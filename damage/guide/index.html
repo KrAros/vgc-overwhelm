@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Overwhelm - A Generation VII Pokémon Damage Calculator</title>
+<meta name="description"
+	content="A 6v6 damage calculator for finding your Pokemon team's best sweepers.">
+<meta name="keywords" content="Pokemon,gen7,damage,calculator,overwhelm">
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<!-- Material Design for Bootstrap fonts and icons -->
+<link rel="stylesheet" href="../../css/bootstrap.css">
+<script src="../../css/less-1.5.0.min.js"></script>
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+<!-- Material Design for Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css">
+<link rel="icon" href="/css/images/favicon.ico" type="image/x-icon">
+<!-- Bootstrap -->
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="./scroll.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script
+	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+      <![endif]-->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+	src="https://www.googletagmanager.com/gtag/js?id=UA-47860917-5"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-47860917-5');
+</script>
+</head>
+<body data-spy="scroll" data-target=".guidenav">
+	<div id="loading"></div>
+	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarExt" aria-controls="navbarExt"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="../../"> <img
+			src="../../css/images/logo.png" width="30" height="30"
+			class="d-inline-block align-top" alt=""> Pokémon Overwhelm
+		</a>
+		<div class="collapse navbar-collapse" id="navbarExt">
+			<div class="navbar-nav">
+				<a class="nav-item nav-link" href="../../">Home</a> <a
+					class="nav-item nav-link" href="../">Damage Calculator</a> <a
+					class="nav-item nav-link" href="../../breakmyteam">Break My
+					Team</a> <a class="nav-item nav-link" href="../../usage">VGC Usage</a>
+				<a class="nav-item nav-link disabled" href="#">Breeding</a>
+			</div>
+			<div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+				<a href="../" class="btn btn-success active">Return to Damage
+					Calculator</a> <a class="nav-item nav-link"
+					href="http://www.facebook.com/pokemonoverwhelm"><i
+					data-feather="facebook"></i></a> <a class="nav-item nav-link"
+					href="http://twitter.com/pkmnoverwhelm"><i
+					data-feather="twitter"></i></a> <a class="nav-item nav-link"
+					href="mailto:aros@pokemonoverwhelm.com?Subject=Contact from site"
+					alt="Send us sets!"><i data-feather="mail"></i></a>
+			</div>
+		</div>
+	</nav>
+	<!-- close nav-menu -->
+
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1 class="display-4">Pokémon damage calculator</h1>
+			<p class="lead">A guide for using the damage calculator.</p>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div id="main-content">
+					<script async
+						src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Pokemon Overwhelm Home Page -->
+					<ins class="adsbygoogle" style="display: block"
+						data-ad-client="ca-pub-8955708076080856" data-ad-slot="7937685412"
+						data-ad-format="auto"></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class='col-3'>
+				<div class="guidenav">
+					<div class="card">
+						<h5 id='overview' class="card-header"
+							style="background-color: rgb(65, 65, 65) !important; color: white;">Navigation</h5>
+						<div class="card-body"
+							style="background-color: rgb(42, 42, 42); color: white">
+							<ul class="navguide">
+								<li><a class="btn btn-primary" href='#quickstart'>Quick
+										Start</a></li>
+								<a class="btn btn-primary" data-toggle="collapse"
+									href="#collapseDamage" role="button" aria-expanded="false"
+									aria-controls="collapseExample"> Damage Area</a>
+								<div class="collapse" id="collapseDamage">
+									<ul class="list-group">
+										<li class="list-group-item"><a href='#thetable'>The
+												Table</a></li>
+										<li class="list-group-item"><a href='#thecell'>The
+												Cell</a></li>
+										<li class="list-group-item"><a href='#outspeedtriangles'>Outspeeding</a></li>
+										<li class="list-group-item"><a href='#popovers'>Popovers</a></li>
+										<li class="list-group-item"><a href='#textoutput'>Text
+												Output</a></li>
+									</ul>
+								</div>
+								<a class="btn btn-primary" data-toggle="collapse"
+									href="#collapseModifier" role="button" aria-expanded="false"
+									aria-controls="collapseExample"> Modifier Area</a>
+								<div class="collapse" id="collapseModifier">
+									<ul class="list-group">
+										<li class="list-group-item"><a href='#options'>Intro</a></li>
+										<li class="list-group-item"><a href='#fields'>Fields,
+												Wheater & Z</a>
+										<li class="list-group-item"><a href='#othermodi'>Other
+												Damage Modifier</a></li>
+									</ul>
+								</div>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='col-9'>
+				<div class="card">
+					<h5 id='overview' class="card-header"
+						style="background-color: rgb(65, 65, 65) !important; color: white;">Guide
+						to using the damage calculator</h5>
+					<div class="card-body"
+						style="background-color: rgb(42, 42, 42); color: white">
+						<p>Overwhelm is a Gen VII 6v6 damage calculator. It is
+							primarily used during online competitive battles as a resource
+							for determining how much damage you can do to your opponents and
+							vice versa. Overwhelm is useful because it provides a visual
+							overview of all damage calculations by all Pokémon in the battle
+							(and is much more efficient than looking at the calculations
+							manually in a 1v1 calculator). Overwhelm enables you to import
+							(or export) your team as well as select Common Sets which can be
+							used to predict what moves your opponent may have (statistically
+							speaking, your opponent will run the most common set). Overwhelm
+							is also a great tool for team building in the case of looking at
+							Pokémon sets that BreakMyTeam does not include.</p>
+						<h1 class="card-header" style="color: white; text-align: center;"
+							id='quickstart'>Quick Start</h1>
+						<br>
+						<p>1. Import your team to the left side of the table. You can
+							import using Pokemon Showdown format by clicking the "import"
+							button or manually filling out the form. Overwhelm saves your
+							data, so everytime you reload the page, your team will stay.</p>
+						<div align="center">
+							<a class="lightbox" href="#qs1"> <img
+								src="images/quick_start1.png" />
+							</a>
+							<div class="lightbox-target" id="qs1">
+								<img src="images/quick_start1.png" /> <a class="lightbox-close"
+									href="#quickstart"></a>
+							</div>
+							<a class="lightbox" href="#qs2"> <img
+								src="images/quick_start2.png" />
+							</a>
+							<div class="lightbox-target" id="qs2">
+								<img src="images/quick_start2.png" /> <a class="lightbox-close"
+									href="#quickstart"></a>
+							</div>
+						</div>
+						<p>2. At the start of a Pokémon Showdown battle, you get a
+							one-liner listing the opponent’s Pokemon. Copy this line into the
+							importer for the right side of calculator by clicking the
+							"Import" button. If you are not playing in OU, you can specify
+							the tier like so: ‘Ubers: Espeon / Volcarona / Talonflame /
+							Skarmory / Blissey / Rotom-W’. Currently supported tiers are
+							Ubers, OU, UU, LC and VGC. (If you are on a 3DS battle, simply
+							look at the Pokemon sprites before the battle and type their
+							names in the same format as above).</p>
+						<div align="center">
+							<a class="lightbox" href="#qs3"> <img
+								src="images/quick_start3.png" />
+							</a>
+							<div class="lightbox-target" id="qs3">
+								<img src="images/quick_start3.png" /> <a class="lightbox-close"
+									href="#quickstart"></a>
+							</div>
+							<a class="lightbox" href="#qs4"> <img
+								src="images/quick_start4.png" />
+							</a>
+							<div class="lightbox-target" id="qs4">
+								<img src="images/quick_start4.png" /> <a class="lightbox-close"
+									href="#quickstart"></a>
+							</div>
+						</div>
+						<p>3. Overwhelm will then automatically generate the most
+							common set as a good guess for the opponent’s moves, sets and
+							abilities. Of course it won’t be correct all the time but it
+							gives you a rough idea of the moves that your opponent will most
+							likely have. The damage results are displayed in the table (see
+							below).</p>
+						<p>4. As the battle goes on, adjust the opposing team using
+							the forms. All most common sets have 6 moves, so perhaps when you
+							are sure of the opponent’s moves, remove some of the ones they
+							don’t have. You can also adjust the environment, levels and
+							format (doubles/singles) in the Options panel. Don’t forget to
+							“mega evolve” your/your opponent’s Pokemon as they happen. You
+							can do this by changing the Pokemon name from ‘Venusaur’ to
+							‘Venusaur-Mega’.</p>
+						<p>5. Once you have finished the battle, click the "Reset"
+							button, enter another battle and repeat!</p>
+						<h1 class="card-header" style="color: white; text-align: center;"
+							id='thetable'>Damage Area</h1>
+						<br>
+						<p>The table displays a lot of data so it can be pretty
+							daunting to view at first. We'll cover some features that might
+							not be apparant.</p>
+						<div align="center">
+							<a class="lightbox" href="#tt"> <img
+								src="images/table_table.png" />
+							</a>
+							<div class="lightbox-target" id="tt">
+								<img src="images/table_table.png" /> <a class="lightbox-close"
+									href="#thetable"></a>
+							</div>
+						</div>
+						<h3 id='thecell'>The Cell</h3>
+						<p>The move picked by SweeperCalc for each attacker is the one
+							that does the most damage to its target.</p>
+						<div align="center">
+							<a class="lightbox" href="#tc"> <img
+								src="images/table_cell.png" />
+							</a>
+							<div class="lightbox-target" id="tc">
+								<img src="images/table_cell.png" /> <a class="lightbox-close"
+									href="#thecell"></a>
+							</div>
+						</div>
+						<p>In this example, Charizard's Solar Beam hits Landorus
+							hardest out of all its moves and hence is the move shown. The
+							bottom half of the cell shows the move that Landorus hits
+							Charizard with the hardest - in this case, it is Rock Slide.</p>
+						<h3 id='outspeedtriangles'>Outspeed Triangles</h3>
+						<p>The triangles in the top right of a cell indicate that the
+							attacking threat is faster than the defending threat.</p>
+						<p>In the previous example, Landorus outspeeds Charizard. Note
+							that these triangles do not take priority moves.</p>
+						<h3 id='popovers'>Popovers</h3>
+						<p>Click on a cell and you'll see the damage calculations for
+							the entire moveset of the offensive Pokémon.</p>
+						<div align="center">
+							<a class="lightbox" href="#tp"> <img
+								src="images/table_popover.png" />
+							</a>
+							<div class="lightbox-target" id="tp">
+								<img src="images/table_popover.png" /> <a
+									class="lightbox-close" href="#popovers"></a>
+							</div>
+						</div>
+						<h3 id='textoutput'>Text Output</h3>
+						<p>Click on a cell and you'll see the standard text output for
+							that calculation.</p>
+						<p align="center">
+							<img src='images/table_textoutput.png' class='img-responsive'>
+						</p>
+
+						<h1 class="card-header" style="color: white; text-align: center;"
+							id='options'>Modifier Area</h1>
+						<br>
+						<p>Central column contains the calculator options. It is
+							divided into several sections, based on the modifiers to be added
+							or the options to be changed.</p>
+						<div align="center">
+							<a class="lightbox" href="#o1"> <img
+								src="images/option_1.png" />
+							</a>
+							<div class="lightbox-target" id="o1">
+								<img src="images/option_1.png" /> <a class="lightbox-close"
+									href="#options"></a>
+							</div>
+						</div>
+						<p>The Level selector changes all Pokemon to the indicated
+							level: damage proportions are different at different levels.</p>
+						<p>Setting the "Double Target" mode reduces the power of
+							spread moves by 25% and reduces the effectiveness of Light Screen
+							and Reflect.</p>
+						<p>"Trick Room" reverses speed calculations.</p>
+						<h3 id='fields'>Fields, Wheater and Z Moves</h3>
+						<p>The first true damage modification options are for weather,
+							fields and Z Moves.</p>
+						<div align="center">
+							<a class="lightbox" href="#o2"> <img
+								src="images/option_2.png" />
+							</a>
+							<div class="lightbox-target" id="o2">
+								<img src="images/option_2.png" /> <a class="lightbox-close"
+									href="#fields"></a>
+							</div>
+						</div>
+						<p>Grassy Terrain increases the power of Grass moves by 50%,
+							reduces Earthquake and Bulldoze by 50%. Electric Terrain
+							increases the power of Electric moves by 50%, Psychic Terrain
+							increases the power of Psychic moves by 50% and Misty Terrain
+							reduces Dragon type moves by 50%.</p>
+						<p>Weather changes the typing of Weather Ball. Solar Beam does
+							half damage in Rain, Sand and Hail.</p>
+						<p>Sun increases the damage of Fire type moves by 50%, reduces
+							Water type moves by 50% and activates Chlorophyll for speed
+							calculations. Rain increases the damage of Water type moves by
+							50%, reduces Fire type moves by 50% and activates Swift Swim for
+							speed calculations. Sand increases the Special Defense of Rock
+							type Pokemon by 50% and activates Sand Force and Sand Rush.Hail
+							has no additional effects but activates Slush Rush for speed
+							calculations.</p>
+						<p>ZMove turns each move into the respective Z-Move if your
+							Pokémon has the right Z-Crystal as an item. Protect calculates
+							the damage inflicted by the Z Move to 25%.</p>
+						<h3 id='othermodi'>Other Damage Modifier</h3>
+						<p>There are other modifiers to consider:</p>
+						<div align="center">
+							<a class="lightbox" href="#o3"> <img
+								src="images/option_3.png" />
+							</a>
+							<div class="lightbox-target" id="o3">
+								<img src="images/option_3.png" /> <a class="lightbox-close"
+									href="#othermodi"></a>
+							</div>
+						</div>
+						<p>Helping Hand increases damage of every attacks by 50%.</p>
+						<p>Aurora Veil reduces damage from special and physical attack
+							by 50%.</p>
+						<p>Light Screen reduces damage from special attacks by 50%.</p>
+						<p>Reflect reduces damage from physical attacks by 50%.</p>
+					</div>
+				</div>
+			</div>
+			<!-- close col-xs-9 -->
+		</div>
+		<!-- close row -->
+	</div>
+	<!-- close container -->
+	<footer class="footer">
+		<div class="container">
+			<div class="content text-center">
+				<p>
+					<strong>Code written</strong> by <a
+						href='http://reddit.com/u/migetno1'>migetno1</a> and <a
+						href='http://reddit.com/u/veeveearnh'>veeveearnh</a>, <strong>upgraded</strong>
+					by <a href="https://www.facebook.com/simone.gentile.54">Aros</a>. <strong>Website
+						and graphic are created</strong> by Aros. <br>The content of this site
+					is licensed <a
+						href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY
+						SA 4.0</a>.
+				</p>
+				<img src="../../css/images/char.png">
+			</div>
+		</div>
+	</footer>
+	<script type="text/javascript" src="../../advertisement.js"></script>
+	<script type="text/javascript">
+		if (document.getElementById("testadblock") == undefined) {
+			document.getElementById('main-content').innerHTML = "<div class='test'></div><br>";
+		}
+	</script>
+	<script>
+		feather.replace()
+	</script>
+</body>
+</html>
