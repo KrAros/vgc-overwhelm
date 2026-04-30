@@ -1,6 +1,7 @@
 import OptionsPanel from './components/OptionsPanel'
 import FieldsPanel from './components/FieldsPanel'
 import ModifiersPanel from './components/ModifiersPanel'
+import DamageTable from './components/DamageTable'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <FieldsPanel />
           <ModifiersPanel />
         </div>
+        <DamageTable />
       </div>
     </div>
   )
