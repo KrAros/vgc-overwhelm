@@ -1,0 +1,6139 @@
+{
+  "pound": {
+    "num": "1",
+    "name": "Pound",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "karate chop": {
+    "num": "2",
+    "name": "Karate Chop",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "double slap": {
+    "num": "3",
+    "name": "Double Slap",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "comet punch": {
+    "num": "4",
+    "name": "Comet Punch",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 18,
+    "priority": 0
+  },
+  "mega punch": {
+    "num": "5",
+    "name": "Mega Punch",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "pay day": {
+    "num": "6",
+    "name": "Pay Day",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "fire punch": {
+    "num": "7",
+    "name": "Fire Punch",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "ice punch": {
+    "num": "8",
+    "name": "Ice Punch",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "thunder punch": {
+    "num": "9",
+    "name": "Thunder Punch",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "scratch": {
+    "num": "10",
+    "name": "Scratch",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "vice grip": {
+    "num": "11",
+    "name": "Vice Grip",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 55,
+    "priority": 0
+  },
+  "guillotine": {
+    "num": "12",
+    "name": "Guillotine",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "razor wind": {
+    "num": "13",
+    "name": "Razor Wind",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "swords dance": {
+    "num": "14",
+    "name": "Swords Dance",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "cut": {
+    "num": "15",
+    "name": "Cut",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "gust": {
+    "num": "16",
+    "name": "Gust",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "wing attack": {
+    "num": "17",
+    "name": "Wing Attack",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "whirlwind": {
+    "num": "18",
+    "name": "Whirlwind",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": -6
+  },
+  "fly": {
+    "num": "19",
+    "name": "Fly",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "bind": {
+    "num": "20",
+    "name": "Bind",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "slam": {
+    "num": "21",
+    "name": "Slam",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "vine whip": {
+    "num": "22",
+    "name": "Vine Whip",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 45,
+    "priority": 0
+  },
+  "stomp": {
+    "num": "23",
+    "name": "Stomp",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "double kick": {
+    "num": "24",
+    "name": "Double Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 30,
+    "priority": 0
+  },
+  "mega kick": {
+    "num": "25",
+    "name": "Mega Kick",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "jump kick": {
+    "num": "26",
+    "name": "Jump Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "rolling kick": {
+    "num": "27",
+    "name": "Rolling Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "sand attack": {
+    "num": "28",
+    "name": "Sand Attack",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "headbutt": {
+    "num": "29",
+    "name": "Headbutt",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "horn attack": {
+    "num": "30",
+    "name": "Horn Attack",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "fury attack": {
+    "num": "31",
+    "name": "Fury Attack",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "horn drill": {
+    "num": "32",
+    "name": "Horn Drill",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "tackle": {
+    "num": "33",
+    "name": "Tackle",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "body slam": {
+    "num": "34",
+    "name": "Body Slam",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "wrap": {
+    "num": "35",
+    "name": "Wrap",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "take down": {
+    "num": "36",
+    "name": "Take Down",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "thrash": {
+    "num": "37",
+    "name": "Thrash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "double-edge": {
+    "num": "38",
+    "name": "Double-Edge",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "tail whip": {
+    "num": "39",
+    "name": "Tail Whip",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "poison sting": {
+    "num": "40",
+    "name": "Poison Sting",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "twineedle": {
+    "num": "41",
+    "name": "Twineedle",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "pin missile": {
+    "num": "42",
+    "name": "Pin Missile",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "leer": {
+    "num": "43",
+    "name": "Leer",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "bite": {
+    "num": "44",
+    "name": "Bite",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "growl": {
+    "num": "45",
+    "name": "Growl",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "roar": {
+    "num": "46",
+    "name": "Roar",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": -6
+  },
+  "sing": {
+    "num": "47",
+    "name": "Sing",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "supersonic": {
+    "num": "48",
+    "name": "Supersonic",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sonic boom": {
+    "num": "49",
+    "name": "Sonic Boom",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "disable": {
+    "num": "50",
+    "name": "Disable",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "acid": {
+    "num": "51",
+    "name": "Acid",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "ember": {
+    "num": "52",
+    "name": "Ember",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "flamethrower": {
+    "num": "53",
+    "name": "Flamethrower",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "mist": {
+    "num": "54",
+    "name": "Mist",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "water gun": {
+    "num": "55",
+    "name": "Water Gun",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "hydro pump": {
+    "num": "56",
+    "name": "Hydro Pump",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "surf": {
+    "num": "57",
+    "name": "Surf",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "ice beam": {
+    "num": "58",
+    "name": "Ice Beam",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "blizzard": {
+    "num": "59",
+    "name": "Blizzard",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "psybeam": {
+    "num": "60",
+    "name": "Psybeam",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "bubble beam": {
+    "num": "61",
+    "name": "Bubble Beam",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "aurora beam": {
+    "num": "62",
+    "name": "Aurora Beam",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "hyper beam": {
+    "num": "63",
+    "name": "Hyper Beam",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "peck": {
+    "num": "64",
+    "name": "Peck",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 35,
+    "priority": 0
+  },
+  "drill peck": {
+    "num": "65",
+    "name": "Drill Peck",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "submission": {
+    "num": "66",
+    "name": "Submission",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "low kick": {
+    "num": "67",
+    "name": "Low Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "counter": {
+    "num": "68",
+    "name": "Counter",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 0,
+    "priority": -5
+  },
+  "seismic toss": {
+    "num": "69",
+    "name": "Seismic Toss",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "strength": {
+    "num": "70",
+    "name": "Strength",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "absorb": {
+    "num": "71",
+    "name": "Absorb",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 20,
+    "priority": 0
+  },
+  "mega drain": {
+    "num": "72",
+    "name": "Mega Drain",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "leech seed": {
+    "num": "73",
+    "name": "Leech Seed",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "growth": {
+    "num": "74",
+    "name": "Growth",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "razor leaf": {
+    "num": "75",
+    "name": "Razor Leaf",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 55,
+    "priority": 0
+  },
+  "solar beam": {
+    "num": "76",
+    "name": "Solar Beam",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "poison powder": {
+    "num": "77",
+    "name": "Poison Powder",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "stun spore": {
+    "num": "78",
+    "name": "Stun Spore",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sleep powder": {
+    "num": "79",
+    "name": "Sleep Powder",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "petal dance": {
+    "num": "80",
+    "name": "Petal Dance",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "string shot": {
+    "num": "81",
+    "name": "String Shot",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "dragon rage": {
+    "num": "82",
+    "name": "Dragon Rage",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "fire spin": {
+    "num": "83",
+    "name": "Fire Spin",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 35,
+    "priority": 0
+  },
+  "thunder shock": {
+    "num": "84",
+    "name": "Thunder Shock",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "thunderbolt": {
+    "num": "85",
+    "name": "Thunderbolt",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "thunder wave": {
+    "num": "86",
+    "name": "Thunder Wave",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "thunder": {
+    "num": "87",
+    "name": "Thunder",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "rock throw": {
+    "num": "88",
+    "name": "Rock Throw",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "earthquake": {
+    "num": "89",
+    "name": "Earthquake",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "fissure": {
+    "num": "90",
+    "name": "Fissure",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "dig": {
+    "num": "91",
+    "name": "Dig",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "toxic": {
+    "num": "92",
+    "name": "Toxic",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "confusion": {
+    "num": "93",
+    "name": "Confusion",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "psychic": {
+    "num": "94",
+    "name": "Psychic",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "hypnosis": {
+    "num": "95",
+    "name": "Hypnosis",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "meditate": {
+    "num": "96",
+    "name": "Meditate",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "agility": {
+    "num": "97",
+    "name": "Agility",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "quick attack": {
+    "num": "98",
+    "name": "Quick Attack",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "rage": {
+    "num": "99",
+    "name": "Rage",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 20,
+    "priority": 0
+  },
+  "teleport": {
+    "num": "100",
+    "name": "Teleport",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "night shade": {
+    "num": "101",
+    "name": "Night Shade",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "mimic": {
+    "num": "102",
+    "name": "Mimic",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "screech": {
+    "num": "103",
+    "name": "Screech",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "double team": {
+    "num": "104",
+    "name": "Double Team",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "recover": {
+    "num": "105",
+    "name": "Recover",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "harden": {
+    "num": "106",
+    "name": "Harden",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "minimize": {
+    "num": "107",
+    "name": "Minimize",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "smokescreen": {
+    "num": "108",
+    "name": "Smokescreen",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "confuse ray": {
+    "num": "109",
+    "name": "Confuse Ray",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "withdraw": {
+    "num": "110",
+    "name": "Withdraw",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "defense curl": {
+    "num": "111",
+    "name": "Defense Curl",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "barrier": {
+    "num": "112",
+    "name": "Barrier",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "light screen": {
+    "num": "113",
+    "name": "Light Screen",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "haze": {
+    "num": "114",
+    "name": "Haze",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "reflect": {
+    "num": "115",
+    "name": "Reflect",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "focus energy": {
+    "num": "116",
+    "name": "Focus Energy",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "bide": {
+    "num": "117",
+    "name": "Bide",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 1
+  },
+  "metronome": {
+    "num": "118",
+    "name": "Metronome",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "mirror move": {
+    "num": "119",
+    "name": "Mirror Move",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "self-destruct": {
+    "num": "120",
+    "name": "Self-Destruct",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 200,
+    "priority": 0
+  },
+  "egg bomb": {
+    "num": "121",
+    "name": "Egg Bomb",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "lick": {
+    "num": "122",
+    "name": "Lick",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 30,
+    "priority": 0
+  },
+  "smog": {
+    "num": "123",
+    "name": "Smog",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 30,
+    "priority": 0
+  },
+  "sludge": {
+    "num": "124",
+    "name": "Sludge",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "bone club": {
+    "num": "125",
+    "name": "Bone Club",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "fire blast": {
+    "num": "126",
+    "name": "Fire Blast",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "waterfall": {
+    "num": "127",
+    "name": "Waterfall",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "clamp": {
+    "num": "128",
+    "name": "Clamp",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 35,
+    "priority": 0
+  },
+  "swift": {
+    "num": "129",
+    "name": "Swift",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "skull bash": {
+    "num": "130",
+    "name": "Skull Bash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 130,
+    "priority": 0
+  },
+  "spike cannon": {
+    "num": "131",
+    "name": "Spike Cannon",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 20,
+    "priority": 0
+  },
+  "constrict": {
+    "num": "132",
+    "name": "Constrict",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 10,
+    "priority": 0
+  },
+  "amnesia": {
+    "num": "133",
+    "name": "Amnesia",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "kinesis": {
+    "num": "134",
+    "name": "Kinesis",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "soft-boiled": {
+    "num": "135",
+    "name": "Soft-Boiled",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "high jump kick": {
+    "num": "136",
+    "name": "High Jump Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 130,
+    "priority": 0
+  },
+  "glare": {
+    "num": "137",
+    "name": "Glare",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "dream eater": {
+    "num": "138",
+    "name": "Dream Eater",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "poison gas": {
+    "num": "139",
+    "name": "Poison Gas",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "barrage": {
+    "num": "140",
+    "name": "Barrage",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "leech life": {
+    "num": "141",
+    "name": "Leech Life",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "lovely kiss": {
+    "num": "142",
+    "name": "Lovely Kiss",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sky attack": {
+    "num": "143",
+    "name": "Sky Attack",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 140,
+    "priority": 0
+  },
+  "transform": {
+    "num": "144",
+    "name": "Transform",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "bubble": {
+    "num": "145",
+    "name": "Bubble",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "dizzy punch": {
+    "num": "146",
+    "name": "Dizzy Punch",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "spore": {
+    "num": "147",
+    "name": "Spore",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flash": {
+    "num": "148",
+    "name": "Flash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "psywave": {
+    "num": "149",
+    "name": "Psywave",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "splash": {
+    "num": "150",
+    "name": "Splash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "acid armor": {
+    "num": "151",
+    "name": "Acid Armor",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "crabhammer": {
+    "num": "152",
+    "name": "Crabhammer",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "explosion": {
+    "num": "153",
+    "name": "Explosion",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 250,
+    "priority": 0
+  },
+  "fury swipes": {
+    "num": "154",
+    "name": "Fury Swipes",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 18,
+    "priority": 0
+  },
+  "bonemerang": {
+    "num": "155",
+    "name": "Bonemerang",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "rest": {
+    "num": "156",
+    "name": "Rest",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "rock slide": {
+    "num": "157",
+    "name": "Rock Slide",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "hyper fang": {
+    "num": "158",
+    "name": "Hyper Fang",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "sharpen": {
+    "num": "159",
+    "name": "Sharpen",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "conversion": {
+    "num": "160",
+    "name": "Conversion",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "tri attack": {
+    "num": "161",
+    "name": "Tri Attack",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "super fang": {
+    "num": "162",
+    "name": "Super Fang",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "slash": {
+    "num": "163",
+    "name": "Slash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "substitute": {
+    "num": "164",
+    "name": "Substitute",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "struggle": {
+    "num": "165",
+    "name": "Struggle",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "sketch": {
+    "num": "166",
+    "name": "Sketch",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "triple kick": {
+    "num": "167",
+    "name": "Triple Kick",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 10,
+    "priority": 0
+  },
+  "thief": {
+    "num": "168",
+    "name": "Thief",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "spider web": {
+    "num": "169",
+    "name": "Spider Web",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "mind reader": {
+    "num": "170",
+    "name": "Mind Reader",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "nightmare": {
+    "num": "171",
+    "name": "Nightmare",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flame wheel": {
+    "num": "172",
+    "name": "Flame Wheel",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "snore": {
+    "num": "173",
+    "name": "Snore",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "curse": {
+    "num": "174",
+    "name": "Curse",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flail": {
+    "num": "175",
+    "name": "Flail",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "conversion 2": {
+    "num": "176",
+    "name": "Conversion 2",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "aeroblast": {
+    "num": "177",
+    "name": "Aeroblast",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "cotton spore": {
+    "num": "178",
+    "name": "Cotton Spore",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "reversal": {
+    "num": "179",
+    "name": "Reversal",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "spite": {
+    "num": "180",
+    "name": "Spite",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "powder snow": {
+    "num": "181",
+    "name": "Powder Snow",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "protect": {
+    "num": "182",
+    "name": "Protect",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 4
+  },
+  "mach punch": {
+    "num": "183",
+    "name": "Mach Punch",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "scary face": {
+    "num": "184",
+    "name": "Scary Face",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "feint attack": {
+    "num": "185",
+    "name": "Feint Attack",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "sweet kiss": {
+    "num": "186",
+    "name": "Sweet Kiss",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "belly drum": {
+    "num": "187",
+    "name": "Belly Drum",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sludge bomb": {
+    "num": "188",
+    "name": "Sludge Bomb",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "mud-slap": {
+    "num": "189",
+    "name": "Mud-Slap",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 1,
+    "power": 20,
+    "priority": 0
+  },
+  "octazooka": {
+    "num": "190",
+    "name": "Octazooka",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "spikes": {
+    "num": "191",
+    "name": "Spikes",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "zap cannon": {
+    "num": "192",
+    "name": "Zap Cannon",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "foresight": {
+    "num": "193",
+    "name": "Foresight",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "destiny bond": {
+    "num": "194",
+    "name": "Destiny Bond",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "perish song": {
+    "num": "195",
+    "name": "Perish Song",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "icy wind": {
+    "num": "196",
+    "name": "Icy Wind",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 55,
+    "priority": 0
+  },
+  "detect": {
+    "num": "197",
+    "name": "Detect",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 2,
+    "power": 0,
+    "priority": 4
+  },
+  "bone rush": {
+    "num": "198",
+    "name": "Bone Rush",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "lock-on": {
+    "num": "199",
+    "name": "Lock-On",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "outrage": {
+    "num": "200",
+    "name": "Outrage",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "sandstorm": {
+    "num": "201",
+    "name": "Sandstorm",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "giga drain": {
+    "num": "202",
+    "name": "Giga Drain",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 75,
+    "priority": 0
+  },
+  "endure": {
+    "num": "203",
+    "name": "Endure",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 3
+  },
+  "charm": {
+    "num": "204",
+    "name": "Charm",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "rollout": {
+    "num": "205",
+    "name": "Rollout",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 30,
+    "priority": 0
+  },
+  "false swipe": {
+    "num": "206",
+    "name": "False Swipe",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "swagger": {
+    "num": "207",
+    "name": "Swagger",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "milk drink": {
+    "num": "208",
+    "name": "Milk Drink",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "spark": {
+    "num": "209",
+    "name": "Spark",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "fury cutter": {
+    "num": "210",
+    "name": "Fury Cutter",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "steel wing": {
+    "num": "211",
+    "name": "Steel Wing",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "mean look": {
+    "num": "212",
+    "name": "Mean Look",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "attract": {
+    "num": "213",
+    "name": "Attract",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sleep talk": {
+    "num": "214",
+    "name": "Sleep Talk",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heal bell": {
+    "num": "215",
+    "name": "Heal Bell",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "return": {
+    "num": "216",
+    "name": "Return",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 102,
+    "priority": 0
+  },
+  "present": {
+    "num": "217",
+    "name": "Present",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "frustration": {
+    "num": "218",
+    "name": "Frustration",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 102,
+    "priority": 0
+  },
+  "safeguard": {
+    "num": "219",
+    "name": "Safeguard",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "pain split": {
+    "num": "220",
+    "name": "Pain Split",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sacred fire": {
+    "num": "221",
+    "name": "Sacred Fire",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "magnitude": {
+    "num": "222",
+    "name": "Magnitude",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "dynamic punch": {
+    "num": "223",
+    "name": "Dynamic Punch",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "megahorn": {
+    "num": "224",
+    "name": "Megahorn",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "dragon breath": {
+    "num": "225",
+    "name": "Dragon Breath",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "baton pass": {
+    "num": "226",
+    "name": "Baton Pass",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "encore": {
+    "num": "227",
+    "name": "Encore",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "pursuit": {
+    "num": "228",
+    "name": "Pursuit",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "rapid spin": {
+    "num": "229",
+    "name": "Rapid Spin",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 20,
+    "priority": 0
+  },
+  "sweet scent": {
+    "num": "230",
+    "name": "Sweet Scent",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "iron tail": {
+    "num": "231",
+    "name": "Iron Tail",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "metal claw": {
+    "num": "232",
+    "name": "Metal Claw",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "vital throw": {
+    "num": "233",
+    "name": "Vital Throw",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 70,
+    "priority": -1
+  },
+  "morning sun": {
+    "num": "234",
+    "name": "Morning Sun",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "synthesis": {
+    "num": "235",
+    "name": "Synthesis",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "moonlight": {
+    "num": "236",
+    "name": "Moonlight",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "hidden power": {
+    "num": "237",
+    "name": "Hidden Power",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "cross chop": {
+    "num": "238",
+    "name": "Cross Chop",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "twister": {
+    "num": "239",
+    "name": "Twister",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "rain dance": {
+    "num": "240",
+    "name": "Rain Dance",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sunny day": {
+    "num": "241",
+    "name": "Sunny Day",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "crunch": {
+    "num": "242",
+    "name": "Crunch",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "mirror coat": {
+    "num": "243",
+    "name": "Mirror Coat",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 0,
+    "priority": -5
+  },
+  "psych up": {
+    "num": "244",
+    "name": "Psych Up",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "extreme speed": {
+    "num": "245",
+    "name": "Extreme Speed",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 80,
+    "priority": 2
+  },
+  "ancient power": {
+    "num": "246",
+    "name": "Ancient Power",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "shadow ball": {
+    "num": "247",
+    "name": "Shadow Ball",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "future sight": {
+    "num": "248",
+    "name": "Future Sight",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "rock smash": {
+    "num": "249",
+    "name": "Rock Smash",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "whirlpool": {
+    "num": "250",
+    "name": "Whirlpool",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 35,
+    "priority": 0
+  },
+  "beat up": {
+    "num": "251",
+    "name": "Beat Up",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "fake out": {
+    "num": "252",
+    "name": "Fake Out",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 40,
+    "priority": 3
+  },
+  "uproar": {
+    "num": "253",
+    "name": "Uproar",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "stockpile": {
+    "num": "254",
+    "name": "Stockpile",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "spit up": {
+    "num": "255",
+    "name": "Spit Up",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "swallow": {
+    "num": "256",
+    "name": "Swallow",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heat wave": {
+    "num": "257",
+    "name": "Heat Wave",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 95,
+    "priority": 0
+  },
+  "hail": {
+    "num": "258",
+    "name": "Hail",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "torment": {
+    "num": "259",
+    "name": "Torment",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flatter": {
+    "num": "260",
+    "name": "Flatter",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "will-o-wisp": {
+    "num": "261",
+    "name": "Will-O-Wisp",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "memento": {
+    "num": "262",
+    "name": "Memento",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "facade": {
+    "num": "263",
+    "name": "Facade",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "focus punch": {
+    "num": "264",
+    "name": "Focus Punch",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 150,
+    "priority": -3
+  },
+  "smelling salts": {
+    "num": "265",
+    "name": "Smelling Salts",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "follow me": {
+    "num": "266",
+    "name": "Follow Me",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 3
+  },
+  "nature power": {
+    "num": "267",
+    "name": "Nature Power",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "charge": {
+    "num": "268",
+    "name": "Charge",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "taunt": {
+    "num": "269",
+    "name": "Taunt",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "helping hand": {
+    "num": "270",
+    "name": "Helping Hand",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 5
+  },
+  "trick": {
+    "num": "271",
+    "name": "Trick",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "role play": {
+    "num": "272",
+    "name": "Role Play",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "wish": {
+    "num": "273",
+    "name": "Wish",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "assist": {
+    "num": "274",
+    "name": "Assist",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "ingrain": {
+    "num": "275",
+    "name": "Ingrain",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "superpower": {
+    "num": "276",
+    "name": "Superpower",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "magic coat": {
+    "num": "277",
+    "name": "Magic Coat",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 4
+  },
+  "recycle": {
+    "num": "278",
+    "name": "Recycle",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "revenge": {
+    "num": "279",
+    "name": "Revenge",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 60,
+    "priority": -4
+  },
+  "brick break": {
+    "num": "280",
+    "name": "Brick Break",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "yawn": {
+    "num": "281",
+    "name": "Yawn",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "knock off": {
+    "num": "282",
+    "name": "Knock Off",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "endeavor": {
+    "num": "283",
+    "name": "Endeavor",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "eruption": {
+    "num": "284",
+    "name": "Eruption",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "skill swap": {
+    "num": "285",
+    "name": "Skill Swap",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "imprison": {
+    "num": "286",
+    "name": "Imprison",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "refresh": {
+    "num": "287",
+    "name": "Refresh",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "grudge": {
+    "num": "288",
+    "name": "Grudge",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "snatch": {
+    "num": "289",
+    "name": "Snatch",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 4
+  },
+  "secret power": {
+    "num": "290",
+    "name": "Secret Power",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "dive": {
+    "num": "291",
+    "name": "Dive",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "arm thrust": {
+    "num": "292",
+    "name": "Arm Thrust",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 15,
+    "priority": 0
+  },
+  "camouflage": {
+    "num": "293",
+    "name": "Camouflage",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "tail glow": {
+    "num": "294",
+    "name": "Tail Glow",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "luster purge": {
+    "num": "295",
+    "name": "Luster Purge",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 70,
+    "priority": 0
+  },
+  "mist ball": {
+    "num": "296",
+    "name": "Mist Ball",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 70,
+    "priority": 0
+  },
+  "feather dance": {
+    "num": "297",
+    "name": "Feather Dance",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "teeter dance": {
+    "num": "298",
+    "name": "Teeter Dance",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "blaze kick": {
+    "num": "299",
+    "name": "Blaze Kick",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "mud sport": {
+    "num": "300",
+    "name": "Mud Sport",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "ice ball": {
+    "num": "301",
+    "name": "Ice Ball",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 30,
+    "priority": 0
+  },
+  "needle arm": {
+    "num": "302",
+    "name": "Needle Arm",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "slack off": {
+    "num": "303",
+    "name": "Slack Off",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "hyper voice": {
+    "num": "304",
+    "name": "Hyper Voice",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "poison fang": {
+    "num": "305",
+    "name": "Poison Fang",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "crush claw": {
+    "num": "306",
+    "name": "Crush Claw",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "blast burn": {
+    "num": "307",
+    "name": "Blast Burn",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "hydro cannon": {
+    "num": "308",
+    "name": "Hydro Cannon",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "meteor mash": {
+    "num": "309",
+    "name": "Meteor Mash",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "astonish": {
+    "num": "310",
+    "name": "Astonish",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 30,
+    "priority": 0
+  },
+  "weather ball": {
+    "num": "311",
+    "name": "Weather Ball",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "aromatherapy": {
+    "num": "312",
+    "name": "Aromatherapy",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "fake tears": {
+    "num": "313",
+    "name": "Fake Tears",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "air cutter": {
+    "num": "314",
+    "name": "Air Cutter",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "overheat": {
+    "num": "315",
+    "name": "Overheat",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "odor sleuth": {
+    "num": "316",
+    "name": "Odor Sleuth",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "rock tomb": {
+    "num": "317",
+    "name": "Rock Tomb",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "silver wind": {
+    "num": "318",
+    "name": "Silver Wind",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "metal sound": {
+    "num": "319",
+    "name": "Metal Sound",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "grass whistle": {
+    "num": "320",
+    "name": "Grass Whistle",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "tickle": {
+    "num": "321",
+    "name": "Tickle",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "cosmic power": {
+    "num": "322",
+    "name": "Cosmic Power",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "water spout": {
+    "num": "323",
+    "name": "Water Spout",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "signal beam": {
+    "num": "324",
+    "name": "Signal Beam",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 75,
+    "priority": 0
+  },
+  "shadow punch": {
+    "num": "325",
+    "name": "Shadow Punch",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "extrasensory": {
+    "num": "326",
+    "name": "Extrasensory",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "sky uppercut": {
+    "num": "327",
+    "name": "Sky Uppercut",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "sand tomb": {
+    "num": "328",
+    "name": "Sand Tomb",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 35,
+    "priority": 0
+  },
+  "sheer cold": {
+    "num": "329",
+    "name": "Sheer Cold",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "muddy water": {
+    "num": "330",
+    "name": "Muddy Water",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "bullet seed": {
+    "num": "331",
+    "name": "Bullet Seed",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "aerial ace": {
+    "num": "332",
+    "name": "Aerial Ace",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "icicle spear": {
+    "num": "333",
+    "name": "Icicle Spear",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "iron defense": {
+    "num": "334",
+    "name": "Iron Defense",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "block": {
+    "num": "335",
+    "name": "Block",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "howl": {
+    "num": "336",
+    "name": "Howl",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "dragon claw": {
+    "num": "337",
+    "name": "Dragon Claw",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "frenzy plant": {
+    "num": "338",
+    "name": "Frenzy Plant",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "bulk up": {
+    "num": "339",
+    "name": "Bulk Up",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "bounce": {
+    "num": "340",
+    "name": "Bounce",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "mud shot": {
+    "num": "341",
+    "name": "Mud Shot",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 1,
+    "power": 55,
+    "priority": 0
+  },
+  "poison tail": {
+    "num": "342",
+    "name": "Poison Tail",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "covet": {
+    "num": "343",
+    "name": "Covet",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "volt tackle": {
+    "num": "344",
+    "name": "Volt Tackle",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "magical leaf": {
+    "num": "345",
+    "name": "Magical Leaf",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "water sport": {
+    "num": "346",
+    "name": "Water Sport",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "calm mind": {
+    "num": "347",
+    "name": "Calm Mind",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "leaf blade": {
+    "num": "348",
+    "name": "Leaf Blade",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "dragon dance": {
+    "num": "349",
+    "name": "Dragon Dance",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "rock blast": {
+    "num": "350",
+    "name": "Rock Blast",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "shock wave": {
+    "num": "351",
+    "name": "Shock Wave",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "water pulse": {
+    "num": "352",
+    "name": "Water Pulse",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "doom desire": {
+    "num": "353",
+    "name": "Doom Desire",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 1,
+    "power": 140,
+    "priority": 0
+  },
+  "psycho boost": {
+    "num": "354",
+    "name": "Psycho Boost",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 140,
+    "priority": 0
+  },
+  "roost": {
+    "num": "355",
+    "name": "Roost",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "gravity": {
+    "num": "356",
+    "name": "Gravity",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "miracle eye": {
+    "num": "357",
+    "name": "Miracle Eye",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "wake-up slap": {
+    "num": "358",
+    "name": "Wake-Up Slap",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "hammer arm": {
+    "num": "359",
+    "name": "Hammer Arm",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "gyro ball": {
+    "num": "360",
+    "name": "Gyro Ball",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "healing wish": {
+    "num": "361",
+    "name": "Healing Wish",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "brine": {
+    "num": "362",
+    "name": "Brine",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "natural gift": {
+    "num": "363",
+    "name": "Natural Gift",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "feint": {
+    "num": "364",
+    "name": "Feint",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 30,
+    "priority": 2
+  },
+  "pluck": {
+    "num": "365",
+    "name": "Pluck",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "tailwind": {
+    "num": "366",
+    "name": "Tailwind",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "acupressure": {
+    "num": "367",
+    "name": "Acupressure",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "metal burst": {
+    "num": "368",
+    "name": "Metal Burst",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "u-turn": {
+    "num": "369",
+    "name": "U-turn",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "close combat": {
+    "num": "370",
+    "name": "Close Combat",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "payback": {
+    "num": "371",
+    "name": "Payback",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "assurance": {
+    "num": "372",
+    "name": "Assurance",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "embargo": {
+    "num": "373",
+    "name": "Embargo",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "fling": {
+    "num": "374",
+    "name": "Fling",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "psycho shift": {
+    "num": "375",
+    "name": "Psycho Shift",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "trump card": {
+    "num": "376",
+    "name": "Trump Card",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "heal block": {
+    "num": "377",
+    "name": "Heal Block",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "wring out": {
+    "num": "378",
+    "name": "Wring Out",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "power trick": {
+    "num": "379",
+    "name": "Power Trick",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "gastro acid": {
+    "num": "380",
+    "name": "Gastro Acid",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "lucky chant": {
+    "num": "381",
+    "name": "Lucky Chant",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "me first": {
+    "num": "382",
+    "name": "Me First",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "copycat": {
+    "num": "383",
+    "name": "Copycat",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "power swap": {
+    "num": "384",
+    "name": "Power Swap",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "guard swap": {
+    "num": "385",
+    "name": "Guard Swap",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "punishment": {
+    "num": "386",
+    "name": "Punishment",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "last resort": {
+    "num": "387",
+    "name": "Last Resort",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 140,
+    "priority": 0
+  },
+  "worry seed": {
+    "num": "388",
+    "name": "Worry Seed",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sucker punch": {
+    "num": "389",
+    "name": "Sucker Punch",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 70,
+    "priority": 1
+  },
+  "toxic spikes": {
+    "num": "390",
+    "name": "Toxic Spikes",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heart swap": {
+    "num": "391",
+    "name": "Heart Swap",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "aqua ring": {
+    "num": "392",
+    "name": "Aqua Ring",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "magnet rise": {
+    "num": "393",
+    "name": "Magnet Rise",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flare blitz": {
+    "num": "394",
+    "name": "Flare Blitz",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "force palm": {
+    "num": "395",
+    "name": "Force Palm",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "aura sphere": {
+    "num": "396",
+    "name": "Aura Sphere",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "rock polish": {
+    "num": "397",
+    "name": "Rock Polish",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "poison jab": {
+    "num": "398",
+    "name": "Poison Jab",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "dark pulse": {
+    "num": "399",
+    "name": "Dark Pulse",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "night slash": {
+    "num": "400",
+    "name": "Night Slash",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "aqua tail": {
+    "num": "401",
+    "name": "Aqua Tail",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "seed bomb": {
+    "num": "402",
+    "name": "Seed Bomb",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "air slash": {
+    "num": "403",
+    "name": "Air Slash",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 75,
+    "priority": 0
+  },
+  "x-scissor": {
+    "num": "404",
+    "name": "X-Scissor",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "bug buzz": {
+    "num": "405",
+    "name": "Bug Buzz",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "dragon pulse": {
+    "num": "406",
+    "name": "Dragon Pulse",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 85,
+    "priority": 0
+  },
+  "dragon rush": {
+    "num": "407",
+    "name": "Dragon Rush",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "power gem": {
+    "num": "408",
+    "name": "Power Gem",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "drain punch": {
+    "num": "409",
+    "name": "Drain Punch",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "vacuum wave": {
+    "num": "410",
+    "name": "Vacuum Wave",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 40,
+    "priority": 1
+  },
+  "focus blast": {
+    "num": "411",
+    "name": "Focus Blast",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "energy ball": {
+    "num": "412",
+    "name": "Energy Ball",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "brave bird": {
+    "num": "413",
+    "name": "Brave Bird",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "earth power": {
+    "num": "414",
+    "name": "Earth Power",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "switcheroo": {
+    "num": "415",
+    "name": "Switcheroo",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "giga impact": {
+    "num": "416",
+    "name": "Giga Impact",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 150,
+    "priority": 0
+  },
+  "nasty plot": {
+    "num": "417",
+    "name": "Nasty Plot",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "bullet punch": {
+    "num": "418",
+    "name": "Bullet Punch",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "avalanche": {
+    "num": "419",
+    "name": "Avalanche",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 60,
+    "priority": -4
+  },
+  "ice shard": {
+    "num": "420",
+    "name": "Ice Shard",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "shadow claw": {
+    "num": "421",
+    "name": "Shadow Claw",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "thunder fang": {
+    "num": "422",
+    "name": "Thunder Fang",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "ice fang": {
+    "num": "423",
+    "name": "Ice Fang",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "fire fang": {
+    "num": "424",
+    "name": "Fire Fang",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "shadow sneak": {
+    "num": "425",
+    "name": "Shadow Sneak",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "mud bomb": {
+    "num": "426",
+    "name": "Mud Bomb",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "psycho cut": {
+    "num": "427",
+    "name": "Psycho Cut",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "zen headbutt": {
+    "num": "428",
+    "name": "Zen Headbutt",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "mirror shot": {
+    "num": "429",
+    "name": "Mirror Shot",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "flash cannon": {
+    "num": "430",
+    "name": "Flash Cannon",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "rock climb": {
+    "num": "431",
+    "name": "Rock Climb",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "defog": {
+    "num": "432",
+    "name": "Defog",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "trick room": {
+    "num": "433",
+    "name": "Trick Room",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": -7
+  },
+  "draco meteor": {
+    "num": "434",
+    "name": "Draco Meteor",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "discharge": {
+    "num": "435",
+    "name": "Discharge",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "lava plume": {
+    "num": "436",
+    "name": "Lava Plume",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "leaf storm": {
+    "num": "437",
+    "name": "Leaf Storm",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "power whip": {
+    "num": "438",
+    "name": "Power Whip",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "rock wrecker": {
+    "num": "439",
+    "name": "Rock Wrecker",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 150,
+    "priority": 0
+  },
+  "cross poison": {
+    "num": "440",
+    "name": "Cross Poison",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "gunk shot": {
+    "num": "441",
+    "name": "Gunk Shot",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "iron head": {
+    "num": "442",
+    "name": "Iron Head",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "magnet bomb": {
+    "num": "443",
+    "name": "Magnet Bomb",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "stone edge": {
+    "num": "444",
+    "name": "Stone Edge",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "captivate": {
+    "num": "445",
+    "name": "Captivate",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "stealth rock": {
+    "num": "446",
+    "name": "Stealth Rock",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "grass knot": {
+    "num": "447",
+    "name": "Grass Knot",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "chatter": {
+    "num": "448",
+    "name": "Chatter",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "judgment": {
+    "num": "449",
+    "name": "Judgment",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "bug bite": {
+    "num": "450",
+    "name": "Bug Bite",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "charge beam": {
+    "num": "451",
+    "name": "Charge Beam",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "wood hammer": {
+    "num": "452",
+    "name": "Wood Hammer",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "aqua jet": {
+    "num": "453",
+    "name": "Aqua Jet",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "attack order": {
+    "num": "454",
+    "name": "Attack Order",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "defend order": {
+    "num": "455",
+    "name": "Defend Order",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heal order": {
+    "num": "456",
+    "name": "Heal Order",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "head smash": {
+    "num": "457",
+    "name": "Head Smash",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 150,
+    "priority": 0
+  },
+  "double hit": {
+    "num": "458",
+    "name": "Double Hit",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 35,
+    "priority": 0
+  },
+  "roar of time": {
+    "num": "459",
+    "name": "Roar of Time",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "spacial rend": {
+    "num": "460",
+    "name": "Spacial Rend",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "lunar dance": {
+    "num": "461",
+    "name": "Lunar Dance",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "crush grip": {
+    "num": "462",
+    "name": "Crush Grip",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "magma storm": {
+    "num": "463",
+    "name": "Magma Storm",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "dark void": {
+    "num": "464",
+    "name": "Dark Void",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "seed flare": {
+    "num": "465",
+    "name": "Seed Flare",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "ominous wind": {
+    "num": "466",
+    "name": "Ominous Wind",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "shadow force": {
+    "num": "467",
+    "name": "Shadow Force",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "hone claws": {
+    "num": "468",
+    "name": "Hone Claws",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "wide guard": {
+    "num": "469",
+    "name": "Wide Guard",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 2,
+    "power": 0,
+    "priority": 3
+  },
+  "guard split": {
+    "num": "470",
+    "name": "Guard Split",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "power split": {
+    "num": "471",
+    "name": "Power Split",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "wonder room": {
+    "num": "472",
+    "name": "Wonder Room",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": -7
+  },
+  "psyshock": {
+    "num": "473",
+    "name": "Psyshock",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "venoshock": {
+    "num": "474",
+    "name": "Venoshock",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "autotomize": {
+    "num": "475",
+    "name": "Autotomize",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "rage powder": {
+    "num": "476",
+    "name": "Rage Powder",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 3
+  },
+  "telekinesis": {
+    "num": "477",
+    "name": "Telekinesis",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "magic room": {
+    "num": "478",
+    "name": "Magic Room",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": -7
+  },
+  "smack down": {
+    "num": "479",
+    "name": "Smack Down",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "storm throw": {
+    "num": "480",
+    "name": "Storm Throw",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "flame burst": {
+    "num": "481",
+    "name": "Flame Burst",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 70,
+    "priority": 0
+  },
+  "sludge wave": {
+    "num": "482",
+    "name": "Sludge Wave",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 95,
+    "priority": 0
+  },
+  "quiver dance": {
+    "num": "483",
+    "name": "Quiver Dance",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heavy slam": {
+    "num": "484",
+    "name": "Heavy Slam",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "synchronoise": {
+    "num": "485",
+    "name": "Synchronoise",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "electro ball": {
+    "num": "486",
+    "name": "Electro Ball",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "soak": {
+    "num": "487",
+    "name": "Soak",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flame charge": {
+    "num": "488",
+    "name": "Flame Charge",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "coil": {
+    "num": "489",
+    "name": "Coil",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "low sweep": {
+    "num": "490",
+    "name": "Low Sweep",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "acid spray": {
+    "num": "491",
+    "name": "Acid Spray",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "foul play": {
+    "num": "492",
+    "name": "Foul Play",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 95,
+    "priority": 0
+  },
+  "simple beam": {
+    "num": "493",
+    "name": "Simple Beam",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "entrainment": {
+    "num": "494",
+    "name": "Entrainment",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "after you": {
+    "num": "495",
+    "name": "After You",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "round": {
+    "num": "496",
+    "name": "Round",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "echoed voice": {
+    "num": "497",
+    "name": "Echoed Voice",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "chip away": {
+    "num": "498",
+    "name": "Chip Away",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "clear smog": {
+    "num": "499",
+    "name": "Clear Smog",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "stored power": {
+    "num": "500",
+    "name": "Stored Power",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 20,
+    "priority": 0
+  },
+  "quick guard": {
+    "num": "501",
+    "name": "Quick Guard",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 2,
+    "power": 0,
+    "priority": 3
+  },
+  "ally switch": {
+    "num": "502",
+    "name": "Ally Switch",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 1
+  },
+  "scald": {
+    "num": "503",
+    "name": "Scald",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "shell smash": {
+    "num": "504",
+    "name": "Shell Smash",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "heal pulse": {
+    "num": "505",
+    "name": "Heal Pulse",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "hex": {
+    "num": "506",
+    "name": "Hex",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "sky drop": {
+    "num": "507",
+    "name": "Sky Drop",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "shift gear": {
+    "num": "508",
+    "name": "Shift Gear",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "circle throw": {
+    "num": "509",
+    "name": "Circle Throw",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 60,
+    "priority": -6
+  },
+  "incinerate": {
+    "num": "510",
+    "name": "Incinerate",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "quash": {
+    "num": "511",
+    "name": "Quash",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "acrobatics": {
+    "num": "512",
+    "name": "Acrobatics",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 55,
+    "priority": 0
+  },
+  "reflect type": {
+    "num": "513",
+    "name": "Reflect Type",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "retaliate": {
+    "num": "514",
+    "name": "Retaliate",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "final gambit": {
+    "num": "515",
+    "name": "Final Gambit",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "bestow": {
+    "num": "516",
+    "name": "Bestow",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "inferno": {
+    "num": "517",
+    "name": "Inferno",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "water pledge": {
+    "num": "518",
+    "name": "Water Pledge",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "fire pledge": {
+    "num": "519",
+    "name": "Fire Pledge",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "grass pledge": {
+    "num": "520",
+    "name": "Grass Pledge",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "volt switch": {
+    "num": "521",
+    "name": "Volt Switch",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 70,
+    "priority": 0
+  },
+  "struggle bug": {
+    "num": "522",
+    "name": "Struggle Bug",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "bulldoze": {
+    "num": "523",
+    "name": "Bulldoze",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "frost breath": {
+    "num": "524",
+    "name": "Frost Breath",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "dragon tail": {
+    "num": "525",
+    "name": "Dragon Tail",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 60,
+    "priority": -6
+  },
+  "work up": {
+    "num": "526",
+    "name": "Work Up",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "electroweb": {
+    "num": "527",
+    "name": "Electroweb",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 55,
+    "priority": 0
+  },
+  "wild charge": {
+    "num": "528",
+    "name": "Wild Charge",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "drill run": {
+    "num": "529",
+    "name": "Drill Run",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "dual chop": {
+    "num": "530",
+    "name": "Dual Chop",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "heart stamp": {
+    "num": "531",
+    "name": "Heart Stamp",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "horn leech": {
+    "num": "532",
+    "name": "Horn Leech",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "sacred sword": {
+    "num": "533",
+    "name": "Sacred Sword",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "razor shell": {
+    "num": "534",
+    "name": "Razor Shell",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "heat crash": {
+    "num": "535",
+    "name": "Heat Crash",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "leaf tornado": {
+    "num": "536",
+    "name": "Leaf Tornado",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "steamroller": {
+    "num": "537",
+    "name": "Steamroller",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 65,
+    "priority": 0
+  },
+  "cotton guard": {
+    "num": "538",
+    "name": "Cotton Guard",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "night daze": {
+    "num": "539",
+    "name": "Night Daze",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 1,
+    "power": 85,
+    "priority": 0
+  },
+  "psystrike": {
+    "num": "540",
+    "name": "Psystrike",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "tail slap": {
+    "num": "541",
+    "name": "Tail Slap",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 25,
+    "priority": 0
+  },
+  "hurricane": {
+    "num": "542",
+    "name": "Hurricane",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "head charge": {
+    "num": "543",
+    "name": "Head Charge",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "gear grind": {
+    "num": "544",
+    "name": "Gear Grind",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "searing shot": {
+    "num": "545",
+    "name": "Searing Shot",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "techno blast": {
+    "num": "546",
+    "name": "Techno Blast",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "relic song": {
+    "num": "547",
+    "name": "Relic Song",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 75,
+    "priority": 0
+  },
+  "secret sword": {
+    "num": "548",
+    "name": "Secret Sword",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 85,
+    "priority": 0
+  },
+  "glaciate": {
+    "num": "549",
+    "name": "Glaciate",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "bolt strike": {
+    "num": "550",
+    "name": "Bolt Strike",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 130,
+    "priority": 0
+  },
+  "blue flare": {
+    "num": "551",
+    "name": "Blue Flare",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "fiery dance": {
+    "num": "552",
+    "name": "Fiery Dance",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "freeze shock": {
+    "num": "553",
+    "name": "Freeze Shock",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 140,
+    "priority": 0
+  },
+  "ice burn": {
+    "num": "554",
+    "name": "Ice Burn",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 140,
+    "priority": 0
+  },
+  "snarl": {
+    "num": "555",
+    "name": "Snarl",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 1,
+    "power": 55,
+    "priority": 0
+  },
+  "icicle crash": {
+    "num": "556",
+    "name": "Icicle Crash",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "v-create": {
+    "num": "557",
+    "name": "V-create",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 180,
+    "priority": 0
+  },
+  "fusion flare": {
+    "num": "558",
+    "name": "Fusion Flare",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "fusion bolt": {
+    "num": "559",
+    "name": "Fusion Bolt",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "flying press": {
+    "num": "560",
+    "name": "Flying Press",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "mat block": {
+    "num": "561",
+    "name": "Mat Block",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "belch": {
+    "num": "562",
+    "name": "Belch",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 120,
+    "priority": 0
+  },
+  "rototiller": {
+    "num": "563",
+    "name": "Rototiller",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sticky web": {
+    "num": "564",
+    "name": "Sticky Web",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "fell stinger": {
+    "num": "565",
+    "name": "Fell Stinger",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 50,
+    "priority": 0
+  },
+  "phantom force": {
+    "num": "566",
+    "name": "Phantom Force",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "trick-or-treat": {
+    "num": "567",
+    "name": "Trick-or-Treat",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "noble roar": {
+    "num": "568",
+    "name": "Noble Roar",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "ion deluge": {
+    "num": "569",
+    "name": "Ion Deluge",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "parabolic charge": {
+    "num": "570",
+    "name": "Parabolic Charge",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 65,
+    "priority": 0
+  },
+  "forest's curse": {
+    "num": "571",
+    "name": "Forest's Curse",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "petal blizzard": {
+    "num": "572",
+    "name": "Petal Blizzard",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "freeze-dry": {
+    "num": "573",
+    "name": "Freeze-Dry",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 70,
+    "priority": 0
+  },
+  "disarming voice": {
+    "num": "574",
+    "name": "Disarming Voice",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "parting shot": {
+    "num": "575",
+    "name": "Parting Shot",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "topsy-turvy": {
+    "num": "576",
+    "name": "Topsy-Turvy",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "draining kiss": {
+    "num": "577",
+    "name": "Draining Kiss",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 50,
+    "priority": 0
+  },
+  "crafty shield": {
+    "num": "578",
+    "name": "Crafty Shield",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "flower shield": {
+    "num": "579",
+    "name": "Flower Shield",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "grassy terrain": {
+    "num": "580",
+    "name": "Grassy Terrain",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "misty terrain": {
+    "num": "581",
+    "name": "Misty Terrain",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "electrify": {
+    "num": "582",
+    "name": "Electrify",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "play rough": {
+    "num": "583",
+    "name": "Play Rough",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "fairy wind": {
+    "num": "584",
+    "name": "Fairy Wind",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 40,
+    "priority": 0
+  },
+  "moonblast": {
+    "num": "585",
+    "name": "Moonblast",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 95,
+    "priority": 0
+  },
+  "boomburst": {
+    "num": "586",
+    "name": "Boomburst",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 140,
+    "priority": 0
+  },
+  "fairy lock": {
+    "num": "587",
+    "name": "Fairy Lock",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "king's shield": {
+    "num": "588",
+    "name": "King's Shield",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "play nice": {
+    "num": "589",
+    "name": "Play Nice",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "confide": {
+    "num": "590",
+    "name": "Confide",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "water shuriken": {
+    "num": "594",
+    "name": "Water Shuriken",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 15,
+    "priority": 0
+  },
+  "mystical fire": {
+    "num": "595",
+    "name": "Mystical Fire",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 75,
+    "priority": 0
+  },
+  "spiky shield": {
+    "num": "596",
+    "name": "Spiky Shield",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "aromatic mist": {
+    "num": "597",
+    "name": "Aromatic Mist",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "eerie impulse": {
+    "num": "598",
+    "name": "Eerie Impulse",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "venom drench": {
+    "num": "599",
+    "name": "Venom Drench",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "powder": {
+    "num": "600",
+    "name": "Powder",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "geomancy": {
+    "num": "601",
+    "name": "Geomancy",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "magnetic flux": {
+    "num": "602",
+    "name": "Magnetic Flux",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "electric terrain": {
+    "num": "604",
+    "name": "Electric Terrain",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "dazzling gleam": {
+    "num": "605",
+    "name": "Dazzling Gleam",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "baby-doll eyes": {
+    "num": "608",
+    "name": "Baby-Doll Eyes",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "nuzzle": {
+    "num": "609",
+    "name": "Nuzzle",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 20,
+    "priority": 0
+  },
+  "infestation": {
+    "num": "611",
+    "name": "Infestation",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 20,
+    "priority": 0
+  },
+  "power-up punch": {
+    "num": "612",
+    "name": "Power-Up Punch",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "oblivion wing": {
+    "num": "613",
+    "name": "Oblivion Wing",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 80,
+    "priority": 0
+  },
+  "land's wrath": {
+    "num": "616",
+    "name": "Land's Wrath",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "celebrate": {
+    "num": "???",
+    "name": "Celebrate",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "happy hour": {
+    "num": "???",
+    "name": "Happy Hour",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "precipice blades": {
+    "num": "",
+    "name": "Precipice Blades",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "origin pulse": {
+    "num": "",
+    "name": "Origin Pulse",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "dragon ascent": {
+    "num": "",
+    "name": "Dragon Ascent",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 120,
+    "priority": 0
+  },
+  "diamond storm": {
+    "num": "",
+    "name": "Diamond Storm",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "accelerock": {
+    "num": "",
+    "name": "Accelerock",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 40,
+    "priority": 1
+  },
+  "anchor shot": {
+    "num": "",
+    "name": "Anchor Shot",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "aurora veil": {
+    "num": "",
+    "name": "Aurora Veil",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "beak blast": {
+    "num": "",
+    "name": "Beak Blast",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 0,
+    "power": 100,
+    "priority": -3
+  },
+  "brutal swing": {
+    "num": "",
+    "name": "Brutal Swing",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 60,
+    "priority": 0
+  },
+  "burn up": {
+    "num": "",
+    "name": "Burn Up",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "clanging scales": {
+    "num": "",
+    "name": "Clanging Scales",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 110,
+    "priority": 0
+  },
+  "core enforcer": {
+    "num": "",
+    "name": "Core Enforcer",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "darkest lariat": {
+    "num": "",
+    "name": "Darkest Lariat",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "dragon hammer": {
+    "num": "",
+    "name": "Dragon Hammer",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "fire lash": {
+    "num": "",
+    "name": "Fire Lash",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "first impression": {
+    "num": "",
+    "name": "First Impression",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 90,
+    "priority": 2
+  },
+  "fleur cannon": {
+    "num": "",
+    "name": "Fleur Cannon",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 130,
+    "priority": 0
+  },
+  "floreal healing": {
+    "num": "",
+    "name": "Floreal Healing",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "gear up": {
+    "num": "",
+    "name": "Gear Up",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "high horsepower": {
+    "num": "",
+    "name": "High Horsepower",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 95,
+    "priority": 0
+  },
+  "ice hammer": {
+    "num": "",
+    "name": "Ice Hammer",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "instruct": {
+    "num": "",
+    "name": "Instruct",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "laser focus": {
+    "num": "",
+    "name": "Laser Focus",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "leafage": {
+    "num": "",
+    "name": "Leafage",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 40,
+    "priority": 0
+  },
+  "liquidation": {
+    "num": "",
+    "name": "Liquidation",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "lunge": {
+    "num": "",
+    "name": "Lunge",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "moongeist beam": {
+    "num": "",
+    "name": "Moongeist Beam",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  },
+  "multi-attack": {
+    "num": "",
+    "name": "Multi-Attack",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "natures madness": {
+    "num": "",
+    "name": "Natures's Madness",
+    "type": 17,
+    "zname": "Twinkle Tackle",
+    "category": 1,
+    "power": 0,
+    "priority": 0
+  },
+  "pollen puff": {
+    "num": "",
+    "name": "Pollen Puff",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "power trip": {
+    "num": "",
+    "name": "Power rip",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 20,
+    "priority": 0
+  },
+  "prismatic laser": {
+    "num": "",
+    "name": "Prismatic Laser",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 160,
+    "priority": 0
+  },
+  "psychic fangs": {
+    "num": "",
+    "name": "Psychic Fangs",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "psychic terrain": {
+    "num": "",
+    "name": "Psychic Terrain",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "purify": {
+    "num": "",
+    "name": "Purify",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "revelation dance": {
+    "num": "",
+    "name": "Revelation Dance",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "shadow bone": {
+    "num": "",
+    "name": "Shadow Bone",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 85,
+    "priority": 0
+  },
+  "shell trap": {
+    "num": "",
+    "name": "Shell Trap",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 150,
+    "priority": -3
+  },
+  "shore up": {
+    "num": "",
+    "name": "Shore Up",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "smart strike": {
+    "num": "",
+    "name": "Smart Strike",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "solar blade": {
+    "num": "",
+    "name": "Solar Blade",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 125,
+    "priority": 0
+  },
+  "sparkling aria": {
+    "num": "",
+    "name": "Sparkling Aria",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 90,
+    "priority": 0
+  },
+  "spectral thief": {
+    "num": "",
+    "name": "Spectral Thief",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 90,
+    "priority": 0
+  },
+  "speed swap": {
+    "num": "",
+    "name": "Speed Swap",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "spirit shackle": {
+    "num": "",
+    "name": "Spirit Shackle",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "spotlight": {
+    "num": "",
+    "name": "Spotlight",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "stomping tantrum": {
+    "num": "",
+    "name": "Stomping Tantrum",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 0,
+    "power": 75,
+    "priority": 0
+  },
+  "strenght sap": {
+    "num": "",
+    "name": "Strenght Sap",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "sunsteel strike": {
+    "num": "",
+    "name": "Sunsteel Strike",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 0,
+    "power": 100,
+    "priority": 0
+  },
+  "tearful look": {
+    "num": "",
+    "name": "Tearful Look",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 0,
+    "priority": 0
+  },
+  "throat chop": {
+    "num": "",
+    "name": "Throat Chop",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "toxic thread": {
+    "num": "",
+    "name": "Toxic Thread",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 2,
+    "power": 0,
+    "priority": 0
+  },
+  "trop kick": {
+    "num": "",
+    "name": "Trop Kick",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 0,
+    "power": 70,
+    "priority": 0
+  },
+  "zing zap": {
+    "num": "",
+    "name": "Zing Zap",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 0,
+    "power": 80,
+    "priority": 0
+  },
+  "pulverizing pancake": {
+    "num": "",
+    "name": "Pulverizing Pancake",
+    "type": 0,
+    "zname": "Breakneck Blitz",
+    "category": 0,
+    "power": 210,
+    "priority": 0
+  },
+  "hidden power fire": {
+    "num": "",
+    "name": "Hidden Power Fire",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power water": {
+    "num": "",
+    "name": "Hidden Power Water",
+    "type": 2,
+    "zname": "Hydro Vortex",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power electric": {
+    "num": "",
+    "name": "Hidden Power Electric",
+    "type": 3,
+    "zname": "Gigavolt Havoc",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power grass": {
+    "num": "",
+    "name": "Hidden Power Grass",
+    "type": 4,
+    "zname": "Bloom Doom",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power ice": {
+    "num": "",
+    "name": "Hidden Power Ice",
+    "type": 5,
+    "zname": "Subzero Slammer",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power fighting": {
+    "num": "",
+    "name": "Hidden Power Fighting",
+    "type": 6,
+    "zname": "All-Out Pummeling",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power poison": {
+    "num": "",
+    "name": "Hidden Power Poison",
+    "type": 7,
+    "zname": "Acid Downpour",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power ground": {
+    "num": "",
+    "name": "Hidden Power Ground",
+    "type": 8,
+    "zname": "Tectonic Rage",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power flying": {
+    "num": "",
+    "name": "Hidden Power Flying",
+    "type": 9,
+    "zname": "Supersonic Skystrike",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power psychic": {
+    "num": "ì",
+    "name": "Hidden Power Psychic",
+    "type": 10,
+    "zname": "Shattered Psyche",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power bug": {
+    "num": "",
+    "name": "Hidden Power Bug",
+    "type": 11,
+    "zname": "Savage Spin-Out",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power rock": {
+    "num": "",
+    "name": "Hidden Power Rock",
+    "type": 12,
+    "zname": "Continental Crush",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power ghost": {
+    "num": "",
+    "name": "Hidden Power Ghost",
+    "type": 13,
+    "zname": "Never-Ending Nightmare",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power dragon": {
+    "num": "",
+    "name": "Hidden Power Dragon",
+    "type": 14,
+    "zname": "Devastating Drake",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power dark": {
+    "num": "",
+    "name": "Hidden Power Dark",
+    "type": 15,
+    "zname": "Black Hole Eclipse",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "hidden power steel": {
+    "num": "",
+    "name": "Hidden Power Steel",
+    "type": 16,
+    "zname": "Corkscrew Crash",
+    "category": 1,
+    "power": 60,
+    "priority": 0
+  },
+  "mind blown": {
+    "num": "",
+    "name": "Mind Blown",
+    "type": 1,
+    "zname": "Inferno Overdrive",
+    "category": 1,
+    "power": 150,
+    "priority": 0
+  },
+  "photon geyser": {
+    "num": "",
+    "name": "Photon Geyser",
+    "type": 10,
+    "category": 1,
+    "power": 100,
+    "priority": 0
+  }
+}
