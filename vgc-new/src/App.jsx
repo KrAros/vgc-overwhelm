@@ -2,6 +2,7 @@ import OptionsPanel from './components/OptionsPanel'
 import FieldsPanel from './components/FieldsPanel'
 import ModifiersPanel from './components/ModifiersPanel'
 import DamageTable from './components/DamageTable'
+import PokemonSelector from './components/PokemonSelector'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <FieldsPanel />
           <ModifiersPanel />
         </div>
+        <PokemonSelector />
         <DamageTable />
       </div>
     </div>
