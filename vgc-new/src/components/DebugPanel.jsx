@@ -152,12 +152,24 @@ export default function DebugPanel() {
           </div>
 
           <div className="bg-gray-900 rounded p-3">
-            <div className="text-sm font-bold text-yellow-400 mb-2">
-              {result.minPct}% – {result.maxPct}% ({result.minDmg}–{result.maxDmg} / {result.defHP} HP)
+            <div className={`text-sm font-bold mb-3 ${result.immune ? 'text-gray-400' : 'text-yellow-400'}`}>
+              {result.immune
+                ? '🚫 IMMUNE — danno 0'
+                : `${result.minPct}% – ${result.maxPct}% (${result.minDmg}–${result.maxDmg} / ${result.defHP} HP)`
+              }
             </div>
-            <div className="text-xs text-gray-400">
-              Rolls: {result.rolls.join(', ')}
-            </div>
+            {result.log && (
+              <div className="space-y-1 mb-3">
+                {result.log.map((line, i) => (
+                  <div key={i} className="text-xs text-gray-300 font-mono">{line}</div>
+                ))}
+              </div>
+            )}
+            {!result.immune && (
+              <div className="text-xs text-gray-500 font-mono border-t border-gray-700 pt-2">
+                Rolls: {result.rolls.join(', ')}
+              </div>
+            )}
           </div>
         </div>
       )}
