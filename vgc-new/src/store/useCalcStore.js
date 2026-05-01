@@ -55,6 +55,13 @@ const useCalcStore = create((set) => ({
     t[index] = { ...t[index], nature }
     return { [team]: t }
   }),
+
+  setSPs: (team, index, sps) =>
+  set((s) => {
+    const t = [...s[team]]
+    t[index] = { ...t[index], sps }
+    return { [team]: t }
+  }),
 }))
 
 export default useCalcStore

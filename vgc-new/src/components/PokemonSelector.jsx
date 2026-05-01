@@ -8,10 +8,56 @@ const ALL_MOVES = Object.keys(movesData).sort()
 
 const NATURES = [
   'adamant','bashful','bold','brave','calm','careful','docile',
-  'gentle','hardy','hasty','impish','jolly','lax','lazy','lax',
-  'lonely','mild','modest','naive','naughty','quiet','quirky',
-  'rash','relaxed','sassy','serious','timid','timid'
-].filter((v, i, a) => a.indexOf(v) === i).sort()
+  'gentle','hardy','hasty','impish','jolly','lax','lonely',
+  'mild','modest','naive','naughty','quiet','quirky',
+  'rash','relaxed','sassy','serious','timid'
+].sort()
+
+const STAT_NAMES = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
+
+function SPEditor({ team, index }) {
+  const pokemon = useCalcStore((s) => s[team][index])
+  const setSPs = useCalcStore((s) => s.setSPs)
+
+  const sps = pokemon?.sps || [0,0,0,0,0,0]
+  const total = sps.reduce((a, b) => a + b, 0)
+  const remaining = 66 - total
+
+  const handleChange = (i, val) => {
+    const newVal = Math.min(32, Math.max(0, parseInt(val) || 0))
+    const newSPs = [...sps]
+    const diff = newVal - sps[i]
+    if (diff > remaining) return
+    newSPs[i] = newVal
+    setSPs(team, index, newSPs)
+  }
+
+  return (
+    <div className="mt-2 mb-2">
+      <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <span>Stat Points</span>
+        <span className={total >= 66 ? 'text-yellow-400' : 'text-gray-400'}>
+          {total}/66
+        </span>
+      </div>
+      <div className="grid grid-cols-3 gap-1">
+        {STAT_NAMES.map((s, i) => (
+          <div key={i} className="flex items-center gap-1">
+            <span className="text-xs text-gray-500 w-7">{s}</span>
+            <input
+              type="number"
+              min="0"
+              max="32"
+              value={sps[i]}
+              onChange={e => handleChange(i, e.target.value)}
+              className="w-full bg-gray-700 text-white text-xs rounded px-1 py-0.5 outline-none"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function MoveSelect({ team, pokeIndex, moveIndex }) {
   const move = useCalcStore((s) => s[team][pokeIndex].moves[moveIndex])
@@ -67,7 +113,6 @@ function PokemonSlot({ team, index }) {
 
   return (
     <div className="border border-gray-600 rounded-lg p-2 mb-2">
-      {/* Selettore Pokémon */}
       <div className="relative mb-2">
         <input
           className="w-full bg-gray-700 text-sm text-white rounded px-2 py-1 outline-none capitalize"
@@ -98,7 +143,6 @@ function PokemonSlot({ team, index }) {
 
       {pokemon?.key && (
         <>
-          {/* Selettore natura */}
           <select
             className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 mb-2 outline-none capitalize"
             value={pokemon.nature || ''}
@@ -110,7 +154,8 @@ function PokemonSlot({ team, index }) {
             ))}
           </select>
 
-          {/* Mosse */}
+          <SPEditor team={team} index={index} />
+
           <div className="grid grid-cols-2 gap-1">
             {[0, 1, 2, 3].map(mi => (
               <MoveSelect key={mi} team={team} pokeIndex={index} moveIndex={mi} />
