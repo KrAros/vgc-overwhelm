@@ -3,6 +3,7 @@ import FieldsPanel from './components/FieldsPanel'
 import ModifiersPanel from './components/ModifiersPanel'
 import DamageTable from './components/DamageTable'
 import PokemonSelector from './components/PokemonSelector'
+import DebugPanel from './components/DebugPanel'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <FieldsPanel />
           <ModifiersPanel />
         </div>
+        <DebugPanel />
         <PokemonSelector />
         <DamageTable />
       </div>
