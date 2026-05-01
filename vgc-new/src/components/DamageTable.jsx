@@ -1,6 +1,9 @@
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 
+const spriteUrl = (key) =>
+  `https://play.pokemonshowdown.com/sprites/gen5/${key}.png`
+
 function DamageCell({ attacker, defender, level, field }) {
   if (!attacker?.key || !defender?.key) {
     return (
@@ -13,41 +16,23 @@ function DamageCell({ attacker, defender, level, field }) {
   const moves1 = (attacker.moves || []).filter(Boolean)
   const moves2 = (defender.moves || []).filter(Boolean)
 
-  const bestMove = (pokemon, sps, nature, moves) => {
+  const bestMove = (atk, def, moves) => {
     let best = null
     for (const move of moves) {
       const result = calculateDamage({
-        attacker: { atkPokemon: pokemon, atkSPs: sps, atkNature: nature, level },
-        defender: { defPokemon: defender.key, defSPs: defender.sps, defNature: defender.nature },
+        attacker: { atkPokemon: atk.key, atkSPs: atk.sps, atkNature: atk.nature, level },
+        defender: { defPokemon: def.key, defSPs: def.sps, defNature: def.nature },
         move,
         field,
       })
-      if (!result) continue
+      if (!result || result.immune) continue
       if (!best || result.maxPct > best.maxPct) best = { ...result, move }
     }
     return best
   }
 
-  const d1 = moves1.length > 0
-    ? bestMove(attacker.key, attacker.sps, attacker.nature, moves1)
-    : null
-
-  const d2 = moves2.length > 0
-    ? (() => {
-        let best = null
-        for (const move of moves2) {
-          const result = calculateDamage({
-            attacker: { atkPokemon: defender.key, atkSPs: defender.sps, atkNature: defender.nature, level },
-            defender: { defPokemon: attacker.key, defSPs: attacker.sps, defNature: attacker.nature },
-            move,
-            field,
-          })
-          if (!result) continue
-          if (!best || result.maxPct > best.maxPct) best = { ...result, move }
-        }
-        return best
-      })()
-    : null
+  const d1 = moves1.length > 0 ? bestMove(attacker, defender, moves1) : null
+  const d2 = moves2.length > 0 ? bestMove(defender, attacker, moves2) : null
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
@@ -129,7 +114,13 @@ export default function DamageTable() {
               <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-24">
                 {p?.key ? (
                   <>
-                    <div className="text-gray-300 capitalize">{p.key}</div>
+                    <img
+                      src={spriteUrl(p.key)}
+                      alt={p.key}
+                      className="w-12 h-12 object-contain mx-auto"
+                      onError={e => e.target.style.display = 'none'}
+                    />
+                    <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
                   </>
                 ) : (
                   <div className="text-gray-600">— T2 {i + 1} —</div>
@@ -143,7 +134,15 @@ export default function DamageTable() {
             <tr key={ri} className="border-t border-gray-700">
               <td className="bg-gray-900 p-2 text-center">
                 {row?.key ? (
-                  <div className="text-gray-300 capitalize">{row.key}</div>
+                  <>
+                    <img
+                      src={spriteUrl(row.key)}
+                      alt={row.key}
+                      className="w-12 h-12 object-contain mx-auto"
+                      onError={e => e.target.style.display = 'none'}
+                    />
+                    <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
+                  </>
                 ) : (
                   <div className="text-gray-600">— T1 {ri + 1} —</div>
                 )}
