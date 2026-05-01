@@ -25,6 +25,24 @@ const NATURE_MODIFIERS = {
   calm:    [14, 11], gentle:  [14, 12], sassy:   [14, 15], careful: [14, 13],
 }
 
+// Pokémon Champions: 1 SP = 8 EV, max 32 SP per stat, max 66 SP totali
+const MAX_SP_PER_STAT = 32
+const MAX_SP_TOTAL = 66
+const IV = 31 // fisso in Champions
+
+function spToEv(sp) {
+  const clamped = Math.min(sp ?? 0, MAX_SP_PER_STAT)
+  return clamped * 8
+}
+
+function validateSPs(sps) {
+  const total = sps.reduce((a, b) => a + b, 0)
+  if (total > MAX_SP_TOTAL) {
+    console.warn(`SP totali (${total}) superano il massimo di ${MAX_SP_TOTAL}`)
+  }
+  return sps
+}
+
 function getNatureModifier(nature, stat) {
   if (!nature || !NATURE_MODIFIERS[nature]) return 10
   const [boost, drop] = NATURE_MODIFIERS[nature]
@@ -40,7 +58,10 @@ function getBaseStat(pokemon, stat) {
   return POKEMON_DATA[pokemon].stats[stat]
 }
 
-function calcStat(base, ev, iv = 31, level = 50, nature = null, stat) {
+// IV fisso a 31, accetta SP invece di EV
+function calcStat(base, sp, level = 50, nature = null, stat) {
+  const ev = spToEv(sp)
+  const iv = IV
   if (stat === STAT_HP) {
     return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
   }
@@ -48,21 +69,24 @@ function calcStat(base, ev, iv = 31, level = 50, nature = null, stat) {
   return Math.floor(raw * getNatureModifier(nature, stat) / 10)
 }
 
-function chainMultipleModifiers(...mods) {
-  return mods.reduce((acc, m) => Math.floor(acc * m / 0x1000) , 0x1000)
-}
-
 export function calculateDamage({ attacker, defender, move, field = {} }) {
   const {
-    atkPokemon, defPokemon,
-    atkEVs = [0,0,0,0,0,0], defEVs = [0,0,0,0,0,0],
-    atkIVs = [31,31,31,31,31,31], defIVs = [31,31,31,31,31,31],
-    atkNature = null, defNature = null,
-    atkBoosts = 0, defBoosts = 0,
-    atkAbility = null, defAbility = null,
-    atkItem = null, defItem = null,
+    atkPokemon,
+    atkSPs = [0, 0, 0, 0, 0, 0],
+    atkNature = null,
+    atkItem = null,
     level = 50,
-  } = { ...attacker, ...defender }
+  } = attacker
+
+  const {
+    defPokemon,
+    defSPs = [0, 0, 0, 0, 0, 0],
+    defNature = null,
+    defItem = null,
+  } = defender
+
+  validateSPs(atkSPs)
+  validateSPs(defSPs)
 
   const moveData = MOVE_DATA[move]
   if (!moveData || !moveData.power) return null
@@ -74,12 +98,12 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
 
-  const atkStat = calcStat(atkBase, atkEVs[atkStatIdx], atkIVs[atkStatIdx], level, atkNature, atkStatIdx)
-  const defStat = calcStat(defBase, defEVs[defStatIdx], defIVs[defStatIdx], level, defNature, defStatIdx)
+  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx)
+  const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx)
 
   const defHP = calcStat(
     getBaseStat(defPokemon, STAT_HP),
-    defEVs[STAT_HP], defIVs[STAT_HP], level, null, STAT_HP
+    defSPs[STAT_HP], level, null, STAT_HP
   )
 
   const bp = moveData.power
@@ -89,16 +113,16 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
     let dmg = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * bp * atkStat / defStat) / 50) + 2
     dmg = Math.floor(dmg * r / 100)
 
-    if (field.weather === 'sun' && moveData.type === 10) dmg = Math.floor(dmg * 1.5)
-    if (field.weather === 'sun' && moveData.type === 11) dmg = Math.floor(dmg * 0.5)
+    if (field.weather === 'sun'  && moveData.type === 10) dmg = Math.floor(dmg * 1.5)
+    if (field.weather === 'sun'  && moveData.type === 11) dmg = Math.floor(dmg * 0.5)
     if (field.weather === 'rain' && moveData.type === 11) dmg = Math.floor(dmg * 1.5)
     if (field.weather === 'rain' && moveData.type === 10) dmg = Math.floor(dmg * 0.5)
-    if (field.helpingHand) dmg = Math.floor(dmg * 1.5)
-    if (field.doubleTarget) dmg = Math.floor(dmg * 0.75)
-    if (field.crit) dmg = Math.floor(dmg * 1.5)
-    if (field.reflect && !isSpecial) dmg = Math.floor(dmg * 0.5)
-    if (field.lightScreen && isSpecial) dmg = Math.floor(dmg * 0.5)
-    if (field.auroraVeil) dmg = Math.floor(dmg * 0.5)
+    if (field.helpingHand)              dmg = Math.floor(dmg * 1.5)
+    if (field.doubleTarget)             dmg = Math.floor(dmg * 0.75)
+    if (field.crit)                     dmg = Math.floor(dmg * 1.5)
+    if (field.reflect    && !isSpecial) dmg = Math.floor(dmg * 0.5)
+    if (field.lightScreen &&  isSpecial) dmg = Math.floor(dmg * 0.5)
+    if (field.auroraVeil)               dmg = Math.floor(dmg * 0.5)
 
     rolls.push(dmg)
   }
