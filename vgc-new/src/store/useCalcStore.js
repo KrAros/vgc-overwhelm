@@ -48,6 +48,13 @@ const useCalcStore = create((set) => ({
       t[pokeIndex] = { ...t[pokeIndex], moves }
       return { [team]: t }
     }),
+
+  setNature: (team, index, nature) =>
+  set((s) => {
+    const t = [...s[team]]
+    t[index] = { ...t[index], nature }
+    return { [team]: t }
+  }),
 }))
 
 export default useCalcStore

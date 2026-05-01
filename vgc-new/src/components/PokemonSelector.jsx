@@ -6,6 +6,13 @@ import useCalcStore from '../store/useCalcStore'
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES = Object.keys(movesData).sort()
 
+const NATURES = [
+  'adamant','bashful','bold','brave','calm','careful','docile',
+  'gentle','hardy','hasty','impish','jolly','lax','lazy','lax',
+  'lonely','mild','modest','naive','naughty','quiet','quirky',
+  'rash','relaxed','sassy','serious','timid','timid'
+].filter((v, i, a) => a.indexOf(v) === i).sort()
+
 function MoveSelect({ team, pokeIndex, moveIndex }) {
   const move = useCalcStore((s) => s[team][pokeIndex].moves[moveIndex])
   const setMove = useCalcStore((s) => s.setMove)
@@ -50,6 +57,7 @@ function MoveSelect({ team, pokeIndex, moveIndex }) {
 function PokemonSlot({ team, index }) {
   const pokemon = useCalcStore((s) => s[team][index])
   const setPokemon = useCalcStore((s) => s.setPokemon)
+  const setNature = useCalcStore((s) => s.setNature)
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
@@ -58,14 +66,15 @@ function PokemonSlot({ team, index }) {
   , [query])
 
   return (
-    <div className="bg-gray-750 border border-gray-600 rounded-lg p-2 mb-2">
+    <div className="border border-gray-600 rounded-lg p-2 mb-2">
+      {/* Selettore Pokémon */}
       <div className="relative mb-2">
         <input
           className="w-full bg-gray-700 text-sm text-white rounded px-2 py-1 outline-none capitalize"
           placeholder={`Pokémon ${index + 1}`}
           value={query || (pokemon?.key ? pokemon.key : '')}
           onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
-          onFocus={(e) => { setQuery(''); setOpen(true) }}
+          onFocus={() => { setQuery(''); setOpen(true) }}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
         />
         {open && filtered.length > 0 && (
@@ -88,11 +97,26 @@ function PokemonSlot({ team, index }) {
       </div>
 
       {pokemon?.key && (
-        <div className="grid grid-cols-2 gap-1">
-          {[0, 1, 2, 3].map(mi => (
-            <MoveSelect key={mi} team={team} pokeIndex={index} moveIndex={mi} />
-          ))}
-        </div>
+        <>
+          {/* Selettore natura */}
+          <select
+            className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 mb-2 outline-none capitalize"
+            value={pokemon.nature || ''}
+            onChange={(e) => setNature(team, index, e.target.value || null)}
+          >
+            <option value="">Natura (neutra)</option>
+            {NATURES.map(n => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
+
+          {/* Mosse */}
+          <div className="grid grid-cols-2 gap-1">
+            {[0, 1, 2, 3].map(mi => (
+              <MoveSelect key={mi} team={team} pokeIndex={index} moveIndex={mi} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

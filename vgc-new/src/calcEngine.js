@@ -17,12 +17,13 @@ const STAT_SPD = 4
 const STAT_SPE = 5
 
 const NATURE_MODIFIERS = {
-  hardy:[10,10],bashful:[10,10],docile:[10,10],serious:[10,10],quirky:[10,10],
-  lonely:[11,12],brave:[11,15],adamant:[11,13],naughty:[11,14],
-  bold:[12,11],relaxed:[12,15],impish:[12,13],lax:[12,14],
-  timid:[15,11],hasty:[15,12],jolly:[15,13],naive:[15,14],
-  modest:[13,11],mild:[13,12],quiet:[13,15],rash:[13,14],
-  calm:[14,11],gentle:[14,12],sassy:[14,15],careful:[14,13],
+  hardy:   [0, 0], bashful: [0, 0], docile:  [0, 0],
+  serious: [0, 0], quirky:  [0, 0],
+  lonely:  [1, 2], brave:   [1, 5], adamant: [1, 3], naughty: [1, 4],
+  bold:    [2, 1], relaxed: [2, 5], impish:  [2, 3], lax:     [2, 4],
+  timid:   [5, 1], hasty:   [5, 2], jolly:   [5, 3], naive:   [5, 4],
+  modest:  [3, 1], mild:    [3, 2], quiet:   [3, 5], rash:    [3, 4],
+  calm:    [4, 1], gentle:  [4, 2], sassy:   [4, 5], careful: [4, 3],
 }
 
 const MAX_SP_PER_STAT = 32
@@ -43,6 +44,7 @@ function validateSPs(sps) {
 function getNatureModifier(nature, stat) {
   if (!nature || !NATURE_MODIFIERS[nature]) return 10
   const [boost, drop] = NATURE_MODIFIERS[nature]
+  if (boost === 0) return 10
   if (stat === boost) return 11
   if (stat === drop) return 9
   return 10
