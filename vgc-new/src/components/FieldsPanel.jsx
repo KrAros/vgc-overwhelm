@@ -8,7 +8,7 @@ const fields = [
   { label: "Sun",       key: "sun",      type: "weather", color: "text-orange-400 border-orange-400", active: "bg-orange-400 text-gray-900" },
   { label: "Rain",      key: "rain",     type: "weather", color: "text-blue-400 border-blue-400",    active: "bg-blue-400 text-gray-900" },
   { label: "Sand",      key: "sand",     type: "weather", color: "text-amber-600 border-amber-600",  active: "bg-amber-600 text-gray-900" },
-  { label: "Hail",      key: "hail",     type: "weather", color: "text-sky-200 border-sky-200",      active: "bg-sky-200 text-gray-900" },
+  { label: "Snow",      key: "snow", type: "weather", color: "text-sky-200 border-sky-200", active: "bg-sky-200 text-gray-900" },
 ]
 
 export default function FieldsPanel() {

@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import { calculateDamage } from '../calcEngine'
+import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
 
 const STAT_NAMES = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
+
+const NATURE_MODIFIERS = {
+  hardy:[0,0],bashful:[0,0],docile:[0,0],serious:[0,0],quirky:[0,0],
+  lonely:[1,2],brave:[1,5],adamant:[1,3],naughty:[1,4],
+  bold:[2,1],relaxed:[2,5],impish:[2,3],lax:[2,4],
+  timid:[5,1],hasty:[5,2],jolly:[5,3],naive:[5,4],
+  modest:[3,1],mild:[3,2],quiet:[3,5],rash:[3,4],
+  calm:[4,1],gentle:[4,2],sassy:[4,5],careful:[4,3],
+}
 
 function calcFinalStat(base, sp, level, nature, statIdx) {
   const ev = (sp ?? 0) * 8
@@ -10,16 +20,9 @@ function calcFinalStat(base, sp, level, nature, statIdx) {
   if (statIdx === 0) {
     return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
   }
-  const NATURE_MODIFIERS = {
-    hardy:[10,10],bashful:[10,10],docile:[10,10],serious:[10,10],quirky:[10,10],
-    lonely:[11,12],brave:[11,15],adamant:[11,13],naughty:[11,14],
-    bold:[12,11],relaxed:[12,15],impish:[12,13],lax:[12,14],
-    timid:[15,11],hasty:[15,12],jolly:[15,13],naive:[15,14],
-    modest:[13,11],mild:[13,12],quiet:[13,15],rash:[13,14],
-    calm:[14,11],gentle:[14,12],sassy:[14,15],careful:[14,13],
-  }
   const mod = nature && NATURE_MODIFIERS[nature]
-    ? (NATURE_MODIFIERS[nature][0] === statIdx ? 11 : NATURE_MODIFIERS[nature][1] === statIdx ? 9 : 10)
+    ? (NATURE_MODIFIERS[nature][0] === statIdx ? 11
+      : NATURE_MODIFIERS[nature][1] === statIdx ? 9 : 10)
     : 10
   const raw = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5
   return Math.floor(raw * mod / 10)
@@ -36,24 +39,77 @@ export default function DebugPanel() {
   const [level, setLevel] = useState(50)
   const [result, setResult] = useState(null)
 
+  // Legge weather, terrain e modificatori dallo store
+  const weather      = useCalcStore((s) => s.weather)
+  const terrain      = useCalcStore((s) => s.terrain)
+  const helpingHand  = useCalcStore((s) => s.helpingHand)
+  const auroraVeil   = useCalcStore((s) => s.auroraVeil)
+  const lightScreen  = useCalcStore((s) => s.lightScreen)
+  const reflect      = useCalcStore((s) => s.reflect)
+  const crit         = useCalcStore((s) => s.crit)
+  const doubleTarget = useCalcStore((s) => s.doubleTarget)
+
   const atkData = pokemonData[atkPokemon]
   const defData = pokemonData[defPokemon]
 
   const run = () => {
+    const field = {
+      weather,
+      terrain,
+      helpingHand: helpingHand.t1,
+      auroraVeil:  auroraVeil.t1,
+      lightScreen: lightScreen.t1,
+      reflect:     reflect.t1,
+      crit:        crit.t1,
+      doubleTarget,
+    }
+
     const r = calculateDamage({
       attacker: { atkPokemon, atkSPs, atkNature: atkNature || null, level },
       defender: { defPokemon, defSPs, defNature: defNature || null },
       move,
-      field: {},
+      field,
     })
     setResult(r)
   }
 
+  const weatherLabel = {
+    sun: '☀️ Sole', rain: '🌧️ Pioggia',
+    sand: '🏜️ Sabbia', snow: '❄️ Snow',
+  }
+  const terrainLabel = {
+    electric: '⚡ Electric', grassy: '🌿 Grassy',
+    misty: '🌫️ Misty', psychic: '🔮 Psychic',
+  }
+
   return (
     <div className="bg-gray-800 rounded-xl p-4 border border-yellow-600 mb-4">
-      <h2 className="text-sm font-bold text-yellow-400 uppercase tracking-widest mb-4">
+      <h2 className="text-sm font-bold text-yellow-400 uppercase tracking-widest mb-2">
         🐛 Debug Panel
       </h2>
+
+      {/* Stato campo attivo dallo store */}
+      <div className="flex gap-2 flex-wrap mb-4 text-xs">
+        {weather && (
+          <span className="px-2 py-0.5 rounded bg-orange-900/40 text-orange-300 border border-orange-700">
+            {weatherLabel[weather] || weather}
+          </span>
+        )}
+        {terrain && (
+          <span className="px-2 py-0.5 rounded bg-green-900/40 text-green-300 border border-green-700">
+            {terrainLabel[terrain] || terrain}
+          </span>
+        )}
+        {helpingHand.t1 && <span className="px-2 py-0.5 rounded bg-teal-900/40 text-teal-300 border border-teal-700">Helping Hand ←</span>}
+        {helpingHand.t2 && <span className="px-2 py-0.5 rounded bg-teal-900/40 text-teal-300 border border-teal-700">Helping Hand →</span>}
+        {reflect.t1 && <span className="px-2 py-0.5 rounded bg-yellow-900/40 text-yellow-300 border border-yellow-700">Reflect ←</span>}
+        {lightScreen.t1 && <span className="px-2 py-0.5 rounded bg-yellow-900/40 text-yellow-300 border border-yellow-700">Light Screen ←</span>}
+        {auroraVeil.t1 && <span className="px-2 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-700">Aurora Veil ←</span>}
+        {crit.t1 && <span className="px-2 py-0.5 rounded bg-red-900/40 text-red-300 border border-red-700">Crit ←</span>}
+        {!weather && !terrain && !helpingHand.t1 && !reflect.t1 && !lightScreen.t1 && !auroraVeil.t1 && !crit.t1 && (
+          <span className="text-gray-600">Nessun modificatore attivo</span>
+        )}
+      </div>
 
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div>
@@ -122,7 +178,7 @@ export default function DebugPanel() {
         <div className="border-t border-gray-700 pt-4">
           <div className="grid grid-cols-2 gap-4 mb-3">
             <div>
-              <div className="text-xs text-gray-400 mb-1">Stat base {atkPokemon}</div>
+              <div className="text-xs text-gray-400 mb-1">Stat {atkPokemon}</div>
               <div className="grid grid-cols-6 gap-1">
                 {STAT_NAMES.map((s, i) => (
                   <div key={i} className="text-center">
@@ -136,7 +192,7 @@ export default function DebugPanel() {
               </div>
             </div>
             <div>
-              <div className="text-xs text-gray-400 mb-1">Stat base {defPokemon}</div>
+              <div className="text-xs text-gray-400 mb-1">Stat {defPokemon}</div>
               <div className="grid grid-cols-6 gap-1">
                 {STAT_NAMES.map((s, i) => (
                   <div key={i} className="text-center">

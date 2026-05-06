@@ -16,6 +16,33 @@ const STAT_SPA = 3
 const STAT_SPD = 4
 const STAT_SPE = 5
 
+const SPREAD_MOVES = new Set([
+  'acid', 'air-cutter', 'blizzard', 'boomburst', 'brutal-swing',
+  'bubble', 'bulldoze', 'captivate', 'core-enforcer', 'dark-void',
+  'dazzling-gleam', 'diamond-storm', 'disarming-voice', 'discharge',
+  'earthquake', 'electroweb', 'eruption', 'explosion', 'glaciate',
+  'growl', 'heat-wave', 'hyper-voice', 'icy-wind', 'incinerate',
+  "land's-wrath", 'lava-plume', 'leer', 'magnitude', 'muddy-water',
+  'parabolic-charge', 'petal-blizzard', 'poison-gas', 'powder-snow',
+  'razor-leaf', 'razor-wind', 'relic-song', 'rock-slide',
+  'searing-shot', 'self-destruct', 'sludge-wave', 'snarl',
+  'sparkling-aria', 'string-shot', 'struggle-bug', 'surf',
+  'sweet-scent', 'swift', 'synchronise', 'tail-whip', 'teeter-dance',
+  'twister', 'water-spout', 'precipice-blades', 'origin-pulse',
+  'clanging-scales',
+])
+
+// Tipi per i terreni
+const TYPE_ELECTRIC = 3
+const TYPE_GRASS    = 4
+const TYPE_FAIRY    = 17
+const TYPE_PSYCHIC  = 10
+const TYPE_FIRE     = 1
+const TYPE_WATER    = 2
+const TYPE_ROCK     = 12
+const TYPE_STEEL    = 16
+const TYPE_ICE      = 5
+
 const NATURE_MODIFIERS = {
   hardy:   [0, 0], bashful: [0, 0], docile:  [0, 0],
   serious: [0, 0], quirky:  [0, 0],
@@ -57,14 +84,39 @@ function getBaseStat(pokemon, stat) {
   return POKEMON_DATA[pokemon].stats[stat]
 }
 
-function calcStat(base, sp, level = 50, nature = null, stat) {
+function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pokeTypes = []) {
   const ev = spToEv(sp)
   const iv = IV
+  let result
   if (stat === STAT_HP) {
-    return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
+    result = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
+  } else {
+    const raw = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5
+    result = Math.floor(raw * getNatureModifier(nature, stat) / 10)
   }
-  const raw = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5
-  return Math.floor(raw * getNatureModifier(nature, stat) / 10)
+
+  // Sand: +50% SpDef per tipi Roccia, Acciaio, Terra
+  if (weather === 'sand' && stat === STAT_SPD) {
+    if (pokeTypes.includes(TYPE_ROCK) || pokeTypes.includes(TYPE_STEEL) || pokeTypes.includes(8)) {
+      result = Math.floor(result * 1.5)
+    }
+  }
+
+  // Snow: +50% Def per tipo Ghiaccio
+  if (weather === 'snow' && stat === STAT_DEF) {
+    if (pokeTypes.includes(TYPE_ICE)) {
+      result = Math.floor(result * 1.5)
+    }
+  }
+
+  return result
+}
+
+function isGrounded(defPokeData) {
+  // Volante o levitante non subisce effetti terreno
+  const TYPE_FLYING = 9
+  if (defPokeData.type.includes(TYPE_FLYING)) return false
+  return true
 }
 
 export function calculateDamage({ attacker, defender, move, field = {} }) {
@@ -95,75 +147,116 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
 
-  // Efficacia tipo — immunità, debolezze, resistenze
   const effectiveness = getEffectiveness(moveType, defTypes)
   if (effectiveness === 0) return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
 
-  // STAB
   const stab = hasSTAB(moveType, atkTypes) ? 1.5 : 1
-
   const isSpecial = moveData.category === 1
   const atkStatIdx = isSpecial ? STAT_SPA : STAT_ATT
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
 
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
-
-  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx)
-  const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx)
-
-  const defHP = calcStat(
-    getBaseStat(defPokemon, STAT_HP),
-    defSPs[STAT_HP], level, null, STAT_HP
-  )
+  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, field.weather, atkTypes)
+  const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, field.weather, defTypes)
+  const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
   const bp = moveData.power
+  const defGrounded = isGrounded(defPokeData)
+  const atkGrounded = isGrounded(atkPokeData)
 
-const rolls = []
-  for (let r = 85; r <= 100; r++) {
-    let dmg = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * bp * atkStat / defStat) / 50) + 2
-    dmg = Math.floor(dmg * r / 100)
-
-    // STAB con floor separato
-    if (stab === 1.5) dmg = Math.floor(dmg * 4096 * 1.5 / 4096)
-
-    // Efficacia con floor separato  
-    if (effectiveness === 2)   dmg = dmg * 2
-    if (effectiveness === 4)   dmg = dmg * 4
-    if (effectiveness === 0.5) dmg = Math.floor(dmg * 0.5)
-    if (effectiveness === 0.25) dmg = Math.floor(dmg * 0.25)
-
-    // Modificatori campo
-    if (field.weather === 'sun'  && moveType === 1)  dmg = Math.floor(dmg * 1.5)
-    if (field.weather === 'sun'  && moveType === 2)  dmg = Math.floor(dmg * 0.5)
-    if (field.weather === 'rain' && moveType === 2)  dmg = Math.floor(dmg * 1.5)
-    if (field.weather === 'rain' && moveType === 1)  dmg = Math.floor(dmg * 0.5)
-    if (field.helpingHand)               dmg = Math.floor(dmg * 1.5)
-    if (field.doubleTarget)              dmg = Math.floor(dmg * 0.75)
-    if (field.crit)                      dmg = Math.floor(dmg * 1.5)
-    if (field.reflect    && !isSpecial)  dmg = Math.floor(dmg * 0.5)
-    if (field.lightScreen &&  isSpecial) dmg = Math.floor(dmg * 0.5)
-    if (field.auroraVeil)                dmg = Math.floor(dmg * 0.5)
-
-    rolls.push(dmg)
+  // Modificatori terreno sulla potenza
+  let terrainBP = bp
+  if (field.terrain === 'electric' && moveType === TYPE_ELECTRIC && atkGrounded) {
+    terrainBP = Math.floor(terrainBP * 1.3)
+  }
+  if (field.terrain === 'grassy' && moveType === TYPE_GRASS && atkGrounded) {
+    terrainBP = Math.floor(terrainBP * 1.3)
+  }
+  if (field.terrain === 'psychic' && moveType === TYPE_PSYCHIC && atkGrounded) {
+    terrainBP = Math.floor(terrainBP * 1.3)
+  }
+  // Misty terrain dimezza le mosse drago sul difensore a terra
+  if (field.terrain === 'misty' && moveType === 14 && defGrounded) {
+    terrainBP = Math.floor(terrainBP * 0.5)
+  }
+  // Grassy terrain dimezza Earthquake, Bulldoze, Magnitude
+  if (field.terrain === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move)) {
+    terrainBP = Math.floor(terrainBP * 0.5)
   }
 
-const minDmg = rolls[0]
+  const rolls = []
+  for (let r = 85; r <= 100; r++) {
+    let damage = Math.floor(
+      Math.floor(
+        Math.floor((2 * level) / 5 + 2) * terrainBP * atkStat / defStat
+      ) / 50
+    ) + 2
+
+    // Spread
+    if (SPREAD_MOVES.has(move)) {
+      damage = Math.floor(damage * 0.75)
+    }
+
+    // Meteo
+    if (field.weather === 'sun'  && moveType === TYPE_FIRE)  damage = Math.floor(damage * 1.5)
+    if (field.weather === 'sun'  && moveType === TYPE_WATER) damage = Math.floor(damage * 0.5)
+    if (field.weather === 'rain' && moveType === TYPE_WATER) damage = Math.floor(damage * 1.5)
+    if (field.weather === 'rain' && moveType === TYPE_FIRE)  damage = Math.floor(damage * 0.5)
+    // Sabbia: boost SpDef dei tipi Roccia/Acciaio/Terra
+    // (applicato sulla stat difesa, non sul danno diretto)
+    // Grandine: boost Def dei tipi Ghiaccio
+    // (applicato sulla stat difesa, non sul danno diretto)
+
+    // Crit
+    if (field.crit) damage = Math.floor(damage * 1.5)
+
+    // Random
+    damage = Math.floor(damage * r / 100)
+
+    // STAB
+    if (stab === 1.5) damage = Math.floor(damage * 1.5)
+
+    // Type effectiveness
+    damage = Math.floor(damage * effectiveness)
+
+    // Schermi
+    if (field.reflect    && !isSpecial) damage = Math.floor(damage * 0.5)
+    if (field.lightScreen &&  isSpecial) damage = Math.floor(damage * 0.5)
+    if (field.auroraVeil)               damage = Math.floor(damage * 0.5)
+
+    // Helping Hand
+    if (field.helpingHand) damage = Math.floor(damage * 1.5)
+
+    rolls.push(damage)
+  }
+
+  const minDmg = rolls[0]
   const maxDmg = rolls[rolls.length - 1]
   const minPct = Math.floor(minDmg / defHP * 1000) / 10
   const maxPct = Math.floor(maxDmg / defHP * 1000) / 10
+
+  const terrainLabel = {
+    electric: '⚡ Electric Terrain',
+    grassy: '🌿 Grassy Terrain',
+    misty: '🌫️ Misty Terrain',
+    psychic: '🔮 Psychic Terrain',
+  }
 
   const log = [
     `📊 ${atkPokemon} → ${move} → ${defPokemon}`,
     `⚔️  Stat attacco: ${atkStat} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, natura ${atkNature || 'neutra'})`,
     `🛡️  Stat difesa: ${defStat} (base ${defBase}, SP ${defSPs[defStatIdx]}, natura ${defNature || 'neutra'})`,
     `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
-    `💥 Potenza mossa: ${bp}`,
+    `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
+    `🌍 Spread: ${SPREAD_MOVES.has(move) ? '×0.75 ✅' : '❌'}`,
     `🎯 STAB: ${stab === 1.5 ? '×1.5 ✅' : '×1 ❌'}`,
-    `🔥 Efficacia: ×${effectiveness}${effectiveness === 0 ? ' (IMMUNE)' : effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
+    `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
+    field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
+    field.weather ? `☀️ Meteo: ${field.weather}` : null,
     `🎲 Danno min: ${minDmg} (${minPct}%) | max: ${maxDmg} (${maxPct}%)`,
     `🎲 Rolls: ${rolls.join(', ')}`,
-  ]
+  ].filter(Boolean)
 
   return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log }
 }
