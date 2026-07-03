@@ -1,8 +1,28 @@
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
+import pokemonData from '../data/pokemon.json'
 
-const spriteUrl = (key) =>
-  `https://play.pokemonshowdown.com/sprites/gen5/${key}.png`
+const spriteUrl = (key) => {
+  const data = pokemonData[key]
+  if (!data) return null
+
+  const isMegaX = key.includes('-mega-x')
+  const isMegaY = key.includes('-mega-y')
+  const isMega  = data.mega === 1
+
+  let num = data.num
+
+  if (isMega) {
+    const baseName = key.replace(/-mega.*$/, '')
+    num = pokemonData[baseName]?.num || ''
+  }
+
+  num = num?.replace('#', '').padStart(4, '0')
+  if (!num) return null
+
+  const form = isMegaY ? 'f02' : isMegaX ? 'f01' : isMega ? 'f01' : 'f00'
+  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
+}
 
 function DamageCell({ attacker, defender, level, field }) {
   if (!attacker?.key || !defender?.key) {
