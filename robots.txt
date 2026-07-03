@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /data/
-
-Sitemap: http://www.pokemonoverwhelm.netsons.org/sitemap.xml
