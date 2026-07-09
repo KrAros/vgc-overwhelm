@@ -7,6 +7,10 @@ const emptyPokemon = () => ({
   nature: null,
   ability: null,
   item: null,
+  atkBoost: 0,
+  defBoost: 0,
+  spAtkBoost: 0,
+  spDefBoost: 0,
 })
 
 const useCalcStore = create((set) => ({
@@ -50,18 +54,25 @@ const useCalcStore = create((set) => ({
     }),
 
   setNature: (team, index, nature) =>
-  set((s) => {
-    const t = [...s[team]]
-    t[index] = { ...t[index], nature }
-    return { [team]: t }
-  }),
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = { ...t[index], nature }
+      return { [team]: t }
+    }),
 
   setSPs: (team, index, sps) =>
-  set((s) => {
-    const t = [...s[team]]
-    t[index] = { ...t[index], sps }
-    return { [team]: t }
-  }),
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = { ...t[index], sps }
+      return { [team]: t }
+    }),
+
+  setBoost: (team, index, stat, value) =>
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = { ...t[index], [stat]: Math.min(6, Math.max(-6, value)) }
+      return { [team]: t }
+    }),
 }))
 
 export default useCalcStore

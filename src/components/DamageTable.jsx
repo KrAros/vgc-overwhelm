@@ -20,8 +20,8 @@ const spriteUrl = (key) => {
   num = num?.replace('#', '').padStart(4, '0')
   if (!num) return null
 
-  const form = isMegaY ? 'f02' : isMegaX ? 'f01' : isMega ? 'f01' : 'f00'
-  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
+  const form = isMegaY ? '02' : isMegaX ? '01' : isMega ? '01' : '00'
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_${form}_0.webp`
 }
 
 function DamageCell({ attacker, defender, level, field }) {
@@ -123,7 +123,7 @@ export default function DamageTable() {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-700 mt-4">
+    <div className="overflow-x-auto rounded-xl border border-gray-700 mt-4 mb-4">
       <table className="w-full border-collapse text-xs">
         <thead>
           <tr>
