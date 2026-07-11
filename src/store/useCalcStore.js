@@ -11,6 +11,7 @@ const emptyPokemon = () => ({
   defBoost: 0,
   spAtkBoost: 0,
   spDefBoost: 0,
+  speBoost: 0,
 })
 
 const useCalcStore = create((set) => ({
