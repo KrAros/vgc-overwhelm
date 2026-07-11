@@ -2,7 +2,7 @@ import pokemonData from './data/pokemon.json'
 import movesData from './data/moves.json'
 import itemsData from './data/items.json'
 import abilitiesData from './data/abilities.json'
-import { getEffectiveness, hasSTAB } from './data/typeChart.js'
+import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
@@ -31,17 +31,6 @@ const SPREAD_MOVES = new Set([
   'twister', 'water-spout', 'precipice-blades', 'origin-pulse',
   'clanging-scales',
 ])
-
-// Tipi per i terreni
-const TYPE_ELECTRIC = 3
-const TYPE_GRASS    = 4
-const TYPE_FAIRY    = 17
-const TYPE_PSYCHIC  = 10
-const TYPE_FIRE     = 1
-const TYPE_WATER    = 2
-const TYPE_ROCK     = 12
-const TYPE_STEEL    = 16
-const TYPE_ICE      = 5
 
 const NATURE_MODIFIERS = {
   hardy:   [0, 0], bashful: [0, 0], docile:  [0, 0],
@@ -97,14 +86,14 @@ function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pok
 
   // Sand: +50% SpDef per tipi Roccia, Acciaio, Terra
   if (weather === 'sand' && stat === STAT_SPD) {
-    if (pokeTypes.includes(TYPE_ROCK) || pokeTypes.includes(TYPE_STEEL) || pokeTypes.includes(8)) {
+    if (pokeTypes.includes(TYPES.ROCK) || pokeTypes.includes(TYPES.STEEL) || pokeTypes.includes(TYPES.GROUND)) {
       result = Math.floor(result * 1.5)
     }
   }
 
   // Snow: +50% Def per tipo Ghiaccio
   if (weather === 'snow' && stat === STAT_DEF) {
-    if (pokeTypes.includes(TYPE_ICE)) {
+    if (pokeTypes.includes(TYPES.ICE)) {
       result = Math.floor(result * 1.5)
     }
   }
@@ -112,14 +101,17 @@ function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pok
   return result
 }
 
-function isGrounded(defPokeData) {
+function isGrounded(defPokeData, defAbility) {
   // Volante o levitante non subisce effetti terreno
-  const TYPE_FLYING = 9
-  if (defPokeData.type.includes(TYPE_FLYING)) return false
+  if (defPokeData.type.includes(TYPES.FLYING)) return false
+  if (defAbility === 'levitate') return false
   return true
 }
 
-export function calculateDamage({ attacker, defender, move, field = {} }) {
+// Lettura del parametro debug dall'URL (?debug=yes)
+const isDebugMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'yes';
+
+export function calculateDamage({ attacker, defender, move, field = {}, debug = isDebugMode }) {
   const {
     atkPokemon,
     atkSPs = [0,0,0,0,0,0],
@@ -131,6 +123,7 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
     defPokemon,
     defSPs = [0,0,0,0,0,0],
     defNature = null,
+    defAbility = null,
   } = defender
 
   validateSPs(atkSPs)
@@ -148,7 +141,13 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
   const defTypes = defPokeData.type
 
   const effectiveness = getEffectiveness(moveType, defTypes)
-  if (effectiveness === 0) return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  
+  // CONTROLLO IMMUNITÀ PER LEVITAZIONE (Levitate) CONTRO LE MOSSE TERRA (Ground)
+  const isLevitating = defAbility === 'levitate' && moveType === TYPES.GROUND
+
+  if (effectiveness === 0 || isLevitating) {
+    return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
 
   const stab = hasSTAB(moveType, atkTypes) ? 1.5 : 1
   const isSpecial = moveData.category === 1
@@ -162,22 +161,22 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
   const bp = moveData.power
-  const defGrounded = isGrounded(defPokeData)
-  const atkGrounded = isGrounded(atkPokeData)
+  const defGrounded = isGrounded(defPokeData, defAbility)
+  const atkGrounded = isGrounded(atkPokeData, attacker.atkAbility)
 
   // Modificatori terreno sulla potenza
   let terrainBP = bp
-  if (field.terrain === 'electric' && moveType === TYPE_ELECTRIC && atkGrounded) {
+  if (field.terrain === 'electric' && moveType === TYPES.ELECTRIC && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
   }
-  if (field.terrain === 'grassy' && moveType === TYPE_GRASS && atkGrounded) {
+  if (field.terrain === 'grassy' && moveType === TYPES.GRASS && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
   }
-  if (field.terrain === 'psychic' && moveType === TYPE_PSYCHIC && atkGrounded) {
+  if (field.terrain === 'psychic' && moveType === TYPES.PSYCHIC && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
   }
   // Misty terrain dimezza le mosse drago sul difensore a terra
-  if (field.terrain === 'misty' && moveType === 14 && defGrounded) {
+  if (field.terrain === 'misty' && moveType === TYPES.DRAGON && defGrounded) {
     terrainBP = Math.floor(terrainBP * 0.5)
   }
   // Grassy terrain dimezza Earthquake, Bulldoze, Magnitude
@@ -199,14 +198,10 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
     }
 
     // Meteo
-    if (field.weather === 'sun'  && moveType === TYPE_FIRE)  damage = Math.floor(damage * 1.5)
-    if (field.weather === 'sun'  && moveType === TYPE_WATER) damage = Math.floor(damage * 0.5)
-    if (field.weather === 'rain' && moveType === TYPE_WATER) damage = Math.floor(damage * 1.5)
-    if (field.weather === 'rain' && moveType === TYPE_FIRE)  damage = Math.floor(damage * 0.5)
-    // Sabbia: boost SpDef dei tipi Roccia/Acciaio/Terra
-    // (applicato sulla stat difesa, non sul danno diretto)
-    // Grandine: boost Def dei tipi Ghiaccio
-    // (applicato sulla stat difesa, non sul danno diretto)
+    if (field.weather === 'sun'  && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
+    if (field.weather === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
+    if (field.weather === 'rain' && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
+    if (field.weather === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
 
     // Crit
     if (field.crit) damage = Math.floor(damage * 1.5)
@@ -257,6 +252,54 @@ export function calculateDamage({ attacker, defender, move, field = {} }) {
     `🎲 Danno min: ${minDmg} (${minPct}%) | max: ${maxDmg} (${maxPct}%)`,
     `🎲 Rolls: ${rolls.join(', ')}`,
   ].filter(Boolean)
+
+  // --- INIEZIONE UI DI DEBUG ---
+  if (typeof document !== 'undefined') {
+    let debugContainer = document.getElementById('pokemon-debug-logger');
+    
+    if (debug) {
+      if (!debugContainer) {
+        debugContainer = document.createElement('div');
+        debugContainer.id = 'pokemon-debug-logger';
+        document.body.appendChild(debugContainer);
+        
+        const style = document.createElement('style');
+        style.textContent = `
+          #pokemon-debug-logger { 
+            position: fixed; bottom: 20px; right: 20px; 
+            background: #1e1e2e; color: #cdd6f4; 
+            border-radius: 12px; padding: 16px; 
+            font-family: monospace; max-width: 420px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+            z-index: 9999; max-height: 75vh; 
+            overflow-y: auto; border: 1px solid #313244;
+          }
+          .db-title { font-weight: bold; border-bottom: 1px solid #313244; padding-bottom: 6px; margin-bottom: 8px; color: #f5e0dc; font-size: 13px; }
+          .db-item { font-size: 11px; margin-bottom: 4px; color: #a6adc8; border-bottom: 1px dashed #252538; padding-bottom: 2px; }
+          .db-res { margin-top: 10px; background: #252538; padding: 8px; border-radius: 6px; border-left: 3px solid #fab387; font-size: 11px; }
+        `;
+        document.head.appendChild(style);
+      }
+
+      const headerText = log[0];
+      const rollsText = log[log.length - 1];
+      const minMaxText = log[log.length - 2];
+      const details = log.slice(1, -2);
+
+      debugContainer.innerHTML = `
+        <div class="db-title">${headerText}</div>
+        <div>
+          ${details.map(d => `<div class="db-item">${d}</div>`).join('')}
+        </div>
+        <div class="db-res">
+          <strong>${minMaxText}</strong>
+          <div style="font-size: 10px; color: #b4befe; margin-top: 5px; word-break: break-all;">${rollsText}</div>
+        </div>
+      `;
+    } else if (debugContainer) {
+      debugContainer.remove();
+    }
+  }
 
   return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log }
 }

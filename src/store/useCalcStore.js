@@ -73,6 +73,21 @@ const useCalcStore = create((set) => ({
       t[index] = { ...t[index], [stat]: Math.min(6, Math.max(-6, value)) }
       return { [team]: t }
     }),
+
+  setItem: (team, index, item) =>
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = { ...t[index], item: item }
+      return { [team]: t }
+    }),
+
+  setAbility: (team, index, ability) =>
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = { ...t[index], ability: ability }
+      return { [team]: t }
+    }),
+    
 }))
 
 export default useCalcStore

@@ -1,8 +1,6 @@
-import OptionsPanel from './components/OptionsPanel'
-import FieldsPanel from './components/FieldsPanel'
-import ModifiersPanel from './components/ModifiersPanel'
 import DamageTable from './components/DamageTable'
-import PokemonSelector from './components/PokemonSelector'
+import TeamEditor from './components/TeamEditor'
+import TopBar from './components/TopBar'
 
 function App() {
   return (
@@ -11,13 +9,12 @@ function App() {
         VGC Damage Calculator
       </h1>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <OptionsPanel />
-          <FieldsPanel />
-          <ModifiersPanel />
-        </div>
+        <TopBar />
         <DamageTable />
-        <PokemonSelector />
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <TeamEditor team="team1" />
+          <TeamEditor team="team2" />
+        </div>  
       </div>
     </div>
   )

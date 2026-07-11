@@ -40,8 +40,19 @@ function DamageCell({ attacker, defender, level, field }) {
     let best = null
     for (const move of moves) {
       const result = calculateDamage({
-        attacker: { atkPokemon: atk.key, atkSPs: atk.sps, atkNature: atk.nature, level },
-        defender: { defPokemon: def.key, defSPs: def.sps, defNature: def.nature },
+        attacker: { 
+          atkPokemon: atk.key, 
+          atkSPs: atk.sps, 
+          atkNature: atk.nature, 
+          atkAbility: atk.ability, // <-- Passiamo l'abilità di chi attacca
+          level 
+        },
+        defender: { 
+          defPokemon: def.key, 
+          defSPs: def.sps, 
+          defNature: def.nature,
+          defAbility: def.ability // <-- Passiamo l'abilità di chi difende
+        },
         move,
         field,
       })
