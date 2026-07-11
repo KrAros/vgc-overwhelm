@@ -1,5 +1,8 @@
+import { useMemo } from 'react'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
+import { calculateDamage } from '../calcEngine'
+import useCalcStore from '../store/useCalcStore'
 
 const NATURE_MODIFIERS = {
   hardy:[0,0],bashful:[0,0],docile:[0,0],serious:[0,0],quirky:[0,0],
@@ -40,17 +43,61 @@ function buildSmogonString(atk, def, move, result) {
   const statName = isSpecial ? 'SpA' : 'Atk'
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
-  const atkName = atk.key
-  const defName = def.key
   const moveName = move.replace(/-/g, ' ')
 
-  return `${atkSP}${natSymbol} ${statName} ${atkName} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName} ${defName}`
+  return `${atkSP}${natSymbol} ${statName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName} ${def.key}`
 }
 
 export default function ReportPanel({ selection, onClose }) {
-  if (!selection) return null
+  // Legge live dallo store — si aggiorna ad ogni cambio di modificatori
+  const doubleTarget = useCalcStore(s => s.doubleTarget)
+  const weather      = useCalcStore(s => s.weather)
+  const terrain      = useCalcStore(s => s.terrain)
+  const helpingHand  = useCalcStore(s => s.helpingHand)
+  const auroraVeil   = useCalcStore(s => s.auroraVeil)
+  const lightScreen  = useCalcStore(s => s.lightScreen)
+  const reflect      = useCalcStore(s => s.reflect)
+  const crit         = useCalcStore(s => s.crit)
 
-  const { atk, def, allMoves } = selection
+  const allMoves = useMemo(() => {
+    if (!selection) return []
+    const { atk, def, dir } = selection
+
+    const field = {
+      weather, terrain, doubleTarget,
+      helpingHand: dir === 't1' ? helpingHand.t1 : helpingHand.t2,
+      auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
+      lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
+      reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
+      crit:        dir === 't1' ? crit.t1         : crit.t2,
+    }
+
+    return (atk.moves || []).filter(Boolean).map(move => {
+      const result = calculateDamage({
+        attacker: {
+          atkPokemon: atk.key,
+          atkSPs: atk.sps || [0,0,0,0,0,0],
+          atkNature: atk.nature,
+          atkBoost: atk.atkBoost || 0,
+          spAtkBoost: atk.spAtkBoost || 0,
+          level: 50,
+        },
+        defender: {
+          defPokemon: def.key,
+          defSPs: def.sps || [0,0,0,0,0,0],
+          defNature: def.nature,
+          defBoost: def.defBoost || 0,
+          spDefBoost: def.spDefBoost || 0,
+        },
+        move,
+        field,
+      })
+      return { move, result }
+    }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
+  }, [selection, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
+
+  if (!selection) return null
+  const { atk, def } = selection
 
   return (
     <div className="bg-gray-800 rounded-xl border border-teal-500/50 p-4 mb-4">

@@ -16,7 +16,7 @@ const STAT_SPA = 3
 const STAT_SPD = 4
 const STAT_SPE = 5
 
-const SPREAD_MOVES = new Set([
+export const SPREAD_MOVES = new Set([
   'acid', 'air-cutter', 'blizzard', 'boomburst', 'brutal-swing',
   'bubble', 'bulldoze', 'captivate', 'core-enforcer', 'dark-void',
   'dazzling-gleam', 'diamond-storm', 'disarming-voice', 'discharge',
@@ -84,14 +84,12 @@ function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pok
     result = Math.floor(raw * getNatureModifier(nature, stat) / 10)
   }
 
-  // Sand: +50% SpDef per tipi Roccia, Acciaio, Terra
   if (weather === 'sand' && stat === STAT_SPD) {
     if (pokeTypes.includes(TYPES.ROCK) || pokeTypes.includes(TYPES.STEEL) || pokeTypes.includes(TYPES.GROUND)) {
       result = Math.floor(result * 1.5)
     }
   }
 
-  // Snow: +50% Def per tipo Ghiaccio
   if (weather === 'snow' && stat === STAT_DEF) {
     if (pokeTypes.includes(TYPES.ICE)) {
       result = Math.floor(result * 1.5)
@@ -102,14 +100,12 @@ function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pok
 }
 
 function isGrounded(defPokeData, defAbility) {
-  // Volante o levitante non subisce effetti terreno
   if (defPokeData.type.includes(TYPES.FLYING)) return false
   if (defAbility === 'levitate') return false
   return true
 }
 
-// Lettura del parametro debug dall'URL (?debug=yes)
-const isDebugMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'yes';
+const isDebugMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'yes'
 
 export function calculateDamage({ attacker, defender, move, field = {}, debug = isDebugMode }) {
   const {
@@ -141,8 +137,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defTypes = defPokeData.type
 
   const effectiveness = getEffectiveness(moveType, defTypes)
-  
-  // CONTROLLO IMMUNITÀ PER LEVITAZIONE (Levitate) CONTRO LE MOSSE TERRA (Ground)
+
   const isLevitating = defAbility === 'levitate' && moveType === TYPES.GROUND
 
   if (effectiveness === 0 || isLevitating) {
@@ -164,7 +159,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defGrounded = isGrounded(defPokeData, defAbility)
   const atkGrounded = isGrounded(atkPokeData, attacker.atkAbility)
 
-  // Modificatori terreno sulla potenza
   let terrainBP = bp
   if (field.terrain === 'electric' && moveType === TYPES.ELECTRIC && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
@@ -175,16 +169,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (field.terrain === 'psychic' && moveType === TYPES.PSYCHIC && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
   }
-  // Misty terrain dimezza le mosse drago sul difensore a terra
   if (field.terrain === 'misty' && moveType === TYPES.DRAGON && defGrounded) {
     terrainBP = Math.floor(terrainBP * 0.5)
   }
-  // Grassy terrain dimezza Earthquake, Bulldoze, Magnitude
   if (field.terrain === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move)) {
     terrainBP = Math.floor(terrainBP * 0.5)
   }
 
+  const moveKey = move.replace(/ /g, '-')
   const rolls = []
+
   for (let r = 85; r <= 100; r++) {
     let damage = Math.floor(
       Math.floor(
@@ -192,35 +186,28 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       ) / 50
     ) + 2
 
-    // Spread
-    if (SPREAD_MOVES.has(move)) {
+    // Spread: ×0.75 solo in double target
+    if (SPREAD_MOVES.has(moveKey) && field.doubleTarget) {
       damage = Math.floor(damage * 0.75)
     }
 
-    // Meteo
     if (field.weather === 'sun'  && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
     if (field.weather === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
     if (field.weather === 'rain' && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
     if (field.weather === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
 
-    // Crit
     if (field.crit) damage = Math.floor(damage * 1.5)
 
-    // Random
     damage = Math.floor(damage * r / 100)
 
-    // STAB
     if (stab === 1.5) damage = Math.floor(damage * 1.5)
 
-    // Type effectiveness
     damage = Math.floor(damage * effectiveness)
 
-    // Schermi
-    if (field.reflect    && !isSpecial) damage = Math.floor(damage * 0.5)
+    if (field.reflect     && !isSpecial) damage = Math.floor(damage * 0.5)
     if (field.lightScreen &&  isSpecial) damage = Math.floor(damage * 0.5)
     if (field.auroraVeil)               damage = Math.floor(damage * 0.5)
 
-    // Helping Hand
     if (field.helpingHand) damage = Math.floor(damage * 1.5)
 
     rolls.push(damage)
@@ -244,7 +231,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     `🛡️  Stat difesa: ${defStat} (base ${defBase}, SP ${defSPs[defStatIdx]}, natura ${defNature || 'neutra'})`,
     `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
     `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
-    `🌍 Spread: ${SPREAD_MOVES.has(move) ? '×0.75 ✅' : '❌'}`,
+    `🌍 Spread: ${SPREAD_MOVES.has(moveKey) ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
     `🎯 STAB: ${stab === 1.5 ? '×1.5 ✅' : '×1 ❌'}`,
     `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
     field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
@@ -253,38 +240,37 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     `🎲 Rolls: ${rolls.join(', ')}`,
   ].filter(Boolean)
 
-  // --- INIEZIONE UI DI DEBUG ---
   if (typeof document !== 'undefined') {
-    let debugContainer = document.getElementById('pokemon-debug-logger');
-    
+    let debugContainer = document.getElementById('pokemon-debug-logger')
+
     if (debug) {
       if (!debugContainer) {
-        debugContainer = document.createElement('div');
-        debugContainer.id = 'pokemon-debug-logger';
-        document.body.appendChild(debugContainer);
-        
-        const style = document.createElement('style');
+        debugContainer = document.createElement('div')
+        debugContainer.id = 'pokemon-debug-logger'
+        document.body.appendChild(debugContainer)
+
+        const style = document.createElement('style')
         style.textContent = `
-          #pokemon-debug-logger { 
-            position: fixed; bottom: 20px; right: 20px; 
-            background: #1e1e2e; color: #cdd6f4; 
-            border-radius: 12px; padding: 16px; 
-            font-family: monospace; max-width: 420px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
-            z-index: 9999; max-height: 75vh; 
+          #pokemon-debug-logger {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #1e1e2e; color: #cdd6f4;
+            border-radius: 12px; padding: 16px;
+            font-family: monospace; max-width: 420px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 9999; max-height: 75vh;
             overflow-y: auto; border: 1px solid #313244;
           }
           .db-title { font-weight: bold; border-bottom: 1px solid #313244; padding-bottom: 6px; margin-bottom: 8px; color: #f5e0dc; font-size: 13px; }
           .db-item { font-size: 11px; margin-bottom: 4px; color: #a6adc8; border-bottom: 1px dashed #252538; padding-bottom: 2px; }
           .db-res { margin-top: 10px; background: #252538; padding: 8px; border-radius: 6px; border-left: 3px solid #fab387; font-size: 11px; }
-        `;
-        document.head.appendChild(style);
+        `
+        document.head.appendChild(style)
       }
 
-      const headerText = log[0];
-      const rollsText = log[log.length - 1];
-      const minMaxText = log[log.length - 2];
-      const details = log.slice(1, -2);
+      const headerText = log[0]
+      const rollsText = log[log.length - 1]
+      const minMaxText = log[log.length - 2]
+      const details = log.slice(1, -2)
 
       debugContainer.innerHTML = `
         <div class="db-title">${headerText}</div>
@@ -295,9 +281,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
           <strong>${minMaxText}</strong>
           <div style="font-size: 10px; color: #b4befe; margin-top: 5px; word-break: break-all;">${rollsText}</div>
         </div>
-      `;
+      `
     } else if (debugContainer) {
-      debugContainer.remove();
+      debugContainer.remove()
     }
   }
 

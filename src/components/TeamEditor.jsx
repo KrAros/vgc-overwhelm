@@ -2,15 +2,16 @@ import { useState } from 'react'
 import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
-import itemsData from '../data/items.json' 
-import abilitiesData from '../data/abilities.json' 
+import itemsData from '../data/items.json'
+import abilitiesData from '../data/abilities.json'
 import useCalcStore from '../store/useCalcStore'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
+import { SPREAD_MOVES } from '../calcEngine'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES = Object.keys(movesData).sort()
-const ALL_ITEMS = Object.keys(itemsData).sort() 
-const ALL_ABILITIES = Object.keys(abilitiesData).sort() 
+const ALL_ITEMS = Object.keys(itemsData).sort()
+const ALL_ABILITIES = Object.keys(abilitiesData).sort()
 
 const NATURES = [
   'adamant','bashful','bold','brave','calm','careful','docile',
@@ -45,7 +46,7 @@ const spriteUrl = (key) => {
   }
   num = num?.replace('#', '').padStart(4, '0')
   if (!num) return null
-    const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
+  const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
 }
 
@@ -123,7 +124,7 @@ function PokemonSearch({ value, onChange }) {
   const hasValue = focused ? query.length > 0 : !!value
 
   const handleClear = (e) => {
-    e.preventDefault() 
+    e.preventDefault()
     setQuery('')
     onChange('')
     setOpen(false)
@@ -145,7 +146,6 @@ function PokemonSearch({ value, onChange }) {
           }, 150)
         }}
       />
-
       {hasValue && (
         <button
           type="button"
@@ -155,7 +155,6 @@ function PokemonSearch({ value, onChange }) {
           ✕
         </button>
       )}
-
       {open && filtered.length > 0 && (
         <div className="absolute z-50 w-full top-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-48 overflow-y-auto">
           {filtered.map(p => (
@@ -214,38 +213,25 @@ function MoveSearch({ value, onChange, placeholder }) {
           </div>
         )}
       </div>
-
       {moveDetails && (
         <div className="flex items-center gap-2 shrink-0 pl-1">
-            <span className="text-xs font-mono font-bold text-gray-300 text-right">
-                {moveDetails.power && moveDetails.power > 0 ? moveDetails.power : '—'}
-            </span>
-            <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[3px] shadow-sm shrink-0 ${
-                TYPE_COLORS[TYPE_NAMES[moveDetails.type]] || 'bg-gray-600 text-white'
-            }`}>
+          <span className="text-xs font-mono font-bold text-gray-300 text-right">
+            {moveDetails.power && moveDetails.power > 0 ? moveDetails.power : '—'}
+          </span>
+          <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[3px] shadow-sm shrink-0 ${
+            TYPE_COLORS[TYPE_NAMES[moveDetails.type]] || 'bg-gray-600 text-white'
+          }`}>
             {TYPE_NAMES[moveDetails.type]}
-            </span>
-            <span className="flex items-center justify-center shrink-0 w-4 h-4" title={categoryTitles[moveDetails.category] || 'Status'}>
-                {moveDetails.category === 1 ? (
-                    <img 
-                        src="https://i.pokebase.app/Xa6ark97i7hjvEdKKIJjx.png" 
-                        alt="Speciale" 
-                        className="h-4 w-auto object-contain inline-block" 
-                    />
-                ) : moveDetails.category === 0 ? (
-                    <img 
-                        src="https://i.pokebase.app/u-Uv6ZGd0yirOf1cCnovO.png" 
-                        alt="Fisico" 
-                        className="h-4 w-auto object-contain inline-block" 
-                    />
-                 ) : (
-                    <img 
-                        src="https://i.pokebase.app/4auqtYtIdMdzjIaRYEGNJ.png" 
-                        alt="Stato" 
-                        className="h-4 w-auto object-contain inline-block" 
-                    />
-                )}
-            </span>
+          </span>
+          <span className="flex items-center justify-center shrink-0 w-4 h-4" title={categoryTitles[moveDetails.category] || 'Status'}>
+            {moveDetails.category === 1 ? (
+              <img src="https://i.pokebase.app/Xa6ark97i7hjvEdKKIJjx.png" alt="Speciale" className="h-4 w-auto object-contain inline-block" />
+            ) : moveDetails.category === 0 ? (
+              <img src="https://i.pokebase.app/u-Uv6ZGd0yirOf1cCnovO.png" alt="Fisico" className="h-4 w-auto object-contain inline-block" />
+            ) : (
+              <img src="https://i.pokebase.app/4auqtYtIdMdzjIaRYEGNJ.png" alt="Stato" className="h-4 w-auto object-contain inline-block" />
+            )}
+          </span>
         </div>
       )}
     </div>
@@ -295,7 +281,6 @@ function AbilitySearch({ value, onChange }) {
     ? ALL_ABILITIES.filter(a => a.includes(query.toLowerCase())).slice(0, 20)
     : []
 
-  // Sincronizza l'input visivo quando il valore esterno cambia o l'utente digita
   const displayValue = query !== '' ? query : (value ? value.replace(/-/g, ' ') : '')
 
   return (
@@ -328,19 +313,20 @@ function AbilitySearch({ value, onChange }) {
 function PokemonPanel({ team, index }) {
   const pokemon = useCalcStore(s => s[team][index])
   const level   = useCalcStore(s => s.level)
-  const setPokemon = useCalcStore(s => s.setPokemon)
-  const setNature  = useCalcStore(s => s.setNature)
-  const setSPs     = useCalcStore(s => s.setSPs)
-  const setMove    = useCalcStore(s => s.setMove)
-  const setBoost   = useCalcStore(s => s.setBoost)
-  const setItem    = useCalcStore(s => s.setItem)
-  const setAbility = useCalcStore(s => s.setAbility) 
+  const setPokemon    = useCalcStore(s => s.setPokemon)
+  const setNature     = useCalcStore(s => s.setNature)
+  const setSPs        = useCalcStore(s => s.setSPs)
+  const setMove       = useCalcStore(s => s.setMove)
+  const setBoost      = useCalcStore(s => s.setBoost)
+  const setItem       = useCalcStore(s => s.setItem)
+  const setAbility    = useCalcStore(s => s.setAbility)
+  const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
 
   const data = pokemonData[pokemon?.key]
   const sps  = pokemon?.sps || [0,0,0,0,0,0]
   const nature = pokemon?.nature || null
   const item   = pokemon?.item || null
-  const ability = pokemon?.ability || null 
+  const ability = pokemon?.ability || null
   const total = sps.reduce((a,b) => a+b, 0)
   const remaining = 66 - total
 
@@ -355,7 +341,6 @@ function PokemonPanel({ team, index }) {
     setSPs(team, index, newSPs)
   }
 
-  // Intercettiamo il cambio Pokémon per preimpostare l'abilità di default se presente nel tuo database
   const handlePokemonChange = (key) => {
     setPokemon(team, index, key)
     const targetData = pokemonData[key]
@@ -366,13 +351,19 @@ function PokemonPanel({ team, index }) {
     }
   }
 
+  const handleMoveChange = (mi, m) => {
+    setMove(team, index, mi, m)
+    // Auto-selezione doubleTarget in base alla mossa scelta
+    const isSpread = SPREAD_MOVES.has(m.replace(/ /g, '-'))
+    setDoubleTarget(isSpread)
+  }
+
   const handleDuplicate = () => { console.log('Duplica slot:', index) }
   const handleExport = () => { console.log('Esporta slot:', index) }
   const handleImport = () => { console.log('Importa nello slot:', index) }
 
   return (
     <div className="p-3">
-      {/* TOOLBAR SUPERIORE DELLE AZIONI */}
       {data && (
         <div className="flex justify-end gap-1.5 mb-2.5 text-xs">
           <button
@@ -386,7 +377,6 @@ function PokemonPanel({ team, index }) {
             </svg>
             <span>Duplica</span>
           </button>
-
           <button
             type="button"
             onClick={handleExport}
@@ -398,7 +388,6 @@ function PokemonPanel({ team, index }) {
             </svg>
             <span>Esporta</span>
           </button>
-
           <button
             type="button"
             onClick={handleImport}
@@ -410,7 +399,6 @@ function PokemonPanel({ team, index }) {
             </svg>
             <span>Importa</span>
           </button>
-
           <button
             type="button"
             onClick={() => { setPokemon(team, index, ''); setAbility(team, index, '') }}
@@ -434,16 +422,11 @@ function PokemonPanel({ team, index }) {
             onError={e => e.target.style.display='none'}
           />
         )}
-        
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex gap-2 items-center">
             <div className="flex-1">
-              <PokemonSearch
-                value={pokemon?.key}
-                onChange={handlePokemonChange}
-              />
+              <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
             </div>
-            
             {data && data.type && (
               <div className="flex gap-1 shrink-0">
                 {data.type.map(typeId => {
@@ -462,16 +445,11 @@ function PokemonPanel({ team, index }) {
               </div>
             )}
           </div>
-
           {data && (
             <div className="flex gap-2 w-full">
               <div className="w-1/3">
-                <AbilitySearch
-                  value={ability}
-                  onChange={a => setAbility(team, index, a)}
-                />
+                <AbilitySearch value={ability} onChange={a => setAbility(team, index, a)} />
               </div>
-
               <div className="w-1/3">
                 <select
                   className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
@@ -482,12 +460,8 @@ function PokemonPanel({ team, index }) {
                   {NATURES.map(n => <option key={n} value={n}>{n}</option>)}
                 </select>
               </div>
-
               <div className="w-1/3">
-                <ItemSearch
-                  value={item}
-                  onChange={m => setItem(team, index, m)}
-                />
+                <ItemSearch value={item} onChange={m => setItem(team, index, m)} />
               </div>
             </div>
           )}
@@ -500,23 +474,20 @@ function PokemonPanel({ team, index }) {
             <div className="flex items-center text-xs text-gray-500 mb-1 gap-2">
               <span className="w-8 text-center">Stat</span>
               <span className="w-7 text-center">Base</span>
-              
               <div className="flex-1 flex justify-center items-center gap-1.5">
                 <span>SP</span>
                 <span className={`text-[10px] font-bold px-1 rounded ${
-                  remaining === 0 
-                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' 
+                  remaining === 0
+                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
                     : 'bg-gray-700 text-gray-400'
                 }`}>
                   ({remaining}/66)
                 </span>
               </div>
-              
               <span className="w-8 text-center">Tot</span>
               <span className="w-12 text-center">Boost</span>
               <span className="w-8 text-center">Mod</span>
             </div>
-
             {STAT_NAMES.map((_, i) => (
               <StatRow
                 key={i}
@@ -538,7 +509,7 @@ function PokemonPanel({ team, index }) {
                 key={mi}
                 value={pokemon?.moves[mi]}
                 placeholder={`Mossa ${mi+1}`}
-                onChange={m => setMove(team, index, mi, m)}
+                onChange={m => handleMoveChange(mi, m)}
               />
             ))}
           </div>
@@ -556,7 +527,6 @@ export default function TeamEditor({ team }) {
     <div className="bg-gray-800 rounded-xl border border-gray-700">
       <div className="flex border-b border-gray-700">
         {teamData.map((p, i) => {
-          const data = p?.key ? pokemonData[p.key] : null
           const sprite = p?.key ? spriteUrl(p.key) : null
           return (
             <button

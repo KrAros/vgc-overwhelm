@@ -33,6 +33,7 @@ const useCalcStore = create((set) => ({
   setLevel: (level) => set({ level }),
   toggleTrickRoom: () => set((s) => ({ trickRoom: !s.trickRoom })),
   toggleDoubleTarget: () => set((s) => ({ doubleTarget: !s.doubleTarget })),
+  setDoubleTarget: (val) => set({ doubleTarget: val }),
   setWeather: (w) => set((s) => ({ weather: s.weather === w ? null : w })),
   setTerrain: (t) => set((s) => ({ terrain: s.terrain === t ? null : t })),
   toggleModifier: (mod, side) =>

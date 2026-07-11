@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { calculateDamage } from '../calcEngine'
+import { calculateDamage, SPREAD_MOVES } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
 
@@ -19,6 +19,16 @@ const spriteUrl = (key) => {
   const form = isMegaY ? 'f02' : isMegaX ? 'f01' : isMega ? 'f01' : 'f00'
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
 }
+
+const SpreadIcon = () => (
+  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+    <line x1="5" y1="9" x2="5" y2="5" />
+    <line x1="5" y1="5" x2="2" y2="1" />
+    <line x1="5" y1="5" x2="8" y2="1" />
+    <polygon points="2,1 0,3 4,3" fill="currentColor" stroke="none" />
+    <polygon points="8,1 6,3 10,3" fill="currentColor" stroke="none" />
+  </svg>
+)
 
 function calcAllMoves(atk, def, level, field) {
   return (atk.moves || []).filter(Boolean).map(move => {
@@ -92,7 +102,14 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
       >
         {d1 ? (
           <>
-            <div className="text-gray-400 text-xs truncate">▶ {d1.move}</div>
+            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
+              ▶ {d1.move}
+              {SPREAD_MOVES.has(d1.move.replace(/ /g, '-')) && (
+                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
+                  <SpreadIcon />
+                </span>
+              )}
+            </div>
             <div className={`font-medium text-xs ${colorClass(d1.result.maxPct)}`}>
               {d1.result.minPct}–{d1.result.maxPct}%
             </div>
@@ -109,7 +126,14 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
       >
         {d2 ? (
           <>
-            <div className="text-gray-400 text-xs truncate">◀ {d2.move}</div>
+            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
+              ◀ {d2.move}
+              {SPREAD_MOVES.has(d2.move.replace(/ /g, '-')) && (
+                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
+                  <SpreadIcon />
+                </span>
+              )}
+            </div>
             <div className={`font-medium text-xs ${colorClass(d2.result.maxPct)}`}>
               {d2.result.minPct}–{d2.result.maxPct}%
             </div>
