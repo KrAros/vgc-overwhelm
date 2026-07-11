@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
@@ -5,65 +6,62 @@ import pokemonData from '../data/pokemon.json'
 const spriteUrl = (key) => {
   const data = pokemonData[key]
   if (!data) return null
-
   const isMegaX = key.includes('-mega-x')
   const isMegaY = key.includes('-mega-y')
   const isMega  = data.mega === 1
-
   let num = data.num
-
   if (isMega) {
     const baseName = key.replace(/-mega.*$/, '')
     num = pokemonData[baseName]?.num || ''
   }
-
   num = num?.replace('#', '').padStart(4, '0')
   if (!num) return null
-
-  const form = isMegaY ? '02' : isMegaX ? '01' : isMega ? '01' : '00'
-  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_${form}_0.webp`
+  const form = isMegaY ? 'f02' : isMegaX ? 'f01' : isMega ? 'f01' : 'f00'
+  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
 }
 
-function DamageCell({ attacker, defender, level, field }) {
+function calcAllMoves(atk, def, level, field) {
+  return (atk.moves || []).filter(Boolean).map(move => {
+    const result = calculateDamage({
+      attacker: {
+        atkPokemon: atk.key,
+        atkSPs: atk.sps || [0,0,0,0,0,0],
+        atkNature: atk.nature,
+        atkBoost: atk.atkBoost || 0,
+        spAtkBoost: atk.spAtkBoost || 0,
+        level
+      },
+      defender: {
+        defPokemon: def.key,
+        defSPs: def.sps || [0,0,0,0,0,0],
+        defNature: def.nature,
+        defBoost: def.defBoost || 0,
+        spDefBoost: def.spDefBoost || 0,
+      },
+      move,
+      field,
+    })
+    return { move, result }
+  }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
+}
+
+function getBestMove(atk, def, level, field) {
+  const all = calcAllMoves(atk, def, level, field)
+  if (!all.length) return null
+  return all.reduce((best, cur) =>
+    cur.result.maxPct > best.result.maxPct ? cur : best
+  )
+}
+
+function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, selectedDir, isSelected }) {
   if (!attacker?.key || !defender?.key) {
     return (
-      <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">
-        —
-      </td>
+      <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">—</td>
     )
   }
 
-  const moves1 = (attacker.moves || []).filter(Boolean)
-  const moves2 = (defender.moves || []).filter(Boolean)
-
-  const bestMove = (atk, def, moves) => {
-    let best = null
-    for (const move of moves) {
-      const result = calculateDamage({
-        attacker: { 
-          atkPokemon: atk.key, 
-          atkSPs: atk.sps, 
-          atkNature: atk.nature, 
-          atkAbility: atk.ability, // <-- Passiamo l'abilità di chi attacca
-          level 
-        },
-        defender: { 
-          defPokemon: def.key, 
-          defSPs: def.sps, 
-          defNature: def.nature,
-          defAbility: def.ability // <-- Passiamo l'abilità di chi difende
-        },
-        move,
-        field,
-      })
-      if (!result || result.immune) continue
-      if (!best || result.maxPct > best.maxPct) best = { ...result, move }
-    }
-    return best
-  }
-
-  const d1 = moves1.length > 0 ? bestMove(attacker, defender, moves1) : null
-  const d2 = moves2.length > 0 ? bestMove(defender, attacker, moves2) : null
+  const d1 = getBestMove(attacker, defender, level, field)
+  const d2 = getBestMove(defender, attacker, level, fieldReversed)
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
@@ -80,26 +78,40 @@ function DamageCell({ attacker, defender, level, field }) {
     return ''
   }
 
+  const cellBorder = isSelected
+    ? 'ring-2 ring-teal-400 ring-inset'
+    : ''
+
   return (
-    <td className={`p-1 text-center border-l border-gray-700 ${d1 ? bgClass(d1.maxPct) : ''}`}>
-      <div className="mb-1 pb-1 border-b border-gray-700/50">
+    <td className={`border-l border-gray-700 ${cellBorder} relative`}>
+      <div
+        onClick={() => onSelect('t1', attacker, defender, field)}
+        className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors border-b border-gray-700/50 ${
+          isSelected && selectedDir === 't1' ? 'bg-teal-900/30' : d1 ? bgClass(d1.result.maxPct) : ''
+        }`}
+      >
         {d1 ? (
           <>
             <div className="text-gray-400 text-xs truncate">▶ {d1.move}</div>
-            <div className={`font-medium text-xs ${colorClass(d1.maxPct)}`}>
-              {d1.minPct}–{d1.maxPct}%
+            <div className={`font-medium text-xs ${colorClass(d1.result.maxPct)}`}>
+              {d1.result.minPct}–{d1.result.maxPct}%
             </div>
           </>
         ) : (
           <div className="text-gray-600 text-xs">▶ —</div>
         )}
       </div>
-      <div>
+      <div
+        onClick={() => onSelect('t2', defender, attacker, fieldReversed)}
+        className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
+          isSelected && selectedDir === 't2' ? 'bg-teal-900/30' : ''
+        }`}
+      >
         {d2 ? (
           <>
             <div className="text-gray-400 text-xs truncate">◀ {d2.move}</div>
-            <div className={`font-medium text-xs ${colorClass(d2.maxPct)}`}>
-              {d2.minPct}–{d2.maxPct}%
+            <div className={`font-medium text-xs ${colorClass(d2.result.maxPct)}`}>
+              {d2.result.minPct}–{d2.result.maxPct}%
             </div>
           </>
         ) : (
@@ -110,31 +122,51 @@ function DamageCell({ attacker, defender, level, field }) {
   )
 }
 
-export default function DamageTable() {
-  const team1 = useCalcStore((s) => s.team1)
-  const team2 = useCalcStore((s) => s.team2)
-  const level = useCalcStore((s) => s.level)
-  const weather = useCalcStore((s) => s.weather)
-  const terrain = useCalcStore((s) => s.terrain)
-  const helpingHand = useCalcStore((s) => s.helpingHand)
-  const auroraVeil = useCalcStore((s) => s.auroraVeil)
-  const lightScreen = useCalcStore((s) => s.lightScreen)
-  const reflect = useCalcStore((s) => s.reflect)
-  const crit = useCalcStore((s) => s.crit)
-  const doubleTarget = useCalcStore((s) => s.doubleTarget)
+export default function DamageTable({ onCellSelect }) {
+  const [selected, setSelected] = useState(null)
+
+  const team1 = useCalcStore(s => s.team1)
+  const team2 = useCalcStore(s => s.team2)
+  const level = useCalcStore(s => s.level)
+  const weather = useCalcStore(s => s.weather)
+  const terrain = useCalcStore(s => s.terrain)
+  const helpingHand = useCalcStore(s => s.helpingHand)
+  const auroraVeil  = useCalcStore(s => s.auroraVeil)
+  const lightScreen = useCalcStore(s => s.lightScreen)
+  const reflect     = useCalcStore(s => s.reflect)
+  const crit        = useCalcStore(s => s.crit)
+  const doubleTarget = useCalcStore(s => s.doubleTarget)
 
   const field = {
     weather, terrain,
     helpingHand: helpingHand.t1,
-    auroraVeil: auroraVeil.t1,
-    lightScreen: lightScreen.t1,
-    reflect: reflect.t1,
-    crit: crit.t1,
+    auroraVeil:  auroraVeil.t2,
+    lightScreen: lightScreen.t2,
+    reflect:     reflect.t2,
+    crit:        crit.t1,
     doubleTarget,
   }
 
+  const fieldReversed = {
+    weather, terrain,
+    helpingHand: helpingHand.t2,
+    auroraVeil:  auroraVeil.t1,
+    lightScreen: lightScreen.t1,
+    reflect:     reflect.t1,
+    crit:        crit.t2,
+    doubleTarget,
+  }
+
+  const handleSelect = (ri, ci, dir, atk, def, f) => {
+    const key = `${ri}-${ci}-${dir}`
+    const allMoves = calcAllMoves(atk, def, level, f)
+    const newSelected = { key, ri, ci, dir, atk, def, field: f, allMoves }
+    setSelected(newSelected)
+    onCellSelect?.(newSelected)
+  }
+
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-700 mt-4 mb-4">
+    <div className="overflow-x-auto rounded-xl border border-gray-700 mb-4">
       <table className="w-full border-collapse text-xs">
         <thead>
           <tr>
@@ -149,12 +181,12 @@ export default function DamageTable() {
                       src={spriteUrl(p.key)}
                       alt={p.key}
                       className="w-12 h-12 object-contain mx-auto"
-                      onError={e => e.target.style.display = 'none'}
+                      onError={e => e.target.style.display='none'}
                     />
                     <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
                   </>
                 ) : (
-                  <div className="text-gray-600">— T2 {i + 1} —</div>
+                  <div className="text-gray-600">— T2 {i+1} —</div>
                 )}
               </th>
             ))}
@@ -170,12 +202,12 @@ export default function DamageTable() {
                       src={spriteUrl(row.key)}
                       alt={row.key}
                       className="w-12 h-12 object-contain mx-auto"
-                      onError={e => e.target.style.display = 'none'}
+                      onError={e => e.target.style.display='none'}
                     />
                     <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
                   </>
                 ) : (
-                  <div className="text-gray-600">— T1 {ri + 1} —</div>
+                  <div className="text-gray-600">— T1 {ri+1} —</div>
                 )}
               </td>
               {team2.map((col, ci) => (
@@ -185,6 +217,10 @@ export default function DamageTable() {
                   defender={col}
                   level={level}
                   field={field}
+                  fieldReversed={fieldReversed}
+                  isSelected={selected?.ri === ri && selected?.ci === ci}
+                  selectedDir={selected?.ri === ri && selected?.ci === ci ? selected.dir : null}
+                  onSelect={(dir, atk, def, f) => handleSelect(ri, ci, dir, atk, def, f)}
                 />
               ))}
             </tr>
