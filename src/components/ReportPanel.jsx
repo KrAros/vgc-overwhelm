@@ -35,10 +35,11 @@ function buildSmogonString(atk, def, move) {
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
   const moveName = move.replace(/-/g, ' ')
+  const atkAbilityName = atk.ability ? ` ${atk.ability.replace(/\b\w/g, c => c.toUpperCase())}` : ''
   const atkItemName = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
   const defItemName = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
 
-return `${atkSP}${natSymbol} ${statName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName}${defItemName} ${def.key}`
+return `${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName}${defItemName} ${def.key}`
 }
 
 export default function ReportPanel({ selection, onClose }) {
@@ -72,7 +73,8 @@ export default function ReportPanel({ selection, onClose }) {
           atkNature: atk.nature,
           atkBoost: atk.atkBoost || 0,
           spAtkBoost: atk.spAtkBoost || 0,
-          atkItem: atk.item || null,   // ← aggiunto
+          atkItem: atk.item || null,
+          atkAbility: atk.ability || null,
           level: 50,
         },
         defender: {
@@ -81,7 +83,8 @@ export default function ReportPanel({ selection, onClose }) {
           defNature: def.nature,
           defBoost: def.defBoost || 0,
           spDefBoost: def.spDefBoost || 0,
-          defItem: def.item || null,   // ← aggiunto
+          defItem: def.item || null,
+          defAbility: def.ability || null,
         },
         move,
         field,
