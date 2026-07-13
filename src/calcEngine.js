@@ -249,6 +249,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
     damage = Math.floor(damage * effectiveness)
 
+    // Resist berry difensore: ×0.5 se il tipo della mossa corrisponde
+    if (defItemEffect?.resistBerry !== undefined && defItemEffect.resistBerry === moveType &&
+    effectiveness > 1) {
+      damage = Math.floor(damage * 0.5)
+    }
+
     // Filter / Solid Rock: ×0.75 su danno superefficace
     if (defAbilEffect?.filter && effectiveness > 1) {
       damage = Math.floor(damage * 0.75)
