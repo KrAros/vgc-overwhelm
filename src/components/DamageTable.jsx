@@ -30,39 +30,54 @@ const SpreadIcon = () => (
   </svg>
 )
 
+// Testo e stile per il badge immune — distingue tipo vs abilità specifica
+function immuneLabel(result) {
+  if (!result?.immune) return null
+  if (result.reason === 'ability') {
+    return { text: `Immune (${result.abilityName})`, cls: 'text-purple-400' }
+  }
+  return { text: 'Immune (tipo)', cls: 'text-gray-500' }
+}
+
 function calcAllMoves(atk, def, level, field) {
   return (atk.moves || []).filter(Boolean).map(move => {
     const result = calculateDamage({
       attacker: {
-        atkPokemon: atk.key,
-        atkSPs: atk.sps || [0,0,0,0,0,0],
-        atkNature: atk.nature,
-        atkBoost: atk.atkBoost || 0,
-        spAtkBoost: atk.spAtkBoost || 0,
-        atkItem: atk.item || null,
-        atkAbility: atk.ability || null,
-        level
+        atkPokemon:      atk.key,
+        atkSPs:          atk.sps || [0,0,0,0,0,0],
+        atkNature:       atk.nature,
+        atkBoost:        atk.atkBoost || 0,
+        spAtkBoost:      atk.spAtkBoost || 0,
+        atkItem:         atk.item || null,
+        atkAbility:      atk.ability || null,
+        atkAbilityFlags: atk.abilityFlags || {},
+        level,
       },
       defender: {
-        defPokemon: def.key,
-        defSPs: def.sps || [0,0,0,0,0,0],
-        defNature: def.nature,
-        defBoost: def.defBoost || 0,
-        spDefBoost: def.spDefBoost || 0,
-        defItem: def.item || null,
-        defAbility: def.ability || null,
+        defPokemon:      def.key,
+        defSPs:          def.sps || [0,0,0,0,0,0],
+        defNature:       def.nature,
+        defBoost:        def.defBoost || 0,
+        spDefBoost:      def.spDefBoost || 0,
+        defItem:         def.item || null,
+        defAbility:      def.ability || null,
+        defAbilityFlags: def.abilityFlags || {},
       },
       move,
       field,
     })
     return { move, result }
-  }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
+  })
+  // Nota: NON filtriamo le immune qui — le teniamo per mostrarle nelle celle dettaglio.
+  // Il filtro avviene in getBestMove per scegliere la mossa migliore.
 }
 
 function getBestMove(atk, def, level, field) {
   const all = calcAllMoves(atk, def, level, field)
-  if (!all.length) return null
-  return all.reduce((best, cur) =>
+  // Per il "best move" consideriamo solo mosse che effettivamente danneggiano
+  const effective = all.filter(({ result }) => result && !result.immune && result.maxPct > 0)
+  if (!effective.length) return null
+  return effective.reduce((best, cur) =>
     cur.result.maxPct > best.result.maxPct ? cur : best
   )
 }
@@ -74,8 +89,20 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     )
   }
 
+  // Calcola tutte le mosse (incluse le immune) per entrambe le direzioni
+  const allMovesT1 = calcAllMoves(attacker, defender, level, field)
+  const allMovesT2 = calcAllMoves(defender, attacker, level, fieldReversed)
+
   const d1 = getBestMove(attacker, defender, level, field)
   const d2 = getBestMove(defender, attacker, level, fieldReversed)
+
+  // Se non c'è un best move, verifica se ci sono solo mosse immune da mostrare
+  const firstImmuneT1 = !d1
+    ? allMovesT1.find(({ result }) => result?.immune)
+    : null
+  const firstImmuneT2 = !d2
+    ? allMovesT2.find(({ result }) => result?.immune)
+    : null
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
@@ -92,60 +119,52 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     return ''
   }
 
-  const cellBorder = isSelected
-    ? 'ring-2 ring-teal-400 ring-inset'
-    : ''
+  const cellBorder = isSelected ? 'ring-2 ring-teal-400 ring-inset' : ''
+
+  const renderHalf = (d, immune, prefix, dir, atk, def, f) => {
+    const label = immune ? immuneLabel(immune.result) : null
+    return (
+      <div
+        onClick={() => onSelect(dir, atk, def, f)}
+        className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
+          dir === 't1' ? 'border-b border-gray-700/50' : ''
+        } ${isSelected && selectedDir === dir ? 'bg-teal-900/30' : d ? bgClass(d.result.maxPct) : ''}`}
+      >
+        {d ? (
+          <>
+            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
+              {prefix} {d.move}
+              {SPREAD_MOVES.has(d.move.replace(/ /g, '-')) && (
+                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
+                  <SpreadIcon />
+                </span>
+              )}
+            </div>
+            <div className={`font-medium text-xs ${colorClass(d.result.maxPct)}`}>
+              {d.result.minPct}–{d.result.maxPct}%
+            </div>
+          </>
+        ) : label ? (
+          // Mostra il badge immune con il nome della mossa se disponibile
+          <>
+            <div className="text-gray-500 text-xs truncate">
+              {prefix} {immune.move}
+            </div>
+            <div className={`text-[10px] font-medium ${label.cls}`}>
+              {label.text}
+            </div>
+          </>
+        ) : (
+          <div className="text-gray-600 text-xs">{prefix} —</div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <td className={`border-l border-gray-700 ${cellBorder} relative`}>
-      <div
-        onClick={() => onSelect('t1', attacker, defender, field)}
-        className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors border-b border-gray-700/50 ${
-          isSelected && selectedDir === 't1' ? 'bg-teal-900/30' : d1 ? bgClass(d1.result.maxPct) : ''
-        }`}
-      >
-        {d1 ? (
-          <>
-            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
-              ▶ {d1.move}
-              {SPREAD_MOVES.has(d1.move.replace(/ /g, '-')) && (
-                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
-                  <SpreadIcon />
-                </span>
-              )}
-            </div>
-            <div className={`font-medium text-xs ${colorClass(d1.result.maxPct)}`}>
-              {d1.result.minPct}–{d1.result.maxPct}%
-            </div>
-          </>
-        ) : (
-          <div className="text-gray-600 text-xs">▶ —</div>
-        )}
-      </div>
-      <div
-        onClick={() => onSelect('t2', defender, attacker, fieldReversed)}
-        className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
-          isSelected && selectedDir === 't2' ? 'bg-teal-900/30' : ''
-        }`}
-      >
-        {d2 ? (
-          <>
-            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
-              ◀ {d2.move}
-              {SPREAD_MOVES.has(d2.move.replace(/ /g, '-')) && (
-                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
-                  <SpreadIcon />
-                </span>
-              )}
-            </div>
-            <div className={`font-medium text-xs ${colorClass(d2.result.maxPct)}`}>
-              {d2.result.minPct}–{d2.result.maxPct}%
-            </div>
-          </>
-        ) : (
-          <div className="text-gray-600 text-xs">◀ —</div>
-        )}
-      </div>
+      {renderHalf(d1, firstImmuneT1, '▶', 't1', attacker, defender, field)}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2', defender, attacker, fieldReversed)}
     </td>
   )
 }
@@ -187,6 +206,7 @@ export default function DamageTable({ onCellSelect }) {
 
   const handleSelect = (ri, ci, dir, atk, def, f) => {
     const key = `${ri}-${ci}-${dir}`
+    // Per il pannello dettaglio passiamo tutte le mosse incluse le immune
     const allMoves = calcAllMoves(atk, def, level, f)
     const newSelected = { key, ri, ci, dir, atk, def, field: f, allMoves }
     setSelected(newSelected)

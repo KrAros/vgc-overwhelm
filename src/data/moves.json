@@ -6,7 +6,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "karate chop": {
     "num": "2",
@@ -15,7 +16,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "double slap": {
     "num": "3",
@@ -33,7 +35,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 18,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mega punch": {
     "num": "5",
@@ -42,7 +45,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "pay day": {
     "num": "6",
@@ -60,7 +64,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "ice punch": {
     "num": "8",
@@ -69,7 +74,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "thunder punch": {
     "num": "9",
@@ -78,7 +84,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "scratch": {
     "num": "10",
@@ -87,7 +94,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "vice grip": {
     "num": "11",
@@ -96,7 +104,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 55,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "guillotine": {
     "num": "12",
@@ -150,7 +159,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "whirlwind": {
     "num": "18",
@@ -168,7 +178,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "bind": {
     "num": "20",
@@ -186,7 +197,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "vine whip": {
     "num": "22",
@@ -195,7 +207,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 45,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "stomp": {
     "num": "23",
@@ -213,7 +226,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 30,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mega kick": {
     "num": "25",
@@ -231,7 +245,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "rolling kick": {
     "num": "27",
@@ -240,7 +255,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sand attack": {
     "num": "28",
@@ -294,7 +310,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "body slam": {
     "num": "34",
@@ -303,7 +320,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "wrap": {
     "num": "35",
@@ -312,7 +330,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 15,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "take down": {
     "num": "36",
@@ -321,7 +340,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "thrash": {
     "num": "37",
@@ -330,7 +350,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "double-edge": {
     "num": "38",
@@ -339,7 +360,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "tail whip": {
     "num": "39",
@@ -357,7 +379,8 @@
     "zname": "Acid Downpour",
     "category": 0,
     "power": 15,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "twineedle": {
     "num": "41",
@@ -366,7 +389,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 25,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "pin missile": {
     "num": "42",
@@ -393,7 +417,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "growl": {
     "num": "45",
@@ -573,7 +598,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 35,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "drill peck": {
     "num": "65",
@@ -582,7 +608,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "submission": {
     "num": "66",
@@ -591,7 +618,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "low kick": {
     "num": "67",
@@ -600,7 +628,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "counter": {
     "num": "68",
@@ -609,7 +638,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 0,
-    "priority": -5
+    "priority": -5,
+    "contact": true
   },
   "seismic toss": {
     "num": "69",
@@ -618,7 +648,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "strength": {
     "num": "70",
@@ -627,7 +658,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "absorb": {
     "num": "71",
@@ -672,7 +704,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 55,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "solar beam": {
     "num": "76",
@@ -717,7 +750,8 @@
     "zname": "Bloom Doom",
     "category": 1,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "string shot": {
     "num": "81",
@@ -816,7 +850,8 @@
     "zname": "Tectonic Rage",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "toxic": {
     "num": "92",
@@ -879,7 +914,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "rage": {
     "num": "99",
@@ -888,7 +924,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 20,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "teleport": {
     "num": "100",
@@ -1095,7 +1132,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 30,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "smog": {
     "num": "123",
@@ -1140,7 +1178,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "clamp": {
     "num": "128",
@@ -1149,7 +1188,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 35,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "swift": {
     "num": "129",
@@ -1167,7 +1207,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 130,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "spike cannon": {
     "num": "131",
@@ -1185,7 +1226,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 10,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "amnesia": {
     "num": "133",
@@ -1266,7 +1308,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "lovely kiss": {
     "num": "142",
@@ -1284,7 +1327,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 140,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "transform": {
     "num": "144",
@@ -1365,7 +1409,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "explosion": {
     "num": "153",
@@ -1383,7 +1428,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 18,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "bonemerang": {
     "num": "155",
@@ -1464,7 +1510,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "substitute": {
     "num": "164",
@@ -1509,7 +1556,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "spider web": {
     "num": "169",
@@ -1545,7 +1593,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "snore": {
     "num": "173",
@@ -1608,7 +1657,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "spite": {
     "num": "180",
@@ -1644,7 +1694,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "scary face": {
     "num": "184",
@@ -1662,7 +1713,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sweet kiss": {
     "num": "186",
@@ -1797,7 +1849,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sandstorm": {
     "num": "201",
@@ -1851,7 +1904,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "swagger": {
     "num": "207",
@@ -1878,7 +1932,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "fury cutter": {
     "num": "210",
@@ -1887,7 +1942,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "steel wing": {
     "num": "211",
@@ -1941,7 +1997,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 102,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "present": {
     "num": "217",
@@ -1959,7 +2016,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 102,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "safeguard": {
     "num": "219",
@@ -2004,7 +2062,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "megahorn": {
     "num": "224",
@@ -2013,7 +2072,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dragon breath": {
     "num": "225",
@@ -2049,7 +2109,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "rapid spin": {
     "num": "229",
@@ -2058,7 +2119,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 20,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sweet scent": {
     "num": "230",
@@ -2076,7 +2138,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "metal claw": {
     "num": "232",
@@ -2085,7 +2148,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "vital throw": {
     "num": "233",
@@ -2094,7 +2158,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 70,
-    "priority": -1
+    "priority": -1,
+    "contact": true
   },
   "morning sun": {
     "num": "234",
@@ -2139,7 +2204,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "twister": {
     "num": "239",
@@ -2175,7 +2241,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mirror coat": {
     "num": "243",
@@ -2202,7 +2269,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 80,
-    "priority": 2
+    "priority": 2,
+    "contact": true
   },
   "ancient power": {
     "num": "246",
@@ -2238,7 +2306,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "whirlpool": {
     "num": "250",
@@ -2265,7 +2334,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 40,
-    "priority": 3
+    "priority": 3,
+    "contact": true
   },
   "uproar": {
     "num": "253",
@@ -2373,7 +2443,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 150,
-    "priority": -3
+    "priority": -3,
+    "contact": true
   },
   "smelling salts": {
     "num": "265",
@@ -2382,7 +2453,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "follow me": {
     "num": "266",
@@ -2481,7 +2553,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "magic coat": {
     "num": "277",
@@ -2508,7 +2581,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 60,
-    "priority": -4
+    "priority": -4,
+    "contact": true
   },
   "brick break": {
     "num": "280",
@@ -2517,7 +2591,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "yawn": {
     "num": "281",
@@ -2535,7 +2610,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "endeavor": {
     "num": "283",
@@ -2607,7 +2683,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dive": {
     "num": "291",
@@ -2616,7 +2693,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "arm thrust": {
     "num": "292",
@@ -2625,7 +2703,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 15,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "camouflage": {
     "num": "293",
@@ -2688,7 +2767,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mud sport": {
     "num": "300",
@@ -2706,7 +2786,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 30,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "needle arm": {
     "num": "302",
@@ -2715,7 +2796,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "slack off": {
     "num": "303",
@@ -2742,7 +2824,8 @@
     "zname": "Acid Downpour",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "crush claw": {
     "num": "306",
@@ -2751,7 +2834,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "blast burn": {
     "num": "307",
@@ -2778,7 +2862,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "astonish": {
     "num": "310",
@@ -2787,7 +2872,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 30,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "weather ball": {
     "num": "311",
@@ -2922,7 +3008,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "extrasensory": {
     "num": "326",
@@ -2940,7 +3027,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sand tomb": {
     "num": "328",
@@ -2985,7 +3073,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "icicle spear": {
     "num": "333",
@@ -3030,7 +3119,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "frenzy plant": {
     "num": "338",
@@ -3057,7 +3147,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mud shot": {
     "num": "341",
@@ -3075,7 +3166,8 @@
     "zname": "Acid Downpour",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "covet": {
     "num": "343",
@@ -3084,7 +3176,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "volt tackle": {
     "num": "344",
@@ -3093,7 +3186,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "magical leaf": {
     "num": "345",
@@ -3129,7 +3223,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dragon dance": {
     "num": "349",
@@ -3219,7 +3314,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "hammer arm": {
     "num": "359",
@@ -3228,7 +3324,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "gyro ball": {
     "num": "360",
@@ -3237,7 +3334,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "healing wish": {
     "num": "361",
@@ -3282,7 +3380,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "tailwind": {
     "num": "366",
@@ -3318,7 +3417,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "close combat": {
     "num": "370",
@@ -3327,7 +3427,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "payback": {
     "num": "371",
@@ -3336,7 +3437,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "assurance": {
     "num": "372",
@@ -3345,7 +3447,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "embargo": {
     "num": "373",
@@ -3480,7 +3583,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 140,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "worry seed": {
     "num": "388",
@@ -3498,7 +3602,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 70,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "toxic spikes": {
     "num": "390",
@@ -3543,7 +3648,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "force palm": {
     "num": "395",
@@ -3552,7 +3658,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "aura sphere": {
     "num": "396",
@@ -3579,7 +3686,8 @@
     "zname": "Acid Downpour",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dark pulse": {
     "num": "399",
@@ -3597,7 +3705,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "aqua tail": {
     "num": "401",
@@ -3606,7 +3715,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "seed bomb": {
     "num": "402",
@@ -3615,7 +3725,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "air slash": {
     "num": "403",
@@ -3633,7 +3744,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "bug buzz": {
     "num": "405",
@@ -3660,7 +3772,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "power gem": {
     "num": "408",
@@ -3678,7 +3791,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "vacuum wave": {
     "num": "410",
@@ -3714,7 +3828,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "earth power": {
     "num": "414",
@@ -3759,7 +3874,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "avalanche": {
     "num": "419",
@@ -3768,7 +3884,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 60,
-    "priority": -4
+    "priority": -4,
+    "contact": true
   },
   "ice shard": {
     "num": "420",
@@ -3777,7 +3894,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "shadow claw": {
     "num": "421",
@@ -3786,7 +3904,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "thunder fang": {
     "num": "422",
@@ -3795,7 +3914,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "ice fang": {
     "num": "423",
@@ -3804,7 +3924,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "fire fang": {
     "num": "424",
@@ -3813,7 +3934,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "shadow sneak": {
     "num": "425",
@@ -3822,7 +3944,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "mud bomb": {
     "num": "426",
@@ -3840,7 +3963,8 @@
     "zname": "Shattered Psyche",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "zen headbutt": {
     "num": "428",
@@ -3849,7 +3973,8 @@
     "zname": "Shattered Psyche",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mirror shot": {
     "num": "429",
@@ -3876,7 +4001,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "defog": {
     "num": "432",
@@ -3939,7 +4065,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "rock wrecker": {
     "num": "439",
@@ -3957,7 +4084,8 @@
     "zname": "Acid Downpour",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "gunk shot": {
     "num": "441",
@@ -3975,7 +4103,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "magnet bomb": {
     "num": "443",
@@ -4047,7 +4176,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "charge beam": {
     "num": "451",
@@ -4065,7 +4195,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "aqua jet": {
     "num": "453",
@@ -4074,7 +4205,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 40,
-    "priority": 1
+    "priority": 1,
+    "contact": true
   },
   "attack order": {
     "num": "454",
@@ -4110,7 +4242,8 @@
     "zname": "Continental Crush",
     "category": 0,
     "power": 150,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "double hit": {
     "num": "458",
@@ -4119,7 +4252,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 35,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "roar of time": {
     "num": "459",
@@ -4200,7 +4334,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "hone claws": {
     "num": "468",
@@ -4308,7 +4443,8 @@
     "zname": "Continental Crush",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "storm throw": {
     "num": "480",
@@ -4317,7 +4453,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "flame burst": {
     "num": "481",
@@ -4353,7 +4490,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "synchronoise": {
     "num": "485",
@@ -4389,7 +4527,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "coil": {
     "num": "489",
@@ -4407,7 +4546,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "acid spray": {
     "num": "491",
@@ -4425,7 +4565,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 95,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "simple beam": {
     "num": "493",
@@ -4479,7 +4620,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "clear smog": {
     "num": "499",
@@ -4560,7 +4702,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "shift gear": {
     "num": "508",
@@ -4578,7 +4721,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 60,
-    "priority": -6
+    "priority": -6,
+    "contact": true
   },
   "incinerate": {
     "num": "510",
@@ -4605,7 +4749,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 55,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "reflect type": {
     "num": "513",
@@ -4623,7 +4768,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "final gambit": {
     "num": "515",
@@ -4722,7 +4868,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 60,
-    "priority": -6
+    "priority": -6,
+    "contact": true
   },
   "work up": {
     "num": "526",
@@ -4749,7 +4896,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "drill run": {
     "num": "529",
@@ -4758,7 +4906,8 @@
     "zname": "Tectonic Rage",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dual chop": {
     "num": "530",
@@ -4767,7 +4916,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "heart stamp": {
     "num": "531",
@@ -4776,7 +4926,8 @@
     "zname": "Shattered Psyche",
     "category": 0,
     "power": 60,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "horn leech": {
     "num": "532",
@@ -4785,7 +4936,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sacred sword": {
     "num": "533",
@@ -4794,7 +4946,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "razor shell": {
     "num": "534",
@@ -4803,7 +4956,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "heat crash": {
     "num": "535",
@@ -4812,7 +4966,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 0,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "leaf tornado": {
     "num": "536",
@@ -4830,7 +4985,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 65,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "cotton guard": {
     "num": "538",
@@ -4866,7 +5022,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 25,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "hurricane": {
     "num": "542",
@@ -4884,7 +5041,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "gear grind": {
     "num": "544",
@@ -4893,7 +5051,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "searing shot": {
     "num": "545",
@@ -4974,7 +5133,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 140,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "ice burn": {
     "num": "554",
@@ -5001,7 +5161,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "v-create": {
     "num": "557",
@@ -5010,7 +5171,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 180,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "fusion flare": {
     "num": "558",
@@ -5037,7 +5199,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "mat block": {
     "num": "561",
@@ -5082,7 +5245,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "phantom force": {
     "num": "566",
@@ -5091,7 +5255,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "trick-or-treat": {
     "num": "567",
@@ -5190,7 +5355,8 @@
     "zname": "Twinkle Tackle",
     "category": 1,
     "power": 50,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "crafty shield": {
     "num": "578",
@@ -5244,7 +5410,8 @@
     "zname": "Twinkle Tackle",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "fairy wind": {
     "num": "584",
@@ -5424,7 +5591,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 20,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "infestation": {
     "num": "611",
@@ -5442,7 +5610,8 @@
     "zname": "All-Out Pummeling",
     "category": 0,
     "power": 40,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "oblivion wing": {
     "num": "613",
@@ -5505,7 +5674,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 120,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "diamond storm": {
     "num": "",
@@ -5532,7 +5702,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "aurora veil": {
     "num": "",
@@ -5550,7 +5721,8 @@
     "zname": "Supersonic Skystrike",
     "category": 0,
     "power": 100,
-    "priority": -3
+    "priority": -3,
+    "contact": true
   },
   "brutal swing": {
     "num": "",
@@ -5595,7 +5767,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "dragon hammer": {
     "num": "",
@@ -5604,7 +5777,8 @@
     "zname": "Devastating Drake",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "fire lash": {
     "num": "",
@@ -5613,7 +5787,8 @@
     "zname": "Inferno Overdrive",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "first impression": {
     "num": "",
@@ -5622,7 +5797,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 90,
-    "priority": 2
+    "priority": 2,
+    "contact": true
   },
   "fleur cannon": {
     "num": "",
@@ -5658,7 +5834,8 @@
     "zname": "Tectonic Rage",
     "category": 0,
     "power": 95,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "ice hammer": {
     "num": "",
@@ -5667,7 +5844,8 @@
     "zname": "Subzero Slammer",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "instruct": {
     "num": "",
@@ -5703,7 +5881,8 @@
     "zname": "Hydro Vortex",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "lunge": {
     "num": "",
@@ -5712,7 +5891,8 @@
     "zname": "Savage Spin-Out",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "moongeist beam": {
     "num": "",
@@ -5730,7 +5910,8 @@
     "zname": "Breakneck Blitz",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "natures madness": {
     "num": "",
@@ -5775,7 +5956,8 @@
     "zname": "Shattered Psyche",
     "category": 0,
     "power": 85,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "psychic terrain": {
     "num": "",
@@ -5838,7 +6020,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "solar blade": {
     "num": "",
@@ -5847,7 +6030,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 125,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "sparkling aria": {
     "num": "",
@@ -5865,7 +6049,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 90,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "speed swap": {
     "num": "",
@@ -5883,7 +6068,8 @@
     "zname": "Never-Ending Nightmare",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "spotlight": {
     "num": "",
@@ -5901,7 +6087,8 @@
     "zname": "Tectonic Rage",
     "category": 0,
     "power": 75,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "strenght sap": {
     "num": "",
@@ -5919,7 +6106,8 @@
     "zname": "Corkscrew Crash",
     "category": 0,
     "power": 100,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "tearful look": {
     "num": "",
@@ -5937,7 +6125,8 @@
     "zname": "Black Hole Eclipse",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "toxic thread": {
     "num": "",
@@ -5955,7 +6144,8 @@
     "zname": "Bloom Doom",
     "category": 0,
     "power": 70,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "zing zap": {
     "num": "",
@@ -5964,7 +6154,8 @@
     "zname": "Gigavolt Havoc",
     "category": 0,
     "power": 80,
-    "priority": 0
+    "priority": 0,
+    "contact": true
   },
   "pulverizing pancake": {
     "num": "",

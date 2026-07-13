@@ -13,7 +13,7 @@ function calcHKO(minPct) {
   return `guaranteed ${hits}HKO`
 }
 
-function buildSmogonString(atk, def, move) {
+function buildSmogonString(atk, def, move, result) {
   const moveData = movesData[move]
   if (!moveData) return ''
 
@@ -35,7 +35,9 @@ function buildSmogonString(atk, def, move) {
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
   const moveName = move.replace(/-/g, ' ')
-  const atkBoostVal = isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
+  const atkBoostVal = result?.atkBoostEffective !== undefined
+  ? result.atkBoostEffective
+  : isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
   const atkBoostStr = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
   const atkAbilityName = atk.ability ? ` ${atk.ability.replace(/\b\w/g, c => c.toUpperCase())}` : ''
   const defBoostVal = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
@@ -79,6 +81,7 @@ export default function ReportPanel({ selection, onClose }) {
           spAtkBoost: atk.spAtkBoost || 0,
           atkItem: atk.item || null,
           atkAbility: atk.ability || null,
+          atkAbilityFlags: atk.abilityFlags || {},
           level: 50,
         },
         defender: {
@@ -89,6 +92,7 @@ export default function ReportPanel({ selection, onClose }) {
           spDefBoost: def.spDefBoost || 0,
           defItem: def.item || null,
           defAbility: def.ability || null,
+          defAbilityFlags: def.abilityFlags || {},
         },
         move,
         field,
@@ -122,7 +126,7 @@ export default function ReportPanel({ selection, onClose }) {
         <div className="space-y-3">
           {allMoves.map(({ move, result }) => {
             const hko = calcHKO(result.minPct)
-            const smogon = buildSmogonString(atk, def, move)
+            const smogon = buildSmogonString(atk, def, move, result)
             const rolls = result.rolls
 
             const hkoColor = result.minPct >= 100 ? 'text-red-400' :

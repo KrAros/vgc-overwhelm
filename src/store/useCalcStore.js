@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 
 const emptyPokemon = () => ({
   key: null,
@@ -12,6 +13,9 @@ const emptyPokemon = () => ({
   spAtkBoost: 0,
   spDefBoost: 0,
   speBoost: 0,
+  // Flag contestuali per abilità con stato (toggle/input nell'UI)
+  // I valori di default vengono da DEFAULT_ABILITY_FLAGS in abilityEffects.js
+  abilityFlags: { ...DEFAULT_ABILITY_FLAGS },
 })
 
 const useCalcStore = create((set) => ({
@@ -86,10 +90,21 @@ const useCalcStore = create((set) => ({
   setAbility: (team, index, ability) =>
     set((s) => {
       const t = [...s[team]]
-      t[index] = { ...t[index], ability: ability }
+      // Quando si cambia abilità, reset dei flag al default
+      t[index] = { ...t[index], ability, abilityFlags: { ...DEFAULT_ABILITY_FLAGS } }
       return { [team]: t }
     }),
-    
+
+  // Aggiorna un singolo flag contestuale dell'abilità (es. intimidateActive, flashFireActive)
+  setAbilityFlag: (team, index, flagName, value) =>
+    set((s) => {
+      const t = [...s[team]]
+      t[index] = {
+        ...t[index],
+        abilityFlags: { ...t[index].abilityFlags, [flagName]: value },
+      }
+      return { [team]: t }
+    }),
 }))
 
 export default useCalcStore

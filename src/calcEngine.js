@@ -112,6 +112,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkItem = null,
     atkBoost = 0,
     spAtkBoost = 0,
+    atkAbilityFlags = {},
     level = 50,
   } = attacker
 
@@ -123,6 +124,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     defItem = null,
     defBoost = 0,
     spDefBoost = 0,
+    defAbilityFlags = {},
   } = defender
 
   validateSPs(atkSPs)
@@ -138,24 +140,34 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const moveType = moveData.type
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
+  const moveKey  = move.replace(/ /g, '-')
+  const isContact = moveData.contact === true
 
   const effectiveness = getEffectiveness(moveType, defTypes)
   const isSpecial = moveData.category === 1
   const atkStatIdx = isSpecial ? STAT_SPA : STAT_ATT
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
 
-  // Ability effects
-  const atkAbilKey = (atkAbility || '').toLowerCase()
-  const defAbilKey = (defAbility || '').toLowerCase()
+  // ── Chiavi abilità normalizzate ──────────────────────────────────────────
+  const atkAbilKey = (atkAbility || '').toLowerCase().replace(/ /g, '-')
+  const defAbilKey = (defAbility || '').toLowerCase().replace(/ /g, '-')
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
 
-  // Immunità
-  const isLevitating  = defAbility === 'levitate' && moveType === TYPES.GROUND
-  const isFlashFire   = defAbilEffect?.flashFire && moveType === TYPES.FIRE
+  // ── Immunità ─────────────────────────────────────────────────────────────
+  // Levitate: immune a mosse Ground
+  const isLevitating = defAbilKey === 'levitate' && moveType === TYPES.GROUND
+  // Flash Fire: sempre immune a Fire in difesa (indipendentemente dal toggle offensivo)
+  const isFlashFire  = defAbilEffect?.flashFireImmune && moveType === TYPES.FIRE
 
-  if (effectiveness === 0 || isLevitating || isFlashFire) {
-    return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  if (isLevitating) {
+    return { immune: true, reason: 'ability', abilityName: 'Levitate', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (isFlashFire) {
+    return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (effectiveness === 0) {
+    return { immune: true, reason: 'type', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
 
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
@@ -164,13 +176,27 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, field.weather, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
-  // Boost di stat
-  const atkBoostVal = isSpecial ? spAtkBoost : atkBoost
+  // ── Boost di stat base ───────────────────────────────────────────────────
+  let atkBoostVal = isSpecial ? spAtkBoost : atkBoost
   const defBoostVal = isSpecial ? spDefBoost : defBoost
-  let atkStatFinal = applyBoost(atkStat, atkBoostVal)
+
+  // ── Intimidate → Defiant / Contrary (automatico, nessun toggle extra) ───
+  // Il difensore ha Intimidate attivo: applica -1 Atk all'attaccante,
+  // MA se l'attaccante ha Defiant o Contrary, il risultato cambia.
+  //   - Normale:  atkBoostVal -= 1
+  //   - Defiant:  -1 + 2 = +1 netto (drop avviene, poi +2 per ogni drop)
+  //   - Contrary: -1 invertito = +1 (il drop diventa aumento)
+  if (!isSpecial && defAbilEffect?.intimidate && defAbilityFlags.intimidateActive) {
+    if (atkAbilEffect?.defiant)  atkBoostVal += 1  // -1 + 2 Defiant = +1
+    else if (atkAbilEffect?.contrary) atkBoostVal += 1  // -1 invertito = +1
+    else                         atkBoostVal -= 1  // drop normale
+  }
+
+  const atkBoostEffective = Math.min(6, Math.max(-6, atkBoostVal))
+  let atkStatFinal = applyBoost(atkStat, atkBoostEffective)
   let defStatFinal = applyBoost(defStat, defBoostVal)
 
-  // Item effects
+  // ── Item effects ─────────────────────────────────────────────────────────
   const atkItemKey = (atkItem || '').toLowerCase()
   const defItemKey = (defItem || '').toLowerCase()
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
@@ -188,14 +214,25 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.defMult)
   if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.spdMult)
 
-  // Ability effects attaccante su stat
+  // ── Ability effects su stat attaccante ───────────────────────────────────
+
+  // Huge Power / Pure Power: ×2 Atk fisico
   if (atkAbilEffect?.atkMult) {
     const isCorrectType = !atkAbilEffect.statType
       || (atkAbilEffect.statType === 'physical' && !isSpecial)
     if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkAbilEffect.atkMult)
   }
 
-  // STAB — Adaptability porta a ×2
+  // Supreme Overlord (Kingambit): ×(1 + KOs×0.1) su Atk e SpAtk
+  // Es: 1 alleato KO = ×1.1, 5 alleati KO = ×1.5
+  if (atkAbilEffect?.supremeOverlord) {
+    const kos = Math.min(5, Math.max(0, atkAbilityFlags.supremeOverlordKOs || 0))
+    if (kos > 0) {
+      atkStatFinal = Math.floor(atkStatFinal * (1 + kos * 0.1))
+    }
+  }
+  
+  // ── STAB ─────────────────────────────────────────────────────────────────
   const stab = hasSTAB(moveType, atkTypes)
     ? (atkAbilEffect?.adaptability ? 2.0 : 1.5)
     : 1
@@ -204,6 +241,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defGrounded = isGrounded(defPokeData, defAbility)
   const atkGrounded = isGrounded(atkPokeData, atkAbility)
 
+  // ── Terrain boost potenza ─────────────────────────────────────────────────
   let terrainBP = bp
   if (field.terrain === 'electric' && moveType === TYPES.ELECTRIC && atkGrounded) {
     terrainBP = Math.floor(terrainBP * 1.3)
@@ -220,8 +258,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (field.terrain === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move)) {
     terrainBP = Math.floor(terrainBP * 0.5)
   }
+  // Tough Claws: ×1.3 BP su mosse contatto (Mega Metagross, Mega Barbaracle)
+  if (atkAbilEffect?.toughClaws && isContact) {
+    terrainBP = Math.floor(terrainBP * 1.3)
+  }
 
-  const moveKey = move.replace(/ /g, '-')
+  // Fire Mane: ×1.5 BP su mosse Fire (Mega Pyroar)
+  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) {
+    terrainBP = Math.floor(terrainBP * 1.5)
+  }
+
+  // ── Calcolo rolls (r = 85..100) ───────────────────────────────────────────
   const rolls = []
 
   for (let r = 85; r <= 100; r++) {
@@ -231,46 +278,72 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       ) / 50
     ) + 2
 
-    // Spread: ×0.75 solo in double target
+    // Spread: ×0.75 solo con doppio bersaglio
     if (SPREAD_MOVES.has(moveKey) && field.doubleTarget) {
       damage = Math.floor(damage * 0.75)
     }
 
+    // Meteo
     if (field.weather === 'sun'  && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
     if (field.weather === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
     if (field.weather === 'rain' && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
     if (field.weather === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
 
+    // Critico
     if (field.crit) damage = Math.floor(damage * 1.5)
 
+    // Roll random (85-100%)
     damage = Math.floor(damage * r / 100)
 
+    // STAB
     if (stab > 1) damage = Math.floor(damage * stab)
 
+    // Efficacia tipo
     damage = Math.floor(damage * effectiveness)
 
-    // Resist berry difensore: ×0.5 se il tipo della mossa corrisponde
-    if (defItemEffect?.resistBerry !== undefined && defItemEffect.resistBerry === moveType &&
-    effectiveness > 1) {
+    // ── Moltiplicatori abilità difensore (post-efficacia, come da formula Gen6+) ─
+
+    // Resist berry: ×0.5 se il tipo corrisponde e la mossa è SE
+    if (defItemEffect?.resistBerry !== undefined && defItemEffect.resistBerry === moveType && effectiveness > 1) {
       damage = Math.floor(damage * 0.5)
     }
 
-    // Filter / Solid Rock: ×0.75 su danno superefficace
+    // Filter / Solid Rock: ×0.75 su super effective
     if (defAbilEffect?.filter && effectiveness > 1) {
       damage = Math.floor(damage * 0.75)
     }
 
-    // Thick Fat: ×0.5 danno da Fuoco e Ghiaccio
+    // Thick Fat: ×0.5 da Fire e Ice
     if (defAbilEffect?.thickFat) {
       if (moveType === TYPES.FIRE || moveType === TYPES.ICE) {
         damage = Math.floor(damage * 0.5)
       }
     }
 
+    // Fluffy: ×0.5 da contatto, ×2 da Fire (si moltiplicano: Fire+contatto = ×1.0 netto)
+    if (defAbilEffect?.fluffy) {
+      if (isContact)              damage = Math.floor(damage * 0.5)
+      if (moveType === TYPES.FIRE) damage = Math.floor(damage * 2.0)
+    }
+
+    // Multiscale / Shadow Shield: ×0.5 danno ricevuto se HP pieni
+    // Il toggle parte true di default — l'utente lo disattiva se il Pokémon è già danneggiato
+    if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
+      damage = Math.floor(damage * 0.5)
+    }
+
+    // Flash Fire attaccante: ×1.5 Fire se il toggle è attivo
+    // (l'immunità difensiva è già gestita sopra, prima del calcolo)
+    if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
+      damage = Math.floor(damage * 1.5)
+    }
+
+    // Schermi difensivi
     if (field.reflect     && !isSpecial) damage = Math.floor(damage * 0.5)
     if (field.lightScreen &&  isSpecial) damage = Math.floor(damage * 0.5)
     if (field.auroraVeil)               damage = Math.floor(damage * 0.5)
 
+    // Helping Hand
     if (field.helpingHand) damage = Math.floor(damage * 1.5)
 
     rolls.push(damage)
@@ -281,6 +354,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const minPct = Math.floor(minDmg / defHP * 1000) / 10
   const maxPct = Math.floor(maxDmg / defHP * 1000) / 10
 
+  // ── Debug panel ───────────────────────────────────────────────────────────
   const terrainLabel = {
     electric: '⚡ Electric Terrain',
     grassy: '🌿 Grassy Terrain',
@@ -297,6 +371,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     `🌍 Spread: ${SPREAD_MOVES.has(moveKey) ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
     `🎯 STAB: ${stab > 1 ? `×${stab} ✅` : '×1 ❌'}`,
     `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
+    isContact ? `👊 Contatto: sì` : null,
     atkAbility ? `⚡ Abilità atk: ${atkAbility}` : null,
     defAbility ? `🛡️ Abilità def: ${defAbility}` : null,
     field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
@@ -352,5 +427,5 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     }
   }
 
-  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log }
+  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective }
 }
