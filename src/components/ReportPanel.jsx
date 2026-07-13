@@ -35,11 +35,15 @@ function buildSmogonString(atk, def, move) {
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
   const moveName = move.replace(/-/g, ' ')
+  const atkBoostVal = isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
+  const atkBoostStr = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
   const atkAbilityName = atk.ability ? ` ${atk.ability.replace(/\b\w/g, c => c.toUpperCase())}` : ''
+  const defBoostVal = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
+  const defBoostStr = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
   const atkItemName = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
   const defItemName = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
 
-return `${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName}${defItemName} ${def.key}`
+return `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defBoostStr}${defSP} ${defStatName}${defItemName} ${def.key}`
 }
 
 export default function ReportPanel({ selection, onClose }) {

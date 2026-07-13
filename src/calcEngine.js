@@ -1,7 +1,5 @@
 import pokemonData from './data/pokemon.json'
 import movesData from './data/moves.json'
-import itemsData from './data/items.json'
-import abilitiesData from './data/abilities.json'
 import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 import { NATURE_MODIFIERS } from './data/natures.js'
 import { ITEM_EFFECTS } from './data/itemEffects.js'
@@ -15,6 +13,14 @@ const STAT_ATT = 1
 const STAT_DEF = 2
 const STAT_SPA = 3
 const STAT_SPD = 4
+
+const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
+const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
+
+function applyBoost(stat, boost) {
+  if (!boost) return stat
+  return Math.floor(stat * BOOST_NUM[6 + boost] / BOOST_DEN[6 + boost])
+}
 
 export const SPREAD_MOVES = new Set([
   'acid', 'air-cutter', 'blizzard', 'boomburst', 'brutal-swing',
@@ -104,6 +110,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkNature = null,
     atkAbility = null,
     atkItem = null,
+    atkBoost = 0,
+    spAtkBoost = 0,
     level = 50,
   } = attacker
 
@@ -113,6 +121,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     defNature = null,
     defAbility = null,
     defItem = null,
+    defBoost = 0,
+    spDefBoost = 0,
   } = defender
 
   validateSPs(atkSPs)
@@ -130,16 +140,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defTypes = defPokeData.type
 
   const effectiveness = getEffectiveness(moveType, defTypes)
-
-  const isLevitating = defAbility === 'levitate' && moveType === TYPES.GROUND
-
-  if (effectiveness === 0 || isLevitating) {
-    return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
-  }
-
   const isSpecial = moveData.category === 1
   const atkStatIdx = isSpecial ? STAT_SPA : STAT_ATT
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
+
+  // Ability effects
+  const atkAbilKey = (atkAbility || '').toLowerCase()
+  const defAbilKey = (defAbility || '').toLowerCase()
+  const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
+  const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
+
+  // Immunità
+  const isLevitating  = defAbility === 'levitate' && moveType === TYPES.GROUND
+  const isFlashFire   = defAbilEffect?.flashFire && moveType === TYPES.FIRE
+
+  if (effectiveness === 0 || isLevitating || isFlashFire) {
+    return { immune: true, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
 
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
@@ -147,40 +164,36 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, field.weather, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
+  // Boost di stat
+  const atkBoostVal = isSpecial ? spAtkBoost : atkBoost
+  const defBoostVal = isSpecial ? spDefBoost : defBoost
+  let atkStatFinal = applyBoost(atkStat, atkBoostVal)
+  let defStatFinal = applyBoost(defStat, defBoostVal)
+
   // Item effects
   const atkItemKey = (atkItem || '').toLowerCase()
   const defItemKey = (defItem || '').toLowerCase()
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
-  let atkStatFinal = atkStat
   if (atkItemEffect?.atkMult) {
     const isCorrectType = !atkItemEffect.statType
       || (atkItemEffect.statType === 'physical' && !isSpecial)
       || (atkItemEffect.statType === 'special'  &&  isSpecial)
-    if (isCorrectType) atkStatFinal = Math.floor(atkStat * atkItemEffect.atkMult)
+    if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.atkMult)
   }
   if (atkItemEffect?.typBoost !== undefined && atkItemEffect.typBoost === moveType) {
     atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.typMult)
   }
+  if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.defMult)
+  if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.spdMult)
 
-  let defStatFinal = defStat
-  if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStat * defItemEffect.defMult)
-  if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStat * defItemEffect.spdMult)
-
-  // Ability effects attaccante
-  const atkAbilKey = (atkAbility || '').toLowerCase()
-  const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
-
+  // Ability effects attaccante su stat
   if (atkAbilEffect?.atkMult) {
     const isCorrectType = !atkAbilEffect.statType
       || (atkAbilEffect.statType === 'physical' && !isSpecial)
     if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkAbilEffect.atkMult)
   }
-
-  // Ability effects difensore
-  const defAbilKey = (defAbility || '').toLowerCase()
-  const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
 
   // STAB — Adaptability porta a ×2
   const stab = hasSTAB(moveType, atkTypes)
@@ -236,6 +249,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
     damage = Math.floor(damage * effectiveness)
 
+    // Filter / Solid Rock: ×0.75 su danno superefficace
+    if (defAbilEffect?.filter && effectiveness > 1) {
+      damage = Math.floor(damage * 0.75)
+    }
+
     // Thick Fat: ×0.5 danno da Fuoco e Ghiaccio
     if (defAbilEffect?.thickFat) {
       if (moveType === TYPES.FIRE || moveType === TYPES.ICE) {
@@ -266,8 +284,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   const log = [
     `📊 ${atkPokemon} → ${move} → ${defPokemon}`,
-    `⚔️  Stat attacco: ${atkStatFinal} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, natura ${atkNature || 'neutra'})`,
-    `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, natura ${defNature || 'neutra'})`,
+    `⚔️  Stat attacco: ${atkStatFinal} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, boost ${atkBoostVal > 0 ? '+' : ''}${atkBoostVal}, natura ${atkNature || 'neutra'})`,
+    `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, boost ${defBoostVal > 0 ? '+' : ''}${defBoostVal}, natura ${defNature || 'neutra'})`,
     `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
     `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
     `🌍 Spread: ${SPREAD_MOVES.has(moveKey) ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
