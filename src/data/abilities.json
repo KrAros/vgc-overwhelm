@@ -691,5 +691,236 @@
   },
   "wimp out": {
     "name": "Wimp Out"
+  },
+  "intrepid sword": {
+    "name": "Intrepid Sword"
+  },
+  "dauntless shield": {
+    "name": "Dauntless Shield"
+  },
+  "libero": {
+    "name": "Libero"
+  },
+  "mirror armor": {
+    "name": "Mirror Armor"
+  },
+  "gorilla tactics": {
+    "name": "Gorilla Tactics"
+  },
+  "neutralizing gas": {
+    "name": "Neutralizing Gas"
+  },
+  "punk rock": {
+    "name": "Punk Rock"
+  },
+  "ice scales": {
+    "name": "Ice Scales"
+  },
+  "stalwart": {
+    "name": "Stalwart"
+  },
+  "propeller tail": {
+    "name": "Propeller Tail"
+  },
+  "gulp missile": {
+    "name": "Gulp Missile"
+  },
+  "wandering spirit": {
+    "name": "Wandering Spirit"
+  },
+  "pastel veil": {
+    "name": "Pastel Veil"
+  },
+  "hunger switch": {
+    "name": "Hunger Switch"
+  },
+  "quick draw": {
+    "name": "Quick Draw"
+  },
+  "unseen fist": {
+    "name": "Unseen Fist"
+  },
+  "transistor": {
+    "name": "Transistor"
+  },
+  "dragons maw": {
+    "name": "Dragon's Maw"
+  },
+  "chilling neigh": {
+    "name": "Chilling Neigh"
+  },
+  "grim neigh": {
+    "name": "Grim Neigh"
+  },
+  "as one": {
+    "name": "As One"
+  },
+  "wind rider": {
+    "name": "Wind Rider"
+  },
+  "guard dog": {
+    "name": "Guard Dog"
+  },
+  "rocky payload": {
+    "name": "Rocky Payload"
+  },
+  "wind power": {
+    "name": "Wind Power"
+  },
+  "zero to hero": {
+    "name": "Zero to Hero"
+  },
+  "commander": {
+    "name": "Commander"
+  },
+  "electromorphosis": {
+    "name": "Electromorphosis"
+  },
+  "protosynthesis": {
+    "name": "Protosynthesis"
+  },
+  "quark drive": {
+    "name": "Quark Drive"
+  },
+  "good as gold": {
+    "name": "Good as Gold"
+  },
+  "vessel of ruin": {
+    "name": "Vessel of Ruin"
+  },
+  "sword of ruin": {
+    "name": "Sword of Ruin"
+  },
+  "tablets of ruin": {
+    "name": "Tablets of Ruin"
+  },
+  "beads of ruin": {
+    "name": "Beads of Ruin"
+  },
+  "orichalcum pulse": {
+    "name": "Orichalcum Pulse"
+  },
+  "hadron engine": {
+    "name": "Hadron Engine"
+  },
+  "opportunist": {
+    "name": "Opportunist"
+  },
+  "cud chew": {
+    "name": "Cud Chew"
+  },
+  "sharpness": {
+    "name": "Sharpness"
+  },
+  "supreme overlord": {
+    "name": "Supreme Overlord"
+  },
+  "costar": {
+    "name": "Costar"
+  },
+  "toxic debris": {
+    "name": "Toxic Debris"
+  },
+  "armor tail": {
+    "name": "Armor Tail"
+  },
+  "earth eater": {
+    "name": "Earth Eater"
+  },
+  "mycelium might": {
+    "name": "Mycelium Might"
+  },
+  "anger shell": {
+    "name": "Anger Shell"
+  },
+  "purifying salt": {
+    "name": "Purifying Salt"
+  },
+  "well-baked body": {
+    "name": "Well-Baked Body"
+  },
+  "embody aspect": {
+    "name": "Embody Aspect"
+  },
+  "tera shift": {
+    "name": "Tera Shift"
+  },
+  "tera shell": {
+    "name": "Tera Shell"
+  },
+  "teraform zero": {
+    "name": "Teraform Zero"
+  },
+  "poison puppeteer": {
+    "name": "Poison Puppeteer"
+  },
+  "ball fetch": {
+    "name": "Ball Fetch"
+  },
+  "cotton down": {
+    "name": "Cotton Down"
+  },
+  "curious medicine": {
+    "name": "Curious Medicine"
+  },
+  "dragonize": {
+    "name": "Dragonize"
+  },
+  "hospitality": {
+    "name": "Hospitality"
+  },
+  "ice face": {
+    "name": "Ice Face"
+  },
+  "lingering aroma": {
+    "name": "Lingering Aroma"
+  },
+  "long reach": {
+    "name": "Long Reach"
+  },
+  "mega sol": {
+    "name": "Mega Sol"
+  },
+  "mimicry": {
+    "name": "Mimicry"
+  },
+  "minds eye": {
+    "name": "Mind's Eye"
+  },
+  "neuroforce": {
+    "name": "Neuroforce"
+  },
+  "perish body": {
+    "name": "Perish Body"
+  },
+  "power spot": {
+    "name": "Power Spot"
+  },
+  "ripen": {
+    "name": "Ripen"
+  },
+  "sand spit": {
+    "name": "Sand Spit"
+  },
+  "screen cleaner": {
+    "name": "Screen Cleaner"
+  },
+  "seed sower": {
+    "name": "Seed Sower"
+  },
+  "steam engine": {
+    "name": "Steam Engine"
+  },
+  "steely spirit": {
+    "name": "Steely Spirit"
+  },
+  "supersweet syrup": {
+    "name": "Supersweet Syrup"
+  },
+  "thermal exchange": {
+    "name": "Thermal Exchange"
+  },
+  "toxic chain": {
+    "name": "Toxic Chain"
   }
 }
