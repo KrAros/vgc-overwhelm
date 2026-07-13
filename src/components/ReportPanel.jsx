@@ -1,17 +1,8 @@
 import { useMemo } from 'react'
-import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
-
-const NATURE_MODIFIERS = {
-  hardy:[0,0],bashful:[0,0],docile:[0,0],serious:[0,0],quirky:[0,0],
-  lonely:[1,2],brave:[1,5],adamant:[1,3],naughty:[1,4],
-  bold:[2,1],relaxed:[2,5],impish:[2,3],lax:[2,4],
-  timid:[5,1],hasty:[5,2],jolly:[5,3],naive:[5,4],
-  modest:[3,1],mild:[3,2],quiet:[3,5],rash:[3,4],
-  calm:[4,1],gentle:[4,2],sassy:[4,5],careful:[4,3],
-}
+import { NATURE_MODIFIERS } from '../data/natures'
 
 function calcHKO(minPct) {
   if (minPct <= 0) return null
@@ -22,7 +13,7 @@ function calcHKO(minPct) {
   return `guaranteed ${hits}HKO`
 }
 
-function buildSmogonString(atk, def, move, result) {
+function buildSmogonString(atk, def, move) {
   const moveData = movesData[move]
   if (!moveData) return ''
 
@@ -44,12 +35,13 @@ function buildSmogonString(atk, def, move, result) {
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
   const moveName = move.replace(/-/g, ' ')
+  const atkItemName = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
+  const defItemName = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
 
-  return `${atkSP}${natSymbol} ${statName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName} ${def.key}`
+return `${atkSP}${natSymbol} ${statName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defSP} ${defStatName}${defItemName} ${def.key}`
 }
 
 export default function ReportPanel({ selection, onClose }) {
-  // Legge live dallo store — si aggiorna ad ogni cambio di modificatori
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
   const terrain      = useCalcStore(s => s.terrain)
@@ -80,6 +72,7 @@ export default function ReportPanel({ selection, onClose }) {
           atkNature: atk.nature,
           atkBoost: atk.atkBoost || 0,
           spAtkBoost: atk.spAtkBoost || 0,
+          atkItem: atk.item || null,   // ← aggiunto
           level: 50,
         },
         defender: {
@@ -88,6 +81,7 @@ export default function ReportPanel({ selection, onClose }) {
           defNature: def.nature,
           defBoost: def.defBoost || 0,
           spDefBoost: def.spDefBoost || 0,
+          defItem: def.item || null,   // ← aggiunto
         },
         move,
         field,
@@ -121,7 +115,7 @@ export default function ReportPanel({ selection, onClose }) {
         <div className="space-y-3">
           {allMoves.map(({ move, result }) => {
             const hko = calcHKO(result.minPct)
-            const smogon = buildSmogonString(atk, def, move, result)
+            const smogon = buildSmogonString(atk, def, move)
             const rolls = result.rolls
 
             const hkoColor = result.minPct >= 100 ? 'text-red-400' :

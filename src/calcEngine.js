@@ -4,6 +4,7 @@ import itemsData from './data/items.json'
 import abilitiesData from './data/abilities.json'
 import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 import { NATURE_MODIFIERS } from './data/natures'
+import { ITEM_EFFECTS } from './data/itemEffects.js'
 
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
@@ -146,6 +147,27 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, field.weather, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
+  // Item effects
+const atkItemKey = (attacker.atkItem || '').toLowerCase()
+const defItemKey = (defender.defItem || '').toLowerCase()
+const atkEffect = ITEM_EFFECTS[atkItemKey] || null
+const defEffect = ITEM_EFFECTS[defItemKey] || null
+
+let atkStatFinal = atkStat
+if (atkEffect?.atkMult) {
+  const isCorrectType = !atkEffect.statType
+    || (atkEffect.statType === 'physical' && !isSpecial)
+    || (atkEffect.statType === 'special'  &&  isSpecial)
+  if (isCorrectType) atkStatFinal = Math.floor(atkStat * atkEffect.atkMult)
+}
+if (atkEffect?.typBoost !== undefined && atkEffect.typBoost === moveType) {
+  atkStatFinal = Math.floor(atkStatFinal * atkEffect.typMult)
+}
+
+let defStatFinal = defStat
+if (defEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStat * defEffect.defMult)
+if (defEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStat * defEffect.spdMult)
+
   const bp = moveData.power
   const defGrounded = isGrounded(defPokeData, defAbility)
   const atkGrounded = isGrounded(atkPokeData, attacker.atkAbility)
@@ -172,10 +194,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   for (let r = 85; r <= 100; r++) {
     let damage = Math.floor(
-      Math.floor(
-        Math.floor((2 * level) / 5 + 2) * terrainBP * atkStat / defStat
-      ) / 50
-    ) + 2
+  Math.floor(
+    Math.floor((2 * level) / 5 + 2) * terrainBP * atkStatFinal / defStatFinal
+  ) / 50
+) + 2
 
     // Spread: ×0.75 solo in double target
     if (SPREAD_MOVES.has(moveKey) && field.doubleTarget) {

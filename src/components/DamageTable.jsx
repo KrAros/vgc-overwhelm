@@ -39,6 +39,7 @@ function calcAllMoves(atk, def, level, field) {
         atkNature: atk.nature,
         atkBoost: atk.atkBoost || 0,
         spAtkBoost: atk.spAtkBoost || 0,
+        atkItem: atk.item || null,   // ← aggiunto
         level
       },
       defender: {
@@ -47,6 +48,7 @@ function calcAllMoves(atk, def, level, field) {
         defNature: def.nature,
         defBoost: def.defBoost || 0,
         spDefBoost: def.spDefBoost || 0,
+        defItem: def.item || null,   // ← aggiunto
       },
       move,
       field,
