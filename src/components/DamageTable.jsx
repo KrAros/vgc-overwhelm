@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { calculateDamage, SPREAD_MOVES } from '../calcEngine'
+import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
+import movesData from '../data/moves.json'
 
 const spriteUrl = (key) => {
   const data = pokemonData[key]
@@ -134,7 +135,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
           <>
             <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
               {prefix} {d.move}
-              {SPREAD_MOVES.has(d.move.replace(/ /g, '-')) && (
+              {movesData[d.move]?.spread === true && (
                 <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
                   <SpreadIcon />
                 </span>

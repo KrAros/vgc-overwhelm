@@ -22,21 +22,7 @@ function applyBoost(stat, boost) {
   return Math.floor(stat * BOOST_NUM[6 + boost] / BOOST_DEN[6 + boost])
 }
 
-export const SPREAD_MOVES = new Set([
-  'acid', 'air-cutter', 'blizzard', 'boomburst', 'brutal-swing',
-  'bubble', 'bulldoze', 'captivate', 'core-enforcer', 'dark-void',
-  'dazzling-gleam', 'diamond-storm', 'disarming-voice', 'discharge',
-  'earthquake', 'electroweb', 'eruption', 'explosion', 'glaciate',
-  'growl', 'heat-wave', 'hyper-voice', 'icy-wind', 'incinerate',
-  "land's-wrath", 'lava-plume', 'leer', 'magnitude', 'muddy-water',
-  'parabolic-charge', 'petal-blizzard', 'poison-gas', 'powder-snow',
-  'razor-leaf', 'razor-wind', 'relic-song', 'rock-slide',
-  'searing-shot', 'self-destruct', 'sludge-wave', 'snarl',
-  'sparkling-aria', 'string-shot', 'struggle-bug', 'surf',
-  'sweet-scent', 'swift', 'synchronise', 'tail-whip', 'teeter-dance',
-  'twister', 'water-spout', 'precipice-blades', 'origin-pulse',
-  'clanging-scales',
-])
+// Spread moves tracked via moveData.spread nel JSON — nessun Set separato
 
 const MAX_SP_PER_STAT = 32
 const MAX_SP_TOTAL = 66
@@ -140,8 +126,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const moveType = moveData.type
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
-  const moveKey  = move.replace(/ /g, '-')
   const isContact = moveData.contact === true
+  const isSpread  = moveData.spread === true
 
   const effectiveness = getEffectiveness(moveType, defTypes)
   const isSpecial = moveData.category === 1
@@ -279,7 +265,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     ) + 2
 
     // Spread: ×0.75 solo con doppio bersaglio
-    if (SPREAD_MOVES.has(moveKey) && field.doubleTarget) {
+    if (isSpread && field.doubleTarget) {
       damage = Math.floor(damage * 0.75)
     }
 
@@ -375,7 +361,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, boost ${defBoostVal > 0 ? '+' : ''}${defBoostVal}, natura ${defNature || 'neutra'})`,
     `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
     `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
-    `🌍 Spread: ${SPREAD_MOVES.has(moveKey) ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
+    `🌍 Spread: ${isSpread ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
     `🎯 STAB: ${stab > 1 ? `×${stab} ✅` : '×1 ❌'}`,
     `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
     isContact ? `👊 Contatto: sì` : null,

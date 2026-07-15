@@ -6,7 +6,7 @@ import itemsData from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import useCalcStore from '../store/useCalcStore'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
-import { SPREAD_MOVES } from '../calcEngine'
+
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES = Object.keys(movesData).sort()
@@ -325,7 +325,7 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
         <button
           type="button"
           onClick={() => onFlagChange('intimidateActive', !flags.intimidateActive)}
-          className={`w-8 h-4 rounded-full transition-colors relative flex-shrink-0 ${
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
             flags.intimidateActive ? 'bg-orange-500' : 'bg-gray-600'
           }`}
         >
@@ -349,7 +349,7 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
         <button
           type="button"
           onClick={() => onFlagChange('flashFireActive', !flags.flashFireActive)}
-          className={`w-8 h-4 rounded-full transition-colors relative flex-shrink-0 ${
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
             flags.flashFireActive ? 'bg-red-500' : 'bg-gray-600'
           }`}
         >
@@ -373,7 +373,7 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
         <button
           type="button"
           onClick={() => onFlagChange('multiscaleActive', !flags.multiscaleActive)}
-          className={`w-8 h-4 rounded-full transition-colors relative flex-shrink-0 ${
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
             flags.multiscaleActive ? 'bg-blue-500' : 'bg-gray-600'
           }`}
         >
@@ -488,7 +488,7 @@ function PokemonPanel({ team, index }) {
 
   const handleMoveChange = (mi, m) => {
     setMove(team, index, mi, m)
-    const isSpread = SPREAD_MOVES.has(m.replace(/ /g, '-'))
+    const isSpread = movesData[m]?.spread === true
     setDoubleTarget(isSpread)
   }
 
