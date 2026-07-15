@@ -13,7 +13,7 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical' },
   'choice specs':   { atkMult: 1.5, statType: 'special'  },
-  'life orb':       { atkMult: 1.3 },
+  'life orb':       { dmgMult: { num: 13, den: 10 } },
 
   // ── Type-boosting ×1.2 ────────────────────────────────────────────────────
   'silk scarf':     { typBoost: TYPES.NORMAL,   typMult: 1.2 },

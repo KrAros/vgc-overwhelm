@@ -295,6 +295,13 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // Roll random (85-100%)
     damage = Math.floor(damage * r / 100)
 
+    // dmgMult: moltiplicatori di danno finale (es. Life Orb)
+    // formula half-up: floor((d * num + den/2) / den)
+    if (atkItemEffect?.dmgMult) {
+      const { num, den } = atkItemEffect.dmgMult
+      damage = Math.floor((damage * num + Math.floor(den / 2)) / den)
+    }
+
     // STAB
     if (stab > 1) damage = Math.floor(damage * stab)
 
