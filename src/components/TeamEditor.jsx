@@ -35,13 +35,18 @@ const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 const spriteUrl = (key) => {
   const data = pokemonData[key]
   if (!data) return null
-  const isAlola = key.includes('-alola')
-  const isMegaY = key.includes('-mega-y')
-  const isMegaX = key.includes('-mega-x')
-  const isMega  = data.mega === 1
+  const isMegaY   = key.includes('-mega-y')
+  const isMegaX   = key.includes('-mega-x')
+  const isMega    = data.mega === 1
+  const isAlola   = key.includes('-alola')
   let num = data.num
-  if (isMega) {
-    const baseName = key.replace(/-mega.*$/, '')
+  // Le Mega, le forme Primal e Unbound non hanno num proprio —
+  // si ricava togliendo il suffisso dalla chiave base.
+  if (isMega || !num) {
+    const baseName = key
+      .replace(/-mega.*$/, '')
+      .replace(/-primal$/, '')
+      .replace(/-unbound$/, '')
     num = pokemonData[baseName]?.num || ''
   }
   num = num?.replace('#', '').padStart(4, '0')

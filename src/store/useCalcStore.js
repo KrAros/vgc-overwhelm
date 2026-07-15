@@ -21,7 +21,7 @@ const emptyPokemon = () => ({
 const useCalcStore = create((set) => ({
   level: 50,
   trickRoom: false,
-  doubleTarget: false,
+  doubleTarget: true,
   weather: null,
   terrain: null,
   helpingHand: { t1: false, t2: false },

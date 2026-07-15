@@ -922,5 +922,101 @@
   },
   "toxic chain": {
     "name": "Toxic Chain"
+  },
+  "mega-launcher": {
+    "name": "Mega Launcher"
+  },
+  "shell-armor": {
+    "name": "Shell Armor"
+  },
+  "shadow-tag": {
+    "name": "Shadow Tag"
+  },
+  "parental-bond": {
+    "name": "Parental Bond"
+  },
+  "mold-breaker": {
+    "name": "Mold Breaker"
+  },
+  "skill-link": {
+    "name": "Skill Link"
+  },
+  "solar-power": {
+    "name": "Solar Power"
+  },
+  "sand-stream": {
+    "name": "Sand Stream"
+  },
+  "speed-boost": {
+    "name": "Speed Boost"
+  },
+  "huge-power": {
+    "name": "Huge Power"
+  },
+  "pure-power": {
+    "name": "Pure Power"
+  },
+  "magic-bounce": {
+    "name": "Magic Bounce"
+  },
+  "sand-force": {
+    "name": "Sand Force"
+  },
+  "snow-warning": {
+    "name": "Snow Warning"
+  },
+  "no-guard": {
+    "name": "No Guard"
+  },
+  "lightning-rod": {
+    "name": "Lightning Rod"
+  },
+  "swift-swim": {
+    "name": "Swift Swim"
+  },
+  "strong-jaw": {
+    "name": "Strong Jaw"
+  },
+  "sheer-force": {
+    "name": "Sheer Force"
+  },
+  "inner-focus": {
+    "name": "Inner Focus"
+  },
+  "delta-stream": {
+    "name": "Delta Stream"
+  },
+  "desolate-land": {
+    "name": "Desolate Land"
+  },
+  "primordial-sea": {
+    "name": "Primordial Sea"
+  },
+  "mega-sol": {
+    "name": "Mega Sol"
+  },
+  "piercing-drill": {
+    "name": "Piercing Drill"
+  },
+  "unseen-fist": {
+    "name": "Unseen Fist"
+  },
+  "innards-out": {
+    "name": "Innards Out"
+  },
+  "iron-fist": {
+    "name": "Iron Fist"
+  },
+  "spicy-spray": {
+    "name": "Spicy Spray"
+  },
+  "fairy-aura": {
+    "name": "Fairy Aura"
+  },
+  "surge-surfer": {
+    "name": "Surge Surfer"
+  },
+  "electric-surge": {
+    "name": "Electric Surge"
   }
 }
