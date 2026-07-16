@@ -10,10 +10,10 @@ import { NATURE_MODIFIERS } from '../data/natures'
 function calcHKO(minPct) {
   if (minPct <= 0) return null
   const hits = Math.ceil(100 / minPct)
-  if (hits === 1) return 'guaranteed OHKO'
-  if (hits === 2) return 'guaranteed 2HKO'
-  if (hits === 3) return 'guaranteed 3HKO'
-  return `guaranteed ${hits}HKO`
+  if (hits === 1) return 'OHKO'
+  if (hits === 2) return '2HKO'
+  if (hits === 3) return '3HKO'
+  return `${hits}HKO`
 }
 
 function buildSmogonString(atk, def, move, result) {
@@ -22,10 +22,9 @@ function buildSmogonString(atk, def, move, result) {
 
   const isSpecial = moveData.category === 1
   const atkStatIdx = isSpecial ? 3 : 1
-  const defStatIdx = isSpecial ? 4 : 2
 
   const atkSP = atk.sps?.[atkStatIdx] || 0
-  const defSP = def.sps?.[defStatIdx] || 0
+  const defSP = def.sps?.[isSpecial ? 4 : 2] || 0
   const defHP = def.sps?.[0] || 0
 
   const nature = atk.nature
@@ -81,87 +80,85 @@ const spriteUrl = (key) => {
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
 }
 
-// ── Sitrus Berry simulation ────────────────────────────────────────────────────
-// Simula fino a 6 turni di danno con una Sitrus Berry che heala il 25% HP
-// una sola volta (quando si attiva, cioè HP scende sotto 50%).
-// Restituisce un array di oggetti turno + XHKO finale.
+// ── Sitrus Berry simulation ───────────────────────────────────────────────────
 
 function simulateSitrus(rolls, defHP) {
-  // Usiamo danno medio (mediana dei roll) per la simulazione
   const midDmg = rolls[Math.floor(rolls.length / 2)]
   const sitrusHeal = Math.floor(defHP * 0.25)
-
   let hp = defHP
   let sitrusUsed = false
-  const turns = []
+  const healTurns = []
 
   for (let t = 1; t <= 6; t++) {
     hp -= midDmg
     const dmgNote = `T${t}: −${midDmg} HP`
-
     if (hp <= 0) {
-      turns.push({ t, hp: 0, note: dmgNote, ko: true })
+      healTurns.push({ t, hp: 0, note: dmgNote, ko: true })
       break
     }
-
-    turns.push({ t, hp, note: dmgNote, ko: false })
-
-    // Sitrus si attiva se HP ≤ 50% e non ancora usata
+    healTurns.push({ t, hp, note: dmgNote, ko: false })
     if (!sitrusUsed && hp <= Math.floor(defHP / 2)) {
       const healed = Math.min(hp + sitrusHeal, defHP) - hp
       hp = Math.min(hp + sitrusHeal, defHP)
       sitrusUsed = true
-      turns.push({ t, hp, note: `  🍊 Sitrus Berry: +${healed} HP`, heal: true })
+      healTurns.push({ t, hp, note: `🍊 Sitrus Berry: +${healed} HP`, heal: true })
     }
   }
 
-  // Calcola XHKO
-  const koTurn = turns.find(r => r.ko)
-  const hko = koTurn ? `${koTurn.t}HKO` : 'No KO in 6T'
-
-  return { turns: turns.filter(r => !r.heal || r.heal), healTurns: turns, hko }
+  const koTurn = healTurns.find(r => r.ko)
+  return { healTurns, hko: koTurn ? `${koTurn.t}HKO` : 'No KO in 6T' }
 }
 
-// ── Scheda singola mossa ───────────────────────────────────────────────────────
+
+
+
+
+// ── MoveCard — layout migliorato ─────────────────────────────────────────────
 
 function MoveCard({ atk, def, move, result }) {
-  const hko    = calcHKO(result.minPct)
-  const smogon = buildSmogonString(atk, def, move, result)
-  const rolls  = result.rolls
+  const hko       = calcHKO(result.minPct)
+  const smogon    = buildSmogonString(atk, def, move, result)
+  const rolls     = result.rolls
   const hasSitrus = def.item === 'sitrus berry'
+  const sitrus    = hasSitrus ? simulateSitrus(rolls, result.defHP) : null
 
-  const sitrus = hasSitrus ? simulateSitrus(rolls, result.defHP) : null
+  const pctColor = result.minPct >= 100 ? 'text-red-400' :
+                   result.maxPct >= 100  ? 'text-orange-400' :
+                   result.minPct >= 50   ? 'text-orange-300' :
+                   result.minPct >= 25   ? 'text-teal-300' : 'text-green-400'
 
-  const hkoColor = result.minPct >= 100 ? 'text-red-400' :
-                   result.minPct >= 50  ? 'text-orange-400' :
-                   result.minPct >= 25  ? 'text-teal-300' : 'text-green-400'
+  const hkoBadge = result.minPct >= 100
+    ? 'border-red-500/50 text-red-400 bg-red-900/20'
+    : result.maxPct >= 100
+    ? 'border-orange-500/50 text-orange-400 bg-orange-900/20'
+    : 'border-gray-600/60 text-gray-400 bg-gray-800/60'
 
   return (
-    <div className="bg-gray-900/60 rounded-lg p-3 border border-gray-700/50 space-y-2">
-      {/* Header mossa */}
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-white capitalize">
+    <div className="bg-gray-900/60 rounded-lg p-3 border border-gray-700/50 space-y-2.5">
+
+      {/* Riga 1: nome mossa grande + % + badge HKO */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-base font-bold text-white capitalize tracking-wide">
           {move.replace(/-/g, ' ')}
         </span>
-        <div className="flex items-center gap-2">
-          <span className={`text-sm font-bold ${hkoColor}`}>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className={`text-base font-bold ${pctColor}`}>
             {result.minPct}–{result.maxPct}%
           </span>
           {hko && (
-            <span className={`text-xs px-2 py-0.5 rounded border ${
-              result.minPct >= 100
-                ? 'border-red-500/50 text-red-400 bg-red-900/20'
-                : 'border-gray-600 text-gray-400'
-            }`}>
+            <span className={`text-xs px-2 py-0.5 rounded border font-semibold ${hkoBadge}`}>
               {hko}
             </span>
           )}
         </div>
       </div>
 
-      {/* Stringa Smogon */}
-      <div className="text-xs text-gray-500 font-mono">
-        {smogon}: {result.minDmg}–{result.maxDmg} / {result.defHP} HP
+      {/* Riga 2: stringa Smogon + danni grezzi su una riga */}
+      <div className="text-[11px] font-mono leading-relaxed">
+        <span className="text-gray-400">{smogon}</span>
+        <span className="text-gray-600 ml-1">
+          → {result.minDmg}–{result.maxDmg} / {result.defHP} HP
+        </span>
       </div>
 
       {/* Roll grid */}
@@ -170,9 +167,7 @@ function MoveCard({ atk, def, move, result }) {
           <span
             key={i}
             className={`text-xs px-1.5 py-0.5 rounded font-mono ${
-              r >= result.defHP
-                ? 'bg-red-900/40 text-red-300'
-                : 'bg-gray-700/60 text-gray-400'
+              r >= result.defHP ? 'bg-red-900/40 text-red-300' : 'bg-gray-700/60 text-gray-400'
             }`}
           >
             {r}
@@ -182,24 +177,20 @@ function MoveCard({ atk, def, move, result }) {
 
       {/* Simulazione Sitrus Berry */}
       {sitrus && (
-        <div className="mt-2 pt-2 border-t border-gray-700/50">
-          <div className="text-[10px] text-orange-300 font-semibold mb-1 uppercase tracking-wide">
-            🍊 Simulazione Sitrus Berry (danno medio)
+        <div className="pt-2 border-t border-gray-700/50 space-y-1">
+          <div className="text-[10px] text-orange-300 font-semibold uppercase tracking-wide">
+            🍊 Sitrus Berry — simulazione (danno medio)
           </div>
-          <div className="space-y-0.5">
-            {sitrus.healTurns.map((row, i) => (
-              <div key={i} className={`text-xs font-mono ${
-                row.ko   ? 'text-red-400' :
-                row.heal ? 'text-orange-300' :
-                           'text-gray-400'
-              }`}>
-                {row.note}
-                {!row.heal && !row.ko && ` → ${row.hp}/${result.defHP} HP`}
-                {row.ko && ' → KO'}
-              </div>
-            ))}
-          </div>
-          <div className={`mt-1 text-xs font-bold ${
+          {sitrus.healTurns.map((row, i) => (
+            <div key={i} className={`text-xs font-mono ${
+              row.ko ? 'text-red-400' : row.heal ? 'text-orange-300' : 'text-gray-400'
+            }`}>
+              {row.note}
+              {!row.heal && !row.ko && ` → ${row.hp}/${result.defHP} HP`}
+              {row.ko && ' → KO'}
+            </div>
+          ))}
+          <div className={`text-xs font-bold ${
             sitrus.hko === 'No KO in 6T' ? 'text-green-400' : 'text-orange-400'
           }`}>
             Risultato: {sitrus.hko}
@@ -210,12 +201,11 @@ function MoveCard({ atk, def, move, result }) {
   )
 }
 
-// ── Tab Singola ───────────────────────────────────────────────────────────────
+// ── SinglePanel ───────────────────────────────────────────────────────────────
 
-function SinglePanel({ entry, fieldOverride }) {
-  const { atk, def, dir, allMoves } = entry
+function SinglePanel({ entry }) {
+  const { atk, def, dir } = entry
 
-  // Ricostruiamo i risultati live dallo store
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
   const terrain      = useCalcStore(s => s.terrain)
@@ -234,32 +224,22 @@ function SinglePanel({ entry, fieldOverride }) {
       reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
       crit:        dir === 't1' ? crit.t1         : crit.t2,
     }
-
     return (atk.moves || []).filter(Boolean).map(move => {
       const result = calculateDamage({
         attacker: {
-          atkPokemon: atk.key,
-          atkSPs: atk.sps || [0,0,0,0,0,0],
-          atkNature: atk.nature,
-          atkBoost: atk.atkBoost || 0,
-          spAtkBoost: atk.spAtkBoost || 0,
-          atkItem: atk.item || null,
-          atkAbility: atk.ability || null,
-          atkAbilityFlags: atk.abilityFlags || {},
+          atkPokemon: atk.key, atkSPs: atk.sps || [0,0,0,0,0,0],
+          atkNature: atk.nature, atkBoost: atk.atkBoost || 0,
+          spAtkBoost: atk.spAtkBoost || 0, atkItem: atk.item || null,
+          atkAbility: atk.ability || null, atkAbilityFlags: atk.abilityFlags || {},
           level: 50,
         },
         defender: {
-          defPokemon: def.key,
-          defSPs: def.sps || [0,0,0,0,0,0],
-          defNature: def.nature,
-          defBoost: def.defBoost || 0,
-          spDefBoost: def.spDefBoost || 0,
-          defItem: def.item || null,
-          defAbility: def.ability || null,
-          defAbilityFlags: def.abilityFlags || {},
+          defPokemon: def.key, defSPs: def.sps || [0,0,0,0,0,0],
+          defNature: def.nature, defBoost: def.defBoost || 0,
+          spDefBoost: def.spDefBoost || 0, defItem: def.item || null,
+          defAbility: def.ability || null, defAbilityFlags: def.abilityFlags || {},
         },
-        move,
-        field,
+        move, field,
       })
       return { move, result }
     }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
@@ -267,11 +247,9 @@ function SinglePanel({ entry, fieldOverride }) {
 
   const [selectedMove, setSelectedMove] = useState(null)
 
-  // Seleziona la mossa con maxPct più alto come default
   const defaultMove = computedMoves.length > 0
     ? computedMoves.reduce((a, b) => b.result.maxPct > a.result.maxPct ? b : a)
     : null
-
   const activeMoveKey = selectedMove || defaultMove?.move
   const active = computedMoves.find(m => m.move === activeMoveKey) || defaultMove
 
@@ -281,7 +259,7 @@ function SinglePanel({ entry, fieldOverride }) {
 
   return (
     <div className="space-y-3">
-      {/* Dropdown scelta mossa */}
+      {/* Dropdown con % inline */}
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-500">Mossa:</span>
         <select
@@ -289,24 +267,23 @@ function SinglePanel({ entry, fieldOverride }) {
           onChange={e => setSelectedMove(e.target.value)}
           className="bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded px-2 py-1 outline-none focus:border-teal-500"
         >
-          {computedMoves.map(({ move }) => (
-            <option key={move} value={move}>{move.replace(/-/g, ' ')}</option>
+          {computedMoves.map(({ move, result }) => (
+            <option key={move} value={move}>
+              {move.replace(/-/g, ' ')} — {result.minPct}–{result.maxPct}%
+            </option>
           ))}
         </select>
       </div>
 
-      {active && (
-        <MoveCard atk={atk} def={def} move={active.move} result={active.result} />
-      )}
+      {active && <MoveCard atk={atk} def={def} move={active.move} result={active.result} />}
     </div>
   )
 }
 
-// ── Tab Cumulativo ────────────────────────────────────────────────────────────
+// ── CumulativePanel ───────────────────────────────────────────────────────────
 
 function CumulativePanel({ entries }) {
   const [entry1, entry2] = entries
-  // entry1 e entry2 hanno lo stesso difensore (stessa colonna)
   const def = entry1.def
 
   const doubleTarget = useCalcStore(s => s.doubleTarget)
@@ -318,7 +295,6 @@ function CumulativePanel({ entries }) {
   const reflect      = useCalcStore(s => s.reflect)
   const crit         = useCalcStore(s => s.crit)
 
-  // Calcolo mosse per i due attaccanti — due useMemo separati (hooks regola: no hooks in funzioni annidate)
   const buildMoves = (atk, dir) => {
     const field = {
       weather, terrain, doubleTarget,
@@ -331,28 +307,19 @@ function CumulativePanel({ entries }) {
     return (atk.moves || []).filter(Boolean).map(move => {
       const result = calculateDamage({
         attacker: {
-          atkPokemon: atk.key,
-          atkSPs: atk.sps || [0,0,0,0,0,0],
-          atkNature: atk.nature,
-          atkBoost: atk.atkBoost || 0,
-          spAtkBoost: atk.spAtkBoost || 0,
-          atkItem: atk.item || null,
-          atkAbility: atk.ability || null,
-          atkAbilityFlags: atk.abilityFlags || {},
+          atkPokemon: atk.key, atkSPs: atk.sps || [0,0,0,0,0,0],
+          atkNature: atk.nature, atkBoost: atk.atkBoost || 0,
+          spAtkBoost: atk.spAtkBoost || 0, atkItem: atk.item || null,
+          atkAbility: atk.ability || null, atkAbilityFlags: atk.abilityFlags || {},
           level: 50,
         },
         defender: {
-          defPokemon: def.key,
-          defSPs: def.sps || [0,0,0,0,0,0],
-          defNature: def.nature,
-          defBoost: def.defBoost || 0,
-          spDefBoost: def.spDefBoost || 0,
-          defItem: def.item || null,
-          defAbility: def.ability || null,
-          defAbilityFlags: def.abilityFlags || {},
+          defPokemon: def.key, defSPs: def.sps || [0,0,0,0,0,0],
+          defNature: def.nature, defBoost: def.defBoost || 0,
+          spDefBoost: def.spDefBoost || 0, defItem: def.item || null,
+          defAbility: def.ability || null, defAbilityFlags: def.abilityFlags || {},
         },
-        move,
-        field,
+        move, field,
       })
       return { move, result }
     }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
@@ -368,71 +335,57 @@ function CumulativePanel({ entries }) {
 
   const default1 = moves1.length > 0 ? moves1.reduce((a, b) => b.result.maxPct > a.result.maxPct ? b : a) : null
   const default2 = moves2.length > 0 ? moves2.reduce((a, b) => b.result.maxPct > a.result.maxPct ? b : a) : null
+  const active1  = moves1.find(m => m.move === (sel1 || default1?.move)) || default1
+  const active2  = moves2.find(m => m.move === (sel2 || default2?.move)) || default2
 
-  const active1 = moves1.find(m => m.move === (sel1 || default1?.move)) || default1
-  const active2 = moves2.find(m => m.move === (sel2 || default2?.move)) || default2
-
-  // Calcolo cumulativo
   const cumulative = useMemo(() => {
     if (!active1 || !active2) return null
     const r1 = active1.result
     const r2 = active2.result
     const defHP = r1.defHP
+    const rolls1 = r1.rolls
+    const rolls2 = r2.rolls
 
-    const rolls1 = r1.rolls  // 16 valori
-    const rolls2 = r2.rolls  // 16 valori
-
-    // Conta le combinazioni (16×16=256) in cui la somma ≥ defHP
     let koCount = 0
-    for (const a of rolls1) {
-      for (const b of rolls2) {
-        if (a + b >= defHP) koCount++
-      }
-    }
+    for (const a of rolls1) for (const b of rolls2) if (a + b >= defHP) koCount++
 
-    const totalCombos = rolls1.length * rolls2.length  // 256
+    const totalCombos = rolls1.length * rolls2.length
     const minSum = rolls1[0] + rolls2[0]
     const maxSum = rolls1[rolls1.length - 1] + rolls2[rolls2.length - 1]
     const minPct = Math.floor(minSum / defHP * 1000) / 10
     const maxPct = Math.floor(maxSum / defHP * 1000) / 10
-
-    // Esprimiamo il risultato come "X/16 roll" semplificato:
-    // proiettiamo le 256 combinazioni su 16 "slot" proporzionali
-    // (semplificazione accettata: usiamo il conteggio grezzo / 16)
     const koOf16 = Math.round(koCount / (totalCombos / 16))
 
-    return { minPct, maxPct, defHP, minSum, maxSum, koCount, totalCombos, koOf16 }
+    return { minPct, maxPct, defHP, minSum, maxSum, koCount, totalCombos, koOf16, rolls1, rolls2 }
   }, [active1, active2])
 
   const badge = !cumulative ? null :
-    cumulative.minPct >= 100 ? { text: 'KO garantito', cls: 'bg-green-900/40 border-green-500/50 text-green-400' } :
-    cumulative.koOf16 > 0    ? { text: `KO probabile (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-400' } :
-                               { text: 'No KO', cls: 'bg-gray-800 border-gray-600 text-gray-400' }
-
-  const atkColor1 = 'text-teal-400'
-  const atkColor2 = 'text-violet-400'
+    cumulative.minPct >= 100 ? { text: 'KO garantito', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
+    cumulative.koOf16 > 0    ? { text: `KO probabile (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
+                               { text: 'No KO', cls: 'bg-gray-800 border-gray-600 text-gray-500' }
 
   return (
     <div className="space-y-4">
-      {/* Riga attaccanti */}
+
+      {/* Box attaccanti affiancati */}
       <div className="grid grid-cols-2 gap-3">
         {[entry1, entry2].map((entry, idx) => {
-          const moves     = idx === 0 ? moves1 : moves2
-          const sel       = idx === 0 ? sel1   : sel2
+          const moves     = idx === 0 ? moves1  : moves2
+          const sel       = idx === 0 ? sel1    : sel2
           const setSel    = idx === 0 ? setSel1 : setSel2
           const deflt     = idx === 0 ? default1 : default2
-          const color     = idx === 0 ? atkColor1 : atkColor2
-          const ringColor = idx === 0 ? 'border-teal-500/50' : 'border-violet-500/50'
-          const activeSel = idx === 0 ? active1 : active2
+          const activeSel = idx === 0 ? active1  : active2
+          const color     = idx === 0 ? 'text-teal-400'      : 'text-violet-400'
+          const ring      = idx === 0 ? 'border-teal-500/40' : 'border-violet-500/40'
 
           return (
-            <div key={idx} className={`bg-gray-900/60 rounded-lg p-3 border ${ringColor}`}>
-              {/* Header attaccante con sprite */}
-              <div className="flex items-center gap-2 mb-2">
+            <div key={idx} className={`bg-gray-900/60 rounded-lg p-3 border ${ring} space-y-2`}>
+              {/* Sprite + nome */}
+              <div className="flex items-center gap-2">
                 <img
                   src={spriteUrl(entry.atk.key)}
                   alt={entry.atk.key}
-                  className="w-8 h-8 object-contain"
+                  className="w-9 h-9 object-contain"
                   onError={e => { e.target.style.display = 'none' }}
                 />
                 <span className={`text-sm font-semibold capitalize ${color}`}>
@@ -440,23 +393,27 @@ function CumulativePanel({ entries }) {
                 </span>
               </div>
 
-              {/* Dropdown mossa */}
+              {/* Dropdown mosse con % */}
               {moves.length > 0 ? (
                 <>
                   <select
                     value={sel || deflt?.move || ''}
                     onChange={e => setSel(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded px-2 py-1 outline-none focus:border-teal-500 mb-2"
+                    className="w-full bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded px-2 py-1 outline-none focus:border-teal-500"
                   >
-                    {moves.map(({ move }) => (
-                      <option key={move} value={move}>{move.replace(/-/g, ' ')}</option>
+                    {moves.map(({ move, result }) => (
+                      <option key={move} value={move}>
+                        {move.replace(/-/g, ' ')} — {result.minPct}–{result.maxPct}%
+                      </option>
                     ))}
                   </select>
+
+                  {/* Stringa Smogon compatta */}
                   {activeSel && (
-                    <div className="text-xs text-gray-400 font-mono">
-                      {activeSel.result.minPct}–{activeSel.result.maxPct}%
+                    <div className="text-[10px] text-gray-500 font-mono leading-relaxed">
+                      {buildSmogonString(entry.atk, def, activeSel.move, activeSel.result)}
                       <span className="text-gray-600 ml-1">
-                        ({activeSel.result.minDmg}–{activeSel.result.maxDmg} / {activeSel.result.defHP})
+                        → {activeSel.result.minDmg}–{activeSel.result.maxDmg} / {activeSel.result.defHP}
                       </span>
                     </div>
                   )}
@@ -469,7 +426,7 @@ function CumulativePanel({ entries }) {
         })}
       </div>
 
-      {/* Riepilogo difensore */}
+      {/* Riga difensore */}
       <div className="flex items-center gap-2 text-xs text-gray-500">
         <span>vs.</span>
         <img
@@ -478,61 +435,67 @@ function CumulativePanel({ entries }) {
           className="w-6 h-6 object-contain"
           onError={e => { e.target.style.display = 'none' }}
         />
-        <span className="capitalize text-gray-300">{def.key}</span>
-        {cumulative && <span>({cumulative.defHP} HP)</span>}
+        <span className="capitalize text-gray-300 font-medium">{def.key}</span>
+        {cumulative && <span className="text-gray-600">— {cumulative.defHP} HP</span>}
       </div>
 
-      {/* Risultato cumulativo */}
-      {cumulative && (
-        <div className="bg-gray-900/80 rounded-lg p-3 border border-gray-700 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-500 uppercase tracking-wide">Danno totale</span>
-            <div className="flex items-center gap-2">
-              <span className={`text-base font-bold ${cumulative.minPct >= 100 ? 'text-red-400' : cumulative.maxPct >= 100 ? 'text-orange-400' : 'text-teal-300'}`}>
+      {/* Box danno totale */}
+      {cumulative && (() => {
+        const sums = cumulative.rolls1.map((r, i) => r + cumulative.rolls2[i])
+        const midSum = sums[Math.floor(sums.length / 2)]
+        const koPct  = Math.round(cumulative.koCount / cumulative.totalCombos * 100)
+
+        return (
+          <div className="bg-gray-900/80 rounded-lg p-4 border border-gray-700 space-y-3">
+
+            {/* Riga narrativa — testo più grande */}
+            <div className="text-sm text-gray-400 leading-relaxed">
+              <span className="text-teal-400 font-semibold capitalize">{entry1.atk.key}</span>
+              {active1 && <span className="text-gray-500"> usa <span className="text-gray-200 capitalize">{active1.move.replace(/-/g, ' ')}</span></span>}
+              <span className="text-gray-600"> + </span>
+              <span className="text-violet-400 font-semibold capitalize">{entry2.atk.key}</span>
+              {active2 && <span className="text-gray-500"> usa <span className="text-gray-200 capitalize">{active2.move.replace(/-/g, ' ')}</span></span>}
+              <span className="text-gray-600"> → </span>
+              <span className="text-gray-200 font-semibold capitalize">{def.key}</span>
+              <span className="text-gray-600"> ({cumulative.defHP} HP)</span>
+            </div>
+
+            {/* Danno % + badge KO sulla stessa riga */}
+            <div className="flex items-center justify-between gap-3">
+              <span className={`text-lg font-bold shrink-0 ${
+                cumulative.minPct >= 100 ? 'text-red-400' :
+                cumulative.maxPct >= 100 ? 'text-orange-400' : 'text-teal-300'
+              }`}>
                 {cumulative.minPct}–{cumulative.maxPct}%
               </span>
-              <span className={`text-xs px-2 py-0.5 rounded border font-semibold ${badge.cls}`}>
-                {badge.text}
-              </span>
+              <div className={`px-3 py-1.5 rounded-lg border font-bold text-sm tracking-wide text-center ${badge.cls}`}>
+                {cumulative.minPct >= 100 ? '✓ KO garantito' :
+                 cumulative.koOf16 > 0   ? `⚡ KO probabile (${cumulative.koOf16}/16)` :
+                                           '✗ No KO'}
+              </div>
             </div>
-          </div>
 
-          <div className="text-xs text-gray-500 font-mono">
-            min: {cumulative.minSum} + max: {cumulative.maxSum} su {cumulative.defHP} HP
-          </div>
+            {/* Triade min · mid · max */}
+            <div className="text-[11px] text-gray-500 font-mono">
+              min {cumulative.minSum} · mid {midSum} · max {cumulative.maxSum}
+              <span className="text-gray-600"> / {cumulative.defHP} HP</span>
+            </div>
 
-          {/* Barra KO probability */}
-          <div>
-            <div className="text-[10px] text-gray-600 mb-1">
-              Combinazioni KO: {cumulative.koCount}/{cumulative.totalCombos} ({cumulative.koOf16}/16 roll equivalenti)
-            </div>
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  cumulative.koCount === cumulative.totalCombos ? 'bg-green-500' :
-                  cumulative.koCount > 0 ? 'bg-yellow-500' : 'bg-gray-600'
-                }`}
-                style={{ width: `${(cumulative.koCount / cumulative.totalCombos) * 100}%` }}
-              />
+            {/* Conteggio combinazioni — tiny, grigio */}
+            <div className="text-[10px] text-gray-600 font-mono">
+              {cumulative.koCount}/{cumulative.totalCombos} combinazioni KO ({koPct}%)
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }
 
 // ── ReportPanel root ──────────────────────────────────────────────────────────
-// selection: null | CellEntry[] (1 = singola, 2 = cumulativa)
 
 export default function ReportPanel({ selection, onClose }) {
-  // Tab attiva: 'single' | 'cumulative'
-  // Auto-switch a 'cumulative' quando arrivano 2 entries
   const isDouble = Array.isArray(selection) && selection.length === 2
-  const [activeTab, setActiveTab] = useState('single')
-
-  // Quando cambia la selezione: se doppia, vai su cumulativo; se singola, torna a singolo
-  const tab = isDouble ? (activeTab === 'cumulative' ? 'cumulative' : 'cumulative') : 'single'
 
   if (!selection || selection.length === 0) return null
 
@@ -543,58 +506,43 @@ export default function ReportPanel({ selection, onClose }) {
     <div className={`bg-gray-800 rounded-xl border p-4 mb-4 ${
       isDouble ? 'border-violet-500/50' : 'border-teal-500/50'
     }`}>
-      {/* Header */}
+      {/* Header con sprite inline */}
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           {isDouble ? (
             <>
-              <span className="text-sm font-medium text-teal-400 capitalize">{entry1.atk.key}</span>
-              <span className="text-gray-500">+</span>
-              <span className="text-sm font-medium text-violet-400 capitalize">{selection[1].atk.key}</span>
-              <span className="text-gray-500">→</span>
+              <img src={spriteUrl(entry1.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-sm font-semibold text-teal-400 capitalize">{entry1.atk.key}</span>
+              <span className="text-gray-600 mx-0.5">+</span>
+              <img src={spriteUrl(selection[1].atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-sm font-semibold text-violet-400 capitalize">{selection[1].atk.key}</span>
+              <span className="text-gray-600 mx-0.5">→</span>
+              <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
               <span className="text-sm font-medium text-gray-300 capitalize">{def.key}</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-violet-900/40 border border-violet-500/40 text-violet-300">
-                Cumulativo
-              </span>
             </>
           ) : (
             <>
-              <span className="text-sm font-medium text-teal-400 capitalize">{atk.key}</span>
-              <span className="text-gray-500">→</span>
+              <img src={spriteUrl(atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-sm font-semibold text-teal-400 capitalize">{atk.key}</span>
+              <span className="text-gray-600 mx-0.5">→</span>
+              <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
               <span className="text-sm font-medium text-gray-300 capitalize">{def.key}</span>
             </>
           )}
         </div>
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors"
+          className="text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors shrink-0 ml-2"
         >
           ✕ chiudi
         </button>
       </div>
 
-      {/* Tab bar — mostrata solo in modalità singola (la doppia ha solo cumulativo) */}
-      {!isDouble && (
-        <div className="flex gap-1 mb-3 border-b border-gray-700 pb-2">
-          <button
-            onClick={() => setActiveTab('single')}
-            className={`text-xs px-3 py-1 rounded-t transition-colors ${
-              activeTab === 'single'
-                ? 'bg-teal-900/60 border border-teal-500/50 text-teal-300'
-                : 'text-gray-500 hover:text-gray-300'
-            }`}
-          >
-            Singola
-          </button>
-        </div>
-      )}
-
       {/* Contenuto */}
-      {isDouble ? (
-        <CumulativePanel entries={selection} />
-      ) : (
-        <SinglePanel entry={entry1} />
-      )}
+      {isDouble
+        ? <CumulativePanel entries={selection} />
+        : <SinglePanel entry={entry1} />
+      }
     </div>
   )
 }
