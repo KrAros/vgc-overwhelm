@@ -23830,8 +23830,7 @@
 		"num": "",
 		"name": "Raichu-Mega-X",
 		"type": [
-			3,
-			6
+			3
 		],
 		"mega": 1,
 		"weight": 32,
@@ -23852,8 +23851,7 @@
 		"num": "",
 		"name": "Raichu-Mega-Y",
 		"type": [
-			3,
-			16
+			3
 		],
 		"mega": 1,
 		"weight": 24,
