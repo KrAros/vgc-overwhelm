@@ -165,7 +165,7 @@ function getInitialTeams() {
 const { team1: initialTeam1, team2: initialTeam2 } = getInitialTeams()
 
 // ─── Store ────────────────────────────────────────────────────────────────────
-const useCalcStore = create((set, get) => ({
+const useCalcStore = create((set) => ({
   level: 50,
   trickRoom: false,
   doubleTarget: true,

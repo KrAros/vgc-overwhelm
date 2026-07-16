@@ -37,7 +37,7 @@ const IconShare = () => (
 // Definito FUORI da TeamActionBar per rispettare le regole di React
 // (componenti non possono essere creati durante il render di un altro componente)
 
-function TeamGroup({ teamKey, label, importMode, activeMode, onImportToggle, onExport, onReset }) {
+function TeamGroup({ label, importMode, activeMode, onImportToggle, onExport, onReset }) {
   const isImportActive = activeMode === importMode
 
   const btnBase   = 'flex items-center justify-center gap-1 text-xs w-20 py-1 rounded border transition'

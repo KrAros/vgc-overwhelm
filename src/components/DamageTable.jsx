@@ -138,11 +138,11 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
   const cellBorder = isSelected ? 'ring-2 ring-teal-400 ring-inset' : ''
 
-  const renderHalf = (d, immune, prefix, dir, atk, def, f) => {
+  const renderHalf = (d, immune, prefix, dir) => {
     const label = immune ? immuneLabel(immune.result) : null
     return (
       <div
-        onClick={() => onSelect(dir, atk, def, f)}
+        onClick={() => onSelect(dir)}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
         } ${isSelected && selectedDir === dir ? 'bg-teal-900/30' : d ? bgClass(d.result.maxPct) : ''}`}
@@ -180,8 +180,8 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
   return (
     <td className={`border-l border-gray-700 ${cellBorder} relative`}>
-      {renderHalf(d1, firstImmuneT1, '▶', 't1', attacker, defender, field)}
-      {renderHalf(d2, firstImmuneT2, '◀', 't2', defender, attacker, fieldReversed)}
+      {renderHalf(d1, firstImmuneT1, '▶', 't1')}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2')}
     </td>
   )
 }
@@ -221,11 +221,9 @@ export default function DamageTable({ onCellSelect }) {
     doubleTarget,
   }
 
-  const handleSelect = (ri, ci, dir, atk, def, f) => {
+  const handleSelect = (ri, ci, dir) => {
     const key = `${ri}-${ci}-${dir}`
-    // Per il pannello dettaglio passiamo tutte le mosse incluse le immune
-    const allMoves = calcAllMoves(atk, def, level, f)
-    const newSelected = { key, ri, ci, dir, atk, def, field: f, allMoves }
+    const newSelected = { key, ri, ci, dir }
     setSelected(newSelected)
     onCellSelect?.(newSelected)
   }
@@ -291,7 +289,7 @@ export default function DamageTable({ onCellSelect }) {
                   fieldReversed={fieldReversed}
                   isSelected={selected?.ri === ri && selected?.ci === ci}
                   selectedDir={selected?.ri === ri && selected?.ci === ci ? selected.dir : null}
-                  onSelect={(dir, atk, def, f) => handleSelect(ri, ci, dir, atk, def, f)}
+                  onSelect={(dir) => handleSelect(ri, ci, dir)}
                 />
               ))}
             </tr>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import movesData from '../data/moves.json'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
@@ -31,24 +31,32 @@ function buildSmogonString(atk, def, move, result) {
   const isDrop  = mod && mod[0] !== 0 && mod[1] === atkStatIdx
   const natSymbol = isBoost ? '+' : isDrop ? '-' : ''
 
-  const statName = isSpecial ? 'SpA' : 'Atk'
+  const statName    = isSpecial ? 'SpA' : 'Atk'
   const defStatName = isSpecial ? 'SpD' : 'Def'
+  const moveName    = move.replace(/-/g, ' ')
 
-  const moveName = move.replace(/-/g, ' ')
   const atkBoostVal = result?.atkBoostEffective !== undefined
-  ? result.atkBoostEffective
-  : isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
-  const atkBoostStr = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
+    ? result.atkBoostEffective
+    : isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
+  const atkBoostStr  = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
   const atkAbilityName = atk.ability ? ` ${atk.ability.replace(/\b\w/g, c => c.toUpperCase())}` : ''
-  const defBoostVal = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
-  const defBoostStr = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
-  const atkItemName = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
-  const defItemName = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
+  const defBoostVal  = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
+  const defBoostStr  = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
+  const atkItemName  = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
+  const defItemName  = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
 
-return `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defBoostStr}${defSP} ${defStatName}${defItemName} ${def.key}`
+  return `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defBoostStr}${defSP} ${defStatName}${defItemName} ${def.key}`
 }
 
 export default function ReportPanel({ selection, onClose }) {
+  const panelRef = useRef(null)
+
+  // ── Legge lo stato live dallo store tramite gli indici ──────────────────────
+  // Questo è il punto chiave per il real-time: non usiamo gli snapshot
+  // passati al click, ma i dati freschi letti dallo store ad ogni render.
+  const team1 = useCalcStore(s => s.team1)
+  const team2 = useCalcStore(s => s.team2)
+
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
   const terrain      = useCalcStore(s => s.terrain)
@@ -58,9 +66,21 @@ export default function ReportPanel({ selection, onClose }) {
   const reflect      = useCalcStore(s => s.reflect)
   const crit         = useCalcStore(s => s.crit)
 
+  // ── Scroll automatico quando viene aperto un nuovo pannello ─────────────────
+  useEffect(() => {
+    if (selection && panelRef.current) {
+      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [selection])
+
   const allMoves = useMemo(() => {
     if (!selection) return []
-    const { atk, def, dir } = selection
+    const { ri, ci, dir } = selection
+
+    // Legge dati freschi dallo store
+    const atk = dir === 't1' ? team1[ri] : team2[ci]
+    const def = dir === 't1' ? team2[ci] : team1[ri]
+    if (!atk?.key || !def?.key) return []
 
     const field = {
       weather, terrain, doubleTarget,
@@ -71,41 +91,50 @@ export default function ReportPanel({ selection, onClose }) {
       crit:        dir === 't1' ? crit.t1         : crit.t2,
     }
 
-    return (atk.moves || []).filter(Boolean).map(move => {
+    const results = (atk.moves || []).filter(Boolean).map(move => {
       const result = calculateDamage({
         attacker: {
-          atkPokemon: atk.key,
-          atkSPs: atk.sps || [0,0,0,0,0,0],
-          atkNature: atk.nature,
-          atkBoost: atk.atkBoost || 0,
-          spAtkBoost: atk.spAtkBoost || 0,
-          atkItem: atk.item || null,
-          atkAbility: atk.ability || null,
+          atkPokemon:      atk.key,
+          atkSPs:          atk.sps || [0,0,0,0,0,0],
+          atkNature:       atk.nature,
+          atkBoost:        atk.atkBoost || 0,
+          spAtkBoost:      atk.spAtkBoost || 0,
+          atkItem:         atk.item || null,
+          atkAbility:      atk.ability || null,
           atkAbilityFlags: atk.abilityFlags || {},
           level: 50,
         },
         defender: {
-          defPokemon: def.key,
-          defSPs: def.sps || [0,0,0,0,0,0],
-          defNature: def.nature,
-          defBoost: def.defBoost || 0,
-          spDefBoost: def.spDefBoost || 0,
-          defItem: def.item || null,
-          defAbility: def.ability || null,
+          defPokemon:      def.key,
+          defSPs:          def.sps || [0,0,0,0,0,0],
+          defNature:       def.nature,
+          defBoost:        def.defBoost || 0,
+          spDefBoost:      def.spDefBoost || 0,
+          defItem:         def.item || null,
+          defAbility:      def.ability || null,
           defAbilityFlags: def.abilityFlags || {},
         },
         move,
         field,
       })
-      return { move, result }
+      return { move, result, atk, def }
     }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
-  }, [selection, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
+
+    // Ordina per danno massimo decrescente
+    results.sort((a, b) => b.result.maxPct - a.result.maxPct)
+    return results
+  }, [selection, team1, team2, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
 
   if (!selection) return null
-  const { atk, def } = selection
+
+  // Ricava atk/def freschi per l'intestazione
+  const { ri, ci, dir } = selection
+  const atk = dir === 't1' ? team1[ri] : team2[ci]
+  const def = dir === 't1' ? team2[ci] : team1[ri]
+  if (!atk?.key || !def?.key) return null
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-teal-500/50 p-4 mb-4">
+    <div ref={panelRef} className="bg-gray-800 rounded-xl border border-teal-500/50 p-4 mb-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-teal-400 capitalize">{atk.key}</span>
@@ -125,9 +154,9 @@ export default function ReportPanel({ selection, onClose }) {
       ) : (
         <div className="space-y-3">
           {allMoves.map(({ move, result }) => {
-            const hko = calcHKO(result.minPct)
+            const hko    = calcHKO(result.minPct)
             const smogon = buildSmogonString(atk, def, move, result)
-            const rolls = result.rolls
+            const rolls  = result.rolls
 
             const hkoColor = result.minPct >= 100 ? 'text-red-400' :
                              result.minPct >= 50  ? 'text-orange-400' :
