@@ -47,7 +47,6 @@ const SpreadIcon = () => (
   </svg>
 )
 
-// Testo e stile per il badge immune — distingue tipo vs abilità specifica
 function immuneLabel(result) {
   if (!result?.immune) return null
   if (result.reason === 'ability') {
@@ -85,13 +84,10 @@ function calcAllMoves(atk, def, level, field) {
     })
     return { move, result }
   })
-  // Nota: NON filtriamo le immune qui — le teniamo per mostrarle nelle celle dettaglio.
-  // Il filtro avviene in getBestMove per scegliere la mossa migliore.
 }
 
 function getBestMove(atk, def, level, field) {
   const all = calcAllMoves(atk, def, level, field)
-  // Per il "best move" consideriamo solo mosse che effettivamente danneggiano
   const effective = all.filter(({ result }) => result && !result.immune && result.maxPct > 0)
   if (!effective.length) return null
   return effective.reduce((best, cur) =>
@@ -99,53 +95,82 @@ function getBestMove(atk, def, level, field) {
   )
 }
 
-function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, selectedDir, isSelected }) {
+// ── DamageCell ────────────────────────────────────────────────────────────────
+// selectionState: { first: {ri,ci,dir} | null, second: {ri,ci,dir} | null }
+// onSelect: (ri, ci, dir, atk, def, field) => void
+
+function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly }) {
   if (!attacker?.key || !defender?.key) {
     return (
       <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">—</td>
     )
   }
 
-  // Calcola tutte le mosse (incluse le immune) per entrambe le direzioni
   const allMovesT1 = calcAllMoves(attacker, defender, level, field)
   const allMovesT2 = calcAllMoves(defender, attacker, level, fieldReversed)
 
   const d1 = getBestMove(attacker, defender, level, field)
   const d2 = getBestMove(defender, attacker, level, fieldReversed)
 
-  // Se non c'è un best move, verifica se ci sono solo mosse immune da mostrare
-  const firstImmuneT1 = !d1
-    ? allMovesT1.find(({ result }) => result?.immune)
-    : null
-  const firstImmuneT2 = !d2
-    ? allMovesT2.find(({ result }) => result?.immune)
-    : null
+  const firstImmuneT1 = !d1 ? allMovesT1.find(({ result }) => result?.immune) : null
+  const firstImmuneT2 = !d2 ? allMovesT2.find(({ result }) => result?.immune) : null
+
+  // KO filter: nascondi cella se né t1 né t2 raggiunge il 100%
+  if (showKoOnly) {
+    const t1Ko = d1 && d1.result.maxPct >= 100
+    const t2Ko = d2 && d2.result.maxPct >= 100
+    if (!t1Ko && !t2Ko) {
+      return (
+        <td className="border-l border-gray-700 opacity-20">
+          <div className="p-1 text-center text-gray-700 text-xs">—</div>
+          <div className="p-1 text-center text-gray-700 text-xs">—</div>
+        </td>
+      )
+    }
+  }
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
     if (pct >= 100) return 'text-red-400'
-    if (pct >= 50) return 'text-orange-400'
-    if (pct <= 25) return 'text-green-400'
+    if (pct >= 50)  return 'text-orange-400'
+    if (pct <= 25)  return 'text-green-400'
     return 'text-teal-300'
   }
 
   const bgClass = (pct) => {
     if (!pct) return ''
     if (pct >= 100) return 'bg-red-900/30'
-    if (pct <= 25) return 'bg-green-900/20'
+    if (pct <= 25)  return 'bg-green-900/20'
     return ''
   }
 
-  const cellBorder = isSelected ? 'ring-2 ring-teal-400 ring-inset' : ''
+  // Determina lo stato visivo di questa cella
+  const { first, second } = selectionState
+  const isFirst  = first  && first.ri  === ri && first.ci  === ci
+  const isSecond = second && second.ri === ri && second.ci === ci
+
+  // Ring attorno alla td intera
+  const cellRing = isFirst
+    ? 'ring-2 ring-teal-400 ring-inset'
+    : isSecond
+    ? 'ring-2 ring-violet-400 ring-inset'
+    : ''
 
   const renderHalf = (d, immune, prefix, dir) => {
     const label = immune ? immuneLabel(immune.result) : null
+
+    // Sfondo della singola metà (sopra/sotto) quando è quella selezionata
+    const halfSelected =
+      (isFirst  && first.dir  === dir) ? 'bg-teal-900/40'   :
+      (isSecond && second.dir === dir) ? 'bg-violet-900/40' :
+      d ? bgClass(d.result.maxPct) : ''
+
     return (
       <div
-        onClick={() => onSelect(dir)}
+        onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) }}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
-        } ${isSelected && selectedDir === dir ? 'bg-teal-900/30' : d ? bgClass(d.result.maxPct) : ''}`}
+        } ${halfSelected}`}
       >
         {d ? (
           <>
@@ -162,7 +187,6 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
             </div>
           </>
         ) : label ? (
-          // Mostra il badge immune con il nome della mossa se disponibile
           <>
             <div className="text-gray-500 text-xs truncate">
               {prefix} {immune.move}
@@ -179,15 +203,20 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   }
 
   return (
-    <td className={`border-l border-gray-700 ${cellBorder} relative`}>
+    <td className={`border-l border-gray-700 ${cellRing} relative`}>
       {renderHalf(d1, firstImmuneT1, '▶', 't1')}
       {renderHalf(d2, firstImmuneT2, '◀', 't2')}
     </td>
   )
 }
 
+// ── DamageTable ───────────────────────────────────────────────────────────────
+
 export default function DamageTable({ onCellSelect }) {
-  const [selected, setSelected] = useState(null)
+  // Doppia selezione: { first, second }
+  // Ogni entry: { ri, ci, dir, atk, def, field, allMoves } | null
+  const [selectionState, setSelectionState] = useState({ first: null, second: null })
+  const [showKoOnly, setShowKoOnly] = useState(false)
 
   const team1 = useCalcStore(s => s.team1)
   const team2 = useCalcStore(s => s.team2)
@@ -221,81 +250,142 @@ export default function DamageTable({ onCellSelect }) {
     doubleTarget,
   }
 
-  const handleSelect = (ri, ci, dir) => {
-    const key = `${ri}-${ci}-${dir}`
-    const newSelected = { key, ri, ci, dir }
-    setSelected(newSelected)
-    onCellSelect?.(newSelected)
+  const handleSelect = (ri, ci, dir, atk, def, f, allMovesT1, allMovesT2) => {
+    // allMoves per il pannello: le mosse dell'attaccante corrente
+    const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
+
+    const entry = { ri, ci, dir, atk, def, field: f, allMoves }
+
+    setSelectionState(prev => {
+      const { first, second } = prev
+
+      // Click sulla stessa cella+dir già selezionata come prima → deseleziona tutto
+      if (first && first.ri === ri && first.ci === ci && first.dir === dir) {
+        onCellSelect?.(null)
+        return { first: null, second: null }
+      }
+
+      // Click sulla stessa cella+dir già selezionata come seconda → deseleziona la seconda
+      if (second && second.ri === ri && second.ci === ci && second.dir === dir) {
+        onCellSelect?.([first])
+        return { first, second: null }
+      }
+
+      // Nessuna prima selezione → prima selezione
+      if (!first) {
+        onCellSelect?.([entry])
+        return { first: entry, second: null }
+      }
+
+      // C'è una prima selezione.
+      // t1 attacca T2: stesso difensore = stessa colonna (ci), riga diversa
+      // t2 attacca T1: stesso difensore = stessa riga (ri), colonna diversa
+      const sameDefender = first.dir === dir && (
+        dir === 't1' ? (first.ci === ci && first.ri !== ri) :
+                       (first.ri === ri && first.ci !== ci)
+      )
+      if (sameDefender) {
+        const newState = { first, second: entry }
+        onCellSelect?.([first, entry])
+        return newState
+      }
+
+      // Tutto il resto → nuova prima selezione (reset)
+      onCellSelect?.([entry])
+      return { first: entry, second: null }
+    })
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-700 mb-4">
-      <table className="w-full border-collapse text-xs">
-        <thead>
-          <tr>
-            <th className="bg-gray-900 p-2 text-gray-500 font-medium text-center w-20">
-              T1 \ T2
-            </th>
-            {team2.map((p, i) => (
-              <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-24">
-                {p?.key ? (
-                  <>
-                    <img
-                      src={spriteUrl(p.key)}
-                      alt={p.key}
-                      className="w-12 h-12 object-contain mx-auto"
-                      onError={e => {
-                        const fb = fallbackSpriteUrl(p.key)
-                        if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
-                      }}
-                    />
-                    <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
-                  </>
-                ) : (
-                  <div className="text-gray-600">— T2 {i+1} —</div>
-                )}
+    <div className="mb-4">
+      {/* Barra filtri sopra la tabella */}
+      <div className="flex items-center gap-3 mb-2 px-1">
+        <label className="flex items-center gap-1.5 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={showKoOnly}
+            onChange={e => setShowKoOnly(e.target.checked)}
+            className="accent-red-500"
+          />
+          <span className="text-xs text-gray-400">Solo KO <span className="text-red-400 font-semibold">(≥100%)</span></span>
+        </label>
+        {selectionState.second && (
+          <span className="text-xs text-violet-400">
+            📌 Modalità cumulativa attiva — vedi ReportPanel
+          </span>
+        )}
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-gray-700">
+        <table className="w-full border-collapse text-xs">
+          <thead>
+            <tr>
+              <th className="bg-gray-900 p-2 text-gray-500 font-medium text-center w-20">
+                T1 \ T2
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {team1.map((row, ri) => (
-            <tr key={ri} className="border-t border-gray-700">
-              <td className="bg-gray-900 p-2 text-center">
-                {row?.key ? (
-                  <>
-                    <img
-                      src={spriteUrl(row.key)}
-                      alt={row.key}
-                      className="w-12 h-12 object-contain mx-auto"
-                      onError={e => {
-                        const fb = fallbackSpriteUrl(row.key)
-                        if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
-                      }}
-                    />
-                    <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
-                  </>
-                ) : (
-                  <div className="text-gray-600">— T1 {ri+1} —</div>
-                )}
-              </td>
-              {team2.map((col, ci) => (
-                <DamageCell
-                  key={ci}
-                  attacker={row}
-                  defender={col}
-                  level={level}
-                  field={field}
-                  fieldReversed={fieldReversed}
-                  isSelected={selected?.ri === ri && selected?.ci === ci}
-                  selectedDir={selected?.ri === ri && selected?.ci === ci ? selected.dir : null}
-                  onSelect={(dir) => handleSelect(ri, ci, dir)}
-                />
+              {team2.map((p, i) => (
+                <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-24">
+                  {p?.key ? (
+                    <>
+                      <img
+                        src={spriteUrl(p.key)}
+                        alt={p.key}
+                        className="w-12 h-12 object-contain mx-auto"
+                        onError={e => {
+                          const fb = fallbackSpriteUrl(p.key)
+                          if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                        }}
+                      />
+                      <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
+                    </>
+                  ) : (
+                    <div className="text-gray-600">— T2 {i+1} —</div>
+                  )}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {team1.map((row, ri) => (
+              <tr key={ri} className="border-t border-gray-700">
+                <td className="bg-gray-900 p-2 text-center">
+                  {row?.key ? (
+                    <>
+                      <img
+                        src={spriteUrl(row.key)}
+                        alt={row.key}
+                        className="w-12 h-12 object-contain mx-auto"
+                        onError={e => {
+                          const fb = fallbackSpriteUrl(row.key)
+                          if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                        }}
+                      />
+                      <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
+                    </>
+                  ) : (
+                    <div className="text-gray-600">— T1 {ri+1} —</div>
+                  )}
+                </td>
+                {team2.map((col, ci) => (
+                  <DamageCell
+                    key={ci}
+                    attacker={row}
+                    defender={col}
+                    level={level}
+                    field={field}
+                    fieldReversed={fieldReversed}
+                    ri={ri}
+                    ci={ci}
+                    selectionState={selectionState}
+                    onSelect={handleSelect}
+                    showKoOnly={showKoOnly}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

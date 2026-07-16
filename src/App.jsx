@@ -37,7 +37,7 @@ const IconShare = () => (
 // Definito FUORI da TeamActionBar per rispettare le regole di React
 // (componenti non possono essere creati durante il render di un altro componente)
 
-function TeamGroup({ label, importMode, activeMode, onImportToggle, onExport, onReset }) {
+function TeamGroup({ teamKey, label, importMode, activeMode, onImportToggle, onExport, onReset }) {
   const isImportActive = activeMode === importMode
 
   const btnBase   = 'flex items-center justify-center gap-1 text-xs w-20 py-1 rounded border transition'
@@ -204,6 +204,7 @@ function TeamActionBar() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 function App() {
+  // reportSelection: null | Array<CellEntry>  (1 elemento = singola, 2 = cumulativa)
   const [reportSelection, setReportSelection] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
 
@@ -218,7 +219,7 @@ function App() {
           selection={reportSelection}
           onClose={() => setReportSelection(null)}
         />
-        <DamageTable onCellSelect={setReportSelection} />
+        <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
 
         <TeamActionBar />
 
