@@ -16,6 +16,10 @@
 			65,
 			65,
 			45
+		],
+		"abilities": [
+			"overgrow",
+			"chlorophyll"
 		]
 	},
 	"ivysaur": {
@@ -35,6 +39,10 @@
 			80,
 			80,
 			60
+		],
+		"abilities": [
+			"overgrow",
+			"chlorophyll"
 		]
 	},
 	"venusaur": {
@@ -54,6 +62,10 @@
 			100,
 			100,
 			80
+		],
+		"abilities": [
+			"overgrow",
+			"chlorophyll"
 		]
 	},
 	"charmander": {
@@ -72,6 +84,10 @@
 			60,
 			50,
 			65
+		],
+		"abilities": [
+			"blaze",
+			"solar-power"
 		]
 	},
 	"charmeleon": {
@@ -90,6 +106,10 @@
 			80,
 			65,
 			80
+		],
+		"abilities": [
+			"blaze",
+			"solar-power"
 		]
 	},
 	"charizard": {
@@ -109,6 +129,10 @@
 			109,
 			85,
 			100
+		],
+		"abilities": [
+			"blaze",
+			"solar-power"
 		]
 	},
 	"squirtle": {
@@ -127,6 +151,10 @@
 			50,
 			64,
 			43
+		],
+		"abilities": [
+			"torrent",
+			"rain-dish"
 		]
 	},
 	"wartortle": {
@@ -145,6 +173,10 @@
 			65,
 			80,
 			58
+		],
+		"abilities": [
+			"torrent",
+			"rain-dish"
 		]
 	},
 	"blastoise": {
@@ -163,6 +195,10 @@
 			85,
 			105,
 			78
+		],
+		"abilities": [
+			"torrent",
+			"rain-dish"
 		]
 	},
 	"caterpie": {
@@ -181,6 +217,10 @@
 			20,
 			20,
 			45
+		],
+		"abilities": [
+			"shield-dust",
+			"run-away"
 		]
 	},
 	"metapod": {
@@ -199,6 +239,9 @@
 			25,
 			25,
 			30
+		],
+		"abilities": [
+			"shed-skin"
 		]
 	},
 	"butterfree": {
@@ -218,6 +261,10 @@
 			90,
 			80,
 			70
+		],
+		"abilities": [
+			"compound-eyes",
+			"tinted-lens"
 		]
 	},
 	"weedle": {
@@ -237,6 +284,10 @@
 			20,
 			20,
 			50
+		],
+		"abilities": [
+			"shield-dust",
+			"run-away"
 		]
 	},
 	"kakuna": {
@@ -256,6 +307,9 @@
 			25,
 			25,
 			35
+		],
+		"abilities": [
+			"shed-skin"
 		]
 	},
 	"beedrill": {
@@ -275,6 +329,10 @@
 			45,
 			80,
 			75
+		],
+		"abilities": [
+			"swarm",
+			"sniper"
 		]
 	},
 	"pidgey": {
@@ -294,6 +352,11 @@
 			35,
 			35,
 			56
+		],
+		"abilities": [
+			"keen-eye",
+			"tangled-feet",
+			"big-pecks"
 		]
 	},
 	"pidgeotto": {
@@ -313,6 +376,11 @@
 			50,
 			50,
 			71
+		],
+		"abilities": [
+			"keen-eye",
+			"tangled-feet",
+			"big-pecks"
 		]
 	},
 	"pidgeot": {
@@ -332,6 +400,11 @@
 			70,
 			70,
 			101
+		],
+		"abilities": [
+			"keen-eye",
+			"tangled-feet",
+			"big-pecks"
 		]
 	},
 	"rattata": {
@@ -350,6 +423,11 @@
 			25,
 			35,
 			72
+		],
+		"abilities": [
+			"run-away",
+			"guts",
+			"hustle"
 		]
 	},
 	"rattata-alola": {
@@ -369,6 +447,11 @@
 			25,
 			35,
 			72
+		],
+		"abilities": [
+			"gluttony",
+			"hustle",
+			"thick-fat"
 		]
 	},
 	"raticate": {
@@ -387,6 +470,11 @@
 			50,
 			70,
 			97
+		],
+		"abilities": [
+			"run-away",
+			"guts",
+			"hustle"
 		]
 	},
 	"raticate-alola": {
@@ -406,6 +494,11 @@
 			40,
 			80,
 			77
+		],
+		"abilities": [
+			"gluttony",
+			"hustle",
+			"thick-fat"
 		]
 	},
 	"spearow": {
@@ -425,6 +518,10 @@
 			31,
 			31,
 			70
+		],
+		"abilities": [
+			"keen-eye",
+			"sniper"
 		]
 	},
 	"fearow": {
@@ -444,6 +541,10 @@
 			61,
 			61,
 			100
+		],
+		"abilities": [
+			"keen-eye",
+			"sniper"
 		]
 	},
 	"ekans": {
@@ -462,6 +563,11 @@
 			40,
 			54,
 			55
+		],
+		"abilities": [
+			"intimidate",
+			"shed-skin",
+			"unnerve"
 		]
 	},
 	"arbok": {
@@ -480,6 +586,11 @@
 			65,
 			79,
 			80
+		],
+		"abilities": [
+			"intimidate",
+			"shed-skin",
+			"unnerve"
 		]
 	},
 	"pikachu": {
@@ -498,6 +609,10 @@
 			50,
 			50,
 			90
+		],
+		"abilities": [
+			"static",
+			"lightning-rod"
 		]
 	},
 	"raichu": {
@@ -516,6 +631,10 @@
 			90,
 			80,
 			110
+		],
+		"abilities": [
+			"static",
+			"lightning-rod"
 		]
 	},
 	"raichu-alola": {
@@ -535,6 +654,9 @@
 			95,
 			85,
 			110
+		],
+		"abilities": [
+			"surge-surfer"
 		]
 	},
 	"sandshrew": {
@@ -553,6 +675,10 @@
 			20,
 			30,
 			40
+		],
+		"abilities": [
+			"sand-veil",
+			"sand-rush"
 		]
 	},
 	"sandshrew-alola": {
@@ -572,6 +698,10 @@
 			10,
 			35,
 			40
+		],
+		"abilities": [
+			"snow-cloak",
+			"slush-rush"
 		]
 	},
 	"sandslash": {
@@ -590,6 +720,10 @@
 			45,
 			55,
 			65
+		],
+		"abilities": [
+			"sand-veil",
+			"sand-rush"
 		]
 	},
 	"sandslash-alola": {
@@ -609,6 +743,10 @@
 			25,
 			65,
 			65
+		],
+		"abilities": [
+			"snow-cloak",
+			"slush-rush"
 		]
 	},
 	"nidoran-f": {
@@ -627,6 +765,11 @@
 			40,
 			40,
 			41
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"hustle"
 		]
 	},
 	"nidorina": {
@@ -645,6 +788,11 @@
 			55,
 			55,
 			56
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"hustle"
 		]
 	},
 	"nidoqueen": {
@@ -664,6 +812,11 @@
 			75,
 			85,
 			76
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"sheer-force"
 		]
 	},
 	"nidoran-m": {
@@ -682,6 +835,11 @@
 			40,
 			40,
 			50
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"hustle"
 		]
 	},
 	"nidorino": {
@@ -700,6 +858,11 @@
 			55,
 			55,
 			65
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"hustle"
 		]
 	},
 	"nidoking": {
@@ -719,6 +882,11 @@
 			85,
 			75,
 			85
+		],
+		"abilities": [
+			"poison-point",
+			"rivalry",
+			"sheer-force"
 		]
 	},
 	"clefairy": {
@@ -737,6 +905,11 @@
 			60,
 			65,
 			35
+		],
+		"abilities": [
+			"cute-charm",
+			"magic-guard",
+			"friend-guard"
 		]
 	},
 	"clefable": {
@@ -755,6 +928,11 @@
 			95,
 			90,
 			60
+		],
+		"abilities": [
+			"cute-charm",
+			"magic-guard",
+			"unaware"
 		]
 	},
 	"vulpix": {
@@ -773,6 +951,10 @@
 			50,
 			65,
 			65
+		],
+		"abilities": [
+			"flash-fire",
+			"drought"
 		]
 	},
 	"vulpix-alola": {
@@ -791,6 +973,10 @@
 			50,
 			65,
 			65
+		],
+		"abilities": [
+			"snow-cloak",
+			"snow-warning"
 		]
 	},
 	"ninetales": {
@@ -809,6 +995,10 @@
 			81,
 			100,
 			100
+		],
+		"abilities": [
+			"flash-fire",
+			"drought"
 		]
 	},
 	"ninetales-alola": {
@@ -828,6 +1018,10 @@
 			81,
 			100,
 			109
+		],
+		"abilities": [
+			"snow-cloak",
+			"snow-warning"
 		]
 	},
 	"jigglypuff": {
@@ -847,6 +1041,11 @@
 			45,
 			25,
 			20
+		],
+		"abilities": [
+			"cute-charm",
+			"competitive",
+			"friend-guard"
 		]
 	},
 	"wigglytuff": {
@@ -866,6 +1065,11 @@
 			85,
 			50,
 			45
+		],
+		"abilities": [
+			"cute-charm",
+			"competitive",
+			"frisk"
 		]
 	},
 	"zubat": {
@@ -885,6 +1089,10 @@
 			30,
 			40,
 			55
+		],
+		"abilities": [
+			"inner-focus",
+			"infiltrator"
 		]
 	},
 	"golbat": {
@@ -904,6 +1112,10 @@
 			65,
 			75,
 			90
+		],
+		"abilities": [
+			"inner-focus",
+			"infiltrator"
 		]
 	},
 	"oddish": {
@@ -923,6 +1135,10 @@
 			75,
 			65,
 			30
+		],
+		"abilities": [
+			"chlorophyll",
+			"run-away"
 		]
 	},
 	"gloom": {
@@ -942,6 +1158,10 @@
 			85,
 			75,
 			40
+		],
+		"abilities": [
+			"chlorophyll",
+			"stench"
 		]
 	},
 	"vileplume": {
@@ -961,6 +1181,10 @@
 			110,
 			90,
 			50
+		],
+		"abilities": [
+			"chlorophyll",
+			"effect-spore"
 		]
 	},
 	"paras": {
@@ -980,6 +1204,11 @@
 			45,
 			55,
 			25
+		],
+		"abilities": [
+			"effect-spore",
+			"dry-skin",
+			"damp"
 		]
 	},
 	"parasect": {
@@ -999,6 +1228,11 @@
 			60,
 			80,
 			30
+		],
+		"abilities": [
+			"effect-spore",
+			"dry-skin",
+			"damp"
 		]
 	},
 	"venonat": {
@@ -1018,6 +1252,11 @@
 			40,
 			55,
 			45
+		],
+		"abilities": [
+			"compound-eyes",
+			"tinted-lens",
+			"run-away"
 		]
 	},
 	"venomoth": {
@@ -1037,6 +1276,11 @@
 			90,
 			75,
 			90
+		],
+		"abilities": [
+			"shield-dust",
+			"tinted-lens",
+			"wonder-skin"
 		]
 	},
 	"diglett": {
@@ -1055,6 +1299,11 @@
 			35,
 			45,
 			95
+		],
+		"abilities": [
+			"sand-veil",
+			"arena-trap",
+			"sand-force"
 		]
 	},
 	"diglett-alola": {
@@ -1074,6 +1323,11 @@
 			35,
 			45,
 			90
+		],
+		"abilities": [
+			"sand-veil",
+			"tangling-hair",
+			"sand-force"
 		]
 	},
 	"dugtrio": {
@@ -1092,6 +1346,11 @@
 			50,
 			70,
 			120
+		],
+		"abilities": [
+			"sand-veil",
+			"arena-trap",
+			"sand-force"
 		]
 	},
 	"dugtrio-alola": {
@@ -1111,6 +1370,11 @@
 			50,
 			70,
 			110
+		],
+		"abilities": [
+			"sand-veil",
+			"tangling-hair",
+			"sand-force"
 		]
 	},
 	"meowth": {
@@ -1129,6 +1393,11 @@
 			40,
 			40,
 			90
+		],
+		"abilities": [
+			"pickup",
+			"technician",
+			"unnerve"
 		]
 	},
 	"meowth-alola": {
@@ -1147,6 +1416,11 @@
 			50,
 			40,
 			90
+		],
+		"abilities": [
+			"pickup",
+			"technician",
+			"rattled"
 		]
 	},
 	"persian": {
@@ -1165,6 +1439,11 @@
 			65,
 			65,
 			115
+		],
+		"abilities": [
+			"limber",
+			"technician",
+			"unnerve"
 		]
 	},
 	"persian-alola": {
@@ -1183,6 +1462,11 @@
 			75,
 			65,
 			115
+		],
+		"abilities": [
+			"fur-coat",
+			"technician",
+			"rattled"
 		]
 	},
 	"psyduck": {
@@ -1201,6 +1485,11 @@
 			65,
 			50,
 			55
+		],
+		"abilities": [
+			"damp",
+			"cloud-nine",
+			"swift-swim"
 		]
 	},
 	"golduck": {
@@ -1219,6 +1508,11 @@
 			95,
 			80,
 			85
+		],
+		"abilities": [
+			"damp",
+			"cloud-nine",
+			"swift-swim"
 		]
 	},
 	"mankey": {
@@ -1237,6 +1531,11 @@
 			35,
 			45,
 			70
+		],
+		"abilities": [
+			"vital-spirit",
+			"anger-point",
+			"defiant"
 		]
 	},
 	"primeape": {
@@ -1255,6 +1554,11 @@
 			60,
 			70,
 			95
+		],
+		"abilities": [
+			"vital-spirit",
+			"anger-point",
+			"defiant"
 		]
 	},
 	"growlithe": {
@@ -1273,6 +1577,11 @@
 			70,
 			50,
 			60
+		],
+		"abilities": [
+			"intimidate",
+			"flash-fire",
+			"justified"
 		]
 	},
 	"arcanine": {
@@ -1291,6 +1600,11 @@
 			100,
 			80,
 			95
+		],
+		"abilities": [
+			"intimidate",
+			"flash-fire",
+			"justified"
 		]
 	},
 	"poliwag": {
@@ -1309,6 +1623,11 @@
 			40,
 			40,
 			90
+		],
+		"abilities": [
+			"water-absorb",
+			"damp",
+			"swift-swim"
 		]
 	},
 	"poliwhirl": {
@@ -1327,6 +1646,11 @@
 			50,
 			50,
 			90
+		],
+		"abilities": [
+			"water-absorb",
+			"damp",
+			"swift-swim"
 		]
 	},
 	"poliwrath": {
@@ -1346,6 +1670,11 @@
 			70,
 			90,
 			70
+		],
+		"abilities": [
+			"water-absorb",
+			"damp",
+			"swift-swim"
 		]
 	},
 	"abra": {
@@ -1364,6 +1693,11 @@
 			105,
 			55,
 			90
+		],
+		"abilities": [
+			"synchronize",
+			"inner-focus",
+			"magic-guard"
 		]
 	},
 	"kadabra": {
@@ -1382,6 +1716,11 @@
 			120,
 			70,
 			105
+		],
+		"abilities": [
+			"synchronize",
+			"inner-focus",
+			"magic-guard"
 		]
 	},
 	"alakazam": {
@@ -1400,6 +1739,11 @@
 			135,
 			95,
 			120
+		],
+		"abilities": [
+			"synchronize",
+			"inner-focus",
+			"magic-guard"
 		]
 	},
 	"machop": {
@@ -1418,6 +1762,11 @@
 			35,
 			35,
 			35
+		],
+		"abilities": [
+			"guts",
+			"no-guard",
+			"steadfast"
 		]
 	},
 	"machoke": {
@@ -1436,6 +1785,11 @@
 			50,
 			60,
 			45
+		],
+		"abilities": [
+			"guts",
+			"no-guard",
+			"steadfast"
 		]
 	},
 	"machamp": {
@@ -1454,6 +1808,11 @@
 			65,
 			85,
 			55
+		],
+		"abilities": [
+			"guts",
+			"no-guard",
+			"steadfast"
 		]
 	},
 	"bellsprout": {
@@ -1473,6 +1832,10 @@
 			70,
 			30,
 			40
+		],
+		"abilities": [
+			"chlorophyll",
+			"gluttony"
 		]
 	},
 	"weepinbell": {
@@ -1492,6 +1855,10 @@
 			85,
 			45,
 			55
+		],
+		"abilities": [
+			"chlorophyll",
+			"gluttony"
 		]
 	},
 	"victreebel": {
@@ -1511,6 +1878,10 @@
 			100,
 			70,
 			70
+		],
+		"abilities": [
+			"chlorophyll",
+			"gluttony"
 		]
 	},
 	"tentacool": {
@@ -1530,6 +1901,11 @@
 			50,
 			100,
 			70
+		],
+		"abilities": [
+			"clear-body",
+			"liquid-ooze",
+			"rain-dish"
 		]
 	},
 	"tentacruel": {
@@ -1549,6 +1925,11 @@
 			80,
 			120,
 			100
+		],
+		"abilities": [
+			"clear-body",
+			"liquid-ooze",
+			"rain-dish"
 		]
 	},
 	"geodude": {
@@ -1568,6 +1949,11 @@
 			30,
 			30,
 			20
+		],
+		"abilities": [
+			"rock-head",
+			"sturdy",
+			"sand-veil"
 		]
 	},
 	"geodude-alola": {
@@ -1587,6 +1973,11 @@
 			30,
 			30,
 			20
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"galvanize"
 		]
 	},
 	"graveler": {
@@ -1606,6 +1997,11 @@
 			45,
 			45,
 			35
+		],
+		"abilities": [
+			"rock-head",
+			"sturdy",
+			"sand-veil"
 		]
 	},
 	"graveler-alola": {
@@ -1625,6 +2021,11 @@
 			45,
 			45,
 			35
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"galvanize"
 		]
 	},
 	"golem": {
@@ -1644,6 +2045,11 @@
 			55,
 			65,
 			45
+		],
+		"abilities": [
+			"rock-head",
+			"sturdy",
+			"sand-veil"
 		]
 	},
 	"golem-alola": {
@@ -1663,6 +2069,11 @@
 			55,
 			65,
 			45
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"galvanize"
 		]
 	},
 	"ponyta": {
@@ -1681,6 +2092,11 @@
 			65,
 			65,
 			90
+		],
+		"abilities": [
+			"run-away",
+			"flash-fire",
+			"flame-body"
 		]
 	},
 	"rapidash": {
@@ -1699,6 +2115,11 @@
 			80,
 			80,
 			105
+		],
+		"abilities": [
+			"run-away",
+			"flash-fire",
+			"flame-body"
 		]
 	},
 	"slowpoke": {
@@ -1718,6 +2139,11 @@
 			40,
 			40,
 			15
+		],
+		"abilities": [
+			"oblivious",
+			"own-tempo",
+			"regenerator"
 		]
 	},
 	"slowbro": {
@@ -1737,6 +2163,11 @@
 			100,
 			80,
 			30
+		],
+		"abilities": [
+			"oblivious",
+			"own-tempo",
+			"regenerator"
 		]
 	},
 	"magnemite": {
@@ -1756,6 +2187,11 @@
 			95,
 			55,
 			45
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"analytic"
 		]
 	},
 	"magneton": {
@@ -1775,6 +2211,11 @@
 			120,
 			70,
 			70
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"analytic"
 		]
 	},
 	"farfetch'd": {
@@ -1794,6 +2235,11 @@
 			58,
 			62,
 			60
+		],
+		"abilities": [
+			"keen-eye",
+			"inner-focus",
+			"defiant"
 		]
 	},
 	"doduo": {
@@ -1813,6 +2259,11 @@
 			35,
 			35,
 			75
+		],
+		"abilities": [
+			"run-away",
+			"early-bird",
+			"tangled-feet"
 		]
 	},
 	"dodrio": {
@@ -1832,6 +2283,11 @@
 			60,
 			60,
 			100
+		],
+		"abilities": [
+			"run-away",
+			"early-bird",
+			"tangled-feet"
 		]
 	},
 	"seel": {
@@ -1850,6 +2306,11 @@
 			45,
 			70,
 			45
+		],
+		"abilities": [
+			"thick-fat",
+			"hydration",
+			"ice-body"
 		]
 	},
 	"dewgong": {
@@ -1869,6 +2330,11 @@
 			70,
 			95,
 			70
+		],
+		"abilities": [
+			"thick-fat",
+			"hydration",
+			"ice-body"
 		]
 	},
 	"grimer": {
@@ -1887,6 +2353,11 @@
 			40,
 			50,
 			25
+		],
+		"abilities": [
+			"stench",
+			"sticky-hold",
+			"poison-touch"
 		]
 	},
 	"grimer-alola": {
@@ -1906,6 +2377,11 @@
 			40,
 			50,
 			25
+		],
+		"abilities": [
+			"poison-touch",
+			"gluttony",
+			"power-of-alchemy"
 		]
 	},
 	"muk": {
@@ -1924,6 +2400,11 @@
 			65,
 			100,
 			50
+		],
+		"abilities": [
+			"stench",
+			"sticky-hold",
+			"poison-touch"
 		]
 	},
 	"muk-alola": {
@@ -1943,6 +2424,11 @@
 			65,
 			100,
 			50
+		],
+		"abilities": [
+			"poison-touch",
+			"gluttony",
+			"power-of-alchemy"
 		]
 	},
 	"shellder": {
@@ -1961,6 +2447,11 @@
 			45,
 			25,
 			40
+		],
+		"abilities": [
+			"shell-armor",
+			"skill-link",
+			"overcoat"
 		]
 	},
 	"cloyster": {
@@ -1980,6 +2471,11 @@
 			85,
 			45,
 			70
+		],
+		"abilities": [
+			"shell-armor",
+			"skill-link",
+			"overcoat"
 		]
 	},
 	"gastly": {
@@ -1999,6 +2495,9 @@
 			100,
 			35,
 			80
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"haunter": {
@@ -2018,6 +2517,9 @@
 			115,
 			55,
 			95
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"gengar": {
@@ -2037,6 +2539,9 @@
 			130,
 			75,
 			110
+		],
+		"abilities": [
+			"cursed-body"
 		]
 	},
 	"onix": {
@@ -2056,6 +2561,11 @@
 			30,
 			45,
 			70
+		],
+		"abilities": [
+			"rock-head",
+			"sturdy",
+			"weak-armor"
 		]
 	},
 	"drowzee": {
@@ -2074,6 +2584,11 @@
 			43,
 			90,
 			42
+		],
+		"abilities": [
+			"insomnia",
+			"forewarn",
+			"inner-focus"
 		]
 	},
 	"hypno": {
@@ -2092,6 +2607,11 @@
 			73,
 			115,
 			67
+		],
+		"abilities": [
+			"insomnia",
+			"forewarn",
+			"inner-focus"
 		]
 	},
 	"krabby": {
@@ -2110,6 +2630,11 @@
 			25,
 			25,
 			50
+		],
+		"abilities": [
+			"hyper-cutter",
+			"shell-armor",
+			"sheer-force"
 		]
 	},
 	"kingler": {
@@ -2128,6 +2653,11 @@
 			50,
 			50,
 			75
+		],
+		"abilities": [
+			"hyper-cutter",
+			"shell-armor",
+			"sheer-force"
 		]
 	},
 	"voltorb": {
@@ -2146,6 +2676,11 @@
 			55,
 			55,
 			100
+		],
+		"abilities": [
+			"soundproof",
+			"static",
+			"aftermath"
 		]
 	},
 	"electrode": {
@@ -2164,6 +2699,11 @@
 			80,
 			80,
 			150
+		],
+		"abilities": [
+			"soundproof",
+			"static",
+			"aftermath"
 		]
 	},
 	"exeggcute": {
@@ -2183,6 +2723,10 @@
 			60,
 			45,
 			40
+		],
+		"abilities": [
+			"chlorophyll",
+			"harvest"
 		]
 	},
 	"exeggutor": {
@@ -2202,6 +2746,10 @@
 			125,
 			75,
 			55
+		],
+		"abilities": [
+			"chlorophyll",
+			"harvest"
 		]
 	},
 	"exeggutor-alola": {
@@ -2221,6 +2769,10 @@
 			125,
 			75,
 			45
+		],
+		"abilities": [
+			"frisk",
+			"harvest"
 		]
 	},
 	"cubone": {
@@ -2239,6 +2791,11 @@
 			40,
 			50,
 			35
+		],
+		"abilities": [
+			"rock-head",
+			"lightning-rod",
+			"battle-armor"
 		]
 	},
 	"marowak": {
@@ -2257,6 +2814,11 @@
 			50,
 			80,
 			45
+		],
+		"abilities": [
+			"rock-head",
+			"lightning-rod",
+			"battle-armor"
 		]
 	},
 	"marowak-alola": {
@@ -2276,6 +2838,11 @@
 			50,
 			80,
 			45
+		],
+		"abilities": [
+			"cursed-body",
+			"lightning-rod",
+			"rock-head"
 		]
 	},
 	"hitmonlee": {
@@ -2294,6 +2861,11 @@
 			35,
 			110,
 			87
+		],
+		"abilities": [
+			"limber",
+			"reckless",
+			"unburden"
 		]
 	},
 	"hitmonchan": {
@@ -2312,6 +2884,11 @@
 			35,
 			110,
 			76
+		],
+		"abilities": [
+			"keen-eye",
+			"iron-fist",
+			"inner-focus"
 		]
 	},
 	"lickitung": {
@@ -2330,6 +2907,11 @@
 			60,
 			75,
 			30
+		],
+		"abilities": [
+			"own-tempo",
+			"oblivious",
+			"cloud-nine"
 		]
 	},
 	"koffing": {
@@ -2348,6 +2930,11 @@
 			60,
 			45,
 			35
+		],
+		"abilities": [
+			"levitate",
+			"neutralizing-gas",
+			"stench"
 		]
 	},
 	"weezing": {
@@ -2366,6 +2953,11 @@
 			85,
 			70,
 			60
+		],
+		"abilities": [
+			"levitate",
+			"neutralizing-gas",
+			"stench"
 		]
 	},
 	"rhyhorn": {
@@ -2385,6 +2977,11 @@
 			30,
 			30,
 			25
+		],
+		"abilities": [
+			"lightning-rod",
+			"rock-head",
+			"reckless"
 		]
 	},
 	"rhydon": {
@@ -2404,6 +3001,11 @@
 			45,
 			45,
 			40
+		],
+		"abilities": [
+			"lightning-rod",
+			"rock-head",
+			"reckless"
 		]
 	},
 	"chansey": {
@@ -2422,6 +3024,11 @@
 			35,
 			105,
 			50
+		],
+		"abilities": [
+			"natural-cure",
+			"serene-grace",
+			"healer"
 		]
 	},
 	"tangela": {
@@ -2440,6 +3047,11 @@
 			100,
 			40,
 			60
+		],
+		"abilities": [
+			"chlorophyll",
+			"leaf-guard",
+			"regenerator"
 		]
 	},
 	"kangaskhan": {
@@ -2458,6 +3070,11 @@
 			40,
 			80,
 			90
+		],
+		"abilities": [
+			"early-bird",
+			"scrappy",
+			"inner-focus"
 		]
 	},
 	"horsea": {
@@ -2476,6 +3093,11 @@
 			70,
 			25,
 			60
+		],
+		"abilities": [
+			"swift-swim",
+			"sniper",
+			"damp"
 		]
 	},
 	"seadra": {
@@ -2494,6 +3116,11 @@
 			95,
 			45,
 			85
+		],
+		"abilities": [
+			"poison-point",
+			"sniper",
+			"damp"
 		]
 	},
 	"goldeen": {
@@ -2512,6 +3139,11 @@
 			35,
 			50,
 			63
+		],
+		"abilities": [
+			"swift-swim",
+			"water-veil",
+			"lightning-rod"
 		]
 	},
 	"seaking": {
@@ -2530,6 +3162,11 @@
 			65,
 			80,
 			68
+		],
+		"abilities": [
+			"swift-swim",
+			"water-veil",
+			"lightning-rod"
 		]
 	},
 	"staryu": {
@@ -2548,6 +3185,11 @@
 			70,
 			55,
 			85
+		],
+		"abilities": [
+			"illuminate",
+			"natural-cure",
+			"analytic"
 		]
 	},
 	"starmie": {
@@ -2567,6 +3209,11 @@
 			100,
 			85,
 			115
+		],
+		"abilities": [
+			"illuminate",
+			"natural-cure",
+			"analytic"
 		]
 	},
 	"mr. mime": {
@@ -2586,6 +3233,11 @@
 			100,
 			120,
 			90
+		],
+		"abilities": [
+			"soundproof",
+			"filter",
+			"technician"
 		]
 	},
 	"scyther": {
@@ -2605,6 +3257,11 @@
 			55,
 			80,
 			105
+		],
+		"abilities": [
+			"swarm",
+			"technician",
+			"steadfast"
 		]
 	},
 	"jynx": {
@@ -2624,6 +3281,11 @@
 			115,
 			95,
 			95
+		],
+		"abilities": [
+			"oblivious",
+			"forewarn",
+			"dry-skin"
 		]
 	},
 	"electabuzz": {
@@ -2642,6 +3304,10 @@
 			95,
 			85,
 			105
+		],
+		"abilities": [
+			"static",
+			"vital-spirit"
 		]
 	},
 	"magmar": {
@@ -2660,6 +3326,10 @@
 			100,
 			85,
 			93
+		],
+		"abilities": [
+			"flame-body",
+			"vital-spirit"
 		]
 	},
 	"pinsir": {
@@ -2678,6 +3348,11 @@
 			55,
 			70,
 			85
+		],
+		"abilities": [
+			"hyper-cutter",
+			"mold-breaker",
+			"moxie"
 		]
 	},
 	"tauros": {
@@ -2696,6 +3371,11 @@
 			40,
 			70,
 			110
+		],
+		"abilities": [
+			"intimidate",
+			"anger-point",
+			"sheer-force"
 		]
 	},
 	"magikarp": {
@@ -2714,6 +3394,10 @@
 			15,
 			20,
 			80
+		],
+		"abilities": [
+			"swift-swim",
+			"rattled"
 		]
 	},
 	"gyarados": {
@@ -2733,6 +3417,10 @@
 			60,
 			100,
 			81
+		],
+		"abilities": [
+			"intimidate",
+			"moxie"
 		]
 	},
 	"lapras": {
@@ -2752,6 +3440,11 @@
 			85,
 			95,
 			60
+		],
+		"abilities": [
+			"water-absorb",
+			"shell-armor",
+			"hydration"
 		]
 	},
 	"ditto": {
@@ -2770,6 +3463,10 @@
 			48,
 			48,
 			48
+		],
+		"abilities": [
+			"limber",
+			"imposter"
 		]
 	},
 	"eevee": {
@@ -2788,6 +3485,11 @@
 			45,
 			65,
 			55
+		],
+		"abilities": [
+			"run-away",
+			"adaptability",
+			"anticipation"
 		]
 	},
 	"vaporeon": {
@@ -2806,6 +3508,10 @@
 			110,
 			95,
 			65
+		],
+		"abilities": [
+			"water-absorb",
+			"hydration"
 		]
 	},
 	"jolteon": {
@@ -2824,6 +3530,10 @@
 			110,
 			95,
 			130
+		],
+		"abilities": [
+			"volt-absorb",
+			"quick-feet"
 		]
 	},
 	"flareon": {
@@ -2842,6 +3552,10 @@
 			95,
 			110,
 			65
+		],
+		"abilities": [
+			"flash-fire",
+			"guts"
 		]
 	},
 	"porygon": {
@@ -2860,6 +3574,11 @@
 			85,
 			75,
 			40
+		],
+		"abilities": [
+			"trace",
+			"download",
+			"analytic"
 		]
 	},
 	"omanyte": {
@@ -2879,6 +3598,11 @@
 			90,
 			55,
 			35
+		],
+		"abilities": [
+			"swift-swim",
+			"shell-armor",
+			"weak-armor"
 		]
 	},
 	"omastar": {
@@ -2898,6 +3622,11 @@
 			115,
 			70,
 			55
+		],
+		"abilities": [
+			"swift-swim",
+			"shell-armor",
+			"weak-armor"
 		]
 	},
 	"kabuto": {
@@ -2917,6 +3646,11 @@
 			55,
 			45,
 			55
+		],
+		"abilities": [
+			"swift-swim",
+			"battle-armor",
+			"weak-armor"
 		]
 	},
 	"kabutops": {
@@ -2936,6 +3670,11 @@
 			65,
 			70,
 			80
+		],
+		"abilities": [
+			"swift-swim",
+			"battle-armor",
+			"weak-armor"
 		]
 	},
 	"aerodactyl": {
@@ -2955,6 +3694,11 @@
 			60,
 			75,
 			130
+		],
+		"abilities": [
+			"rock-head",
+			"pressure",
+			"unnerve"
 		]
 	},
 	"snorlax": {
@@ -2973,6 +3717,11 @@
 			65,
 			110,
 			30
+		],
+		"abilities": [
+			"immunity",
+			"thick-fat",
+			"gluttony"
 		]
 	},
 	"articuno": {
@@ -2992,6 +3741,10 @@
 			95,
 			125,
 			85
+		],
+		"abilities": [
+			"pressure",
+			"snow-cloak"
 		]
 	},
 	"zapdos": {
@@ -3011,6 +3764,10 @@
 			125,
 			90,
 			100
+		],
+		"abilities": [
+			"pressure",
+			"static"
 		]
 	},
 	"moltres": {
@@ -3030,6 +3787,10 @@
 			125,
 			85,
 			90
+		],
+		"abilities": [
+			"pressure",
+			"flame-body"
 		]
 	},
 	"dratini": {
@@ -3048,6 +3809,10 @@
 			50,
 			50,
 			50
+		],
+		"abilities": [
+			"shed-skin",
+			"marvel-scale"
 		]
 	},
 	"dragonair": {
@@ -3066,6 +3831,10 @@
 			70,
 			70,
 			70
+		],
+		"abilities": [
+			"shed-skin",
+			"marvel-scale"
 		]
 	},
 	"dragonite": {
@@ -3085,6 +3854,10 @@
 			100,
 			100,
 			80
+		],
+		"abilities": [
+			"inner-focus",
+			"multiscale"
 		]
 	},
 	"mewtwo": {
@@ -3103,6 +3876,10 @@
 			154,
 			90,
 			130
+		],
+		"abilities": [
+			"pressure",
+			"unnerve"
 		]
 	},
 	"mew": {
@@ -3121,6 +3898,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"synchronize"
 		]
 	},
 	"chikorita": {
@@ -3139,6 +3919,10 @@
 			49,
 			65,
 			45
+		],
+		"abilities": [
+			"overgrow",
+			"leaf-guard"
 		]
 	},
 	"bayleef": {
@@ -3157,6 +3941,10 @@
 			63,
 			80,
 			60
+		],
+		"abilities": [
+			"overgrow",
+			"leaf-guard"
 		]
 	},
 	"meganium": {
@@ -3175,6 +3963,10 @@
 			83,
 			100,
 			80
+		],
+		"abilities": [
+			"overgrow",
+			"leaf-guard"
 		]
 	},
 	"cyndaquil": {
@@ -3193,6 +3985,10 @@
 			60,
 			50,
 			65
+		],
+		"abilities": [
+			"blaze",
+			"flash-fire"
 		]
 	},
 	"quilava": {
@@ -3211,6 +4007,10 @@
 			80,
 			65,
 			80
+		],
+		"abilities": [
+			"blaze",
+			"flash-fire"
 		]
 	},
 	"typhlosion": {
@@ -3229,6 +4029,10 @@
 			109,
 			85,
 			100
+		],
+		"abilities": [
+			"blaze",
+			"flash-fire"
 		]
 	},
 	"totodile": {
@@ -3247,6 +4051,10 @@
 			44,
 			48,
 			43
+		],
+		"abilities": [
+			"torrent",
+			"sheer-force"
 		]
 	},
 	"croconaw": {
@@ -3265,6 +4073,10 @@
 			59,
 			63,
 			58
+		],
+		"abilities": [
+			"torrent",
+			"sheer-force"
 		]
 	},
 	"feraligatr": {
@@ -3283,6 +4095,10 @@
 			79,
 			83,
 			78
+		],
+		"abilities": [
+			"torrent",
+			"sheer-force"
 		]
 	},
 	"sentret": {
@@ -3301,6 +4117,11 @@
 			35,
 			45,
 			20
+		],
+		"abilities": [
+			"run-away",
+			"keen-eye",
+			"frisk"
 		]
 	},
 	"furret": {
@@ -3319,6 +4140,11 @@
 			45,
 			55,
 			90
+		],
+		"abilities": [
+			"run-away",
+			"keen-eye",
+			"frisk"
 		]
 	},
 	"hoothoot": {
@@ -3338,6 +4164,11 @@
 			36,
 			56,
 			50
+		],
+		"abilities": [
+			"insomnia",
+			"keen-eye",
+			"tinted-lens"
 		]
 	},
 	"noctowl": {
@@ -3357,6 +4188,11 @@
 			86,
 			96,
 			70
+		],
+		"abilities": [
+			"insomnia",
+			"keen-eye",
+			"tinted-lens"
 		]
 	},
 	"ledyba": {
@@ -3376,6 +4212,11 @@
 			40,
 			80,
 			55
+		],
+		"abilities": [
+			"swarm",
+			"early-bird",
+			"rattled"
 		]
 	},
 	"ledian": {
@@ -3395,6 +4236,11 @@
 			55,
 			110,
 			85
+		],
+		"abilities": [
+			"swarm",
+			"early-bird",
+			"iron-fist"
 		]
 	},
 	"spinarak": {
@@ -3414,6 +4260,11 @@
 			40,
 			40,
 			30
+		],
+		"abilities": [
+			"swarm",
+			"insomnia",
+			"sniper"
 		]
 	},
 	"ariados": {
@@ -3433,6 +4284,11 @@
 			60,
 			70,
 			40
+		],
+		"abilities": [
+			"swarm",
+			"insomnia",
+			"sniper"
 		]
 	},
 	"crobat": {
@@ -3452,6 +4308,10 @@
 			70,
 			80,
 			130
+		],
+		"abilities": [
+			"inner-focus",
+			"infiltrator"
 		]
 	},
 	"chinchou": {
@@ -3471,6 +4331,11 @@
 			56,
 			56,
 			67
+		],
+		"abilities": [
+			"volt-absorb",
+			"illuminate",
+			"water-absorb"
 		]
 	},
 	"lanturn": {
@@ -3490,6 +4355,11 @@
 			76,
 			76,
 			67
+		],
+		"abilities": [
+			"volt-absorb",
+			"illuminate",
+			"water-absorb"
 		]
 	},
 	"pichu": {
@@ -3508,6 +4378,10 @@
 			35,
 			35,
 			60
+		],
+		"abilities": [
+			"static",
+			"lightning-rod"
 		]
 	},
 	"cleffa": {
@@ -3526,6 +4400,11 @@
 			45,
 			55,
 			15
+		],
+		"abilities": [
+			"cute-charm",
+			"magic-guard",
+			"friend-guard"
 		]
 	},
 	"igglybuff": {
@@ -3545,6 +4424,11 @@
 			40,
 			20,
 			15
+		],
+		"abilities": [
+			"cute-charm",
+			"competitive",
+			"friend-guard"
 		]
 	},
 	"togepi": {
@@ -3563,6 +4447,11 @@
 			40,
 			65,
 			20
+		],
+		"abilities": [
+			"hustle",
+			"serene-grace",
+			"super-luck"
 		]
 	},
 	"togetic": {
@@ -3582,6 +4471,11 @@
 			80,
 			105,
 			40
+		],
+		"abilities": [
+			"hustle",
+			"serene-grace",
+			"super-luck"
 		]
 	},
 	"natu": {
@@ -3601,6 +4495,11 @@
 			70,
 			45,
 			70
+		],
+		"abilities": [
+			"synchronize",
+			"early-bird",
+			"magic-bounce"
 		]
 	},
 	"xatu": {
@@ -3620,6 +4519,11 @@
 			95,
 			70,
 			95
+		],
+		"abilities": [
+			"synchronize",
+			"early-bird",
+			"magic-bounce"
 		]
 	},
 	"mareep": {
@@ -3638,6 +4542,10 @@
 			65,
 			45,
 			35
+		],
+		"abilities": [
+			"static",
+			"plus"
 		]
 	},
 	"flaaffy": {
@@ -3656,6 +4564,10 @@
 			80,
 			60,
 			45
+		],
+		"abilities": [
+			"static",
+			"plus"
 		]
 	},
 	"ampharos": {
@@ -3674,6 +4586,10 @@
 			115,
 			90,
 			55
+		],
+		"abilities": [
+			"static",
+			"plus"
 		]
 	},
 	"bellossom": {
@@ -3692,6 +4608,10 @@
 			90,
 			100,
 			50
+		],
+		"abilities": [
+			"chlorophyll",
+			"healer"
 		]
 	},
 	"marill": {
@@ -3711,6 +4631,11 @@
 			20,
 			50,
 			40
+		],
+		"abilities": [
+			"thick-fat",
+			"huge-power",
+			"sap-sipper"
 		]
 	},
 	"azumarill": {
@@ -3730,6 +4655,11 @@
 			60,
 			80,
 			50
+		],
+		"abilities": [
+			"thick-fat",
+			"huge-power",
+			"sap-sipper"
 		]
 	},
 	"sudowoodo": {
@@ -3748,6 +4678,11 @@
 			30,
 			65,
 			30
+		],
+		"abilities": [
+			"sturdy",
+			"rock-head",
+			"rattled"
 		]
 	},
 	"politoed": {
@@ -3766,6 +4701,11 @@
 			90,
 			100,
 			70
+		],
+		"abilities": [
+			"water-absorb",
+			"damp",
+			"drizzle"
 		]
 	},
 	"hoppip": {
@@ -3785,6 +4725,11 @@
 			35,
 			55,
 			50
+		],
+		"abilities": [
+			"chlorophyll",
+			"leaf-guard",
+			"infiltrator"
 		]
 	},
 	"skiploom": {
@@ -3804,6 +4749,11 @@
 			45,
 			65,
 			80
+		],
+		"abilities": [
+			"chlorophyll",
+			"leaf-guard",
+			"infiltrator"
 		]
 	},
 	"jumpluff": {
@@ -3823,6 +4773,11 @@
 			55,
 			95,
 			110
+		],
+		"abilities": [
+			"chlorophyll",
+			"leaf-guard",
+			"infiltrator"
 		]
 	},
 	"aipom": {
@@ -3841,6 +4796,11 @@
 			40,
 			55,
 			85
+		],
+		"abilities": [
+			"run-away",
+			"pickup",
+			"skill-link"
 		]
 	},
 	"sunkern": {
@@ -3859,6 +4819,11 @@
 			30,
 			30,
 			30
+		],
+		"abilities": [
+			"chlorophyll",
+			"solar-power",
+			"early-bird"
 		]
 	},
 	"sunflora": {
@@ -3877,6 +4842,11 @@
 			105,
 			85,
 			30
+		],
+		"abilities": [
+			"chlorophyll",
+			"solar-power",
+			"early-bird"
 		]
 	},
 	"yanma": {
@@ -3896,6 +4866,11 @@
 			75,
 			45,
 			95
+		],
+		"abilities": [
+			"speed-boost",
+			"compound-eyes",
+			"frisk"
 		]
 	},
 	"wooper": {
@@ -3915,6 +4890,11 @@
 			25,
 			25,
 			15
+		],
+		"abilities": [
+			"damp",
+			"water-absorb",
+			"unaware"
 		]
 	},
 	"quagsire": {
@@ -3934,6 +4914,11 @@
 			65,
 			65,
 			35
+		],
+		"abilities": [
+			"damp",
+			"water-absorb",
+			"unaware"
 		]
 	},
 	"espeon": {
@@ -3952,6 +4937,10 @@
 			130,
 			95,
 			110
+		],
+		"abilities": [
+			"synchronize",
+			"magic-bounce"
 		]
 	},
 	"umbreon": {
@@ -3970,6 +4959,10 @@
 			60,
 			130,
 			65
+		],
+		"abilities": [
+			"synchronize",
+			"inner-focus"
 		]
 	},
 	"murkrow": {
@@ -3989,6 +4982,11 @@
 			85,
 			42,
 			91
+		],
+		"abilities": [
+			"insomnia",
+			"super-luck",
+			"prankster"
 		]
 	},
 	"slowking": {
@@ -4008,6 +5006,11 @@
 			100,
 			110,
 			30
+		],
+		"abilities": [
+			"oblivious",
+			"own-tempo",
+			"regenerator"
 		]
 	},
 	"misdreavus": {
@@ -4026,6 +5029,9 @@
 			85,
 			85,
 			85
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"unown": {
@@ -4044,6 +5050,9 @@
 			72,
 			48,
 			48
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"wobbuffet": {
@@ -4062,6 +5071,10 @@
 			33,
 			58,
 			33
+		],
+		"abilities": [
+			"shadow-tag",
+			"telepathy"
 		]
 	},
 	"girafarig": {
@@ -4081,6 +5094,11 @@
 			90,
 			65,
 			85
+		],
+		"abilities": [
+			"inner-focus",
+			"early-bird",
+			"sap-sipper"
 		]
 	},
 	"pineco": {
@@ -4099,6 +5117,10 @@
 			35,
 			35,
 			15
+		],
+		"abilities": [
+			"sturdy",
+			"overcoat"
 		]
 	},
 	"forretress": {
@@ -4118,6 +5140,10 @@
 			60,
 			60,
 			40
+		],
+		"abilities": [
+			"sturdy",
+			"overcoat"
 		]
 	},
 	"dunsparce": {
@@ -4136,6 +5162,11 @@
 			65,
 			65,
 			45
+		],
+		"abilities": [
+			"serene-grace",
+			"run-away",
+			"rattled"
 		]
 	},
 	"gligar": {
@@ -4155,6 +5186,11 @@
 			35,
 			65,
 			85
+		],
+		"abilities": [
+			"hyper-cutter",
+			"sand-veil",
+			"immunity"
 		]
 	},
 	"steelix": {
@@ -4174,6 +5210,11 @@
 			55,
 			65,
 			30
+		],
+		"abilities": [
+			"rock-head",
+			"sturdy",
+			"sheer-force"
 		]
 	},
 	"snubbull": {
@@ -4192,6 +5233,11 @@
 			40,
 			40,
 			30
+		],
+		"abilities": [
+			"intimidate",
+			"run-away",
+			"rattled"
 		]
 	},
 	"granbull": {
@@ -4210,6 +5256,11 @@
 			60,
 			60,
 			45
+		],
+		"abilities": [
+			"intimidate",
+			"quick-feet",
+			"rattled"
 		]
 	},
 	"qwilfish": {
@@ -4229,6 +5280,11 @@
 			55,
 			55,
 			85
+		],
+		"abilities": [
+			"poison-point",
+			"swift-swim",
+			"intimidate"
 		]
 	},
 	"scizor": {
@@ -4248,6 +5304,11 @@
 			55,
 			80,
 			65
+		],
+		"abilities": [
+			"swarm",
+			"technician",
+			"light-metal"
 		]
 	},
 	"shuckle": {
@@ -4267,6 +5328,11 @@
 			10,
 			230,
 			5
+		],
+		"abilities": [
+			"sturdy",
+			"gluttony",
+			"contrary"
 		]
 	},
 	"heracross": {
@@ -4286,6 +5352,11 @@
 			40,
 			95,
 			85
+		],
+		"abilities": [
+			"swarm",
+			"guts",
+			"moxie"
 		]
 	},
 	"sneasel": {
@@ -4305,6 +5376,11 @@
 			35,
 			75,
 			115
+		],
+		"abilities": [
+			"inner-focus",
+			"keen-eye",
+			"pickpocket"
 		]
 	},
 	"teddiursa": {
@@ -4323,6 +5399,11 @@
 			50,
 			50,
 			40
+		],
+		"abilities": [
+			"pickup",
+			"quick-feet",
+			"honey-gather"
 		]
 	},
 	"ursaring": {
@@ -4341,6 +5422,11 @@
 			75,
 			75,
 			55
+		],
+		"abilities": [
+			"guts",
+			"quick-feet",
+			"unnerve"
 		]
 	},
 	"slugma": {
@@ -4359,6 +5445,11 @@
 			70,
 			40,
 			20
+		],
+		"abilities": [
+			"magma-armor",
+			"flame-body",
+			"weak-armor"
 		]
 	},
 	"magcargo": {
@@ -4378,6 +5469,11 @@
 			90,
 			80,
 			30
+		],
+		"abilities": [
+			"magma-armor",
+			"flame-body",
+			"weak-armor"
 		]
 	},
 	"swinub": {
@@ -4397,6 +5493,11 @@
 			30,
 			30,
 			50
+		],
+		"abilities": [
+			"oblivious",
+			"snow-cloak",
+			"thick-fat"
 		]
 	},
 	"piloswine": {
@@ -4416,6 +5517,11 @@
 			60,
 			60,
 			50
+		],
+		"abilities": [
+			"oblivious",
+			"snow-cloak",
+			"thick-fat"
 		]
 	},
 	"corsola": {
@@ -4435,6 +5541,11 @@
 			65,
 			95,
 			35
+		],
+		"abilities": [
+			"hustle",
+			"natural-cure",
+			"regenerator"
 		]
 	},
 	"remoraid": {
@@ -4453,6 +5564,11 @@
 			65,
 			35,
 			65
+		],
+		"abilities": [
+			"hustle",
+			"sniper",
+			"moody"
 		]
 	},
 	"octillery": {
@@ -4471,6 +5587,11 @@
 			105,
 			75,
 			45
+		],
+		"abilities": [
+			"suction-cups",
+			"sniper",
+			"moody"
 		]
 	},
 	"delibird": {
@@ -4490,6 +5611,11 @@
 			65,
 			45,
 			75
+		],
+		"abilities": [
+			"vital-spirit",
+			"hustle",
+			"insomnia"
 		]
 	},
 	"mantine": {
@@ -4509,6 +5635,11 @@
 			80,
 			140,
 			70
+		],
+		"abilities": [
+			"swift-swim",
+			"water-absorb",
+			"water-veil"
 		]
 	},
 	"skarmory": {
@@ -4528,6 +5659,11 @@
 			40,
 			70,
 			70
+		],
+		"abilities": [
+			"keen-eye",
+			"sturdy",
+			"weak-armor"
 		]
 	},
 	"houndour": {
@@ -4547,6 +5683,11 @@
 			80,
 			50,
 			65
+		],
+		"abilities": [
+			"early-bird",
+			"flash-fire",
+			"unnerve"
 		]
 	},
 	"houndoom": {
@@ -4566,6 +5707,11 @@
 			110,
 			80,
 			95
+		],
+		"abilities": [
+			"early-bird",
+			"flash-fire",
+			"unnerve"
 		]
 	},
 	"kingdra": {
@@ -4585,6 +5731,11 @@
 			95,
 			95,
 			85
+		],
+		"abilities": [
+			"swift-swim",
+			"sniper",
+			"damp"
 		]
 	},
 	"phanpy": {
@@ -4603,6 +5754,10 @@
 			40,
 			40,
 			40
+		],
+		"abilities": [
+			"pickup",
+			"sand-veil"
 		]
 	},
 	"donphan": {
@@ -4621,6 +5776,10 @@
 			60,
 			60,
 			50
+		],
+		"abilities": [
+			"sturdy",
+			"sand-veil"
 		]
 	},
 	"porygon2": {
@@ -4639,6 +5798,11 @@
 			105,
 			95,
 			60
+		],
+		"abilities": [
+			"trace",
+			"download",
+			"analytic"
 		]
 	},
 	"stantler": {
@@ -4657,6 +5821,11 @@
 			85,
 			65,
 			85
+		],
+		"abilities": [
+			"intimidate",
+			"frisk",
+			"sap-sipper"
 		]
 	},
 	"smeargle": {
@@ -4675,6 +5844,11 @@
 			20,
 			45,
 			75
+		],
+		"abilities": [
+			"own-tempo",
+			"technician",
+			"moody"
 		]
 	},
 	"tyrogue": {
@@ -4693,6 +5867,11 @@
 			35,
 			35,
 			35
+		],
+		"abilities": [
+			"guts",
+			"steadfast",
+			"vital-spirit"
 		]
 	},
 	"hitmontop": {
@@ -4711,6 +5890,11 @@
 			35,
 			110,
 			70
+		],
+		"abilities": [
+			"intimidate",
+			"technician",
+			"steadfast"
 		]
 	},
 	"smoochum": {
@@ -4730,6 +5914,11 @@
 			85,
 			65,
 			65
+		],
+		"abilities": [
+			"oblivious",
+			"forewarn",
+			"hydration"
 		]
 	},
 	"elekid": {
@@ -4748,6 +5937,10 @@
 			65,
 			55,
 			95
+		],
+		"abilities": [
+			"static",
+			"vital-spirit"
 		]
 	},
 	"magby": {
@@ -4766,6 +5959,10 @@
 			70,
 			55,
 			83
+		],
+		"abilities": [
+			"flame-body",
+			"vital-spirit"
 		]
 	},
 	"miltank": {
@@ -4784,6 +5981,11 @@
 			40,
 			70,
 			100
+		],
+		"abilities": [
+			"thick-fat",
+			"scrappy",
+			"sap-sipper"
 		]
 	},
 	"blissey": {
@@ -4802,6 +6004,11 @@
 			75,
 			135,
 			55
+		],
+		"abilities": [
+			"natural-cure",
+			"serene-grace",
+			"healer"
 		]
 	},
 	"raikou": {
@@ -4820,6 +6027,10 @@
 			115,
 			100,
 			115
+		],
+		"abilities": [
+			"pressure",
+			"inner-focus"
 		]
 	},
 	"entei": {
@@ -4838,6 +6049,10 @@
 			90,
 			75,
 			100
+		],
+		"abilities": [
+			"pressure",
+			"inner-focus"
 		]
 	},
 	"suicune": {
@@ -4856,6 +6071,10 @@
 			90,
 			115,
 			85
+		],
+		"abilities": [
+			"pressure",
+			"inner-focus"
 		]
 	},
 	"larvitar": {
@@ -4875,6 +6094,10 @@
 			45,
 			50,
 			41
+		],
+		"abilities": [
+			"guts",
+			"sand-veil"
 		]
 	},
 	"pupitar": {
@@ -4894,6 +6117,9 @@
 			65,
 			70,
 			51
+		],
+		"abilities": [
+			"shed-skin"
 		]
 	},
 	"tyranitar": {
@@ -4913,6 +6139,10 @@
 			95,
 			100,
 			61
+		],
+		"abilities": [
+			"sand-stream",
+			"unnerve"
 		]
 	},
 	"lugia": {
@@ -4932,6 +6162,10 @@
 			90,
 			154,
 			110
+		],
+		"abilities": [
+			"pressure",
+			"multiscale"
 		]
 	},
 	"ho-oh": {
@@ -4951,6 +6185,10 @@
 			110,
 			154,
 			90
+		],
+		"abilities": [
+			"pressure",
+			"regenerator"
 		]
 	},
 	"celebi": {
@@ -4970,6 +6208,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"natural-cure"
 		]
 	},
 	"treecko": {
@@ -4988,6 +6229,10 @@
 			65,
 			55,
 			70
+		],
+		"abilities": [
+			"overgrow",
+			"unburden"
 		]
 	},
 	"grovyle": {
@@ -5006,6 +6251,10 @@
 			85,
 			65,
 			95
+		],
+		"abilities": [
+			"overgrow",
+			"unburden"
 		]
 	},
 	"sceptile": {
@@ -5024,6 +6273,10 @@
 			105,
 			85,
 			120
+		],
+		"abilities": [
+			"overgrow",
+			"unburden"
 		]
 	},
 	"torchic": {
@@ -5042,6 +6295,10 @@
 			70,
 			50,
 			45
+		],
+		"abilities": [
+			"blaze",
+			"speed-boost"
 		]
 	},
 	"combusken": {
@@ -5061,6 +6318,10 @@
 			85,
 			60,
 			55
+		],
+		"abilities": [
+			"blaze",
+			"speed-boost"
 		]
 	},
 	"blaziken": {
@@ -5080,6 +6341,10 @@
 			110,
 			70,
 			80
+		],
+		"abilities": [
+			"blaze",
+			"speed-boost"
 		]
 	},
 	"mudkip": {
@@ -5098,6 +6363,10 @@
 			50,
 			50,
 			40
+		],
+		"abilities": [
+			"torrent",
+			"damp"
 		]
 	},
 	"marshtomp": {
@@ -5117,6 +6386,10 @@
 			60,
 			70,
 			50
+		],
+		"abilities": [
+			"torrent",
+			"damp"
 		]
 	},
 	"swampert": {
@@ -5136,6 +6409,10 @@
 			85,
 			90,
 			60
+		],
+		"abilities": [
+			"torrent",
+			"damp"
 		]
 	},
 	"poochyena": {
@@ -5154,6 +6431,11 @@
 			30,
 			30,
 			35
+		],
+		"abilities": [
+			"run-away",
+			"quick-feet",
+			"rattled"
 		]
 	},
 	"mightyena": {
@@ -5172,6 +6454,11 @@
 			60,
 			60,
 			70
+		],
+		"abilities": [
+			"intimidate",
+			"quick-feet",
+			"moxie"
 		]
 	},
 	"zigzagoon": {
@@ -5190,6 +6477,11 @@
 			30,
 			41,
 			60
+		],
+		"abilities": [
+			"pickup",
+			"gluttony",
+			"quick-feet"
 		]
 	},
 	"linoone": {
@@ -5208,6 +6500,11 @@
 			50,
 			61,
 			100
+		],
+		"abilities": [
+			"pickup",
+			"gluttony",
+			"quick-feet"
 		]
 	},
 	"wurmple": {
@@ -5226,6 +6523,10 @@
 			20,
 			30,
 			20
+		],
+		"abilities": [
+			"shield-dust",
+			"run-away"
 		]
 	},
 	"silcoon": {
@@ -5244,6 +6545,9 @@
 			25,
 			25,
 			15
+		],
+		"abilities": [
+			"shed-skin"
 		]
 	},
 	"beautifly": {
@@ -5263,6 +6567,10 @@
 			100,
 			50,
 			65
+		],
+		"abilities": [
+			"swarm",
+			"rivalry"
 		]
 	},
 	"cascoon": {
@@ -5281,6 +6589,9 @@
 			25,
 			25,
 			15
+		],
+		"abilities": [
+			"shed-skin"
 		]
 	},
 	"dustox": {
@@ -5300,6 +6611,10 @@
 			50,
 			90,
 			65
+		],
+		"abilities": [
+			"shield-dust",
+			"compound-eyes"
 		]
 	},
 	"lotad": {
@@ -5319,6 +6634,11 @@
 			40,
 			50,
 			30
+		],
+		"abilities": [
+			"swift-swim",
+			"rain-dish",
+			"own-tempo"
 		]
 	},
 	"lombre": {
@@ -5338,6 +6658,11 @@
 			60,
 			70,
 			50
+		],
+		"abilities": [
+			"swift-swim",
+			"rain-dish",
+			"own-tempo"
 		]
 	},
 	"ludicolo": {
@@ -5357,6 +6682,11 @@
 			90,
 			100,
 			70
+		],
+		"abilities": [
+			"swift-swim",
+			"rain-dish",
+			"own-tempo"
 		]
 	},
 	"seedot": {
@@ -5375,6 +6705,11 @@
 			30,
 			30,
 			30
+		],
+		"abilities": [
+			"chlorophyll",
+			"early-bird",
+			"pickpocket"
 		]
 	},
 	"nuzleaf": {
@@ -5394,6 +6729,11 @@
 			60,
 			40,
 			60
+		],
+		"abilities": [
+			"chlorophyll",
+			"early-bird",
+			"pickpocket"
 		]
 	},
 	"shiftry": {
@@ -5413,6 +6753,11 @@
 			90,
 			60,
 			80
+		],
+		"abilities": [
+			"chlorophyll",
+			"wind-rider",
+			"pickpocket"
 		]
 	},
 	"taillow": {
@@ -5432,6 +6777,10 @@
 			30,
 			30,
 			85
+		],
+		"abilities": [
+			"guts",
+			"scrappy"
 		]
 	},
 	"swellow": {
@@ -5451,6 +6800,10 @@
 			75,
 			50,
 			125
+		],
+		"abilities": [
+			"guts",
+			"scrappy"
 		]
 	},
 	"wingull": {
@@ -5470,6 +6823,11 @@
 			55,
 			30,
 			85
+		],
+		"abilities": [
+			"keen-eye",
+			"hydration",
+			"rain-dish"
 		]
 	},
 	"pelipper": {
@@ -5489,6 +6847,11 @@
 			95,
 			70,
 			65
+		],
+		"abilities": [
+			"keen-eye",
+			"drizzle",
+			"rain-dish"
 		]
 	},
 	"ralts": {
@@ -5508,6 +6871,11 @@
 			45,
 			35,
 			40
+		],
+		"abilities": [
+			"synchronize",
+			"trace",
+			"telepathy"
 		]
 	},
 	"kirlia": {
@@ -5527,6 +6895,11 @@
 			65,
 			55,
 			50
+		],
+		"abilities": [
+			"synchronize",
+			"trace",
+			"telepathy"
 		]
 	},
 	"gardevoir": {
@@ -5546,6 +6919,11 @@
 			125,
 			115,
 			80
+		],
+		"abilities": [
+			"synchronize",
+			"trace",
+			"telepathy"
 		]
 	},
 	"surskit": {
@@ -5565,6 +6943,10 @@
 			50,
 			52,
 			65
+		],
+		"abilities": [
+			"swift-swim",
+			"rain-dish"
 		]
 	},
 	"masquerain": {
@@ -5584,6 +6966,10 @@
 			100,
 			82,
 			80
+		],
+		"abilities": [
+			"intimidate",
+			"unnerve"
 		]
 	},
 	"shroomish": {
@@ -5602,6 +6988,11 @@
 			40,
 			60,
 			35
+		],
+		"abilities": [
+			"effect-spore",
+			"poison-heal",
+			"quick-feet"
 		]
 	},
 	"breloom": {
@@ -5621,6 +7012,11 @@
 			60,
 			60,
 			70
+		],
+		"abilities": [
+			"effect-spore",
+			"poison-heal",
+			"technician"
 		]
 	},
 	"slakoth": {
@@ -5639,6 +7035,9 @@
 			35,
 			35,
 			30
+		],
+		"abilities": [
+			"truant"
 		]
 	},
 	"vigoroth": {
@@ -5657,6 +7056,9 @@
 			55,
 			55,
 			90
+		],
+		"abilities": [
+			"vital-spirit"
 		]
 	},
 	"slaking": {
@@ -5675,6 +7077,9 @@
 			95,
 			65,
 			100
+		],
+		"abilities": [
+			"truant"
 		]
 	},
 	"nincada": {
@@ -5694,6 +7099,10 @@
 			30,
 			30,
 			40
+		],
+		"abilities": [
+			"compound-eyes",
+			"run-away"
 		]
 	},
 	"ninjask": {
@@ -5713,6 +7122,10 @@
 			50,
 			50,
 			160
+		],
+		"abilities": [
+			"speed-boost",
+			"infiltrator"
 		]
 	},
 	"shedinja": {
@@ -5732,6 +7145,9 @@
 			30,
 			30,
 			40
+		],
+		"abilities": [
+			"wonder-guard"
 		]
 	},
 	"whismur": {
@@ -5750,6 +7166,10 @@
 			51,
 			23,
 			28
+		],
+		"abilities": [
+			"soundproof",
+			"rattled"
 		]
 	},
 	"loudred": {
@@ -5768,6 +7188,10 @@
 			71,
 			43,
 			48
+		],
+		"abilities": [
+			"soundproof",
+			"scrappy"
 		]
 	},
 	"exploud": {
@@ -5786,6 +7210,10 @@
 			91,
 			73,
 			68
+		],
+		"abilities": [
+			"soundproof",
+			"scrappy"
 		]
 	},
 	"makuhita": {
@@ -5804,6 +7232,11 @@
 			20,
 			30,
 			25
+		],
+		"abilities": [
+			"thick-fat",
+			"guts",
+			"sheer-force"
 		]
 	},
 	"hariyama": {
@@ -5822,6 +7255,11 @@
 			40,
 			60,
 			50
+		],
+		"abilities": [
+			"thick-fat",
+			"guts",
+			"sheer-force"
 		]
 	},
 	"azurill": {
@@ -5841,6 +7279,11 @@
 			20,
 			40,
 			20
+		],
+		"abilities": [
+			"thick-fat",
+			"huge-power",
+			"sap-sipper"
 		]
 	},
 	"nosepass": {
@@ -5859,6 +7302,11 @@
 			45,
 			90,
 			30
+		],
+		"abilities": [
+			"sturdy",
+			"magnet-pull",
+			"sand-force"
 		]
 	},
 	"skitty": {
@@ -5877,6 +7325,11 @@
 			35,
 			35,
 			50
+		],
+		"abilities": [
+			"cute-charm",
+			"normalize",
+			"wonder-skin"
 		]
 	},
 	"delcatty": {
@@ -5895,6 +7348,11 @@
 			55,
 			55,
 			90
+		],
+		"abilities": [
+			"cute-charm",
+			"normalize",
+			"wonder-skin"
 		]
 	},
 	"sableye": {
@@ -5914,6 +7372,11 @@
 			65,
 			65,
 			50
+		],
+		"abilities": [
+			"keen-eye",
+			"stall",
+			"prankster"
 		]
 	},
 	"mawile": {
@@ -5933,6 +7396,11 @@
 			55,
 			55,
 			50
+		],
+		"abilities": [
+			"hyper-cutter",
+			"intimidate",
+			"sheer-force"
 		]
 	},
 	"aron": {
@@ -5952,6 +7420,11 @@
 			40,
 			40,
 			30
+		],
+		"abilities": [
+			"sturdy",
+			"rock-head",
+			"heavy-metal"
 		]
 	},
 	"lairon": {
@@ -5971,6 +7444,11 @@
 			50,
 			50,
 			40
+		],
+		"abilities": [
+			"sturdy",
+			"rock-head",
+			"heavy-metal"
 		]
 	},
 	"aggron": {
@@ -5990,6 +7468,11 @@
 			60,
 			60,
 			50
+		],
+		"abilities": [
+			"sturdy",
+			"rock-head",
+			"heavy-metal"
 		]
 	},
 	"meditite": {
@@ -6009,6 +7492,10 @@
 			40,
 			55,
 			60
+		],
+		"abilities": [
+			"pure-power",
+			"telepathy"
 		]
 	},
 	"medicham": {
@@ -6028,6 +7515,10 @@
 			60,
 			75,
 			80
+		],
+		"abilities": [
+			"pure-power",
+			"telepathy"
 		]
 	},
 	"electrike": {
@@ -6046,6 +7537,11 @@
 			65,
 			40,
 			65
+		],
+		"abilities": [
+			"static",
+			"lightning-rod",
+			"minus"
 		]
 	},
 	"manectric": {
@@ -6064,6 +7560,11 @@
 			105,
 			60,
 			105
+		],
+		"abilities": [
+			"static",
+			"lightning-rod",
+			"minus"
 		]
 	},
 	"plusle": {
@@ -6082,6 +7583,10 @@
 			85,
 			75,
 			95
+		],
+		"abilities": [
+			"plus",
+			"lightning-rod"
 		]
 	},
 	"minun": {
@@ -6100,6 +7605,10 @@
 			75,
 			85,
 			95
+		],
+		"abilities": [
+			"minus",
+			"volt-absorb"
 		]
 	},
 	"volbeat": {
@@ -6118,6 +7627,11 @@
 			47,
 			85,
 			85
+		],
+		"abilities": [
+			"illuminate",
+			"swarm",
+			"prankster"
 		]
 	},
 	"illumise": {
@@ -6136,6 +7650,11 @@
 			73,
 			85,
 			85
+		],
+		"abilities": [
+			"oblivious",
+			"tinted-lens",
+			"prankster"
 		]
 	},
 	"roselia": {
@@ -6155,6 +7674,11 @@
 			100,
 			80,
 			65
+		],
+		"abilities": [
+			"natural-cure",
+			"poison-point",
+			"leaf-guard"
 		]
 	},
 	"gulpin": {
@@ -6173,6 +7697,11 @@
 			43,
 			53,
 			40
+		],
+		"abilities": [
+			"liquid-ooze",
+			"sticky-hold",
+			"gluttony"
 		]
 	},
 	"swalot": {
@@ -6191,6 +7720,11 @@
 			73,
 			83,
 			55
+		],
+		"abilities": [
+			"liquid-ooze",
+			"sticky-hold",
+			"gluttony"
 		]
 	},
 	"carvanha": {
@@ -6210,6 +7744,10 @@
 			65,
 			20,
 			65
+		],
+		"abilities": [
+			"rough-skin",
+			"speed-boost"
 		]
 	},
 	"sharpedo": {
@@ -6229,6 +7767,10 @@
 			95,
 			40,
 			95
+		],
+		"abilities": [
+			"rough-skin",
+			"speed-boost"
 		]
 	},
 	"wailmer": {
@@ -6247,6 +7789,11 @@
 			70,
 			35,
 			60
+		],
+		"abilities": [
+			"water-veil",
+			"oblivious",
+			"pressure"
 		]
 	},
 	"wailord": {
@@ -6265,6 +7812,11 @@
 			90,
 			45,
 			60
+		],
+		"abilities": [
+			"water-veil",
+			"oblivious",
+			"pressure"
 		]
 	},
 	"numel": {
@@ -6284,6 +7836,11 @@
 			65,
 			45,
 			35
+		],
+		"abilities": [
+			"oblivious",
+			"simple",
+			"own-tempo"
 		]
 	},
 	"camerupt": {
@@ -6303,6 +7860,11 @@
 			105,
 			75,
 			40
+		],
+		"abilities": [
+			"magma-armor",
+			"solid-rock",
+			"anger-point"
 		]
 	},
 	"torkoal": {
@@ -6321,6 +7883,11 @@
 			85,
 			70,
 			20
+		],
+		"abilities": [
+			"white-smoke",
+			"drought",
+			"shell-armor"
 		]
 	},
 	"spoink": {
@@ -6339,6 +7906,11 @@
 			70,
 			80,
 			60
+		],
+		"abilities": [
+			"thick-fat",
+			"own-tempo",
+			"gluttony"
 		]
 	},
 	"grumpig": {
@@ -6357,6 +7929,11 @@
 			90,
 			110,
 			80
+		],
+		"abilities": [
+			"thick-fat",
+			"own-tempo",
+			"gluttony"
 		]
 	},
 	"spinda": {
@@ -6375,6 +7952,11 @@
 			60,
 			60,
 			60
+		],
+		"abilities": [
+			"own-tempo",
+			"tangled-feet",
+			"contrary"
 		]
 	},
 	"trapinch": {
@@ -6393,6 +7975,11 @@
 			45,
 			45,
 			10
+		],
+		"abilities": [
+			"hyper-cutter",
+			"arena-trap",
+			"sheer-force"
 		]
 	},
 	"vibrava": {
@@ -6412,6 +7999,9 @@
 			50,
 			50,
 			70
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"flygon": {
@@ -6431,6 +8021,9 @@
 			80,
 			80,
 			100
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"cacnea": {
@@ -6449,6 +8042,10 @@
 			85,
 			40,
 			35
+		],
+		"abilities": [
+			"sand-veil",
+			"water-absorb"
 		]
 	},
 	"cacturne": {
@@ -6468,6 +8065,10 @@
 			115,
 			60,
 			55
+		],
+		"abilities": [
+			"sand-veil",
+			"water-absorb"
 		]
 	},
 	"swablu": {
@@ -6487,6 +8088,10 @@
 			40,
 			75,
 			50
+		],
+		"abilities": [
+			"natural-cure",
+			"cloud-nine"
 		]
 	},
 	"altaria": {
@@ -6506,6 +8111,10 @@
 			70,
 			105,
 			80
+		],
+		"abilities": [
+			"natural-cure",
+			"cloud-nine"
 		]
 	},
 	"zangoose": {
@@ -6524,6 +8133,10 @@
 			60,
 			60,
 			90
+		],
+		"abilities": [
+			"immunity",
+			"toxic-boost"
 		]
 	},
 	"seviper": {
@@ -6542,6 +8155,10 @@
 			100,
 			60,
 			65
+		],
+		"abilities": [
+			"shed-skin",
+			"infiltrator"
 		]
 	},
 	"lunatone": {
@@ -6561,6 +8178,9 @@
 			95,
 			85,
 			70
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"solrock": {
@@ -6580,6 +8200,9 @@
 			55,
 			65,
 			70
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"barboach": {
@@ -6599,6 +8222,11 @@
 			46,
 			41,
 			60
+		],
+		"abilities": [
+			"oblivious",
+			"anticipation",
+			"hydration"
 		]
 	},
 	"whiscash": {
@@ -6618,6 +8246,11 @@
 			76,
 			71,
 			60
+		],
+		"abilities": [
+			"oblivious",
+			"anticipation",
+			"hydration"
 		]
 	},
 	"corphish": {
@@ -6636,6 +8269,11 @@
 			50,
 			35,
 			35
+		],
+		"abilities": [
+			"hyper-cutter",
+			"shell-armor",
+			"adaptability"
 		]
 	},
 	"crawdaunt": {
@@ -6655,6 +8293,11 @@
 			90,
 			55,
 			55
+		],
+		"abilities": [
+			"hyper-cutter",
+			"shell-armor",
+			"adaptability"
 		]
 	},
 	"baltoy": {
@@ -6674,6 +8317,9 @@
 			40,
 			70,
 			55
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"claydol": {
@@ -6693,6 +8339,9 @@
 			70,
 			120,
 			75
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"lileep": {
@@ -6712,6 +8361,10 @@
 			61,
 			87,
 			23
+		],
+		"abilities": [
+			"suction-cups",
+			"storm-drain"
 		]
 	},
 	"cradily": {
@@ -6731,6 +8384,10 @@
 			81,
 			107,
 			43
+		],
+		"abilities": [
+			"suction-cups",
+			"storm-drain"
 		]
 	},
 	"anorith": {
@@ -6750,6 +8407,10 @@
 			40,
 			50,
 			75
+		],
+		"abilities": [
+			"battle-armor",
+			"swift-swim"
 		]
 	},
 	"armaldo": {
@@ -6769,6 +8430,10 @@
 			70,
 			80,
 			45
+		],
+		"abilities": [
+			"battle-armor",
+			"swift-swim"
 		]
 	},
 	"feebas": {
@@ -6787,6 +8452,11 @@
 			10,
 			55,
 			80
+		],
+		"abilities": [
+			"swift-swim",
+			"oblivious",
+			"adaptability"
 		]
 	},
 	"milotic": {
@@ -6805,6 +8475,11 @@
 			100,
 			125,
 			81
+		],
+		"abilities": [
+			"marvel-scale",
+			"competitive",
+			"cute-charm"
 		]
 	},
 	"castform": {
@@ -6823,6 +8498,9 @@
 			70,
 			70,
 			70
+		],
+		"abilities": [
+			"forecast"
 		]
 	},
 	"kecleon": {
@@ -6841,6 +8519,10 @@
 			60,
 			120,
 			40
+		],
+		"abilities": [
+			"color-change",
+			"protean"
 		]
 	},
 	"shuppet": {
@@ -6859,6 +8541,11 @@
 			63,
 			33,
 			45
+		],
+		"abilities": [
+			"insomnia",
+			"frisk",
+			"cursed-body"
 		]
 	},
 	"banette": {
@@ -6877,6 +8564,11 @@
 			83,
 			63,
 			65
+		],
+		"abilities": [
+			"insomnia",
+			"frisk",
+			"cursed-body"
 		]
 	},
 	"duskull": {
@@ -6895,6 +8587,10 @@
 			30,
 			90,
 			25
+		],
+		"abilities": [
+			"levitate",
+			"frisk"
 		]
 	},
 	"dusclops": {
@@ -6913,6 +8609,10 @@
 			60,
 			130,
 			25
+		],
+		"abilities": [
+			"pressure",
+			"frisk"
 		]
 	},
 	"tropius": {
@@ -6932,6 +8632,11 @@
 			72,
 			87,
 			51
+		],
+		"abilities": [
+			"chlorophyll",
+			"solar-power",
+			"harvest"
 		]
 	},
 	"chimecho": {
@@ -6950,6 +8655,9 @@
 			95,
 			90,
 			65
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"absol": {
@@ -6968,6 +8676,11 @@
 			75,
 			60,
 			75
+		],
+		"abilities": [
+			"pressure",
+			"super-luck",
+			"justified"
 		]
 	},
 	"wynaut": {
@@ -6986,6 +8699,10 @@
 			23,
 			48,
 			23
+		],
+		"abilities": [
+			"shadow-tag",
+			"telepathy"
 		]
 	},
 	"snorunt": {
@@ -7004,6 +8721,11 @@
 			50,
 			50,
 			50
+		],
+		"abilities": [
+			"inner-focus",
+			"ice-body",
+			"moody"
 		]
 	},
 	"glalie": {
@@ -7022,6 +8744,11 @@
 			80,
 			80,
 			80
+		],
+		"abilities": [
+			"inner-focus",
+			"ice-body",
+			"moody"
 		]
 	},
 	"spheal": {
@@ -7041,6 +8768,11 @@
 			55,
 			50,
 			25
+		],
+		"abilities": [
+			"thick-fat",
+			"ice-body",
+			"oblivious"
 		]
 	},
 	"sealeo": {
@@ -7060,6 +8792,11 @@
 			75,
 			70,
 			45
+		],
+		"abilities": [
+			"thick-fat",
+			"ice-body",
+			"oblivious"
 		]
 	},
 	"walrein": {
@@ -7079,6 +8816,11 @@
 			95,
 			90,
 			65
+		],
+		"abilities": [
+			"thick-fat",
+			"ice-body",
+			"oblivious"
 		]
 	},
 	"clamperl": {
@@ -7097,6 +8839,10 @@
 			74,
 			55,
 			32
+		],
+		"abilities": [
+			"shell-armor",
+			"rattled"
 		]
 	},
 	"huntail": {
@@ -7115,6 +8861,10 @@
 			94,
 			75,
 			52
+		],
+		"abilities": [
+			"swift-swim",
+			"water-veil"
 		]
 	},
 	"gorebyss": {
@@ -7133,6 +8883,10 @@
 			114,
 			75,
 			52
+		],
+		"abilities": [
+			"swift-swim",
+			"hydration"
 		]
 	},
 	"relicanth": {
@@ -7152,6 +8906,11 @@
 			45,
 			65,
 			55
+		],
+		"abilities": [
+			"swift-swim",
+			"rock-head",
+			"sturdy"
 		]
 	},
 	"luvdisc": {
@@ -7170,6 +8929,10 @@
 			40,
 			65,
 			97
+		],
+		"abilities": [
+			"swift-swim",
+			"hydration"
 		]
 	},
 	"bagon": {
@@ -7188,6 +8951,10 @@
 			40,
 			30,
 			50
+		],
+		"abilities": [
+			"rock-head",
+			"sheer-force"
 		]
 	},
 	"shelgon": {
@@ -7206,6 +8973,10 @@
 			60,
 			50,
 			50
+		],
+		"abilities": [
+			"rock-head",
+			"overcoat"
 		]
 	},
 	"salamence": {
@@ -7225,6 +8996,10 @@
 			110,
 			80,
 			100
+		],
+		"abilities": [
+			"intimidate",
+			"moxie"
 		]
 	},
 	"beldum": {
@@ -7244,6 +9019,10 @@
 			35,
 			60,
 			30
+		],
+		"abilities": [
+			"clear-body",
+			"light-metal"
 		]
 	},
 	"metang": {
@@ -7263,6 +9042,10 @@
 			55,
 			80,
 			50
+		],
+		"abilities": [
+			"clear-body",
+			"light-metal"
 		]
 	},
 	"metagross": {
@@ -7282,6 +9065,10 @@
 			95,
 			90,
 			70
+		],
+		"abilities": [
+			"clear-body",
+			"light-metal"
 		]
 	},
 	"regirock": {
@@ -7300,6 +9087,10 @@
 			50,
 			100,
 			50
+		],
+		"abilities": [
+			"clear-body",
+			"sturdy"
 		]
 	},
 	"regice": {
@@ -7318,6 +9109,10 @@
 			100,
 			200,
 			50
+		],
+		"abilities": [
+			"clear-body",
+			"ice-body"
 		]
 	},
 	"registeel": {
@@ -7336,6 +9131,10 @@
 			75,
 			150,
 			50
+		],
+		"abilities": [
+			"clear-body",
+			"light-metal"
 		]
 	},
 	"latias": {
@@ -7355,6 +9154,9 @@
 			110,
 			130,
 			110
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"latios": {
@@ -7374,6 +9176,9 @@
 			130,
 			110,
 			110
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"kyogre": {
@@ -7392,6 +9197,9 @@
 			150,
 			140,
 			90
+		],
+		"abilities": [
+			"drizzle"
 		]
 	},
 	"groudon": {
@@ -7410,6 +9218,9 @@
 			100,
 			90,
 			90
+		],
+		"abilities": [
+			"drought"
 		]
 	},
 	"rayquaza": {
@@ -7429,6 +9240,9 @@
 			150,
 			90,
 			95
+		],
+		"abilities": [
+			"air-lock"
 		]
 	},
 	"jirachi": {
@@ -7448,6 +9262,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"serene-grace"
 		]
 	},
 	"deoxys": {
@@ -7466,6 +9283,9 @@
 			150,
 			50,
 			150
+		],
+		"abilities": [
+			"pressure"
 		]
 	},
 	"deoxys-attack": {
@@ -7484,6 +9304,9 @@
 			180,
 			20,
 			150
+		],
+		"abilities": [
+			"pressure"
 		]
 	},
 	"deoxys-defense": {
@@ -7502,6 +9325,9 @@
 			70,
 			160,
 			90
+		],
+		"abilities": [
+			"pressure"
 		]
 	},
 	"deoxys-speed": {
@@ -7520,6 +9346,9 @@
 			95,
 			90,
 			180
+		],
+		"abilities": [
+			"pressure"
 		]
 	},
 	"turtwig": {
@@ -7538,6 +9367,10 @@
 			45,
 			55,
 			31
+		],
+		"abilities": [
+			"overgrow",
+			"shell-armor"
 		]
 	},
 	"grotle": {
@@ -7556,6 +9389,10 @@
 			55,
 			65,
 			36
+		],
+		"abilities": [
+			"overgrow",
+			"shell-armor"
 		]
 	},
 	"torterra": {
@@ -7575,6 +9412,10 @@
 			75,
 			85,
 			56
+		],
+		"abilities": [
+			"overgrow",
+			"shell-armor"
 		]
 	},
 	"chimchar": {
@@ -7593,6 +9434,10 @@
 			58,
 			44,
 			61
+		],
+		"abilities": [
+			"blaze",
+			"iron-fist"
 		]
 	},
 	"monferno": {
@@ -7612,6 +9457,10 @@
 			78,
 			52,
 			81
+		],
+		"abilities": [
+			"blaze",
+			"iron-fist"
 		]
 	},
 	"infernape": {
@@ -7631,6 +9480,10 @@
 			104,
 			71,
 			108
+		],
+		"abilities": [
+			"blaze",
+			"iron-fist"
 		]
 	},
 	"piplup": {
@@ -7649,6 +9502,10 @@
 			61,
 			56,
 			40
+		],
+		"abilities": [
+			"torrent",
+			"competitive"
 		]
 	},
 	"prinplup": {
@@ -7667,6 +9524,10 @@
 			81,
 			76,
 			50
+		],
+		"abilities": [
+			"torrent",
+			"competitive"
 		]
 	},
 	"empoleon": {
@@ -7686,6 +9547,10 @@
 			111,
 			101,
 			60
+		],
+		"abilities": [
+			"torrent",
+			"competitive"
 		]
 	},
 	"starly": {
@@ -7705,6 +9570,10 @@
 			30,
 			30,
 			60
+		],
+		"abilities": [
+			"keen-eye",
+			"reckless"
 		]
 	},
 	"staravia": {
@@ -7724,6 +9593,10 @@
 			40,
 			40,
 			80
+		],
+		"abilities": [
+			"intimidate",
+			"reckless"
 		]
 	},
 	"staraptor": {
@@ -7743,6 +9616,10 @@
 			50,
 			60,
 			100
+		],
+		"abilities": [
+			"intimidate",
+			"reckless"
 		]
 	},
 	"bidoof": {
@@ -7761,6 +9638,11 @@
 			35,
 			40,
 			31
+		],
+		"abilities": [
+			"simple",
+			"unaware",
+			"moody"
 		]
 	},
 	"bibarel": {
@@ -7780,6 +9662,11 @@
 			55,
 			60,
 			71
+		],
+		"abilities": [
+			"simple",
+			"unaware",
+			"moody"
 		]
 	},
 	"kricketot": {
@@ -7798,6 +9685,10 @@
 			25,
 			41,
 			25
+		],
+		"abilities": [
+			"shed-skin",
+			"run-away"
 		]
 	},
 	"kricketune": {
@@ -7816,6 +9707,10 @@
 			55,
 			51,
 			65
+		],
+		"abilities": [
+			"swarm",
+			"technician"
 		]
 	},
 	"shinx": {
@@ -7834,6 +9729,11 @@
 			40,
 			34,
 			45
+		],
+		"abilities": [
+			"rivalry",
+			"intimidate",
+			"guts"
 		]
 	},
 	"luxio": {
@@ -7852,6 +9752,11 @@
 			60,
 			49,
 			60
+		],
+		"abilities": [
+			"rivalry",
+			"intimidate",
+			"guts"
 		]
 	},
 	"luxray": {
@@ -7870,6 +9775,11 @@
 			95,
 			79,
 			70
+		],
+		"abilities": [
+			"rivalry",
+			"intimidate",
+			"guts"
 		]
 	},
 	"budew": {
@@ -7889,6 +9799,11 @@
 			50,
 			70,
 			55
+		],
+		"abilities": [
+			"natural-cure",
+			"poison-point",
+			"leaf-guard"
 		]
 	},
 	"roserade": {
@@ -7908,6 +9823,11 @@
 			125,
 			105,
 			90
+		],
+		"abilities": [
+			"natural-cure",
+			"poison-point",
+			"technician"
 		]
 	},
 	"cranidos": {
@@ -7926,6 +9846,10 @@
 			30,
 			30,
 			58
+		],
+		"abilities": [
+			"mold-breaker",
+			"sheer-force"
 		]
 	},
 	"rampardos": {
@@ -7944,6 +9868,10 @@
 			65,
 			50,
 			58
+		],
+		"abilities": [
+			"mold-breaker",
+			"sheer-force"
 		]
 	},
 	"shieldon": {
@@ -7963,6 +9891,10 @@
 			42,
 			88,
 			30
+		],
+		"abilities": [
+			"sturdy",
+			"soundproof"
 		]
 	},
 	"bastiodon": {
@@ -7982,6 +9914,10 @@
 			47,
 			138,
 			30
+		],
+		"abilities": [
+			"sturdy",
+			"soundproof"
 		]
 	},
 	"burmy": {
@@ -8000,6 +9936,10 @@
 			29,
 			45,
 			36
+		],
+		"abilities": [
+			"shed-skin",
+			"overcoat"
 		]
 	},
 	"wormadam": {
@@ -8019,6 +9959,10 @@
 			79,
 			105,
 			36
+		],
+		"abilities": [
+			"anticipation",
+			"overcoat"
 		]
 	},
 	"wormadam-sandy": {
@@ -8038,6 +9982,10 @@
 			59,
 			85,
 			36
+		],
+		"abilities": [
+			"anticipation",
+			"overcoat"
 		]
 	},
 	"wormadam-trash": {
@@ -8057,6 +10005,10 @@
 			69,
 			95,
 			36
+		],
+		"abilities": [
+			"anticipation",
+			"overcoat"
 		]
 	},
 	"mothim": {
@@ -8076,6 +10028,10 @@
 			94,
 			50,
 			66
+		],
+		"abilities": [
+			"swarm",
+			"tinted-lens"
 		]
 	},
 	"combee": {
@@ -8095,6 +10051,10 @@
 			30,
 			42,
 			70
+		],
+		"abilities": [
+			"honey-gather",
+			"hustle"
 		]
 	},
 	"vespiquen": {
@@ -8114,6 +10074,10 @@
 			80,
 			102,
 			40
+		],
+		"abilities": [
+			"pressure",
+			"unnerve"
 		]
 	},
 	"pachirisu": {
@@ -8132,6 +10096,11 @@
 			45,
 			90,
 			95
+		],
+		"abilities": [
+			"run-away",
+			"pickup",
+			"volt-absorb"
 		]
 	},
 	"buizel": {
@@ -8150,6 +10119,10 @@
 			60,
 			30,
 			85
+		],
+		"abilities": [
+			"swift-swim",
+			"water-veil"
 		]
 	},
 	"floatzel": {
@@ -8168,6 +10141,10 @@
 			85,
 			50,
 			115
+		],
+		"abilities": [
+			"swift-swim",
+			"water-veil"
 		]
 	},
 	"cherubi": {
@@ -8186,6 +10163,9 @@
 			62,
 			53,
 			35
+		],
+		"abilities": [
+			"chlorophyll"
 		]
 	},
 	"cherrim": {
@@ -8204,6 +10184,9 @@
 			87,
 			78,
 			85
+		],
+		"abilities": [
+			"flower-gift"
 		]
 	},
 	"shellos": {
@@ -8222,6 +10205,11 @@
 			57,
 			62,
 			34
+		],
+		"abilities": [
+			"sticky-hold",
+			"storm-drain",
+			"sand-force"
 		]
 	},
 	"gastrodon": {
@@ -8241,6 +10229,11 @@
 			92,
 			82,
 			39
+		],
+		"abilities": [
+			"sticky-hold",
+			"storm-drain",
+			"sand-force"
 		]
 	},
 	"ambipom": {
@@ -8259,6 +10252,11 @@
 			60,
 			66,
 			115
+		],
+		"abilities": [
+			"technician",
+			"pickup",
+			"skill-link"
 		]
 	},
 	"drifloon": {
@@ -8278,6 +10276,11 @@
 			60,
 			44,
 			70
+		],
+		"abilities": [
+			"aftermath",
+			"unburden",
+			"flare-boost"
 		]
 	},
 	"drifblim": {
@@ -8297,6 +10300,11 @@
 			90,
 			54,
 			80
+		],
+		"abilities": [
+			"aftermath",
+			"unburden",
+			"flare-boost"
 		]
 	},
 	"buneary": {
@@ -8315,6 +10323,11 @@
 			44,
 			56,
 			85
+		],
+		"abilities": [
+			"run-away",
+			"klutz",
+			"limber"
 		]
 	},
 	"lopunny": {
@@ -8333,6 +10346,11 @@
 			54,
 			96,
 			105
+		],
+		"abilities": [
+			"cute-charm",
+			"klutz",
+			"limber"
 		]
 	},
 	"mismagius": {
@@ -8351,6 +10369,9 @@
 			105,
 			105,
 			105
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"honchkrow": {
@@ -8370,6 +10391,11 @@
 			105,
 			52,
 			71
+		],
+		"abilities": [
+			"insomnia",
+			"super-luck",
+			"moxie"
 		]
 	},
 	"glameow": {
@@ -8388,6 +10414,11 @@
 			42,
 			37,
 			85
+		],
+		"abilities": [
+			"limber",
+			"own-tempo",
+			"keen-eye"
 		]
 	},
 	"purugly": {
@@ -8406,6 +10437,11 @@
 			64,
 			59,
 			112
+		],
+		"abilities": [
+			"thick-fat",
+			"own-tempo",
+			"defiant"
 		]
 	},
 	"chingling": {
@@ -8424,6 +10460,9 @@
 			65,
 			50,
 			45
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"stunky": {
@@ -8443,6 +10482,11 @@
 			41,
 			41,
 			74
+		],
+		"abilities": [
+			"stench",
+			"aftermath",
+			"keen-eye"
 		]
 	},
 	"skuntank": {
@@ -8462,6 +10506,11 @@
 			71,
 			61,
 			84
+		],
+		"abilities": [
+			"stench",
+			"aftermath",
+			"keen-eye"
 		]
 	},
 	"bronzor": {
@@ -8481,6 +10530,11 @@
 			24,
 			86,
 			23
+		],
+		"abilities": [
+			"levitate",
+			"heatproof",
+			"heavy-metal"
 		]
 	},
 	"bronzong": {
@@ -8500,6 +10554,11 @@
 			79,
 			116,
 			33
+		],
+		"abilities": [
+			"levitate",
+			"heatproof",
+			"heavy-metal"
 		]
 	},
 	"bonsly": {
@@ -8518,6 +10577,11 @@
 			10,
 			45,
 			10
+		],
+		"abilities": [
+			"sturdy",
+			"rock-head",
+			"rattled"
 		]
 	},
 	"mime jr.": {
@@ -8537,6 +10601,11 @@
 			70,
 			90,
 			60
+		],
+		"abilities": [
+			"soundproof",
+			"filter",
+			"technician"
 		]
 	},
 	"happiny": {
@@ -8555,6 +10624,11 @@
 			15,
 			65,
 			30
+		],
+		"abilities": [
+			"natural-cure",
+			"serene-grace",
+			"friend-guard"
 		]
 	},
 	"chatot": {
@@ -8574,6 +10648,11 @@
 			92,
 			42,
 			91
+		],
+		"abilities": [
+			"keen-eye",
+			"tangled-feet",
+			"big-pecks"
 		]
 	},
 	"spiritomb": {
@@ -8593,6 +10672,10 @@
 			92,
 			108,
 			35
+		],
+		"abilities": [
+			"pressure",
+			"infiltrator"
 		]
 	},
 	"gible": {
@@ -8612,6 +10695,10 @@
 			40,
 			45,
 			42
+		],
+		"abilities": [
+			"sand-veil",
+			"rough-skin"
 		]
 	},
 	"gabite": {
@@ -8631,6 +10718,10 @@
 			50,
 			55,
 			82
+		],
+		"abilities": [
+			"sand-veil",
+			"rough-skin"
 		]
 	},
 	"garchomp": {
@@ -8650,6 +10741,10 @@
 			80,
 			85,
 			102
+		],
+		"abilities": [
+			"sand-veil",
+			"rough-skin"
 		]
 	},
 	"munchlax": {
@@ -8668,6 +10763,11 @@
 			40,
 			85,
 			5
+		],
+		"abilities": [
+			"pickup",
+			"thick-fat",
+			"gluttony"
 		]
 	},
 	"riolu": {
@@ -8686,6 +10786,11 @@
 			35,
 			40,
 			60
+		],
+		"abilities": [
+			"steadfast",
+			"inner-focus",
+			"prankster"
 		]
 	},
 	"lucario": {
@@ -8705,6 +10810,11 @@
 			115,
 			70,
 			90
+		],
+		"abilities": [
+			"steadfast",
+			"inner-focus",
+			"justified"
 		]
 	},
 	"hippopotas": {
@@ -8723,6 +10833,10 @@
 			38,
 			42,
 			32
+		],
+		"abilities": [
+			"sand-stream",
+			"sand-force"
 		]
 	},
 	"hippowdon": {
@@ -8741,6 +10855,10 @@
 			68,
 			72,
 			47
+		],
+		"abilities": [
+			"sand-stream",
+			"sand-force"
 		]
 	},
 	"skorupi": {
@@ -8760,6 +10878,11 @@
 			30,
 			55,
 			65
+		],
+		"abilities": [
+			"battle-armor",
+			"sniper",
+			"keen-eye"
 		]
 	},
 	"drapion": {
@@ -8779,6 +10902,11 @@
 			60,
 			75,
 			95
+		],
+		"abilities": [
+			"battle-armor",
+			"sniper",
+			"keen-eye"
 		]
 	},
 	"croagunk": {
@@ -8798,6 +10926,11 @@
 			61,
 			40,
 			50
+		],
+		"abilities": [
+			"anticipation",
+			"dry-skin",
+			"poison-touch"
 		]
 	},
 	"toxicroak": {
@@ -8817,6 +10950,11 @@
 			86,
 			65,
 			85
+		],
+		"abilities": [
+			"anticipation",
+			"dry-skin",
+			"poison-touch"
 		]
 	},
 	"carnivine": {
@@ -8835,6 +10973,9 @@
 			90,
 			72,
 			46
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"finneon": {
@@ -8853,6 +10994,11 @@
 			49,
 			61,
 			66
+		],
+		"abilities": [
+			"swift-swim",
+			"storm-drain",
+			"water-veil"
 		]
 	},
 	"lumineon": {
@@ -8871,6 +11017,11 @@
 			69,
 			86,
 			91
+		],
+		"abilities": [
+			"swift-swim",
+			"storm-drain",
+			"water-veil"
 		]
 	},
 	"mantyke": {
@@ -8890,6 +11041,11 @@
 			60,
 			120,
 			50
+		],
+		"abilities": [
+			"swift-swim",
+			"water-absorb",
+			"water-veil"
 		]
 	},
 	"snover": {
@@ -8909,6 +11065,10 @@
 			62,
 			60,
 			40
+		],
+		"abilities": [
+			"snow-warning",
+			"soundproof"
 		]
 	},
 	"abomasnow": {
@@ -8928,6 +11088,10 @@
 			92,
 			85,
 			60
+		],
+		"abilities": [
+			"snow-warning",
+			"soundproof"
 		]
 	},
 	"weavile": {
@@ -8947,6 +11111,10 @@
 			45,
 			85,
 			125
+		],
+		"abilities": [
+			"pressure",
+			"pickpocket"
 		]
 	},
 	"magnezone": {
@@ -8966,6 +11134,11 @@
 			130,
 			90,
 			60
+		],
+		"abilities": [
+			"magnet-pull",
+			"sturdy",
+			"analytic"
 		]
 	},
 	"lickilicky": {
@@ -8984,6 +11157,11 @@
 			80,
 			95,
 			50
+		],
+		"abilities": [
+			"own-tempo",
+			"oblivious",
+			"cloud-nine"
 		]
 	},
 	"rhyperior": {
@@ -9003,6 +11181,11 @@
 			55,
 			55,
 			40
+		],
+		"abilities": [
+			"lightning-rod",
+			"solid-rock",
+			"reckless"
 		]
 	},
 	"tangrowth": {
@@ -9021,6 +11204,11 @@
 			110,
 			50,
 			50
+		],
+		"abilities": [
+			"chlorophyll",
+			"leaf-guard",
+			"regenerator"
 		]
 	},
 	"electivire": {
@@ -9039,6 +11227,10 @@
 			95,
 			85,
 			95
+		],
+		"abilities": [
+			"motor-drive",
+			"vital-spirit"
 		]
 	},
 	"magmortar": {
@@ -9057,6 +11249,10 @@
 			125,
 			95,
 			83
+		],
+		"abilities": [
+			"flame-body",
+			"vital-spirit"
 		]
 	},
 	"togekiss": {
@@ -9076,6 +11272,11 @@
 			120,
 			115,
 			80
+		],
+		"abilities": [
+			"hustle",
+			"serene-grace",
+			"super-luck"
 		]
 	},
 	"yanmega": {
@@ -9095,6 +11296,11 @@
 			116,
 			56,
 			95
+		],
+		"abilities": [
+			"speed-boost",
+			"tinted-lens",
+			"frisk"
 		]
 	},
 	"leafeon": {
@@ -9113,6 +11319,10 @@
 			60,
 			65,
 			95
+		],
+		"abilities": [
+			"leaf-guard",
+			"chlorophyll"
 		]
 	},
 	"glaceon": {
@@ -9131,6 +11341,10 @@
 			130,
 			95,
 			65
+		],
+		"abilities": [
+			"snow-cloak",
+			"ice-body"
 		]
 	},
 	"gliscor": {
@@ -9150,6 +11364,11 @@
 			45,
 			75,
 			95
+		],
+		"abilities": [
+			"hyper-cutter",
+			"sand-veil",
+			"poison-heal"
 		]
 	},
 	"mamoswine": {
@@ -9169,6 +11388,11 @@
 			70,
 			60,
 			80
+		],
+		"abilities": [
+			"oblivious",
+			"snow-cloak",
+			"thick-fat"
 		]
 	},
 	"porygon-z": {
@@ -9187,6 +11411,11 @@
 			135,
 			75,
 			90
+		],
+		"abilities": [
+			"adaptability",
+			"download",
+			"analytic"
 		]
 	},
 	"gallade": {
@@ -9206,6 +11435,11 @@
 			65,
 			115,
 			80
+		],
+		"abilities": [
+			"steadfast",
+			"sharpness",
+			"justified"
 		]
 	},
 	"probopass": {
@@ -9225,6 +11459,11 @@
 			75,
 			150,
 			40
+		],
+		"abilities": [
+			"sturdy",
+			"magnet-pull",
+			"sand-force"
 		]
 	},
 	"dusknoir": {
@@ -9243,6 +11482,10 @@
 			65,
 			135,
 			45
+		],
+		"abilities": [
+			"pressure",
+			"frisk"
 		]
 	},
 	"froslass": {
@@ -9262,6 +11505,10 @@
 			80,
 			70,
 			110
+		],
+		"abilities": [
+			"snow-cloak",
+			"cursed-body"
 		]
 	},
 	"rotom": {
@@ -9281,6 +11528,9 @@
 			95,
 			77,
 			91
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"rotom-heat": {
@@ -9300,6 +11550,9 @@
 			105,
 			107,
 			86
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"rotom-wash": {
@@ -9319,6 +11572,9 @@
 			105,
 			107,
 			86
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"rotom-frost": {
@@ -9338,6 +11594,9 @@
 			105,
 			107,
 			86
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"rotom-fan": {
@@ -9357,6 +11616,9 @@
 			105,
 			107,
 			86
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"rotom-mow": {
@@ -9376,6 +11638,9 @@
 			105,
 			107,
 			86
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"uxie": {
@@ -9394,6 +11659,9 @@
 			75,
 			130,
 			95
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"mesprit": {
@@ -9412,6 +11680,9 @@
 			105,
 			105,
 			80
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"azelf": {
@@ -9430,6 +11701,9 @@
 			125,
 			70,
 			115
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"dialga": {
@@ -9449,6 +11723,10 @@
 			150,
 			100,
 			90
+		],
+		"abilities": [
+			"pressure",
+			"telepathy"
 		]
 	},
 	"palkia": {
@@ -9468,6 +11746,10 @@
 			150,
 			120,
 			100
+		],
+		"abilities": [
+			"pressure",
+			"telepathy"
 		]
 	},
 	"heatran": {
@@ -9487,6 +11769,10 @@
 			130,
 			106,
 			77
+		],
+		"abilities": [
+			"flash-fire",
+			"flame-body"
 		]
 	},
 	"regigigas": {
@@ -9505,6 +11791,9 @@
 			80,
 			110,
 			100
+		],
+		"abilities": [
+			"slow-start"
 		]
 	},
 	"giratina": {
@@ -9524,6 +11813,10 @@
 			100,
 			120,
 			90
+		],
+		"abilities": [
+			"pressure",
+			"telepathy"
 		]
 	},
 	"giratina-origin": {
@@ -9543,6 +11836,9 @@
 			120,
 			100,
 			90
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"cresselia": {
@@ -9561,6 +11857,9 @@
 			75,
 			130,
 			85
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"phione": {
@@ -9579,6 +11878,9 @@
 			80,
 			80,
 			80
+		],
+		"abilities": [
+			"hydration"
 		]
 	},
 	"manaphy": {
@@ -9597,6 +11899,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"hydration"
 		]
 	},
 	"darkrai": {
@@ -9615,6 +11920,9 @@
 			135,
 			90,
 			125
+		],
+		"abilities": [
+			"bad-dreams"
 		]
 	},
 	"shaymin": {
@@ -9633,6 +11941,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"natural-cure"
 		]
 	},
 	"shaymin-sky": {
@@ -9652,6 +11963,9 @@
 			120,
 			75,
 			127
+		],
+		"abilities": [
+			"serene-grace"
 		]
 	},
 	"arceus": {
@@ -9670,6 +11984,9 @@
 			120,
 			120,
 			120
+		],
+		"abilities": [
+			"multitype"
 		]
 	},
 	"victini": {
@@ -9689,6 +12006,9 @@
 			100,
 			100,
 			100
+		],
+		"abilities": [
+			"victory-star"
 		]
 	},
 	"snivy": {
@@ -9707,6 +12027,10 @@
 			45,
 			55,
 			63
+		],
+		"abilities": [
+			"overgrow",
+			"contrary"
 		]
 	},
 	"servine": {
@@ -9725,6 +12049,10 @@
 			60,
 			75,
 			83
+		],
+		"abilities": [
+			"overgrow",
+			"contrary"
 		]
 	},
 	"serperior": {
@@ -9743,6 +12071,10 @@
 			75,
 			95,
 			113
+		],
+		"abilities": [
+			"overgrow",
+			"contrary"
 		]
 	},
 	"tepig": {
@@ -9761,6 +12093,10 @@
 			45,
 			45,
 			45
+		],
+		"abilities": [
+			"blaze",
+			"thick-fat"
 		]
 	},
 	"pignite": {
@@ -9780,6 +12116,10 @@
 			70,
 			55,
 			55
+		],
+		"abilities": [
+			"blaze",
+			"thick-fat"
 		]
 	},
 	"emboar": {
@@ -9799,6 +12139,10 @@
 			100,
 			65,
 			65
+		],
+		"abilities": [
+			"blaze",
+			"reckless"
 		]
 	},
 	"oshawott": {
@@ -9817,6 +12161,10 @@
 			63,
 			45,
 			45
+		],
+		"abilities": [
+			"torrent",
+			"shell-armor"
 		]
 	},
 	"dewott": {
@@ -9835,6 +12183,10 @@
 			83,
 			60,
 			60
+		],
+		"abilities": [
+			"torrent",
+			"shell-armor"
 		]
 	},
 	"samurott": {
@@ -9853,6 +12205,10 @@
 			108,
 			70,
 			70
+		],
+		"abilities": [
+			"torrent",
+			"shell-armor"
 		]
 	},
 	"patrat": {
@@ -9871,6 +12227,11 @@
 			35,
 			39,
 			42
+		],
+		"abilities": [
+			"run-away",
+			"keen-eye",
+			"analytic"
 		]
 	},
 	"watchog": {
@@ -9889,6 +12250,11 @@
 			60,
 			69,
 			77
+		],
+		"abilities": [
+			"illuminate",
+			"keen-eye",
+			"analytic"
 		]
 	},
 	"lillipup": {
@@ -9907,6 +12273,11 @@
 			25,
 			45,
 			55
+		],
+		"abilities": [
+			"vital-spirit",
+			"pickup",
+			"run-away"
 		]
 	},
 	"herdier": {
@@ -9925,6 +12296,11 @@
 			35,
 			65,
 			60
+		],
+		"abilities": [
+			"intimidate",
+			"sand-rush",
+			"scrappy"
 		]
 	},
 	"stoutland": {
@@ -9943,6 +12319,11 @@
 			45,
 			90,
 			80
+		],
+		"abilities": [
+			"intimidate",
+			"sand-rush",
+			"scrappy"
 		]
 	},
 	"purrloin": {
@@ -9961,6 +12342,11 @@
 			50,
 			37,
 			66
+		],
+		"abilities": [
+			"limber",
+			"unburden",
+			"prankster"
 		]
 	},
 	"liepard": {
@@ -9979,6 +12365,11 @@
 			88,
 			50,
 			106
+		],
+		"abilities": [
+			"limber",
+			"unburden",
+			"prankster"
 		]
 	},
 	"pansage": {
@@ -9997,6 +12388,10 @@
 			53,
 			48,
 			64
+		],
+		"abilities": [
+			"gluttony",
+			"overgrow"
 		]
 	},
 	"simisage": {
@@ -10015,6 +12410,10 @@
 			98,
 			63,
 			101
+		],
+		"abilities": [
+			"gluttony",
+			"overgrow"
 		]
 	},
 	"pansear": {
@@ -10033,6 +12432,10 @@
 			53,
 			48,
 			64
+		],
+		"abilities": [
+			"gluttony",
+			"blaze"
 		]
 	},
 	"simisear": {
@@ -10051,6 +12454,10 @@
 			98,
 			63,
 			101
+		],
+		"abilities": [
+			"gluttony",
+			"blaze"
 		]
 	},
 	"panpour": {
@@ -10069,6 +12476,10 @@
 			53,
 			48,
 			64
+		],
+		"abilities": [
+			"gluttony",
+			"torrent"
 		]
 	},
 	"simipour": {
@@ -10087,6 +12498,10 @@
 			98,
 			63,
 			101
+		],
+		"abilities": [
+			"gluttony",
+			"torrent"
 		]
 	},
 	"munna": {
@@ -10105,6 +12520,11 @@
 			67,
 			55,
 			24
+		],
+		"abilities": [
+			"forewarn",
+			"synchronize",
+			"telepathy"
 		]
 	},
 	"musharna": {
@@ -10123,6 +12543,11 @@
 			107,
 			95,
 			29
+		],
+		"abilities": [
+			"forewarn",
+			"synchronize",
+			"telepathy"
 		]
 	},
 	"pidove": {
@@ -10142,6 +12567,11 @@
 			36,
 			30,
 			43
+		],
+		"abilities": [
+			"big-pecks",
+			"super-luck",
+			"rivalry"
 		]
 	},
 	"tranquill": {
@@ -10161,6 +12591,11 @@
 			50,
 			42,
 			65
+		],
+		"abilities": [
+			"big-pecks",
+			"super-luck",
+			"rivalry"
 		]
 	},
 	"unfezant": {
@@ -10180,6 +12615,11 @@
 			65,
 			55,
 			93
+		],
+		"abilities": [
+			"big-pecks",
+			"super-luck",
+			"rivalry"
 		]
 	},
 	"blitzle": {
@@ -10198,6 +12638,11 @@
 			50,
 			32,
 			76
+		],
+		"abilities": [
+			"lightning-rod",
+			"motor-drive",
+			"sap-sipper"
 		]
 	},
 	"zebstrika": {
@@ -10216,6 +12661,11 @@
 			80,
 			63,
 			116
+		],
+		"abilities": [
+			"lightning-rod",
+			"motor-drive",
+			"sap-sipper"
 		]
 	},
 	"roggenrola": {
@@ -10234,6 +12684,11 @@
 			25,
 			25,
 			15
+		],
+		"abilities": [
+			"sturdy",
+			"weak-armor",
+			"sand-force"
 		]
 	},
 	"boldore": {
@@ -10252,6 +12707,11 @@
 			50,
 			40,
 			20
+		],
+		"abilities": [
+			"sturdy",
+			"weak-armor",
+			"sand-force"
 		]
 	},
 	"gigalith": {
@@ -10270,6 +12730,11 @@
 			60,
 			80,
 			25
+		],
+		"abilities": [
+			"sturdy",
+			"sand-stream",
+			"sand-force"
 		]
 	},
 	"woobat": {
@@ -10289,6 +12754,11 @@
 			55,
 			43,
 			72
+		],
+		"abilities": [
+			"unaware",
+			"klutz",
+			"simple"
 		]
 	},
 	"swoobat": {
@@ -10308,6 +12778,11 @@
 			77,
 			55,
 			114
+		],
+		"abilities": [
+			"unaware",
+			"klutz",
+			"simple"
 		]
 	},
 	"drilbur": {
@@ -10326,6 +12801,11 @@
 			30,
 			45,
 			68
+		],
+		"abilities": [
+			"sand-rush",
+			"sand-force",
+			"mold-breaker"
 		]
 	},
 	"excadrill": {
@@ -10345,6 +12825,11 @@
 			50,
 			65,
 			88
+		],
+		"abilities": [
+			"sand-rush",
+			"sand-force",
+			"mold-breaker"
 		]
 	},
 	"audino": {
@@ -10363,6 +12848,11 @@
 			60,
 			86,
 			50
+		],
+		"abilities": [
+			"healer",
+			"regenerator",
+			"klutz"
 		]
 	},
 	"timburr": {
@@ -10381,6 +12871,11 @@
 			25,
 			35,
 			35
+		],
+		"abilities": [
+			"guts",
+			"sheer-force",
+			"iron-fist"
 		]
 	},
 	"gurdurr": {
@@ -10399,6 +12894,11 @@
 			40,
 			50,
 			40
+		],
+		"abilities": [
+			"guts",
+			"sheer-force",
+			"iron-fist"
 		]
 	},
 	"conkeldurr": {
@@ -10417,6 +12917,11 @@
 			55,
 			65,
 			45
+		],
+		"abilities": [
+			"guts",
+			"sheer-force",
+			"iron-fist"
 		]
 	},
 	"tympole": {
@@ -10435,6 +12940,11 @@
 			50,
 			40,
 			64
+		],
+		"abilities": [
+			"swift-swim",
+			"hydration",
+			"water-absorb"
 		]
 	},
 	"palpitoad": {
@@ -10454,6 +12964,11 @@
 			65,
 			55,
 			69
+		],
+		"abilities": [
+			"swift-swim",
+			"hydration",
+			"water-absorb"
 		]
 	},
 	"seismitoad": {
@@ -10473,6 +12988,11 @@
 			85,
 			75,
 			74
+		],
+		"abilities": [
+			"swift-swim",
+			"poison-touch",
+			"water-absorb"
 		]
 	},
 	"throh": {
@@ -10491,6 +13011,11 @@
 			30,
 			85,
 			45
+		],
+		"abilities": [
+			"guts",
+			"inner-focus",
+			"mold-breaker"
 		]
 	},
 	"sawk": {
@@ -10509,6 +13034,11 @@
 			30,
 			75,
 			85
+		],
+		"abilities": [
+			"sturdy",
+			"inner-focus",
+			"mold-breaker"
 		]
 	},
 	"sewaddle": {
@@ -10528,6 +13058,11 @@
 			40,
 			60,
 			42
+		],
+		"abilities": [
+			"swarm",
+			"chlorophyll",
+			"overcoat"
 		]
 	},
 	"swadloon": {
@@ -10547,6 +13082,11 @@
 			50,
 			80,
 			42
+		],
+		"abilities": [
+			"leaf-guard",
+			"chlorophyll",
+			"overcoat"
 		]
 	},
 	"leavanny": {
@@ -10566,6 +13106,11 @@
 			70,
 			80,
 			92
+		],
+		"abilities": [
+			"swarm",
+			"chlorophyll",
+			"overcoat"
 		]
 	},
 	"venipede": {
@@ -10585,6 +13130,11 @@
 			30,
 			39,
 			57
+		],
+		"abilities": [
+			"poison-point",
+			"swarm",
+			"speed-boost"
 		]
 	},
 	"whirlipede": {
@@ -10604,6 +13154,11 @@
 			40,
 			79,
 			47
+		],
+		"abilities": [
+			"poison-point",
+			"swarm",
+			"speed-boost"
 		]
 	},
 	"scolipede": {
@@ -10623,6 +13178,11 @@
 			55,
 			69,
 			112
+		],
+		"abilities": [
+			"poison-point",
+			"swarm",
+			"speed-boost"
 		]
 	},
 	"cottonee": {
@@ -10642,6 +13202,11 @@
 			37,
 			50,
 			66
+		],
+		"abilities": [
+			"prankster",
+			"infiltrator",
+			"chlorophyll"
 		]
 	},
 	"whimsicott": {
@@ -10661,6 +13226,11 @@
 			77,
 			75,
 			116
+		],
+		"abilities": [
+			"prankster",
+			"infiltrator",
+			"chlorophyll"
 		]
 	},
 	"petilil": {
@@ -10679,6 +13249,11 @@
 			70,
 			50,
 			30
+		],
+		"abilities": [
+			"chlorophyll",
+			"own-tempo",
+			"leaf-guard"
 		]
 	},
 	"lilligant": {
@@ -10697,6 +13272,11 @@
 			110,
 			75,
 			90
+		],
+		"abilities": [
+			"chlorophyll",
+			"own-tempo",
+			"leaf-guard"
 		]
 	},
 	"basculin": {
@@ -10715,6 +13295,11 @@
 			80,
 			55,
 			98
+		],
+		"abilities": [
+			"reckless",
+			"adaptability",
+			"mold-breaker"
 		]
 	},
 	"basculin-blue-striped": {
@@ -10733,6 +13318,11 @@
 			80,
 			55,
 			98
+		],
+		"abilities": [
+			"rock-head",
+			"adaptability",
+			"mold-breaker"
 		]
 	},
 	"sandile": {
@@ -10752,6 +13342,11 @@
 			35,
 			35,
 			65
+		],
+		"abilities": [
+			"intimidate",
+			"moxie",
+			"anger-point"
 		]
 	},
 	"krokorok": {
@@ -10771,6 +13366,11 @@
 			45,
 			45,
 			74
+		],
+		"abilities": [
+			"intimidate",
+			"moxie",
+			"anger-point"
 		]
 	},
 	"krookodile": {
@@ -10790,6 +13390,11 @@
 			65,
 			70,
 			92
+		],
+		"abilities": [
+			"intimidate",
+			"moxie",
+			"anger-point"
 		]
 	},
 	"darumaka": {
@@ -10808,6 +13413,10 @@
 			15,
 			45,
 			50
+		],
+		"abilities": [
+			"hustle",
+			"inner-focus"
 		]
 	},
 	"darmanitan": {
@@ -10826,6 +13435,10 @@
 			30,
 			55,
 			95
+		],
+		"abilities": [
+			"sheer-force",
+			"zen-mode"
 		]
 	},
 	"darmanitan-zen": {
@@ -10845,6 +13458,9 @@
 			140,
 			105,
 			55
+		],
+		"abilities": [
+			"zen-mode"
 		]
 	},
 	"maractus": {
@@ -10863,6 +13479,11 @@
 			106,
 			67,
 			60
+		],
+		"abilities": [
+			"water-absorb",
+			"chlorophyll",
+			"storm-drain"
 		]
 	},
 	"dwebble": {
@@ -10882,6 +13503,11 @@
 			35,
 			35,
 			55
+		],
+		"abilities": [
+			"sturdy",
+			"shell-armor",
+			"weak-armor"
 		]
 	},
 	"crustle": {
@@ -10901,6 +13527,11 @@
 			65,
 			75,
 			45
+		],
+		"abilities": [
+			"sturdy",
+			"shell-armor",
+			"weak-armor"
 		]
 	},
 	"scraggy": {
@@ -10920,6 +13551,11 @@
 			35,
 			70,
 			48
+		],
+		"abilities": [
+			"shed-skin",
+			"moxie",
+			"intimidate"
 		]
 	},
 	"scrafty": {
@@ -10939,6 +13575,11 @@
 			45,
 			115,
 			58
+		],
+		"abilities": [
+			"shed-skin",
+			"moxie",
+			"intimidate"
 		]
 	},
 	"sigilyph": {
@@ -10958,6 +13599,11 @@
 			103,
 			80,
 			97
+		],
+		"abilities": [
+			"wonder-skin",
+			"magic-guard",
+			"tinted-lens"
 		]
 	},
 	"yamask": {
@@ -10976,6 +13622,9 @@
 			55,
 			65,
 			30
+		],
+		"abilities": [
+			"mummy"
 		]
 	},
 	"cofagrigus": {
@@ -10994,6 +13643,9 @@
 			95,
 			105,
 			30
+		],
+		"abilities": [
+			"mummy"
 		]
 	},
 	"tirtouga": {
@@ -11013,6 +13665,11 @@
 			53,
 			45,
 			22
+		],
+		"abilities": [
+			"solid-rock",
+			"sturdy",
+			"swift-swim"
 		]
 	},
 	"carracosta": {
@@ -11032,6 +13689,11 @@
 			83,
 			65,
 			32
+		],
+		"abilities": [
+			"solid-rock",
+			"sturdy",
+			"swift-swim"
 		]
 	},
 	"archen": {
@@ -11051,6 +13713,9 @@
 			74,
 			45,
 			70
+		],
+		"abilities": [
+			"defeatist"
 		]
 	},
 	"archeops": {
@@ -11070,6 +13735,9 @@
 			112,
 			65,
 			110
+		],
+		"abilities": [
+			"defeatist"
 		]
 	},
 	"trubbish": {
@@ -11088,6 +13756,11 @@
 			40,
 			62,
 			65
+		],
+		"abilities": [
+			"stench",
+			"sticky-hold",
+			"aftermath"
 		]
 	},
 	"garbodor": {
@@ -11106,6 +13779,11 @@
 			60,
 			82,
 			75
+		],
+		"abilities": [
+			"stench",
+			"weak-armor",
+			"aftermath"
 		]
 	},
 	"zorua": {
@@ -11124,6 +13802,9 @@
 			80,
 			40,
 			65
+		],
+		"abilities": [
+			"illusion"
 		]
 	},
 	"zoroark": {
@@ -11142,6 +13823,9 @@
 			120,
 			60,
 			105
+		],
+		"abilities": [
+			"illusion"
 		]
 	},
 	"minccino": {
@@ -11160,6 +13844,11 @@
 			40,
 			40,
 			75
+		],
+		"abilities": [
+			"cute-charm",
+			"technician",
+			"skill-link"
 		]
 	},
 	"cinccino": {
@@ -11178,6 +13867,11 @@
 			65,
 			60,
 			115
+		],
+		"abilities": [
+			"cute-charm",
+			"technician",
+			"skill-link"
 		]
 	},
 	"gothita": {
@@ -11196,6 +13890,11 @@
 			55,
 			65,
 			45
+		],
+		"abilities": [
+			"frisk",
+			"competitive",
+			"shadow-tag"
 		]
 	},
 	"gothorita": {
@@ -11214,6 +13913,11 @@
 			75,
 			85,
 			55
+		],
+		"abilities": [
+			"frisk",
+			"competitive",
+			"shadow-tag"
 		]
 	},
 	"gothitelle": {
@@ -11232,6 +13936,11 @@
 			95,
 			110,
 			65
+		],
+		"abilities": [
+			"frisk",
+			"competitive",
+			"shadow-tag"
 		]
 	},
 	"solosis": {
@@ -11250,6 +13959,11 @@
 			105,
 			50,
 			20
+		],
+		"abilities": [
+			"overcoat",
+			"magic-guard",
+			"regenerator"
 		]
 	},
 	"duosion": {
@@ -11268,6 +13982,11 @@
 			125,
 			60,
 			30
+		],
+		"abilities": [
+			"overcoat",
+			"magic-guard",
+			"regenerator"
 		]
 	},
 	"reuniclus": {
@@ -11286,6 +14005,11 @@
 			125,
 			85,
 			30
+		],
+		"abilities": [
+			"overcoat",
+			"magic-guard",
+			"regenerator"
 		]
 	},
 	"ducklett": {
@@ -11305,6 +14029,11 @@
 			44,
 			50,
 			55
+		],
+		"abilities": [
+			"keen-eye",
+			"big-pecks",
+			"hydration"
 		]
 	},
 	"swanna": {
@@ -11324,6 +14053,11 @@
 			87,
 			63,
 			98
+		],
+		"abilities": [
+			"keen-eye",
+			"big-pecks",
+			"hydration"
 		]
 	},
 	"vanillite": {
@@ -11342,6 +14076,11 @@
 			65,
 			60,
 			44
+		],
+		"abilities": [
+			"ice-body",
+			"snow-cloak",
+			"weak-armor"
 		]
 	},
 	"vanillish": {
@@ -11360,6 +14099,11 @@
 			80,
 			75,
 			59
+		],
+		"abilities": [
+			"ice-body",
+			"snow-cloak",
+			"weak-armor"
 		]
 	},
 	"vanilluxe": {
@@ -11378,6 +14122,11 @@
 			110,
 			95,
 			79
+		],
+		"abilities": [
+			"ice-body",
+			"snow-warning",
+			"weak-armor"
 		]
 	},
 	"deerling": {
@@ -11397,6 +14146,11 @@
 			40,
 			50,
 			75
+		],
+		"abilities": [
+			"chlorophyll",
+			"sap-sipper",
+			"serene-grace"
 		]
 	},
 	"sawsbuck": {
@@ -11416,6 +14170,11 @@
 			60,
 			70,
 			95
+		],
+		"abilities": [
+			"chlorophyll",
+			"sap-sipper",
+			"serene-grace"
 		]
 	},
 	"emolga": {
@@ -11435,6 +14194,10 @@
 			75,
 			60,
 			103
+		],
+		"abilities": [
+			"static",
+			"motor-drive"
 		]
 	},
 	"karrablast": {
@@ -11453,6 +14216,11 @@
 			40,
 			45,
 			60
+		],
+		"abilities": [
+			"swarm",
+			"shed-skin",
+			"no-guard"
 		]
 	},
 	"escavalier": {
@@ -11472,6 +14240,11 @@
 			60,
 			105,
 			20
+		],
+		"abilities": [
+			"swarm",
+			"shell-armor",
+			"overcoat"
 		]
 	},
 	"foongus": {
@@ -11491,6 +14264,10 @@
 			55,
 			55,
 			15
+		],
+		"abilities": [
+			"effect-spore",
+			"regenerator"
 		]
 	},
 	"amoonguss": {
@@ -11510,6 +14287,10 @@
 			85,
 			80,
 			30
+		],
+		"abilities": [
+			"effect-spore",
+			"regenerator"
 		]
 	},
 	"frillish": {
@@ -11529,6 +14310,11 @@
 			65,
 			85,
 			40
+		],
+		"abilities": [
+			"water-absorb",
+			"cursed-body",
+			"damp"
 		]
 	},
 	"jellicent": {
@@ -11548,6 +14334,11 @@
 			85,
 			105,
 			60
+		],
+		"abilities": [
+			"water-absorb",
+			"cursed-body",
+			"damp"
 		]
 	},
 	"alomomola": {
@@ -11566,6 +14357,11 @@
 			40,
 			45,
 			65
+		],
+		"abilities": [
+			"healer",
+			"hydration",
+			"regenerator"
 		]
 	},
 	"joltik": {
@@ -11585,6 +14381,11 @@
 			57,
 			50,
 			65
+		],
+		"abilities": [
+			"compound-eyes",
+			"unnerve",
+			"swarm"
 		]
 	},
 	"galvantula": {
@@ -11604,6 +14405,11 @@
 			97,
 			60,
 			108
+		],
+		"abilities": [
+			"compound-eyes",
+			"unnerve",
+			"swarm"
 		]
 	},
 	"ferroseed": {
@@ -11623,6 +14429,9 @@
 			24,
 			86,
 			10
+		],
+		"abilities": [
+			"iron-barbs"
 		]
 	},
 	"ferrothorn": {
@@ -11642,6 +14451,10 @@
 			54,
 			116,
 			20
+		],
+		"abilities": [
+			"iron-barbs",
+			"anticipation"
 		]
 	},
 	"klink": {
@@ -11660,6 +14473,11 @@
 			45,
 			60,
 			30
+		],
+		"abilities": [
+			"plus",
+			"minus",
+			"clear-body"
 		]
 	},
 	"klang": {
@@ -11678,6 +14496,11 @@
 			70,
 			85,
 			50
+		],
+		"abilities": [
+			"plus",
+			"minus",
+			"clear-body"
 		]
 	},
 	"klinklang": {
@@ -11696,6 +14519,11 @@
 			70,
 			85,
 			90
+		],
+		"abilities": [
+			"plus",
+			"minus",
+			"clear-body"
 		]
 	},
 	"tynamo": {
@@ -11714,6 +14542,9 @@
 			45,
 			40,
 			60
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"eelektrik": {
@@ -11732,6 +14563,9 @@
 			75,
 			70,
 			40
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"eelektross": {
@@ -11750,6 +14584,9 @@
 			105,
 			80,
 			50
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"elgyem": {
@@ -11768,6 +14605,11 @@
 			85,
 			55,
 			30
+		],
+		"abilities": [
+			"telepathy",
+			"synchronize",
+			"analytic"
 		]
 	},
 	"beheeyem": {
@@ -11786,6 +14628,11 @@
 			125,
 			95,
 			40
+		],
+		"abilities": [
+			"telepathy",
+			"synchronize",
+			"analytic"
 		]
 	},
 	"litwick": {
@@ -11805,6 +14652,11 @@
 			65,
 			55,
 			20
+		],
+		"abilities": [
+			"flash-fire",
+			"flame-body",
+			"infiltrator"
 		]
 	},
 	"lampent": {
@@ -11824,6 +14676,11 @@
 			95,
 			60,
 			55
+		],
+		"abilities": [
+			"flash-fire",
+			"flame-body",
+			"infiltrator"
 		]
 	},
 	"chandelure": {
@@ -11843,6 +14700,11 @@
 			145,
 			90,
 			80
+		],
+		"abilities": [
+			"flash-fire",
+			"flame-body",
+			"infiltrator"
 		]
 	},
 	"axew": {
@@ -11861,6 +14723,11 @@
 			30,
 			40,
 			57
+		],
+		"abilities": [
+			"rivalry",
+			"mold-breaker",
+			"unnerve"
 		]
 	},
 	"fraxure": {
@@ -11879,6 +14746,11 @@
 			40,
 			50,
 			67
+		],
+		"abilities": [
+			"rivalry",
+			"mold-breaker",
+			"unnerve"
 		]
 	},
 	"haxorus": {
@@ -11897,6 +14769,11 @@
 			60,
 			70,
 			97
+		],
+		"abilities": [
+			"rivalry",
+			"mold-breaker",
+			"unnerve"
 		]
 	},
 	"cubchoo": {
@@ -11915,6 +14792,11 @@
 			60,
 			40,
 			40
+		],
+		"abilities": [
+			"snow-cloak",
+			"slush-rush",
+			"rattled"
 		]
 	},
 	"beartic": {
@@ -11933,6 +14815,11 @@
 			70,
 			80,
 			50
+		],
+		"abilities": [
+			"snow-cloak",
+			"slush-rush",
+			"swift-swim"
 		]
 	},
 	"cryogonal": {
@@ -11951,6 +14838,9 @@
 			95,
 			135,
 			105
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"shelmet": {
@@ -11969,6 +14859,11 @@
 			40,
 			65,
 			25
+		],
+		"abilities": [
+			"hydration",
+			"shell-armor",
+			"overcoat"
 		]
 	},
 	"accelgor": {
@@ -11987,6 +14882,11 @@
 			100,
 			60,
 			145
+		],
+		"abilities": [
+			"hydration",
+			"sticky-hold",
+			"unburden"
 		]
 	},
 	"stunfisk": {
@@ -12006,6 +14906,11 @@
 			81,
 			99,
 			32
+		],
+		"abilities": [
+			"static",
+			"limber",
+			"sand-veil"
 		]
 	},
 	"mienfoo": {
@@ -12024,6 +14929,11 @@
 			55,
 			50,
 			65
+		],
+		"abilities": [
+			"inner-focus",
+			"regenerator",
+			"reckless"
 		]
 	},
 	"mienshao": {
@@ -12042,6 +14952,11 @@
 			95,
 			60,
 			105
+		],
+		"abilities": [
+			"inner-focus",
+			"regenerator",
+			"reckless"
 		]
 	},
 	"druddigon": {
@@ -12060,6 +14975,11 @@
 			60,
 			90,
 			48
+		],
+		"abilities": [
+			"rough-skin",
+			"sheer-force",
+			"mold-breaker"
 		]
 	},
 	"golett": {
@@ -12079,6 +14999,11 @@
 			35,
 			50,
 			35
+		],
+		"abilities": [
+			"iron-fist",
+			"klutz",
+			"no-guard"
 		]
 	},
 	"golurk": {
@@ -12098,6 +15023,11 @@
 			55,
 			80,
 			55
+		],
+		"abilities": [
+			"iron-fist",
+			"klutz",
+			"no-guard"
 		]
 	},
 	"pawniard": {
@@ -12117,6 +15047,11 @@
 			40,
 			40,
 			60
+		],
+		"abilities": [
+			"defiant",
+			"inner-focus",
+			"pressure"
 		]
 	},
 	"bisharp": {
@@ -12136,6 +15071,11 @@
 			60,
 			70,
 			70
+		],
+		"abilities": [
+			"defiant",
+			"inner-focus",
+			"pressure"
 		]
 	},
 	"bouffalant": {
@@ -12154,6 +15094,11 @@
 			40,
 			95,
 			55
+		],
+		"abilities": [
+			"reckless",
+			"sap-sipper",
+			"soundproof"
 		]
 	},
 	"rufflet": {
@@ -12173,6 +15118,11 @@
 			37,
 			50,
 			60
+		],
+		"abilities": [
+			"keen-eye",
+			"sheer-force",
+			"hustle"
 		]
 	},
 	"braviary": {
@@ -12192,6 +15142,11 @@
 			57,
 			75,
 			80
+		],
+		"abilities": [
+			"keen-eye",
+			"sheer-force",
+			"defiant"
 		]
 	},
 	"vullaby": {
@@ -12211,6 +15166,11 @@
 			45,
 			65,
 			60
+		],
+		"abilities": [
+			"big-pecks",
+			"overcoat",
+			"weak-armor"
 		]
 	},
 	"mandibuzz": {
@@ -12230,6 +15190,11 @@
 			55,
 			95,
 			80
+		],
+		"abilities": [
+			"big-pecks",
+			"overcoat",
+			"weak-armor"
 		]
 	},
 	"heatmor": {
@@ -12248,6 +15213,11 @@
 			105,
 			66,
 			65
+		],
+		"abilities": [
+			"gluttony",
+			"flash-fire",
+			"white-smoke"
 		]
 	},
 	"durant": {
@@ -12267,6 +15237,11 @@
 			48,
 			48,
 			109
+		],
+		"abilities": [
+			"swarm",
+			"hustle",
+			"truant"
 		]
 	},
 	"deino": {
@@ -12286,6 +15261,9 @@
 			45,
 			50,
 			38
+		],
+		"abilities": [
+			"hustle"
 		]
 	},
 	"zweilous": {
@@ -12305,6 +15283,9 @@
 			65,
 			70,
 			58
+		],
+		"abilities": [
+			"hustle"
 		]
 	},
 	"hydreigon": {
@@ -12324,6 +15305,9 @@
 			125,
 			90,
 			98
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"larvesta": {
@@ -12343,6 +15327,10 @@
 			50,
 			55,
 			60
+		],
+		"abilities": [
+			"flame-body",
+			"swarm"
 		]
 	},
 	"volcarona": {
@@ -12362,6 +15350,10 @@
 			135,
 			105,
 			100
+		],
+		"abilities": [
+			"flame-body",
+			"swarm"
 		]
 	},
 	"cobalion": {
@@ -12381,6 +15373,9 @@
 			90,
 			72,
 			108
+		],
+		"abilities": [
+			"justified"
 		]
 	},
 	"terrakion": {
@@ -12400,6 +15395,9 @@
 			72,
 			90,
 			108
+		],
+		"abilities": [
+			"justified"
 		]
 	},
 	"virizion": {
@@ -12419,6 +15417,9 @@
 			90,
 			129,
 			108
+		],
+		"abilities": [
+			"justified"
 		]
 	},
 	"tornadus": {
@@ -12437,6 +15438,10 @@
 			125,
 			80,
 			111
+		],
+		"abilities": [
+			"prankster",
+			"defiant"
 		]
 	},
 	"tornadus-therian": {
@@ -12455,6 +15460,9 @@
 			110,
 			90,
 			121
+		],
+		"abilities": [
+			"regenerator"
 		]
 	},
 	"thundurus": {
@@ -12474,6 +15482,10 @@
 			125,
 			80,
 			111
+		],
+		"abilities": [
+			"prankster",
+			"defiant"
 		]
 	},
 	"thundurus-therian": {
@@ -12493,6 +15505,9 @@
 			145,
 			80,
 			101
+		],
+		"abilities": [
+			"volt-absorb"
 		]
 	},
 	"reshiram": {
@@ -12512,6 +15527,9 @@
 			150,
 			120,
 			90
+		],
+		"abilities": [
+			"turboblaze"
 		]
 	},
 	"zekrom": {
@@ -12531,6 +15549,9 @@
 			120,
 			100,
 			90
+		],
+		"abilities": [
+			"teravolt"
 		]
 	},
 	"landorus": {
@@ -12550,6 +15571,10 @@
 			115,
 			80,
 			101
+		],
+		"abilities": [
+			"sand-force",
+			"sheer-force"
 		]
 	},
 	"landorus-therian": {
@@ -12569,6 +15594,9 @@
 			105,
 			80,
 			91
+		],
+		"abilities": [
+			"intimidate"
 		]
 	},
 	"kyurem": {
@@ -12588,6 +15616,9 @@
 			130,
 			90,
 			95
+		],
+		"abilities": [
+			"pressure"
 		]
 	},
 	"kyurem-black": {
@@ -12607,6 +15638,9 @@
 			120,
 			90,
 			95
+		],
+		"abilities": [
+			"teravolt"
 		]
 	},
 	"kyurem-white": {
@@ -12626,6 +15660,9 @@
 			170,
 			100,
 			95
+		],
+		"abilities": [
+			"turboblaze"
 		]
 	},
 	"keldeo": {
@@ -12645,6 +15682,9 @@
 			129,
 			90,
 			108
+		],
+		"abilities": [
+			"justified"
 		]
 	},
 	"meloetta": {
@@ -12664,6 +15704,9 @@
 			128,
 			128,
 			90
+		],
+		"abilities": [
+			"serene-grace"
 		]
 	},
 	"meloetta-pirouette": {
@@ -12683,6 +15726,9 @@
 			77,
 			77,
 			128
+		],
+		"abilities": [
+			"serene-grace"
 		]
 	},
 	"genesect": {
@@ -12702,6 +15748,9 @@
 			120,
 			95,
 			99
+		],
+		"abilities": [
+			"download"
 		]
 	},
 	"chespin": {
@@ -12720,6 +15769,10 @@
 			48,
 			45,
 			33
+		],
+		"abilities": [
+			"overgrow",
+			"bulletproof"
 		]
 	},
 	"quilladin": {
@@ -12738,6 +15791,10 @@
 			56,
 			58,
 			57
+		],
+		"abilities": [
+			"overgrow",
+			"bulletproof"
 		]
 	},
 	"chesnaught": {
@@ -12757,6 +15814,10 @@
 			74,
 			75,
 			64
+		],
+		"abilities": [
+			"overgrow",
+			"bulletproof"
 		]
 	},
 	"fennekin": {
@@ -12775,6 +15836,10 @@
 			62,
 			60,
 			60
+		],
+		"abilities": [
+			"blaze",
+			"magician"
 		]
 	},
 	"braixen": {
@@ -12793,6 +15858,10 @@
 			90,
 			70,
 			73
+		],
+		"abilities": [
+			"blaze",
+			"magician"
 		]
 	},
 	"delphox": {
@@ -12812,6 +15881,10 @@
 			114,
 			100,
 			104
+		],
+		"abilities": [
+			"blaze",
+			"magician"
 		]
 	},
 	"froakie": {
@@ -12830,6 +15903,10 @@
 			62,
 			44,
 			71
+		],
+		"abilities": [
+			"torrent",
+			"protean"
 		]
 	},
 	"frogadier": {
@@ -12848,6 +15925,10 @@
 			83,
 			56,
 			97
+		],
+		"abilities": [
+			"torrent",
+			"protean"
 		]
 	},
 	"greninja": {
@@ -12867,6 +15948,10 @@
 			103,
 			71,
 			122
+		],
+		"abilities": [
+			"torrent",
+			"protean"
 		]
 	},
 	"bunnelby": {
@@ -12885,6 +15970,11 @@
 			32,
 			36,
 			57
+		],
+		"abilities": [
+			"pickup",
+			"cheek-pouch",
+			"huge-power"
 		]
 	},
 	"diggersby": {
@@ -12904,6 +15994,11 @@
 			50,
 			77,
 			78
+		],
+		"abilities": [
+			"pickup",
+			"cheek-pouch",
+			"huge-power"
 		]
 	},
 	"fletchling": {
@@ -12923,6 +16018,10 @@
 			40,
 			38,
 			62
+		],
+		"abilities": [
+			"big-pecks",
+			"gale-wings"
 		]
 	},
 	"fletchinder": {
@@ -12942,6 +16041,10 @@
 			56,
 			52,
 			84
+		],
+		"abilities": [
+			"flame-body",
+			"gale-wings"
 		]
 	},
 	"talonflame": {
@@ -12961,6 +16064,10 @@
 			74,
 			69,
 			126
+		],
+		"abilities": [
+			"flame-body",
+			"gale-wings"
 		]
 	},
 	"scatterbug": {
@@ -12979,6 +16086,11 @@
 			27,
 			25,
 			35
+		],
+		"abilities": [
+			"shield-dust",
+			"compound-eyes",
+			"friend-guard"
 		]
 	},
 	"spewpa": {
@@ -12997,6 +16109,10 @@
 			27,
 			30,
 			29
+		],
+		"abilities": [
+			"shed-skin",
+			"friend-guard"
 		]
 	},
 	"vivillon": {
@@ -13016,6 +16132,11 @@
 			90,
 			50,
 			89
+		],
+		"abilities": [
+			"shield-dust",
+			"compound-eyes",
+			"friend-guard"
 		]
 	},
 	"litleo": {
@@ -13035,6 +16156,11 @@
 			73,
 			54,
 			72
+		],
+		"abilities": [
+			"rivalry",
+			"unnerve",
+			"moxie"
 		]
 	},
 	"pyroar": {
@@ -13054,6 +16180,11 @@
 			109,
 			66,
 			106
+		],
+		"abilities": [
+			"rivalry",
+			"unnerve",
+			"moxie"
 		]
 	},
 	"flabebe": {
@@ -13072,6 +16203,10 @@
 			61,
 			79,
 			42
+		],
+		"abilities": [
+			"flower-veil",
+			"symbiosis"
 		]
 	},
 	"floette": {
@@ -13090,6 +16225,10 @@
 			75,
 			98,
 			52
+		],
+		"abilities": [
+			"flower-veil",
+			"symbiosis"
 		]
 	},
 	"florges": {
@@ -13108,6 +16247,10 @@
 			112,
 			154,
 			75
+		],
+		"abilities": [
+			"flower-veil",
+			"symbiosis"
 		]
 	},
 	"skiddo": {
@@ -13126,6 +16269,10 @@
 			62,
 			57,
 			52
+		],
+		"abilities": [
+			"sap-sipper",
+			"grass-pelt"
 		]
 	},
 	"gogoat": {
@@ -13144,6 +16291,10 @@
 			97,
 			81,
 			68
+		],
+		"abilities": [
+			"sap-sipper",
+			"grass-pelt"
 		]
 	},
 	"pancham": {
@@ -13162,6 +16313,11 @@
 			46,
 			48,
 			43
+		],
+		"abilities": [
+			"iron-fist",
+			"mold-breaker",
+			"scrappy"
 		]
 	},
 	"pangoro": {
@@ -13181,6 +16337,11 @@
 			69,
 			71,
 			58
+		],
+		"abilities": [
+			"iron-fist",
+			"mold-breaker",
+			"scrappy"
 		]
 	},
 	"furfrou": {
@@ -13199,6 +16360,9 @@
 			65,
 			90,
 			102
+		],
+		"abilities": [
+			"fur-coat"
 		]
 	},
 	"espurr": {
@@ -13217,6 +16381,11 @@
 			63,
 			60,
 			68
+		],
+		"abilities": [
+			"keen-eye",
+			"infiltrator",
+			"own-tempo"
 		]
 	},
 	"meowstic": {
@@ -13235,6 +16404,11 @@
 			83,
 			81,
 			104
+		],
+		"abilities": [
+			"keen-eye",
+			"infiltrator",
+			"prankster"
 		]
 	},
 	"meowstic-f": {
@@ -13253,6 +16427,11 @@
 			83,
 			81,
 			104
+		],
+		"abilities": [
+			"keen-eye",
+			"infiltrator",
+			"competitive"
 		]
 	},
 	"honedge": {
@@ -13272,6 +16451,9 @@
 			35,
 			37,
 			28
+		],
+		"abilities": [
+			"no-guard"
 		]
 	},
 	"doublade": {
@@ -13291,6 +16473,9 @@
 			45,
 			49,
 			35
+		],
+		"abilities": [
+			"no-guard"
 		]
 	},
 	"aegislash": {
@@ -13310,6 +16495,9 @@
 			50,
 			150,
 			60
+		],
+		"abilities": [
+			"stance-change"
 		]
 	},
 	"aegislash-blade": {
@@ -13329,6 +16517,9 @@
 			150,
 			50,
 			60
+		],
+		"abilities": [
+			"stance-change"
 		]
 	},
 	"spritzee": {
@@ -13347,6 +16538,10 @@
 			63,
 			65,
 			23
+		],
+		"abilities": [
+			"healer",
+			"aroma-veil"
 		]
 	},
 	"aromatisse": {
@@ -13365,6 +16560,10 @@
 			99,
 			89,
 			29
+		],
+		"abilities": [
+			"healer",
+			"aroma-veil"
 		]
 	},
 	"swirlix": {
@@ -13383,6 +16582,10 @@
 			59,
 			57,
 			49
+		],
+		"abilities": [
+			"sweet-veil",
+			"unburden"
 		]
 	},
 	"slurpuff": {
@@ -13401,6 +16604,10 @@
 			85,
 			75,
 			72
+		],
+		"abilities": [
+			"sweet-veil",
+			"unburden"
 		]
 	},
 	"inkay": {
@@ -13420,6 +16627,11 @@
 			46,
 			45,
 			45
+		],
+		"abilities": [
+			"contrary",
+			"suction-cups",
+			"infiltrator"
 		]
 	},
 	"malamar": {
@@ -13439,6 +16651,11 @@
 			68,
 			75,
 			73
+		],
+		"abilities": [
+			"contrary",
+			"suction-cups",
+			"infiltrator"
 		]
 	},
 	"binacle": {
@@ -13458,6 +16675,11 @@
 			39,
 			56,
 			50
+		],
+		"abilities": [
+			"tough-claws",
+			"sniper",
+			"pickpocket"
 		]
 	},
 	"barbaracle": {
@@ -13477,6 +16699,11 @@
 			54,
 			86,
 			68
+		],
+		"abilities": [
+			"tough-claws",
+			"sniper",
+			"pickpocket"
 		]
 	},
 	"skrelp": {
@@ -13496,6 +16723,11 @@
 			60,
 			60,
 			30
+		],
+		"abilities": [
+			"poison-point",
+			"poison-touch",
+			"adaptability"
 		]
 	},
 	"dragalge": {
@@ -13515,6 +16747,11 @@
 			97,
 			123,
 			44
+		],
+		"abilities": [
+			"poison-point",
+			"poison-touch",
+			"adaptability"
 		]
 	},
 	"clauncher": {
@@ -13533,6 +16770,9 @@
 			58,
 			63,
 			44
+		],
+		"abilities": [
+			"mega-launcher"
 		]
 	},
 	"clawitzer": {
@@ -13551,6 +16791,9 @@
 			120,
 			89,
 			59
+		],
+		"abilities": [
+			"mega-launcher"
 		]
 	},
 	"helioptile": {
@@ -13570,6 +16813,11 @@
 			61,
 			43,
 			70
+		],
+		"abilities": [
+			"dry-skin",
+			"sand-veil",
+			"solar-power"
 		]
 	},
 	"heliolisk": {
@@ -13589,6 +16837,11 @@
 			109,
 			94,
 			109
+		],
+		"abilities": [
+			"dry-skin",
+			"sand-veil",
+			"solar-power"
 		]
 	},
 	"tyrunt": {
@@ -13608,6 +16861,10 @@
 			45,
 			45,
 			48
+		],
+		"abilities": [
+			"strong-jaw",
+			"sturdy"
 		]
 	},
 	"tyrantrum": {
@@ -13627,6 +16884,10 @@
 			69,
 			59,
 			71
+		],
+		"abilities": [
+			"strong-jaw",
+			"rock-head"
 		]
 	},
 	"amaura": {
@@ -13646,6 +16907,10 @@
 			67,
 			63,
 			46
+		],
+		"abilities": [
+			"refrigerate",
+			"snow-warning"
 		]
 	},
 	"aurorus": {
@@ -13665,6 +16930,10 @@
 			99,
 			92,
 			58
+		],
+		"abilities": [
+			"refrigerate",
+			"snow-warning"
 		]
 	},
 	"sylveon": {
@@ -13683,6 +16952,10 @@
 			110,
 			130,
 			60
+		],
+		"abilities": [
+			"cute-charm",
+			"pixilate"
 		]
 	},
 	"hawlucha": {
@@ -13702,6 +16975,11 @@
 			74,
 			63,
 			118
+		],
+		"abilities": [
+			"limber",
+			"unburden",
+			"mold-breaker"
 		]
 	},
 	"dedenne": {
@@ -13721,6 +16999,11 @@
 			81,
 			67,
 			101
+		],
+		"abilities": [
+			"cheek-pouch",
+			"pickup",
+			"plus"
 		]
 	},
 	"carbink": {
@@ -13740,6 +17023,10 @@
 			50,
 			150,
 			50
+		],
+		"abilities": [
+			"clear-body",
+			"sturdy"
 		]
 	},
 	"goomy": {
@@ -13758,6 +17045,11 @@
 			55,
 			75,
 			40
+		],
+		"abilities": [
+			"sap-sipper",
+			"hydration",
+			"gooey"
 		]
 	},
 	"sliggoo": {
@@ -13776,6 +17068,11 @@
 			83,
 			113,
 			60
+		],
+		"abilities": [
+			"sap-sipper",
+			"hydration",
+			"gooey"
 		]
 	},
 	"goodra": {
@@ -13794,6 +17091,11 @@
 			110,
 			150,
 			80
+		],
+		"abilities": [
+			"sap-sipper",
+			"hydration",
+			"gooey"
 		]
 	},
 	"klefki": {
@@ -13813,6 +17115,10 @@
 			80,
 			87,
 			75
+		],
+		"abilities": [
+			"prankster",
+			"magician"
 		]
 	},
 	"phantump": {
@@ -13832,6 +17138,11 @@
 			50,
 			60,
 			38
+		],
+		"abilities": [
+			"natural-cure",
+			"frisk",
+			"harvest"
 		]
 	},
 	"trevenant": {
@@ -13851,6 +17162,11 @@
 			65,
 			82,
 			56
+		],
+		"abilities": [
+			"natural-cure",
+			"frisk",
+			"harvest"
 		]
 	},
 	"pumpkaboo-small": {
@@ -13870,6 +17186,11 @@
 			44,
 			55,
 			56
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"pumpkaboo": {
@@ -13889,6 +17210,11 @@
 			44,
 			55,
 			51
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"pumpkaboo-large": {
@@ -13908,6 +17234,11 @@
 			44,
 			55,
 			46
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"pumpkaboo-super": {
@@ -13927,6 +17258,11 @@
 			44,
 			55,
 			41
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"gourgeist-small": {
@@ -13946,6 +17282,11 @@
 			58,
 			75,
 			99
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"gourgeist": {
@@ -13965,6 +17306,11 @@
 			58,
 			75,
 			84
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"gourgeist-large": {
@@ -13984,6 +17330,11 @@
 			58,
 			75,
 			69
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"gourgeist-super": {
@@ -14003,6 +17354,11 @@
 			58,
 			75,
 			54
+		],
+		"abilities": [
+			"pickup",
+			"frisk",
+			"insomnia"
 		]
 	},
 	"bergmite": {
@@ -14021,6 +17377,11 @@
 			32,
 			35,
 			28
+		],
+		"abilities": [
+			"own-tempo",
+			"ice-body",
+			"sturdy"
 		]
 	},
 	"avalugg": {
@@ -14039,6 +17400,11 @@
 			44,
 			46,
 			28
+		],
+		"abilities": [
+			"own-tempo",
+			"ice-body",
+			"sturdy"
 		]
 	},
 	"noibat": {
@@ -14058,6 +17424,11 @@
 			45,
 			40,
 			55
+		],
+		"abilities": [
+			"frisk",
+			"infiltrator",
+			"telepathy"
 		]
 	},
 	"noivern": {
@@ -14077,6 +17448,11 @@
 			97,
 			80,
 			123
+		],
+		"abilities": [
+			"frisk",
+			"infiltrator",
+			"telepathy"
 		]
 	},
 	"xerneas": {
@@ -14095,6 +17471,9 @@
 			131,
 			98,
 			99
+		],
+		"abilities": [
+			"fairy-aura"
 		]
 	},
 	"yveltal": {
@@ -14114,6 +17493,9 @@
 			131,
 			98,
 			99
+		],
+		"abilities": [
+			"dark-aura"
 		]
 	},
 	"zygarde": {
@@ -14133,6 +17515,9 @@
 			81,
 			95,
 			95
+		],
+		"abilities": [
+			"aura-break"
 		]
 	},
 	"diancie": {
@@ -14152,6 +17537,9 @@
 			100,
 			150,
 			50
+		],
+		"abilities": [
+			"clear-body"
 		]
 	},
 	"hoopa": {
@@ -14171,6 +17559,9 @@
 			150,
 			130,
 			70
+		],
+		"abilities": [
+			"magician"
 		]
 	},
 	"volcanion": {
@@ -14190,6 +17581,9 @@
 			130,
 			90,
 			70
+		],
+		"abilities": [
+			"water-absorb"
 		]
 	},
 	"rowlet": {
@@ -14209,6 +17603,10 @@
 			50,
 			50,
 			42
+		],
+		"abilities": [
+			"overgrow",
+			"long-reach"
 		]
 	},
 	"dartrix": {
@@ -14228,6 +17626,10 @@
 			70,
 			70,
 			52
+		],
+		"abilities": [
+			"overgrow",
+			"long-reach"
 		]
 	},
 	"decidueye": {
@@ -14247,6 +17649,10 @@
 			100,
 			100,
 			70
+		],
+		"abilities": [
+			"overgrow",
+			"long-reach"
 		]
 	},
 	"litten": {
@@ -14265,6 +17671,10 @@
 			60,
 			40,
 			70
+		],
+		"abilities": [
+			"blaze",
+			"intimidate"
 		]
 	},
 	"torracat": {
@@ -14283,6 +17693,10 @@
 			80,
 			50,
 			90
+		],
+		"abilities": [
+			"blaze",
+			"intimidate"
 		]
 	},
 	"incineroar": {
@@ -14302,6 +17716,10 @@
 			80,
 			90,
 			60
+		],
+		"abilities": [
+			"blaze",
+			"intimidate"
 		]
 	},
 	"popplio": {
@@ -14320,6 +17738,10 @@
 			66,
 			56,
 			40
+		],
+		"abilities": [
+			"torrent",
+			"liquid-voice"
 		]
 	},
 	"brionne": {
@@ -14338,6 +17760,10 @@
 			91,
 			81,
 			50
+		],
+		"abilities": [
+			"torrent",
+			"liquid-voice"
 		]
 	},
 	"primarina": {
@@ -14357,6 +17783,10 @@
 			126,
 			116,
 			60
+		],
+		"abilities": [
+			"torrent",
+			"liquid-voice"
 		]
 	},
 	"pikipek": {
@@ -14376,6 +17806,11 @@
 			30,
 			30,
 			65
+		],
+		"abilities": [
+			"keen-eye",
+			"skill-link",
+			"pickup"
 		]
 	},
 	"trumbeak": {
@@ -14395,6 +17830,11 @@
 			40,
 			50,
 			75
+		],
+		"abilities": [
+			"keen-eye",
+			"skill-link",
+			"pickup"
 		]
 	},
 	"toucannon": {
@@ -14414,6 +17854,11 @@
 			75,
 			75,
 			60
+		],
+		"abilities": [
+			"keen-eye",
+			"skill-link",
+			"sheer-force"
 		]
 	},
 	"yungoos": {
@@ -14432,6 +17877,11 @@
 			30,
 			30,
 			45
+		],
+		"abilities": [
+			"stakeout",
+			"strong-jaw",
+			"adaptability"
 		]
 	},
 	"gumshoos": {
@@ -14450,6 +17900,11 @@
 			55,
 			60,
 			45
+		],
+		"abilities": [
+			"stakeout",
+			"strong-jaw",
+			"adaptability"
 		]
 	},
 	"grubbin": {
@@ -14468,6 +17923,9 @@
 			55,
 			45,
 			46
+		],
+		"abilities": [
+			"swarm"
 		]
 	},
 	"charjabug": {
@@ -14487,6 +17945,9 @@
 			55,
 			75,
 			36
+		],
+		"abilities": [
+			"battery"
 		]
 	},
 	"vikavolt": {
@@ -14506,6 +17967,9 @@
 			145,
 			75,
 			43
+		],
+		"abilities": [
+			"levitate"
 		]
 	},
 	"crabrawler": {
@@ -14524,6 +17988,11 @@
 			42,
 			47,
 			63
+		],
+		"abilities": [
+			"hyper-cutter",
+			"iron-fist",
+			"anger-point"
 		]
 	},
 	"crabominable": {
@@ -14543,6 +18012,11 @@
 			62,
 			67,
 			43
+		],
+		"abilities": [
+			"hyper-cutter",
+			"iron-fist",
+			"anger-point"
 		]
 	},
 	"oricorio-fire": {
@@ -14562,6 +18036,9 @@
 			98,
 			70,
 			93
+		],
+		"abilities": [
+			"dancer"
 		]
 	},
 	"oricorio-electric": {
@@ -14581,6 +18058,9 @@
 			98,
 			70,
 			93
+		],
+		"abilities": [
+			"dancer"
 		]
 	},
 	"oricorio-psychic": {
@@ -14600,6 +18080,9 @@
 			98,
 			70,
 			93
+		],
+		"abilities": [
+			"dancer"
 		]
 	},
 	"oricorio-ghost": {
@@ -14619,6 +18102,9 @@
 			98,
 			70,
 			93
+		],
+		"abilities": [
+			"dancer"
 		]
 	},
 	"cutiefly": {
@@ -14638,6 +18124,11 @@
 			55,
 			40,
 			84
+		],
+		"abilities": [
+			"honey-gather",
+			"shield-dust",
+			"sweet-veil"
 		]
 	},
 	"ribombee": {
@@ -14657,6 +18148,11 @@
 			95,
 			70,
 			124
+		],
+		"abilities": [
+			"honey-gather",
+			"shield-dust",
+			"sweet-veil"
 		]
 	},
 	"rockruff": {
@@ -14675,6 +18171,11 @@
 			30,
 			40,
 			60
+		],
+		"abilities": [
+			"keen-eye",
+			"vital-spirit",
+			"steadfast"
 		]
 	},
 	"lycanroc-midday": {
@@ -14693,6 +18194,11 @@
 			55,
 			65,
 			112
+		],
+		"abilities": [
+			"keen-eye",
+			"sand-rush",
+			"steadfast"
 		]
 	},
 	"lycanroc-midnight": {
@@ -14711,6 +18217,11 @@
 			55,
 			75,
 			82
+		],
+		"abilities": [
+			"keen-eye",
+			"vital-spirit",
+			"no-guard"
 		]
 	},
 	"lycanroc-dusk": {
@@ -14729,6 +18240,9 @@
 			55,
 			65,
 			110
+		],
+		"abilities": [
+			"tough-claws"
 		]
 	},
 	"wishiwashi-solo": {
@@ -14747,6 +18261,9 @@
 			25,
 			20,
 			40
+		],
+		"abilities": [
+			"schooling"
 		]
 	},
 	"whisiwashi-school": {
@@ -14766,6 +18283,9 @@
 			140,
 			135,
 			30
+		],
+		"abilities": [
+			"schooling"
 		]
 	},
 	"mareanie": {
@@ -14785,6 +18305,11 @@
 			43,
 			52,
 			45
+		],
+		"abilities": [
+			"merciless",
+			"limber",
+			"regenerator"
 		]
 	},
 	"toxapex": {
@@ -14804,6 +18329,11 @@
 			53,
 			142,
 			35
+		],
+		"abilities": [
+			"merciless",
+			"limber",
+			"regenerator"
 		]
 	},
 	"mudbray": {
@@ -14822,6 +18352,11 @@
 			45,
 			55,
 			45
+		],
+		"abilities": [
+			"own-tempo",
+			"stamina",
+			"inner-focus"
 		]
 	},
 	"mudsdale": {
@@ -14840,6 +18375,11 @@
 			55,
 			85,
 			35
+		],
+		"abilities": [
+			"own-tempo",
+			"stamina",
+			"inner-focus"
 		]
 	},
 	"dewpider": {
@@ -14859,6 +18399,10 @@
 			40,
 			72,
 			27
+		],
+		"abilities": [
+			"water-bubble",
+			"water-absorb"
 		]
 	},
 	"araquanid": {
@@ -14878,6 +18422,10 @@
 			50,
 			132,
 			42
+		],
+		"abilities": [
+			"water-bubble",
+			"water-absorb"
 		]
 	},
 	"fomantis": {
@@ -14896,6 +18444,10 @@
 			50,
 			35,
 			35
+		],
+		"abilities": [
+			"leaf-guard",
+			"contrary"
 		]
 	},
 	"lurantis": {
@@ -14914,6 +18466,10 @@
 			80,
 			90,
 			45
+		],
+		"abilities": [
+			"leaf-guard",
+			"contrary"
 		]
 	},
 	"morelull": {
@@ -14933,6 +18489,11 @@
 			65,
 			75,
 			15
+		],
+		"abilities": [
+			"illuminate",
+			"effect-spore",
+			"rain-dish"
 		]
 	},
 	"shiinotic": {
@@ -14952,6 +18513,11 @@
 			90,
 			100,
 			30
+		],
+		"abilities": [
+			"illuminate",
+			"effect-spore",
+			"rain-dish"
 		]
 	},
 	"salandit": {
@@ -14971,6 +18537,10 @@
 			71,
 			40,
 			77
+		],
+		"abilities": [
+			"corrosion",
+			"oblivious"
 		]
 	},
 	"salazzle": {
@@ -14990,6 +18560,10 @@
 			111,
 			60,
 			117
+		],
+		"abilities": [
+			"corrosion",
+			"oblivious"
 		]
 	},
 	"stufful": {
@@ -15009,6 +18583,11 @@
 			45,
 			50,
 			50
+		],
+		"abilities": [
+			"fluffy",
+			"klutz",
+			"cute-charm"
 		]
 	},
 	"bewear": {
@@ -15028,6 +18607,11 @@
 			55,
 			60,
 			60
+		],
+		"abilities": [
+			"fluffy",
+			"klutz",
+			"unnerve"
 		]
 	},
 	"bounsweet": {
@@ -15046,6 +18630,11 @@
 			30,
 			38,
 			32
+		],
+		"abilities": [
+			"leaf-guard",
+			"oblivious",
+			"sweet-veil"
 		]
 	},
 	"steenee": {
@@ -15064,6 +18653,11 @@
 			40,
 			48,
 			62
+		],
+		"abilities": [
+			"leaf-guard",
+			"oblivious",
+			"sweet-veil"
 		]
 	},
 	"tsareena": {
@@ -15082,6 +18676,11 @@
 			50,
 			98,
 			72
+		],
+		"abilities": [
+			"leaf-guard",
+			"queenly-majesty",
+			"sweet-veil"
 		]
 	},
 	"comfey": {
@@ -15100,6 +18699,11 @@
 			82,
 			110,
 			100
+		],
+		"abilities": [
+			"flower-veil",
+			"triage",
+			"natural-cure"
 		]
 	},
 	"oranguru": {
@@ -15119,6 +18723,11 @@
 			90,
 			110,
 			60
+		],
+		"abilities": [
+			"inner-focus",
+			"telepathy",
+			"symbiosis"
 		]
 	},
 	"passimian": {
@@ -15137,6 +18746,10 @@
 			40,
 			60,
 			80
+		],
+		"abilities": [
+			"receiver",
+			"defiant"
 		]
 	},
 	"wimpod": {
@@ -15156,6 +18769,9 @@
 			20,
 			30,
 			80
+		],
+		"abilities": [
+			"wimp-out"
 		]
 	},
 	"golisopod": {
@@ -15175,6 +18791,9 @@
 			60,
 			90,
 			40
+		],
+		"abilities": [
+			"emergency-exit"
 		]
 	},
 	"sandygast": {
@@ -15194,6 +18813,10 @@
 			70,
 			45,
 			15
+		],
+		"abilities": [
+			"water-compaction",
+			"sand-veil"
 		]
 	},
 	"palossand": {
@@ -15213,6 +18836,10 @@
 			100,
 			75,
 			35
+		],
+		"abilities": [
+			"water-compaction",
+			"sand-veil"
 		]
 	},
 	"pyukumuku": {
@@ -15231,6 +18858,10 @@
 			30,
 			130,
 			5
+		],
+		"abilities": [
+			"innards-out",
+			"unaware"
 		]
 	},
 	"type-null": {
@@ -15249,6 +18880,9 @@
 			95,
 			95,
 			59
+		],
+		"abilities": [
+			"battle-armor"
 		]
 	},
 	"silvally": {
@@ -15267,6 +18901,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-fire": {
@@ -15285,6 +18922,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-water": {
@@ -15303,6 +18943,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-electric": {
@@ -15321,6 +18964,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-grass": {
@@ -15339,6 +18985,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-ice": {
@@ -15357,6 +19006,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-fighting": {
@@ -15375,6 +19027,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-poison": {
@@ -15393,6 +19048,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-ground": {
@@ -15411,6 +19069,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-flying": {
@@ -15429,6 +19090,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-psychic": {
@@ -15447,6 +19111,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-bug": {
@@ -15465,6 +19132,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-rock": {
@@ -15483,6 +19153,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-ghost": {
@@ -15501,6 +19174,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-dragon": {
@@ -15519,6 +19195,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-dark": {
@@ -15537,6 +19216,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-steel": {
@@ -15555,6 +19237,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"silvally-fairy": {
@@ -15573,6 +19258,9 @@
 			95,
 			95,
 			95
+		],
+		"abilities": [
+			"rks-system"
 		]
 	},
 	"minior-meteor": {
@@ -15592,6 +19280,9 @@
 			60,
 			100,
 			60
+		],
+		"abilities": [
+			"shields-down"
 		]
 	},
 	"minior-core": {
@@ -15611,6 +19302,9 @@
 			100,
 			60,
 			100
+		],
+		"abilities": [
+			"shields-down"
 		]
 	},
 	"komala": {
@@ -15629,6 +19323,9 @@
 			75,
 			95,
 			65
+		],
+		"abilities": [
+			"comatose"
 		]
 	},
 	"turtonator": {
@@ -15648,6 +19345,9 @@
 			91,
 			85,
 			36
+		],
+		"abilities": [
+			"shell-armor"
 		]
 	},
 	"togedemaru": {
@@ -15667,6 +19367,11 @@
 			40,
 			73,
 			96
+		],
+		"abilities": [
+			"iron-barbs",
+			"lightning-rod",
+			"sturdy"
 		]
 	},
 	"mimikyu": {
@@ -15686,6 +19391,9 @@
 			50,
 			105,
 			96
+		],
+		"abilities": [
+			"disguise"
 		]
 	},
 	"bruxish": {
@@ -15705,6 +19413,11 @@
 			70,
 			70,
 			92
+		],
+		"abilities": [
+			"dazzling",
+			"strong-jaw",
+			"wonder-skin"
 		]
 	},
 	"drampa": {
@@ -15724,6 +19437,11 @@
 			135,
 			91,
 			36
+		],
+		"abilities": [
+			"berserk",
+			"sap-sipper",
+			"cloud-nine"
 		]
 	},
 	"dhelmise": {
@@ -15743,6 +19461,9 @@
 			86,
 			90,
 			40
+		],
+		"abilities": [
+			"steelworker"
 		]
 	},
 	"jangmo-o": {
@@ -15761,6 +19482,11 @@
 			45,
 			45,
 			45
+		],
+		"abilities": [
+			"bulletproof",
+			"soundproof",
+			"overcoat"
 		]
 	},
 	"hakamo-o": {
@@ -15780,6 +19506,11 @@
 			65,
 			70,
 			65
+		],
+		"abilities": [
+			"bulletproof",
+			"soundproof",
+			"overcoat"
 		]
 	},
 	"kommo-o": {
@@ -15799,6 +19530,11 @@
 			100,
 			105,
 			85
+		],
+		"abilities": [
+			"bulletproof",
+			"soundproof",
+			"overcoat"
 		]
 	},
 	"tapu koko": {
@@ -15818,6 +19554,10 @@
 			95,
 			75,
 			130
+		],
+		"abilities": [
+			"electric-surge",
+			"telepathy"
 		]
 	},
 	"tapu lele": {
@@ -15837,6 +19577,10 @@
 			130,
 			115,
 			95
+		],
+		"abilities": [
+			"psychic-surge",
+			"telepathy"
 		]
 	},
 	"tapu bulu": {
@@ -15856,6 +19600,10 @@
 			85,
 			95,
 			75
+		],
+		"abilities": [
+			"grassy-surge",
+			"telepathy"
 		]
 	},
 	"tapu fini": {
@@ -15875,6 +19623,10 @@
 			95,
 			130,
 			85
+		],
+		"abilities": [
+			"misty-surge",
+			"telepathy"
 		]
 	},
 	"cosmog": {
@@ -15893,6 +19645,9 @@
 			29,
 			31,
 			37
+		],
+		"abilities": [
+			"unaware"
 		]
 	},
 	"solgaleo": {
@@ -15912,6 +19667,9 @@
 			113,
 			89,
 			97
+		],
+		"abilities": [
+			"full-metal-body"
 		]
 	},
 	"lunala": {
@@ -15931,6 +19689,9 @@
 			137,
 			107,
 			97
+		],
+		"abilities": [
+			"shadow-shield"
 		]
 	},
 	"nihilego": {
@@ -15950,6 +19711,9 @@
 			127,
 			131,
 			103
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"buzzwole": {
@@ -15969,6 +19733,9 @@
 			53,
 			53,
 			79
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"pheromosa": {
@@ -15988,6 +19755,9 @@
 			137,
 			37,
 			151
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"xurkitree": {
@@ -16006,6 +19776,9 @@
 			173,
 			71,
 			83
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"celesteela": {
@@ -16025,6 +19798,9 @@
 			107,
 			101,
 			61
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"kartana": {
@@ -16044,6 +19820,9 @@
 			59,
 			31,
 			109
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"guzzlord": {
@@ -16063,6 +19842,9 @@
 			97,
 			53,
 			43
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"necrozma": {
@@ -16081,6 +19863,9 @@
 			107,
 			89,
 			79
+		],
+		"abilities": [
+			"prism-armor"
 		]
 	},
 	"necrozma-dusk": {
@@ -16100,6 +19885,9 @@
 			113,
 			109,
 			77
+		],
+		"abilities": [
+			"prism-armor"
 		]
 	},
 	"necrozma-dawn": {
@@ -16119,6 +19907,9 @@
 			157,
 			127,
 			77
+		],
+		"abilities": [
+			"prism-armor"
 		]
 	},
 	"necrozma-ultra": {
@@ -16138,6 +19929,9 @@
 			161,
 			97,
 			129
+		],
+		"abilities": [
+			"neuroforce"
 		]
 	},
 	"magearna": {
@@ -16157,6 +19951,9 @@
 			130,
 			115,
 			65
+		],
+		"abilities": [
+			"soul-heart"
 		]
 	},
 	"marshadow": {
@@ -16176,6 +19973,9 @@
 			90,
 			90,
 			125
+		],
+		"abilities": [
+			"technician"
 		]
 	},
 	"poipole": {
@@ -16194,6 +19994,9 @@
 			73,
 			67,
 			173
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"naganadel": {
@@ -16213,6 +20016,9 @@
 			127,
 			73,
 			121
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"stakataka": {
@@ -16232,6 +20038,9 @@
 			53,
 			101,
 			13
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"blacephalon": {
@@ -16251,6 +20060,9 @@
 			151,
 			79,
 			107
+		],
+		"abilities": [
+			"beast-boost"
 		]
 	},
 	"zeraora": {
@@ -16269,6 +20081,9 @@
 			102,
 			80,
 			143
+		],
+		"abilities": [
+			"volt-absorb"
 		]
 	},
 	"venusaur-mega": {
@@ -23830,7 +27645,8 @@
 		"num": "",
 		"name": "Raichu-Mega-X",
 		"type": [
-			3
+			3,
+			6
 		],
 		"mega": 1,
 		"weight": 32,
@@ -23851,7 +27667,8 @@
 		"num": "",
 		"name": "Raichu-Mega-Y",
 		"type": [
-			3
+			3,
+			16
 		],
 		"mega": 1,
 		"weight": 24,
