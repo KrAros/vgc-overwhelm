@@ -16,27 +16,37 @@ const ALL_ITEMS = Object.keys(itemsData).sort()
 const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
 const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 
-const spriteUrl = (key) => {
+const _resolveNum = (key) => {
   const data = pokemonData[key]
   if (!data) return null
-  const isMegaY   = key.includes('-mega-y')
-  const isMegaX   = key.includes('-mega-x')
-  const isMega    = data.mega === 1
-  const isAlola   = key.includes('-alola')
   let num = data.num
-  // Le Mega, le forme Primal e Unbound non hanno num proprio —
-  // si ricava togliendo il suffisso dalla chiave base.
-  if (isMega || !num) {
+  if (!num) {
     const baseName = key
       .replace(/-mega.*$/, '')
       .replace(/-primal$/, '')
       .replace(/-unbound$/, '')
     num = pokemonData[baseName]?.num || ''
   }
-  num = num?.replace('#', '').padStart(4, '0')
+  return num?.replace('#', '').padStart(4, '0') || null
+}
+
+const spriteUrl = (key) => {
+  const data = pokemonData[key]
+  if (!data) return null
+  const isMegaY = key.includes('-mega-y')
+  const isMegaX = key.includes('-mega-x')
+  const isMega  = data.mega === 1
+  const isAlola = key.includes('-alola')
+  const num = _resolveNum(key)
   if (!num) return null
   const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
+}
+
+const fallbackSpriteUrl = (key) => {
+  const num = _resolveNum(key)
+  if (!num) return null
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
 }
 
 function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange }) {
@@ -520,7 +530,10 @@ function PokemonPanel({ team, index }) {
             src={spriteUrl(pokemon.key)}
             alt={pokemon.key}
             className="w-16 h-16 object-contain"
-            onError={e => e.target.style.display='none'}
+            onError={e => {
+              const fb = fallbackSpriteUrl(pokemon.key)
+              if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+            }}
           />
         )}
         <div className="flex-1 flex flex-col gap-1.5">
@@ -653,7 +666,10 @@ export default function TeamEditor({ team }) {
                   src={sprite}
                   alt={p.key}
                   className="w-8 h-8 object-contain"
-                  onError={e => e.target.style.display='none'}
+                  onError={e => {
+                    const fb = fallbackSpriteUrl(p.key)
+                    if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                  }}
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-gray-600 text-xs">

@@ -4,21 +4,37 @@ import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 
+const _resolveNum = (key) => {
+  const data = pokemonData[key]
+  if (!data) return null
+  let num = data.num
+  if (!num) {
+    const baseName = key
+      .replace(/-mega.*$/, '')
+      .replace(/-primal$/, '')
+      .replace(/-unbound$/, '')
+    num = pokemonData[baseName]?.num || ''
+  }
+  return num?.replace('#', '').padStart(4, '0') || null
+}
+
 const spriteUrl = (key) => {
   const data = pokemonData[key]
   if (!data) return null
-  const isMegaX = key.includes('-mega-x')
   const isMegaY = key.includes('-mega-y')
+  const isMegaX = key.includes('-mega-x')
   const isMega  = data.mega === 1
-  let num = data.num
-  if (isMega) {
-    const baseName = key.replace(/-mega.*$/, '')
-    num = pokemonData[baseName]?.num || ''
-  }
-  num = num?.replace('#', '').padStart(4, '0')
+  const isAlola = key.includes('-alola')
+  const num = _resolveNum(key)
   if (!num) return null
-  const form = isMegaY ? 'f02' : isMegaX ? 'f01' : isMega ? 'f01' : 'f00'
+  const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
+}
+
+const fallbackSpriteUrl = (key) => {
+  const num = _resolveNum(key)
+  if (!num) return null
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
 }
 
 const SpreadIcon = () => (
@@ -230,7 +246,10 @@ export default function DamageTable({ onCellSelect }) {
                       src={spriteUrl(p.key)}
                       alt={p.key}
                       className="w-12 h-12 object-contain mx-auto"
-                      onError={e => e.target.style.display='none'}
+                      onError={e => {
+                        const fb = fallbackSpriteUrl(p.key)
+                        if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                      }}
                     />
                     <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
                   </>
@@ -251,7 +270,10 @@ export default function DamageTable({ onCellSelect }) {
                       src={spriteUrl(row.key)}
                       alt={row.key}
                       className="w-12 h-12 object-contain mx-auto"
-                      onError={e => e.target.style.display='none'}
+                      onError={e => {
+                        const fb = fallbackSpriteUrl(row.key)
+                        if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                      }}
                     />
                     <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
                   </>
