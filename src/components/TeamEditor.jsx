@@ -1,20 +1,26 @@
 import { useState } from 'react'
 import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
-import movesData from '../data/moves.json'
-import itemsData from '../data/items.json'
+import movesData   from '../data/moves.json'
+import itemsData   from '../data/items.json'
+import abilitiesData from '../data/abilities.json'
 import useCalcStore from '../store/useCalcStore'
 import { NATURES, NATURE_MODIFIERS } from '../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
 
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
-const ALL_MOVES = Object.keys(movesData).sort()
-const ALL_ITEMS = Object.keys(itemsData).sort()
-
+const ALL_MOVES   = Object.keys(movesData).sort()
+const ALL_ITEMS   = Object.keys(itemsData).sort()
 
 const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
 const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
+
+const SP_TO_EV = (sp) => sp
+const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
+const EV_TO_SP = (ev) => Math.min(32, ev)
+
+// ─── Sprite helpers ───────────────────────────────────────────────────────────
 
 const _resolveNum = (key) => {
   const data = pokemonData[key]
@@ -49,6 +55,151 @@ const fallbackSpriteUrl = (key) => {
   return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
 }
 
+// ─── Showdown helpers (singolo Pokémon) ───────────────────────────────────────
+
+/**
+ * Converte uno slot store → blocco testo Showdown per un singolo Pokémon.
+ */
+function slotToShowdown(slot) {
+  if (!slot?.key) return null
+  const data = pokemonData[slot.key]
+  if (!data) return null
+
+  const displayName = data.name || slot.key
+
+  const itemDisplay = slot.item
+    ? (itemsData[slot.item]?.name || slot.item.replace(/\b\w/g, c => c.toUpperCase()))
+    : null
+  const line1 = itemDisplay ? `${displayName} @ ${itemDisplay}` : displayName
+
+  const abilityDisplay = slot.ability
+    ? (abilitiesData[slot.ability]?.name || slot.ability.replace(/\b\w/g, c => c.toUpperCase()))
+    : 'None'
+  const abilityLine = `Ability: ${abilityDisplay}`
+
+  const evParts = (slot.sps || [])
+    .map((sp, i) => sp > 0 ? `${SP_TO_EV(sp)} ${STAT_NAMES_SHOWDOWN[i]}` : null)
+    .filter(Boolean)
+  const evsLine = evParts.length > 0 ? `EVs: ${evParts.join(' / ')}` : null
+
+  const natureLine = slot.nature
+    ? `${slot.nature.charAt(0).toUpperCase() + slot.nature.slice(1)} Nature`
+    : null
+
+  const moveLines = (slot.moves || [])
+    .filter(Boolean)
+    .map(moveKey => {
+      const moveName = movesData[moveKey]?.name
+        || moveKey.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+      return `- ${moveName}`
+    })
+
+  return [line1, abilityLine, evsLine, natureLine, ...moveLines]
+    .filter(Boolean)
+    .join('\n')
+}
+
+/**
+ * Parsa un blocco Showdown di un singolo Pokémon → oggetto slot store.
+ * Restituisce { slot, warnings }.
+ */
+function showdownToSlot(text) {
+  const lines = text.replace(/\r\n/g, '\n').split('\n').map(l => l.trim()).filter(Boolean)
+  if (!lines.length) return { slot: null, warnings: ['Testo vuoto.'] }
+
+  const warnings = []
+  const STAT_IDX = { HP: 0, Atk: 1, Def: 2, SpA: 3, SpD: 4, Spe: 5 }
+
+  // Riga 1: nome @ item
+  let pokeRawName = lines[0]
+  let itemKey = null
+  if (lines[0].includes(' @ ')) {
+    const [pokePart, itemPart] = lines[0].split(' @ ')
+    pokeRawName = pokePart.trim()
+    const itemSlug = itemPart.trim().toLowerCase()
+    itemKey = itemsData[itemSlug] ? itemSlug : null
+    if (!itemKey) warnings.push(`Item "${itemPart.trim()}" non trovato, ignorato.`)
+  }
+
+  // Gestione nickname "(Venusaur)"
+  const nicknameMatch = pokeRawName.match(/^.+\((.+)\)$/)
+  if (nicknameMatch) pokeRawName = nicknameMatch[1].trim()
+
+  const pokeSlug = pokeRawName.toLowerCase()
+  const pokeDashSlug = pokeSlug.replace(/\s+/g, '-')
+  let pokemonKey = pokemonData[pokeSlug] ? pokeSlug
+    : pokemonData[pokeDashSlug] ? pokeDashSlug
+    : null
+  if (!pokemonKey) {
+    if (pokeDashSlug.endsWith('-f')) {
+      const withF = pokeDashSlug.slice(0, -2) + 'f'
+      if (pokemonData[withF]) pokemonKey = withF
+    } else if (pokeDashSlug.endsWith('-m')) {
+      const withoutM = pokeDashSlug.slice(0, -2)
+      if (pokemonData[withoutM]) pokemonKey = withoutM
+    }
+  }
+
+  if (!pokemonKey) {
+    return { slot: null, warnings: [`Pokémon "${pokeRawName}" non trovato.`] }
+  }
+
+  let abilityKey = null
+  let nature = null
+  const sps = [0, 0, 0, 0, 0, 0]
+  const moves = [null, null, null, null]
+  let moveIdx = 0
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (line.startsWith('Ability:')) {
+      const rawAbility = line.replace('Ability:', '').trim().toLowerCase()
+      abilityKey = abilitiesData[rawAbility] ? rawAbility : null
+      if (!abilityKey) warnings.push(`Abilità "${rawAbility}" non trovata, ignorata.`)
+
+    } else if (line.startsWith('EVs:')) {
+      line.replace('EVs:', '').trim().split('/').forEach(seg => {
+        const m = seg.trim().match(/^(\d+)\s+(\w+)$/)
+        if (m) {
+          const idx = STAT_IDX[m[2]]
+          if (idx !== undefined) sps[idx] = EV_TO_SP(parseInt(m[1], 10))
+        }
+      })
+
+    } else if (line.endsWith(' Nature')) {
+      const n = line.replace(' Nature', '').trim().toLowerCase()
+      if (NATURES.includes(n)) nature = n
+      else warnings.push(`Natura "${n}" non riconosciuta.`)
+
+    } else if (line.startsWith('- ') && moveIdx < 4) {
+      const rawMove = line.slice(2).trim().toLowerCase()
+      const moveSpaced = rawMove.replace(/-/g, ' ')
+      const moveKey = movesData[rawMove] ? rawMove
+        : movesData[moveSpaced] ? moveSpaced
+        : null
+      if (moveKey) moves[moveIdx] = moveKey
+      else warnings.push(`Mossa "${line.slice(2).trim()}" non trovata, ignorata.`)
+      moveIdx++
+    }
+    // IVs, Level, Shiny, Tera Type → ignorati (Champions format)
+  }
+
+  // Se il Pokémon ha abilità di default, usala come fallback
+  if (!abilityKey) {
+    const defaultAbility = pokemonData[pokemonKey]?.abilities?.[0]
+    if (defaultAbility) abilityKey = defaultAbility
+  }
+
+  return {
+    slot: { key: pokemonKey, moves, sps, nature, ability: abilityKey, item: itemKey,
+            atkBoost: 0, defBoost: 0, spAtkBoost: 0, spDefBoost: 0, speBoost: 0,
+            abilityFlags: {} },
+    warnings,
+  }
+}
+
+// ─── StatRow ─────────────────────────────────────────────────────────────────
+
 function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange }) {
   const finalStat = calcFinalStat(base, sp, level, nature, statIdx)
   const boostedStat = boostVal !== 0
@@ -59,9 +210,8 @@ function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoo
   const isBoost = mod && mod[0] !== 0 && mod[0] === statIdx
   const isDrop  = mod && mod[0] !== 0 && mod[1] === statIdx
 
-  const statColor = isBoost ? 'text-red-400' : isDrop ? 'text-blue-400' : 'text-gray-200'
+  const statColor  = isBoost ? 'text-red-400' : isDrop ? 'text-blue-400' : 'text-gray-200'
   const boostColor = boostVal > 0 ? 'text-green-400' : boostVal < 0 ? 'text-red-400' : 'text-gray-500'
-
   const hasBoost = statIdx !== 0
 
   return (
@@ -104,17 +254,19 @@ function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoo
       ) : (
         <>
           <div className="w-12" aria-hidden="true" />
-          <div className="w-8" aria-hidden="true" />
+          <div className="w-8"  aria-hidden="true" />
         </>
       )}
     </div>
   )
 }
 
+// ─── PokemonSearch ────────────────────────────────────────────────────────────
+
 function PokemonSearch({ value, onChange }) {
-  const [query, setQuery] = useState('')
+  const [query, setQuery]   = useState('')
   const [focused, setFocused] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen]     = useState(false)
 
   const filtered = query.length >= 2
     ? ALL_POKEMON.filter(p => p.includes(query.toLowerCase())).slice(0, 20)
@@ -138,11 +290,7 @@ function PokemonSearch({ value, onChange }) {
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
         onBlur={() => {
-          setTimeout(() => {
-            setFocused(false)
-            setOpen(false)
-            setQuery('')
-          }, 150)
+          setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150)
         }}
       />
       {hasValue && (
@@ -171,9 +319,11 @@ function PokemonSearch({ value, onChange }) {
   )
 }
 
+// ─── MoveSearch ───────────────────────────────────────────────────────────────
+
 function MoveSearch({ value, onChange, placeholder }) {
   const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
+  const [open, setOpen]   = useState(false)
 
   const filtered = query.length >= 2
     ? ALL_MOVES.filter(m => m.includes(query.toLowerCase())).slice(0, 20)
@@ -181,11 +331,7 @@ function MoveSearch({ value, onChange, placeholder }) {
 
   const moveDetails = movesData[value]
 
-  const categoryTitles = {
-    0: 'Fisico',
-    1: 'Speciale',
-    2: 'Stato'
-  }
+  const categoryTitles = { 0: 'Fisico', 1: 'Speciale', 2: 'Stato' }
 
   return (
     <div className="bg-gray-700/40 p-1.5 rounded border border-gray-700/60 flex items-center justify-between gap-2 h-9">
@@ -237,9 +383,11 @@ function MoveSearch({ value, onChange, placeholder }) {
   )
 }
 
+// ─── ItemSearch ───────────────────────────────────────────────────────────────
+
 function ItemSearch({ value, onChange }) {
   const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
+  const [open, setOpen]   = useState(false)
 
   const filtered = query.length >= 2
     ? ALL_ITEMS.filter(i => i.includes(query.toLowerCase())).slice(0, 20)
@@ -272,6 +420,8 @@ function ItemSearch({ value, onChange }) {
   )
 }
 
+// ─── AbilitySelect ────────────────────────────────────────────────────────────
+
 function AbilitySelect({ value, abilities, onChange }) {
   const options = abilities && abilities.length > 0 ? abilities : (value ? [value] : [])
   return (
@@ -287,15 +437,11 @@ function AbilitySelect({ value, abilities, onChange }) {
   )
 }
 
-// ─── Toggle contestuali per abilità con stato ─────────────────────────────────
-// Appare sotto il selector abilità solo quando l'abilità selezionata ha flag
-// configurabili (Intimidate, Flash Fire, Multiscale, Supreme Overlord).
-// Ogni toggle/input modifica abilityFlags nello store senza toccare i boost.
+// ─── AbilityFlags ─────────────────────────────────────────────────────────────
+
 function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange }) {
   const key = (ability || '').toLowerCase()
 
-  // Intimidate: toggle manuale — se attivo, applica -1 Atk all'attaccante nel calc
-  // Defiant / Contrary sull'attaccante reagiscono automaticamente a questo flag
   if (key === 'intimidate') {
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-orange-950/30 border border-orange-800/30 rounded text-xs">
@@ -311,15 +457,12 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
           }`} />
         </button>
         <span className={flags.intimidateActive ? 'text-orange-300' : 'text-gray-500'}>
-          {flags.intimidateActive
-            ? '−1 Atk avversario attivo'
-            : 'Intimidate non ancora attivato'}
+          {flags.intimidateActive ? '−1 Atk avversario attivo' : 'Intimidate non ancora attivato'}
         </span>
       </div>
     )
   }
 
-  // Flash Fire: toggle offensivo — immune Fire sempre, boost ×1.5 solo se attivato
   if (key === 'flash-fire') {
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-red-950/30 border border-red-800/30 rounded text-xs">
@@ -335,15 +478,12 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
           }`} />
         </button>
         <span className={flags.flashFireActive ? 'text-red-300' : 'text-gray-500'}>
-          {flags.flashFireActive
-            ? '×1.5 Fire attivo (colpito in precedenza)'
-            : 'Immune Fire — boost non ancora attivato'}
+          {flags.flashFireActive ? '×1.5 Fire attivo (colpito in precedenza)' : 'Immune Fire — boost non ancora attivato'}
         </span>
       </div>
     )
   }
 
-  // Multiscale / Shadow Shield: default true (HP pieni), l'utente disattiva se già danneggiato
   if (key === 'multiscale' || key === 'shadow-shield') {
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-blue-950/30 border border-blue-800/30 rounded text-xs">
@@ -359,18 +499,14 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
           }`} />
         </button>
         <span className={flags.multiscaleActive ? 'text-blue-300' : 'text-gray-500'}>
-          {flags.multiscaleActive
-            ? 'Multiscale: ×0.5 danno ricevuto (HP pieni)'
-            : 'Multiscale: HP non pieni — nessuna riduzione'}
+          {flags.multiscaleActive ? 'Multiscale: ×0.5 danno ricevuto (HP pieni)' : 'Multiscale: HP non pieni — nessuna riduzione'}
         </span>
       </div>
     )
   }
 
-  // Supreme Overlord (Kingambit): input 0-5 per il numero di alleati KO
-  // Ogni alleato KO aggiunge +10% ad Atk e SpAtk (max ×1.5 con 5 alleati KO)
   if (key === 'supreme-overlord') {
-    const kos = flags.supremeOverlordKOs || 0
+    const kos  = flags.supremeOverlordKOs || 0
     const mult = (1 + kos * 0.1).toFixed(1)
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
@@ -382,9 +518,7 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
               type="button"
               onClick={() => onFlagChange('supremeOverlordKOs', n)}
               className={`w-5 h-5 rounded text-[10px] font-bold transition-colors ${
-                kos === n
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                kos === n ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
               }`}
             >
               {n}
@@ -398,45 +532,181 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
     )
   }
 
-  // Defiant / Contrary: nessun toggle — reagiscono automaticamente a Intimidate
   if (key === 'defiant' || key === 'contrary') {
-  return (
-    <div className={`mt-1 px-1 py-1 rounded text-xs border ${
-      opponentHasIntimidateActive
-        ? 'bg-green-950/40 border-green-700/40 text-green-300'
-        : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
-    }`}>
-      {opponentHasIntimidateActive
-        ? '✅ Intimidate avversario attivo → +1 Atk'
-        : '💡 Reagisce automaticamente a Intimidate avversario'}
-    </div>
-  )
-}
+    return (
+      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+        opponentHasIntimidateActive
+          ? 'bg-green-950/40 border-green-700/40 text-green-300'
+          : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
+      }`}>
+        {opponentHasIntimidateActive
+          ? '✅ Intimidate avversario attivo → +1 Atk'
+          : '💡 Reagisce automaticamente a Intimidate avversario'}
+      </div>
+    )
+  }
 
   return null
 }
 
+// ─── ImportModal (inline nello slot) ─────────────────────────────────────────
+/**
+ * Textarea inline che appare sotto i bottoni quando si clicca Importa.
+ * Parsa un singolo blocco Showdown e popola lo slot corrente.
+ */
+function ImportModal({ team, index, onClose, alwaysOpen = false }) {
+  const [text, setText] = useState('')
+  const [warnings, setWarnings] = useState([])
+
+  const setPokemon     = useCalcStore(s => s.setPokemon)
+  const setSPs         = useCalcStore(s => s.setSPs)
+  const setNature      = useCalcStore(s => s.setNature)
+  const setAbility     = useCalcStore(s => s.setAbility)
+  const setItem        = useCalcStore(s => s.setItem)
+  const setMove        = useCalcStore(s => s.setMove)
+
+  function handleImport() {
+    const { slot, warnings: w } = showdownToSlot(text)
+    setWarnings(w)
+    if (!slot) return
+
+    setPokemon(team, index, slot.key)
+    setSPs(team, index, slot.sps)
+    if (slot.nature)  setNature(team, index, slot.nature)
+    if (slot.ability) setAbility(team, index, slot.ability)
+    if (slot.item)    setItem(team, index, slot.item)
+    slot.moves.forEach((m, mi) => { if (m) setMove(team, index, mi, m) })
+
+    if (w.length === 0) onClose()
+  }
+
+  return (
+    <div className={alwaysOpen ? '' : 'mt-2 p-2 bg-gray-900 rounded border border-gray-700'}>
+      <textarea
+        autoFocus={!alwaysOpen}
+        className="w-full h-36 bg-gray-800 text-gray-200 text-xs font-mono p-2 rounded border border-gray-700 resize-none outline-none focus:border-teal-500"
+        placeholder={"Incolla qui il blocco Showdown del singolo Pokémon...\n\nEsempio:\nGardevoir @ Choice Specs\nAbility: Trace\nEVs: 4 HP / 32 SpA / 30 Spe\nTimid Nature\n- Moonblast\n- Psychic\n- Shadow Ball\n- Trick"}
+        value={text}
+        onChange={e => setText(e.target.value)}
+      />
+      <div className="flex gap-2 mt-1.5 items-center flex-wrap">
+        <button
+          onClick={handleImport}
+          className="text-xs px-3 py-1 rounded bg-teal-700 hover:bg-teal-600 text-white transition-colors"
+        >
+          ✔ Importa
+        </button>
+        {!alwaysOpen && (
+          <button
+            onClick={onClose}
+            className="text-xs px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors"
+          >
+            Annulla
+          </button>
+        )}
+        {warnings.map((w, i) => (
+          <span key={i} className="text-xs text-yellow-400">⚠ {w}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── DuplicateModal ───────────────────────────────────────────────────────────
+/**
+ * Mostra un selettore di slot solo quando tutti e 6 i posti del team sono occupati.
+ * In caso contrario duplica direttamente nel primo slot libero dopo l'attuale.
+ */
+function DuplicateModal({ team, sourceIndex, onClose }) {
+  const teamData   = useCalcStore(s => s[team])
+  const setTeamFn  = useCalcStore(s => s.setTeam)
+
+  // Trova il primo slot libero dopo sourceIndex
+  const nextEmpty = (() => {
+    for (let i = sourceIndex + 1; i < 6; i++) {
+      if (!teamData[i]?.key) return i
+    }
+    return null
+  })()
+
+  function duplicateTo(targetIndex) {
+    const source = teamData[sourceIndex]
+    if (!source) return
+    const newTeam = teamData.map((slot, i) =>
+      i === targetIndex ? { ...source } : slot
+    )
+    setTeamFn(team, newTeam)
+    onClose()
+  }
+
+  // Slot libero trovato → duplica subito senza mostrare UI
+  if (nextEmpty !== null) {
+    duplicateTo(nextEmpty)
+    return null
+  }
+
+  // Tutti gli slot occupati → chiedi dove sovrascrivere
+  return (
+    <div className="mt-2 p-2 bg-gray-900 rounded border border-gray-700">
+      <p className="text-xs text-gray-400 mb-2">Tutti gli slot sono occupati. Scegli dove sovrascrivere:</p>
+      <div className="flex gap-1 flex-wrap">
+        {teamData.map((slot, i) => {
+          if (i === sourceIndex) return null
+          const name = slot?.key ? slot.key.split('-')[0] : `P${i+1}`
+          const sprite = slot?.key ? spriteUrl(slot.key) : null
+          return (
+            <button
+              key={i}
+              onClick={() => duplicateTo(i)}
+              className="flex flex-col items-center gap-0.5 px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 border border-gray-600 transition-colors"
+            >
+              {sprite && (
+                <img src={sprite} alt={name} className="w-8 h-8 object-contain"
+                  onError={e => { e.target.style.display = 'none' }} />
+              )}
+              <span className="text-[10px] text-gray-300 capitalize">{name}</span>
+            </button>
+          )
+        })}
+      </div>
+      <button
+        onClick={onClose}
+        className="mt-2 text-xs text-gray-500 hover:text-gray-300"
+      >
+        Annulla
+      </button>
+    </div>
+  )
+}
+
+// ─── PokemonPanel ─────────────────────────────────────────────────────────────
+
 function PokemonPanel({ team, index }) {
-  const pokemon = useCalcStore(s => s[team][index])
-  const level   = useCalcStore(s => s.level)
-  const setPokemon      = useCalcStore(s => s.setPokemon)
-  const setNature       = useCalcStore(s => s.setNature)
-  const setSPs          = useCalcStore(s => s.setSPs)
-  const setMove         = useCalcStore(s => s.setMove)
-  const setBoost        = useCalcStore(s => s.setBoost)
-  const setItem         = useCalcStore(s => s.setItem)
-  const setAbility      = useCalcStore(s => s.setAbility)
-  const setAbilityFlag  = useCalcStore(s => s.setAbilityFlag)
+  const pokemon        = useCalcStore(s => s[team][index])
+  const level          = useCalcStore(s => s.level)
+  const setPokemon     = useCalcStore(s => s.setPokemon)
+  const setNature      = useCalcStore(s => s.setNature)
+  const setSPs         = useCalcStore(s => s.setSPs)
+  const setMove        = useCalcStore(s => s.setMove)
+  const setBoost       = useCalcStore(s => s.setBoost)
+  const setItem        = useCalcStore(s => s.setItem)
+  const setAbility     = useCalcStore(s => s.setAbility)
+  const setAbilityFlag = useCalcStore(s => s.setAbilityFlag)
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
 
-  const data = pokemonData[pokemon?.key]
-  const sps  = pokemon?.sps || [0,0,0,0,0,0]
-  const nature = pokemon?.nature || null
-  const item   = pokemon?.item || null
-  const ability = pokemon?.ability || null
+  const [showImport,    setShowImport]    = useState(false)
+  const [showDuplicate, setShowDuplicate] = useState(false)
+  const [exportCopied,  setExportCopied]  = useState(false)
+
+  const data         = pokemonData[pokemon?.key]
+  const sps          = pokemon?.sps || [0,0,0,0,0,0]
+  const nature       = pokemon?.nature || null
+  const item         = pokemon?.item || null
+  const ability      = pokemon?.ability || null
   const abilityFlags = pokemon?.abilityFlags || {}
-  const total = sps.reduce((a,b) => a+b, 0)
-  const remaining = 66 - total
+  const total        = sps.reduce((a,b) => a+b, 0)
+  const remaining    = 66 - total
+
   const opponentTeam = useCalcStore(s => s[team === 'team1' ? 'team2' : 'team1'])
   const opponentHasIntimidateActive = opponentTeam.some(
     p => p?.ability?.toLowerCase() === 'intimidate' && p?.abilityFlags?.intimidateActive
@@ -447,7 +717,7 @@ function PokemonPanel({ team, index }) {
   const handleSp = (i, val) => {
     const newVal = Math.min(32, Math.max(0, val))
     const newSPs = [...sps]
-    const diff = newVal - sps[i]
+    const diff   = newVal - sps[i]
     if (diff > remaining) return
     newSPs[i] = newVal
     setSPs(team, index, newSPs)
@@ -456,7 +726,7 @@ function PokemonPanel({ team, index }) {
   const handlePokemonChange = (key) => {
     setPokemon(team, index, key)
     const targetData = pokemonData[key]
-    if (targetData && targetData.abilities && targetData.abilities.length > 0) {
+    if (targetData?.abilities?.length > 0) {
       setAbility(team, index, targetData.abilities[0])
     } else {
       setAbility(team, index, '')
@@ -469,59 +739,105 @@ function PokemonPanel({ team, index }) {
     setDoubleTarget(isSpread)
   }
 
-  const handleDuplicate = () => { console.log('Duplica slot:', index) }
-  const handleExport = () => { console.log('Esporta slot:', index) }
-  const handleImport = () => { console.log('Importa nello slot:', index) }
+  // ── Esporta: copia paste singolo Pokémon negli appunti
+  const handleExport = () => {
+    const paste = slotToShowdown(pokemon)
+    if (!paste) return
+    navigator.clipboard.writeText(paste).then(() => {
+      setExportCopied(true)
+      setTimeout(() => setExportCopied(false), 2000)
+    })
+  }
+
+  // ── Importa: toggle textarea inline
+  const handleImport = () => {
+    setShowImport(v => !v)
+    setShowDuplicate(false)
+  }
+
+  // ── Duplica: logica gestita da DuplicateModal
+  const handleDuplicate = () => {
+    setShowDuplicate(v => !v)
+    setShowImport(false)
+  }
 
   return (
     <div className="p-3">
-      {data && (
-        <div className="flex justify-end gap-1.5 mb-2.5 text-xs">
-          <button
-            type="button"
-            onClick={handleDuplicate}
-            className="flex items-center justify-center gap-1 bg-gray-700/60 hover:bg-gray-700 text-gray-300 w-20 py-1 rounded border border-gray-600/40 transition"
-            title="Duplica Pokémon"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-            </svg>
-            <span>Duplica</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleExport}
-            className="flex items-center justify-center gap-1 bg-gray-700/60 hover:bg-gray-700 text-gray-300 w-20 py-1 rounded border border-gray-600/40 transition"
-            title="Esporta in Showdown"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-            <span>Esporta</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleImport}
-            className="flex items-center justify-center gap-1 bg-gray-700/60 hover:bg-gray-700 text-gray-300 w-20 py-1 rounded border border-gray-600/40 transition"
-            title="Importa da Showdown"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            <span>Importa</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => { setPokemon(team, index, ''); setAbility(team, index, '') }}
-            className="flex items-center justify-center gap-1 bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 w-20 py-1 rounded border border-red-900/30 transition ml-1"
-            title="Elimina Pokémon"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-            <span>Elimina</span>
-          </button>
-        </div>
+      {/* Barra bottoni — sempre visibile. Duplica/Esporta/Elimina disabilitati se slot vuoto */}
+      <div className="flex justify-end gap-1.5 mb-2.5 text-xs">
+            <button
+              type="button"
+              onClick={data ? handleDuplicate : undefined}
+              disabled={!data}
+              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                : showDuplicate ? 'bg-teal-800 border-teal-600 text-teal-200'
+                : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
+              }`}
+              title="Duplica Pokémon"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+              <span>Duplica</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={data ? handleExport : undefined}
+              disabled={!data}
+              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                : exportCopied ? 'bg-green-800 border-green-600 text-green-200'
+                : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
+              }`}
+              title="Esporta in Showdown"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span>{exportCopied ? '✔ Copiato' : 'Esporta'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleImport}
+              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
+                showImport
+                  ? 'bg-teal-800 border-teal-600 text-teal-200'
+                  : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
+              }`}
+              title="Importa da Showdown"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Importa</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={data ? () => { setPokemon(team, index, ''); setAbility(team, index, '') } : undefined}
+              disabled={!data}
+              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ml-1 ${
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                : 'bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 border-red-900/30'
+              }`}
+              title="Elimina Pokémon"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <span>Elimina</span>
+            </button>
+          </div>
+
+      {/* Pannelli inline: Importa / Duplica */}
+      {showImport && (
+        <ImportModal team={team} index={index} onClose={() => setShowImport(false)} />
+      )}
+      {showDuplicate && data && (
+        <DuplicateModal team={team} sourceIndex={index} onClose={() => setShowDuplicate(false)} />
       )}
 
       <div className="flex gap-3 mb-3">
@@ -541,7 +857,7 @@ function PokemonPanel({ team, index }) {
             <div className="flex-1">
               <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
             </div>
-            {data && data.type && (
+            {data?.type && (
               <div className="flex gap-1 shrink-0">
                 {data.type.map(typeId => {
                   const typeName = TYPE_NAMES[typeId]
@@ -579,13 +895,12 @@ function PokemonPanel({ team, index }) {
               </div>
             </div>
           )}
-          {/* Toggle contestuali abilità — appaiono solo per abilità con stato */}
           {data && ability && (
             <AbilityFlags
-                ability={ability}
-                flags={abilityFlags}
-                opponentHasIntimidateActive={opponentHasIntimidateActive}
-                onFlagChange={(flag, val) => setAbilityFlag(team, index, flag, val)}
+              ability={ability}
+              flags={abilityFlags}
+              opponentHasIntimidateActive={opponentHasIntimidateActive}
+              onFlagChange={(flag, val) => setAbilityFlag(team, index, flag, val)}
             />
           )}
         </div>
@@ -641,6 +956,8 @@ function PokemonPanel({ team, index }) {
     </div>
   )
 }
+
+// ─── TeamEditor (root export) ─────────────────────────────────────────────────
 
 export default function TeamEditor({ team }) {
   const [activeTab, setActiveTab] = useState(0)

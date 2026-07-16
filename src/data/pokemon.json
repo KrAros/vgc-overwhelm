@@ -23558,7 +23558,7 @@
 			"minds eye"
 		]
 	},
-	"basculegion": {
+	"basculegion-m": {
 		"num": "#902",
 		"name": "Basculegion",
 		"type": [
@@ -23582,7 +23582,7 @@
 			"mold breaker"
 		]
 	},
-	"basculegionf": {
+	"basculegion-f": {
 		"num": "#902",
 		"name": "Basculegion-F",
 		"type": [
