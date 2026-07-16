@@ -3,31 +3,15 @@ import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 import itemsData from '../data/items.json'
-import abilitiesData from '../data/abilities.json'
 import useCalcStore from '../store/useCalcStore'
+import { NATURES, NATURE_MODIFIERS } from '../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
 
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES = Object.keys(movesData).sort()
 const ALL_ITEMS = Object.keys(itemsData).sort()
-const ALL_ABILITIES = Object.keys(abilitiesData).sort()
 
-const NATURES = [
-  'adamant','bashful','bold','brave','calm','careful','docile',
-  'gentle','hardy','hasty','impish','jolly','lax','lonely',
-  'mild','modest','naive','naughty','quiet','quirky',
-  'rash','relaxed','sassy','serious','timid'
-].sort()
-
-const NATURE_MODIFIERS = {
-  hardy:[0,0],bashful:[0,0],docile:[0,0],serious:[0,0],quirky:[0,0],
-  lonely:[1,2],brave:[1,5],adamant:[1,3],naughty:[1,4],
-  bold:[2,1],relaxed:[2,5],impish:[2,3],lax:[2,4],
-  timid:[5,1],hasty:[5,2],jolly:[5,3],naive:[5,4],
-  modest:[3,1],mild:[3,2],quiet:[3,5],rash:[3,4],
-  calm:[4,1],gentle:[4,2],sassy:[4,5],careful:[4,3],
-}
 
 const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
 const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
@@ -278,40 +262,18 @@ function ItemSearch({ value, onChange }) {
   )
 }
 
-function AbilitySearch({ value, onChange }) {
-  const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
-
-  const filtered = query.length >= 2
-    ? ALL_ABILITIES.filter(a => a.includes(query.toLowerCase())).slice(0, 20)
-    : []
-
-  const displayValue = query !== '' ? query : (value ? value.replace(/-/g, ' ') : '')
-
+function AbilitySelect({ value, abilities, onChange }) {
+  const options = abilities && abilities.length > 0 ? abilities : (value ? [value] : [])
   return (
-    <div className="relative">
-      <input
-        className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
-        placeholder="Abilità..."
-        value={displayValue}
-        onChange={e => { setQuery(e.target.value); setOpen(true) }}
-        onFocus={() => { setQuery(''); setOpen(true) }}
-        onBlur={() => setTimeout(() => { setOpen(false); setQuery('') }, 150)}
-      />
-      {open && filtered.length > 0 && (
-        <div className="absolute z-50 w-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto shadow-xl">
-          {filtered.map(a => (
-            <div
-              key={a}
-              className="px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 cursor-pointer capitalize"
-              onMouseDown={() => { onChange(a); setQuery(''); setOpen(false) }}
-            >
-              {a.replace(/-/g, ' ')}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <select
+      className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
+      value={value || ''}
+      onChange={e => onChange(e.target.value)}
+    >
+      {options.map(a => (
+        <option key={a} value={a}>{a.replace(/-/g, ' ')}</option>
+      ))}
+    </select>
   )
 }
 
@@ -587,7 +549,7 @@ function PokemonPanel({ team, index }) {
           {data && (
             <div className="flex gap-2 w-full">
               <div className="w-1/3">
-                <AbilitySearch value={ability} onChange={a => setAbility(team, index, a)} />
+                <AbilitySelect value={ability} abilities={data?.abilities} onChange={a => setAbility(team, index, a)} />
               </div>
               <div className="w-1/3">
                 <select
