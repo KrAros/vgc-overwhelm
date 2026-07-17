@@ -7,7 +7,7 @@ import abilitiesData from '../data/abilities.json'
 import useCalcStore from '../store/useCalcStore'
 import { NATURES, NATURE_MODIFIERS } from '../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
-
+import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES   = Object.keys(movesData).sort()
@@ -19,41 +19,6 @@ const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 const SP_TO_EV = (sp) => sp
 const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
 const EV_TO_SP = (ev) => Math.min(32, ev)
-
-// ─── Sprite helpers ───────────────────────────────────────────────────────────
-
-const _resolveNum = (key) => {
-  const data = pokemonData[key]
-  if (!data) return null
-  let num = data.num
-  if (!num) {
-    const baseName = key
-      .replace(/-mega.*$/, '')
-      .replace(/-primal$/, '')
-      .replace(/-unbound$/, '')
-    num = pokemonData[baseName]?.num || ''
-  }
-  return num?.replace('#', '').padStart(4, '0') || null
-}
-
-const spriteUrl = (key) => {
-  const data = pokemonData[key]
-  if (!data) return null
-  const isMegaY = key.includes('-mega-y')
-  const isMegaX = key.includes('-mega-x')
-  const isMega  = data.mega === 1
-  const isAlola = key.includes('-alola')
-  const num = _resolveNum(key)
-  if (!num) return null
-  const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
-  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
-}
-
-const fallbackSpriteUrl = (key) => {
-  const num = _resolveNum(key)
-  if (!num) return null
-  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
-}
 
 // ─── Showdown helpers (singolo Pokémon) ───────────────────────────────────────
 

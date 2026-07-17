@@ -3,39 +3,7 @@ import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
-
-const _resolveNum = (key) => {
-  const data = pokemonData[key]
-  if (!data) return null
-  let num = data.num
-  if (!num) {
-    const baseName = key
-      .replace(/-mega.*$/, '')
-      .replace(/-primal$/, '')
-      .replace(/-unbound$/, '')
-    num = pokemonData[baseName]?.num || ''
-  }
-  return num?.replace('#', '').padStart(4, '0') || null
-}
-
-const spriteUrl = (key) => {
-  const data = pokemonData[key]
-  if (!data) return null
-  const isMegaY = key.includes('-mega-y')
-  const isMegaX = key.includes('-mega-x')
-  const isMega  = data.mega === 1
-  const isAlola = key.includes('-alola')
-  const num = _resolveNum(key)
-  if (!num) return null
-  const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
-  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
-}
-
-const fallbackSpriteUrl = (key) => {
-  const num = _resolveNum(key)
-  if (!num) return null
-  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
-}
+import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 
 const SpreadIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
