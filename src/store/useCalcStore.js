@@ -164,6 +164,20 @@ function getInitialTeams() {
 
 const { team1: initialTeam1, team2: initialTeam2 } = getInitialTeams()
 
+// ─── Helper interno: aggiorna un singolo slot e salva su localStorage ─────────
+// Riceve lo stato corrente, il team da modificare ('team1'/'team2'), l'indice
+// dello slot e un oggetto patch (es. { nature: 'adamant' }).
+// Restituisce il frammento di stato da passare a set() di Zustand.
+// Non va usato per setPokemon, che azzera tutto lo slot anziché fare un merge.
+function updateSlot(state, team, index, patch) {
+  const t = [...state[team]]
+  t[index] = { ...t[index], ...patch }
+  const t1 = team === 'team1' ? t : state.team1
+  const t2 = team === 'team2' ? t : state.team2
+  saveToLocalStorage(t1, t2)
+  return { [team]: t }
+}
+
 // ─── Store ────────────────────────────────────────────────────────────────────
 const useCalcStore = create((set) => ({
   level: 50,
@@ -219,54 +233,21 @@ const useCalcStore = create((set) => ({
     }),
 
   setNature: (team, index, nature) =>
-    set((s) => {
-      const t = [...s[team]]
-      t[index] = { ...t[index], nature }
-      const t1 = team === 'team1' ? t : s.team1
-      const t2 = team === 'team2' ? t : s.team2
-      saveToLocalStorage(t1, t2)
-      return { [team]: t }
-    }),
+    set((s) => updateSlot(s, team, index, { nature })),
 
   setSPs: (team, index, sps) =>
-    set((s) => {
-      const t = [...s[team]]
-      t[index] = { ...t[index], sps }
-      const t1 = team === 'team1' ? t : s.team1
-      const t2 = team === 'team2' ? t : s.team2
-      saveToLocalStorage(t1, t2)
-      return { [team]: t }
-    }),
+    set((s) => updateSlot(s, team, index, { sps })),
 
+  // setBoost clamp il valore tra -6 e +6 prima di passarlo all'helper
   setBoost: (team, index, stat, value) =>
-    set((s) => {
-      const t = [...s[team]]
-      t[index] = { ...t[index], [stat]: Math.min(6, Math.max(-6, value)) }
-      const t1 = team === 'team1' ? t : s.team1
-      const t2 = team === 'team2' ? t : s.team2
-      saveToLocalStorage(t1, t2)
-      return { [team]: t }
-    }),
+    set((s) => updateSlot(s, team, index, { [stat]: Math.min(6, Math.max(-6, value)) })),
 
   setItem: (team, index, item) =>
-    set((s) => {
-      const t = [...s[team]]
-      t[index] = { ...t[index], item }
-      const t1 = team === 'team1' ? t : s.team1
-      const t2 = team === 'team2' ? t : s.team2
-      saveToLocalStorage(t1, t2)
-      return { [team]: t }
-    }),
+    set((s) => updateSlot(s, team, index, { item })),
 
+  // setAbility azzera anche abilityFlags quando si cambia abilità
   setAbility: (team, index, ability) =>
-    set((s) => {
-      const t = [...s[team]]
-      t[index] = { ...t[index], ability, abilityFlags: { ...DEFAULT_ABILITY_FLAGS } }
-      const t1 = team === 'team1' ? t : s.team1
-      const t2 = team === 'team2' ? t : s.team2
-      saveToLocalStorage(t1, t2)
-      return { [team]: t }
-    }),
+    set((s) => updateSlot(s, team, index, { ability, abilityFlags: { ...DEFAULT_ABILITY_FLAGS } })),
 
   setAbilityFlag: (team, index, flagName, value) =>
     set((s) => {

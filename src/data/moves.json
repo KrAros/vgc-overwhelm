@@ -6383,7 +6383,8 @@
     "category": 0,
     "power": 80,
     "priority": 0,
-    "contact": true
+    "contact": true,
+    "useDefAsStat": true
   },
   "branch poke": {
     "num": "785",

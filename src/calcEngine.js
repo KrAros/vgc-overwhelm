@@ -3,7 +3,7 @@ import movesData from './data/moves.json'
 import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 import { NATURE_MODIFIERS } from './data/natures.js'
 import { ITEM_EFFECTS } from './data/itemEffects.js'
-import { ABILITY_EFFECTS } from './data/abilityEffects.js'
+import { ABILITY_EFFECTS, normalizeAbilityKey } from './data/abilityEffects.js'
 
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
@@ -132,13 +132,13 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const effectiveness = getEffectiveness(moveType, defTypes)
   const isSpecial = moveData.category === 1
   // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk
-  const isBodyPress = move === 'body-press' || move === 'body press'
+  const isBodyPress = moveData.useDefAsStat === true
   const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
 
   // ── Chiavi abilità normalizzate ──────────────────────────────────────────
-  const atkAbilKey = (atkAbility || '').toLowerCase().replace(/ /g, '-')
-  const defAbilKey = (defAbility || '').toLowerCase().replace(/ /g, '-')
+  const atkAbilKey = normalizeAbilityKey(atkAbility)
+  const defAbilKey = normalizeAbilityKey(defAbility)
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
 

@@ -5,6 +5,8 @@ import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { NATURE_MODIFIERS } from '../data/natures'
 import { TYPE_NAMES } from '../data/typeChart'
+import { ABILITY_EFFECTS, normalizeAbilityKey } from '../data/abilityEffects'
+import { ITEM_EFFECTS } from '../data/itemEffects'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
@@ -20,29 +22,21 @@ function calcHKO(minPct) {
 // Title Case helper
 const _tc = s => s.replace(/(^|\s|-)\w/g, c => c.toUpperCase())
 
-// Abilità attaccante che aumentano il danno — mostrate nella stringa
-const ATK_ABILITY_WHITELIST = new Set([
-  'adaptability', 'huge power', 'pure power', 'tough claws', 'flash fire',
-  'guts', 'sheer force', 'technician', 'rivalry', 'overgrow', 'blaze',
-  'torrent', 'swarm', 'fire mane', 'protosynthesis', 'quark drive',
-  'supreme overlord', 'transistor', 'dragons maw', 'steelworker',
-  'rocky payload', 'water bubble', 'stakeout',
-])
+// Abilità attaccante con showInSmogon: true in abilityEffects.js
+// Costruita dinamicamente: aggiungere showInSmogon a una voce è sufficiente
+// per farla apparire nella stringa — niente da toccare qui.
+const ATK_ABILITY_WHITELIST = new Set(
+  Object.entries(ABILITY_EFFECTS)
+    .filter(([, v]) => v.showInSmogon)
+    .map(([k]) => k)
+)
 
-// Item attaccante che aumentano il danno
-const ATK_ITEM_WHITELIST = new Set([
-  'choice band', 'choice specs', 'life orb', 'muscle band', 'wise glasses',
-  'punching glove', 'silk scarf', 'black belt', 'sharp beak', 'poison barb',
-  'soft sand', 'hard stone', 'silver powder', 'spell tag', 'twisted spoon',
-  'charcoal', 'mystic water', 'miracle seed', 'magnet', 'never-melt ice',
-  'black glasses', 'dragon fang', 'metal coat', 'fairy feather',
-  'flame plate', 'splash plate', 'meadow plate', 'icicle plate', 'fist plate',
-  'sky plate', 'toxic plate', 'earth plate', 'stone plate', 'insect plate',
-  'spooky plate', 'iron plate', 'mind plate', 'draco plate', 'dread plate',
-  'pixie plate', 'zap plate', 'legend plate',
-  'adamant orb', 'lustrous orb', 'griseous orb',
-  'throat spray', 'booster energy',
-])
+// Item attaccante con showInSmogon: true in itemEffects.js
+const ATK_ITEM_WHITELIST = new Set(
+  Object.entries(ITEM_EFFECTS)
+    .filter(([, v]) => v.showInSmogon)
+    .map(([k]) => k)
+)
 
 // Item difensore che riducono il danno
 const DEF_ITEM_WHITELIST = new Set([
@@ -59,7 +53,7 @@ function buildSmogonString(atk, def, move, result, field = {}) {
 
   const isSpecial  = moveData.category === 1
   // Body Press usa la Def dell'attaccante
-  const isBodyPress = move === 'body-press' || move === 'body press'
+  const isBodyPress = moveData.useDefAsStat === true
   const atkStatIdx = isSpecial ? 3 : (isBodyPress ? 2 : 1)
   const defStatIdx = isSpecial ? 4 : 2
 
@@ -88,9 +82,9 @@ function buildSmogonString(atk, def, move, result, field = {}) {
   const defBoostStr = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
 
   // Abilità attaccante — solo se in whitelist (e Flash Fire solo se attivo)
-  const atkAbilityKey = atk.ability?.toLowerCase()
+  const atkAbilityKey = normalizeAbilityKey(atk.ability)
   const showAtkAbility = atkAbilityKey && ATK_ABILITY_WHITELIST.has(atkAbilityKey) &&
-    (atkAbilityKey !== 'flash fire' || atk.abilityFlags?.flashFireActive)
+    (atkAbilityKey !== 'flash-fire' || atk.abilityFlags?.flashFireActive)
   const atkAbilityStr = showAtkAbility ? ` ${_tc(atk.ability)}` : ''
 
   // Item attaccante — solo se in whitelist

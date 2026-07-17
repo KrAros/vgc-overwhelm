@@ -1,3 +1,11 @@
+// ─── Normalizzazione chiave abilità ──────────────────────────────────────────
+// Converte un nome abilità in qualsiasi formato (es. "Flash Fire", "flash fire")
+// nella chiave usata in ABILITY_EFFECTS (es. "flash-fire").
+// Esportata così che calcEngine.js e chiunque altro la importino da un posto solo.
+export function normalizeAbilityKey(str) {
+  return (str || '').toLowerCase().replace(/ /g, '-')
+}
+
 // ─── Flag di default per abilità con stato contestuale ───────────────────────
 // Questi valori vengono usati da emptyPokemon() nello store per inizializzare
 // abilityFlags su ogni slot Pokémon.
@@ -13,27 +21,28 @@ export const DEFAULT_ABILITY_FLAGS = {
 // metadati descrittivi. La logica vera è in calcEngine.js che legge abilityFlags.
 export const ABILITY_EFFECTS = {
   // ── Attaccante: moltiplicatori stat ──────────────────────────────────────
-  'huge-power':  { atkMult: 2.0, statType: 'physical' },
-  'pure-power':  { atkMult: 2.0, statType: 'physical' },
+  'huge-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
+  'pure-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
 
   // ── Attaccante: STAB potenziato ──────────────────────────────────────────
-  'adaptability': { adaptability: true },
+  'adaptability': { adaptability: true, showInSmogon: true },
 
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
   // ×1.5 su mosse Fire (abilità esclusiva Champions — Mega Pyroar)
-  'fire-mane':   { fireMane: true },
+  'fire-mane':   { fireMane: true, showInSmogon: true },
 
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
   // ×1.3 su mosse che fanno contatto fisico (Mega Metagross, Mega Barbaracle)
-  'tough-claws': { toughClaws: true },
+  'tough-claws': { toughClaws: true, showInSmogon: true },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   // Gestito tramite abilityFlags.flashFireActive — qui solo il flag di immunità
-  'flash-fire':  { flashFireImmune: true },
+  // showInSmogon: true perché appare nella stringa quando il boost è attivo
+  'flash-fire':  { flashFireImmune: true, showInSmogon: true },
 
   // Kingambit: +10% Atk e SpAtk per ogni alleato KO
   // Gestito tramite abilityFlags.supremeOverlordKOs
-  'supreme-overlord': { supremeOverlord: true },
+  'supreme-overlord': { supremeOverlord: true, showInSmogon: true },
 
   // ── Difensore: riduzione danno passiva ───────────────────────────────────
   'thick-fat':   { thickFat: true },   // ×0.5 danno Fire e Ice
