@@ -216,7 +216,7 @@ export default function DamageTable({ onCellSelect }) {
   // Doppia selezione: { first, second }
   // Ogni entry: { ri, ci, dir, atk, def, field, allMoves } | null
   const [selectionState, setSelectionState] = useState({ first: null, second: null })
-  const [showKoOnly, setShowKoOnly] = useState(false)
+  const showKoOnly = useCalcStore(s => s.showKoOnly)
 
   const team1 = useCalcStore(s => s.team1)
   const team2 = useCalcStore(s => s.team2)
@@ -298,23 +298,14 @@ export default function DamageTable({ onCellSelect }) {
 
   return (
     <div className="mb-4">
-      {/* Barra filtri sopra la tabella */}
-      <div className="flex items-center gap-3 mb-2 px-1">
-        <label className="flex items-center gap-1.5 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={showKoOnly}
-            onChange={e => setShowKoOnly(e.target.checked)}
-            className="accent-red-500"
-          />
-          <span className="text-xs text-gray-400">Solo KO <span className="text-red-400 font-semibold">(≥100%)</span></span>
-        </label>
-        {selectionState.second && (
+      {/* Indicatore modalità cumulativa */}
+      {selectionState.second && (
+        <div className="mb-2 px-1">
           <span className="text-xs text-violet-400">
             📌 Modalità cumulativa attiva — vedi ReportPanel
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="overflow-x-auto rounded-xl border border-gray-700">
         <table className="w-full border-collapse text-xs">

@@ -33,29 +33,22 @@ export default function TopBar() {
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
   const terrain      = useCalcStore(s => s.terrain)
-  const helpingHand  = useCalcStore(s => s.helpingHand)
-  const auroraVeil   = useCalcStore(s => s.auroraVeil)
-  const lightScreen  = useCalcStore(s => s.lightScreen)
-  const reflect      = useCalcStore(s => s.reflect)
-  const protect      = useCalcStore(s => s.protect)
-  const crit         = useCalcStore(s => s.crit)
 
-  const setLevel        = useCalcStore(s => s.setLevel)
-  const toggleTrickRoom = useCalcStore(s => s.toggleTrickRoom)
+  const setLevel           = useCalcStore(s => s.setLevel)
+  const toggleTrickRoom    = useCalcStore(s => s.toggleTrickRoom)
   const toggleDoubleTarget = useCalcStore(s => s.toggleDoubleTarget)
-  const setWeather      = useCalcStore(s => s.setWeather)
-  const setTerrain      = useCalcStore(s => s.setTerrain)
-  const toggleModifier  = useCalcStore(s => s.toggleModifier)
+  const setWeather         = useCalcStore(s => s.setWeather)
+  const setTerrain         = useCalcStore(s => s.setTerrain)
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-3 mb-4">
+    <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 py-2 mb-4">
       <div className="flex flex-wrap gap-4 items-center">
 
         {/* Options */}
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500 uppercase tracking-wider">Options</span>
           <div className="flex gap-1">
-            {[5,50,100].map(lv => (
+            {[5, 50, 100].map(lv => (
               <button
                 key={lv}
                 onClick={() => setLevel(lv)}
@@ -102,14 +95,8 @@ export default function TopBar() {
               None
             </button>
             {FIELDS.map(f => (
-              <Btn
-                key={f.key}
-                label={f.label}
-                active={terrain === f.key}
-                color={f.color}
-                activeClass={f.active}
-                onClick={() => setTerrain(f.key)}
-              />
+              <Btn key={f.key} label={f.label} active={terrain === f.key}
+                color={f.color} activeClass={f.active} onClick={() => setTerrain(f.key)} />
             ))}
           </div>
         </div>
@@ -129,44 +116,10 @@ export default function TopBar() {
               None
             </button>
             {WEATHERS.map(w => (
-              <Btn
-                key={w.key}
-                label={w.label}
-                active={weather === w.key}
-                color={w.color}
-                activeClass={w.active}
-                onClick={() => setWeather(w.key)}
-              />
+              <Btn key={w.key} label={w.label} active={weather === w.key}
+                color={w.color} activeClass={w.active} onClick={() => setWeather(w.key)} />
             ))}
           </div>
-        </div>
-
-        <div className="w-px h-6 bg-gray-700" />
-
-        {/* Modifiers */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">Modifiers</span>
-          {[
-            { label: 'HH ←',  mod: 'helpingHand', side: 't1', val: helpingHand.t1,  color: 'text-green-400 border-green-400',  active: 'bg-green-400 text-gray-900' },
-            { label: 'HH →',  mod: 'helpingHand', side: 't2', val: helpingHand.t2,  color: 'text-green-400 border-green-400',  active: 'bg-green-400 text-gray-900' },
-            { label: 'AV ←',  mod: 'auroraVeil',  side: 't1', val: auroraVeil.t1,   color: 'text-blue-400  border-blue-400',   active: 'bg-blue-400  text-gray-900' },
-            { label: 'AV →',  mod: 'auroraVeil',  side: 't2', val: auroraVeil.t2,   color: 'text-blue-400  border-blue-400',   active: 'bg-blue-400  text-gray-900' },
-            { label: 'LS ←',  mod: 'lightScreen', side: 't1', val: lightScreen.t1,  color: 'text-yellow-400 border-yellow-400', active: 'bg-yellow-400 text-gray-900' },
-            { label: 'LS →',  mod: 'lightScreen', side: 't2', val: lightScreen.t2,  color: 'text-yellow-400 border-yellow-400', active: 'bg-yellow-400 text-gray-900' },
-            { label: 'Ref ←', mod: 'reflect',     side: 't1', val: reflect.t1,      color: 'text-pink-400  border-pink-400',   active: 'bg-pink-400  text-gray-900' },
-            { label: 'Ref →', mod: 'reflect',     side: 't2', val: reflect.t2,      color: 'text-pink-400  border-pink-400',   active: 'bg-pink-400  text-gray-900' },
-            { label: 'Crit ←',mod: 'crit',        side: 't1', val: crit.t1,         color: 'text-red-400   border-red-400',    active: 'bg-red-400   text-gray-900' },
-            { label: 'Crit →',mod: 'crit',        side: 't2', val: crit.t2,         color: 'text-red-400   border-red-400',    active: 'bg-red-400   text-gray-900' },
-          ].map(b => (
-            <Btn
-              key={b.label}
-              label={b.label}
-              active={b.val}
-              color={b.color}
-              activeClass={b.active}
-              onClick={() => toggleModifier(b.mod, b.side)}
-            />
-          ))}
         </div>
 
       </div>
