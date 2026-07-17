@@ -4,50 +4,155 @@ import pokemonData from '../data/pokemon.json'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { NATURE_MODIFIERS } from '../data/natures'
+import { TYPE_NAMES } from '../data/typeChart'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
 function calcHKO(minPct) {
   if (minPct <= 0) return null
   const hits = Math.ceil(100 / minPct)
-  if (hits === 1) return 'OHKO'
-  if (hits === 2) return '2HKO'
-  if (hits === 3) return '3HKO'
-  return `${hits}HKO`
+  if (hits === 1) return 'Guaranteed OHKO'
+  if (hits === 2) return 'Guaranteed 2HKO'
+  if (hits === 3) return 'Guaranteed 3HKO'
+  return `Guaranteed ${hits}HKO`
 }
 
-function buildSmogonString(atk, def, move, result) {
+// Title Case helper
+const _tc = s => s.replace(/(^|\s|-)\w/g, c => c.toUpperCase())
+
+// Abilità attaccante che aumentano il danno — mostrate nella stringa
+const ATK_ABILITY_WHITELIST = new Set([
+  'adaptability', 'huge power', 'pure power', 'tough claws', 'flash fire',
+  'guts', 'sheer force', 'technician', 'rivalry', 'overgrow', 'blaze',
+  'torrent', 'swarm', 'fire mane', 'protosynthesis', 'quark drive',
+  'supreme overlord', 'transistor', 'dragons maw', 'steelworker',
+  'rocky payload', 'water bubble', 'stakeout',
+])
+
+// Item attaccante che aumentano il danno
+const ATK_ITEM_WHITELIST = new Set([
+  'choice band', 'choice specs', 'life orb', 'muscle band', 'wise glasses',
+  'punching glove', 'silk scarf', 'black belt', 'sharp beak', 'poison barb',
+  'soft sand', 'hard stone', 'silver powder', 'spell tag', 'twisted spoon',
+  'charcoal', 'mystic water', 'miracle seed', 'magnet', 'never-melt ice',
+  'black glasses', 'dragon fang', 'metal coat', 'fairy feather',
+  'flame plate', 'splash plate', 'meadow plate', 'icicle plate', 'fist plate',
+  'sky plate', 'toxic plate', 'earth plate', 'stone plate', 'insect plate',
+  'spooky plate', 'iron plate', 'mind plate', 'draco plate', 'dread plate',
+  'pixie plate', 'zap plate', 'legend plate',
+  'adamant orb', 'lustrous orb', 'griseous orb',
+  'throat spray', 'booster energy',
+])
+
+// Item difensore che riducono il danno
+const DEF_ITEM_WHITELIST = new Set([
+  'assault vest', 'eviolite',
+  'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',
+  'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',
+  'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',
+  'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',
+])
+
+function buildSmogonString(atk, def, move, result, field = {}) {
   const moveData = movesData[move]
   if (!moveData) return ''
 
-  const isSpecial = moveData.category === 1
-  const atkStatIdx = isSpecial ? 3 : 1
+  const isSpecial  = moveData.category === 1
+  // Body Press usa la Def dell'attaccante
+  const isBodyPress = move === 'body-press' || move === 'body press'
+  const atkStatIdx = isSpecial ? 3 : (isBodyPress ? 2 : 1)
+  const defStatIdx = isSpecial ? 4 : 2
 
-  const atkSP = atk.sps?.[atkStatIdx] || 0
-  const defSP = def.sps?.[isSpecial ? 4 : 2] || 0
-  const defHP = def.sps?.[0] || 0
+  const atkSP  = atk.sps?.[atkStatIdx] || 0
+  const defSP  = def.sps?.[defStatIdx]  || 0
+  const defHPsp = def.sps?.[0] || 0
 
+  // Nature symbol sul lato attaccante
   const nature = atk.nature
   const mod = nature && NATURE_MODIFIERS[nature]
   const isBoost = mod && mod[0] !== 0 && mod[0] === atkStatIdx
   const isDrop  = mod && mod[0] !== 0 && mod[1] === atkStatIdx
   const natSymbol = isBoost ? '+' : isDrop ? '-' : ''
 
-  const statName    = isSpecial ? 'SpA' : 'Atk'
+  const statName    = isSpecial ? 'SpA' : (isBodyPress ? 'Def' : 'Atk')
   const defStatName = isSpecial ? 'SpD' : 'Def'
 
-  const moveName = move.replace(/-/g, ' ')
+  // Boost attaccante
   const atkBoostVal = result?.atkBoostEffective !== undefined
     ? result.atkBoostEffective
     : isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
   const atkBoostStr = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
-  const atkAbilityName = atk.ability ? ` ${atk.ability.replace(/\b\w/g, c => c.toUpperCase())}` : ''
+
+  // Boost difensore
   const defBoostVal = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
   const defBoostStr = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
-  const atkItemName = atk.item ? ` ${atk.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
-  const defItemName = def.item ? ` ${def.item.replace(/\b\w/g, c => c.toUpperCase())}` : ''
 
-  return `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityName}${atkItemName} ${atk.key} ${moveName} vs. ${defHP} HP / ${defBoostStr}${defSP} ${defStatName}${defItemName} ${def.key}`
+  // Abilità attaccante — solo se in whitelist (e Flash Fire solo se attivo)
+  const atkAbilityKey = atk.ability?.toLowerCase()
+  const showAtkAbility = atkAbilityKey && ATK_ABILITY_WHITELIST.has(atkAbilityKey) &&
+    (atkAbilityKey !== 'flash fire' || atk.abilityFlags?.flashFireActive)
+  const atkAbilityStr = showAtkAbility ? ` ${_tc(atk.ability)}` : ''
+
+  // Item attaccante — solo se in whitelist
+  const atkItemKey = atk.item?.toLowerCase()
+  const showAtkItem = atkItemKey && ATK_ITEM_WHITELIST.has(atkItemKey)
+  const atkItemStr = showAtkItem ? ` ${_tc(atk.item)}` : ''
+
+  // Item difensore — solo se riduce il danno
+  const defItemKey = def.item?.toLowerCase()
+  const showDefItem = defItemKey && DEF_ITEM_WHITELIST.has(defItemKey)
+  const defItemStr = showDefItem ? ` ${_tc(def.item)}` : ''
+
+  // Helping Hand
+  const hhStr = field.helpingHand ? ' Helping Hand' : ''
+
+  // Nomi in Title Case
+  const atkName  = _tc(atk.key.replace(/-/g, ' '))
+  const defName  = _tc(def.key.replace(/-/g, ' '))
+  const moveName = _tc(move.replace(/-/g, ' '))
+
+  // Field effects in coda — meteo/terrain poi screen
+  const fieldParts = []
+  if (field.weather && field.weather !== 'none') {
+    const moveType = (TYPE_NAMES[moveData.type] || '').toLowerCase()
+    const w = field.weather.toLowerCase()
+    // Rain: rilevante per Water (boost) e Fire (nerf)
+    // Sun:  rilevante per Fire (boost) e Water (nerf)
+    const weatherRelevant =
+      (w === 'rain' || w === 'heavy rain')       && (moveType === 'water' || moveType === 'fire') ||
+      (w === 'sun'  || w === 'harsh sunshine')   && (moveType === 'fire'  || moveType === 'water')
+    if (weatherRelevant) {
+      const weatherMap = {
+        sun: 'Sun', rain: 'Rain',
+        'harsh sunshine': 'Harsh Sunshine', 'heavy rain': 'Heavy Rain',
+      }
+      fieldParts.push(`in ${weatherMap[w] || _tc(field.weather)}`)
+    }
+  }
+  if (field.terrain && field.terrain !== 'none') {
+    const terrainMap = {
+      electric: 'Electric Terrain', grassy: 'Grassy Terrain',
+      misty: 'Misty Terrain', psychic: 'Psychic Terrain',
+    }
+    fieldParts.push(`in ${terrainMap[field.terrain] || _tc(field.terrain)}`)
+  }
+  const screenParts = []
+  if (field.reflect)     screenParts.push('Reflect')
+  if (field.lightScreen) screenParts.push('Light Screen')
+  if (field.auroraVeil)  screenParts.push('Aurora Veil')
+  if (screenParts.length) fieldParts.push(`through ${screenParts.join(' and ')}`)
+
+  const fieldStr = fieldParts.length ? ` ${fieldParts.join(' ')}` : ''
+
+  // Danni grezzi
+  const dmgStr = `${result.minDmg}-${result.maxDmg} (${result.minPct} - ${result.maxPct}%)`
+
+  return (
+    `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityStr}${atkItemStr} ` +
+    `${atkName}${hhStr} ${moveName} vs. ` +
+    `${defHPsp} HP / ${defBoostStr}${defSP} ${defStatName}${defItemStr} ${defName}${fieldStr}: ` +
+    `${dmgStr}`
+  )
 }
 
 // ── Sprite helpers ────────────────────────────────────────────────────────────
@@ -82,44 +187,170 @@ const spriteUrl = (key) => {
 
 // ── Sitrus Berry simulation ───────────────────────────────────────────────────
 
-function simulateSitrus(rolls, defHP) {
-  const midDmg = rolls[Math.floor(rolls.length / 2)]
+// Calcolo esatto probabilità Sitrus Berry
+// DP su stati (hp, sitrusUsed) — i roll con duplicati hanno peso 1/16 ciascuno
+function _calcSitrusProb(rolls, defHP, maxTurns = 6) {
   const sitrusHeal = Math.floor(defHP * 0.25)
-  let hp = defHP
-  let sitrusUsed = false
+  const halfHP     = Math.floor(defHP / 2)
+
+  let states = new Map()
+  states.set(`${defHP},0`, 1.0)
+  const koAtTurn = {}
+
+  for (let t = 1; t <= maxTurns; t++) {
+    const next = new Map()
+    let koThisTurn = 0
+
+    for (const [key, prob] of states) {
+      const comma  = key.indexOf(',')
+      const hp     = parseInt(key.slice(0, comma))
+      const used   = key[comma + 1] === '1'
+
+      for (const dmg of rolls) {
+        const p     = prob / rolls.length
+        const newHp = hp - dmg
+
+        if (newHp <= 0) {
+          koThisTurn += p
+        } else {
+          let fHp   = newHp
+          let fUsed = used
+          if (!used && newHp <= halfHP) {
+            fHp   = Math.min(newHp + sitrusHeal, defHP)
+            fUsed = true
+          }
+          const nk = `${fHp},${fUsed ? 1 : 0}`
+          next.set(nk, (next.get(nk) || 0) + p)
+        }
+      }
+    }
+
+    koAtTurn[t] = koThisTurn
+    states = next
+    if (states.size === 0) break
+  }
+
+  return koAtTurn
+}
+
+function simulateSitrus(rolls, defHP) {
+  // ── Simulazione visiva con danno medio ──
+  const midDmg     = rolls[Math.floor(rolls.length / 2)]
+  const sitrusHeal = Math.floor(defHP * 0.25)
+  let hp = defHP, sitrusUsed = false
   const healTurns = []
 
   for (let t = 1; t <= 6; t++) {
     hp -= midDmg
-    const dmgNote = `T${t}: −${midDmg} HP`
     if (hp <= 0) {
-      healTurns.push({ t, hp: 0, note: dmgNote, ko: true })
+      healTurns.push({ t, hp: 0, ko: true })
       break
     }
-    healTurns.push({ t, hp, note: dmgNote, ko: false })
+    healTurns.push({ t, hp, ko: false })
     if (!sitrusUsed && hp <= Math.floor(defHP / 2)) {
       const healed = Math.min(hp + sitrusHeal, defHP) - hp
       hp = Math.min(hp + sitrusHeal, defHP)
       sitrusUsed = true
-      healTurns.push({ t, hp, note: `🍊 Sitrus Berry: +${healed} HP`, heal: true })
+      healTurns.push({ t, hp, heal: true, healed })
     }
   }
 
   const koTurn = healTurns.find(r => r.ko)
-  return { healTurns, hko: koTurn ? `${koTurn.t}HKO` : 'No KO in 6T' }
+  const hko    = koTurn ? `${koTurn.t}HKO` : 'No KO in 6T'
+
+  // ── Calcolo probabilistico esatto ──
+  const koAtTurn = _calcSitrusProb(rolls, defHP)
+
+  const bestTurn = Object.entries(koAtTurn)
+    .filter(([, p]) => p > 0.0001)
+    .sort((a, b) => Number(a[0]) - Number(b[0]))[0]
+
+  const totalKoProb = Object.values(koAtTurn).reduce((a, b) => a + b, 0)
+  const activeTurns = Object.values(koAtTurn).filter(p => p > 0.0001).length
+
+  let summary
+  if (!bestTurn || totalKoProb < 0.0001) {
+    summary = { text: 'No KO in 6 turns after Sitrus Berry recovery', color: 'text-green-400' }
+  } else if (totalKoProb > 0.9999 && activeTurns === 1) {
+    summary = {
+      text: `Guaranteed ${bestTurn[0]}HKO after Sitrus Berry recovery`,
+      color: 'text-orange-400'
+    }
+  } else {
+    const pct = Math.round(bestTurn[1] * 1000) / 10
+    summary = {
+      text: `${pct}% chance to ${bestTurn[0]}HKO after Sitrus Berry recovery`,
+      color: pct >= 50 ? 'text-orange-400' : 'text-yellow-400'
+    }
+  }
+
+  return { healTurns, midDmg, hko, summary }
 }
 
 
 
+// ── SitrusSection ────────────────────────────────────────────────────────────
 
+function SitrusSection({ sitrus, defHP }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="pt-2 border-t border-gray-700/50 space-y-1.5">
+
+      {/* Frase sintetica sempre visibile */}
+      <div className="flex items-center gap-1.5">
+        <img src="https://www.serebii.net/itemdex/sprites/sitrusberry.png" alt="Sitrus Berry" className="w-4 h-4 object-contain shrink-0" />
+        <span className={`text-xs font-semibold ${sitrus.summary.color}`}>
+          {sitrus.summary.text}
+        </span>
+      </div>
+
+      {/* Toggle dettaglio turni */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors flex items-center gap-1"
+      >
+        <span>{open ? '▾' : '▸'}</span>
+        <span>{open ? 'Nascondi simulazione' : 'Mostra simulazione turno per turno'}</span>
+      </button>
+
+      {/* Dettaglio turni — collassabile */}
+      {open && (
+        <div className="space-y-1 pl-1 pt-1">
+          {sitrus.healTurns.map((row, i) => {
+            // Separatore visivo per l'evento bacca
+            if (row.heal) {
+              return (
+                <div key={i} className="flex items-center gap-2 my-1.5 py-1.5 px-2 rounded-md bg-orange-900/20 border border-orange-700/30">
+                  <img src="https://www.serebii.net/itemdex/sprites/sitrusberry.png" alt="" className="w-4 h-4 object-contain shrink-0" />
+                  <span className="text-xs text-orange-300 font-semibold">
+                    La Sitrus Berry si attiva! +{row.healed} HP → {row.hp}/{defHP} HP
+                  </span>
+                </div>
+              )
+            }
+            return (
+              <div key={i} className={`text-xs font-mono ${row.ko ? 'text-red-400' : 'text-gray-400'}`}>
+                <span className="text-gray-600 mr-1">Turno {row.t}:</span>
+                −{sitrus.midDmg} HP
+                {!row.ko && <span className="text-gray-500"> → {row.hp}/{defHP} HP</span>}
+                {row.ko && <span className="text-red-400"> → KO</span>}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
 
 // ── MoveCard — layout migliorato ─────────────────────────────────────────────
 
-function MoveCard({ atk, def, move, result }) {
+function MoveCard({ atk, def, move, result, field = {} }) {
   const hko       = calcHKO(result.minPct)
-  const smogon    = buildSmogonString(atk, def, move, result)
+  const smogon    = buildSmogonString(atk, def, move, result, field)
   const rolls     = result.rolls
-  const hasSitrus = def.item === 'sitrus berry'
+  const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
   const sitrus    = hasSitrus ? simulateSitrus(rolls, result.defHP) : null
 
   const pctColor = result.minPct >= 100 ? 'text-red-400' :
@@ -153,12 +384,9 @@ function MoveCard({ atk, def, move, result }) {
         </div>
       </div>
 
-      {/* Riga 2: stringa Smogon + danni grezzi su una riga */}
-      <div className="text-[11px] font-mono leading-relaxed">
-        <span className="text-gray-400">{smogon}</span>
-        <span className="text-gray-600 ml-1">
-          → {result.minDmg}–{result.maxDmg} / {result.defHP} HP
-        </span>
+      {/* Riga 2: stringa Smogon stile Showdown */}
+      <div className="text-[11px] font-mono leading-relaxed text-gray-400">
+        {smogon}
       </div>
 
       {/* Roll grid */}
@@ -176,27 +404,7 @@ function MoveCard({ atk, def, move, result }) {
       </div>
 
       {/* Simulazione Sitrus Berry */}
-      {sitrus && (
-        <div className="pt-2 border-t border-gray-700/50 space-y-1">
-          <div className="text-[10px] text-orange-300 font-semibold uppercase tracking-wide">
-            🍊 Sitrus Berry — simulazione (danno medio)
-          </div>
-          {sitrus.healTurns.map((row, i) => (
-            <div key={i} className={`text-xs font-mono ${
-              row.ko ? 'text-red-400' : row.heal ? 'text-orange-300' : 'text-gray-400'
-            }`}>
-              {row.note}
-              {!row.heal && !row.ko && ` → ${row.hp}/${result.defHP} HP`}
-              {row.ko && ' → KO'}
-            </div>
-          ))}
-          <div className={`text-xs font-bold ${
-            sitrus.hko === 'No KO in 6T' ? 'text-green-400' : 'text-orange-400'
-          }`}>
-            Risultato: {sitrus.hko}
-          </div>
-        </div>
-      )}
+      {sitrus && <SitrusSection sitrus={sitrus} defHP={result.defHP} />}
     </div>
   )
 }
@@ -275,7 +483,16 @@ function SinglePanel({ entry }) {
         </select>
       </div>
 
-      {active && <MoveCard atk={atk} def={def} move={active.move} result={active.result} />}
+      {active && (() => {
+        const field = {
+          weather, terrain, doubleTarget,
+          helpingHand: dir === 't1' ? helpingHand.t1 : helpingHand.t2,
+          auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
+          lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
+          reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
+        }
+        return <MoveCard atk={atk} def={def} move={active.move} result={active.result} field={field} />
+      })()}
     </div>
   )
 }
@@ -412,9 +629,6 @@ function CumulativePanel({ entries }) {
                   {activeSel && (
                     <div className="text-[10px] text-gray-500 font-mono leading-relaxed">
                       {buildSmogonString(entry.atk, def, activeSel.move, activeSel.result)}
-                      <span className="text-gray-600 ml-1">
-                        → {activeSel.result.minDmg}–{activeSel.result.maxDmg} / {activeSel.result.defHP}
-                      </span>
                     </div>
                   )}
                 </>
@@ -506,9 +720,9 @@ export default function ReportPanel({ selection, onClose }) {
     <div className={`bg-gray-800 rounded-xl border p-4 mb-4 ${
       isDouble ? 'border-violet-500/50' : 'border-teal-500/50'
     }`}>
-      {/* Header con sprite inline */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-1.5 flex-wrap">
+      {/* Header con sprite — atk→def centrato, chiudi in absolute a destra */}
+      <div className="relative flex items-center justify-center mb-3 min-h-[2.5rem]">
+        <div className="flex items-center gap-1.5 flex-wrap justify-center">
           {isDouble ? (
             <>
               <img src={spriteUrl(entry1.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
@@ -522,17 +736,17 @@ export default function ReportPanel({ selection, onClose }) {
             </>
           ) : (
             <>
-              <img src={spriteUrl(atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
-              <span className="text-sm font-semibold text-teal-400 capitalize">{atk.key}</span>
-              <span className="text-gray-600 mx-0.5">→</span>
-              <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
-              <span className="text-sm font-medium text-gray-300 capitalize">{def.key}</span>
+              <img src={spriteUrl(atk.key)} className="w-8 h-8 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-base font-bold text-teal-400 capitalize">{atk.key}</span>
+              <span className="text-gray-400 mx-2 text-xs font-bold px-2 py-0.5 rounded-full bg-gray-900 border border-gray-700">vs.</span>
+              <img src={spriteUrl(def.key)} className="w-8 h-8 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-base font-semibold text-gray-200 capitalize">{def.key}</span>
             </>
           )}
         </div>
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors shrink-0 ml-2"
+          className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors"
         >
           ✕ chiudi
         </button>

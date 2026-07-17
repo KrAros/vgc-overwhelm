@@ -131,7 +131,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   const effectiveness = getEffectiveness(moveType, defTypes)
   const isSpecial = moveData.category === 1
-  const atkStatIdx = isSpecial ? STAT_SPA : STAT_ATT
+  // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk
+  const isBodyPress = move === 'body-press' || move === 'body press'
+  const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
 
   // ── Chiavi abilità normalizzate ──────────────────────────────────────────
