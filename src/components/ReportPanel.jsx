@@ -1,12 +1,8 @@
 import { useMemo, useState } from 'react'
-import movesData from '../data/moves.json'
 import pokemonData from '../data/pokemon.json'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
-import { NATURE_MODIFIERS } from '../data/natures'
-import { TYPE_NAMES } from '../data/typeChart'
-import { ABILITY_EFFECTS, normalizeAbilityKey } from '../data/abilityEffects'
-import { ITEM_EFFECTS } from '../data/itemEffects'
+import { buildSmogonString } from '../utils/smogonString'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
@@ -17,136 +13,6 @@ function calcHKO(minPct) {
   if (hits === 2) return 'Guaranteed 2HKO'
   if (hits === 3) return 'Guaranteed 3HKO'
   return `Guaranteed ${hits}HKO`
-}
-
-// Title Case helper
-const _tc = s => s.replace(/(^|\s|-)\w/g, c => c.toUpperCase())
-
-// Abilità attaccante con showInSmogon: true in abilityEffects.js
-// Costruita dinamicamente: aggiungere showInSmogon a una voce è sufficiente
-// per farla apparire nella stringa — niente da toccare qui.
-const ATK_ABILITY_WHITELIST = new Set(
-  Object.entries(ABILITY_EFFECTS)
-    .filter(([, v]) => v.showInSmogon)
-    .map(([k]) => k)
-)
-
-// Item attaccante con showInSmogon: true in itemEffects.js
-const ATK_ITEM_WHITELIST = new Set(
-  Object.entries(ITEM_EFFECTS)
-    .filter(([, v]) => v.showInSmogon)
-    .map(([k]) => k)
-)
-
-// Item difensore che riducono il danno
-const DEF_ITEM_WHITELIST = new Set([
-  'assault vest', 'eviolite',
-  'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',
-  'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',
-  'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',
-  'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',
-])
-
-function buildSmogonString(atk, def, move, result, field = {}) {
-  const moveData = movesData[move]
-  if (!moveData) return ''
-
-  const isSpecial  = moveData.category === 1
-  // Body Press usa la Def dell'attaccante
-  const isBodyPress = moveData.useDefAsStat === true
-  const atkStatIdx = isSpecial ? 3 : (isBodyPress ? 2 : 1)
-  const defStatIdx = isSpecial ? 4 : 2
-
-  const atkSP  = atk.sps?.[atkStatIdx] || 0
-  const defSP  = def.sps?.[defStatIdx]  || 0
-  const defHPsp = def.sps?.[0] || 0
-
-  // Nature symbol sul lato attaccante
-  const nature = atk.nature
-  const mod = nature && NATURE_MODIFIERS[nature]
-  const isBoost = mod && mod[0] !== 0 && mod[0] === atkStatIdx
-  const isDrop  = mod && mod[0] !== 0 && mod[1] === atkStatIdx
-  const natSymbol = isBoost ? '+' : isDrop ? '-' : ''
-
-  const statName    = isSpecial ? 'SpA' : (isBodyPress ? 'Def' : 'Atk')
-  const defStatName = isSpecial ? 'SpD' : 'Def'
-
-  // Boost attaccante
-  const atkBoostVal = result?.atkBoostEffective !== undefined
-    ? result.atkBoostEffective
-    : isSpecial ? (atk.spAtkBoost || 0) : (atk.atkBoost || 0)
-  const atkBoostStr = atkBoostVal > 0 ? `+${atkBoostVal} ` : atkBoostVal < 0 ? `${atkBoostVal} ` : ''
-
-  // Boost difensore
-  const defBoostVal = isSpecial ? (def.spDefBoost || 0) : (def.defBoost || 0)
-  const defBoostStr = defBoostVal > 0 ? `+${defBoostVal} ` : defBoostVal < 0 ? `${defBoostVal} ` : ''
-
-  // Abilità attaccante — solo se in whitelist (e Flash Fire solo se attivo)
-  const atkAbilityKey = normalizeAbilityKey(atk.ability)
-  const showAtkAbility = atkAbilityKey && ATK_ABILITY_WHITELIST.has(atkAbilityKey) &&
-    (atkAbilityKey !== 'flash-fire' || atk.abilityFlags?.flashFireActive)
-  const atkAbilityStr = showAtkAbility ? ` ${_tc(atk.ability)}` : ''
-
-  // Item attaccante — solo se in whitelist
-  const atkItemKey = atk.item?.toLowerCase()
-  const showAtkItem = atkItemKey && ATK_ITEM_WHITELIST.has(atkItemKey)
-  const atkItemStr = showAtkItem ? ` ${_tc(atk.item)}` : ''
-
-  // Item difensore — solo se riduce il danno
-  const defItemKey = def.item?.toLowerCase()
-  const showDefItem = defItemKey && DEF_ITEM_WHITELIST.has(defItemKey)
-  const defItemStr = showDefItem ? ` ${_tc(def.item)}` : ''
-
-  // Helping Hand
-  const hhStr = field.helpingHand ? ' Helping Hand' : ''
-
-  // Nomi in Title Case
-  const atkName  = _tc(atk.key.replace(/-/g, ' '))
-  const defName  = _tc(def.key.replace(/-/g, ' '))
-  const moveName = _tc(move.replace(/-/g, ' '))
-
-  // Field effects in coda — meteo/terrain poi screen
-  const fieldParts = []
-  if (field.weather && field.weather !== 'none') {
-    const moveType = (TYPE_NAMES[moveData.type] || '').toLowerCase()
-    const w = field.weather.toLowerCase()
-    // Rain: rilevante per Water (boost) e Fire (nerf)
-    // Sun:  rilevante per Fire (boost) e Water (nerf)
-    const weatherRelevant =
-      (w === 'rain' || w === 'heavy rain')       && (moveType === 'water' || moveType === 'fire') ||
-      (w === 'sun'  || w === 'harsh sunshine')   && (moveType === 'fire'  || moveType === 'water')
-    if (weatherRelevant) {
-      const weatherMap = {
-        sun: 'Sun', rain: 'Rain',
-        'harsh sunshine': 'Harsh Sunshine', 'heavy rain': 'Heavy Rain',
-      }
-      fieldParts.push(`in ${weatherMap[w] || _tc(field.weather)}`)
-    }
-  }
-  if (field.terrain && field.terrain !== 'none') {
-    const terrainMap = {
-      electric: 'Electric Terrain', grassy: 'Grassy Terrain',
-      misty: 'Misty Terrain', psychic: 'Psychic Terrain',
-    }
-    fieldParts.push(`in ${terrainMap[field.terrain] || _tc(field.terrain)}`)
-  }
-  const screenParts = []
-  if (field.reflect)     screenParts.push('Reflect')
-  if (field.lightScreen) screenParts.push('Light Screen')
-  if (field.auroraVeil)  screenParts.push('Aurora Veil')
-  if (screenParts.length) fieldParts.push(`through ${screenParts.join(' and ')}`)
-
-  const fieldStr = fieldParts.length ? ` ${fieldParts.join(' ')}` : ''
-
-  // Danni grezzi
-  const dmgStr = `${result.minDmg}-${result.maxDmg} (${result.minPct} - ${result.maxPct}%)`
-
-  return (
-    `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityStr}${atkItemStr} ` +
-    `${atkName}${hhStr} ${moveName} vs. ` +
-    `${defHPsp} HP / ${defBoostStr}${defSP} ${defStatName}${defItemStr} ${defName}${fieldStr}: ` +
-    `${dmgStr}`
-  )
 }
 
 // ── Sprite helpers ────────────────────────────────────────────────────────────
