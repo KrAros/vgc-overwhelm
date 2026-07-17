@@ -541,11 +541,24 @@ function CumulativePanel({ entries }) {
 
 export default function ReportPanel({ selection, onClose }) {
   const isDouble = Array.isArray(selection) && selection.length === 2
+  const team1 = useCalcStore(s => s.team1)
+  const team2 = useCalcStore(s => s.team2)
 
   if (!selection || selection.length === 0) return null
 
-  const entry1 = selection[0]
+  const getSlot = (teamKey, index) => (teamKey === 'team1' ? team1 : team2)[index]
+
+  // Ricostruisce l'entry con atk/def live dallo store
+  const liveEntry = (entry) => ({
+    ...entry,
+    atk: getSlot(entry.atkTeam, entry.atkIndex) || entry.atk,
+    def: getSlot(entry.defTeam, entry.defIndex) || entry.def,
+  })
+
+  const entry1 = liveEntry(selection[0])
+  const entry2 = isDouble ? liveEntry(selection[1]) : null
   const { atk, def } = entry1
+  const liveSelection = isDouble ? [entry1, entry2] : [entry1]
 
   return (
     <div className={`bg-gray-800 rounded-xl border p-4 mb-4 ${
@@ -559,8 +572,8 @@ export default function ReportPanel({ selection, onClose }) {
               <img src={spriteUrl(entry1.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
               <span className="text-sm font-semibold text-teal-400 capitalize">{entry1.atk.key}</span>
               <span className="text-gray-600 mx-0.5">+</span>
-              <img src={spriteUrl(selection[1].atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
-              <span className="text-sm font-semibold text-violet-400 capitalize">{selection[1].atk.key}</span>
+              <img src={spriteUrl(entry2.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <span className="text-sm font-semibold text-violet-400 capitalize">{entry2.atk.key}</span>
               <span className="text-gray-600 mx-0.5">→</span>
               <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
               <span className="text-sm font-medium text-gray-300 capitalize">{def.key}</span>
@@ -585,7 +598,7 @@ export default function ReportPanel({ selection, onClose }) {
 
       {/* Contenuto */}
       {isDouble
-        ? <CumulativePanel entries={selection} />
+        ? <CumulativePanel entries={liveSelection} />
         : <SinglePanel entry={entry1} />
       }
     </div>

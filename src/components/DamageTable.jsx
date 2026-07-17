@@ -222,7 +222,12 @@ export default function DamageTable({ onCellSelect }) {
     // allMoves per il pannello: le mosse dell'attaccante corrente
     const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
 
-    const entry = { ri, ci, dir, atk, def, field: f, allMoves }
+    const atkTeam  = dir === 't1' ? 'team1' : 'team2'
+    const defTeam  = dir === 't1' ? 'team2' : 'team1'
+    const atkIndex = dir === 't1' ? ri : ci
+    const defIndex = dir === 't1' ? ci : ri
+
+    const entry = { ri, ci, dir, atk, def, field: f, allMoves, atkTeam, atkIndex, defTeam, defIndex }
 
     setSelectionState(prev => {
       const { first, second } = prev

@@ -8,6 +8,7 @@ import useCalcStore from '../store/useCalcStore'
 import { NATURES, NATURE_MODIFIERS } from '../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
+import { PRESETS_BY_SLUG } from '../data/metaPresets'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES   = Object.keys(movesData).sort()
@@ -19,6 +20,73 @@ const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 const SP_TO_EV = (sp) => sp
 const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
 const EV_TO_SP = (ev) => Math.min(32, ev)
+
+// ─── PresetSelect ─────────────────────────────────────────────────────────────
+/**
+ * Dropdown compatto che mostra i preset meta disponibili.
+ * Se il Pokémon nello slot è già uno di quelli con preset, filtra la lista
+ * a quei soli preset. Altrimenti mostra tutti i preset in ordine alfabetico.
+ * Al cambio applica il preset e resetta il select a "— Preset —".
+ */
+function PresetSelect({ team, index, currentSlug }) {
+  const setPokemon = useCalcStore(s => s.setPokemon)
+  const setNature  = useCalcStore(s => s.setNature)
+  const setItem    = useCalcStore(s => s.setItem)
+  const setAbility = useCalcStore(s => s.setAbility)
+  const setSPs     = useCalcStore(s => s.setSPs)
+  const setMove    = useCalcStore(s => s.setMove)
+
+  // Mappa slug → preset selezionato, così ogni Pokémon ricorda la sua scelta
+  // e cambiando Pokémon si riparte automaticamente da Blank Set
+  const [selectedMap, setSelectedMap] = useState({})
+  const selected = selectedMap[currentSlug] ?? '__blank__'
+  const setSelected = (value) => setSelectedMap(prev => ({ ...prev, [currentSlug]: value }))
+
+  // Normalizza slug mossa: trattini → spazi (formato moves.json)
+  const normalizeMove = (m) => m ? m.replace(/-/g, ' ') : null
+
+  const dedicatedPresets = currentSlug && PRESETS_BY_SLUG[currentSlug]
+    ? PRESETS_BY_SLUG[currentSlug]
+    : null
+
+  const presets = dedicatedPresets ?? []
+
+  function applyPreset(value) {
+    if (!value) return
+    setSelected(value)
+    if (value === '__blank__') {
+      if (currentSlug) setPokemon(team, index, currentSlug)
+      setNature(team, index, null)
+      setItem(team, index, null)
+      setAbility(team, index, null)
+      setSPs(team, index, [0, 0, 0, 0, 0, 0])
+      ;[0,1,2,3].forEach(mi => setMove(team, index, mi, null))
+      return
+    }
+    const preset = presets.find(p => p.label === value)
+    if (!preset) return
+    setPokemon(team, index, preset.slug)
+    setNature(team, index, preset.nature.toLowerCase())
+    setItem(team, index, preset.item)
+    setAbility(team, index, preset.ability)
+    setSPs(team, index, preset.sps)
+    preset.moves.forEach((m, mi) => setMove(team, index, mi, normalizeMove(m)))
+  }
+
+  return (
+    <select
+      value={selected}
+      onChange={e => applyPreset(e.target.value)}
+      className="w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 outline-none border border-gray-600 cursor-pointer"
+      title="Carica preset meta"
+    >
+      <option value="__blank__">Blank Set</option>
+      {presets.map(p => (
+        <option key={p.label} value={p.label}>{p.label}</option>
+      ))}
+    </select>
+  )
+}
 
 // ─── Showdown helpers (singolo Pokémon) ───────────────────────────────────────
 
@@ -249,7 +317,7 @@ function PokemonSearch({ value, onChange }) {
   return (
     <div className="relative flex items-center">
       <input
-        className="w-full bg-gray-700 text-sm text-white rounded pl-2 pr-7 py-1 outline-none capitalize"
+        className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
         placeholder="Cerca Pokémon..."
         value={focused ? query : (value || '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
@@ -288,6 +356,7 @@ function PokemonSearch({ value, onChange }) {
 
 function MoveSearch({ value, onChange, placeholder }) {
   const [query, setQuery] = useState('')
+  const [focused, setFocused] = useState(false)
   const [open, setOpen]   = useState(false)
 
   const filtered = query.length >= 2
@@ -302,12 +371,14 @@ function MoveSearch({ value, onChange, placeholder }) {
     <div className="bg-gray-700/40 p-1.5 rounded border border-gray-700/60 flex items-center justify-between gap-2 h-9">
       <div className="flex-1 relative">
         <input
-          className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
-          placeholder={value ? value.replace(/-/g, ' ') : placeholder}
-          value={query}
+          className={`w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none capitalize ${
+            value && !focused ? 'text-white' : 'text-gray-300'
+          }`}
+          placeholder={focused ? placeholder : (value ? value.replace(/-/g, ' ') : placeholder)}
+          value={focused ? query : (value ? value.replace(/-/g, ' ') : '')}
           onChange={e => { setQuery(e.target.value); setOpen(true) }}
-          onFocus={() => setOpen(true)}
-          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
+          onBlur={() => { setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150) }}
         />
         {open && filtered.length > 0 && (
           <div className="absolute z-50 w-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto shadow-xl">
@@ -819,25 +890,30 @@ function PokemonPanel({ team, index }) {
         )}
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex gap-2 items-center">
-            <div className="flex-1">
+            <div className={pokemon?.key ? "w-1/3 shrink-0" : "flex-1"}>
               <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
             </div>
-            {data?.type && (
-              <div className="flex gap-1 shrink-0">
-                {data.type.map(typeId => {
-                  const typeName = TYPE_NAMES[typeId]
-                  return (
-                    <span
-                      key={typeId}
-                      className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded shadow-sm ${
-                        TYPE_COLORS[typeName] || 'bg-gray-600 text-white'
-                      }`}
-                    >
-                      {typeName}
-                    </span>
-                  )
-                })}
-              </div>
+            {pokemon?.key && (
+              <>
+                <div className="flex-1 min-w-0">
+                  <PresetSelect team={team} index={index} currentSlug={pokemon?.key} />
+                </div>
+                <div className="flex gap-1 flex-wrap justify-end shrink-0">
+                  {data?.type?.map(typeId => {
+                    const typeName = TYPE_NAMES[typeId]
+                    return (
+                      <span
+                        key={typeId}
+                        className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded shadow-sm ${
+                          TYPE_COLORS[typeName] || 'bg-gray-600 text-white'
+                        }`}
+                      >
+                        {typeName}
+                      </span>
+                    )
+                  })}
+                </div>
+              </>
             )}
           </div>
           {data && (
