@@ -213,15 +213,15 @@ function ControlBar() {
               <div className="flex gap-1">
                 <button type="button"
                   onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
-                  className={`${mode === 'import1' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-2 py-0.5 rounded border`}>
+                  className={`${mode === 'import1' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-3 py-2.5 rounded border`}>
                   <IconImport />
                 </button>
                 <button type="button" onClick={() => handleExport('team1')}
-                  className="text-[10px] px-2 py-0.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
+                  className="text-[10px] px-3 py-2.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
                   <IconExport />
                 </button>
                 <button type="button" onClick={() => handleReset('team1')}
-                  className="text-[10px] px-2 py-0.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
+                  className="text-[10px] px-3 py-2.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
                   <IconReset />
                 </button>
               </div>
@@ -245,15 +245,15 @@ function ControlBar() {
               <div className="flex gap-1">
                 <button type="button"
                   onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
-                  className={`${mode === 'import2' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-2 py-0.5 rounded border`}>
+                  className={`${mode === 'import2' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-3 py-2.5 rounded border`}>
                   <IconImport />
                 </button>
                 <button type="button" onClick={() => handleExport('team2')}
-                  className="text-[10px] px-2 py-0.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
+                  className="text-[10px] px-3 py-2.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
                   <IconExport />
                 </button>
                 <button type="button" onClick={() => handleReset('team2')}
-                  className="text-[10px] px-2 py-0.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
+                  className="text-[10px] px-3 py-2.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
                   <IconReset />
                 </button>
               </div>
@@ -367,7 +367,7 @@ function App() {
 
         {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}
         <ErrorBoundary>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <TeamEditor team="team1" />
             <TeamEditor team="team2" />
           </div>

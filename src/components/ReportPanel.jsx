@@ -414,8 +414,8 @@ function CumulativePanel({ entries }) {
   return (
     <div className="space-y-4">
 
-      {/* Box attaccanti affiancati */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Box attaccanti affiancati — colonna singola su mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {[entry1, entry2].map((entry, idx) => {
           const moves     = idx === 0 ? moves1  : moves2
           const sel       = idx === 0 ? sel1    : sel2

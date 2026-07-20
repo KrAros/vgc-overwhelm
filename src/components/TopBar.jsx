@@ -137,7 +137,7 @@ export default function TopBar() {
               <button
                 key={lv}
                 onClick={() => setLevel(lv)}
-                className={`text-xs px-2 py-1 rounded border transition-colors ${
+                className={`text-xs px-2.5 py-2.5 rounded border transition-colors ${
                   level === lv
                     ? 'bg-teal-500 text-gray-900 border-teal-500 font-medium'
                     : 'border-gray-600 text-gray-400'
@@ -150,7 +150,7 @@ export default function TopBar() {
           <div className="w-px h-4 bg-gray-700 shrink-0" />
           <button
             onClick={toggleTrickRoom}
-            className={`text-xs px-2 py-1 rounded border transition-colors ${
+            className={`text-xs px-3 py-2.5 rounded border transition-colors ${
               trickRoom ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400'
             }`}
           >
@@ -158,7 +158,7 @@ export default function TopBar() {
           </button>
           <button
             onClick={toggleDoubleTarget}
-            className={`text-xs px-2 py-1 rounded border transition-colors ${
+            className={`text-xs px-3 py-2.5 rounded border transition-colors ${
               doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400'
             }`}
           >

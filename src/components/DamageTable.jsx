@@ -284,11 +284,11 @@ export default function DamageTable({ onCellSelect }) {
           <thead>
             <tr>
               {/* Intestazione angolo — sticky su mobile */}
-              <th className="sticky left-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-16 sm:w-20 border-r border-gray-700/50">
+              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-16 sm:w-20 border-r border-gray-700/50">
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-[5rem] sm:min-w-24">
+                <th key={i} className="sticky top-0 z-10 bg-gray-900 p-2 text-center font-medium min-w-[5rem] sm:min-w-24">
                   {p?.key ? (
                     <>
                       <img
