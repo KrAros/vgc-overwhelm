@@ -42,7 +42,9 @@ export default function TopBar() {
 
   return (
     <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 py-2 mb-4">
-      <div className="flex flex-wrap gap-4 items-center">
+
+      {/* ── DESKTOP: layout orizzontale originale ── */}
+      <div className="hidden sm:flex flex-wrap gap-4 items-center">
 
         {/* Options */}
         <div className="flex items-center gap-2">
@@ -120,6 +122,77 @@ export default function TopBar() {
                 color={w.color} activeClass={w.active} onClick={() => setWeather(w.key)} />
             ))}
           </div>
+        </div>
+
+      </div>
+
+      {/* ── MOBILE: layout a griglia compatta ── */}
+      <div className="sm:hidden space-y-2">
+
+        {/* Riga 1: Level + Trick Room + Double Target */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Lv</span>
+          <div className="flex gap-1">
+            {[5, 50, 100].map(lv => (
+              <button
+                key={lv}
+                onClick={() => setLevel(lv)}
+                className={`text-xs px-2 py-1 rounded border transition-colors ${
+                  level === lv
+                    ? 'bg-teal-500 text-gray-900 border-teal-500 font-medium'
+                    : 'border-gray-600 text-gray-400'
+                }`}
+              >
+                {lv}
+              </button>
+            ))}
+          </div>
+          <div className="w-px h-4 bg-gray-700 shrink-0" />
+          <button
+            onClick={toggleTrickRoom}
+            className={`text-xs px-2 py-1 rounded border transition-colors ${
+              trickRoom ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400'
+            }`}
+          >
+            TR
+          </button>
+          <button
+            onClick={toggleDoubleTarget}
+            className={`text-xs px-2 py-1 rounded border transition-colors ${
+              doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400'
+            }`}
+          >
+            2× Target
+          </button>
+        </div>
+
+        <div className="h-px bg-gray-700/60" />
+
+        {/* Riga 2: Field + Weather come select */}
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Field</span>
+          <select
+            value={terrain ?? ''}
+            onChange={e => setTerrain(e.target.value || null)}
+            className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"
+          >
+            <option value="">None</option>
+            {FIELDS.map(f => (
+              <option key={f.key} value={f.key}>{f.label}</option>
+            ))}
+          </select>
+
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Weather</span>
+          <select
+            value={weather ?? ''}
+            onChange={e => setWeather(e.target.value || null)}
+            className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"
+          >
+            <option value="">None</option>
+            {WEATHERS.map(w => (
+              <option key={w.key} value={w.key}>{w.label}</option>
+            ))}
+          </select>
         </div>
 
       </div>

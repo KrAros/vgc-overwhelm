@@ -36,7 +36,7 @@ function ModBtn({ label, active, color, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`text-xs px-2.5 py-1 rounded border transition-colors ${
+      className={`text-xs px-2 py-1 rounded border transition-colors ${
         active ? activeClass : color + ' bg-transparent hover:opacity-80'
       }`}
     >
@@ -98,6 +98,15 @@ function ControlBar() {
   }
 
   const MODS = [
+    { label: 'HH',    mod: 'helpingHand', color: 'text-green-400  border-green-400',  active: 'bg-green-400  text-gray-900', title: 'Helping Hand' },
+    { label: 'Veil',  mod: 'auroraVeil',  color: 'text-blue-400   border-blue-400',   active: 'bg-blue-400   text-gray-900', title: 'Aurora Veil' },
+    { label: 'LS',    mod: 'lightScreen', color: 'text-yellow-400 border-yellow-400', active: 'bg-yellow-400 text-gray-900', title: 'Light Screen' },
+    { label: 'Ref',   mod: 'reflect',     color: 'text-pink-400   border-pink-400',   active: 'bg-pink-400   text-gray-900', title: 'Reflect' },
+    { label: 'Crit',  mod: 'crit',        color: 'text-red-400    border-red-400',    active: 'bg-red-400    text-gray-900', title: 'Crit' },
+  ]
+
+  // Label estese per desktop
+  const MODS_DESKTOP = [
     { label: 'Helping Hand', mod: 'helpingHand', color: 'text-green-400  border-green-400',  active: 'bg-green-400  text-gray-900' },
     { label: 'Aurora Veil',  mod: 'auroraVeil',  color: 'text-blue-400   border-blue-400',   active: 'bg-blue-400   text-gray-900' },
     { label: 'Light Screen', mod: 'lightScreen', color: 'text-yellow-400 border-yellow-400', active: 'bg-yellow-400 text-gray-900' },
@@ -114,13 +123,110 @@ function ControlBar() {
 
   return (
     <div className="mb-4">
-      <div className="bg-gray-800 rounded-xl border border-gray-700 px-4 py-3 space-y-2">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 py-3 space-y-2">
 
-        {/* Riga 1 — modifier simmetrici */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 1</span>
+        {/* ── DESKTOP: layout simmetrico originale ── */}
+        <div className="hidden sm:block space-y-2">
+          {/* Riga 1 — modifier simmetrici */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 1</span>
+              <div className="flex items-center gap-1">
+                {MODS_DESKTOP.map(m => (
+                  <ModBtn key={m.mod} label={m.label}
+                    active={modVals[m.mod].t1}
+                    color={m.color} activeClass={m.active}
+                    onClick={() => toggleModifier(m.mod, 't1')} />
+                ))}
+              </div>
+            </div>
+
+            <ModBtn
+              label="Solo KO"
+              active={showKoOnly}
+              color="text-red-400 border-red-400"
+              activeClass="bg-red-500 text-white"
+              onClick={toggleShowKoOnly}
+            />
+
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {MODS_DESKTOP.map(m => (
+                  <ModBtn key={m.mod} label={m.label}
+                    active={modVals[m.mod].t2}
+                    color={m.color} activeClass={m.active}
+                    onClick={() => toggleModifier(m.mod, 't2')} />
+                ))}
+              </div>
+              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 2</span>
+            </div>
+          </div>
+
+          <div className="h-px bg-gray-700/60" />
+
+          {/* Riga 2 — azioni */}
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1">
+              <button type="button"
+                onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
+                className={mode === 'import1' ? btnActive : btnNormal}>
+                <IconImport /><span>Importa</span>
+              </button>
+              <button type="button" onClick={() => handleExport('team1')} className={btnNormal}>
+                <IconExport /><span>Esporta</span>
+              </button>
+              <button type="button" onClick={() => handleReset('team1')} className={btnReset}>
+                <IconReset /><span>Azzera</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              {feedback && <span className="text-xs text-green-400">{feedback}</span>}
+              <button type="button" onClick={handleShare} className={btnNormal}>
+                <IconShare /><span>Condividi</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button type="button"
+                onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
+                className={mode === 'import2' ? btnActive : btnNormal}>
+                <IconImport /><span>Importa</span>
+              </button>
+              <button type="button" onClick={() => handleExport('team2')} className={btnNormal}>
+                <IconExport /><span>Esporta</span>
+              </button>
+              <button type="button" onClick={() => handleReset('team2')} className={btnReset}>
+                <IconReset /><span>Azzera</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── MOBILE: layout verticale compatto ── */}
+        <div className="sm:hidden space-y-2.5">
+
+          {/* Team 1 modifier */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Team 1</span>
+              <div className="flex gap-1">
+                <button type="button"
+                  onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
+                  className={`${mode === 'import1' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-2 py-0.5 rounded border`}>
+                  <IconImport />
+                </button>
+                <button type="button" onClick={() => handleExport('team1')}
+                  className="text-[10px] px-2 py-0.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
+                  <IconExport />
+                </button>
+                <button type="button" onClick={() => handleReset('team1')}
+                  className="text-[10px] px-2 py-0.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
+                  <IconReset />
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
                 <ModBtn key={m.mod} label={m.label}
                   active={modVals[m.mod].t1}
@@ -130,16 +236,29 @@ function ControlBar() {
             </div>
           </div>
 
-          <ModBtn
-            label="Solo KO"
-            active={showKoOnly}
-            color="text-red-400 border-red-400"
-            activeClass="bg-red-500 text-white"
-            onClick={toggleShowKoOnly}
-          />
+          <div className="h-px bg-gray-700/60" />
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
+          {/* Team 2 modifier */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Team 2</span>
+              <div className="flex gap-1">
+                <button type="button"
+                  onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
+                  className={`${mode === 'import2' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-2 py-0.5 rounded border`}>
+                  <IconImport />
+                </button>
+                <button type="button" onClick={() => handleExport('team2')}
+                  className="text-[10px] px-2 py-0.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
+                  <IconExport />
+                </button>
+                <button type="button" onClick={() => handleReset('team2')}
+                  className="text-[10px] px-2 py-0.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
+                  <IconReset />
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
                 <ModBtn key={m.mod} label={m.label}
                   active={modVals[m.mod].t2}
@@ -147,49 +266,29 @@ function ControlBar() {
                   onClick={() => toggleModifier(m.mod, 't2')} />
               ))}
             </div>
-            <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 2</span>
+          </div>
+
+          <div className="h-px bg-gray-700/60" />
+
+          {/* Riga utility: KO filter + Share */}
+          <div className="flex items-center justify-between gap-2">
+            <ModBtn
+              label="Solo KO"
+              active={showKoOnly}
+              color="text-red-400 border-red-400"
+              activeClass="bg-red-500 text-white"
+              onClick={toggleShowKoOnly}
+            />
+            <div className="flex items-center gap-2">
+              {feedback && <span className="text-xs text-green-400">{feedback}</span>}
+              <button type="button" onClick={handleShare}
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-gray-300 border-gray-600/40">
+                <IconShare /><span>Condividi</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="h-px bg-gray-700/60" />
-
-        {/* Riga 2 — azioni import/export simmetriche */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1">
-            <button type="button"
-              onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
-              className={mode === 'import1' ? btnActive : btnNormal}>
-              <IconImport /><span>Importa</span>
-            </button>
-            <button type="button" onClick={() => handleExport('team1')} className={btnNormal}>
-              <IconExport /><span>Esporta</span>
-            </button>
-            <button type="button" onClick={() => handleReset('team1')} className={btnReset}>
-              <IconReset /><span>Azzera</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {feedback && <span className="text-xs text-green-400">{feedback}</span>}
-            <button type="button" onClick={handleShare} className={btnNormal}>
-              <IconShare /><span>Condividi</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <button type="button"
-              onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
-              className={mode === 'import2' ? btnActive : btnNormal}>
-              <IconImport /><span>Importa</span>
-            </button>
-            <button type="button" onClick={() => handleExport('team2')} className={btnNormal}>
-              <IconExport /><span>Esporta</span>
-            </button>
-            <button type="button" onClick={() => handleReset('team2')} className={btnReset}>
-              <IconReset /><span>Azzera</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Pannello import espandibile */}
@@ -237,14 +336,15 @@ function App() {
   const [reportSelection, setReportSelection] = useState(null)
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
-      <h1 className="text-3xl font-bold text-center text-red-500 mb-4">
+    <div className="min-h-screen bg-gray-900 text-white px-3 py-3 sm:p-4">
+      {/* Header — compatto su mobile */}
+      <h1 className="text-xl sm:text-3xl font-bold text-center text-red-500 mb-3 sm:mb-4">
         VGC Damage Calculator
       </h1>
 
       <div className="max-w-7xl mx-auto">
 
-        {/* ReportPanel — appare sopra la tabella quando c'è una selezione */}
+        {/* ReportPanel */}
         <ErrorBoundary>
           {reportSelection && (
             <ReportPanel
@@ -259,15 +359,15 @@ function App() {
           <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
         </ErrorBoundary>
 
-        {/* TopBar — Options / Field / Weather */}
+        {/* TopBar */}
         <TopBar />
 
-        {/* ControlBar — modifier + import/export, simmetrica per team */}
+        {/* ControlBar */}
         <ControlBar />
 
-        {/* TeamEditor affiancati */}
+        {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}
         <ErrorBoundary>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <TeamEditor team="team1" />
             <TeamEditor team="team2" />
           </div>

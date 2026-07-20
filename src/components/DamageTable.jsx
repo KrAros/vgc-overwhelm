@@ -283,26 +283,27 @@ export default function DamageTable({ onCellSelect }) {
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
-              <th className="bg-gray-900 p-2 text-gray-500 font-medium text-center w-20">
+              {/* Intestazione angolo — sticky su mobile */}
+              <th className="sticky left-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-16 sm:w-20 border-r border-gray-700/50">
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-24">
+                <th key={i} className="bg-gray-900 p-2 text-center font-medium min-w-[5rem] sm:min-w-24">
                   {p?.key ? (
                     <>
                       <img
                         src={spriteUrl(p.key)}
                         alt={p.key}
-                        className="w-12 h-12 object-contain mx-auto"
+                        className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
                         onError={e => {
                           const fb = fallbackSpriteUrl(p.key)
                           if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
                         }}
                       />
-                      <div className="text-gray-300 text-xs capitalize mt-1">{p.key}</div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[4rem] sm:max-w-none mx-auto">{p.key.split('-')[0]}</div>
                     </>
                   ) : (
-                    <div className="text-gray-600">— T2 {i+1} —</div>
+                    <div className="text-gray-600 text-[10px]">T2·{i+1}</div>
                   )}
                 </th>
               ))}
@@ -311,22 +312,23 @@ export default function DamageTable({ onCellSelect }) {
           <tbody>
             {team1.map((row, ri) => (
               <tr key={ri} className="border-t border-gray-700">
-                <td className="bg-gray-900 p-2 text-center">
+                {/* Prima colonna sticky — rimane visibile durante lo scroll orizzontale */}
+                <td className="sticky left-0 z-10 bg-gray-900 p-2 text-center border-r border-gray-700/50 w-16 sm:w-20">
                   {row?.key ? (
                     <>
                       <img
                         src={spriteUrl(row.key)}
                         alt={row.key}
-                        className="w-12 h-12 object-contain mx-auto"
+                        className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
                         onError={e => {
                           const fb = fallbackSpriteUrl(row.key)
                           if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
                         }}
                       />
-                      <div className="text-gray-300 text-xs capitalize mt-1">{row.key}</div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[3.5rem] sm:max-w-none mx-auto">{row.key.split('-')[0]}</div>
                     </>
                   ) : (
-                    <div className="text-gray-600">— T1 {ri+1} —</div>
+                    <div className="text-gray-600 text-[10px]">T1·{ri+1}</div>
                   )}
                 </td>
                 {team2.map((col, ci) => (
