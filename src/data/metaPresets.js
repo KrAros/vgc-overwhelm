@@ -87,7 +87,7 @@ export const META_PRESETS = [
     slug: 'kingambit',
     label: 'Defiant Sweeper',
     nature: 'Adamant',
-    item: 'black glasses',
+    item: 'blackglasses',
     ability: 'defiant',
     sps: [32, 32, 0, 0, 2, 0],
     moves: ['kowtow-cleave', 'sucker-punch', 'swords-dance', 'protect'],

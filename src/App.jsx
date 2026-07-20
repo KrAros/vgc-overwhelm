@@ -3,6 +3,7 @@ import TopBar from './components/TopBar'
 import DamageTable from './components/DamageTable'
 import TeamEditor from './components/TeamEditor'
 import ReportPanel from './components/ReportPanel'
+import ErrorBoundary from './components/ErrorBoundary'
 import useCalcStore, { encodeTeamsToURL } from './store/useCalcStore'
 import { parseShowdownPaste, teamToShowdown } from './utils/showdownIO'
 
@@ -244,15 +245,19 @@ function App() {
       <div className="max-w-7xl mx-auto">
 
         {/* ReportPanel — appare sopra la tabella quando c'è una selezione */}
-        {reportSelection && (
-          <ReportPanel
-            selection={reportSelection}
-            onClose={() => setReportSelection(null)}
-          />
-        )}
+        <ErrorBoundary>
+          {reportSelection && (
+            <ReportPanel
+              selection={reportSelection}
+              onClose={() => setReportSelection(null)}
+            />
+          )}
+        </ErrorBoundary>
 
         {/* DamageTable */}
-        <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
+        <ErrorBoundary>
+          <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
+        </ErrorBoundary>
 
         {/* TopBar — Options / Field / Weather */}
         <TopBar />
@@ -261,10 +266,12 @@ function App() {
         <ControlBar />
 
         {/* TeamEditor affiancati */}
-        <div className="grid grid-cols-2 gap-4">
-          <TeamEditor team="team1" />
-          <TeamEditor team="team2" />
-        </div>
+        <ErrorBoundary>
+          <div className="grid grid-cols-2 gap-4">
+            <TeamEditor team="team1" />
+            <TeamEditor team="team2" />
+          </div>
+        </ErrorBoundary>
 
       </div>
     </div>

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
-import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 

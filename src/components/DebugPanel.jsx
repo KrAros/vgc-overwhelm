@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import pokemonData from '../data/pokemon.json'
-import { NATURE_MODIFIERS } from '../data/natures'
 import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 
 export default function DebugPanel() {

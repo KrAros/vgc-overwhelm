@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import pokemonData from '../data/pokemon.json'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
