@@ -54,4 +54,5 @@ export function spriteUrl(key) {
 export function fallbackSpriteUrl(key) {
   const num = resolveNum(key)
   if (!num) return null
-  }
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
+}
