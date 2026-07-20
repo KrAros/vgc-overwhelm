@@ -4,6 +4,8 @@ import DamageTable from './components/DamageTable'
 import TeamEditor from './components/TeamEditor'
 import ReportPanel from './components/ReportPanel'
 import ErrorBoundary from './components/ErrorBoundary'
+import Header from './components/Header'
+import Footer from './components/Footer'
 import useCalcStore, { encodeTeamsToURL } from './store/useCalcStore'
 import { parseShowdownPaste, teamToShowdown } from './utils/showdownIO'
 
@@ -336,44 +338,51 @@ function App() {
   const [reportSelection, setReportSelection] = useState(null)
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white px-3 py-3 sm:p-4">
-      {/* Header — compatto su mobile */}
-      <h1 className="text-xl sm:text-3xl font-bold text-center text-red-500 mb-3 sm:mb-4">
-        VGC Damage Calculator
-      </h1>
+    // Layout colonna intera: header fisso in alto, footer in basso
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
 
-      <div className="max-w-7xl mx-auto">
+      {/* ── Navbar header ── */}
+      <Header />
 
-        {/* ReportPanel */}
-        <ErrorBoundary>
-          {reportSelection && (
-            <ReportPanel
-              selection={reportSelection}
-              onClose={() => setReportSelection(null)}
-            />
-          )}
-        </ErrorBoundary>
+      {/* ── Contenuto principale ── */}
+      <main className="flex-1 px-3 py-3 sm:p-4">
+        <div className="max-w-7xl mx-auto">
 
-        {/* DamageTable */}
-        <ErrorBoundary>
-          <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
-        </ErrorBoundary>
+          {/* ReportPanel */}
+          <ErrorBoundary>
+            {reportSelection && (
+              <ReportPanel
+                selection={reportSelection}
+                onClose={() => setReportSelection(null)}
+              />
+            )}
+          </ErrorBoundary>
 
-        {/* TopBar */}
-        <TopBar />
+          {/* DamageTable */}
+          <ErrorBoundary>
+            <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
+          </ErrorBoundary>
 
-        {/* ControlBar */}
-        <ControlBar />
+          {/* TopBar */}
+          <TopBar />
 
-        {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}
-        <ErrorBoundary>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <TeamEditor team="team1" />
-            <TeamEditor team="team2" />
-          </div>
-        </ErrorBoundary>
+          {/* ControlBar */}
+          <ControlBar />
 
-      </div>
+          {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}
+          <ErrorBoundary>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <TeamEditor team="team1" />
+              <TeamEditor team="team2" />
+            </div>
+          </ErrorBoundary>
+
+        </div>
+      </main>
+
+      {/* ── Footer ── */}
+      <Footer />
+
     </div>
   )
 }

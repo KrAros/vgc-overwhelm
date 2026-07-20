@@ -284,11 +284,11 @@ export default function DamageTable({ onCellSelect }) {
           <thead>
             <tr>
               {/* Intestazione angolo — sticky su mobile */}
-              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-16 sm:w-20 border-r border-gray-700/50">
+              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-[80px] min-w-[80px] max-w-[80px] border-r border-gray-700/50">
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className="sticky top-0 z-10 bg-gray-900 p-2 text-center font-medium min-w-[5rem] sm:min-w-24">
+                <th key={i} className="sticky top-0 z-10 bg-gray-900 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden">
                   {p?.key ? (
                     <>
                       <img
@@ -313,7 +313,7 @@ export default function DamageTable({ onCellSelect }) {
             {team1.map((row, ri) => (
               <tr key={ri} className="border-t border-gray-700">
                 {/* Prima colonna sticky — rimane visibile durante lo scroll orizzontale */}
-                <td className="sticky left-0 z-10 bg-gray-900 p-2 text-center border-r border-gray-700/50 w-16 sm:w-20">
+                <td className="sticky left-0 z-10 bg-gray-900 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden">
                   {row?.key ? (
                     <>
                       <img
