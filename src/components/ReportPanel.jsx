@@ -305,8 +305,8 @@ function MoveCard({ atk, def, move, result, field = {} }) {
       const maxRoll = Math.min(rolls[rolls.length - 1], defHP)
       const minRecoilHP = Math.floor(minRoll * rNum / rDen)
       const maxRecoilHP = Math.floor(maxRoll * rNum / rDen)
-      const minPct = Math.floor(minRecoilHP * 1000 / atkHP) / 10
-      const maxPct = Math.floor(maxRecoilHP * 1000 / atkHP) / 10
+      const minPct = Math.round(minRecoilHP * 1000 / atkHP) / 10
+      const maxPct = Math.round(maxRecoilHP * 1000 / atkHP) / 10
       recoilInfo = `${minPct} - ${maxPct}% recoil damage`
     } else {
       // Recoil fisso dagli HP max (Steel Beam, Chloroblast, Mind Blown)
