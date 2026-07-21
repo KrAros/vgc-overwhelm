@@ -14,7 +14,7 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical', showInSmogon: true },
   'choice specs':   { atkMult: 1.5, statType: 'special',  showInSmogon: true },
-  'life orb':       { dmgMult: { num: 13, den: 10 },       showInSmogon: true },
+  'life orb':       { dmgMult: { num: 5324, den: 4096 },    showInSmogon: true },
   // ×1.1 su mosse fisiche / speciali rispettivamente
   'muscle band':    { atkMult: 1.1, statType: 'physical',  showInSmogon: true },
   'wise glasses':   { atkMult: 1.1, statType: 'special',   showInSmogon: true },

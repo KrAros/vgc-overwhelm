@@ -66,8 +66,13 @@ function getBestMove(atk, def, level, field) {
 // selectionState: { first: {ri,ci,dir} | null, second: {ri,ci,dir} | null }
 // onSelect: (ri, ci, dir, atk, def, field) => void
 
-function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly }) {
+function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, selRi, selCi }) {
+  // Oscura le celle non sulla riga/colonna selezionata
+  const hasSelection = selRi !== null && selCi !== null
+  const isOnAxis = ri === selRi || ci === selCi
+  const dimCell = hasSelection && !isOnAxis
   if (!attacker?.key || !defender?.key) {
+    if (showKoOnly) return <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
     return (
       <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">—</td>
     )
@@ -88,13 +93,14 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     const t2Ko = d2 && d2.result.maxPct >= 100
     if (!t1Ko && !t2Ko) {
       return (
-        <td className="border-l border-gray-700 opacity-20">
-          <div className="p-1 text-center text-gray-700 text-xs">—</div>
-          <div className="p-1 text-center text-gray-700 text-xs">—</div>
-        </td>
+        <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
       )
     }
   }
+
+  // Quando showKoOnly è attivo, la metà che non fa KO viene silenziata visivamente
+  const koFilterDimT1 = showKoOnly && !(d1 && d1.result.maxPct >= 100)
+  const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
@@ -123,7 +129,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     ? 'ring-2 ring-violet-400 ring-inset'
     : ''
 
-  const renderHalf = (d, immune, prefix, dir) => {
+  const renderHalf = (d, immune, prefix, dir, dim = false) => {
     const label = immune ? immuneLabel(immune.result) : null
 
     // Sfondo della singola metà (sopra/sotto) quando è quella selezionata
@@ -137,7 +143,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
         onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) }}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
-        } ${halfSelected}`}
+        } ${halfSelected} ${dim ? 'opacity-20 pointer-events-none' : ''}`}
       >
         {d ? (
           <>
@@ -170,9 +176,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   }
 
   return (
-    <td className={`border-l border-gray-700 ${cellRing} relative`}>
-      {renderHalf(d1, firstImmuneT1, '▶', 't1')}
-      {renderHalf(d2, firstImmuneT2, '◀', 't2')}
+    <td className={`border-l border-gray-700 ${cellRing} relative transition-opacity ${dimCell ? 'opacity-30' : ''}`}>
+      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1)}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2)}
     </td>
   )
 }
@@ -217,7 +223,24 @@ export default function DamageTable({ onCellSelect }) {
     doubleTarget,
   }
 
+  const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
+
+  // Mappa abilità → meteo automatico al click cella
+  const ABILITY_WEATHER = {
+    'drizzle':        'rain',
+    'primordial sea': 'heavy rain',
+    'drought':        'sun',
+    'desolate land':  'harsh sunshine',
+    'sand stream':    'sand',
+    'snow warning':   'snow',
+  }
+
   const handleSelect = (ri, ci, dir, atk, def, f, allMovesT1, allMovesT2) => {
+    // Auto-weather: attaccante ha priorità sul difensore
+    const atkAbility = (atk?.ability || '').toLowerCase()
+    const defAbility = (def?.ability || '').toLowerCase()
+    const autoWeather = ABILITY_WEATHER[atkAbility] || ABILITY_WEATHER[defAbility] || null
+    if (autoWeather) setWeatherDirect(autoWeather)
     // allMoves per il pannello: le mosse dell'attaccante corrente
     const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
 
@@ -268,6 +291,10 @@ export default function DamageTable({ onCellSelect }) {
     })
   }
 
+  // Riga e colonna selezionate (per highlight)
+  const selRi = selectionState.first?.ri ?? null
+  const selCi = selectionState.first?.ci ?? null
+
   return (
     <div className="mb-4">
       {/* Indicatore modalità cumulativa */}
@@ -288,7 +315,9 @@ export default function DamageTable({ onCellSelect }) {
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className="sticky top-0 z-10 bg-gray-900 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden">
+                <th key={i} className={`sticky top-0 z-10 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden transition-colors ${
+                  selCi === i ? 'bg-teal-900/40' : 'bg-gray-900'
+                }`}>
                   {p?.key ? (
                     <>
                       <img
@@ -311,9 +340,11 @@ export default function DamageTable({ onCellSelect }) {
           </thead>
           <tbody>
             {team1.map((row, ri) => (
-              <tr key={ri} className="border-t border-gray-700">
+              <tr key={ri} className={`border-t border-gray-700 transition-colors ${selRi === ri ? 'bg-teal-900/20' : ''}`}>
                 {/* Prima colonna sticky — rimane visibile durante lo scroll orizzontale */}
-                <td className="sticky left-0 z-10 bg-gray-900 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden">
+                <td className={`sticky left-0 z-10 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden transition-colors ${
+                  selRi === ri ? 'bg-teal-900/40' : 'bg-gray-900'
+                }`}>
                   {row?.key ? (
                     <>
                       <img
@@ -344,6 +375,8 @@ export default function DamageTable({ onCellSelect }) {
                     selectionState={selectionState}
                     onSelect={handleSelect}
                     showKoOnly={showKoOnly}
+                    selRi={selRi}
+                    selCi={selCi}
                   />
                 ))}
               </tr>

@@ -3,6 +3,9 @@ import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
 import { spriteUrl } from '../utils/sprite'
+import { calcFinalStat } from '../utils/statCalc'
+import pokemonData from '../data/pokemon.json'
+import movesData from '../data/moves.json'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
@@ -183,6 +186,32 @@ function MoveCard({ atk, def, move, result, field = {} }) {
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
   const sitrus    = hasSitrus ? simulateSitrus(rolls, result.defHP) : null
 
+  // ── Recoil ───────────────────────────────────────────────────────────────
+  const moveRecoil = movesData[move]?.recoil || null
+  let recoilInfo = null
+  if (moveRecoil) {
+    const atkPokeData = pokemonData[atk.key]
+    const atkHPBase = atkPokeData?.stats?.[0] ?? 0
+    const atkHP = calcFinalStat(atkHPBase, atk.sps?.[0] ?? 0, 50, null, 0)
+    const [rNum, rDen] = moveRecoil.fraction
+
+    if (moveRecoil.type === 'damage') {
+      // Formula Smogon: Math.floor(roll * (rNum/rDen) * 1000 / atkHP) / 10
+      // Evita floor intermedio su roll/den per mantenere precisione
+      const mod = (rNum / rDen) * 100
+      const defHP = result.defHP
+      const minRoll = Math.min(rolls[0], defHP)
+      const maxRoll = Math.min(rolls[rolls.length - 1], defHP)
+      const minPct = Math.floor(minRoll * mod * 10 / atkHP) / 10
+      const maxPct = Math.floor(maxRoll * mod * 10 / atkHP) / 10
+      recoilInfo = `${minPct} - ${maxPct}% recoil damage`
+    } else {
+      // Recoil fisso dagli HP max (Steel Beam, Chloroblast, Mind Blown)
+      const pct = Math.floor(rNum / rDen * 1000) / 10
+      recoilInfo = `${pct}% recoil damage`
+    }
+  }
+
   const pctColor = result.minPct >= 100 ? 'text-red-400' :
                    result.maxPct >= 100  ? 'text-orange-400' :
                    result.minPct >= 50   ? 'text-orange-300' :
@@ -197,11 +226,18 @@ function MoveCard({ atk, def, move, result, field = {} }) {
   return (
     <div className="bg-gray-900/60 rounded-lg p-3 border border-gray-700/50 space-y-2.5">
 
-      {/* Riga 1: nome mossa grande + % + badge HKO */}
+      {/* Riga 1: nome mossa grande + recoil inline + % + badge HKO */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-base font-bold text-white capitalize tracking-wide">
-          {move.replace(/-/g, ' ')}
-        </span>
+        <div className="flex items-center gap-1 min-w-0 flex-wrap">
+          <span className="text-base font-bold text-white capitalize tracking-wide">
+            {move.replace(/-/g, ' ')}
+          </span>
+          {recoilInfo && (
+            <span className="text-base font-bold text-orange-400/80">
+              ({recoilInfo})
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-2 shrink-0">
           <span className={`text-base font-bold ${pctColor}`}>
             {result.minPct}–{result.maxPct}%
@@ -297,20 +333,27 @@ function SinglePanel({ entry }) {
 
   return (
     <div className="space-y-3">
-      {/* Dropdown con % inline */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Mossa:</span>
-        <select
-          value={activeMoveKey}
-          onChange={e => setSelectedMove(e.target.value)}
-          className="bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded px-2 py-1 outline-none focus:border-teal-500"
-        >
-          {computedMoves.map(({ move, result }) => (
-            <option key={move} value={move}>
-              {move.replace(/-/g, ' ')} — {result.minPct}–{result.maxPct}%
-            </option>
-          ))}
-        </select>
+      {/* 4 bottoni mossa — uno per slot, sempre mostrati nell'ordine del team */}
+      <div className="flex flex-wrap gap-1.5">
+        {computedMoves.map(({ move, result }) => {
+          const isActive = move === activeMoveKey
+          const pct = result.maxPct
+          const koColor = pct >= 100 ? 'border-red-500/70 text-red-300 bg-red-900/30' :
+                          pct >= 50  ? 'border-orange-500/50 text-orange-300 bg-orange-900/20' :
+                                       'border-gray-600 text-gray-400 bg-gray-800/60'
+          const activeRing = isActive ? 'ring-2 ring-teal-400' : ''
+          return (
+            <button
+              key={move}
+              type="button"
+              onClick={() => setSelectedMove(move)}
+              className={`px-2.5 py-1 rounded-lg border text-xs font-medium transition-all ${koColor} ${activeRing}`}
+            >
+              <span className="capitalize">{move.replace(/-/g, ' ')}</span>
+              <span className="ml-1.5 opacity-70">{result.minPct}–{result.maxPct}%</span>
+            </button>
+          )
+        })}
       </div>
 
       {active && (() => {
@@ -320,6 +363,7 @@ function SinglePanel({ entry }) {
           auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
           lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
           reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
+          crit:        dir === 't1' ? crit.t1         : crit.t2,
         }
         return <MoveCard atk={atk} def={def} move={active.move} result={active.result} field={field} />
       })()}
@@ -440,20 +484,32 @@ function CumulativePanel({ entries }) {
                 </span>
               </div>
 
-              {/* Dropdown mosse con % */}
+              {/* Bottoni mossa con % */}
               {moves.length > 0 ? (
                 <>
-                  <select
-                    value={sel || deflt?.move || ''}
-                    onChange={e => setSel(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded px-2 py-1 outline-none focus:border-teal-500"
-                  >
-                    {moves.map(({ move, result }) => (
-                      <option key={move} value={move}>
-                        {move.replace(/-/g, ' ')} — {result.minPct}–{result.maxPct}%
-                      </option>
-                    ))}
-                  </select>
+                  <div className="flex flex-wrap gap-1">
+                    {moves.map(({ move, result }) => {
+                      const isSel = move === (sel || deflt?.move)
+                      const activeRing = idx === 0
+                        ? (isSel ? 'ring-2 ring-teal-400' : '')
+                        : (isSel ? 'ring-2 ring-violet-400' : '')
+                      const pct = result.maxPct
+                      const koColor = pct >= 100 ? 'border-red-500/70 text-red-300 bg-red-900/30' :
+                                      pct >= 50  ? 'border-orange-500/50 text-orange-300 bg-orange-900/20' :
+                                                   'border-gray-600 text-gray-400 bg-gray-800/60'
+                      return (
+                        <button
+                          key={move}
+                          type="button"
+                          onClick={() => setSel(move)}
+                          className={`px-2 py-0.5 rounded-lg border text-xs font-medium transition-all ${koColor} ${activeRing}`}
+                        >
+                          <span className="capitalize">{move.replace(/-/g, ' ')}</span>
+                          <span className="ml-1 opacity-70">{result.minPct}–{result.maxPct}%</span>
+                        </button>
+                      )
+                    })}
+                  </div>
 
                   {/* Stringa Smogon compatta */}
                   {activeSel && (
@@ -470,18 +526,8 @@ function CumulativePanel({ entries }) {
         })}
       </div>
 
-      {/* Riga difensore */}
-      <div className="flex items-center gap-2 text-xs text-gray-500">
-        <span>vs.</span>
-        <img
-          src={spriteUrl(def.key)}
-          alt={def.key}
-          className="w-6 h-6 object-contain"
-          onError={e => { e.target.style.display = 'none' }}
-        />
-        <span className="capitalize text-gray-300 font-medium">{def.key}</span>
-        {cumulative && <span className="text-gray-600">— {cumulative.defHP} HP</span>}
-      </div>
+      {/* Freccia separatore */}
+      <div className="text-center text-gray-600 text-xs">↓ danno cumulativo su</div>
 
       {/* Box danno totale */}
       {cumulative && (() => {
@@ -492,6 +538,20 @@ function CumulativePanel({ entries }) {
         return (
           <div className="bg-gray-900/80 rounded-lg p-4 border border-gray-700 space-y-3">
 
+            {/* Difensore prominente in cima al box */}
+            <div className="flex items-center gap-2 pb-2 border-b border-gray-700/50">
+              <img
+                src={spriteUrl(def.key)}
+                alt={def.key}
+                className="w-10 h-10 object-contain"
+                onError={e => { e.target.style.display = 'none' }}
+              />
+              <div>
+                <div className="text-sm font-bold text-gray-100 capitalize">{def.key.replace(/-/g, ' ')}</div>
+                <div className="text-xs text-gray-500">{cumulative.defHP} HP</div>
+              </div>
+            </div>
+
             {/* Riga narrativa — testo più grande */}
             <div className="text-sm text-gray-400 leading-relaxed">
               <span className="text-teal-400 font-semibold capitalize">{entry1.atk.key}</span>
@@ -499,9 +559,6 @@ function CumulativePanel({ entries }) {
               <span className="text-gray-600"> + </span>
               <span className="text-violet-400 font-semibold capitalize">{entry2.atk.key}</span>
               {active2 && <span className="text-gray-500"> usa <span className="text-gray-200 capitalize">{active2.move.replace(/-/g, ' ')}</span></span>}
-              <span className="text-gray-600"> → </span>
-              <span className="text-gray-200 font-semibold capitalize">{def.key}</span>
-              <span className="text-gray-600"> ({cumulative.defHP} HP)</span>
             </div>
 
             {/* Danno % + badge KO sulla stessa riga */}

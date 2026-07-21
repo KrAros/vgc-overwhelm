@@ -14,8 +14,9 @@
  */
 
 import movesData from '../data/moves.json'
+import pokemonData from '../data/pokemon.json'
 import { NATURE_MODIFIERS } from '../data/natures'
-import { TYPE_NAMES } from '../data/typeChart'
+import { TYPE_NAMES, TYPES } from '../data/typeChart'
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../data/abilityEffects'
 import { ITEM_EFFECTS } from '../data/itemEffects'
 
@@ -125,23 +126,50 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   // Nomi Pokémon e mossa in Title Case
   const atkName  = _tc(atk.key.replace(/-/g, ' '))
   const defName  = _tc(def.key.replace(/-/g, ' '))
-  const moveName = _tc(move.replace(/-/g, ' '))
+
+  // Weather Ball: nome con BP e tipo espliciti
+  // result.weatherBallType è l'indice tipo se il meteo è attivo, null altrimenti
+  let moveName = _tc(move.replace(/-/g, ' '))
+  if (move === 'weather ball') {
+    const wbTypeName = result.weatherBallType !== null && result.weatherBallType !== undefined
+      ? (TYPE_NAMES[result.weatherBallType] || 'Normal')
+      : 'Normal'
+    const wbBP = result.effectiveBP ?? 50
+    moveName = `Weather Ball (${wbBP} BP ${wbTypeName})`
+  }
 
   // Condizioni di campo in coda alla stringa
   const fieldParts = []
 
   if (field.weather && field.weather !== 'none') {
-    const moveType = (TYPE_NAMES[moveData.type] || '').toLowerCase()
+    // Usa il tipo effettivo della mossa (Weather Ball cambia tipo con il meteo)
+    const effectiveType = result.weatherBallType !== null && result.weatherBallType !== undefined
+      ? result.weatherBallType
+      : moveData.type
+    const moveType = (TYPE_NAMES[effectiveType] || '').toLowerCase()
     const w = field.weather.toLowerCase()
-    // Mostriamo il meteo solo quando influenza effettivamente la mossa:
-    // Rain: boost Water, nerf Fire — Sun: boost Fire, nerf Water
-    const weatherRelevant =
+
+    // Tipi del difensore letti dal pokemonData (array di indici numerici)
+    const defPokeTypes = pokemonData[def.key]?.type || []
+
+    // Offensivo: Rain booста Water/nerf Fire, Sun booста Fire/nerf Water
+    const offensiveRelevant =
       (w === 'rain' || w === 'heavy rain')     && (moveType === 'water' || moveType === 'fire') ||
       (w === 'sun'  || w === 'harsh sunshine') && (moveType === 'fire'  || moveType === 'water')
+
+    // Difensivo: Sand booста SpD di Rock/Steel/Ground — mostrato se la mossa è speciale
+    // (allineato a calcEngine.js che applica il bonus a questi tre tipi)
+    const sandDefRelevant =
+      (w === 'sand' || w === 'sandstorm') &&
+      defPokeTypes.includes(TYPES.ROCK) &&
+      moveData.category === 1
+
+    const weatherRelevant = offensiveRelevant || sandDefRelevant
+
     if (weatherRelevant) {
       const weatherMap = {
-        sun: 'Sun', rain: 'Rain',
-        'harsh sunshine': 'Harsh Sunshine', 'heavy rain': 'Heavy Rain',
+        sun: 'Sun', rain: 'Rain', sand: 'Sand', sandstorm: 'Sand',
+        'harsh sunshine': 'Harsh Sunshine', 'heavy rain': 'Heavy Rain', snow: 'Snow',
       }
       fieldParts.push(`in ${weatherMap[w] || _tc(field.weather)}`)
     }
@@ -166,10 +194,13 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   // Range danni grezzi
   const dmgStr = `${result.minDmg}-${result.maxDmg} (${result.minPct} - ${result.maxPct}%)`
 
+  // Crit
+  const critStr = field.crit ? ' on a critical hit' : ''
+
   return (
     `${atkBoostStr}${atkSP}${natSymbol} ${statName}${atkAbilityStr}${atkItemStr} ` +
     `${atkName}${hhStr} ${moveName} vs. ` +
-    `${defHPsp} HP / ${defBoostStr}${defSP} ${defStatName}${defItemStr} ${defName}${fieldStr}: ` +
+    `${defHPsp} HP / ${defBoostStr}${defSP} ${defStatName}${defItemStr} ${defName}${fieldStr}${critStr}: ` +
     `${dmgStr}`
   )
 }

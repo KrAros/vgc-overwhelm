@@ -9,6 +9,7 @@ import { NATURES, NATURE_MODIFIERS } from '../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../data/typeChart.js'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 import { PRESETS_BY_SLUG } from '../data/metaPresets'
+import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES   = Object.keys(movesData).sort()
@@ -218,9 +219,14 @@ function showdownToSlot(text) {
   }
 
   // Se il Pokémon ha abilità di default, usala come fallback
-  if (!abilityKey) {
-    const defaultAbility = pokemonData[pokemonKey]?.abilities?.[0]
-    if (defaultAbility) abilityKey = defaultAbility
+  // Se il Pokémon ha una sola abilità possibile (es. forme Mega), forza quella
+  // indipendentemente da quanto scritto nel paste — il paste Showdown riporta
+  // l'abilità pre-mega che è sbagliata per il calcolo
+  const pokeAbilities = pokemonData[pokemonKey]?.abilities || []
+  if (pokeAbilities.length === 1) {
+    abilityKey = pokeAbilities[0]
+  } else if (!abilityKey) {
+    if (pokeAbilities[0]) abilityKey = pokeAbilities[0]
   }
 
   return {
@@ -359,11 +365,28 @@ function MoveSearch({ value, onChange, placeholder }) {
   const [focused, setFocused] = useState(false)
   const [open, setOpen]   = useState(false)
 
+  const weather = useCalcStore(s => s.weather)
+
   const filtered = query.length >= 2
     ? ALL_MOVES.filter(m => m.includes(query.toLowerCase())).slice(0, 20)
     : []
 
   const moveDetails = movesData[value]
+
+  // Weather Ball: tipo e BP cambiano col meteo
+  const WEATHER_BALL_TYPES = {
+    rain: 2, 'heavy rain': 2,
+    sun: 1,  'harsh sunshine': 1,
+    sand: 12, sandstorm: 12,
+    snow: 5,  hail: 5,
+  }
+  const isWeatherBall = value === 'weather ball'
+  const wbWeatherKey = weather ? weather.toLowerCase() : null
+  const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
+    ? WEATHER_BALL_TYPES[wbWeatherKey]
+    : null
+  const displayType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
+  const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100 : moveDetails?.power
 
   const categoryTitles = { 0: 'Fisico', 1: 'Speciale', 2: 'Stato' }
 
@@ -397,12 +420,12 @@ function MoveSearch({ value, onChange, placeholder }) {
       {moveDetails && (
         <div className="flex items-center gap-2 shrink-0 pl-1">
           <span className="text-xs font-mono font-bold text-gray-300 text-right">
-            {moveDetails.power && moveDetails.power > 0 ? moveDetails.power : '—'}
+            {displayBP && displayBP > 0 ? displayBP : '—'}
           </span>
           <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[3px] shadow-sm shrink-0 ${
-            TYPE_COLORS[TYPE_NAMES[moveDetails.type]] || 'bg-gray-600 text-white'
+            TYPE_COLORS[TYPE_NAMES[displayType]] || 'bg-gray-600 text-white'
           }`}>
-            {TYPE_NAMES[moveDetails.type]}
+            {TYPE_NAMES[displayType]}
           </span>
           <span className="flex items-center justify-center shrink-0 w-4 h-4" title={categoryTitles[moveDetails.category] || 'Status'}>
             {moveDetails.category === 1 ? (
@@ -422,25 +445,44 @@ function MoveSearch({ value, onChange, placeholder }) {
 // ─── ItemSearch ───────────────────────────────────────────────────────────────
 
 function ItemSearch({ value, onChange }) {
-  const [query, setQuery] = useState('')
-  const [open, setOpen]   = useState(false)
+  const [query, setQuery]   = useState('')
+  const [focused, setFocused] = useState(false)
+  const [open, setOpen]     = useState(false)
 
   const filtered = query.length >= 2
     ? ALL_ITEMS.filter(i => i.includes(query.toLowerCase())).slice(0, 20)
     : []
 
+  const hasValue = focused ? query.length > 0 : !!value
+
+  const handleClear = (e) => {
+    e.preventDefault()
+    setQuery('')
+    onChange(null)
+    setOpen(false)
+  }
+
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <input
-        className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
+        className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
         placeholder="Cerca Strumento..."
-        value={query || (value ? value.replace(/-/g, ' ') : '')}
+        value={focused ? query : (value ? value.replace(/-/g, ' ') : '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
-        onFocus={() => { setQuery(''); setOpen(true) }}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
+        onBlur={() => setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150)}
       />
+      {hasValue && (
+        <button
+          type="button"
+          onMouseDown={handleClear}
+          className="absolute right-2 text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
+        >
+          ✕
+        </button>
+      )}
       {open && filtered.length > 0 && (
-        <div className="absolute z-50 w-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto">
+        <div className="absolute z-50 w-full top-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto">
           {filtered.map(i => (
             <div
               key={i}
@@ -578,6 +620,44 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
         {opponentHasIntimidateActive
           ? '✅ Intimidate avversario attivo → +1 Atk'
           : '💡 Reagisce automaticamente a Intimidate avversario'}
+      </div>
+    )
+  }
+
+  if (key === 'competitive') {
+    return (
+      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+        opponentHasIntimidateActive
+          ? 'bg-pink-950/40 border-pink-700/40 text-pink-300'
+          : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
+      }`}>
+        {opponentHasIntimidateActive
+          ? '✅ Intimidate avversario attivo → +2 SpAtk'
+          : '💡 Reagisce automaticamente a Intimidate avversario (+2 SpAtk)'}
+      </div>
+    )
+  }
+
+  // ── Box informativi statici — desc letta da abilityEffects.js ────────────
+  // In futuro: sostituire la stringa con una chiave i18n (es. 'ability.hospitality.desc')
+  const abilityEffect = ABILITY_EFFECTS[key]
+  if (abilityEffect?.desc) {
+    const COLOR_MAP = {
+      'huge-power':   'bg-red-950/30 border-red-800/30 text-red-300',
+      'pure-power':   'bg-red-950/30 border-red-800/30 text-red-300',
+      'adaptability': 'bg-teal-950/30 border-teal-800/30 text-teal-300',
+      'fire-mane':    'bg-orange-950/30 border-orange-800/30 text-orange-300',
+      'tough-claws':  'bg-yellow-950/30 border-yellow-800/30 text-yellow-300',
+      'thick-fat':    'bg-blue-950/30 border-blue-800/30 text-blue-300',
+      'filter':       'bg-indigo-950/30 border-indigo-800/30 text-indigo-300',
+      'solid-rock':   'bg-indigo-950/30 border-indigo-800/30 text-indigo-300',
+      'fluffy':       'bg-pink-950/30 border-pink-800/30 text-pink-300',
+      'levitate':     'bg-sky-950/30 border-sky-800/30 text-sky-300',
+    }
+    const colorCls = COLOR_MAP[key] || 'bg-gray-800/60 border-gray-700/40 text-gray-500'
+    return (
+      <div className={`mt-1 px-1 py-1 rounded text-xs border ${colorCls}`}>
+        💡 {abilityEffect.desc}
       </div>
     )
   }
@@ -829,10 +909,12 @@ function PokemonPanel({ team, index }) {
               }`}
               title="Esporta in Showdown"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span>{exportCopied ? '✔ Copiato' : 'Esporta'}</span>
+              {!exportCopied && (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              )}
+              <span>{exportCopied ? 'Copiato' : 'Esporta'}</span>
             </button>
 
             <button
@@ -928,7 +1010,14 @@ function PokemonPanel({ team, index }) {
                   onChange={e => setNature(team, index, e.target.value || null)}
                 >
                   <option value="">Natura (neutra)</option>
-                  {NATURES.map(n => <option key={n} value={n}>{n}</option>)}
+                  {NATURES.map(n => {
+                    const STAT_LABELS = ['','Atk','Def','SpA','SpD','Spe']
+                    const mod = NATURE_MODIFIERS[n]
+                    const label = mod && mod[0] !== 0
+                      ? `${n.charAt(0).toUpperCase()+n.slice(1)} (+${STAT_LABELS[mod[0]]}, -${STAT_LABELS[mod[1]]})`
+                      : `${n.charAt(0).toUpperCase()+n.slice(1)}`
+                    return <option key={n} value={n}>{label}</option>
+                  })}
                 </select>
               </div>
               <div className="w-1/3">

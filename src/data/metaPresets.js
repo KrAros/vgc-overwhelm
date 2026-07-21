@@ -110,6 +110,15 @@ export const META_PRESETS = [
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['fake-out', 'close-combat', 'phantom-force', 'protect'],
   },
+  {
+    slug: 'excadrill',
+    label: 'Sand Abuser',
+    nature: 'Jolly',
+    item: 'focus sash',
+    ability: 'sand rush',
+    sps: [2, 32, 0, 0, 0, 32],
+    moves: ['earthquake', 'iron-head', 'rock-slide', 'protect'],
+  },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
   {

@@ -21,53 +21,47 @@ export const DEFAULT_ABILITY_FLAGS = {
 // metadati descrittivi. La logica vera è in calcEngine.js che legge abilityFlags.
 export const ABILITY_EFFECTS = {
   // ── Attaccante: moltiplicatori stat ──────────────────────────────────────
-  'huge-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
-  'pure-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
+  'huge-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true, desc: '×2 Atk su mosse fisiche' },
+  'pure-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true, desc: '×2 Atk su mosse fisiche' },
 
   // ── Attaccante: STAB potenziato ──────────────────────────────────────────
-  'adaptability': { adaptability: true, showInSmogon: true },
+  'adaptability': { adaptability: true, showInSmogon: true, desc: 'Aumenta l\'efficacia delle mosse STAB dal normale 1,5× a 2×.' },
 
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
-  // ×1.5 su mosse Fire (abilità esclusiva Champions — Mega Pyroar)
-  'fire-mane':   { fireMane: true, showInSmogon: true },
+  'fire-mane':   { fireMane: true, showInSmogon: true, desc: '×1.5 BP su mosse Fire' },
 
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
-  // ×1.3 su mosse che fanno contatto fisico (Mega Metagross, Mega Barbaracle)
-  'tough-claws': { toughClaws: true, showInSmogon: true },
+  'tough-claws': { toughClaws: true, showInSmogon: true, desc: 'Aumenta l\'efficacia delle mosse da contatto di 1,3x' },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
-  // Gestito tramite abilityFlags.flashFireActive — qui solo il flag di immunità
-  // showInSmogon: true perché appare nella stringa quando il boost è attivo
-  'flash-fire':  { flashFireImmune: true, showInSmogon: true },
+  'flash-fire':  { flashFireImmune: true, showInSmogon: true, desc: 'Immune alle mosse Fire — se colpito, ×1.5 BP Fire' },
 
   // Kingambit: +10% Atk e SpAtk per ogni alleato KO
-  // Gestito tramite abilityFlags.supremeOverlordKOs
-  'supreme-overlord': { supremeOverlord: true, showInSmogon: true },
+  'supreme-overlord': { supremeOverlord: true, showInSmogon: true, desc: '+10% Atk e SpAtk per ogni alleato a terra (max ×1.5)' },
 
   // ── Difensore: riduzione danno passiva ───────────────────────────────────
-  'thick-fat':   { thickFat: true },   // ×0.5 danno Fire e Ice
-  'filter':      { filter: true },     // ×0.75 su mosse super effective
-  'solid-rock':  { filter: true },     // identico a Filter
-
-  // Fluffy: ×0.5 da mosse contatto, ×2 da Fire (si moltiplicano se entrambi)
-  'fluffy':      { fluffy: true },
+  'thick-fat':   { thickFat: true,  desc: '×0.5 danno subito da Fire e Ice' },
+  'filter':      { filter: true,    desc: '×0.75 danno subito da mosse super effective' },
+  'solid-rock':  { filter: true,    desc: '×0.75 danno subito da mosse super effective' },
+  'fluffy':      { fluffy: true,    desc: '×0.5 da contatto · ×2 da Fire' },
 
   // Multiscale / Shadow Shield: ×0.5 danno ricevuto se HP pieni
-  // Gestito tramite abilityFlags.multiscaleActive
-  'multiscale':     { multiscale: true },
-  'shadow-shield':  { multiscale: true },
+  'multiscale':     { multiscale: true, desc: '×0.5 danno ricevuto quando HP pieni' },
+  'shadow-shield':  { multiscale: true, desc: '×0.5 danno ricevuto quando HP pieni' },
 
   // ── Difensore: immunità con effetto attivabile ────────────────────────────
-  // Gestito tramite abilityFlags.intimidateActive
-  'intimidate':  { intimidate: true },
+  'intimidate':  { intimidate: true, desc: '−1 Atk all\'avversario a inizio turno' },
 
   // ── Attaccante: reazione automatica a Intimidate ─────────────────────────
-  // Nessun flag manuale — la logica è automatica in calcEngine.js
-  'defiant':     { defiant: true },
-  'contrary':    { contrary: true },
+  'defiant':     { defiant: true,     desc: '+2 Atk quando una stat viene abbassata da un avversario' },
+  'contrary':    { contrary: true,    desc: 'I boost diventano drop e viceversa — Intimidate diventa +1 Atk' },
+  'competitive': { competitive: true, desc: '+2 SpAtk quando una stat viene abbassata da un avversario' },
+
+  // ── Meteo: Modifica le statistiche ─────────────────────────
+  'sand-rush':     { sandRush: true,     desc: 'Raddoppia la velocità in caso di tempesta di sabbia' },
 
   // ── Solo dropdown, nessun effetto sul calcolo danno ──────────────────────
-  'levitate':    { levitate: true },   // immunità Ground gestita separatamente
-  'hospitality': {},                   // Sinistcha: heal partner, nessun effetto rolls
-  'eelevate':    {},                   // Mega Eelektross: Levitate + Beast Boost
+  'levitate':    { levitate: true, desc: 'Immune alle mosse Ground' },
+  'hospitality': { desc: 'Cura il partner a inizio turno (nessun effetto sui rolls)' },
+  'eelevate':    { desc: 'Levitate + Beast Boost (nessun effetto diretto sui rolls)' },
 }

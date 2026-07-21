@@ -67,7 +67,7 @@ function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pok
   }
 
   if (weather === 'sand' && stat === STAT_SPD) {
-    if (pokeTypes.includes(TYPES.ROCK) || pokeTypes.includes(TYPES.STEEL) || pokeTypes.includes(TYPES.GROUND)) {
+    if (pokeTypes.includes(TYPES.ROCK)) {
       result = Math.floor(result * 1.5)
     }
   }
@@ -123,7 +123,26 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defPokeData = POKEMON_DATA[defPokemon]
   if (!atkPokeData || !defPokeData) return null
 
-  const moveType = moveData.type
+  // ── Weather Ball: tipo e BP cambiano in base al meteo ────────────────────
+  // Senza meteo: Normal BP 50 — Con meteo: tipo corrispondente BP 100
+  const WEATHER_BALL_TYPE = {
+    rain:             TYPES.WATER,
+    'heavy rain':     TYPES.WATER,
+    sun:              TYPES.FIRE,
+    'harsh sunshine': TYPES.FIRE,
+    sand:             TYPES.ROCK,
+    sandstorm:        TYPES.ROCK,
+    snow:             TYPES.ICE,
+    hail:             TYPES.ICE,
+  }
+  const isWeatherBall = move === 'weather ball'
+  const weatherBallType = isWeatherBall && field.weather
+    ? WEATHER_BALL_TYPE[(field.weather || '').toLowerCase()] ?? null
+    : null
+  const effectiveMoveType = weatherBallType !== null ? weatherBallType : moveData.type
+  const effectiveBP       = isWeatherBall && weatherBallType !== null ? 100 : moveData.power
+
+  const moveType = effectiveMoveType
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
   const isContact = moveData.contact === true
@@ -174,10 +193,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //   - Normale:  atkBoostVal -= 1
   //   - Defiant:  -1 + 2 = +1 netto (drop avviene, poi +2 per ogni drop)
   //   - Contrary: -1 invertito = +1 (il drop diventa aumento)
-  if (!isSpecial && defAbilEffect?.intimidate && defAbilityFlags.intimidateActive) {
-    if (atkAbilEffect?.defiant)  atkBoostVal += 1  // -1 + 2 Defiant = +1
-    else if (atkAbilEffect?.contrary) atkBoostVal += 1  // -1 invertito = +1
-    else                         atkBoostVal -= 1  // drop normale
+  //   - Competitive: -1 Atk (normale) + 2 SpAtk separato
+  if (defAbilEffect?.intimidate && defAbilityFlags.intimidateActive) {
+    if (!isSpecial) {
+      // Atk drop — Defiant e Contrary lo invertono/compensano
+      if (atkAbilEffect?.defiant)        atkBoostVal += 1  // -1 + 2 = +1
+      else if (atkAbilEffect?.contrary)  atkBoostVal += 1  // invertito
+      else                               atkBoostVal -= 1  // drop normale
+    }
+    // Competitive: +2 SpAtk indipendentemente dalla stat attaccata
+    if (atkAbilEffect?.competitive && isSpecial) {
+      atkBoostVal += 2
+    }
   }
 
   const atkBoostEffective = Math.min(6, Math.max(-6, atkBoostVal))
@@ -225,7 +252,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     ? (atkAbilEffect?.adaptability ? 2.0 : 1.5)
     : 1
 
-  const bp = moveData.power
+  const bp = effectiveBP
   const defGrounded = isGrounded(defPokeData, defAbility)
   const atkGrounded = isGrounded(atkPokeData, atkAbility)
 
@@ -256,20 +283,34 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     terrainBP = Math.floor(terrainBP * 1.5)
   }
 
+  // Knock Off: ×1.5 BP se il difensore tiene un item rimovibile
+  // Le Mega Stone non possono essere rimosse
+  if (move === 'knock off' && defItemKey) {
+    const isMegaStone = !!(ITEM_EFFECTS[defItemKey]?.megaStone)
+    if (!isMegaStone) {
+      terrainBP = Math.floor(terrainBP * 1.5)
+    }
+  }
+
   // ── Calcolo rolls (r = 85..100) ───────────────────────────────────────────
   const rolls = []
 
-  for (let r = 85; r <= 100; r++) {
-    let damage = Math.floor(
-      Math.floor(
-        Math.floor((2 * level) / 5 + 2) * terrainBP * atkStatFinal / defStatFinal
-      ) / 50
-    ) + 2
+  // Base damage (fuori dal loop — identico per tutti i 16 roll)
+  let baseDmg = Math.floor(
+    Math.floor(
+      Math.floor((2 * level) / 5 + 2) * terrainBP * atkStatFinal / defStatFinal
+    ) / 50
+  ) + 2
 
-    // Spread: ×0.75 solo con doppio bersaglio
-    if (isSpread && field.doubleTarget) {
-      damage = Math.floor(damage * 0.75)
-    }
+  // Spread: ×0.75 con pokeRound (half-up) come da formula Game Freak/Smogon
+  // pokeRound(n * 3072 / 4096) = floor se fraz ≤ 0.5, ceil se fraz > 0.5
+  if (isSpread && field.doubleTarget) {
+    const raw = baseDmg * 3072 / 4096
+    baseDmg = raw % 1 > 0.5 ? Math.ceil(raw) : Math.floor(raw)
+  }
+
+  for (let r = 85; r <= 100; r++) {
+    let damage = baseDmg
 
     // Meteo
     if (field.weather === 'sun'  && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
@@ -286,15 +327,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // STAB
     if (stab > 1) damage = Math.floor(damage * stab)
 
-    // dmgMult: moltiplicatori di danno finale (es. Life Orb)
-    // formula half-up: floor((d * num + den/2) / den)
-    if (atkItemEffect?.dmgMult) {
-      const { num, den } = atkItemEffect.dmgMult
-      damage = Math.floor((damage * num + Math.floor(den / 2)) / den)
-    }
-
     // Efficacia tipo
     damage = Math.floor(damage * effectiveness)
+
+    // dmgMult: moltiplicatori di danno finale (es. Life Orb)
+    // Applicato DOPO efficacia tipo — ordine Smogon
+    // pokeRound: ceil se fraz > 0.5, floor altrimenti (identico a Smogon)
+    if (atkItemEffect?.dmgMult) {
+      const { num, den } = atkItemEffect.dmgMult
+      const raw = damage * num / den
+      damage = raw % 1 > 0.5 ? Math.ceil(raw) : Math.floor(raw)
+    }
 
     // ── Moltiplicatori abilità difensore (post-efficacia, come da formula Gen6+) ─
 
@@ -422,5 +465,5 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     }
   }
 
-  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective }
+  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective, weatherBallType, effectiveBP }
 }

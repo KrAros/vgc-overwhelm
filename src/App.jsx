@@ -358,13 +358,13 @@ function App() {
             )}
           </ErrorBoundary>
 
+          {/* TopBar */}
+          <TopBar />
+
           {/* DamageTable */}
           <ErrorBoundary>
             <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
           </ErrorBoundary>
-
-          {/* TopBar */}
-          <TopBar />
 
           {/* ControlBar */}
           <ControlBar />

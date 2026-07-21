@@ -203,6 +203,7 @@ const useCalcStore = create((set) => ({
   toggleShowKoOnly: () => set((s) => ({ showKoOnly: !s.showKoOnly })),
   setDoubleTarget: (val) => set({ doubleTarget: val }),
   setWeather: (w) => set((s) => ({ weather: s.weather === w ? null : w })),
+  setWeatherDirect: (w) => set(() => ({ weather: w })),
   setTerrain: (t) => set((s) => ({ terrain: s.terrain === t ? null : t })),
   toggleModifier: (mod, side) =>
     set((s) => ({ [mod]: { ...s[mod], [side]: !s[mod][side] } })),
