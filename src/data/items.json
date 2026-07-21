@@ -1,950 +1,1209 @@
 {
-  "custap berry": {
-    "name": "Custap Berry"
-  },
-  "micle berry": {
-    "name": "Micle Berry"
-  },
-  "shed shell": {
-    "name": "Shed Shell"
-  },
-  "metronome": {
-    "name": "Metronome"
-  },
-  "cell battery": {
-    "name": "Cell Battery"
-  },
-  "eviolite": {
-    "name": "Eviolite"
-  },
-  "life orb": {
-    "name": "Life Orb"
-  },
-  "absorb bulb": {
-    "name": "Absorb Bulb"
-  },
-  "insect plate": {
-    "name": "Insect Plate"
-  },
-  "zap plate": {
-    "name": "Zap Plate"
-  },
-  "fist plate": {
-    "name": "Fist Plate"
-  },
-  "flame plate": {
-    "name": "Flame Plate"
-  },
-  "sky plate": {
-    "name": "Sky Plate"
-  },
-  "spooky plate": {
-    "name": "Spooky Plate"
-  },
-  "meadow plate": {
-    "name": "Meadow Plate"
-  },
-  "earth plate": {
-    "name": "Earth Plate"
-  },
-  "icicle plate": {
-    "name": "Icicle Plate"
-  },
-  "toxic plate": {
-    "name": "Toxic Plate"
-  },
-  "mind plate": {
-    "name": "Mind Plate"
-  },
-  "stone plate": {
-    "name": "Stone Plate"
-  },
-  "iron plate": {
-    "name": "Iron Plate"
-  },
-  "splash plate": {
-    "name": "Splash Plate"
-  },
-  "pixie plate": {
-    "name": "Pixie Plate"
-  },
-  "flame orb": {
-    "name": "Flame Orb"
-  },
-  "sticky barb": {
-    "name": "Sticky Barb"
-  },
-  "king's rock": {
-    "name": "King's Rock"
-  },
-  "razor fang": {
-    "name": "Razor Fang"
-  },
-  "shock drive": {
-    "name": "Shock Drive"
-  },
-  "burn drive": {
-    "name": "Burn Drive"
-  },
-  "chill drive": {
-    "name": "Chill Drive"
-  },
-  "douse drive": {
-    "name": "Douse Drive"
-  },
-  "rawst berry": {
-    "name": "Rawst Berry"
-  },
-  "mental herb": {
-    "name": "Mental Herb"
-  },
-  "persim berry": {
-    "name": "Persim Berry"
-  },
-  "aspear berry": {
-    "name": "Aspear Berry"
-  },
-  "cheri berry": {
-    "name": "Cheri Berry"
-  },
-  "pecha berry": {
-    "name": "Pecha Berry"
-  },
-  "chesto berry": {
-    "name": "Chesto Berry"
-  },
-  "lum berry": {
-    "name": "Lum Berry"
-  },
-  "rocky helmet": {
-    "name": "Rocky Helmet"
-  },
-  "deepseatooth": {
-    "name": "DeepSeaTooth"
-  },
-  "deepseascale": {
-    "name": "DeepSeaScale"
-  },
-  "thick club": {
-    "name": "Thick Club"
-  },
-  "quick powder": {
-    "name": "Quick Powder"
-  },
-  "light ball": {
-    "name": "Light Ball"
-  },
-  "focus band": {
-    "name": "Focus Band"
-  },
-  "quick claw": {
-    "name": "Quick Claw"
-  },
-  "icy rock": {
-    "name": "Icy Rock"
-  },
-  "leftovers": {
-    "name": "Leftovers"
-  },
-  "enigma berry": {
-    "name": "Enigma Berry"
-  },
-  "shell bell": {
-    "name": "Shell Bell"
-  },
-  "choice band": {
-    "name": "Choice Band"
-  },
-  "lax incense": {
-    "name": "Lax Incense"
-  },
-  "adamant orb": {
-    "name": "Adamant Orb"
-  },
-  "choice specs": {
-    "name": "Choice Specs"
-  },
-  "choice scarf": {
-    "name": "Choice Scarf"
-  },
-  "jaboca berry": {
-    "name": "Jaboca Berry"
-  },
-  "rowap berry": {
-    "name": "Rowap Berry"
-  },
-  "destiny knot": {
-    "name": "Destiny Knot"
-  },
-  "big root": {
-    "name": "Big Root"
-  },
-  "binding band": {
-    "name": "Binding Band"
-  },
-  "air balloon": {
-    "name": "Air Balloon"
-  },
-  "lagging tail": {
-    "name": "Lagging Tail"
-  },
-  "full incense": {
-    "name": "Full Incense"
-  },
-  "durin berry": {
-    "name": "Durin Berry"
-  },
-  "grip claw": {
-    "name": "Grip Claw"
-  },
-  "toxic orb": {
-    "name": "Toxic Orb"
-  },
-  "damp rock": {
-    "name": "Damp Rock"
-  },
-  "starf berry": {
-    "name": "Starf Berry"
-  },
-  "wide lens": {
-    "name": "Wide Lens"
-  },
-  "zoom lens": {
-    "name": "Zoom Lens"
-  },
-  "liechi berry": {
-    "name": "Liechi Berry"
-  },
-  "lucky punch": {
-    "name": "Lucky Punch"
-  },
-  "lansat berry": {
-    "name": "Lansat Berry"
-  },
-  "scope lens": {
-    "name": "Scope Lens"
-  },
-  "razor claw": {
-    "name": "Razor Claw"
-  },
-  "wise glasses": {
-    "name": "Wise Glasses"
-  },
-  "ganlon berry": {
-    "name": "Ganlon Berry"
-  },
-  "metal powder": {
-    "name": "Metal Powder"
-  },
-  "brightpowder": {
-    "name": "BrightPowder"
-  },
-  "stick": {
-    "name": "Stick"
-  },
-  "silverpowder": {
-    "name": "SilverPowder"
-  },
-  "blackglasses": {
-    "name": "BlackGlasses"
-  },
-  "dread plate": {
-    "name": "Dread Plate"
-  },
-  "dragon fang": {
-    "name": "Dragon Fang"
-  },
-  "draco plate": {
-    "name": "Draco Plate"
-  },
-  "magnet": {
-    "name": "Magnet"
-  },
-  "black belt": {
-    "name": "Black Belt"
-  },
-  "charcoal": {
-    "name": "Charcoal"
-  },
-  "sharp beak": {
-    "name": "Sharp Beak"
-  },
-  "spell tag": {
-    "name": "Spell Tag"
-  },
-  "miracle seed": {
-    "name": "Miracle Seed"
-  },
-  "rose incense": {
-    "name": "Rose Incense"
-  },
-  "soft sand": {
-    "name": "Soft Sand"
-  },
-  "nevermeltice": {
-    "name": "NeverMeltIce"
-  },
-  "silk scarf": {
-    "name": "Silk Scarf"
-  },
-  "lustrous orb": {
-    "name": "Lustrous Orb"
-  },
-  "muscle band": {
-    "name": "Muscle Band"
-  },
-  "poison barb": {
-    "name": "Poison Barb"
-  },
-  "twistedspoon": {
-    "name": "TwistedSpoon"
-  },
-  "odd incense": {
-    "name": "Odd Incense"
-  },
-  "hard stone": {
-    "name": "Hard Stone"
-  },
-  "rock incense": {
-    "name": "Rock Incense"
-  },
-  "metal coat": {
-    "name": "Metal Coat"
-  },
-  "mystic water": {
-    "name": "Mystic Water"
-  },
-  "sea incense": {
-    "name": "Sea Incense"
-  },
-  "wave incense": {
-    "name": "Wave Incense"
-  },
-  "petaya berry": {
-    "name": "Petaya Berry"
-  },
-  "soul dew": {
-    "name": "Soul Dew"
-  },
-  "apicot berry": {
-    "name": "Apicot Berry"
-  },
-  "salac berry": {
-    "name": "Salac Berry"
-  },
-  "griseous orb": {
-    "name": "Griseous Orb"
-  },
-  "bug gem": {
-    "name": "Bug Gem"
-  },
-  "dark gem": {
-    "name": "Dark Gem"
-  },
-  "dragon gem": {
-    "name": "Dragon Gem"
-  },
-  "electric gem": {
-    "name": "Electric Gem"
-  },
-  "fighting gem": {
-    "name": "Fighting Gem"
-  },
-  "fire gem": {
-    "name": "Fire Gem"
-  },
-  "flying gem": {
-    "name": "Flying Gem"
-  },
-  "ghost gem": {
-    "name": "Ghost Gem"
-  },
-  "grass gem": {
-    "name": "Grass Gem"
-  },
-  "ground gem": {
-    "name": "Ground Gem"
-  },
-  "ice gem": {
-    "name": "Ice Gem"
-  },
-  "normal gem": {
-    "name": "Normal Gem"
-  },
-  "poison gem": {
-    "name": "Poison Gem"
-  },
-  "psychic gem": {
-    "name": "Psychic Gem"
-  },
-  "rock gem": {
-    "name": "Rock Gem"
-  },
-  "steel gem": {
-    "name": "Steel Gem"
-  },
-  "water gem": {
-    "name": "Water Gem"
-  },
-  "black sludge": {
-    "name": "Black Sludge"
-  },
-  "chilan berry": {
-    "name": "Chilan Berry"
-  },
-  "tanga berry": {
-    "name": "Tanga Berry"
-  },
-  "colbur berry": {
-    "name": "Colbur Berry"
-  },
-  "haban berry": {
-    "name": "Haban Berry"
-  },
-  "wacan berry": {
-    "name": "Wacan Berry"
-  },
-  "chople berry": {
-    "name": "Chople Berry"
-  },
-  "occa berry": {
-    "name": "Occa Berry"
-  },
-  "coba berry": {
-    "name": "Coba Berry"
-  },
-  "kasib berry": {
-    "name": "Kasib Berry"
-  },
-  "rindo berry": {
-    "name": "Rindo Berry"
-  },
-  "shuca berry": {
-    "name": "Shuca Berry"
-  },
-  "yache berry": {
-    "name": "Yache Berry"
-  },
-  "kebia berry": {
-    "name": "Kebia Berry"
-  },
-  "payapa berry": {
-    "name": "Payapa Berry"
-  },
-  "charti berry": {
-    "name": "Charti Berry"
-  },
-  "babiri berry": {
-    "name": "Babiri Berry"
-  },
-  "passho berry": {
-    "name": "Passho Berry"
-  },
-  "roseli berry": {
-    "name": "Roseli Berry"
-  },
-  "iron ball": {
-    "name": "Iron Ball"
-  },
-  "macho brace": {
-    "name": "Macho Brace"
-  },
-  "light clay": {
-    "name": "Light Clay"
-  },
-  "white herb": {
-    "name": "White Herb"
-  },
-  "iapapa berry": {
-    "name": "Iapapa Berry"
-  },
-  "wiki berry": {
-    "name": "Wiki Berry"
-  },
-  "figy berry": {
-    "name": "Figy Berry"
-  },
-  "aguav berry": {
-    "name": "Aguav Berry"
-  },
-  "mago berry": {
-    "name": "Mago Berry"
-  },
-  "oran berry": {
-    "name": "Oran Berry"
-  },
-  "leppa berry": {
-    "name": "Leppa Berry"
-  },
-  "berry juice": {
-    "name": "Berry Juice"
-  },
-  "sitrus berry": {
-    "name": "Sitrus Berry"
-  },
-  "energypowder": {
-    "name": "EnergyPowder"
-  },
-  "smooth rock": {
-    "name": "Smooth Rock"
-  },
-  "heat rock": {
-    "name": "Heat Rock"
-  },
-  "expert belt": {
-    "name": "Expert Belt"
-  },
-  "focus sash": {
-    "name": "Focus Sash"
-  },
-  "red card": {
-    "name": "Red Card"
-  },
-  "float stone": {
-    "name": "Float Stone"
-  },
-  "eject button": {
-    "name": "Eject Button"
-  },
-  "assault vest": {
-    "name": "Assault Vest"
-  },
-  "abomasite": {
-    "name": "Abomasite"
-  },
-  "absolite": {
-    "name": "Absolite"
-  },
-  "aerodactylite": {
-    "name": "Aerodactylite"
-  },
-  "alakazite": {
-    "name": "Alakazite"
-  },
-  "ampharosite": {
-    "name": "Ampharosite"
-  },
-  "banettite": {
-    "name": "Banettite"
-  },
-  "blastoisinite": {
-    "name": "Blastoisinite"
-  },
-  "blazikenite": {
-    "name": "Blazikenite"
-  },
-  "charizardite x": {
-    "name": "Charizardite X"
-  },
-  "charizardite y": {
-    "name": "Charizardite Y"
-  },
-  "garchompite": {
-    "name": "Garchompite"
-  },
-  "gardevoirite": {
-    "name": "Gardevoirite"
-  },
-  "gengarite": {
-    "name": "Gengarite"
-  },
-  "gyaradosite": {
-    "name": "Gyaradosite"
-  },
-  "heracronite": {
-    "name": "Heracronite"
-  },
-  "houndoominite": {
-    "name": "Houndoominite"
-  },
-  "kangaskhanite": {
-    "name": "Kangaskhanite"
-  },
-  "lucarionite": {
-    "name": "Lucarionite"
-  },
-  "manectite": {
-    "name": "Manectite"
-  },
-  "mawilite": {
-    "name": "Mawilite"
-  },
-  "medichamite": {
-    "name": "Medichamite"
-  },
-  "mewtwonite x": {
-    "name": "Mewtwonite X"
-  },
-  "mewtwonite y": {
-    "name": "Mewtwonite Y"
-  },
-  "pinsirite": {
-    "name": "Pinsirite"
-  },
-  "scizorite": {
-    "name": "Scizorite"
-  },
-  "tyranitarite": {
-    "name": "Tyranitarite"
-  },
-  "venusaurite": {
-    "name": "Venusaurite"
-  },
-  "aggronite": {
-    "name": "Aggronite"
-  },
-  "weakness policy": {
-    "name": "Weakness Policy"
-  },
-  "power herb": {
-    "name": "Power Herb"
-  },
-  "ability capsule": {
-    "name": "Ability Capsule"
-  },
-  "kee berry": {
-    "name": "Kee Berry"
-  },
-  "luminous moss": {
-    "name": "Luminous Moss"
-  },
-  "luminous galette": {
-    "name": "Luminous Galette"
-  },
-  "maranga berry": {
-    "name": "Maranga Berry"
-  },
-  "sachet": {
-    "name": "Sachet"
-  },
-  "safety goggles": {
-    "name": "Safety Goggles"
-  },
-  "snowball": {
-    "name": "Snowball"
-  },
-  "whipped dream": {
-    "name": "Whipped Dream"
-  },
-  "beedrillite": {
-    "name": "Beedrillite"
-  },
-  "pidgeotite": {
-    "name": "Pidgeotite"
-  },
-  "slobronite": {
-    "name": "Slobronite"
-  },
-  "steelixite": {
-    "name": "Steelixite"
-  },
-  "sceptilite": {
-    "name": "Sceptilite"
-  },
-  "swampertite": {
-    "name": "Swampertite"
-  },
-  "sablenite": {
-    "name": "Sablenite"
-  },
-  "sharpedonite": {
-    "name": "Sharpedonite"
-  },
-  "cameruptite": {
-    "name": "Cameruptite"
-  },
-  "altarianite": {
-    "name": "Altarianite"
-  },
-  "glalitite": {
-    "name": "Glalitite"
-  },
-  "salamencite": {
-    "name": "Salamencite"
-  },
-  "metagrossite": {
-    "name": "Metagrossite"
-  },
-  "latiasite": {
-    "name": "Latiasite"
-  },
-  "latiosite": {
-    "name": "Latiosite"
-  },
-  "lopunnite": {
-    "name": "Lopunnite"
-  },
-  "galladite": {
-    "name": "Galladite"
-  },
-  "audinite": {
-    "name": "Audinite"
-  },
-  "diancite": {
-    "name": "Diancite"
-  },
-  "red orb": {
-    "name": "Red Orb"
-  },
-  "blue orb": {
-    "name": "Blue Orb"
-  },
-  "rockium z": {
-    "name": "Rockium Z"
-  },
-  "groundium z": {
-    "name": "Groundium Z"
-  },
-  "buginium z": {
-    "name": "Buginium Z"
-  },
-  "darkinium z": {
-    "name": "Darkinium Z"
-  },
-  "dragonium z": {
-    "name": "Dragonium Z"
-  },
-  "electrium z": {
-    "name": "Electrium Z"
-  },
-  "fairium z": {
-    "name": "Fairium Z"
-  },
-  "fightinium z": {
-    "name": "Fightinium Z"
-  },
-  "firium z": {
-    "name": "Firium Z"
-  },
-  "flyinium z": {
-    "name": "Flyinium Z"
-  },
-  "ghostium z": {
-    "name": "Ghostium Z"
-  },
-  "grassium z": {
-    "name": "Grassium Z"
-  },
-  "icium z": {
-    "name": "Icium Z"
-  },
-  "normalium z": {
-    "name": "Normalium Z"
-  },
-  "poisonium z": {
-    "name": "Poisonium Z"
-  },
-  "psychium z": {
-    "name": "Psychium Z"
-  },
-  "steelium z": {
-    "name": "Steelium Z"
-  },
-  "marshadium z": {
-    "name": "Marshadium Z"
-  },
-  "tapunium z": {
-    "name": "Tapunium Z"
-  },
-  "primarium z": {
-    "name": "Primarium Z"
-  },
-  "pikanium z": {
-    "name": "Pikanium Z"
-  },
-  "mewnium z": {
-    "name": "Mewnium Z"
-  },
-  "aloraichium z": {
-    "name": "Aloraichium Z"
-  },
-  "decidium z": {
-    "name": "Decidium Z"
-  },
-  "incinium z": {
-    "name": "Incinium Z"
-  },
-  "eevium z": {
-    "name": "Eevium Z"
-  },
-  "waterium z": {
-    "name": "Waterium Z"
-  },
-  "kommonium z": {
-    "name": "Kommonium Z"
-  },
-  "lycanium z": {
-    "name": "Lycanium Z"
-  },
-  "solganium z": {
-    "name": "Solganium Z"
-  },
-  "lunalium z": {
-    "name": "Lunalium Z"
-  },
-  "ultranecrozium z": {
-    "name": "Ultranecrozium Z"
-  },
-  "mimikium z": {
-    "name": "Mimikium Z"
-  },
-  "bug memory": {
-    "name": "Bug Memory"
-  },
-  "dark memory": {
-    "name": "Dark Memory"
-  },
-  "dragon memory": {
-    "name": "Dragon Memory"
-  },
-  "electric memory": {
-    "name": "Electric Memory"
-  },
-  "fairy memory": {
-    "name": "Fairy Memory"
-  },
-  "fighting memory": {
-    "name": "Fighting Memory"
-  },
-  "fire memory": {
-    "name": "Fire Memory"
-  },
-  "flying memory": {
-    "name": "Flying Memory"
-  },
-  "ghost memory": {
-    "name": "Ghost Memory"
-  },
-  "grass memory": {
-    "name": "Grass Memory"
-  },
-  "ground memory": {
-    "name": "Ground Memory"
-  },
-  "ice memory": {
-    "name": "Ice Memory"
-  },
-  "poison memory": {
-    "name": "Poison Memory"
-  },
-  "psychic memory": {
-    "name": "Psychic Memory"
-  },
-  "rock memory": {
-    "name": "Rock Memory"
-  },
-  "steel memory": {
-    "name": "Steel Memory"
-  },
-  "water memory": {
-    "name": "Water Memory"
-  },
-  "misty seed": {
-    "name": "Misty Seed"
-  },
-  "psychic seed": {
-    "name": "Psychic Seed"
-  },
-  "barbaraclite": {
-    "name": "Barbaraclite"
-  },
-  "pyroarite": {
-    "name": "Pyroarite"
-  },
-  "eelektrossite": {
-    "name": "Eelektrossite"
-  },
-  "staraptite": {
-    "name": "Staraptite"
-  },
-  "meganiumite": {
-    "name": "Meganiumite"
-  },
-  "feraligatrite": {
-    "name": "Feraligatrite"
-  },
-  "emboarite": {
-    "name": "Emboarite"
-  },
-  "dragonitite": {
-    "name": "Dragonitite"
-  },
-  "chesnaughtite": {
-    "name": "Chesnaughtite"
-  },
-  "delphoxite": {
-    "name": "Delphoxite"
-  },
-  "greninjaite": {
-    "name": "Greninjaite"
-  },
-  "excadrillite": {
-    "name": "Excadrillite"
-  },
-  "golurknite": {
-    "name": "Golurknite"
-  },
-  "clefablite": {
-    "name": "Clefablite"
-  },
-  "victreebelite": {
-    "name": "Victreebelite"
-  },
-  "drampite": {
-    "name": "Drampite"
-  },
-  "froslasite": {
-    "name": "Froslasite"
-  },
-  "hawluchite": {
-    "name": "Hawluchite"
-  },
-  "crabominite": {
-    "name": "Crabominite"
-  },
-  "starmieite": {
-    "name": "Starmieite"
-  },
-  "chimechite": {
-    "name": "Chimechite"
-  },
-  "skarmorite": {
-    "name": "Skarmorite"
-  },
-  "scovillainite": {
-    "name": "Scovillainite"
-  },
-  "glimmorite": {
-    "name": "Glimmorite"
-  },
-  "chandelurite": {
-    "name": "Chandelurite"
-  },
-  "floettite": {
-    "name": "Floettite"
-  },
-  "meowstite": {
-    "name": "Meowstite"
-  },
-  "raichunite x": {
-    "name": "Raichunite X"
-  },
-  "raichunite y": {
-    "name": "Raichunite Y"
-  },
-  "malamarite": {
-    "name": "Malamarite"
-  },
-  "scraftite": {
-    "name": "Scraftite"
-  },
-  "scolipedonite": {
-    "name": "Scolipedonite"
-  },
-  "dragalgite": {
-    "name": "Dragalgite"
-  },
-  "falinksite": {
-    "name": "Falinksite"
-  }
+	"custap berry": {
+		"name": "Custap Berry",
+		"num": 209
+	},
+	"micle berry": {
+		"name": "Micle Berry",
+		"num": 210
+	},
+	"shed shell": {
+		"name": "Shed Shell",
+		"num": 295
+	},
+	"metronome": {
+		"name": "Metronome",
+		"num": 277
+	},
+	"cell battery": {
+		"name": "Cell Battery",
+		"num": 546
+	},
+	"eviolite": {
+		"name": "Eviolite",
+		"num": 538
+	},
+	"life orb": {
+		"name": "Life Orb",
+		"num": 270
+	},
+	"absorb bulb": {
+		"name": "Absorb Bulb",
+		"num": 545
+	},
+	"insect plate": {
+		"name": "Insect Plate",
+		"num": 308
+	},
+	"zap plate": {
+		"name": "Zap Plate",
+		"num": 300
+	},
+	"fist plate": {
+		"name": "Fist Plate",
+		"num": 303
+	},
+	"flame plate": {
+		"name": "Flame Plate",
+		"num": 298
+	},
+	"sky plate": {
+		"name": "Sky Plate",
+		"num": 306
+	},
+	"spooky plate": {
+		"name": "Spooky Plate",
+		"num": 310
+	},
+	"meadow plate": {
+		"name": "Meadow Plate",
+		"num": 301
+	},
+	"earth plate": {
+		"name": "Earth Plate",
+		"num": 305
+	},
+	"icicle plate": {
+		"name": "Icicle Plate",
+		"num": 302
+	},
+	"toxic plate": {
+		"name": "Toxic Plate",
+		"num": 304
+	},
+	"mind plate": {
+		"name": "Mind Plate",
+		"num": 307
+	},
+	"stone plate": {
+		"name": "Stone Plate",
+		"num": 309
+	},
+	"iron plate": {
+		"name": "Iron Plate",
+		"num": 313
+	},
+	"splash plate": {
+		"name": "Splash Plate",
+		"num": 299
+	},
+	"pixie plate": {
+		"name": "Pixie Plate",
+		"num": 644
+	},
+	"flame orb": {
+		"name": "Flame Orb",
+		"num": 273
+	},
+	"sticky barb": {
+		"name": "Sticky Barb",
+		"num": 288
+	},
+	"king's rock": {
+		"name": "King's Rock",
+		"num": 221
+	},
+	"razor fang": {
+		"name": "Razor Fang",
+		"num": 327
+	},
+	"shock drive": {
+		"name": "Shock Drive"
+	},
+	"burn drive": {
+		"name": "Burn Drive"
+	},
+	"chill drive": {
+		"name": "Chill Drive"
+	},
+	"douse drive": {
+		"name": "Douse Drive"
+	},
+	"rawst berry": {
+		"name": "Rawst Berry",
+		"num": 152
+	},
+	"mental herb": {
+		"name": "Mental Herb",
+		"num": 219
+	},
+	"persim berry": {
+		"name": "Persim Berry",
+		"num": 156
+	},
+	"aspear berry": {
+		"name": "Aspear Berry",
+		"num": 153
+	},
+	"cheri berry": {
+		"name": "Cheri Berry",
+		"num": 149
+	},
+	"pecha berry": {
+		"name": "Pecha Berry",
+		"num": 151
+	},
+	"chesto berry": {
+		"name": "Chesto Berry",
+		"num": 150
+	},
+	"lum berry": {
+		"name": "Lum Berry",
+		"num": 157
+	},
+	"rocky helmet": {
+		"name": "Rocky Helmet",
+		"num": 540
+	},
+	"deepseatooth": {
+		"name": "DeepSeaTooth"
+	},
+	"deepseascale": {
+		"name": "DeepSeaScale"
+	},
+	"thick club": {
+		"name": "Thick Club",
+		"num": 258
+	},
+	"quick powder": {
+		"name": "Quick Powder"
+	},
+	"light ball": {
+		"name": "Light Ball",
+		"num": 236
+	},
+	"focus band": {
+		"name": "Focus Band",
+		"num": 230
+	},
+	"quick claw": {
+		"name": "Quick Claw",
+		"num": 217
+	},
+	"icy rock": {
+		"name": "Icy Rock",
+		"num": 282
+	},
+	"leftovers": {
+		"name": "Leftovers",
+		"num": 234
+	},
+	"enigma berry": {
+		"name": "Enigma Berry"
+	},
+	"shell bell": {
+		"name": "Shell Bell",
+		"num": 253
+	},
+	"choice band": {
+		"name": "Choice Band",
+		"num": 220
+	},
+	"lax incense": {
+		"name": "Lax Incense"
+	},
+	"adamant orb": {
+		"name": "Adamant Orb"
+	},
+	"choice specs": {
+		"name": "Choice Specs",
+		"num": 297
+	},
+	"choice scarf": {
+		"name": "Choice Scarf",
+		"num": 287
+	},
+	"jaboca berry": {
+		"name": "Jaboca Berry"
+	},
+	"rowap berry": {
+		"name": "Rowap Berry"
+	},
+	"destiny knot": {
+		"name": "Destiny Knot",
+		"num": 280
+	},
+	"big root": {
+		"name": "Big Root",
+		"num": 296
+	},
+	"binding band": {
+		"name": "Binding Band",
+		"num": 544
+	},
+	"air balloon": {
+		"name": "Air Balloon",
+		"num": 541
+	},
+	"lagging tail": {
+		"name": "Lagging Tail",
+		"num": 279
+	},
+	"full incense": {
+		"name": "Full Incense"
+	},
+	"durin berry": {
+		"name": "Durin Berry"
+	},
+	"grip claw": {
+		"name": "Grip Claw",
+		"num": 286
+	},
+	"toxic orb": {
+		"name": "Toxic Orb",
+		"num": 272
+	},
+	"damp rock": {
+		"name": "Damp Rock",
+		"num": 285
+	},
+	"starf berry": {
+		"name": "Starf Berry"
+	},
+	"wide lens": {
+		"name": "Wide Lens",
+		"num": 265
+	},
+	"zoom lens": {
+		"name": "Zoom Lens",
+		"num": 276
+	},
+	"liechi berry": {
+		"name": "Liechi Berry"
+	},
+	"lucky punch": {
+		"name": "Lucky Punch"
+	},
+	"lansat berry": {
+		"name": "Lansat Berry"
+	},
+	"scope lens": {
+		"name": "Scope Lens",
+		"num": 232
+	},
+	"razor claw": {
+		"name": "Razor Claw",
+		"num": 326
+	},
+	"wise glasses": {
+		"name": "Wise Glasses",
+		"num": 267
+	},
+	"ganlon berry": {
+		"name": "Ganlon Berry"
+	},
+	"metal powder": {
+		"name": "Metal Powder"
+	},
+	"brightpowder": {
+		"name": "BrightPowder"
+	},
+	"stick": {
+		"name": "Stick"
+	},
+	"silverpowder": {
+		"name": "SilverPowder"
+	},
+	"blackglasses": {
+		"name": "BlackGlasses",
+		"num": 240
+	},
+	"dread plate": {
+		"name": "Dread Plate",
+		"num": 312
+	},
+	"dragon fang": {
+		"name": "Dragon Fang",
+		"num": 250
+	},
+	"draco plate": {
+		"name": "Draco Plate",
+		"num": 311
+	},
+	"magnet": {
+		"name": "Magnet",
+		"num": 242
+	},
+	"black belt": {
+		"name": "Black Belt",
+		"num": 241
+	},
+	"charcoal": {
+		"name": "Charcoal",
+		"num": 249
+	},
+	"sharp beak": {
+		"name": "Sharp Beak",
+		"num": 244
+	},
+	"spell tag": {
+		"name": "Spell Tag",
+		"num": 247
+	},
+	"miracle seed": {
+		"name": "Miracle Seed",
+		"num": 239
+	},
+	"rose incense": {
+		"name": "Rose Incense"
+	},
+	"soft sand": {
+		"name": "Soft Sand",
+		"num": 237
+	},
+	"nevermeltice": {
+		"name": "NeverMeltIce"
+	},
+	"silk scarf": {
+		"name": "Silk Scarf",
+		"num": 251
+	},
+	"lustrous orb": {
+		"name": "Lustrous Orb"
+	},
+	"muscle band": {
+		"name": "Muscle Band",
+		"num": 266
+	},
+	"poison barb": {
+		"name": "Poison Barb",
+		"num": 245
+	},
+	"twistedspoon": {
+		"name": "TwistedSpoon"
+	},
+	"odd incense": {
+		"name": "Odd Incense"
+	},
+	"hard stone": {
+		"name": "Hard Stone",
+		"num": 238
+	},
+	"rock incense": {
+		"name": "Rock Incense"
+	},
+	"metal coat": {
+		"name": "Metal Coat",
+		"num": 233
+	},
+	"mystic water": {
+		"name": "Mystic Water",
+		"num": 243
+	},
+	"sea incense": {
+		"name": "Sea Incense"
+	},
+	"wave incense": {
+		"name": "Wave Incense"
+	},
+	"petaya berry": {
+		"name": "Petaya Berry"
+	},
+	"soul dew": {
+		"name": "Soul Dew"
+	},
+	"apicot berry": {
+		"name": "Apicot Berry"
+	},
+	"salac berry": {
+		"name": "Salac Berry"
+	},
+	"griseous orb": {
+		"name": "Griseous Orb"
+	},
+	"bug gem": {
+		"name": "Bug Gem"
+	},
+	"dark gem": {
+		"name": "Dark Gem"
+	},
+	"dragon gem": {
+		"name": "Dragon Gem"
+	},
+	"electric gem": {
+		"name": "Electric Gem"
+	},
+	"fighting gem": {
+		"name": "Fighting Gem"
+	},
+	"fire gem": {
+		"name": "Fire Gem"
+	},
+	"flying gem": {
+		"name": "Flying Gem"
+	},
+	"ghost gem": {
+		"name": "Ghost Gem"
+	},
+	"grass gem": {
+		"name": "Grass Gem"
+	},
+	"ground gem": {
+		"name": "Ground Gem"
+	},
+	"ice gem": {
+		"name": "Ice Gem"
+	},
+	"normal gem": {
+		"name": "Normal Gem"
+	},
+	"poison gem": {
+		"name": "Poison Gem"
+	},
+	"psychic gem": {
+		"name": "Psychic Gem"
+	},
+	"rock gem": {
+		"name": "Rock Gem"
+	},
+	"steel gem": {
+		"name": "Steel Gem"
+	},
+	"water gem": {
+		"name": "Water Gem"
+	},
+	"black sludge": {
+		"name": "Black Sludge",
+		"num": 281
+	},
+	"chilan berry": {
+		"name": "Chilan Berry",
+		"num": 200
+	},
+	"tanga berry": {
+		"name": "Tanga Berry",
+		"num": 194
+	},
+	"colbur berry": {
+		"name": "Colbur Berry",
+		"num": 198
+	},
+	"haban berry": {
+		"name": "Haban Berry",
+		"num": 197
+	},
+	"wacan berry": {
+		"name": "Wacan Berry",
+		"num": 186
+	},
+	"chople berry": {
+		"name": "Chople Berry",
+		"num": 189
+	},
+	"occa berry": {
+		"name": "Occa Berry",
+		"num": 184
+	},
+	"coba berry": {
+		"name": "Coba Berry",
+		"num": 192
+	},
+	"kasib berry": {
+		"name": "Kasib Berry",
+		"num": 196
+	},
+	"rindo berry": {
+		"name": "Rindo Berry",
+		"num": 187
+	},
+	"shuca berry": {
+		"name": "Shuca Berry",
+		"num": 191
+	},
+	"yache berry": {
+		"name": "Yache Berry",
+		"num": 188
+	},
+	"kebia berry": {
+		"name": "Kebia Berry",
+		"num": 190
+	},
+	"payapa berry": {
+		"name": "Payapa Berry",
+		"num": 193
+	},
+	"charti berry": {
+		"name": "Charti Berry",
+		"num": 195
+	},
+	"babiri berry": {
+		"name": "Babiri Berry",
+		"num": 199
+	},
+	"passho berry": {
+		"name": "Passho Berry",
+		"num": 185
+	},
+	"roseli berry": {
+		"name": "Roseli Berry",
+		"num": 686
+	},
+	"iron ball": {
+		"name": "Iron Ball",
+		"num": 278
+	},
+	"macho brace": {
+		"name": "Macho Brace"
+	},
+	"light clay": {
+		"name": "Light Clay",
+		"num": 269
+	},
+	"white herb": {
+		"name": "White Herb",
+		"num": 214
+	},
+	"iapapa berry": {
+		"name": "Iapapa Berry",
+		"num": 163
+	},
+	"wiki berry": {
+		"name": "Wiki Berry",
+		"num": 160
+	},
+	"figy berry": {
+		"name": "Figy Berry",
+		"num": 159
+	},
+	"aguav berry": {
+		"name": "Aguav Berry",
+		"num": 162
+	},
+	"mago berry": {
+		"name": "Mago Berry",
+		"num": 161
+	},
+	"oran berry": {
+		"name": "Oran Berry",
+		"num": 155
+	},
+	"leppa berry": {
+		"name": "Leppa Berry",
+		"num": 154
+	},
+	"berry juice": {
+		"name": "Berry Juice"
+	},
+	"sitrus berry": {
+		"name": "Sitrus Berry",
+		"num": 158
+	},
+	"energypowder": {
+		"name": "EnergyPowder"
+	},
+	"smooth rock": {
+		"name": "Smooth Rock",
+		"num": 283
+	},
+	"heat rock": {
+		"name": "Heat Rock",
+		"num": 284
+	},
+	"expert belt": {
+		"name": "Expert Belt",
+		"num": 268
+	},
+	"focus sash": {
+		"name": "Focus Sash",
+		"num": 275
+	},
+	"red card": {
+		"name": "Red Card",
+		"num": 542
+	},
+	"float stone": {
+		"name": "Float Stone",
+		"num": 539
+	},
+	"eject button": {
+		"name": "Eject Button",
+		"num": 547
+	},
+	"assault vest": {
+		"name": "Assault Vest",
+		"num": 640
+	},
+	"abomasite": {
+		"name": "Abomasite",
+		"num": 674
+	},
+	"absolite": {
+		"name": "Absolite",
+		"num": 677
+	},
+	"aerodactylite": {
+		"name": "Aerodactylite",
+		"num": 672
+	},
+	"alakazite": {
+		"name": "Alakazite",
+		"num": 679
+	},
+	"ampharosite": {
+		"name": "Ampharosite",
+		"num": 658
+	},
+	"banettite": {
+		"name": "Banettite",
+		"num": 668
+	},
+	"blastoisinite": {
+		"name": "Blastoisinite",
+		"num": 661
+	},
+	"blazikenite": {
+		"name": "Blazikenite",
+		"num": 664
+	},
+	"charizardite x": {
+		"name": "Charizardite X",
+		"num": 660
+	},
+	"charizardite y": {
+		"name": "Charizardite Y",
+		"num": 678
+	},
+	"garchompite": {
+		"name": "Garchompite",
+		"num": 683
+	},
+	"gardevoirite": {
+		"name": "Gardevoirite",
+		"num": 657
+	},
+	"gengarite": {
+		"name": "Gengarite",
+		"num": 656
+	},
+	"gyaradosite": {
+		"name": "Gyaradosite",
+		"num": 676
+	},
+	"heracronite": {
+		"name": "Heracronite",
+		"num": 680
+	},
+	"houndoominite": {
+		"name": "Houndoominite",
+		"num": 666
+	},
+	"kangaskhanite": {
+		"name": "Kangaskhanite",
+		"num": 675
+	},
+	"lucarionite": {
+		"name": "Lucarionite",
+		"num": 673
+	},
+	"manectite": {
+		"name": "Manectite",
+		"num": 682
+	},
+	"mawilite": {
+		"name": "Mawilite",
+		"num": 681
+	},
+	"medichamite": {
+		"name": "Medichamite",
+		"num": 665
+	},
+	"mewtwonite x": {
+		"name": "Mewtwonite X",
+		"num": 662
+	},
+	"mewtwonite y": {
+		"name": "Mewtwonite Y",
+		"num": 663
+	},
+	"pinsirite": {
+		"name": "Pinsirite",
+		"num": 671
+	},
+	"scizorite": {
+		"name": "Scizorite",
+		"num": 670
+	},
+	"tyranitarite": {
+		"name": "Tyranitarite",
+		"num": 669
+	},
+	"venusaurite": {
+		"name": "Venusaurite",
+		"num": 659
+	},
+	"aggronite": {
+		"name": "Aggronite",
+		"num": 667
+	},
+	"weakness policy": {
+		"name": "Weakness Policy",
+		"num": 639
+	},
+	"power herb": {
+		"name": "Power Herb",
+		"num": 271
+	},
+	"ability capsule": {
+		"name": "Ability Capsule",
+		"num": 645
+	},
+	"kee berry": {
+		"name": "Kee Berry",
+		"num": 687
+	},
+	"luminous moss": {
+		"name": "Luminous Moss",
+		"num": 648
+	},
+	"luminous galette": {
+		"name": "Luminous Galette"
+	},
+	"maranga berry": {
+		"name": "Maranga Berry",
+		"num": 688
+	},
+	"sachet": {
+		"name": "Sachet",
+		"num": 647
+	},
+	"safety goggles": {
+		"name": "Safety Goggles",
+		"num": 650
+	},
+	"snowball": {
+		"name": "Snowball",
+		"num": 649
+	},
+	"whipped dream": {
+		"name": "Whipped Dream",
+		"num": 646
+	},
+	"beedrillite": {
+		"name": "Beedrillite",
+		"num": 770
+	},
+	"pidgeotite": {
+		"name": "Pidgeotite",
+		"num": 762
+	},
+	"slobronite": {
+		"name": "Slobronite",
+		"num": 2760
+	},
+	"steelixite": {
+		"name": "Steelixite",
+		"num": 761
+	},
+	"sceptilite": {
+		"name": "Sceptilite",
+		"num": 753
+	},
+	"swampertite": {
+		"name": "Swampertite",
+		"num": 752
+	},
+	"sablenite": {
+		"name": "Sablenite",
+		"num": 754
+	},
+	"sharpedonite": {
+		"name": "Sharpedonite",
+		"num": 759
+	},
+	"cameruptite": {
+		"name": "Cameruptite",
+		"num": 767
+	},
+	"altarianite": {
+		"name": "Altarianite",
+		"num": 755
+	},
+	"glalitite": {
+		"name": "Glalitite",
+		"num": 763
+	},
+	"salamencite": {
+		"name": "Salamencite",
+		"num": 769
+	},
+	"metagrossite": {
+		"name": "Metagrossite",
+		"num": 758
+	},
+	"latiasite": {
+		"name": "Latiasite",
+		"num": 684
+	},
+	"latiosite": {
+		"name": "Latiosite",
+		"num": 685
+	},
+	"lopunnite": {
+		"name": "Lopunnite",
+		"num": 768
+	},
+	"galladite": {
+		"name": "Galladite",
+		"num": 756
+	},
+	"audinite": {
+		"name": "Audinite",
+		"num": 757
+	},
+	"diancite": {
+		"name": "Diancite",
+		"num": 764
+	},
+	"red orb": {
+		"name": "Red Orb",
+		"num": 535
+	},
+	"blue orb": {
+		"name": "Blue Orb",
+		"num": 534
+	},
+	"rockium z": {
+		"name": "Rockium Z",
+		"num": 788
+	},
+	"groundium z": {
+		"name": "Groundium Z",
+		"num": 784
+	},
+	"buginium z": {
+		"name": "Buginium Z",
+		"num": 787
+	},
+	"darkinium z": {
+		"name": "Darkinium Z",
+		"num": 791
+	},
+	"dragonium z": {
+		"name": "Dragonium Z",
+		"num": 790
+	},
+	"electrium z": {
+		"name": "Electrium Z",
+		"num": 779
+	},
+	"fairium z": {
+		"name": "Fairium Z",
+		"num": 793
+	},
+	"fightinium z": {
+		"name": "Fightinium Z",
+		"num": 782
+	},
+	"firium z": {
+		"name": "Firium Z",
+		"num": 777
+	},
+	"flyinium z": {
+		"name": "Flyinium Z",
+		"num": 785
+	},
+	"ghostium z": {
+		"name": "Ghostium Z",
+		"num": 789
+	},
+	"grassium z": {
+		"name": "Grassium Z",
+		"num": 780
+	},
+	"icium z": {
+		"name": "Icium Z",
+		"num": 781
+	},
+	"normalium z": {
+		"name": "Normalium Z",
+		"num": 776
+	},
+	"poisonium z": {
+		"name": "Poisonium Z",
+		"num": 783
+	},
+	"psychium z": {
+		"name": "Psychium Z",
+		"num": 786
+	},
+	"steelium z": {
+		"name": "Steelium Z",
+		"num": 792
+	},
+	"marshadium z": {
+		"name": "Marshadium Z",
+		"num": 802
+	},
+	"tapunium z": {
+		"name": "Tapunium Z",
+		"num": 801
+	},
+	"primarium z": {
+		"name": "Primarium Z",
+		"num": 800
+	},
+	"pikanium z": {
+		"name": "Pikanium Z",
+		"num": 794
+	},
+	"mewnium z": {
+		"name": "Mewnium Z",
+		"num": 806
+	},
+	"aloraichium z": {
+		"name": "Aloraichium Z",
+		"num": 803
+	},
+	"decidium z": {
+		"name": "Decidium Z",
+		"num": 798
+	},
+	"incinium z": {
+		"name": "Incinium Z",
+		"num": 799
+	},
+	"eevium z": {
+		"name": "Eevium Z",
+		"num": 805
+	},
+	"waterium z": {
+		"name": "Waterium Z",
+		"num": 778
+	},
+	"kommonium z": {
+		"name": "Kommonium Z",
+		"num": 926
+	},
+	"lycanium z": {
+		"name": "Lycanium Z",
+		"num": 925
+	},
+	"solganium z": {
+		"name": "Solganium Z",
+		"num": 921
+	},
+	"lunalium z": {
+		"name": "Lunalium Z",
+		"num": 922
+	},
+	"ultranecrozium z": {
+		"name": "Ultranecrozium Z",
+		"num": 923
+	},
+	"mimikium z": {
+		"name": "Mimikium Z",
+		"num": 924
+	},
+	"bug memory": {
+		"name": "Bug Memory",
+		"num": 909
+	},
+	"dark memory": {
+		"name": "Dark Memory",
+		"num": 919
+	},
+	"dragon memory": {
+		"name": "Dragon Memory",
+		"num": 918
+	},
+	"electric memory": {
+		"name": "Electric Memory",
+		"num": 915
+	},
+	"fairy memory": {
+		"name": "Fairy Memory",
+		"num": 920
+	},
+	"fighting memory": {
+		"name": "Fighting Memory",
+		"num": 904
+	},
+	"fire memory": {
+		"name": "Fire Memory",
+		"num": 912
+	},
+	"flying memory": {
+		"name": "Flying Memory",
+		"num": 905
+	},
+	"ghost memory": {
+		"name": "Ghost Memory",
+		"num": 910
+	},
+	"grass memory": {
+		"name": "Grass Memory",
+		"num": 914
+	},
+	"ground memory": {
+		"name": "Ground Memory",
+		"num": 907
+	},
+	"ice memory": {
+		"name": "Ice Memory",
+		"num": 917
+	},
+	"poison memory": {
+		"name": "Poison Memory",
+		"num": 906
+	},
+	"psychic memory": {
+		"name": "Psychic Memory",
+		"num": 916
+	},
+	"rock memory": {
+		"name": "Rock Memory",
+		"num": 908
+	},
+	"steel memory": {
+		"name": "Steel Memory",
+		"num": 911
+	},
+	"water memory": {
+		"name": "Water Memory",
+		"num": 913
+	},
+	"misty seed": {
+		"name": "Misty Seed",
+		"num": 883
+	},
+	"psychic seed": {
+		"name": "Psychic Seed",
+		"num": 882
+	},
+	"barbaraclite": {
+		"name": "Barbaraclite",
+		"num": 2581
+	},
+	"pyroarite": {
+		"name": "Pyroarite",
+		"num": 2578
+	},
+	"eelektrossite": {
+		"name": "Eelektrossite",
+		"num": 2573
+	},
+	"staraptite": {
+		"name": "Staraptite",
+		"num": 2639
+	},
+	"meganiumite": {
+		"name": "Meganiumite",
+		"num": 2563
+	},
+	"feraligatrite": {
+		"name": "Feraligatrite",
+		"num": 2564
+	},
+	"emboarite": {
+		"name": "Emboarite",
+		"num": 2569
+	},
+	"dragonitite": {
+		"name": "Dragonitite",
+		"num": 2562
+	},
+	"chesnaughtite": {
+		"name": "Chesnaughtite",
+		"num": 2575
+	},
+	"delphoxite": {
+		"name": "Delphoxite",
+		"num": 2576
+	},
+	"greninjaite": {
+		"name": "Greninjaite",
+		"num": 2577
+	},
+	"excadrillite": {
+		"name": "Excadrillite",
+		"num": 2570
+	},
+	"golurknite": {
+		"name": "Golurknite",
+		"num": 2642
+	},
+	"clefablite": {
+		"name": "Clefablite",
+		"num": 2559
+	},
+	"victreebelite": {
+		"name": "Victreebelite",
+		"num": 2560
+	},
+	"drampite": {
+		"name": "Drampite",
+		"num": 2585
+	},
+	"froslasite": {
+		"name": "Froslasite",
+		"num": 2566
+	},
+	"hawluchite": {
+		"name": "Hawluchite",
+		"num": 2583
+	},
+	"crabominite": {
+		"name": "Crabominite",
+		"num": 2644
+	},
+	"starmieite": {
+		"name": "Starmieite",
+		"num": 2561
+	},
+	"chimechite": {
+		"name": "Chimechite",
+		"num": 2637
+	},
+	"skarmorite": {
+		"name": "Skarmorite",
+		"num": 2565
+	},
+	"scovillainite": {
+		"name": "Scovillainite",
+		"num": 2647
+	},
+	"glimmorite": {
+		"name": "Glimmorite",
+		"num": 2650
+	},
+	"chandelurite": {
+		"name": "Chandelurite",
+		"num": 2574
+	},
+	"floettite": {
+		"name": "Floettite",
+		"num": 2579
+	},
+	"meowstite": {
+		"name": "Meowstite",
+		"num": 2643
+	},
+	"raichunite x": {
+		"name": "Raichunite X",
+		"num": 2635
+	},
+	"raichunite y": {
+		"name": "Raichunite Y",
+		"num": 2636
+	},
+	"malamarite": {
+		"name": "Malamarite",
+		"num": 2580
+	},
+	"scraftite": {
+		"name": "Scraftite",
+		"num": 2572
+	},
+	"scolipedonite": {
+		"name": "Scolipedonite",
+		"num": 2571
+	},
+	"dragalgite": {
+		"name": "Dragalgite",
+		"num": 2582
+	},
+	"falinksite": {
+		"name": "Falinksite",
+		"num": 2587
+	}
 }

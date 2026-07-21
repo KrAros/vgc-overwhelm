@@ -239,11 +239,16 @@ function showdownToSlot(text) {
 
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
-function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange }) {
+function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive }) {
   const finalStat = calcFinalStat(base, sp, level, nature, statIdx)
+
+  // Abilità meteo-velocità: raddoppiano la Spe sotto il meteo corrispondente
+  const speedBase = speedWeatherActive && statIdx === 5 ? finalStat * 2 : null
+  const effectiveStat = speedBase ?? finalStat
+
   const boostedStat = boostVal !== 0
-    ? Math.floor(finalStat * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
-    : null
+    ? Math.floor(effectiveStat * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
+    : speedBase  // se nessun boost ma abilità meteo attiva, mostra il valore ×2
 
   const mod = nature && NATURE_MODIFIERS[nature]
   const isBoost = mod && mod[0] !== 0 && mod[0] === statIdx
@@ -286,7 +291,7 @@ function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoo
               <option key={v} value={v}>{v > 0 ? `+${v}` : v}</option>
             ))}
           </select>
-          <span className={`text-xs w-8 text-center ${boostedStat ? (boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-600'}`}>
+          <span className={`text-xs w-8 text-center ${boostedStat ? (speedBase || boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-600'}`}>
             {boostedStat ?? '—'}
           </span>
         </>
@@ -476,7 +481,7 @@ function ItemSearch({ value, onChange }) {
         <button
           type="button"
           onMouseDown={handleClear}
-          className="absolute right-2 text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
         >
           ✕
         </button>
@@ -517,31 +522,36 @@ function AbilitySelect({ value, abilities, onChange }) {
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
-function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange }) {
+function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather }) {
   const key = (ability || '').toLowerCase()
+  const sandActive = weather === 'sand' || weather === 'sandstorm'
 
-  if (key === 'intimidate') {
+  const SPEED_WEATHER_MAP = {
+    'sand-rush':   ['sand', 'sandstorm'],
+    'chlorophyll': ['sun', 'harsh sunshine'],
+    'swift-swim':  ['rain', 'heavy rain'],
+    'slush-rush':  ['snow', 'hail'],
+  }
+  const speedWeatherConditions = SPEED_WEATHER_MAP[key] || []
+  const speedWeatherActive = speedWeatherConditions.includes((weather || '').toLowerCase())
+
+  if (SPEED_WEATHER_MAP[key]) {
+    const fx = ABILITY_EFFECTS[key]
     return (
-      <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-orange-950/30 border border-orange-800/30 rounded text-xs">
-        <button
-          type="button"
-          onClick={() => onFlagChange('intimidateActive', !flags.intimidateActive)}
-          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
-            flags.intimidateActive ? 'bg-orange-500' : 'bg-gray-600'
-          }`}
-        >
-          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
-            flags.intimidateActive ? 'left-4' : 'left-0.5'
-          }`} />
-        </button>
-        <span className={flags.intimidateActive ? 'text-orange-300' : 'text-gray-500'}>
-          {flags.intimidateActive ? '−1 Atk avversario attivo' : 'Intimidate non ancora attivato'}
-        </span>
+      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+        speedWeatherActive
+          ? 'bg-green-950/40 border-green-700/40 text-green-300'
+          : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
+      }`}>
+        {speedWeatherActive ? `⚡ ${fx?.descOn}` : `💡 ${fx?.descOff}`}
       </div>
     )
   }
 
+
+
   if (key === 'flash-fire') {
+    const fx = ABILITY_EFFECTS[key]
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-red-950/30 border border-red-800/30 rounded text-xs">
         <button
@@ -556,13 +566,14 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
           }`} />
         </button>
         <span className={flags.flashFireActive ? 'text-red-300' : 'text-gray-500'}>
-          {flags.flashFireActive ? '×1.5 Fire attivo (colpito in precedenza)' : 'Immune Fire — boost non ancora attivato'}
+          {flags.flashFireActive ? fx.descOn : fx.descOff}
         </span>
       </div>
     )
   }
 
   if (key === 'multiscale' || key === 'shadow-shield') {
+    const fx = ABILITY_EFFECTS[key]
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-blue-950/30 border border-blue-800/30 rounded text-xs">
         <button
@@ -577,7 +588,7 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
           }`} />
         </button>
         <span className={flags.multiscaleActive ? 'text-blue-300' : 'text-gray-500'}>
-          {flags.multiscaleActive ? 'Multiscale: ×0.5 danno ricevuto (HP pieni)' : 'Multiscale: HP non pieni — nessuna riduzione'}
+          {flags.multiscaleActive ? fx.descOn : fx.descOff}
         </span>
       </div>
     )
@@ -610,30 +621,50 @@ function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChang
     )
   }
 
+  if (key === 'intimidate') {
+    const fx = ABILITY_EFFECTS[key]
+    return (
+      <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-yellow-950/30 border border-yellow-800/30 rounded text-xs">
+        <button
+          type="button"
+          onClick={() => onFlagChange('intimidateActive', !flags.intimidateActive)}
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
+            flags.intimidateActive ? 'bg-yellow-500' : 'bg-gray-600'
+          }`}
+        >
+          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
+            flags.intimidateActive ? 'left-4' : 'left-0.5'
+          }`} />
+        </button>
+        <span className={flags.intimidateActive ? 'text-yellow-300' : 'text-gray-500'}>
+          {flags.intimidateActive ? fx.descOn : fx.descOff}
+        </span>
+      </div>
+    )
+  }
+
   if (key === 'defiant' || key === 'contrary') {
+    const fx = ABILITY_EFFECTS[key]
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         opponentHasIntimidateActive
           ? 'bg-green-950/40 border-green-700/40 text-green-300'
           : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
       }`}>
-        {opponentHasIntimidateActive
-          ? '✅ Intimidate avversario attivo → +1 Atk'
-          : '💡 Reagisce automaticamente a Intimidate avversario'}
+        {opponentHasIntimidateActive ? `✅ ${fx.descOn}` : `💡 ${fx.descOff}`}
       </div>
     )
   }
 
   if (key === 'competitive') {
+    const fx = ABILITY_EFFECTS[key]
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         opponentHasIntimidateActive
           ? 'bg-pink-950/40 border-pink-700/40 text-pink-300'
           : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
       }`}>
-        {opponentHasIntimidateActive
-          ? '✅ Intimidate avversario attivo → +2 SpAtk'
-          : '💡 Reagisce automaticamente a Intimidate avversario (+2 SpAtk)'}
+        {opponentHasIntimidateActive ? `✅ ${fx.descOn}` : `💡 ${fx.descOff}`}
       </div>
     )
   }
@@ -809,6 +840,7 @@ function PokemonPanel({ team, index }) {
   const setAbility     = useCalcStore(s => s.setAbility)
   const setAbilityFlag = useCalcStore(s => s.setAbilityFlag)
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
+  const weather        = useCalcStore(s => s.weather)
 
   const [showImport,    setShowImport]    = useState(false)
   const [showDuplicate, setShowDuplicate] = useState(false)
@@ -1031,6 +1063,7 @@ function PokemonPanel({ team, index }) {
               flags={abilityFlags}
               opponentHasIntimidateActive={opponentHasIntimidateActive}
               onFlagChange={(flag, val) => setAbilityFlag(team, index, flag, val)}
+              weather={weather}
             />
           )}
         </div>
@@ -1067,6 +1100,16 @@ function PokemonPanel({ team, index }) {
                 boostVal={boostFields[i] ? (pokemon?.[boostFields[i]] || 0) : 0}
                 onSpChange={val => handleSp(i, val)}
                 onBoostChange={val => boostFields[i] && setBoost(team, index, boostFields[i], val)}
+                speedWeatherActive={(() => {
+                  const SPEED_MAP = {
+                    'sand-rush':   ['sand', 'sandstorm'],
+                    'chlorophyll': ['sun', 'harsh sunshine'],
+                    'swift-swim':  ['rain', 'heavy rain'],
+                    'slush-rush':  ['snow', 'hail'],
+                  }
+                  const conditions = SPEED_MAP[(ability || '').toLowerCase()] || []
+                  return conditions.includes((weather || '').toLowerCase())
+                })()}
               />
             ))}
           </div>

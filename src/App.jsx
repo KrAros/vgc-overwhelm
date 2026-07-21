@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import TopBar from './components/TopBar'
 import DamageTable from './components/DamageTable'
 import TeamEditor from './components/TeamEditor'
@@ -124,8 +124,8 @@ function ControlBar() {
   const btnReset  = `${btnBase} bg-red-950/30 hover:bg-red-900/50 text-red-400 border-red-900/30`
 
   return (
-    <div className="mb-4">
-      <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 py-3 space-y-2">
+    <div className="mb-3">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 pt-2 pb-1.5 space-y-1.5">
 
         {/* ── DESKTOP: layout simmetrico originale ── */}
         <div className="hidden sm:block space-y-2">
@@ -336,9 +336,18 @@ function ControlBar() {
 
 function App() {
   const [reportSelection, setReportSelection] = useState(null)
+  const reportRef = useRef(null)
+
+  const handleCellSelect = (sel) => {
+    setReportSelection(sel || null)
+    if (sel) {
+      setTimeout(() => {
+        reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 50)
+    }
+  }
 
   return (
-    // Layout colonna intera: header fisso in alto, footer in basso
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
 
       {/* ── Navbar header ── */}
@@ -349,21 +358,23 @@ function App() {
         <div className="max-w-7xl mx-auto">
 
           {/* ReportPanel */}
-          <ErrorBoundary>
-            {reportSelection && (
-              <ReportPanel
-                selection={reportSelection}
-                onClose={() => setReportSelection(null)}
-              />
-            )}
-          </ErrorBoundary>
+          <div ref={reportRef}>
+            <ErrorBoundary>
+              {reportSelection && (
+                <ReportPanel
+                  selection={reportSelection}
+                  onClose={() => setReportSelection(null)}
+                />
+              )}
+            </ErrorBoundary>
+          </div>
 
           {/* TopBar */}
           <TopBar />
 
           {/* DamageTable */}
           <ErrorBoundary>
-            <DamageTable onCellSelect={(sel) => setReportSelection(sel || null)} />
+            <DamageTable onCellSelect={handleCellSelect} />
           </ErrorBoundary>
 
           {/* ControlBar */}

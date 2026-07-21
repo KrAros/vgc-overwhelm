@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
-import { buildSmogonString } from '../utils/smogonString'
-import { spriteUrl } from '../utils/sprite'
+import { buildSmogonString, EOT_STRINGS } from '../utils/smogonString'
+import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
+import { TYPES } from '../data/typeChart'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
@@ -22,7 +23,8 @@ function calcHKO(minPct) {
 
 // Calcolo esatto probabilità Sitrus Berry
 // DP su stati (hp, sitrusUsed) — i roll con duplicati hanno peso 1/16 ciascuno
-function _calcSitrusProb(rolls, defHP, maxTurns = 6) {
+function _calcSitrusProb(rolls, defHP, eot = 0, maxTurns = 6) {
+  console.log('[SITRUS DP] defHP:', defHP, 'eot:', eot, 'rolls:', JSON.stringify(rolls))
   const sitrusHeal = Math.floor(defHP * 0.25)
   const halfHP     = Math.floor(defHP / 2)
 
@@ -48,10 +50,19 @@ function _calcSitrusProb(rolls, defHP, maxTurns = 6) {
         } else {
           let fHp   = newHp
           let fUsed = used
+          // Sitrus si attiva se HP scende sotto la soglia
           if (!used && newHp <= halfHP) {
             fHp   = Math.min(newHp + sitrusHeal, defHP)
             fUsed = true
           }
+          // Fine turno: sabbia/leftovers (eot positivo=recupero, negativo=danno)
+          fHp = fHp + eot
+          if (fHp <= 0) {
+            // KO per sabbia a fine turno
+            koThisTurn += p
+            continue
+          }
+          fHp = Math.min(fHp, defHP)  // cap agli HP massimi (leftovers)
           const nk = `${fHp},${fUsed ? 1 : 0}`
           next.set(nk, (next.get(nk) || 0) + p)
         }
@@ -66,7 +77,7 @@ function _calcSitrusProb(rolls, defHP, maxTurns = 6) {
   return koAtTurn
 }
 
-function simulateSitrus(rolls, defHP) {
+function simulateSitrus(rolls, defHP, eot = 0, condParts = []) {
   // ── Simulazione visiva con danno medio ──
   const midDmg     = rolls[Math.floor(rolls.length / 2)]
   const sitrusHeal = Math.floor(defHP * 0.25)
@@ -86,13 +97,21 @@ function simulateSitrus(rolls, defHP) {
       sitrusUsed = true
       healTurns.push({ t, hp, heal: true, healed })
     }
+    // Fine turno: sabbia/leftovers
+    if (eot !== 0) {
+      const hpBefore = hp
+      hp = Math.min(Math.max(hp + eot, 1), defHP)
+      if (hp !== hpBefore) {
+        healTurns.push({ t, hp, eotDelta: hp - hpBefore, eot: true })
+      }
+    }
   }
 
   const koTurn = healTurns.find(r => r.ko)
   const hko    = koTurn ? `${koTurn.t}HKO` : 'No KO in 6T'
 
   // ── Calcolo probabilistico esatto ──
-  const koAtTurn = _calcSitrusProb(rolls, defHP)
+  const koAtTurn = _calcSitrusProb(rolls, defHP, eot)
 
   const bestTurn = Object.entries(koAtTurn)
     .filter(([, p]) => p > 0.0001)
@@ -101,18 +120,22 @@ function simulateSitrus(rolls, defHP) {
   const totalKoProb = Object.values(koAtTurn).reduce((a, b) => a + b, 0)
   const activeTurns = Object.values(koAtTurn).filter(p => p > 0.0001).length
 
+  // Costruisci la stringa condizioni completa (sand + sitrus)
+  const allParts = [...condParts, EOT_STRINGS.sitrusRecovery]
+  const condStr = allParts.join(' and ')
+
   let summary
   if (!bestTurn || totalKoProb < 0.0001) {
-    summary = { text: 'No KO in 6 turns after Sitrus Berry recovery', color: 'text-green-400' }
+    summary = { text: `${EOT_STRINGS.noKoIn6} ${condStr}`, color: 'text-green-400' }
   } else if (totalKoProb > 0.9999 && activeTurns === 1) {
     summary = {
-      text: `Guaranteed ${bestTurn[0]}HKO after Sitrus Berry recovery`,
+      text: `${EOT_STRINGS.guaranteed} ${bestTurn[0]}HKO ${EOT_STRINGS.after} ${condStr}`,
       color: 'text-orange-400'
     }
   } else {
     const pct = Math.round(bestTurn[1] * 1000) / 10
     summary = {
-      text: `${pct}% chance to ${bestTurn[0]}HKO after Sitrus Berry recovery`,
+      text: `${pct}% ${EOT_STRINGS.chanceTo} ${bestTurn[0]}HKO ${EOT_STRINGS.after} ${condStr}`,
       color: pct >= 50 ? 'text-orange-400' : 'text-yellow-400'
     }
   }
@@ -132,7 +155,7 @@ function SitrusSection({ sitrus, defHP }) {
 
       {/* Frase sintetica sempre visibile */}
       <div className="flex items-center gap-1.5">
-        <img src="https://www.serebii.net/itemdex/sprites/sitrusberry.png" alt="Sitrus Berry" className="w-4 h-4 object-contain shrink-0" />
+        <img src="https://www.serebii.net/itemdex/sprites/sitrusberry.png" alt={EOT_STRINGS.sitrusRecovery} className="w-4 h-4 object-contain shrink-0" />
         <span className={`text-xs font-semibold ${sitrus.summary.color}`}>
           {sitrus.summary.text}
         </span>
@@ -144,30 +167,40 @@ function SitrusSection({ sitrus, defHP }) {
         className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors flex items-center gap-1"
       >
         <span>{open ? '▾' : '▸'}</span>
-        <span>{open ? 'Nascondi simulazione' : 'Mostra simulazione turno per turno'}</span>
+        <span>{open ? EOT_STRINGS.hideSim : EOT_STRINGS.showSim}</span>
       </button>
 
       {/* Dettaglio turni — collassabile */}
       {open && (
         <div className="space-y-1 pl-1 pt-1">
           {sitrus.healTurns.map((row, i) => {
-            // Separatore visivo per l'evento bacca
+            // Evento Sitrus Berry
             if (row.heal) {
               return (
                 <div key={i} className="flex items-center gap-2 my-1.5 py-1.5 px-2 rounded-md bg-orange-900/20 border border-orange-700/30">
                   <img src="https://www.serebii.net/itemdex/sprites/sitrusberry.png" alt="" className="w-4 h-4 object-contain shrink-0" />
                   <span className="text-xs text-orange-300 font-semibold">
-                    La Sitrus Berry si attiva! +{row.healed} HP → {row.hp}/{defHP} HP
+                    {EOT_STRINGS.sitrusActivates(row.healed, row.hp, defHP)}
                   </span>
+                </div>
+              )
+            }
+            // Evento end-of-turn (sabbia/leftovers)
+            if (row.eot) {
+              const sign = row.eotDelta > 0 ? '+' : ''
+              const color = row.eotDelta > 0 ? 'text-green-400' : 'text-yellow-600'
+              return (
+                <div key={i} className={`text-xs font-mono ${color} pl-4`}>
+                  {EOT_STRINGS.eotDelta(sign, row.eotDelta, row.hp, defHP)}
                 </div>
               )
             }
             return (
               <div key={i} className={`text-xs font-mono ${row.ko ? 'text-red-400' : 'text-gray-400'}`}>
-                <span className="text-gray-600 mr-1">Turno {row.t}:</span>
+                <span className="text-gray-600 mr-1">{EOT_STRINGS.turno(row.t)}</span>
                 −{sitrus.midDmg} HP
                 {!row.ko && <span className="text-gray-500"> → {row.hp}/{defHP} HP</span>}
-                {row.ko && <span className="text-red-400"> → KO</span>}
+                {row.ko && <span className="text-red-400"> {EOT_STRINGS.ko}</span>}
               </div>
             )
           })}
@@ -184,7 +217,77 @@ function MoveCard({ atk, def, move, result, field = {} }) {
   const smogon    = buildSmogonString(atk, def, move, result, field)
   const rolls     = result.rolls
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
-  const sitrus    = hasSitrus ? simulateSitrus(rolls, result.defHP) : null
+
+  // ── Leftovers + Sand damage ───────────────────────────────────────────────
+  const defHP     = result.defHP
+  const defTypes  = pokemonData[def.key]?.type || []
+  const isSandImmune = defTypes.some(t =>
+    t === TYPES.ROCK || t === TYPES.STEEL || t === TYPES.GROUND)
+  const weather   = (field.weather || '').toLowerCase()
+  const isSand    = weather === 'sand' || weather === 'sandstorm'
+
+  const leftoversHP = def.item === 'leftovers' ? Math.floor(defHP / 16) : 0
+  const sandDmgHP   = isSand && !isSandImmune ? Math.floor(defHP / 16) : 0
+  // eot: positivo = danno netto (sabbia), negativo = recupero netto (leftovers)
+  // Convenzione Smogon: eot positivo = recupero (Leftovers), negativo = danno (sabbia)
+  const eot = leftoversHP - sandDmgHP
+
+  // Parti EOT senza Sitrus (per combinazione)
+  const eotParts = []
+  if (isSand && !isSandImmune) eotParts.push(EOT_STRINGS.sandstormDamage)
+  if (leftoversHP > 0)         eotParts.push(EOT_STRINGS.leftoversRecovery)
+
+  const sitrus = hasSitrus ? simulateSitrus(rolls, result.defHP, eot, eotParts) : null
+
+  // Algoritmo Smogon: computeKOChance ricorsivo (senza ottimizzazioni)
+  function computeKOChance(damage, hp, eot, hits) {
+    const n = damage.length
+    if (hits === 1) {
+      if (damage[n - 1] < hp) return 0
+      for (let i = 0; i < n; i++) {
+        if (damage[i] >= hp) return (n - i) / n
+      }
+      return 0
+    }
+    let sum = 0
+    for (let i = 0; i < n; i++) {
+      const c = computeKOChance(damage, hp - damage[i] + eot, eot, hits - 1)
+      if (c === 1) { sum += n - i; break }
+      else sum += c
+    }
+    return sum / n
+  }
+
+  const endOfTurnInfo = (() => {
+    // Mostra info solo se c'è almeno un effetto end-of-turn attivo
+    if (leftoversHP === 0 && sandDmgHP === 0) return null
+    if (result.minPct >= 100) return null
+
+    // Stringa condizioni — sempre costruita se c'è almeno un effetto
+    const parts = []
+    if (isSand && !isSandImmune) parts.push(EOT_STRINGS.sandstormDamage)
+    if (leftoversHP > 0)         parts.push(EOT_STRINGS.leftoversRecovery)
+    const condStr = parts.join(' and ')
+
+    // Se eot netto = 0 (sand e leftovers si annullano), mostra solo la nota senza %
+    if (eot === 0) {
+      return { text: `${condStr} ${EOT_STRINGS.neutralize}`, hkoSuffix: null }
+    }
+
+    // Cerca il primo N-HKO con probabilità > 0
+    for (let hits = 2; hits <= 4; hits++) {
+      const chance = computeKOChance(rolls, defHP, eot, hits)
+      if (chance > 0) {
+        const pct = Math.max(Math.min(Math.round(chance * 1000), 999), 1) / 10
+        const label = `${hits}HKO`
+        if (chance >= 1) return { text: `${EOT_STRINGS.guaranteed} ${label} ${EOT_STRINGS.after} ${condStr}`, hkoSuffix: `${label}†`, guaranteed: true }
+        return { text: `${pct}% ${EOT_STRINGS.chanceTo} ${label} ${EOT_STRINGS.after} ${condStr}`, hkoSuffix: `${label}†`, pct }
+      }
+    }
+
+    if (condStr) return { text: `${EOT_STRINGS.after} ${condStr}`, hkoSuffix: null }
+    return null
+  })()
 
   // ── Recoil ───────────────────────────────────────────────────────────────
   const moveRecoil = movesData[move]?.recoil || null
@@ -196,14 +299,14 @@ function MoveCard({ atk, def, move, result, field = {} }) {
     const [rNum, rDen] = moveRecoil.fraction
 
     if (moveRecoil.type === 'damage') {
-      // Formula Smogon: Math.floor(roll * (rNum/rDen) * 1000 / atkHP) / 10
-      // Evita floor intermedio su roll/den per mantenere precisione
-      const mod = (rNum / rDen) * 100
-      const defHP = result.defHP
+      // Formula Smogon toDisplay: Math.floor((damage * (rNum/rDen) * 10) / atkHP) / 10
+      // Usa Math.floor(damage * rNum / rDen) per evitare floating point
       const minRoll = Math.min(rolls[0], defHP)
       const maxRoll = Math.min(rolls[rolls.length - 1], defHP)
-      const minPct = Math.floor(minRoll * mod * 10 / atkHP) / 10
-      const maxPct = Math.floor(maxRoll * mod * 10 / atkHP) / 10
+      const minRecoilHP = Math.floor(minRoll * rNum / rDen)
+      const maxRecoilHP = Math.floor(maxRoll * rNum / rDen)
+      const minPct = Math.floor(minRecoilHP * 1000 / atkHP) / 10
+      const maxPct = Math.floor(maxRecoilHP * 1000 / atkHP) / 10
       recoilInfo = `${minPct} - ${maxPct}% recoil damage`
     } else {
       // Recoil fisso dagli HP max (Steel Beam, Chloroblast, Mind Blown)
@@ -242,9 +345,9 @@ function MoveCard({ atk, def, move, result, field = {} }) {
           <span className={`text-base font-bold ${pctColor}`}>
             {result.minPct}–{result.maxPct}%
           </span>
-          {hko && (
+          {(hko || endOfTurnInfo || sitrus) && (
             <span className={`text-xs px-2 py-0.5 rounded border font-semibold ${hkoBadge}`}>
-              {hko}
+              {sitrus ? sitrus.summary.text : (endOfTurnInfo?.text ?? hko)}
             </span>
           )}
         </div>
@@ -477,7 +580,7 @@ function CumulativePanel({ entries }) {
                   src={spriteUrl(entry.atk.key)}
                   alt={entry.atk.key}
                   className="w-9 h-9 object-contain"
-                  onError={e => { e.target.style.display = 'none' }}
+                  onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }}
                 />
                 <span className={`text-sm font-semibold capitalize ${color}`}>
                   {entry.atk.key}
@@ -544,7 +647,7 @@ function CumulativePanel({ entries }) {
                 src={spriteUrl(def.key)}
                 alt={def.key}
                 className="w-10 h-10 object-contain"
-                onError={e => { e.target.style.display = 'none' }}
+                onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }}
               />
               <div>
                 <div className="text-sm font-bold text-gray-100 capitalize">{def.key.replace(/-/g, ' ')}</div>
@@ -625,21 +728,21 @@ export default function ReportPanel({ selection, onClose }) {
         <div className="flex items-center gap-1.5 flex-wrap justify-center">
           {isDouble ? (
             <>
-              <img src={spriteUrl(entry1.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <img src={spriteUrl(entry1.atk.key)} className="w-6 h-6 object-contain" alt={entry1.atk.key} onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
               <span className="text-sm font-semibold text-teal-400 capitalize">{entry1.atk.key}</span>
               <span className="text-gray-600 mx-0.5">+</span>
-              <img src={spriteUrl(entry2.atk.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <img src={spriteUrl(entry2.atk.key)} className="w-6 h-6 object-contain" alt={entry2.atk.key} onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
               <span className="text-sm font-semibold text-violet-400 capitalize">{entry2.atk.key}</span>
               <span className="text-gray-600 mx-0.5">→</span>
-              <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <img src={spriteUrl(def.key)} className="w-6 h-6 object-contain" alt={def.key} onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
               <span className="text-sm font-medium text-gray-300 capitalize">{def.key}</span>
             </>
           ) : (
             <>
-              <img src={spriteUrl(atk.key)} className="w-8 h-8 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <img src={spriteUrl(atk.key)} className="w-8 h-8 object-contain" alt={atk.key} onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
               <span className="text-base font-bold text-teal-400 capitalize">{atk.key}</span>
               <span className="text-gray-400 mx-2 text-xs font-bold px-2 py-0.5 rounded-full bg-gray-900 border border-gray-700">vs.</span>
-              <img src={spriteUrl(def.key)} className="w-8 h-8 object-contain" onError={e => { e.target.style.display='none' }} alt="" />
+              <img src={spriteUrl(def.key)} className="w-8 h-8 object-contain" alt={def.key} onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
               <span className="text-base font-semibold text-gray-200 capitalize">{def.key}</span>
             </>
           )}

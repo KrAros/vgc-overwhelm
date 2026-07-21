@@ -34,31 +34,64 @@ export const ABILITY_EFFECTS = {
   'tough-claws': { toughClaws: true, showInSmogon: true, desc: 'Aumenta l\'efficacia delle mosse da contatto di 1,3x' },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
-  'flash-fire':  { flashFireImmune: true, showInSmogon: true, desc: 'Immune alle mosse Fire — se colpito, ×1.5 BP Fire' },
+  'flash-fire':  { flashFireImmune: true, showInSmogon: true,
+    desc: 'Immune alle mosse Fire — se colpito, ×1.5 BP Fire',
+    descOn:  '×1.5 Fire attivo (colpito in precedenza)',
+    descOff: 'Immune Fire — boost non ancora attivato' },
 
-  // Kingambit: +10% Atk e SpAtk per ogni alleato KO
-  'supreme-overlord': { supremeOverlord: true, showInSmogon: true, desc: '+10% Atk e SpAtk per ogni alleato a terra (max ×1.5)' },
+  'supreme-overlord': { supremeOverlord: true, showInSmogon: true,
+    desc: '+10% Atk e SpAtk per ogni alleato a terra (max ×1.5)' },
 
-  // ── Difensore: riduzione danno passiva ───────────────────────────────────
-  'thick-fat':   { thickFat: true,  desc: '×0.5 danno subito da Fire e Ice' },
-  'filter':      { filter: true,    desc: '×0.75 danno subito da mosse super effective' },
-  'solid-rock':  { filter: true,    desc: '×0.75 danno subito da mosse super effective' },
-  'fluffy':      { fluffy: true,    desc: '×0.5 da contatto · ×2 da Fire' },
+  'multiscale':     { multiscale: true,
+    desc: '×0.5 danno ricevuto quando HP pieni',
+    descOn:  'Multiscale: ×0.5 danno ricevuto (HP pieni)',
+    descOff: 'Multiscale: HP non pieni — nessuna riduzione' },
 
-  // Multiscale / Shadow Shield: ×0.5 danno ricevuto se HP pieni
-  'multiscale':     { multiscale: true, desc: '×0.5 danno ricevuto quando HP pieni' },
-  'shadow-shield':  { multiscale: true, desc: '×0.5 danno ricevuto quando HP pieni' },
+  'shadow-shield':  { multiscale: true,
+    desc: '×0.5 danno ricevuto quando HP pieni',
+    descOn:  'Shadow Shield: ×0.5 danno ricevuto (HP pieni)',
+    descOff: 'Shadow Shield: HP non pieni — nessuna riduzione' },
 
-  // ── Difensore: immunità con effetto attivabile ────────────────────────────
-  'intimidate':  { intimidate: true, desc: '−1 Atk all\'avversario a inizio turno' },
+  'intimidate':  { intimidate: true,
+    desc: '−1 Atk all\'avversario a inizio turno',
+    descOn:  '−1 Atk avversario attivo nel calcolo',
+    descOff: 'Intimidate non ancora attivato' },
 
-  // ── Attaccante: reazione automatica a Intimidate ─────────────────────────
-  'defiant':     { defiant: true,     desc: '+2 Atk quando una stat viene abbassata da un avversario' },
-  'contrary':    { contrary: true,    desc: 'I boost diventano drop e viceversa — Intimidate diventa +1 Atk' },
-  'competitive': { competitive: true, desc: '+2 SpAtk quando una stat viene abbassata da un avversario' },
+  'defiant':     { defiant: true,
+    desc: '+2 Atk quando una stat viene abbassata da un avversario',
+    descOn:  'Intimidate avversario attivo → Defiant: +1 Atk netto',
+    descOff: 'Si attiva automaticamente quando l\'avversario usa Intimidate' },
+
+  'contrary':    { contrary: true,
+    desc: 'I boost diventano drop e viceversa — Intimidate diventa +1 Atk',
+    descOn:  'Intimidate avversario attivo → Contrary: drop invertito in +1 Atk',
+    descOff: 'Si attiva automaticamente quando l\'avversario usa Intimidate' },
+
+  'competitive': { competitive: true,
+    desc: '+2 SpAtk quando una stat viene abbassata da un avversario',
+    descOn:  'Intimidate avversario attivo → +2 SpAtk nel calcolo',
+    descOff: 'Si attiva automaticamente quando l\'avversario usa Intimidate (+2 SpAtk)' },
 
   // ── Meteo: Modifica le statistiche ─────────────────────────
-  'sand-rush':     { sandRush: true,     desc: 'Raddoppia la velocità in caso di tempesta di sabbia' },
+  'sand-rush':     { sandRush: true,
+    desc: 'Raddoppia la velocità in caso di tempesta di sabbia',
+    descOn:  'Sand Rush attivo — velocità ×2 (vedi riga Spe)',
+    descOff: 'Raddoppia la velocità in caso di tempesta di sabbia' },
+
+  'chlorophyll':   { speedWeather: true,
+    desc: 'Raddoppia la velocità sotto il sole',
+    descOn:  'Chlorophyll attivo — velocità ×2 (vedi riga Spe)',
+    descOff: 'Raddoppia la velocità sotto il sole' },
+
+  'swift swim':    { speedWeather: true,
+    desc: 'Raddoppia la velocità sotto la pioggia',
+    descOn:  'Swift Swim attivo — velocità ×2 (vedi riga Spe)',
+    descOff: 'Raddoppia la velocità sotto la pioggia' },
+
+  'slush rush':    { speedWeather: true,
+    desc: 'Raddoppia la velocità sotto la neve',
+    descOn:  'Slush Rush attivo — velocità ×2 (vedi riga Spe)',
+    descOff: 'Raddoppia la velocità sotto la neve' },
 
   // ── Solo dropdown, nessun effetto sul calcolo danno ──────────────────────
   'levitate':    { levitate: true, desc: 'Immune alle mosse Ground' },

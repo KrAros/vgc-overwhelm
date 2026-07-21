@@ -2,7 +2,20 @@ import { useState } from 'react'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
+import pokemonData from '../data/pokemon.json'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
+import itemsData from '../data/items.json'
+import { calcFinalStat } from '../utils/statCalc'
+
+// URL icona item — usa l'index GF (num) con zero padding a 4 cifre
+// Mega Stone (num >= 656) usano mdicon02, item regolari usano mdicon01
+const itemIconUrl = (itemKey) => {
+  if (!itemKey) return null
+  const num = itemsData[itemKey]?.num
+  if (!num) return null
+  const folder = num >= 656 ? 'mdicon02' : 'mdicon01'
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/${folder}/ui_ItemIcon_${num >= 656 ? '02' : '01'}_${String(num).padStart(4, '0')}.webp`
+}
 
 const SpreadIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -64,12 +77,71 @@ function getBestMove(atk, def, level, field) {
 
 // ── DamageCell ────────────────────────────────────────────────────────────────
 // selectionState: { first: {ri,ci,dir} | null, second: {ri,ci,dir} | null }
-// onSelect: (ri, ci, dir, atk, def, field) => void
 
-function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, selRi, selCi }) {
-  // Oscura le celle non sulla riga/colonna selezionata
-  const hasSelection = selRi !== null && selCi !== null
-  const isOnAxis = ri === selRi || ci === selCi
+// Formatta il nome del Pokémon per la tabella — gestisce forme Mega
+function formatPokeName(key) {
+  if (!key) return ''
+  if (key.endsWith('-mega') || key.endsWith('-mega-x') || key.endsWith('-mega-y')) {
+    const base = key.replace(/-mega-[xy]$/, '').replace(/-mega$/, '')
+    const suffix = key.includes('-mega-x') ? ' M·X' : key.includes('-mega-y') ? ' M·Y' : ' Mega'
+    return base.charAt(0).toUpperCase() + base.slice(1) + suffix
+  }
+  return key.split('-')[0]
+}
+// ── Speed tier helpers ────────────────────────────────────────────────────────
+
+const SPEED_WEATHER_CONDITIONS = {
+  'sand-rush':   ['sand', 'sandstorm'],
+  'chlorophyll': ['sun', 'harsh sunshine'],
+  'swift swim':  ['rain', 'heavy rain'],
+  'slush-rush':  ['snow', 'hail'],
+}
+
+const BOOST_NUM = [2,2,2,2,2,2,2,3,4,5,6,7,8]
+const BOOST_DEN = [8,7,6,5,4,3,2,2,2,2,2,2,2]
+
+function calcEffectiveSpe(pokemon, weather) {
+  if (!pokemon?.key) return 0
+  const base = pokemonData[pokemon.key]?.stats?.[5] ?? 0
+  const sp   = pokemon.sps?.[5] ?? 0
+  const boostVal = pokemon.speBoost ?? 0
+
+  let spe = calcFinalStat(base, sp, 50, pokemon.nature, 5)
+
+  // Boost stage
+  if (boostVal !== 0) {
+    spe = Math.floor(spe * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
+  }
+
+  // Abilità meteo-velocità
+  const abilityKey = (pokemon.ability || '').toLowerCase()
+  const conditions = SPEED_WEATHER_CONDITIONS[abilityKey] || []
+  if (conditions.includes((weather || '').toLowerCase())) {
+    spe = spe * 2
+  }
+
+  return spe
+}
+
+// Restituisce 't1' se T1 va prima, 't2' se T2 va prima, null se tie
+function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom) {
+  const p1 = movesData[bestMoveT1?.move]?.priority ?? 0
+  const p2 = movesData[bestMoveT2?.move]?.priority ?? 0
+
+  if (p1 !== p2) return p1 > p2 ? 't1' : 't2'
+
+  const spe1 = calcEffectiveSpe(t1, weather)
+  const spe2 = calcEffectiveSpe(t2, weather)
+
+  if (spe1 === spe2) return null  // tie
+  if (trickRoom) return spe1 < spe2 ? 't1' : 't2'
+  return spe1 > spe2 ? 't1' : 't2'
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, isOnAxis, hasSelection, selDir }) {
+  // Oscura le celle non sull'asse del difensore
   const dimCell = hasSelection && !isOnAxis
   if (!attacker?.key || !defender?.key) {
     if (showKoOnly) return <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
@@ -102,6 +174,11 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   const koFilterDimT1 = showKoOnly && !(d1 && d1.result.maxPct >= 100)
   const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
 
+  // Speed tier: chi va prima?
+  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom)
+  const goesFirstT1 = speedFirst === 't1'
+  const goesFirstT2 = speedFirst === 't2'
+
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
     if (pct >= 100) return 'text-red-400'
@@ -129,7 +206,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     ? 'ring-2 ring-violet-400 ring-inset'
     : ''
 
-  const renderHalf = (d, immune, prefix, dir, dim = false) => {
+  const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false) => {
     const label = immune ? immuneLabel(immune.result) : null
 
     // Sfondo della singola metà (sopra/sotto) quando è quella selezionata
@@ -149,6 +226,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
           <>
             <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
               {prefix} {d.move}
+              {goesFirst && (
+                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title="Va per primo">⚡</span>
+              )}
               {movesData[d.move]?.spread === true && (
                 <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
                   <SpreadIcon />
@@ -176,9 +256,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   }
 
   return (
-    <td className={`border-l border-gray-700 ${cellRing} relative transition-opacity ${dimCell ? 'opacity-30' : ''}`}>
-      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1)}
-      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2)}
+    <td className={`border-l border-gray-700 ${cellRing} relative transition-opacity w-[100px] min-w-[100px] max-w-[100px] ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
+      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1)}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2)}
     </td>
   )
 }
@@ -202,6 +282,7 @@ export default function DamageTable({ onCellSelect }) {
   const reflect     = useCalcStore(s => s.reflect)
   const crit        = useCalcStore(s => s.crit)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
+  const trickRoom    = useCalcStore(s => s.trickRoom)
 
   const field = {
     weather, terrain,
@@ -211,6 +292,7 @@ export default function DamageTable({ onCellSelect }) {
     reflect:     reflect.t2,
     crit:        crit.t1,
     doubleTarget,
+    trickRoom,
   }
 
   const fieldReversed = {
@@ -221,6 +303,7 @@ export default function DamageTable({ onCellSelect }) {
     reflect:     reflect.t1,
     crit:        crit.t2,
     doubleTarget,
+    trickRoom,
   }
 
   const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
@@ -240,7 +323,7 @@ export default function DamageTable({ onCellSelect }) {
     const atkAbility = (atk?.ability || '').toLowerCase()
     const defAbility = (def?.ability || '').toLowerCase()
     const autoWeather = ABILITY_WEATHER[atkAbility] || ABILITY_WEATHER[defAbility] || null
-    if (autoWeather) setWeatherDirect(autoWeather)
+    if (autoWeather) setTimeout(() => setWeatherDirect(autoWeather), 0)
     // allMoves per il pannello: le mosse dell'attaccante corrente
     const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
 
@@ -251,49 +334,51 @@ export default function DamageTable({ onCellSelect }) {
 
     const entry = { ri, ci, dir, atk, def, field: f, allMoves, atkTeam, atkIndex, defTeam, defIndex }
 
+    let nextSel = null
     setSelectionState(prev => {
       const { first, second } = prev
 
-      // Click sulla stessa cella+dir già selezionata come prima → deseleziona tutto
       if (first && first.ri === ri && first.ci === ci && first.dir === dir) {
-        onCellSelect?.(null)
+        nextSel = null
         return { first: null, second: null }
       }
-
-      // Click sulla stessa cella+dir già selezionata come seconda → deseleziona la seconda
       if (second && second.ri === ri && second.ci === ci && second.dir === dir) {
-        onCellSelect?.([first])
+        nextSel = [first]
         return { first, second: null }
       }
-
-      // Nessuna prima selezione → prima selezione
       if (!first) {
-        onCellSelect?.([entry])
+        nextSel = [entry]
         return { first: entry, second: null }
       }
-
-      // C'è una prima selezione.
-      // t1 attacca T2: stesso difensore = stessa colonna (ci), riga diversa
-      // t2 attacca T1: stesso difensore = stessa riga (ri), colonna diversa
       const sameDefender = first.dir === dir && (
         dir === 't1' ? (first.ci === ci && first.ri !== ri) :
                        (first.ri === ri && first.ci !== ci)
       )
       if (sameDefender) {
-        const newState = { first, second: entry }
-        onCellSelect?.([first, entry])
-        return newState
+        nextSel = [first, entry]
+        return { first, second: entry }
       }
-
-      // Tutto il resto → nuova prima selezione (reset)
-      onCellSelect?.([entry])
+      nextSel = [entry]
       return { first: entry, second: null }
     })
+    // Chiama onCellSelect dopo il ciclo di render
+    setTimeout(() => onCellSelect?.(nextSel), 0)
   }
 
   // Riga e colonna selezionate (per highlight)
-  const selRi = selectionState.first?.ri ?? null
-  const selCi = selectionState.first?.ci ?? null
+  const selRi    = selectionState.first?.ri  ?? null
+  const selCi    = selectionState.first?.ci  ?? null
+  const selDir   = selectionState.first?.dir ?? null
+
+  // Logica oscuramento: tieni visibile solo l'asse del DIFENSORE
+  // dir='t2' (T2 attacca T1): difensore è T1 → tieni riga selRi, oscura tutto il resto
+  // dir='t1' (T1 attacca T2): difensore è T2 → tieni colonna selCi, oscura tutto il resto
+  const getIsOnDefenderAxis = (ri, ci) => {
+    if (selRi === null) return true
+    if (selDir === 't2') return ri === selRi   // T2 attacca T1: riga del difensore T1
+    if (selDir === 't1') return ci === selCi   // T1 attacca T2: colonna del difensore T2
+    return ri === selRi || ci === selCi
+  }
 
   return (
     <div className="mb-4">
@@ -315,21 +400,39 @@ export default function DamageTable({ onCellSelect }) {
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className={`sticky top-0 z-10 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden transition-colors ${
-                  selCi === i ? 'bg-teal-900/40' : 'bg-gray-900'
+                <th key={i} className={`sticky top-0 z-10 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden transition-all ${
+                  selRi !== null && selDir === 't1' && selCi === i
+                    ? 'bg-teal-900/40'                          // difensore T2 (dir=t1)
+                    : selRi !== null && selDir === 't2' && selCi === i
+                    ? 'bg-orange-900/40'                        // attaccante T2 (dir=t2)
+                    : selRi !== null && selDir === 't2' && selCi !== i
+                    ? 'bg-gray-900 opacity-30'                  // altri T2 oscurati
+                    : selRi !== null && selDir === 't1' && selCi !== i
+                    ? 'bg-gray-900 opacity-30'                  // altri T2 oscurati
+                    : 'bg-gray-900'
                 }`}>
                   {p?.key ? (
                     <>
-                      <img
-                        src={spriteUrl(p.key)}
-                        alt={p.key}
-                        className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
-                        onError={e => {
-                          const fb = fallbackSpriteUrl(p.key)
-                          if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
-                        }}
-                      />
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[4rem] sm:max-w-none mx-auto">{p.key.split('-')[0]}</div>
+                      <div className="relative inline-block">
+                        <img
+                          src={spriteUrl(p.key)}
+                          alt={p.key}
+                          className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
+                          onError={e => {
+                            const fb = fallbackSpriteUrl(p.key)
+                            if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                          }}
+                        />
+                        {p.item && (
+                          <img
+                            src={itemIconUrl(p.item)}
+                            alt={p.item}
+                            className="absolute bottom-0 right-0 w-4 h-4 object-contain"
+                            onError={e => { e.target.style.display = 'none' }}
+                          />
+                        )}
+                      </div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[4rem] sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-600 text-[10px]">T2·{i+1}</div>
@@ -340,23 +443,41 @@ export default function DamageTable({ onCellSelect }) {
           </thead>
           <tbody>
             {team1.map((row, ri) => (
-              <tr key={ri} className={`border-t border-gray-700 transition-colors ${selRi === ri ? 'bg-teal-900/20' : ''}`}>
-                {/* Prima colonna sticky — rimane visibile durante lo scroll orizzontale */}
-                <td className={`sticky left-0 z-10 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden transition-colors ${
-                  selRi === ri ? 'bg-teal-900/40' : 'bg-gray-900'
+              <tr key={ri} className={`border-t border-gray-700 transition-colors ${
+                selRi === ri && selDir === 't2' ? 'bg-teal-900/20' : ''
+              }`}>
+                {/* Prima colonna sticky */}
+                <td className={`sticky left-0 z-10 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden transition-all ${
+                  selRi === ri && selDir === 't2'
+                    ? 'bg-teal-900/40'                          // difensore T1 (dir=t2)
+                    : selRi === ri && selDir === 't1'
+                    ? 'bg-orange-900/40'                        // attaccante T1 (dir=t1)
+                    : selRi !== null && selDir === 't1'
+                    ? 'bg-gray-900 opacity-30'                  // altri T1 oscurati
+                    : 'bg-gray-900'
                 }`}>
                   {row?.key ? (
                     <>
-                      <img
-                        src={spriteUrl(row.key)}
-                        alt={row.key}
-                        className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
-                        onError={e => {
-                          const fb = fallbackSpriteUrl(row.key)
-                          if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
-                        }}
-                      />
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[3.5rem] sm:max-w-none mx-auto">{row.key.split('-')[0]}</div>
+                      <div className="relative inline-block">
+                        <img
+                          src={spriteUrl(row.key)}
+                          alt={row.key}
+                          className="w-8 h-8 sm:w-12 sm:h-12 object-contain mx-auto"
+                          onError={e => {
+                            const fb = fallbackSpriteUrl(row.key)
+                            if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
+                          }}
+                        />
+                        {row.item && (
+                          <img
+                            src={itemIconUrl(row.item)}
+                            alt={row.item}
+                            className="absolute bottom-0 right-0 w-4 h-4 object-contain"
+                            onError={e => { e.target.style.display = 'none' }}
+                          />
+                        )}
+                      </div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[3.5rem] sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-600 text-[10px]">T1·{ri+1}</div>
@@ -375,8 +496,9 @@ export default function DamageTable({ onCellSelect }) {
                     selectionState={selectionState}
                     onSelect={handleSelect}
                     showKoOnly={showKoOnly}
-                    selRi={selRi}
-                    selCi={selCi}
+                    isOnAxis={getIsOnDefenderAxis(ri, ci)}
+                    hasSelection={selRi !== null}
+                    selDir={selDir}
                   />
                 ))}
               </tr>

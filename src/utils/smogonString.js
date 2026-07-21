@@ -14,6 +14,24 @@
  */
 
 import movesData from '../data/moves.json'
+
+// ── Stringhe end-of-turn e Sitrus Berry (usate da ReportPanel) ───────────────
+export const EOT_STRINGS = {
+  sandstormDamage:   'sandstorm damage',
+  leftoversRecovery: 'Leftovers recovery',
+  sitrusRecovery:    'Sitrus Berry recovery',
+  neutralize:        'si annullano',
+  noKoIn6:           'No KO in 6 turns after',
+  guaranteed:        'Guaranteed',
+  chanceTo:          'chance to',
+  after:             'after',
+  sitrusActivates:   (healed, hp, maxHp) => `La Sitrus Berry si attiva! +${healed} HP → ${hp}/${maxHp} HP`,
+  eotDelta:          (sign, delta, hp, maxHp) => `Fine turno: ${sign}${Math.abs(delta)} HP → ${hp}/${maxHp} HP`,
+  showSim:           'Mostra simulazione turno per turno',
+  hideSim:           'Nascondi simulazione',
+  turno:             (t) => `Turno ${t}:`,
+  ko:                '→ KO',
+}
 import pokemonData from '../data/pokemon.json'
 import { NATURE_MODIFIERS } from '../data/natures'
 import { TYPE_NAMES, TYPES } from '../data/typeChart'
@@ -24,6 +42,20 @@ import { ITEM_EFFECTS } from '../data/itemEffects'
 // Capitalizza la prima lettera di ogni parola e dopo i trattini.
 // Usata per i nomi di Pokémon, mosse, abilità e item nella stringa finale.
 const _tc = s => s.replace(/(^|\s|-)\w/g, c => c.toUpperCase())
+
+// Formatta il nome del Pokémon nello stile Smogon:
+// - Forme Mega: "charizard-mega-y" → "Charizard-Mega-Y"
+// - Forme con suffisso lettera singola: "basculegion-m" → "Basculegion" (Smogon omette -M/-F)
+// - Tutto il resto: "tyranitar-mega" → "Tyranitar-Mega"
+function _smogonName(key) {
+  if (!key) return ''
+  // Forme con -m o -f finale (es. basculegion-m, indeedee-f) → ometti il suffisso
+  if (/-(m|f)$/.test(key)) {
+    return _tc(key.replace(/-(m|f)$/, '').replace(/-/g, ' '))
+  }
+  // Forme Mega e altre forme speciali: mantieni i trattini
+  return key.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('-')
+}
 
 // ─── Whitelist abilità attaccante ─────────────────────────────────────────────
 // Costruita dinamicamente dal flag showInSmogon in abilityEffects.js.
@@ -124,8 +156,8 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   const hhStr = field.helpingHand ? ' Helping Hand' : ''
 
   // Nomi Pokémon e mossa in Title Case
-  const atkName  = _tc(atk.key.replace(/-/g, ' '))
-  const defName  = _tc(def.key.replace(/-/g, ' '))
+  const atkName  = _smogonName(atk.key)
+  const defName  = _smogonName(def.key)
 
   // Weather Ball: nome con BP e tipo espliciti
   // result.weatherBallType è l'indice tipo se il meteo è attivo, null altrimenti
