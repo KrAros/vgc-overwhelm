@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
@@ -1135,9 +1135,17 @@ function PokemonPanel({ team, index }) {
 export default function TeamEditor({ team }) {
   const [activeTab, setActiveTab] = useState(0)
   const teamData = useCalcStore(s => s[team])
+  const editorFocus = useCalcStore(s => s.editorFocus)
+
+  // Cliccando uno sprite in DamageTable, apri il tab corrispondente
+  useEffect(() => {
+    if (editorFocus && editorFocus.team === team) {
+      setActiveTab(editorFocus.index)
+    }
+  }, [editorFocus, team])
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700">
+    <div id={`team-editor-${team}`} className="bg-gray-800 rounded-xl border border-gray-700">
       <div className="flex border-b border-gray-700">
         {teamData.map((p, i) => {
           const sprite = p?.key ? spriteUrl(p.key) : null

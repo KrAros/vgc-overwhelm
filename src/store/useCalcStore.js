@@ -199,6 +199,10 @@ const useCalcStore = create((set) => ({
   // ── Setter campo ──
   setLevel: (level) => set({ level }),
   toggleTrickRoom: () => set((s) => ({ trickRoom: !s.trickRoom })),
+
+  // Focus editor: cliccando uno sprite in DamageTable si apre il suo tab nel TeamEditor
+  editorFocus: null,   // { team: 'team1'|'team2', index: 0-5, ts: number }
+  setEditorFocus: (team, index) => set({ editorFocus: { team, index, ts: Date.now() } }),
   toggleDoubleTarget: () => set((s) => ({ doubleTarget: !s.doubleTarget })),
   toggleShowKoOnly: () => set((s) => ({ showKoOnly: !s.showKoOnly })),
   setDoubleTarget: (val) => set({ doubleTarget: val }),

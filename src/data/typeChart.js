@@ -26,6 +26,15 @@ export const TYPE_NAMES = [
   'Dragon','Dark','Steel','Fairy',
 ]
 
+// Colori hex per bordi/stili inline (allineati a TYPE_COLORS)
+export const TYPE_HEX = {
+  Normal: '#9ca3af', Fire: '#f97316', Water: '#3b82f6', Electric: '#facc15',
+  Grass: '#22c55e', Ice: '#22d3ee', Fighting: '#dc2626', Poison: '#a855f7',
+  Ground: '#d97706', Flying: '#818cf8', Psychic: '#ec4899', Bug: '#84cc16',
+  Rock: '#ca8a04', Ghost: '#6d28d9', Dragon: '#4338ca', Dark: '#57534e',
+  Steel: '#94a3b8', Fairy: '#fb7185',
+}
+
 export const TYPE_COLORS = {
   Normal: 'bg-gray-400 text-black',
   Fire: 'bg-orange-500 text-white',

@@ -56,3 +56,19 @@ export function fallbackSpriteUrl(key) {
   if (!num) return null
   return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
 }
+/**
+ * URL icona strumento — usa l'index GF (num) da items.json.
+ * Item regolari (num < 656) → mdicon01 / ui_ItemIcon_01_XXXX.webp
+ * Mega Stone (num >= 656)  → mdicon02 / ui_ItemIcon_02_XXXX.webp
+ */
+import itemsData from '../data/items.json'
+
+export function itemIconUrl(itemKey) {
+  if (!itemKey) return null
+  const num = itemsData[itemKey]?.num
+  if (!num) return null
+  const isMega = num >= 656
+  const folder = isMega ? 'mdicon02' : 'mdicon01'
+  const prefix = isMega ? '02' : '01'
+  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/${folder}/ui_ItemIcon_${prefix}_${String(num).padStart(4, '0')}.webp`
+}

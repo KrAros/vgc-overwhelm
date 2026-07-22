@@ -3,19 +3,8 @@ import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
 import pokemonData from '../data/pokemon.json'
-import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
-import itemsData from '../data/items.json'
+import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
-
-// URL icona item — usa l'index GF (num) con zero padding a 4 cifre
-// Mega Stone (num >= 656) usano mdicon02, item regolari usano mdicon01
-const itemIconUrl = (itemKey) => {
-  if (!itemKey) return null
-  const num = itemsData[itemKey]?.num
-  if (!num) return null
-  const folder = num >= 656 ? 'mdicon02' : 'mdicon01'
-  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/${folder}/ui_ItemIcon_${num >= 656 ? '02' : '01'}_${String(num).padStart(4, '0')}.webp`
-}
 
 const SpreadIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -283,6 +272,15 @@ export default function DamageTable({ onCellSelect }) {
   const crit        = useCalcStore(s => s.crit)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const trickRoom    = useCalcStore(s => s.trickRoom)
+  const setEditorFocus = useCalcStore(s => s.setEditorFocus)
+
+  // Click sprite → apri tab nel TeamEditor e scrolla
+  const focusEditor = (team, index) => {
+    setEditorFocus(team, index)
+    setTimeout(() => {
+      document.getElementById(`team-editor-${team}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }
 
   const field = {
     weather, terrain,
@@ -413,7 +411,11 @@ export default function DamageTable({ onCellSelect }) {
                 }`}>
                   {p?.key ? (
                     <>
-                      <div className="relative inline-block">
+                      <div
+                        className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => focusEditor('team2', i)}
+                        title="Apri nel Team Editor"
+                      >
                         <img
                           src={spriteUrl(p.key)}
                           alt={p.key}
@@ -458,7 +460,11 @@ export default function DamageTable({ onCellSelect }) {
                 }`}>
                   {row?.key ? (
                     <>
-                      <div className="relative inline-block">
+                      <div
+                        className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => focusEditor('team1', ri)}
+                        title="Apri nel Team Editor"
+                      >
                         <img
                           src={spriteUrl(row.key)}
                           alt={row.key}
