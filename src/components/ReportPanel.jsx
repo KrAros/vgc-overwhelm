@@ -109,54 +109,36 @@ function TypeBadge({ typeIdx }) {
   return <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded ${cls}`}>{name.toUpperCase()}</span>
 }
 
-// ── HP Bar ────────────────────────────────────────────────────────────────────
+// ── HpStep — step HP intermedio nel Damage Breakdown ─────────────────────────
 
-function HPBar({ rolls, defHP }) {
-  if (!rolls || rolls.length === 0) return null
-  const minDmg = rolls[0]
-  const maxDmg = rolls[rolls.length - 1]
-  const minPct = Math.min(minDmg / defHP * 100, 100)
-  const maxPct = Math.min(maxDmg / defHP * 100, 100)
-  const koThreshold = defHP
-  const thresholdPct = 100  // sempre 100% degli HP
-
-  // Quanti roll fanno KO
-  const koRolls = rolls.filter(r => r >= defHP).length
-  const koFraction = koRolls / rolls.length
-
+function HpStep({ range, defKey }) {
   return (
-    <div>
-      <div className="flex justify-between text-[10px] text-gray-500 mb-1">
-        <span>MIN {minDmg}</span>
-        <span className="text-purple-400">KO THRESHOLD: ≥ {koThreshold} HP</span>
-        <span>MAX {maxDmg}</span>
+    <>
+      <span className="text-gray-600 shrink-0 mb-8">→</span>
+      <div className="flex flex-col items-center shrink-0 w-[68px]">
+        <div className="h-10 flex items-center justify-center mb-2">
+          <div className="relative inline-block">
+            <img
+              src={spriteUrl(defKey)}
+              alt={defKey}
+              className="w-10 h-10 object-contain"
+              onError={e => { const fb = fallbackSpriteUrl(defKey); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }}
+            />
+            <span className="absolute bottom-0 right-0 text-[10px] leading-none">❤️</span>
+          </div>
+        </div>
+        <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">HP</div>
+        <div className="text-xs font-bold text-gray-200 mt-1 whitespace-nowrap">
+          {range[0] === range[1] ? range[0] : `${range[0]}–${range[1]}`}
+        </div>
       </div>
-      <div className="relative h-2 bg-gray-700 rounded-full overflow-visible">
-        {/* Barra danno min */}
-        <div
-          className="absolute left-0 top-0 h-full bg-blue-800 rounded-full"
-          style={{ width: `${minPct}%` }}
-        />
-        {/* Barra danno max (sovrapposizione zona KO) */}
-        {maxPct > minPct && (
-          <div
-            className="absolute top-0 h-full bg-purple-800"
-            style={{ left: `${minPct}%`, width: `${maxPct - minPct}%` }}
-          />
-        )}
-        {/* Marker threshold */}
-        <div
-          className="absolute top-[-4px] w-[2px] h-[18px] bg-purple-400"
-          style={{ left: `calc(${thresholdPct}% - 1px)` }}
-        />
-      </div>
-    </div>
+    </>
   )
 }
 
 // ── Turn narrative bar ────────────────────────────────────────────────────────
 
-function TurnNarrative({ def: defender, weather, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, endOfTurnInfo, activeMove, defHP }) {
+function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, endOfTurnInfo, activeMove, defHP }) {
   const steps = []
 
   // 1. Mossa (avviene per prima nel turno)
@@ -241,9 +223,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   if (isSand && !isSandImmune) eotParts.push(EOT_STRINGS.sandstormDamage)
   if (leftoversHP > 0)         eotParts.push(EOT_STRINGS.leftoversRecovery)
   const sitrus = hasSitrus ? simulateSitrus(rolls, defHP, eot, eotParts) : null
-  // Simulazione anche per solo Leftovers/sand (senza bacca)
-  const hasLeftovers = leftoversHP > 0
-  const sim = sitrus ?? ((hasLeftovers && result.minPct < 100) ? simulateSitrus(rolls, defHP, eot, eotParts, false) : null)
 
   function computeKOChance(damage, hp, eot, hits) {
     const n = damage.length
@@ -309,20 +288,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const hasOHKOChance = !isOHKO && result.maxPct >= 100
   const moveData = movesData[move]
   const isSpread = moveData?.spread === true
-  const atkTypes = pokemonData[atk.key]?.type || []
-  const effectiveMoveType = result.weatherBallType ?? moveData?.type
-  const moveTypeName = TYPE_NAMES[effectiveMoveType] || ''
-
-  // Badge HKO text
-  const badgeText = sitrus ? sitrus.summary.text :
-    endOfTurnInfo?.text ?? (isOHKO ? 'Guaranteed OHKO' : hasOHKOChance ? `${result.maxPct - 100 > 0 ? Math.round(rolls.filter(r => r >= defHP).length / rolls.length * 100) : 0}% chance OHKO` : hko)
-
-  const badgeColor = isOHKO || result.maxPct >= 100
-    ? 'text-orange-400 border-orange-500/50 bg-orange-950/40'
-    : endOfTurnInfo || sitrus
-    ? 'text-yellow-400 border-yellow-500/50 bg-yellow-950/40'
-    : 'text-gray-400 border-gray-600/50 bg-gray-800/60'
-
   // % chance OHKO reale
   const ohkoChanceRolls = rolls.filter(r => r >= defHP).length
   const ohkoPct = Math.round(ohkoChanceRolls / rolls.length * 1000) / 10
@@ -439,7 +404,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
         {/* Barra narrativa turno */}
         <TurnNarrative
           def={def}
-          weather={weather}
           isSand={isSand}
           isSandImmune={isSandImmune}
           sandDmgHP={sandDmgHP}
@@ -494,29 +458,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           if (leftoversHP > 0) { hpMin = Math.min(hpMin + leftoversHP, defHP); hpMax = Math.min(hpMax + leftoversHP, defHP) }
           const hpAfterLefto = [hpMin, hpMax]
 
-          const HpStep = ({ range }) => (
-            <>
-              <span className="text-gray-600 shrink-0 mb-8">→</span>
-              <div className="flex flex-col items-center shrink-0 w-[68px]">
-                <div className="h-10 flex items-center justify-center mb-2">
-                  <div className="relative inline-block">
-                    <img
-                      src={spriteUrl(def.key)}
-                      alt={def.key}
-                      className="w-10 h-10 object-contain"
-                      onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }}
-                    />
-                    <span className="absolute bottom-0 right-0 text-[10px] leading-none">❤️</span>
-                  </div>
-                </div>
-                <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">HP</div>
-                <div className="text-xs font-bold text-gray-200 mt-1 whitespace-nowrap">
-                  {range[0] === range[1] ? range[0] : `${range[0]}–${range[1]}`}
-                </div>
-              </div>
-            </>
-          )
-
           return (
             <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
               <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">Damage Breakdown</div>
@@ -542,7 +483,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                 </div>
 
-                <HpStep range={hpAfterMove} />
+                <HpStep range={hpAfterMove} defKey={def.key} />
 
                 {/* 2. Sitrus Berry */}
                 {sitrus && <>
@@ -554,7 +495,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                     <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Sitrus Berry</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{sitrusHeal} HP</div>
                   </div>
-                  <HpStep range={hpAfterSitrus} />
+                  <HpStep range={hpAfterSitrus} defKey={def.key} />
                 </>}
 
                 {/* 3. Sandstorm */}
@@ -567,7 +508,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                     <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Sandstorm</div>
                     <div className="text-xs font-bold text-red-400 mt-1">−{sandDmgHP} HP</div>
                   </div>
-                  <HpStep range={hpAfterSand} />
+                  <HpStep range={hpAfterSand} defKey={def.key} />
                 </>}
 
                 {/* 4. Leftovers */}
@@ -580,7 +521,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                     <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Leftovers</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{leftoversHP} HP</div>
                   </div>
-                  <HpStep range={hpAfterLefto} />
+                  <HpStep range={hpAfterLefto} defKey={def.key} />
                 </>}
 
                 {/* 5. Result */}

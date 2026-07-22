@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { calcFinalStat, STAT_NAMES } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
@@ -524,7 +524,6 @@ function AbilitySelect({ value, abilities, onChange }) {
 
 function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather }) {
   const key = (ability || '').toLowerCase()
-  const sandActive = weather === 'sand' || weather === 'sandstorm'
 
   const SPEED_WEATHER_MAP = {
     'sand-rush':   ['sand', 'sandstorm'],
@@ -1137,12 +1136,13 @@ export default function TeamEditor({ team }) {
   const teamData = useCalcStore(s => s[team])
   const editorFocus = useCalcStore(s => s.editorFocus)
 
-  // Cliccando uno sprite in DamageTable, apri il tab corrispondente
-  useEffect(() => {
-    if (editorFocus && editorFocus.team === team) {
-      setActiveTab(editorFocus.index)
-    }
-  }, [editorFocus, team])
+  // Cliccando uno sprite in DamageTable, apri il tab corrispondente.
+  // Pattern React "adjust state during render": niente useEffect, nessun render extra committato.
+  const [lastFocusTs, setLastFocusTs] = useState(null)
+  if (editorFocus && editorFocus.team === team && editorFocus.ts !== lastFocusTs) {
+    setLastFocusTs(editorFocus.ts)
+    setActiveTab(editorFocus.index)
+  }
 
   return (
     <div id={`team-editor-${team}`} className="bg-gray-800 rounded-xl border border-gray-700">
