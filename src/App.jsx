@@ -34,12 +34,12 @@ const IconShare = () => (
 
 // ─── Modifier button ──────────────────────────────────────────────────────────
 
-function ModBtn({ label, active, color, activeClass, onClick }) {
+function ModBtn({ label, active, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
       className={`text-xs px-2 py-1 rounded border transition-colors ${
-        active ? activeClass : color + ' bg-transparent hover:opacity-80'
+        active ? activeClass : 'text-gray-400 border-gray-600/40 hover:bg-gray-800/60'
       }`}
     >
       {label}
@@ -75,7 +75,7 @@ function ControlBar() {
     if (pokemon.length === 0) return
     const slots = Array(6).fill(null).map((_, i) => pokemon[i] || null)
     setTeam(targetTeam, slots)
-    flash(`Importati ${pokemon.length} Pokémon in ${targetTeam === 'team1' ? 'Team 1' : 'Team 2'}.`)
+    flash(`Imported ${pokemon.length} Pokémon into ${targetTeam === 'team1' ? 'Team 1' : 'Team 2'}.`)
     if (w.length === 0) setMode(null)
   }
 
@@ -84,19 +84,19 @@ function ControlBar() {
     const paste = teamToShowdown(team)
     if (!paste) return
     navigator.clipboard.writeText(paste).then(() =>
-      flash(`${targetTeam === 'team1' ? 'Team 1' : 'Team 2'} copiato!`)
+      flash(`${targetTeam === 'team1' ? 'Team 1' : 'Team 2'} copied!`)
     )
   }
 
   function handleReset(targetTeam) {
     setTeam(targetTeam, Array(6).fill(null))
-    flash(`${targetTeam === 'team1' ? 'Team 1' : 'Team 2'} azzerato.`)
+    flash(`${targetTeam === 'team1' ? 'Team 1' : 'Team 2'} cleared.`)
   }
 
   function handleShare() {
     const encoded = encodeTeamsToURL(team1, team2)
     const url = window.location.origin + window.location.pathname + `?share=${encoded}`
-    navigator.clipboard.writeText(url).then(() => flash('Link copiato!'))
+    navigator.clipboard.writeText(url).then(() => flash('Link copied!'))
   }
 
   const MODS = [
@@ -125,28 +125,26 @@ function ControlBar() {
 
   return (
     <div className="mb-3">
-      <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 pt-2 pb-1.5 space-y-1.5">
+      <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
 
         {/* ── DESKTOP: layout simmetrico originale ── */}
         <div className="hidden sm:block space-y-2">
           {/* Riga 1 — modifier simmetrici */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 1</span>
+              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold shrink-0">Team 1</span>
               <div className="flex items-center gap-1">
                 {MODS_DESKTOP.map(m => (
                   <ModBtn key={m.mod} label={m.label}
-                    active={modVals[m.mod].t1}
-                    color={m.color} activeClass={m.active}
+                    active={modVals[m.mod].t1} activeClass={m.active}
                     onClick={() => toggleModifier(m.mod, 't1')} />
                 ))}
               </div>
             </div>
 
             <ModBtn
-              label="Solo KO"
+              label="KO only"
               active={showKoOnly}
-              color="text-red-400 border-red-400"
               activeClass="bg-red-500 text-white"
               onClick={toggleShowKoOnly}
             />
@@ -155,12 +153,11 @@ function ControlBar() {
               <div className="flex items-center gap-1">
                 {MODS_DESKTOP.map(m => (
                   <ModBtn key={m.mod} label={m.label}
-                    active={modVals[m.mod].t2}
-                    color={m.color} activeClass={m.active}
+                    active={modVals[m.mod].t2} activeClass={m.active}
                     onClick={() => toggleModifier(m.mod, 't2')} />
                 ))}
               </div>
-              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium shrink-0">Team 2</span>
+              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
             </div>
           </div>
 
@@ -172,20 +169,20 @@ function ControlBar() {
               <button type="button"
                 onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
                 className={mode === 'import1' ? btnActive : btnNormal}>
-                <IconImport /><span>Importa</span>
+                <IconImport /><span>Import</span>
               </button>
               <button type="button" onClick={() => handleExport('team1')} className={btnNormal}>
-                <IconExport /><span>Esporta</span>
+                <IconExport /><span>Export</span>
               </button>
               <button type="button" onClick={() => handleReset('team1')} className={btnReset}>
-                <IconReset /><span>Azzera</span>
+                <IconReset /><span>Clear</span>
               </button>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
               <button type="button" onClick={handleShare} className={btnNormal}>
-                <IconShare /><span>Condividi</span>
+                <IconShare /><span>Share</span>
               </button>
             </div>
 
@@ -193,13 +190,13 @@ function ControlBar() {
               <button type="button"
                 onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
                 className={mode === 'import2' ? btnActive : btnNormal}>
-                <IconImport /><span>Importa</span>
+                <IconImport /><span>Import</span>
               </button>
               <button type="button" onClick={() => handleExport('team2')} className={btnNormal}>
-                <IconExport /><span>Esporta</span>
+                <IconExport /><span>Export</span>
               </button>
               <button type="button" onClick={() => handleReset('team2')} className={btnReset}>
-                <IconReset /><span>Azzera</span>
+                <IconReset /><span>Clear</span>
               </button>
             </div>
           </div>
@@ -211,7 +208,7 @@ function ControlBar() {
           {/* Team 1 modifier */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Team 1</span>
+              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 1</span>
               <div className="flex gap-1">
                 <button type="button"
                   onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
@@ -231,8 +228,7 @@ function ControlBar() {
             <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
                 <ModBtn key={m.mod} label={m.label}
-                  active={modVals[m.mod].t1}
-                  color={m.color} activeClass={m.active}
+                  active={modVals[m.mod].t1} activeClass={m.active}
                   onClick={() => toggleModifier(m.mod, 't1')} />
               ))}
             </div>
@@ -243,7 +239,7 @@ function ControlBar() {
           {/* Team 2 modifier */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Team 2</span>
+              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 2</span>
               <div className="flex gap-1">
                 <button type="button"
                   onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
@@ -263,8 +259,7 @@ function ControlBar() {
             <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
                 <ModBtn key={m.mod} label={m.label}
-                  active={modVals[m.mod].t2}
-                  color={m.color} activeClass={m.active}
+                  active={modVals[m.mod].t2} activeClass={m.active}
                   onClick={() => toggleModifier(m.mod, 't2')} />
               ))}
             </div>
@@ -275,9 +270,8 @@ function ControlBar() {
           {/* Riga utility: KO filter + Share */}
           <div className="flex items-center justify-between gap-2">
             <ModBtn
-              label="Solo KO"
+              label="KO only"
               active={showKoOnly}
-              color="text-red-400 border-red-400"
               activeClass="bg-red-500 text-white"
               onClick={toggleShowKoOnly}
             />
@@ -285,7 +279,7 @@ function ControlBar() {
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
               <button type="button" onClick={handleShare}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-gray-300 border-gray-600/40">
-                <IconShare /><span>Condividi</span>
+                <IconShare /><span>Share</span>
               </button>
             </div>
           </div>
@@ -305,7 +299,7 @@ function ControlBar() {
           <textarea
             autoFocus
             className="w-full h-52 bg-gray-900 text-gray-200 text-xs font-mono p-2 rounded border border-gray-700 resize-y outline-none focus:border-teal-500"
-            placeholder="Incolla qui la paste Showdown completa (fino a 6 Pokémon, separati da righe vuote)..."
+            placeholder="Paste the full Showdown team here (up to 6 Pokémon, separated by blank lines)..."
             value={pasteText}
             onChange={e => setPasteText(e.target.value)}
           />
@@ -314,7 +308,7 @@ function ControlBar() {
               onClick={() => handleImport(mode === 'import1' ? 'team1' : 'team2')}
               className="text-xs px-3 py-1 rounded bg-teal-700 hover:bg-teal-600 text-white"
             >
-              ✔ Importa
+              ✔ Import
             </button>
             <button
               onClick={() => setMode(null)}
@@ -344,11 +338,16 @@ function App() {
       setTimeout(() => {
         reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
+    } else {
+      // Deselezione: il report si smonta e il contenuto sale — riporta la tabella in vista
+      setTimeout(() => {
+        document.getElementById('damage-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 50)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+    <div className="min-h-screen text-white flex flex-col">
 
       {/* ── Navbar header ── */}
       <Header />

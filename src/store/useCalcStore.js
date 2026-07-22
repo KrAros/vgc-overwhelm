@@ -197,7 +197,6 @@ const useCalcStore = create((set) => ({
   team2: initialTeam2,
 
   // ── Setter campo ──
-  setLevel: (level) => set({ level }),
   toggleTrickRoom: () => set((s) => ({ trickRoom: !s.trickRoom })),
 
   // Focus editor: cliccando uno sprite in DamageTable si apre il suo tab nel TeamEditor

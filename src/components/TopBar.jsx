@@ -14,12 +14,12 @@ const WEATHERS = [
   { label: 'Snow', key: 'snow', color: 'text-sky-200    border-sky-200',    active: 'bg-sky-200    text-gray-900' },
 ]
 
-function Btn({ label, active, color, activeClass, onClick }) {
+function Btn({ label, active, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
       className={`text-xs px-3 py-1 rounded border transition-colors ${
-        active ? activeClass : color + ' bg-transparent hover:opacity-80'
+        active ? activeClass : 'text-gray-400 border-gray-600/40 hover:bg-gray-800/60'
       }`}
     >
       {label}
@@ -28,42 +28,25 @@ function Btn({ label, active, color, activeClass, onClick }) {
 }
 
 export default function TopBar() {
-  const level        = useCalcStore(s => s.level)
   const trickRoom    = useCalcStore(s => s.trickRoom)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
   const terrain      = useCalcStore(s => s.terrain)
 
-  const setLevel           = useCalcStore(s => s.setLevel)
   const toggleTrickRoom    = useCalcStore(s => s.toggleTrickRoom)
   const toggleDoubleTarget = useCalcStore(s => s.toggleDoubleTarget)
   const setWeather         = useCalcStore(s => s.setWeather)
   const setTerrain         = useCalcStore(s => s.setTerrain)
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 px-3 py-2 mb-4">
+    <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
 
       {/* ── DESKTOP: layout orizzontale originale ── */}
-      <div className="hidden sm:flex flex-wrap gap-4 items-center">
+      <div className="hidden sm:flex flex-nowrap gap-3 items-center justify-between overflow-x-auto">
 
         {/* Options */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">Options</span>
-          <div className="flex gap-1">
-            {[5, 50, 100].map(lv => (
-              <button
-                key={lv}
-                onClick={() => setLevel(lv)}
-                className={`text-xs px-2 py-1 rounded border transition-colors ${
-                  level === lv
-                    ? 'bg-teal-500 text-gray-900 border-teal-500 font-medium'
-                    : 'border-gray-600 text-gray-400 hover:bg-gray-700'
-                }`}
-              >
-                Lv.{lv}
-              </button>
-            ))}
-          </div>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Options</span>
           <button
             onClick={toggleTrickRoom}
             className={`text-xs px-2 py-1 rounded border transition-colors ${
@@ -86,7 +69,7 @@ export default function TopBar() {
 
         {/* Field */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">Field</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Field</span>
           <div className="flex gap-1">
             <button
               onClick={() => setTerrain(null)}
@@ -97,8 +80,7 @@ export default function TopBar() {
               None
             </button>
             {FIELDS.map(f => (
-              <Btn key={f.key} label={f.label} active={terrain === f.key}
-                color={f.color} activeClass={f.active} onClick={() => setTerrain(f.key)} />
+              <Btn key={f.key} label={f.label} active={terrain === f.key} activeClass={f.active} onClick={() => setTerrain(f.key)} />
             ))}
           </div>
         </div>
@@ -107,7 +89,7 @@ export default function TopBar() {
 
         {/* Weather */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">Weather</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Weather</span>
           <div className="flex gap-1">
             <button
               onClick={() => setWeather(null)}
@@ -118,8 +100,7 @@ export default function TopBar() {
               None
             </button>
             {WEATHERS.map(w => (
-              <Btn key={w.key} label={w.label} active={weather === w.key}
-                color={w.color} activeClass={w.active} onClick={() => setWeather(w.key)} />
+              <Btn key={w.key} label={w.label} active={weather === w.key} activeClass={w.active} onClick={() => setWeather(w.key)} />
             ))}
           </div>
         </div>
@@ -131,23 +112,6 @@ export default function TopBar() {
 
         {/* Riga 1: Level + Trick Room + Double Target */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Lv</span>
-          <div className="flex gap-1">
-            {[5, 50, 100].map(lv => (
-              <button
-                key={lv}
-                onClick={() => setLevel(lv)}
-                className={`text-xs px-2.5 py-2.5 rounded border transition-colors ${
-                  level === lv
-                    ? 'bg-teal-500 text-gray-900 border-teal-500 font-medium'
-                    : 'border-gray-600 text-gray-400'
-                }`}
-              >
-                {lv}
-              </button>
-            ))}
-          </div>
-          <div className="w-px h-4 bg-gray-700 shrink-0" />
           <button
             onClick={toggleTrickRoom}
             className={`text-xs px-3 py-2.5 rounded border transition-colors ${

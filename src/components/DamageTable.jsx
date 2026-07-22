@@ -190,9 +190,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
   // Ring attorno alla td intera
   const cellRing = isFirst
-    ? 'ring-2 ring-teal-400 ring-inset'
+    ? 'ring-2 ring-teal-400 ring-inset shadow-[0_0_16px_rgba(45,212,191,0.25)]'
     : isSecond
-    ? 'ring-2 ring-violet-400 ring-inset'
+    ? 'ring-2 ring-violet-400 ring-inset shadow-[0_0_16px_rgba(167,139,250,0.25)]'
     : ''
 
   const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false) => {
@@ -216,7 +216,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
             <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
               {prefix} {d.move}
               {goesFirst && (
-                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title="Va per primo">⚡</span>
+                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title="Moves first">⚡</span>
               )}
               {movesData[d.move]?.spread === true && (
                 <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
@@ -245,7 +245,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   }
 
   return (
-    <td className={`border-l border-gray-700 ${cellRing} relative transition-opacity w-[100px] min-w-[100px] max-w-[100px] ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
+    <td className={`border-l border-gray-700 ${cellRing} relative transition-all hover:brightness-125 w-[100px] min-w-[100px] max-w-[100px] ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
       {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1)}
       {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2)}
     </td>
@@ -363,33 +363,33 @@ export default function DamageTable({ onCellSelect }) {
     setTimeout(() => onCellSelect?.(nextSel), 0)
   }
 
-  // Riga e colonna selezionate (per highlight)
-  const selRi    = selectionState.first?.ri  ?? null
-  const selCi    = selectionState.first?.ci  ?? null
-  const selDir   = selectionState.first?.dir ?? null
+  // Selezione attiva (per highlight e dimming) — lettura diretta, nessuna derivata intermedia
+  const sel      = selectionState.first
+  const selRi    = sel ? sel.ri  : null
+  const selCi    = sel ? sel.ci  : null
+  const selDir   = sel ? sel.dir : null
 
   // Logica oscuramento: tieni visibile solo l'asse del DIFENSORE
-  // dir='t2' (T2 attacca T1): difensore è T1 → tieni riga selRi, oscura tutto il resto
-  // dir='t1' (T1 attacca T2): difensore è T2 → tieni colonna selCi, oscura tutto il resto
+  // dir='t2' (T2 attacca T1): difensore è il Pokémon T1 → tieni la riga sel.ri
+  // dir='t1' (T1 attacca T2): difensore è il Pokémon T2 → tieni la colonna sel.ci
   const getIsOnDefenderAxis = (ri, ci) => {
-    if (selRi === null) return true
-    if (selDir === 't2') return ri === selRi   // T2 attacca T1: riga del difensore T1
-    if (selDir === 't1') return ci === selCi   // T1 attacca T2: colonna del difensore T2
-    return ri === selRi || ci === selCi
+    if (!sel) return true
+    return sel.dir === 't2' ? ri === sel.ri : ci === sel.ci
   }
 
   return (
-    <div className="mb-4">
+    <div id="damage-table" className="mb-4">
       {/* Indicatore modalità cumulativa */}
       {selectionState.second && (
         <div className="mb-2 px-1">
           <span className="text-xs text-violet-400">
-            📌 Modalità cumulativa attiva — vedi ReportPanel
+            📌 Cumulative mode active — see report above
           </span>
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl border border-gray-700">
+      <div className="xl:flex xl:gap-3 xl:items-start">
+      <div className="overflow-x-auto rounded-xl border border-gray-700/40 xl:flex-1 xl:min-w-0">
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
@@ -414,7 +414,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div
                         className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => focusEditor('team2', i)}
-                        title="Apri nel Team Editor"
+                        title="Open in Team Editor"
                       >
                         <img
                           src={spriteUrl(p.key)}
@@ -445,16 +445,14 @@ export default function DamageTable({ onCellSelect }) {
           </thead>
           <tbody>
             {team1.map((row, ri) => (
-              <tr key={ri} className={`border-t border-gray-700 transition-colors ${
-                selRi === ri && selDir === 't2' ? 'bg-teal-900/20' : ''
-              }`}>
+              <tr key={ri} className="border-t border-gray-700 transition-colors">
                 {/* Prima colonna sticky */}
                 <td className={`sticky left-0 z-10 p-2 text-center border-r border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden transition-all ${
                   selRi === ri && selDir === 't2'
                     ? 'bg-teal-900/40'                          // difensore T1 (dir=t2)
                     : selRi === ri && selDir === 't1'
                     ? 'bg-orange-900/40'                        // attaccante T1 (dir=t1)
-                    : selRi !== null && selDir === 't1'
+                    : selRi !== null
                     ? 'bg-gray-900 opacity-30'                  // altri T1 oscurati
                     : 'bg-gray-900'
                 }`}>
@@ -463,7 +461,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div
                         className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => focusEditor('team1', ri)}
-                        title="Apri nel Team Editor"
+                        title="Open in Team Editor"
                       >
                         <img
                           src={spriteUrl(row.key)}
@@ -511,6 +509,43 @@ export default function DamageTable({ onCellSelect }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* ── Legend sidebar (desktop largo) ── */}
+      <aside className="hidden xl:block w-[190px] shrink-0 bg-gray-900 rounded-xl border border-gray-700/40 px-4 py-4 self-stretch">
+        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">Legend</div>
+        <div className="space-y-2 text-xs text-gray-300">
+          <div className="flex items-center gap-2"><span className="text-teal-400">▶</span> Attacks</div>
+          <div className="flex items-center gap-2"><span className="text-red-400">◀</span> Attacked by</div>
+          <div className="flex items-center gap-2"><span className="text-yellow-400">⚡</span> Moves first</div>
+          <div className="flex items-center gap-2"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> Spread move</div>
+        </div>
+        <div className="text-[11px] text-gray-500 mt-4 mb-2">Damage</div>
+        <div className="space-y-1.5 text-xs">
+          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> <span className="text-green-400">0 – 25%</span></div>
+          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-teal-300 inline-block" /> <span className="text-teal-300">25 – 50%</span></div>
+          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-orange-400 inline-block" /> <span className="text-orange-400">50 – 100%</span></div>
+          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> <span className="text-red-400">100%+</span></div>
+        </div>
+        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">Quick Info</div>
+        <p className="text-[11px] text-gray-500 leading-relaxed">
+          Select a cell to see detailed damage analysis and KO chance. Click a sprite to open it in the Team Editor.
+        </p>
+      </aside>
+      </div>
+
+      {/* ── Legend riga compatta (schermi sotto xl) ── */}
+      <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-500">
+        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">Legend</span>
+        <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> attacks</span>
+        <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> attacked by</span>
+        <span className="flex items-center gap-1"><span className="text-yellow-400">⚡</span> moves first</span>
+        <span className="flex items-center gap-1"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> spread move</span>
+        <span className="text-gray-600">|</span>
+        <span className="text-green-400">0–25%</span>
+        <span className="text-teal-300">25–50%</span>
+        <span className="text-orange-400">50–100%</span>
+        <span className="text-red-400">100%+ KO</span>
       </div>
     </div>
   )

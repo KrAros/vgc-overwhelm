@@ -77,7 +77,7 @@ export function parseShowdownPaste(paste) {
       const [pokePart, itemPart] = lines[0].split(' @ ')
       pokeRawName = pokePart.trim()
       itemKey = findItemKey(itemPart.trim())
-      if (!itemKey) warnings.push(`Slot ${blockIdx + 1}: item "${itemPart.trim()}" non trovato.`)
+      if (!itemKey) warnings.push(`Slot ${blockIdx + 1}: item "${itemPart.trim()}" not found.`)
     }
 
     // Gestione nickname: "Nickname (NomePokémon) @ Item"
@@ -86,7 +86,7 @@ export function parseShowdownPaste(paste) {
 
     const pokemonKey = findPokemonKey(pokeRawName)
     if (!pokemonKey) {
-      warnings.push(`Slot ${blockIdx + 1}: Pokémon "${pokeRawName}" non trovato, saltato.`)
+      warnings.push(`Slot ${blockIdx + 1}: Pokémon "${pokeRawName}" not found, skipped.`)
       continue
     }
 
@@ -116,7 +116,7 @@ export function parseShowdownPaste(paste) {
       } else if (line.endsWith(' Nature')) {
         const n = line.replace(' Nature', '').trim().toLowerCase()
         if (NATURES.includes(n)) nature = n
-        else warnings.push(`Slot ${blockIdx + 1}: natura "${n}" non riconosciuta.`)
+        else warnings.push(`Slot ${blockIdx + 1}: nature "${n}" not recognized.`)
 
       } else if (line.startsWith('- ') && moveIdx < 4) {
         const raw     = line.slice(2).trim()

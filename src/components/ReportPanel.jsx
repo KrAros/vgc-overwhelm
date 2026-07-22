@@ -310,17 +310,16 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       {/* ═══ CARD 1: MATCHUP ═══ */}
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
 
-        {/* Header: [atk] ⚡→ [def] | [move info] | [buttons] */}
-        <div className="flex items-center px-5 py-4">
+        {/* Header: [atk] ⚡→ [def] | [move info] | [buttons] — stacked su mobile */}
+        <div className="flex flex-col lg:flex-row lg:items-center px-4 lg:px-5 py-4 gap-4 lg:gap-0">
 
           {/* Attaccante */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-[104px] h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
+            <div className="w-[72px] h-[72px] lg:w-[104px] lg:h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(atk.key)}
                 alt={atk.key}
-                style={{width:'96px',height:'96px'}}
-                className="object-contain"
+                className="w-16 h-16 lg:w-24 lg:h-24 object-contain"
                 onError={e => { const fb = fallbackSpriteUrl(atk.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }}
               />
             </div>
@@ -335,20 +334,19 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           </div>
 
           {/* Freccia ⚡ → */}
-          <div className="flex items-center px-6 shrink-0">
-            <svg width="64" height="14" viewBox="0 0 64 14" fill="none">
+          <div className="flex items-center px-2 lg:px-6 shrink-0">
+            <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className="w-10 lg:w-16">
               <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
           {/* Difensore */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-[104px] h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
+            <div className="w-[72px] h-[72px] lg:w-[104px] lg:h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(def.key)}
                 alt={def.key}
-                style={{width:'96px',height:'96px'}}
-                className="object-contain"
+                className="w-16 h-16 lg:w-24 lg:h-24 object-contain"
                 onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }}
               />
             </div>
@@ -363,7 +361,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           </div>
 
           {/* Separatore verticale */}
-          <div className="w-px bg-gray-700/40 mx-6 self-stretch" />
+          <div className="hidden lg:block w-px bg-gray-700/40 mx-6 self-stretch" />
 
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
@@ -377,7 +375,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           </div>
 
           {/* Colonna destra: spread + badge % + bottone rolls */}
-          <div className="shrink-0 flex flex-col items-end gap-2 self-start">
+          <div className="shrink-0 flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-2 lg:self-start">
             {isSpread && (
               <span className="text-[10px] text-purple-400 font-bold uppercase tracking-[0.1em]">🌀 Spread Move</span>
             )}
@@ -416,7 +414,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
         {/* 4 bottoni mossa */}
         {computedMoves && (
-          <div className="grid grid-cols-4 gap-2 px-4 py-3 border-t border-gray-700/20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 px-4 py-3 border-t border-gray-700/20">
             {computedMoves.map(({ move: mv, result: res }) => {
               const isActive = mv === activeMoveKey
               const pct = res.maxPct
@@ -631,7 +629,7 @@ function SinglePanel({ entry }) {
   const activeMoveKey = selectedMove || defaultMove?.move
   const active = computedMoves.find(m => m.move === activeMoveKey) || defaultMove
 
-  if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">Nessuna mossa offensiva disponibile.</div>
+  if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">No offensive moves available.</div>
 
   const field = {
     weather, terrain, doubleTarget,
@@ -718,8 +716,8 @@ function CumulativePanel({ entries }) {
   }, [active1, active2])
 
   const badge = !cumulative ? null :
-    cumulative.minPct >= 100 ? { text: 'KO garantito', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
-    cumulative.koOf16 > 0    ? { text: `KO probabile (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
+    cumulative.minPct >= 100 ? { text: 'Guaranteed KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
+    cumulative.koOf16 > 0    ? { text: `Likely KO (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
                                { text: 'No KO', cls: 'bg-gray-800 border-gray-600 text-gray-500' }
 
   return (
@@ -761,13 +759,13 @@ function CumulativePanel({ entries }) {
                     </div>
                   )}
                 </>
-              ) : <div className="text-xs text-gray-600">Nessuna mossa offensiva</div>}
+              ) : <div className="text-xs text-gray-600">No offensive moves</div>}
             </div>
           )
         })}
       </div>
 
-      <div className="text-center text-gray-600 text-xs">↓ danno cumulativo su</div>
+      <div className="text-center text-gray-600 text-xs">↓ combined damage on</div>
 
       {cumulative && (() => {
         const sums = cumulative.rolls1.map((r, i) => r + cumulative.rolls2[i])
@@ -784,21 +782,21 @@ function CumulativePanel({ entries }) {
             </div>
             <div className="text-sm text-gray-400 leading-relaxed">
               <span className="text-teal-400 font-semibold capitalize">{entry1.atk.key}</span>
-              {active1 && <span className="text-gray-500"> usa <span className="text-gray-200 capitalize">{active1.move.replace(/-/g, ' ')}</span></span>}
+              {active1 && <span className="text-gray-500"> uses <span className="text-gray-200 capitalize">{active1.move.replace(/-/g, ' ')}</span></span>}
               <span className="text-gray-600"> + </span>
               <span className="text-violet-400 font-semibold capitalize">{entry2.atk.key}</span>
-              {active2 && <span className="text-gray-500"> usa <span className="text-gray-200 capitalize">{active2.move.replace(/-/g, ' ')}</span></span>}
+              {active2 && <span className="text-gray-500"> uses <span className="text-gray-200 capitalize">{active2.move.replace(/-/g, ' ')}</span></span>}
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className={`text-lg font-bold shrink-0 ${cumulative.minPct >= 100 ? 'text-red-400' : cumulative.maxPct >= 100 ? 'text-orange-400' : 'text-teal-300'}`}>
                 {cumulative.minPct}–{cumulative.maxPct}%
               </span>
               <div className={`px-3 py-1.5 rounded-lg border font-bold text-sm tracking-wide text-center ${badge.cls}`}>
-                {cumulative.minPct >= 100 ? '✓ KO garantito' : cumulative.koOf16 > 0 ? `⚡ KO probabile (${cumulative.koOf16}/16)` : '✗ No KO'}
+                {cumulative.minPct >= 100 ? '✓ Guaranteed KO' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ No KO'}
               </div>
             </div>
             <div className="text-[11px] text-gray-500 font-mono">min {cumulative.minSum} · mid {midSum} · max {cumulative.maxSum}<span className="text-gray-600"> / {cumulative.defHP} HP</span></div>
-            <div className="text-[10px] text-gray-600 font-mono">{cumulative.koCount}/{cumulative.totalCombos} combinazioni KO ({koPct}%)</div>
+            <div className="text-[10px] text-gray-600 font-mono">{cumulative.koCount}/{cumulative.totalCombos} KO combinations ({koPct}%)</div>
           </div>
         )
       })()}
@@ -824,7 +822,7 @@ export default function ReportPanel({ selection, onClose }) {
       {/* Pulsante chiudi fuori dal pannello */}
       <div className="flex justify-end mb-1">
         <button onClick={onClose} className="text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors">
-          ✕ chiudi
+          ✕ close
         </button>
       </div>
       {isDouble
