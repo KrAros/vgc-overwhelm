@@ -203,9 +203,29 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
   )
 }
 
+// ── CopyCalcButton ────────────────────────────────────────────────────────────
+
+function CopyCalcButton({ smogon }) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <button
+      onClick={() => navigator.clipboard.writeText(smogon).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500) })}
+      aria-label="Copy calc string"
+      className={`text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border transition-colors flex items-center gap-1 ${
+        copied ? 'border-teal-600/50 text-teal-300' : 'border-gray-700/50 hover:border-gray-500'
+      }`}
+    >
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+      </svg>
+      {copied ? 'Copied' : 'Copy calc'}
+    </button>
+  )
+}
+
 // ── MoveCard NCP style ────────────────────────────────────────────────────────
 
-function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect }) {
+function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
   const hko    = calcHKO(result.minPct)
   const smogon = buildSmogonString(atk, def, move, result, field)
   const rolls  = result.rolls
@@ -213,7 +233,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
   const defHP = result.defHP
   const defTypes = pokemonData[def.key]?.type || []
+  const SAND_IMMUNE_ABILITIES = ['sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat']
+  const defAbilityKey = (def.ability || '').toLowerCase()
   const isSandImmune = defTypes.some(t => t === TYPES.ROCK || t === TYPES.STEEL || t === TYPES.GROUND)
+    || SAND_IMMUNE_ABILITIES.includes(defAbilityKey)
+    || def.item === 'safety goggles'
   const weather = (field.weather || '').toLowerCase()
   const isSand  = weather === 'sand' || weather === 'sandstorm'
   const leftoversHP = def.item === 'leftovers' ? Math.floor(defHP / 16) : 0
@@ -302,13 +326,19 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
   return (
     <div>
-      {/* Label esterna */}
-      <div className="mb-2">
-        <span className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold">Selected Matchup</span>
-      </div>
-
       {/* ═══ CARD 1: MATCHUP ═══ */}
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
+        {/* Label + Copy + Close — prima riga della card, ha accesso a smogon e onClose */}
+        <div className="flex items-center justify-between px-4 pt-2.5 pb-2 border-b border-gray-700/20">
+          <span className="text-[9px] tracking-[0.2em] text-gray-600 uppercase font-bold">Selected Matchup</span>
+          <div className="flex items-center gap-1.5">
+            <CopyCalcButton smogon={smogon} />
+            <button onClick={onClose} aria-label="Close report panel"
+              className="text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
+              ✕ Close
+            </button>
+          </div>
+        </div>
 
         {/* Header: [atk] ⚡→ [def] | [move info] | [buttons] — stacked su mobile */}
         <div className="flex flex-col lg:flex-row lg:items-center px-4 lg:px-5 py-4 gap-4 lg:gap-0">
@@ -392,6 +422,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             <button
               type="button"
               onClick={() => { const el = document.getElementById('damage-rolls-card'); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}
+              aria-label="Scroll to damage rolls"
               className="text-[11px] font-semibold text-teal-300 uppercase tracking-[0.08em] border border-teal-700/50 rounded-lg px-4 py-1.5 hover:bg-teal-950/40 transition-colors w-[150px] text-center"
             >
               Damage Rolls
@@ -529,9 +560,22 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                     <span className="text-3xl">🎯</span>
                   </div>
                   <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">Result</div>
-                  <div className={`text-sm font-black mt-1 whitespace-nowrap ${isOHKO || hasOHKOChance ? 'text-orange-400' : 'text-gray-200'}`}>
-                    {isOHKO ? '100%' : hasOHKOChance ? `${ohkoPct}%` : `${result.minPct}–${result.maxPct}%`}
-                  </div>
+                  {(() => {
+                    if (isOHKO || hasOHKOChance) return (
+                      <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">
+                        {isOHKO ? '100%' : `${ohkoPct}%`}
+                      </div>
+                    )
+                    const sandPct = (isSand && !isSandImmune)
+                      ? Math.round(Math.floor(defHP / 16) / defHP * 1000) / 10 : 0
+                    const minTotal = Math.round((result.minPct + sandPct) * 10) / 10
+                    const maxTotal = Math.round((result.maxPct + sandPct) * 10) / 10
+                    return (
+                      <div className="text-sm font-black mt-1 whitespace-nowrap text-gray-200">
+                        {minTotal}–{maxTotal}%
+                      </div>
+                    )
+                  })()}
                   {(isOHKO || hasOHKOChance) && <div className="text-[9px] text-orange-400 leading-tight whitespace-nowrap">1HKO chance</div>}
                 </div>
               </div>
@@ -584,17 +628,13 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
         </div>
       </div>
 
-      {/* Stringa Smogon */}
-      <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-3 mt-3">
-        <div className="text-[11px] font-mono text-gray-500 leading-relaxed">{smogon}</div>
-      </div>
     </div>
   )
 }
 
 // ── SinglePanel ───────────────────────────────────────────────────────────────
 
-function SinglePanel({ entry }) {
+function SinglePanel({ entry, onClose }) {
   const { atk, def, dir } = entry
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
@@ -650,6 +690,7 @@ function SinglePanel({ entry }) {
       computedMoves={computedMoves}
       activeMoveKey={activeMoveKey}
       onMoveSelect={setSelectedMove}
+      onClose={onClose}
     />
   ) : null
 }
@@ -721,88 +762,177 @@ function CumulativePanel({ entries }) {
                                { text: 'No KO', cls: 'bg-gray-800 border-gray-600 text-gray-500' }
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {[entry1, entry2].map((entry, idx) => {
-          const moves = idx === 0 ? moves1 : moves2
-          const sel = idx === 0 ? sel1 : sel2
-          const setSel = idx === 0 ? setSel1 : setSel2
-          const deflt = idx === 0 ? default1 : default2
-          const activeSel = idx === 0 ? active1 : active2
-          const color = idx === 0 ? 'text-teal-400' : 'text-violet-400'
-          const ring  = idx === 0 ? 'border-teal-500/40' : 'border-violet-500/40'
-          return (
-            <div key={idx} className={`bg-gray-900/60 rounded-lg p-3 border ${ring} space-y-2`}>
-              <div className="flex items-center gap-2">
-                <img src={spriteUrl(entry.atk.key)} alt={entry.atk.key} className="w-9 h-9 object-contain" onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
-                <span className={`text-sm font-semibold capitalize ${color}`}>{entry.atk.key}</span>
-              </div>
-              {moves.length > 0 ? (
-                <>
-                  <div className="flex flex-wrap gap-1">
-                    {moves.map(({ move, result }) => {
-                      const isSel = move === (sel || deflt?.move)
-                      const activeRing = idx === 0 ? (isSel ? 'ring-2 ring-teal-400' : '') : (isSel ? 'ring-2 ring-violet-400' : '')
-                      const pct = result.maxPct
-                      const koColor = pct >= 100 ? 'border-red-500/70 text-red-300 bg-red-900/30' : pct >= 50 ? 'border-orange-500/50 text-orange-300 bg-orange-900/20' : 'border-gray-600 text-gray-400 bg-gray-800/60'
-                      return (
-                        <button key={move} type="button" onClick={() => setSel(move)} className={`px-2 py-0.5 rounded-lg border text-xs font-medium transition-all ${koColor} ${activeRing}`}>
-                          <span className="capitalize">{move.replace(/-/g, ' ')}</span>
-                          <span className="ml-1 opacity-70">{result.minPct}–{result.maxPct}%</span>
-                        </button>
-                      )
-                    })}
+    <div>
+      {/* SELECTED MATCHUP label */}
+      <div className="mb-2">
+        <span className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold">Selected Matchup</span>
+      </div>
+
+      {/* Card principale: due attaccanti affiancati → difensore */}
+      <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
+
+        {/* Header: [atk1] + [atk2] → [def] */}
+        <div className="flex flex-col lg:flex-row lg:items-center px-5 py-4 gap-4 border-b border-gray-700/20">
+
+          {/* Attaccanti */}
+          <div className="flex items-center gap-4 flex-wrap">
+            {[entry1, entry2].map((entry, idx) => {
+              const atkTypes = pokemonData[entry.atk.key]?.type || []
+              const borderColor = TYPE_HEX[TYPE_NAMES[atkTypes[0]]] || '#4b5563'
+              const accentCls = idx === 0 ? 'text-teal-300' : 'text-violet-300'
+              return (
+                <div key={idx} className="flex items-center gap-3 shrink-0">
+                  <div className="w-[72px] h-[72px] lg:w-[80px] lg:h-[80px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
+                    style={{ borderColor }}>
+                    <img src={spriteUrl(entry.atk.key)} alt={entry.atk.key}
+                      className="w-16 h-16 lg:w-[72px] lg:h-[72px] object-contain"
+                      onError={e => { const fb = fallbackSpriteUrl(entry.atk.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
                   </div>
-                  {activeSel && (
-                    <div className="text-[10px] text-gray-500 font-mono leading-relaxed">
-                      {buildSmogonString(entry.atk, def, activeSel.move, activeSel.result)}
+                  <div>
+                    <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${accentCls}`}>
+                      {idx === 0 ? 'Attacker 1' : 'Attacker 2'}
                     </div>
+                    <div className="text-sm font-bold text-white uppercase tracking-wide leading-tight mb-1.5">
+                      {entry.atk.key.replace(/-/g, ' ').toUpperCase()}
+                    </div>
+                    <div className="flex gap-1 flex-wrap">
+                      {atkTypes.map(t => <TypeBadge key={t} typeIdx={t} />)}
+                    </div>
+                  </div>
+                  {idx === 0 && (
+                    <div className="flex items-center px-3 shrink-0 text-gray-500 text-xl font-light">+</div>
                   )}
-                </>
-              ) : <div className="text-xs text-gray-600">No offensive moves</div>}
+                </div>
+              )
+            })}
+
+          </div>
+
+          {/* Separatore */}
+          <div className="hidden lg:block w-px bg-gray-700/30 mx-4 self-stretch" />
+
+          {/* Difensore */}
+          {(() => {
+            const defTypes = pokemonData[def.key]?.type || []
+            const borderColor = TYPE_HEX[TYPE_NAMES[defTypes[0]]] || '#4b5563'
+            return (
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="w-[72px] h-[72px] lg:w-[80px] lg:h-[80px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
+                  style={{ borderColor }}>
+                  <img src={spriteUrl(def.key)} alt={def.key}
+                    className="w-16 h-16 lg:w-[72px] lg:h-[72px] object-contain"
+                    onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Defender</div>
+                  <div className="text-sm font-bold text-white uppercase tracking-wide leading-tight mb-1.5">
+                    {def.key.replace(/-/g, ' ').toUpperCase()}
+                  </div>
+                  <div className="flex gap-1 flex-wrap">
+                    {defTypes.map(t => <TypeBadge key={t} typeIdx={t} />)}
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
+
+          {/* Separatore */}
+          <div className="hidden lg:block w-px bg-gray-700/30 mx-4 self-stretch" />
+
+          {/* Badge danno cumulativo */}
+          {cumulative && (
+            <div className="shrink-0 text-right ml-auto">
+              <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">Combined Damage</div>
+              <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
+              <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
+              <div className="mt-2">
+                <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
+                  {cumulative.minPct >= 100 ? '✓ Guaranteed KO' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ No KO'}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Bottoni mossa per ogni attaccante */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-700/30 border-b border-gray-700/20">
+          {[entry1, entry2].map((entry, idx) => {
+            const moves = idx === 0 ? moves1 : moves2
+            const sel = idx === 0 ? sel1 : sel2
+            const setSel = idx === 0 ? setSel1 : setSel2
+            const deflt = idx === 0 ? default1 : default2
+            const ringCls = idx === 0 ? 'ring-teal-400' : 'ring-violet-400'
+            const labelCls = idx === 0 ? 'text-teal-400' : 'text-violet-400'
+            return (
+              <div key={idx} className="px-4 py-3 space-y-2">
+                <div className={`text-[9px] uppercase tracking-[0.15em] font-semibold ${labelCls}`}>
+                  {entry.atk.key.split('-')[0].toUpperCase()} moves
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {moves.map(({ move: mv, result: res }) => {
+                    const isSel = mv === (sel || deflt?.move)
+                    const pct = res.maxPct
+                    const koColor = pct >= 100 ? 'border-red-500/50 text-red-300' : pct >= 50 ? 'border-orange-500/40 text-orange-300' : 'border-gray-600/40 text-gray-400'
+                    return (
+                      <button key={mv} type="button" onClick={() => setSel(mv)}
+                        className={`px-3 py-2 rounded-lg border text-left transition-all bg-gray-800/30 ${koColor} ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
+                        <div className="text-[11px] font-semibold capitalize truncate tracking-wide">{mv.replace(/-/g, ' ')}</div>
+                        <div className="text-[11px] font-bold opacity-90 mt-0.5">{res.minPct}–{res.maxPct}%</div>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Barra segmentata combinata */}
+        {cumulative && (() => {
+          const segColors = cumulative.rolls1.map((r, i) => r + cumulative.rolls2[i] >= cumulative.defHP)
+          return (
+            <div className="px-5 py-3 border-b border-gray-700/20">
+              <div className="flex items-center gap-3">
+                <div className="text-left shrink-0">
+                  <div className="text-[10px] text-gray-500 uppercase">Min</div>
+                  <div className="text-sm font-bold text-gray-200">{cumulative.minSum}</div>
+                </div>
+                <div className="flex-1 flex gap-[3px]">
+                  {segColors.map((isKO, i) => (
+                    <div key={i} className={`h-2.5 flex-1 rounded-sm ${isKO ? 'bg-purple-500' : 'bg-gray-700/70'}`} />
+                  ))}
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-[10px] text-gray-500 uppercase">Max</div>
+                  <div className="text-sm font-bold text-gray-200">{cumulative.maxSum}</div>
+                </div>
+              </div>
+              <div className="text-center mt-1.5">
+                <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">
+                  KO Threshold: ≥ {cumulative.defHP} HP
+                </span>
+              </div>
+            </div>
+          )
+        })()}
+      </div>
+
+      {/* Stringhe Smogon */}
+      <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-3 space-y-2">
+        {[entry1, entry2].map((entry, idx) => {
+          const activeSel = idx === 0 ? active1 : active2
+          if (!activeSel) return null
+          return (
+            <div key={idx} className="text-[11px] font-mono text-gray-500 leading-relaxed">
+              {buildSmogonString(entry.atk, def, activeSel.move, activeSel.result)}
             </div>
           )
         })}
       </div>
-
-      <div className="text-center text-gray-600 text-xs">↓ combined damage on</div>
-
-      {cumulative && (() => {
-        const sums = cumulative.rolls1.map((r, i) => r + cumulative.rolls2[i])
-        const midSum = sums[Math.floor(sums.length / 2)]
-        const koPct  = Math.round(cumulative.koCount / cumulative.totalCombos * 100)
-        return (
-          <div className="bg-gray-900/80 rounded-lg p-4 border border-gray-700 space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b border-gray-700/50">
-              <img src={spriteUrl(def.key)} alt={def.key} className="w-10 h-10 object-contain" onError={e => { const fb = fallbackSpriteUrl(e.target.alt || ''); if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' } }} />
-              <div>
-                <div className="text-sm font-bold text-gray-100 capitalize">{def.key.replace(/-/g, ' ')}</div>
-                <div className="text-xs text-gray-500">{cumulative.defHP} HP</div>
-              </div>
-            </div>
-            <div className="text-sm text-gray-400 leading-relaxed">
-              <span className="text-teal-400 font-semibold capitalize">{entry1.atk.key}</span>
-              {active1 && <span className="text-gray-500"> uses <span className="text-gray-200 capitalize">{active1.move.replace(/-/g, ' ')}</span></span>}
-              <span className="text-gray-600"> + </span>
-              <span className="text-violet-400 font-semibold capitalize">{entry2.atk.key}</span>
-              {active2 && <span className="text-gray-500"> uses <span className="text-gray-200 capitalize">{active2.move.replace(/-/g, ' ')}</span></span>}
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className={`text-lg font-bold shrink-0 ${cumulative.minPct >= 100 ? 'text-red-400' : cumulative.maxPct >= 100 ? 'text-orange-400' : 'text-teal-300'}`}>
-                {cumulative.minPct}–{cumulative.maxPct}%
-              </span>
-              <div className={`px-3 py-1.5 rounded-lg border font-bold text-sm tracking-wide text-center ${badge.cls}`}>
-                {cumulative.minPct >= 100 ? '✓ Guaranteed KO' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ No KO'}
-              </div>
-            </div>
-            <div className="text-[11px] text-gray-500 font-mono">min {cumulative.minSum} · mid {midSum} · max {cumulative.maxSum}<span className="text-gray-600"> / {cumulative.defHP} HP</span></div>
-            <div className="text-[10px] text-gray-600 font-mono">{cumulative.koCount}/{cumulative.totalCombos} KO combinations ({koPct}%)</div>
-          </div>
-        )
-      })()}
     </div>
   )
 }
+
 
 // ── ReportPanel root ──────────────────────────────────────────────────────────
 
@@ -818,17 +948,13 @@ export default function ReportPanel({ selection, onClose }) {
   const liveSelection = isDouble ? [entry1, entry2] : [entry1]
 
   return (
-    <div className="mb-4">
+    <section aria-label="Damage report" className="mb-4">
       {/* Pulsante chiudi fuori dal pannello */}
-      <div className="flex justify-end mb-1">
-        <button onClick={onClose} className="text-gray-500 hover:text-white text-xs px-2 py-1 rounded border border-gray-700 hover:border-gray-500 transition-colors">
-          ✕ close
-        </button>
-      </div>
+
       {isDouble
         ? <CumulativePanel entries={liveSelection} />
-        : <SinglePanel entry={entry1} />
+        : <SinglePanel entry={entry1} onClose={onClose} />
       }
-    </div>
+    </section>
   )
 }

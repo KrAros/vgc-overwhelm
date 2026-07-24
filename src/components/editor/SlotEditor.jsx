@@ -19,7 +19,7 @@ import { ImportModal, DuplicateModal } from './Modals.jsx'
 
 // ─── PokemonPanel ─────────────────────────────────────────────────────────────
 
-export default function PokemonPanel({ team, index }) {
+export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const pokemon        = useCalcStore(s => s[team][index])
   const level          = useCalcStore(s => s.level)
   const setPokemon     = useCalcStore(s => s.setPokemon)
@@ -301,6 +301,7 @@ export default function PokemonPanel({ team, index }) {
                   const conditions = SPEED_MAP[(ability || '').toLowerCase()] || []
                   return conditions.includes((weather || '').toLowerCase())
                 })()}
+                tailwindActive={i === 5 && tailwindActive}
               />
             ))}
           </div>

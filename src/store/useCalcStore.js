@@ -187,6 +187,7 @@ const useCalcStore = create((set) => ({
   weather: null,
   terrain: null,
   helpingHand: { t1: false, t2: false },
+  tailwind:    { t1: false, t2: false },
   auroraVeil:  { t1: false, t2: false },
   lightScreen: { t1: false, t2: false },
   reflect:     { t1: false, t2: false },
@@ -200,8 +201,12 @@ const useCalcStore = create((set) => ({
   toggleTrickRoom: () => set((s) => ({ trickRoom: !s.trickRoom })),
 
   // Focus editor: cliccando uno sprite in DamageTable si apre il suo tab nel TeamEditor
-  editorFocus: null,   // { team: 'team1'|'team2', index: 0-5, ts: number }
+  editorFocus: null,   // { team: 'team1'|'team2', index: 0-5, ts: number } — usato dal click sprite
+  team1Focus: null,    // { index, ts } — focus diretto per team1
+  team2Focus: null,    // { index, ts } — focus diretto per team2
   setEditorFocus: (team, index) => set({ editorFocus: { team, index, ts: Date.now() } }),
+  setTeam1Focus: (index) => set({ team1Focus: { index, ts: Date.now() } }),
+  setTeam2Focus: (index) => set({ team2Focus: { index, ts: Date.now() } }),
   toggleDoubleTarget: () => set((s) => ({ doubleTarget: !s.doubleTarget })),
   toggleShowKoOnly: () => set((s) => ({ showKoOnly: !s.showKoOnly })),
   setDoubleTarget: (val) => set({ doubleTarget: val }),

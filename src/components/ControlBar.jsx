@@ -31,6 +31,7 @@ function ModBtn({ label, active, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
+      aria-pressed={active}
       className={`text-xs px-2 py-1 rounded border transition-colors ${
         active ? activeClass : 'text-gray-400 border-gray-600/40 hover:bg-gray-800/60'
       }`}
@@ -49,6 +50,7 @@ export default function ControlBar() {
   const reflect      = useCalcStore(s => s.reflect)
   const crit         = useCalcStore(s => s.crit)
   const showKoOnly   = useCalcStore(s => s.showKoOnly)
+  const tailwind     = useCalcStore(s => s.tailwind)
   const team1        = useCalcStore(s => s.team1)
   const team2        = useCalcStore(s => s.team2)
   const toggleModifier   = useCalcStore(s => s.toggleModifier)
@@ -93,11 +95,12 @@ export default function ControlBar() {
   }
 
   const MODS = [
-    { label: 'HH',   mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
-    { label: 'Veil', mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
-    { label: 'LS',   mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
-    { label: 'Ref',  mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
-    { label: 'Crit', mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: 'HH',  mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
+    { label: 'Veil', mod: 'auroraVeil', active: 'bg-blue-400   text-gray-900' },
+    { label: 'LS',  mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
+    { label: 'Ref',  mod: 'reflect',    active: 'bg-pink-400   text-gray-900' },
+    { label: 'Crit', mod: 'crit',       active: 'bg-red-400    text-gray-900' },
+    { label: 'TW',   mod: 'tailwind',   active: 'bg-cyan-400   text-gray-900' },
   ]
 
   const MODS_DESKTOP = [
@@ -106,9 +109,10 @@ export default function ControlBar() {
     { label: 'Light Screen', mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
     { label: 'Reflect',      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
     { label: 'Crit',         mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: 'Tailwind',     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
-  const modVals = { helpingHand, auroraVeil, lightScreen, reflect, crit }
+  const modVals = { helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind }
 
   const btnBase   = 'flex items-center justify-center gap-1 text-xs px-2.5 py-1 rounded border transition-colors'
   const btnNormal = `${btnBase} bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40`
@@ -117,7 +121,7 @@ export default function ControlBar() {
 
   return (
     <div className="mb-3">
-      <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
+      <div role="group" aria-label="Team modifiers and actions" className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
 
         {/* ── DESKTOP ── */}
         <div className="hidden sm:block space-y-2">

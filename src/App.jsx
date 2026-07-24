@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import useCalcStore from './store/useCalcStore'
 import TopBar from './components/TopBar'
 import DamageTable from './components/DamageTable'
 import TeamEditor from './components/TeamEditor'
@@ -15,10 +16,21 @@ import ControlBar from './components/ControlBar'
 function App() {
   const [reportSelection, setReportSelection] = useState(null)
   const reportRef = useRef(null)
+  const setTeam1Focus = useCalcStore(s => s.setTeam1Focus)
+  const setTeam2Focus = useCalcStore(s => s.setTeam2Focus)
 
   const handleCellSelect = (sel) => {
     setReportSelection(sel || null)
     if (sel) {
+      // Seleziona in background i tab del TeamEditor per attaccante e difensore
+      // sel è un array — prendi il primo elemento
+      const first = Array.isArray(sel) ? sel[0] : sel
+      if (first) {
+        const t1idx = first.atkTeam === 'team1' ? first.atkIndex : first.defIndex
+        const t2idx = first.atkTeam === 'team2' ? first.atkIndex : first.defIndex
+        setTeam1Focus(t1idx)
+        setTeam2Focus(t2idx)
+      }
       setTimeout(() => {
         reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
@@ -32,6 +44,13 @@ function App() {
 
   return (
     <div className="min-h-screen text-white flex flex-col">
+      <a href="#main-content"
+        style={{ position:'absolute', width:'1px', height:'1px', padding:0, margin:'-1px', overflow:'hidden', clip:'rect(0,0,0,0)', whiteSpace:'nowrap', border:0 }}
+        onFocus={e => Object.assign(e.target.style, { position:'fixed', top:'8px', left:'8px', width:'auto', height:'auto', padding:'6px 12px', margin:0, overflow:'visible', clip:'auto', whiteSpace:'normal', background:'#14b8a6', color:'#111', borderRadius:'6px', fontSize:'14px', fontWeight:600, zIndex:9999 })}
+        onBlur={e => Object.assign(e.target.style, { position:'absolute', width:'1px', height:'1px', padding:0, margin:'-1px', overflow:'hidden', clip:'rect(0,0,0,0)', whiteSpace:'nowrap' })}
+      >
+        Skip to main content
+      </a>
 
       {/* ── Navbar header ── */}
       <Header />

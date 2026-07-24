@@ -6,11 +6,12 @@ const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
-export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive }) {
+export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive, tailwindActive = false }) {
   const finalStat = calcFinalStat(base, sp, level, nature, statIdx)
 
   // Abilità meteo-velocità: raddoppiano la Spe sotto il meteo corrispondente
-  const speedBase = speedWeatherActive && statIdx === 5 ? finalStat * 2 : null
+  const speedMult = statIdx === 5 ? (speedWeatherActive ? 2 : 1) * (tailwindActive ? 2 : 1) : 1
+  const speedBase = speedMult > 1 ? finalStat * speedMult : null
   const effectiveStat = speedBase ?? finalStat
 
   const boostedStat = boostVal !== 0

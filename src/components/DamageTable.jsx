@@ -112,7 +112,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
 
   // Speed tier: chi va prima?
-  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom)
+  const twAtk = field.atkTeamSide === 't2' ? field.tailwindT2 : field.tailwindT1
+  const twDef = field.atkTeamSide === 't2' ? field.tailwindT1 : field.tailwindT2
+  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom, twAtk, twDef)
   const goesFirstT1 = speedFirst === 't1'
   const goesFirstT2 = speedFirst === 't2'
 
@@ -155,6 +157,10 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     return (
       <div
         onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) } }}
+        aria-label={d ? `${dir === 't1' ? attacker?.key : defender?.key} uses ${d.move}, ${d.result.minPct}–${d.result.maxPct}% damage` : `${dir === 't1' ? '▶' : '◀'} no move`}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
         } ${halfSelected} ${dim ? 'opacity-20 pointer-events-none' : ''}`}
@@ -220,6 +226,7 @@ export default function DamageTable({ onCellSelect }) {
   const crit        = useCalcStore(s => s.crit)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const trickRoom    = useCalcStore(s => s.trickRoom)
+  const tailwind     = useCalcStore(s => s.tailwind)
   const setEditorFocus = useCalcStore(s => s.setEditorFocus)
 
   // Click sprite → apri tab nel TeamEditor e scrolla
@@ -239,6 +246,9 @@ export default function DamageTable({ onCellSelect }) {
     crit:        crit.t1,
     doubleTarget,
     trickRoom,
+    tailwindT1: tailwind.t1,
+    tailwindT2: tailwind.t2,
+    atkTeamSide: 't1',
   }
 
   const fieldReversed = {
@@ -250,6 +260,9 @@ export default function DamageTable({ onCellSelect }) {
     crit:        crit.t2,
     doubleTarget,
     trickRoom,
+    tailwindT1: tailwind.t1,
+    tailwindT2: tailwind.t2,
+    atkTeamSide: 't2',
   }
 
   const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
@@ -338,7 +351,7 @@ export default function DamageTable({ onCellSelect }) {
 
       <div className="xl:flex xl:gap-3 xl:items-start">
       <div className="overflow-x-auto rounded-xl border border-gray-700/40 xl:flex-1 xl:min-w-0">
-        <table className="w-full border-separate border-spacing-0 text-xs">
+        <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label="Damage matchup matrix">
           <thead>
             <tr>
               {/* Intestazione angolo — sticky su mobile */}

@@ -23,7 +23,7 @@ const SPEED_WEATHER_CONDITIONS = {
 const BOOST_NUM = [2,2,2,2,2,2,2,3,4,5,6,7,8]
 const BOOST_DEN = [8,7,6,5,4,3,2,2,2,2,2,2,2]
 
-export function calcEffectiveSpe(pokemon, weather) {
+export function calcEffectiveSpe(pokemon, weather, tailwind = false) {
   if (!pokemon?.key) return 0
   const base = pokemonData[pokemon.key]?.stats?.[5] ?? 0
   const sp   = pokemon.sps?.[5] ?? 0
@@ -34,6 +34,9 @@ export function calcEffectiveSpe(pokemon, weather) {
   if (boostVal !== 0) {
     spe = Math.floor(spe * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
   }
+
+  // Tailwind raddoppia la Spe (si moltiplica con l'abilità meteo)
+  if (tailwind) spe = spe * 2
 
   const abilityKey = (pokemon.ability || '').toLowerCase()
   const conditions = SPEED_WEATHER_CONDITIONS[abilityKey] || []
@@ -47,14 +50,14 @@ export function calcEffectiveSpe(pokemon, weather) {
 /**
  * Restituisce 't1' se T1 va prima, 't2' se T2 va prima, null se tie.
  */
-export function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom) {
+export function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom, tailwindT1 = false, tailwindT2 = false) {
   const p1 = movesData[bestMoveT1?.move]?.priority ?? 0
   const p2 = movesData[bestMoveT2?.move]?.priority ?? 0
 
   if (p1 !== p2) return p1 > p2 ? 't1' : 't2'
 
-  const spe1 = calcEffectiveSpe(t1, weather)
-  const spe2 = calcEffectiveSpe(t2, weather)
+  const spe1 = calcEffectiveSpe(t1, weather, tailwindT1)
+  const spe2 = calcEffectiveSpe(t2, weather, tailwindT2)
 
   if (spe1 === spe2) return null
   if (trickRoom) return spe1 < spe2 ? 't1' : 't2'

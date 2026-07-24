@@ -18,6 +18,7 @@ function Btn({ label, active, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
+      aria-pressed={active}
       className={`text-xs px-3 py-1 rounded border transition-colors ${
         active ? activeClass : 'text-gray-400 border-gray-600/40 hover:bg-gray-800/60'
       }`}
@@ -39,7 +40,7 @@ export default function TopBar() {
   const setTerrain         = useCalcStore(s => s.setTerrain)
 
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
+    <div role="group" aria-label="Battle conditions" className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
 
       {/* ── DESKTOP: layout orizzontale originale ── */}
       <div className="hidden sm:flex flex-nowrap gap-3 items-center justify-between overflow-x-auto">
@@ -49,6 +50,7 @@ export default function TopBar() {
           <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Options</span>
           <button
             onClick={toggleTrickRoom}
+            aria-pressed={trickRoom}
             className={`text-xs px-2 py-1 rounded border transition-colors ${
               trickRoom ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
             }`}
@@ -57,6 +59,7 @@ export default function TopBar() {
           </button>
           <button
             onClick={toggleDoubleTarget}
+            aria-pressed={doubleTarget}
             className={`text-xs px-2 py-1 rounded border transition-colors ${
               doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
             }`}
@@ -73,6 +76,7 @@ export default function TopBar() {
           <div className="flex gap-1">
             <button
               onClick={() => setTerrain(null)}
+              aria-pressed={!terrain}
               className={`text-xs px-2 py-1 rounded border transition-colors ${
                 !terrain ? 'bg-gray-500 text-white border-gray-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
               }`}
@@ -93,6 +97,7 @@ export default function TopBar() {
           <div className="flex gap-1">
             <button
               onClick={() => setWeather(null)}
+              aria-pressed={!weather}
               className={`text-xs px-2 py-1 rounded border transition-colors ${
                 !weather ? 'bg-gray-500 text-white border-gray-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
               }`}

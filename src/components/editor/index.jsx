@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useCalcStore from '../../store/useCalcStore'
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
 import PokemonPanel from './SlotEditor.jsx'
@@ -8,15 +8,25 @@ import PokemonPanel from './SlotEditor.jsx'
 export default function TeamEditor({ team }) {
   const [activeTab, setActiveTab] = useState(0)
   const teamData = useCalcStore(s => s[team])
-  const editorFocus = useCalcStore(s => s.editorFocus)
+  const editorFocus  = useCalcStore(s => s.editorFocus)
+  const tailwind     = useCalcStore(s => s.tailwind)
+  const team1Focus   = useCalcStore(s => s.team1Focus)
+  const team2Focus   = useCalcStore(s => s.team2Focus)
+  const directFocus  = team === 'team1' ? team1Focus : team2Focus
 
-  // Cliccando uno sprite in DamageTable, apri il tab corrispondente.
-  // Pattern React "adjust state during render": niente useEffect, nessun render extra committato.
+  // Focus da click sprite (editorFocus) — per team specifico
   const [lastFocusTs, setLastFocusTs] = useState(null)
   if (editorFocus && editorFocus.team === team && editorFocus.ts !== lastFocusTs) {
     setLastFocusTs(editorFocus.ts)
     setActiveTab(editorFocus.index)
   }
+  // Focus da click cella (directFocus) — useEffect per evitare problemi di ordine
+  // Focus da click cella — setTimeout evita cascading renders
+  useEffect(() => {
+    if (!directFocus) return
+    const t = setTimeout(() => setActiveTab(directFocus.index), 0)
+    return () => clearTimeout(t)
+  }, [directFocus])
 
   return (
     <div id={`team-editor-${team}`} className="bg-gray-900 rounded-xl border border-gray-700/40">
@@ -55,7 +65,7 @@ export default function TeamEditor({ team }) {
           )
         })}
       </div>
-      <PokemonPanel team={team} index={activeTab} />
+      <PokemonPanel team={team} index={activeTab} tailwindActive={team === 'team1' ? tailwind.t1 : tailwind.t2} />
     </div>
   )
 }
