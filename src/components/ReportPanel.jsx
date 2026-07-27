@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
-import { buildSmogonString, EOT_STRINGS } from '../utils/smogonString'
+import { buildSmogonString } from '../utils/smogonString'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
@@ -88,16 +88,15 @@ function simulateSitrus(rolls, defHP, eot = 0, condParts = [], useSitrus = true)
   const bestTurn = Object.entries(koAtTurn).filter(([, p]) => p > 0.0001).sort((a, b) => Number(a[0]) - Number(b[0]))[0]
   const totalKoProb = Object.values(koAtTurn).reduce((a, b) => a + b, 0)
   const activeTurns = Object.values(koAtTurn).filter(p => p > 0.0001).length
-  const allParts = useSitrus ? [...condParts, EOT_STRINGS.sitrusRecovery] : [...condParts]
-  const condStr = allParts.join(' and ')
+  const allParts = useSitrus ? [...condParts, 'sitrus'] : [...condParts]
   let summary
   if (!bestTurn || totalKoProb < 0.0001) {
-    summary = { text: `${EOT_STRINGS.noKoIn6} ${condStr}`, color: 'text-green-400' }
+    summary = { type: 'noKo', condParts: allParts }
   } else if (totalKoProb > 0.9999 && activeTurns === 1) {
-    summary = { text: `${EOT_STRINGS.guaranteed} ${bestTurn[0]}HKO ${EOT_STRINGS.after} ${condStr}`, color: 'text-orange-400' }
+    summary = { type: 'guaranteed', turn: bestTurn[0], condParts: allParts, color: 'text-orange-400' }
   } else {
     const pct = Math.round(bestTurn[1] * 1000) / 10
-    summary = { text: `${pct}% ${EOT_STRINGS.chanceTo} ${bestTurn[0]}HKO ${EOT_STRINGS.after} ${condStr}`, color: pct >= 50 ? 'text-orange-400' : 'text-yellow-400' }
+    summary = { type: 'chance', pct, turn: bestTurn[0], condParts: allParts, color: pct >= 50 ? 'text-orange-400' : 'text-yellow-400' }
   }
   return { healTurns, midDmg, hko, summary }
 }
@@ -142,7 +141,7 @@ function HpStep({ range, defKey }) {
 
 // ── Turn narrative bar ────────────────────────────────────────────────────────
 
-function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, endOfTurnInfo, activeMove, defHP }) {
+function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, sitrusText, endOfTurnInfo, activeMove, defHP }) {
   const { t } = useTranslation()
   const steps = []
 
@@ -167,8 +166,9 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
   if (isSand && !isSandImmune && sandDmgHP > 0) {
     const pct = Math.floor(sandDmgHP / defHP * 1000) / 10
     steps.push(
-      <span key="sand" className="flex items-center gap-1.5 text-yellow-500 text-xs font-medium">
-        🌪 <span className="capitalize">{defender.key.split('-')[0]} takes {pct}%</span>
+      <span key="sand" className="flex items-center gap-1.5 text-xs font-medium">
+        <span className="text-[#c2a139]">🌪</span>
+        <span className="text-red-400 capitalize">{defender.key.split('-')[0].charAt(0).toUpperCase() + defender.key.split('-')[0].slice(1)} {t('eot.takes_pct')} {pct}%</span>
       </span>
     )
   }
@@ -186,7 +186,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
 
   // 5. Risultato
   if (endOfTurnInfo || sitrus) {
-    const text = sitrus ? sitrus.summary.text : endOfTurnInfo?.text
+    const text = sitrus ? sitrusText : endOfTurnInfo?.text
     steps.push(
       <span key="result" className="flex items-center gap-1.5 font-bold text-orange-400 text-xs">
         🎯 <span>{text}</span>
@@ -251,8 +251,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const sandDmgHP   = isSand && !isSandImmune ? Math.floor(defHP / 16) : 0
   const eot = leftoversHP - sandDmgHP
   const eotParts = []
-  if (isSand && !isSandImmune) eotParts.push(EOT_STRINGS.sandstormDamage)
-  if (leftoversHP > 0)         eotParts.push(EOT_STRINGS.leftoversRecovery)
+  if (isSand && !isSandImmune) eotParts.push('sand')
+  if (leftoversHP > 0)         eotParts.push('left')
   const sitrus = hasSitrus ? simulateSitrus(rolls, defHP, eot, eotParts) : null
 
   function computeKOChance(damage, hp, eot, hits) {
@@ -274,24 +274,39 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
     return sum / n
   }
 
+  const formatSummary = (s) => {
+    if (!s) return ''
+    const partLabels = (s.condParts || []).map(p =>
+      p === 'sitrus' ? t('eot.sitrus_recovery') :
+      p === 'sand'   ? t('eot.sandstorm_damage') :
+      p === 'left'   ? t('eot.leftovers_recovery') : p
+    )
+    const condStr = partLabels.join(` ${t('eot.and')} `)
+    if (s.type === 'noKo')       return `${t('eot.no_ko_in_6')} ${condStr}`
+    if (s.type === 'guaranteed') return `${t('eot.guaranteed')} ${s.turn}HKO ${t('eot.after')} ${condStr}`
+    if (s.type === 'chance')     return `${s.pct}% ${t('eot.chance_to')} ${s.turn}HKO ${t('eot.after')} ${condStr}`
+    return condStr
+  }
+
   const endOfTurnInfo = (() => {
     if (leftoversHP === 0 && sandDmgHP === 0) return null
     if (result.minPct >= 100) return null
     const parts = []
-    if (isSand && !isSandImmune) parts.push(EOT_STRINGS.sandstormDamage)
-    if (leftoversHP > 0)         parts.push(EOT_STRINGS.leftoversRecovery)
-    const condStr = parts.join(' and ')
-    if (eot === 0) return { text: `${condStr} ${EOT_STRINGS.neutralize}`, hkoSuffix: null }
-    for (let hits = 2; hits <= 4; hits++) {
+    if (isSand && !isSandImmune) parts.push('sand')
+    if (leftoversHP > 0)         parts.push('left')
+    const partLabels = parts.map(p => p === 'sand' ? t('eot.sandstorm_damage') : t('eot.leftovers_recovery'))
+    const condStr = partLabels.join(` ${t('eot.and')} `)
+    if (eot === 0) return { text: `${condStr} ${t('eot.neutralize')}`, hkoSuffix: null }
+    for (let hits = 2; hits <= 6; hits++) {
       const chance = computeKOChance(rolls, defHP, eot, hits)
       if (chance > 0) {
         const pct = Math.max(Math.min(Math.round(chance * 1000), 999), 1) / 10
         const label = `${hits}HKO`
-        if (chance >= 1) return { text: `${EOT_STRINGS.guaranteed} ${label} ${EOT_STRINGS.after} ${condStr}`, hkoSuffix: `${label}†`, guaranteed: true }
-        return { text: `${pct}% ${EOT_STRINGS.chanceTo} ${label} ${EOT_STRINGS.after} ${condStr}`, hkoSuffix: `${label}†`, pct }
+        if (chance >= 1) return { text: `${t('eot.guaranteed')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: `${label}†`, guaranteed: true }
+        return { text: `${pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: `${label}†`, pct }
       }
     }
-    if (condStr) return { text: `${EOT_STRINGS.after} ${condStr}`, hkoSuffix: null }
+    if (condStr) return { text: `${t('eot.after')} ${condStr}`, hkoSuffix: null }
     return null
   })()
 
@@ -421,18 +436,18 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 <div className="text-[20px] font-black text-orange-400 leading-tight">{isOHKO ? '100%' : `${ohkoPct}%`}</div>
                 <div className="text-[9px] font-bold text-orange-400 uppercase tracking-widest mt-0.5">1HKO Chance</div>
               </div>
-            ) : (endOfTurnInfo?.text || hko) ? (
+            ) : (
               <div className="border border-gray-600/40 rounded-lg px-3 py-2 bg-gray-800/40 w-37.5 text-center">
                 <div className="text-[10px] font-semibold text-gray-300 leading-snug">{endOfTurnInfo?.text ?? hko}</div>
               </div>
-            ) : null}
+            )}
             <button
               type="button"
               onClick={() => { const el = document.getElementById('damage-rolls-card'); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}
               aria-label={t("report.scroll_rolls")}
               className="text-[11px] font-semibold text-teal-300 uppercase tracking-[0.08em] border border-teal-700/50 rounded-lg px-4 py-1.5 hover:bg-teal-950/40 transition-colors w-37.5 text-center"
             >
-              Damage Rolls
+              {t('report.scroll_to_rolls')}
             </button>
           </div>
         </div>
@@ -445,6 +460,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           sandDmgHP={sandDmgHP}
           leftoversHP={leftoversHP}
           sitrus={sitrus}
+          sitrusText={sitrus ? formatSummary(sitrus.summary) : null}
           endOfTurnInfo={endOfTurnInfo}
           activeMove={move}
           defHP={defHP}
@@ -502,7 +518,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 {/* Start */}
                 <div className="flex flex-col items-center shrink-0 w-20">
                   <div className="h-10 flex items-center justify-center mb-2">
-                    <span className="text-3xl">🤍</span>
+                    <span className="text-3xl">❤️</span>
                   </div>
                   <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.start")}</div>
                   <div className="text-[10px] text-gray-400 capitalize leading-tight truncate w-full text-center">{def.key.split('-')[0]}</div>
@@ -539,7 +555,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <span className="text-gray-600 shrink-0 mb-8">→</span>
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
-                      <span className="text-3xl">🌪</span>
+                      <span className="text-3xl text-[#C2a193]">🌪</span>
                     </div>
                     <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.sandstorm")}</div>
                     <div className="text-xs font-bold text-red-400 mt-1">−{sandDmgHP} HP</div>
@@ -630,7 +646,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             </div>
           </div>
           <div className="text-center mt-2">
-            <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">KO Threshold: ≥ {defHP} HP</span>
+            <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">{t('report.ko_threshold')}: ≥ {defHP} HP</span>
           </div>
         </div>
       </div>
@@ -766,7 +782,7 @@ function CumulativePanel({ entries }) {
   }, [active1, active2])
 
   const badge = !cumulative ? null :
-    cumulative.minPct >= 100 ? { text: 't("eot.guaranteed") + " KO"', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
+    cumulative.minPct >= 100 ? { text: t('eot.guaranteed') + ' KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
     cumulative.koOf16 > 0    ? { text: `Likely KO (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
                                { text: t('report.no_ko'), cls: 'bg-gray-800 border-gray-600 text-gray-500' }
 
@@ -799,7 +815,7 @@ function CumulativePanel({ entries }) {
                   </div>
                   <div>
                     <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${accentCls}`}>
-                      {idx === 0 ? 'Attacker 1' : 'Attacker 2'}
+                      {idx === 0 ? t('report.attacker_n', { n: 1 }) : t('report.attacker_n', { n: 2 })}
                     </div>
                     <div className="text-sm font-bold text-white uppercase tracking-wide leading-tight mb-1.5">
                       {entry.atk.key.replace(/-/g, ' ').toUpperCase()}
@@ -856,7 +872,7 @@ function CumulativePanel({ entries }) {
               <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
               <div className="mt-2">
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
-                  {cumulative.minPct >= 100 ? '✓ t("eot.guaranteed") + " KO"' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ {t("report.no_ko")}'}
+                  {cumulative.minPct >= 100 ? '✓ ' + t('eot.guaranteed') + ' KO' : cumulative.koOf16 > 0 ? `⚡ ${t('report.likely_ko')} (${cumulative.koOf16}/16)` : '✗ ' + t('report.no_ko')}
                 </span>
               </div>
             </div>
@@ -875,7 +891,7 @@ function CumulativePanel({ entries }) {
             return (
               <div key={idx} className="px-4 py-3 space-y-2">
                 <div className={`text-[9px] uppercase tracking-[0.15em] font-semibold ${labelCls}`}>
-                  {entry.atk.key.split('-')[0].toUpperCase()} moves
+                  {entry.atk.key.split('-')[0].toUpperCase()} {t('report.moves')}
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
                   {moves.map(({ move: mv, result: res }) => {
@@ -896,15 +912,36 @@ function CumulativePanel({ entries }) {
           })}
         </div>
 
-        {/* Barra segmentata combinata */}
+        {/* Barra segmentata combinata — stile uguale al singolo */}
         {cumulative && (() => {
-          const segColors = cumulative.rolls1.map((r, i) => r + cumulative.rolls2[i] >= cumulative.defHP)
+          // 16 step uniformi da minSum a maxSum
+          const { minSum, maxSum, defHP, koOf16 } = cumulative
+          const step = (maxSum - minSum) / 15
+          const sums = Array.from({ length: 16 }, (_, i) => Math.round(minSum + i * step))
+          // segmenti KO sono quelli in fondo (valori più alti >= defHP)
+          const segColors = Array.from({ length: 16 }, (_, i) => i >= 16 - koOf16)
           return (
-            <div className="px-5 py-3 border-b border-gray-700/20">
+            <div className="px-5 py-4 border-b border-gray-700/20">
+              <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">{t('report.combined_damage')}</div>
+
+              {/* Chip somme */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {sums.map((s, i) => (
+                  <span key={i} className={`text-xs px-2.5 py-1 rounded font-mono font-semibold ${
+                    s >= defHP
+                      ? 'bg-red-950/60 text-red-300 border border-red-700/40'
+                      : 'bg-gray-800 text-gray-300 border border-gray-700/40'
+                  }`}>
+                    {s}
+                  </span>
+                ))}
+              </div>
+
+              {/* Barra MIN/MAX */}
               <div className="flex items-center gap-3">
                 <div className="text-left shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
-                  <div className="text-sm font-bold text-gray-200">{cumulative.minSum}</div>
+                  <div className="text-[10px] text-gray-500 uppercase">{t('report.min')}</div>
+                  <div className="text-sm font-bold text-gray-200">{minSum}</div>
                 </div>
                 <div className="flex-1 flex gap-0.75">
                   {segColors.map((isKO, i) => (
@@ -912,17 +949,18 @@ function CumulativePanel({ entries }) {
                   ))}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">{t("report.max")}</div>
-                  <div className="text-sm font-bold text-gray-200">{cumulative.maxSum}</div>
+                  <div className="text-[10px] text-gray-500 uppercase">{t('report.max')}</div>
+                  <div className="text-sm font-bold text-gray-200">{maxSum}</div>
                 </div>
               </div>
-              <div className="text-center mt-1.5">
+              <div className="text-center mt-2">
                 <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">
-                  KO Threshold: ≥ {cumulative.defHP} HP
+                  {t('report.ko_threshold')}: ≥ {defHP} HP
                 </span>
               </div>
             </div>
           )
+
         })()}
       </div>
 

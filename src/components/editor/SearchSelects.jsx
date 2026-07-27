@@ -3,6 +3,7 @@ import { useState } from 'react'
 import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
+import itLocale    from '../../locales/it.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { useTranslation } from 'react-i18next'
 
@@ -169,7 +170,12 @@ export function ItemSearch({ value, onChange }) {
   const [open, setOpen]     = useState(false)
 
   const filtered = query.length >= 2
-    ? ALL_ITEMS.filter(i => i.includes(query.toLowerCase())).slice(0, 20)
+    ? ALL_ITEMS.filter(i => {
+        const q = query.toLowerCase()
+        const enName = i.toLowerCase()
+        const itName = (itLocale.items?.[i] || '').toLowerCase()
+        return enName.includes(q) || itName.includes(q)
+      }).slice(0, 20)
     : []
 
   const hasValue = focused ? query.length > 0 : !!value
@@ -186,7 +192,7 @@ export function ItemSearch({ value, onChange }) {
       <input
         className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
         placeholder={t("ui.search_item")}
-        value={focused ? query : (value ? value.replace(/-/g, ' ') : '')}
+        value={focused ? query : (value ? t(`items.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
         onBlur={() => setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150)}
@@ -208,7 +214,7 @@ export function ItemSearch({ value, onChange }) {
               className="px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 cursor-pointer capitalize"
               onMouseDown={() => { onChange(i); setQuery(''); setOpen(false) }}
             >
-              {i.replace(/-/g, ' ')}
+              {t(`items.${i}`, { defaultValue: i.replace(/-/g, ' ') })}
             </div>
           ))}
         </div>
