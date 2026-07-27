@@ -42,14 +42,14 @@ export default function TopBar() {
   const setTerrain         = useCalcStore(s => s.setTerrain)
 
   return (
-    <div role="group" aria-label="Battle conditions" className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
+    <div role="group" aria-label={t("aria.battle_conditions")} className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
 
       {/* ── DESKTOP: layout orizzontale originale ── */}
       <div className="hidden sm:flex flex-nowrap gap-3 items-center justify-between overflow-x-auto">
 
         {/* Options */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Options</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.options")}</span>
           <button
             onClick={toggleTrickRoom}
             aria-pressed={trickRoom}
@@ -74,7 +74,7 @@ export default function TopBar() {
 
         {/* Field */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Field</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.field")}</span>
           <div className="flex gap-1">
             <button
               onClick={() => setTerrain(null)}
@@ -86,7 +86,7 @@ export default function TopBar() {
               {t("ui.none")}
             </button>
             {FIELDS.map(f => (
-              <Btn key={f.key} label={f.label} active={terrain === f.key} activeClass={f.active} onClick={() => setTerrain(f.key)} />
+              <Btn key={f.key} label={t("ui." + f.key)} active={terrain === f.key} activeClass={f.active} onClick={() => setTerrain(f.key)} />
             ))}
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function TopBar() {
 
         {/* Weather */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Weather</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.weather")}</span>
           <div className="flex gap-1">
             <button
               onClick={() => setWeather(null)}
@@ -107,7 +107,7 @@ export default function TopBar() {
               {t("ui.none")}
             </button>
             {WEATHERS.map(w => (
-              <Btn key={w.key} label={w.label} active={weather === w.key} activeClass={w.active} onClick={() => setWeather(w.key)} />
+              <Btn key={w.key} label={t("ui." + w.key)} active={weather === w.key} activeClass={w.active} onClick={() => setWeather(w.key)} />
             ))}
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function TopBar() {
 
         {/* Riga 2: Field + Weather come select */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Field</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.field")}</span>
           <select
             value={terrain ?? ''}
             onChange={e => setTerrain(e.target.value || null)}
@@ -149,11 +149,11 @@ export default function TopBar() {
           >
             <option value="">{t("ui.none")}</option>
             {FIELDS.map(f => (
-              <option key={f.key} value={f.key}>{f.label}</option>
+              <option key={f.key} value={f.key}>{t("ui." + f.key)}</option>
             ))}
           </select>
 
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">Weather</span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.weather")}</span>
           <select
             value={weather ?? ''}
             onChange={e => setWeather(e.target.value || null)}
@@ -161,7 +161,7 @@ export default function TopBar() {
           >
             <option value="">{t("ui.none")}</option>
             {WEATHERS.map(w => (
-              <option key={w.key} value={w.key}>{w.label}</option>
+              <option key={w.key} value={w.key}>{t("ui." + w.key)}</option>
             ))}
           </select>
         </div>

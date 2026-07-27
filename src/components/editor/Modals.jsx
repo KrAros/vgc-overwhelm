@@ -1,4 +1,5 @@
-import { spriteUrl } from '../../utils/sprite'
+import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
+import { useTranslation } from 'react-i18next'
 import { showdownToSlot } from './showdownHelpers.js'
 import { useState } from 'react'
 import useCalcStore from '../../store/useCalcStore'
@@ -72,6 +73,7 @@ export function ImportModal({ team, index, onClose, alwaysOpen = false }) {
  * In caso contrario duplica direttamente nel primo slot libero dopo l'attuale.
  */
 export function DuplicateModal({ team, sourceIndex, onClose }) {
+  const { t } = useTranslation()
   const teamData   = useCalcStore(s => s[team])
   const setTeamFn  = useCalcStore(s => s.setTeam)
 
@@ -101,8 +103,8 @@ export function DuplicateModal({ team, sourceIndex, onClose }) {
 
   // Tutti gli slot occupati → chiedi dove sovrascrivere
   return (
-    <div className="mt-2 p-2 bg-gray-900 rounded border border-gray-700">
-      <p className="text-xs text-gray-400 mb-2">Tutti gli slot sono occupati. Scegli dove sovrascrivere:</p>
+    <div className="my-3 mx-1 p-3 bg-gray-900 rounded border border-gray-700">
+      <p className="text-xs text-gray-400 mb-2">{t('editor.all_slots_full')}</p>
       <div className="flex gap-1 flex-wrap">
         {teamData.map((slot, i) => {
           if (i === sourceIndex) return null
@@ -112,11 +114,11 @@ export function DuplicateModal({ team, sourceIndex, onClose }) {
             <button
               key={i}
               onClick={() => duplicateTo(i)}
-              className="flex flex-col items-center gap-0.5 px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 border border-gray-600 transition-colors"
+              className="flex flex-col items-center gap-0.5 w-16 py-2 rounded bg-gray-700 hover:bg-gray-600 border border-gray-600 transition-colors"
             >
               {sprite && (
                 <img src={sprite} alt={name} className="w-8 h-8 object-contain"
-                  onError={e => { e.target.style.display = 'none' }} />
+                  onError={e => { const fb = fallbackSpriteUrl(slot.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display = 'none' }} />
               )}
               <span className="text-[10px] text-gray-300 capitalize">{name}</span>
             </button>
@@ -127,7 +129,7 @@ export function DuplicateModal({ team, sourceIndex, onClose }) {
         onClick={onClose}
         className="mt-2 text-xs text-gray-500 hover:text-gray-300"
       >
-        Annulla
+        {t('ui.cancel')}
       </button>
     </div>
   )

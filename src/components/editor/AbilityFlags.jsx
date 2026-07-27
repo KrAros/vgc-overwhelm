@@ -1,8 +1,10 @@
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
+import { useTranslation } from 'react-i18next'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
 export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather }) {
+  const { t } = useTranslation()
   const key = normalizeAbilityKey(ability)
 
   const SPEED_WEATHER_MAP = {
@@ -78,7 +80,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     const mult = (1 + kos * 0.1).toFixed(1)
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
-        <span className="text-gray-400 shrink-0">Alleati KO:</span>
+        <span className="text-gray-400 shrink-0">{t('editor.allies_ko')}</span>
         <div className="flex gap-1">
           {[0,1,2,3,4,5].map(n => (
             <button

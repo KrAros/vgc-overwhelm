@@ -80,6 +80,7 @@ function formatPokeName(key) {
 }
 
 function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, isOnAxis, hasSelection, selDir }) {
+  const { t } = useTranslation()
   // Oscura le celle non sull'asse del difensore
   const dimCell = hasSelection && !isOnAxis
   if (!attacker?.key || !defender?.key) {
@@ -172,10 +173,10 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
             <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
               {prefix} {d.move}
               {goesFirst && (
-                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title="Moves first">⚡</span>
+                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title={t("ui.moves_first")}>⚡</span>
               )}
               {movesData[d.move]?.spread === true && (
-                <span title="Spread move — colpisce entrambi gli avversari" className="text-yellow-400 inline-flex items-center">
+                <span title={t("ui.spread_move")} className="text-yellow-400 inline-flex items-center">
                   <SpreadIcon />
                 </span>
               )}
@@ -201,7 +202,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   }
 
   return (
-    <td className={`border-l border-t border-gray-700 ${cellRing} relative transition-all hover:brightness-125 w-[100px] min-w-[100px] max-w-[100px] ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
+    <td className={`border-l border-t border-gray-700 ${cellRing} relative transition-all hover:brightness-125 w-25 min-w-25 max-w-25 ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
       {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1)}
       {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2)}
     </td>
@@ -354,15 +355,15 @@ export default function DamageTable({ onCellSelect }) {
 
       <div className="xl:flex xl:gap-3 xl:items-start">
       <div className="overflow-x-auto rounded-xl border border-gray-700/40 xl:flex-1 xl:min-w-0">
-        <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label="Damage matchup matrix">
+        <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label={t("ui.damage_matrix")}>
           <thead>
             <tr>
               {/* Intestazione angolo — sticky su mobile */}
-              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-[80px] min-w-[80px] max-w-[80px] border-r border-b border-gray-700/50">
+              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-20 min-w-20 max-w-20 border-r border-b border-gray-700/50">
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
-                <th key={i} className={`sticky top-0 z-10 p-2 text-center font-medium w-[100px] min-w-[100px] max-w-[100px] overflow-hidden transition-all ${
+                <th key={i} className={`sticky top-0 z-10 p-2 text-center font-medium w-25 min-w-25 max-w-25 overflow-hidden transition-all ${
                   selRi !== null && selDir === 't1' && selCi === i
                     ? 'bg-teal-900/40 border-b border-gray-700'
                     : selRi !== null && selDir === 't2' && selCi === i
@@ -396,7 +397,7 @@ export default function DamageTable({ onCellSelect }) {
                           />
                         )}
                       </div>
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[4rem] sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-16 sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-600 text-[10px]">T2·{i+1}</div>
@@ -409,7 +410,7 @@ export default function DamageTable({ onCellSelect }) {
             {team1.map((row, ri) => (
               <tr key={ri} className="transition-colors">
                 {/* Prima colonna sticky */}
-                <td className={`sticky left-0 z-10 p-2 text-center border-r border-t border-gray-700/50 w-[80px] min-w-[80px] max-w-[80px] h-14 overflow-hidden transition-all ${
+                <td className={`sticky left-0 z-10 p-2 text-center border-r border-t border-gray-700/50 w-20 min-w-20 max-w-20 h-14 overflow-hidden transition-all ${
                   selRi === ri && selDir === 't2'
                     ? 'bg-teal-900/40'                          // difensore T1 (dir=t2)
                     : selRi === ri && selDir === 't1'
@@ -443,7 +444,7 @@ export default function DamageTable({ onCellSelect }) {
                           />
                         )}
                       </div>
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-[3.5rem] sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
+                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-14 sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-600 text-[10px]">T1·{ri+1}</div>
@@ -474,15 +475,15 @@ export default function DamageTable({ onCellSelect }) {
       </div>
 
       {/* ── Legend sidebar (desktop largo) ── */}
-      <aside className="hidden xl:block w-[190px] shrink-0 bg-gray-900 rounded-xl border border-gray-700/40 px-4 py-4 self-stretch">
-        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">Legend</div>
+      <aside className="hidden xl:block w-47.5 shrink-0 bg-gray-900 rounded-xl border border-gray-700/40 px-4 py-4 self-stretch">
+        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">{t("report.legend")}</div>
         <div className="space-y-2 text-xs text-gray-300">
-          <div className="flex items-center gap-2"><span className="text-teal-400">▶</span> Attacks</div>
-          <div className="flex items-center gap-2"><span className="text-red-400">◀</span> Attacked by</div>
-          <div className="flex items-center gap-2"><span className="text-yellow-400">⚡</span> Moves first</div>
-          <div className="flex items-center gap-2"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> Spread move</div>
+          <div className="flex items-center gap-2"><span className="text-teal-400">▶</span> {t("report.attacks")}</div>
+          <div className="flex items-center gap-2"><span className="text-red-400">◀</span> {t("report.attacked_by")}</div>
+          <div className="flex items-center gap-2"><span className="text-yellow-400">⚡</span> {t("ui.moves_first")}</div>
+          <div className="flex items-center gap-2"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</div>
         </div>
-        <div className="text-[11px] text-gray-500 mt-4 mb-2">Damage</div>
+        <div className="text-[11px] text-gray-500 mt-4 mb-2">{t("report.damage")}</div>
         <div className="space-y-1.5 text-xs">
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> <span className="text-green-400">0 – 25%</span></div>
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-teal-300 inline-block" /> <span className="text-teal-300">25 – 50%</span></div>
@@ -491,18 +492,18 @@ export default function DamageTable({ onCellSelect }) {
         </div>
         <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">{t("report.quick_info")}</div>
         <p className="text-[11px] text-gray-500 leading-relaxed">
-          Select a cell to see detailed damage analysis and KO chance. Click a sprite to open it in the Team Editor.
+          {t("report.quick_info_desc")}
         </p>
       </aside>
       </div>
 
       {/* ── Legend riga compatta (schermi sotto xl) ── */}
       <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-500">
-        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">Legend</span>
+        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">{t("report.legend")}</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> attacks</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> attacked by</span>
         <span className="flex items-center gap-1"><span className="text-yellow-400">⚡</span> moves first</span>
-        <span className="flex items-center gap-1"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> spread move</span>
+        <span className="flex items-center gap-1"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</span>
         <span className="text-gray-600">|</span>
         <span className="text-green-400">0–25%</span>
         <span className="text-teal-300">25–50%</span>

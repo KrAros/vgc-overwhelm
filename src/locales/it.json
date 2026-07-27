@@ -26,10 +26,10 @@
     "light_screen": "Schermo Luce",
     "reflect": "Riflesso",
     "crit": "Critico",
-    "tailwind": "Coda di Vento",
+    "tailwind": "Ventoincoda",
     "grassy": "Erboso",
     "electric": "Elettrico",
-    "misty": "Nebbia",
+    "misty": "Nebbioso",
     "psychic": "Psichico",
     "sun": "Sole",
     "rain": "Pioggia",
@@ -37,7 +37,22 @@
     "snow": "Neve",
     "nature_neutral": "Natura (neutra)",
     "no_offensive_moves": "Nessuna mossa offensiva disponibile.",
-    "import_paste": "Incolla qui il team Showdown completo (fino a 6 Pokémon, separati da righe vuote)..."
+    "import_paste": "Incolla qui il team Showdown completo (fino a 6 Pokémon, separati da righe vuote)...",
+    "spread_move": "Mossa spread — colpisce entrambi gli avversari",
+    "moves_first": "Attacca per primo",
+    "damage_matrix": "Matrice matchup danni",
+    "battle_conditions": "Condizioni di battaglia",
+    "cancel": "Annulla",
+    "copied": "Copiato",
+    "helpingHand": "Helping Hand",
+    "auroraVeil": "VeloAurora",
+    "lightScreen": "SchermoLuce",
+    "hhShort": "HH",
+    "veilShort": "Velo",
+    "lsShort": "SL",
+    "refShort": "Rif",
+    "critShort": "Crit",
+    "twShort": "CV"
   },
   "report": {
     "selected_matchup": "Matchup Selezionato",
@@ -68,7 +83,15 @@
     "share_discord": "Discord",
     "social_coming_soon": "Social — prossimamente",
     "quick_info": "Info Rapide",
-    "no_ko": "Nessun KO"
+    "no_ko": "Nessun KO",
+    "copy_calc_aria": "Copia stringa calcolo",
+    "close_aria": "Chiudi pannello",
+    "scroll_rolls": "Vai ai roll danno",
+    "damage_report_aria": "Report danno",
+    "attacks": "Attacca",
+    "attacked_by": "Attaccato da",
+    "spread_move": "Mossa spread",
+    "quick_info_desc": "Seleziona una cella per vedere l'analisi danno e la probabilità di KO. Clicca uno sprite per aprirlo nel Team Editor."
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",
@@ -76,7 +99,10 @@
     "export_showdown": "Esporta su Showdown",
     "import_showdown": "Importa da Showdown",
     "all_slots_full": "Tutti gli slot sono occupati. Scegli dove sovrascrivere:",
-    "last_respects_allies": "Last Respects — Alleati KO:"
+    "last_respects_allies": "Last Respects — Alleati KO:",
+    "allies_ko": "Alleati KO:",
+    "duplicate": "Duplica",
+    "error_details": "Dettagli errore"
   },
   "eot": {
     "leftovers_recovery": "Recupero Resti",
@@ -85,5 +111,11 @@
     "guaranteed": "Garantito",
     "show_sim": "Mostra simulazione turno per turno",
     "hide_sim": "Nascondi simulazione"
+  },
+  "aria": {
+    "team_modifiers": "Modificatori e azioni del team",
+    "switch_language": "Cambia lingua",
+    "github_repo": "Repository GitHub",
+    "battle_conditions": "Condizioni di battaglia"
   }
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import FiammaLogo from './FiammaLogo'
 import { useTranslation } from 'react-i18next'
 
@@ -17,26 +18,55 @@ const IconGitHub = () => (
 )
 
 function LangToggle() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const lang = i18n.language
-  const toggle = () => {
-    const next = lang === 'en' ? 'it' : 'en'
-    i18n.changeLanguage(next)
-    localStorage.setItem('lang', next)
+  const [open, setOpen] = useState(false)
+
+  const select = (l) => {
+    i18n.changeLanguage(l)
+    localStorage.setItem('lang', l)
+    setOpen(false)
   }
+
+  const LANGS = [
+    { code: 'en', flag: '🇬🇧', label: 'English' },
+    { code: 'it', flag: '🇮🇹', label: 'Italiano' },
+  ]
+  const current = LANGS.find(l => l.code === lang) || LANGS[0]
+
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      className="text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 text-gray-400 hover:text-white transition-colors"
-      aria-label="Switch language"
-    >
-      {lang === 'en' ? '🇮🇹' : '🇬🇧'}
-    </button>
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white transition-colors"
+        aria-label={t('aria.switch_language')}
+      >
+        <span>{current.flag}</span>
+        <span>{current.code.toUpperCase()}</span>
+        <span className="text-gray-500">▾</span>
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 bg-gray-800 border border-gray-700 rounded shadow-lg z-50 min-w-27.5">
+          {LANGS.map(l => (
+            <button
+              key={l.code}
+              type="button"
+              onClick={() => select(l.code)}
+              className={`flex items-center gap-2 w-full px-3 py-1.5 text-[11px] hover:bg-gray-700 transition-colors ${l.code === lang ? 'text-white font-bold' : 'text-gray-400'}`}
+            >
+              <span>{l.flag}</span>
+              <span>{l.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
 export default function Header() {
+  const { t } = useTranslation()
   return (
     <header className="bg-gray-800 border-b border-gray-700 h-12 px-4 flex items-center justify-between shrink-0">
 
@@ -81,7 +111,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
           className="text-gray-400 hover:text-white transition-colors"
-          aria-label="GitHub repository"
+          aria-label={t("aria.github_repo")}
         >
           <IconGitHub />
         </a>

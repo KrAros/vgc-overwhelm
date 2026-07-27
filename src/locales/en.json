@@ -37,7 +37,22 @@
     "snow": "Snow",
     "nature_neutral": "Nature (neutral)",
     "no_offensive_moves": "No offensive moves available.",
-    "import_paste": "Paste the full Showdown team here (up to 6 Pokémon, separated by blank lines)..."
+    "import_paste": "Paste the full Showdown team here (up to 6 Pokémon, separated by blank lines)...",
+    "spread_move": "Spread move — hits both opponents",
+    "moves_first": "Moves first",
+    "damage_matrix": "Damage matchup matrix",
+    "battle_conditions": "Battle conditions",
+    "cancel": "Cancel",
+    "copied": "Copied",
+    "helpingHand": "Helping Hand",
+    "auroraVeil": "Aurora Veil",
+    "lightScreen": "Light Screen",
+    "hhShort": "HH",
+    "veilShort": "Veil",
+    "lsShort": "LS",
+    "refShort": "Ref",
+    "critShort": "Crit",
+    "twShort": "TW"
   },
   "report": {
     "selected_matchup": "Selected Matchup",
@@ -68,7 +83,15 @@
     "share_discord": "Discord",
     "social_coming_soon": "Social — coming soon",
     "quick_info": "Quick Info",
-    "no_ko": "No KO"
+    "no_ko": "No KO",
+    "copy_calc_aria": "Copy calc string",
+    "close_aria": "Close report panel",
+    "scroll_rolls": "Scroll to damage rolls",
+    "damage_report_aria": "Damage report",
+    "attacks": "Attacks",
+    "attacked_by": "Attacked by",
+    "spread_move": "Spread move",
+    "quick_info_desc": "Select a cell to see detailed damage analysis and KO chance. Click a sprite to open it in the Team Editor."
   },
   "editor": {
     "delete_pokemon": "Delete Pokémon",
@@ -76,7 +99,10 @@
     "export_showdown": "Export to Showdown",
     "import_showdown": "Import from Showdown",
     "all_slots_full": "All slots are full. Choose where to overwrite:",
-    "last_respects_allies": "Last Respects — Allies KO:"
+    "last_respects_allies": "Last Respects — Allies KO:",
+    "allies_ko": "Allies KO:",
+    "duplicate": "Duplicate",
+    "error_details": "Error details"
   },
   "eot": {
     "leftovers_recovery": "Leftovers recovery",
@@ -85,5 +111,11 @@
     "guaranteed": "Guaranteed",
     "show_sim": "Show turn-by-turn simulation",
     "hide_sim": "Hide simulation"
+  },
+  "aria": {
+    "team_modifiers": "Team modifiers and actions",
+    "switch_language": "Switch language",
+    "github_repo": "GitHub repository",
+    "battle_conditions": "Battle conditions"
   }
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import useCalcStore from '../../store/useCalcStore'
 import { PRESETS_BY_SLUG } from '../../data/metaPresets'
 
@@ -14,6 +15,7 @@ import { PRESETS_BY_SLUG } from '../../data/metaPresets'
  * Al cambio applica il preset e resetta il select a "— Preset —".
  */
 export default function PresetSelect({ team, index, currentSlug }) {
+  const { t } = useTranslation()
   const setPokemon = useCalcStore(s => s.setPokemon)
   const setNature  = useCalcStore(s => s.setNature)
   const setItem    = useCalcStore(s => s.setItem)
@@ -63,9 +65,9 @@ export default function PresetSelect({ team, index, currentSlug }) {
       value={selected}
       onChange={e => applyPreset(e.target.value)}
       className="w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 outline-none border border-gray-600 cursor-pointer"
-      title="Carica preset meta"
+      title={t("ui.load_meta_preset")}
     >
-      <option value="__blank__">Blank Set</option>
+      <option value="__blank__">{t("ui.blank_set")}</option>
       {presets.map(p => (
         <option key={p.label} value={p.label}>{p.label}</option>
       ))}

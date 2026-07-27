@@ -117,7 +117,7 @@ function HpStep({ range, defKey }) {
   return (
     <>
       <span className="text-gray-600 shrink-0 mb-8">→</span>
-      <div className="flex flex-col items-center shrink-0 w-[68px]">
+      <div className="flex flex-col items-center shrink-0 w-17">
         <div className="h-10 flex items-center justify-center mb-2">
           <div className="relative inline-block">
             <img
@@ -177,7 +177,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
     steps.push(
       <span key="leftovers" className="flex items-center gap-1.5 text-green-400 text-xs font-medium">
         <img src={itemIconUrl('leftovers')} alt="" className="w-4 h-4 object-contain" onError={e => { e.target.style.display = 'none' }} />
-        <span>Leftovers +{pct}%</span>
+        <span>{t("report.leftovers")} +{pct}%</span>
       </span>
     )
   }
@@ -214,7 +214,7 @@ function CopyCalcButton({ smogon }) {
   return (
     <button
       onClick={() => navigator.clipboard.writeText(smogon).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500) })}
-      aria-label="Copy calc string"
+      aria-label={t("report.copy_calc_aria")}
       className={`text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border transition-colors flex items-center gap-1 ${
         copied ? 'border-teal-600/50 text-teal-300' : 'border-gray-700/50 hover:border-gray-500'
       }`}
@@ -338,7 +338,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           <span className="text-[9px] tracking-[0.2em] text-gray-600 uppercase font-bold">{t("report.selected_matchup")}</span>
           <div className="flex items-center gap-1.5">
             <CopyCalcButton smogon={smogon} />
-            <button onClick={onClose} aria-label="Close report panel"
+            <button onClick={onClose} aria-label={t("report.close_aria")}
               className="text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
               {t("ui.close")}
             </button>
@@ -350,7 +350,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
           {/* Attaccante */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-[72px] h-[72px] lg:w-[104px] lg:h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
+            <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(atk.key)}
                 alt={atk.key}
@@ -377,7 +377,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
           {/* Difensore */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-[72px] h-[72px] lg:w-[104px] lg:h-[104px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
+            <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(def.key)}
                 alt={def.key}
@@ -400,7 +400,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">Selected Move</div>
+            <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
             <div className="text-lg font-bold text-white uppercase tracking-wide mb-1.5 leading-tight">
               {move.replace(/-/g, ' ')}
               {recoilInfo && <span className="text-orange-400 text-[11px] font-normal ml-2 normal-case tracking-normal">({recoilInfo})</span>}
@@ -412,23 +412,23 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Colonna destra: spread + badge % + bottone rolls */}
           <div className="shrink-0 flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-2 lg:self-start">
             {isSpread && (
-              <span className="text-[10px] text-purple-400 font-bold uppercase tracking-[0.1em]">🌀 Spread Move</span>
+              <span className="text-[10px] text-purple-400 font-bold uppercase tracking-widest">🌀 Spread Move</span>
             )}
             {(isOHKO || hasOHKOChance) ? (
-              <div className="border border-orange-700/50 rounded-lg px-4 py-2 text-center bg-orange-950/20 w-[150px]">
+              <div className="border border-orange-700/50 rounded-lg px-4 py-2 text-center bg-orange-950/20 w-37.5">
                 <div className="text-[20px] font-black text-orange-400 leading-tight">{isOHKO ? '100%' : `${ohkoPct}%`}</div>
-                <div className="text-[9px] font-bold text-orange-400 uppercase tracking-[0.1em] mt-0.5">1HKO Chance</div>
+                <div className="text-[9px] font-bold text-orange-400 uppercase tracking-widest mt-0.5">1HKO Chance</div>
               </div>
             ) : (endOfTurnInfo?.text || hko) ? (
-              <div className="border border-gray-600/40 rounded-lg px-3 py-2 bg-gray-800/40 w-[150px] text-center">
+              <div className="border border-gray-600/40 rounded-lg px-3 py-2 bg-gray-800/40 w-37.5 text-center">
                 <div className="text-[10px] font-semibold text-gray-300 leading-snug">{endOfTurnInfo?.text ?? hko}</div>
               </div>
             ) : null}
             <button
               type="button"
               onClick={() => { const el = document.getElementById('damage-rolls-card'); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}
-              aria-label="Scroll to damage rolls"
-              className="text-[11px] font-semibold text-teal-300 uppercase tracking-[0.08em] border border-teal-700/50 rounded-lg px-4 py-1.5 hover:bg-teal-950/40 transition-colors w-[150px] text-center"
+              aria-label={t("report.scroll_rolls")}
+              className="text-[11px] font-semibold text-teal-300 uppercase tracking-[0.08em] border border-teal-700/50 rounded-lg px-4 py-1.5 hover:bg-teal-950/40 transition-colors w-37.5 text-center"
             >
               Damage Rolls
             </button>
@@ -498,7 +498,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               <div className="flex items-center justify-center gap-1.5 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
 
                 {/* Start */}
-                <div className="flex flex-col items-center shrink-0 w-[80px]">
+                <div className="flex flex-col items-center shrink-0 w-20">
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">🤍</span>
                   </div>
@@ -509,11 +509,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
                 {/* 1. Mossa */}
                 <span className="text-gray-600 shrink-0 mb-8">→</span>
-                <div className="flex flex-col items-center shrink-0 w-[92px]">
+                <div className="flex flex-col items-center shrink-0 w-23">
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">⚔️</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight capitalize text-center w-full">{move.replace(/-/g, ' ')}</div>
+                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center w-full">{move.replace(/-/g, ' ')}</div>
                   <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                 </div>
 
@@ -522,11 +522,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 {/* 2. Sitrus Berry */}
                 {sitrus && <>
                   <span className="text-gray-600 shrink-0 mb-8">→</span>
-                  <div className="flex flex-col items-center shrink-0 w-[80px]">
+                  <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <img src={itemIconUrl('sitrus berry')} alt="" className="w-8 h-8 object-contain" onError={e => { e.target.style.display = 'none' }} />
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Sitrus Berry</div>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.sitrus_berry")}</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{sitrusHeal} HP</div>
                   </div>
                   <HpStep range={hpAfterSitrus} defKey={def.key} />
@@ -535,11 +535,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 {/* 3. Sandstorm */}
                 {(isSand && !isSandImmune) && <>
                   <span className="text-gray-600 shrink-0 mb-8">→</span>
-                  <div className="flex flex-col items-center shrink-0 w-[80px]">
+                  <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <span className="text-3xl">🌪</span>
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Sandstorm</div>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.sandstorm")}</div>
                     <div className="text-xs font-bold text-red-400 mt-1">−{sandDmgHP} HP</div>
                   </div>
                   <HpStep range={hpAfterSand} defKey={def.key} />
@@ -548,11 +548,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 {/* 4. Leftovers */}
                 {leftoversHP > 0 && <>
                   <span className="text-gray-600 shrink-0 mb-8">→</span>
-                  <div className="flex flex-col items-center shrink-0 w-[80px]">
+                  <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <img src={itemIconUrl('leftovers')} alt="" className="w-8 h-8 object-contain" onError={e => { e.target.style.display = 'none' }} />
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">Leftovers</div>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.leftovers")}</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{leftoversHP} HP</div>
                   </div>
                   <HpStep range={hpAfterLefto} defKey={def.key} />
@@ -560,7 +560,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
                 {/* 5. Result */}
                 <span className="text-gray-600 shrink-0 mb-8">→</span>
-                <div className="flex flex-col items-center justify-start shrink-0 w-[88px] text-center">
+                <div className="flex flex-col items-center justify-start shrink-0 w-22 text-center">
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">🎯</span>
                   </div>
@@ -614,7 +614,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
               <div className="text-sm font-bold text-gray-200">{result.minDmg}</div>
             </div>
-            <div className="flex-1 flex gap-[3px]">
+            <div className="flex-1 flex gap-0.75">
               {segColors.map((isKO, i) => (
                 <div
                   key={i}
@@ -640,6 +640,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 // ── SinglePanel ───────────────────────────────────────────────────────────────
 
 function SinglePanel({ entry, onClose }) {
+  const { t } = useTranslation()
   const { atk, def, dir } = entry
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
@@ -674,7 +675,7 @@ function SinglePanel({ entry, onClose }) {
   const activeMoveKey = selectedMove || defaultMove?.move
   const active = computedMoves.find(m => m.move === activeMoveKey) || defaultMove
 
-  if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">No offensive moves available.</div>
+  if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">{t("ui.no_offensive_moves")}</div>
 
   const field = {
     weather, terrain, doubleTarget,
@@ -788,10 +789,10 @@ function CumulativePanel({ entries }) {
               const accentCls = idx === 0 ? 'text-teal-300' : 'text-violet-300'
               return (
                 <div key={idx} className="flex items-center gap-3 shrink-0">
-                  <div className="w-[72px] h-[72px] lg:w-[80px] lg:h-[80px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
+                  <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                     style={{ borderColor }}>
                     <img src={spriteUrl(entry.atk.key)} alt={entry.atk.key}
-                      className="w-16 h-16 lg:w-[72px] lg:h-[72px] object-contain"
+                      className="w-16 h-16 lg:w-18 lg:h-18 object-contain"
                       onError={e => { const fb = fallbackSpriteUrl(entry.atk.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
                   </div>
                   <div>
@@ -823,10 +824,10 @@ function CumulativePanel({ entries }) {
             const borderColor = TYPE_HEX[TYPE_NAMES[defTypes[0]]] || '#4b5563'
             return (
               <div className="flex items-center gap-3 shrink-0">
-                <div className="w-[72px] h-[72px] lg:w-[80px] lg:h-[80px] bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
+                <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                   style={{ borderColor }}>
                   <img src={spriteUrl(def.key)} alt={def.key}
-                    className="w-16 h-16 lg:w-[72px] lg:h-[72px] object-contain"
+                    className="w-16 h-16 lg:w-18 lg:h-18 object-contain"
                     onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
                 </div>
                 <div>
@@ -903,7 +904,7 @@ function CumulativePanel({ entries }) {
                   <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
                   <div className="text-sm font-bold text-gray-200">{cumulative.minSum}</div>
                 </div>
-                <div className="flex-1 flex gap-[3px]">
+                <div className="flex-1 flex gap-0.75">
                   {segColors.map((isKO, i) => (
                     <div key={i} className={`h-2.5 flex-1 rounded-sm ${isKO ? 'bg-purple-500' : 'bg-gray-700/70'}`} />
                   ))}
@@ -943,6 +944,7 @@ function CumulativePanel({ entries }) {
 // ── ReportPanel root ──────────────────────────────────────────────────────────
 
 export default function ReportPanel({ selection, onClose }) {
+  const { t } = useTranslation()
   const isDouble = Array.isArray(selection) && selection.length === 2
   const team1 = useCalcStore(s => s.team1)
   const team2 = useCalcStore(s => s.team2)
@@ -954,7 +956,7 @@ export default function ReportPanel({ selection, onClose }) {
   const liveSelection = isDouble ? [entry1, entry2] : [entry1]
 
   return (
-    <section aria-label="Damage report" className="mb-4">
+    <section aria-label={t("report.damage_report_aria")} className="mb-4">
       {/* Pulsante chiudi fuori dal pannello */}
 
       {isDouble

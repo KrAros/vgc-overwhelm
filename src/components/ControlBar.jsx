@@ -97,21 +97,21 @@ export default function ControlBar() {
   }
 
   const MODS = [
-    { label: 'HH',  mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
-    { label: 'Veil', mod: 'auroraVeil', active: 'bg-blue-400   text-gray-900' },
-    { label: 'LS',  mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
-    { label: 'Ref',  mod: 'reflect',    active: 'bg-pink-400   text-gray-900' },
-    { label: 'Crit', mod: 'crit',       active: 'bg-red-400    text-gray-900' },
-    { label: 'TW',   mod: 'tailwind',   active: 'bg-cyan-400   text-gray-900' },
+    { label: t('ui.hhShort'),   mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
+    { label: t('ui.veilShort'), mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
+    { label: t('ui.lsShort'),   mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
+    { label: t('ui.refShort'),  mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
+    { label: t('ui.critShort'), mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: t('ui.twShort'),   mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
   const MODS_DESKTOP = [
-    { label: 'Helping Hand', mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
-    { label: 'Aurora Veil',  mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
-    { label: 'Light Screen', mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
-    { label: 'Reflect',      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
-    { label: 'Crit',         mod: 'crit',        active: 'bg-red-400    text-gray-900' },
-    { label: 'Tailwind',     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
+    { label: t('ui.helpingHand'), mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
+    { label: t('ui.auroraVeil'),  mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
+    { label: t('ui.lightScreen'), mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
+    { label: t('ui.reflect'),     mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
+    { label: t('ui.crit'),        mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: t('ui.tailwind'),    mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
   const modVals = { helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind }
@@ -123,7 +123,7 @@ export default function ControlBar() {
 
   return (
     <div className="mb-3">
-      <div role="group" aria-label="Team modifiers and actions" className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
+      <div role="group" aria-label={t("aria.team_modifiers")} className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
 
         {/* ── DESKTOP ── */}
         <div className="hidden sm:block space-y-2">
@@ -278,7 +278,7 @@ export default function ControlBar() {
           <textarea
             autoFocus
             className="w-full h-52 bg-gray-800 text-gray-200 text-xs font-mono p-2 rounded border border-gray-700 resize-y outline-none focus:border-teal-500"
-            placeholder="Paste the full Showdown team here (up to 6 Pokémon, separated by blank lines)..."
+            placeholder={t("ui.import_paste")}
             value={pasteText}
             onChange={e => setPasteText(e.target.value)}
           />
