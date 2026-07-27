@@ -67,7 +67,7 @@ export function itemIconUrl(itemKey) {
   if (!itemKey) return null
   const num = itemsData[itemKey]?.num
   if (!num) return null
-  const isMega = num >= 656
+  const isMega = itemKey.endsWith('ite') || itemKey.endsWith('ite x') || itemKey.endsWith('ite y')
   const folder = isMega ? 'mdicon02' : 'mdicon01'
   const prefix = isMega ? '02' : '01'
   return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/${folder}/ui_ItemIcon_${prefix}_${String(num).padStart(4, '0')}.webp`

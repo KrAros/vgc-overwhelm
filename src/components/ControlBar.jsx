@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import useCalcStore, { encodeTeamsToURL } from '../store/useCalcStore'
 import { parseShowdownPaste, teamToShowdown } from '../utils/showdownIO'
 
@@ -44,6 +45,7 @@ function ModBtn({ label, active, activeClass, onClick }) {
 // ── ControlBar ────────────────────────────────────────────────────────────────
 
 export default function ControlBar() {
+  const { t } = useTranslation()
   const helpingHand  = useCalcStore(s => s.helpingHand)
   const auroraVeil   = useCalcStore(s => s.auroraVeil)
   const lightScreen  = useCalcStore(s => s.lightScreen)
@@ -136,7 +138,7 @@ export default function ControlBar() {
                 ))}
               </div>
             </div>
-            <ModBtn label="KO only" active={showKoOnly}
+            <ModBtn label={t("ui.ko_only")} active={showKoOnly}
               activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
@@ -157,32 +159,32 @@ export default function ControlBar() {
               <button type="button"
                 onClick={() => { setMode(mode === 'import1' ? null : 'import1'); setWarnings([]) }}
                 className={mode === 'import1' ? btnActive : btnNormal}>
-                <IconImport /><span>Import</span>
+                <IconImport /><span>{t("ui.import")}</span>
               </button>
               <button type="button" onClick={() => handleExport('team1')} className={btnNormal}>
-                <IconExport /><span>Export</span>
+                <IconExport /><span>{t("ui.export")}</span>
               </button>
               <button type="button" onClick={() => handleReset('team1')} className={btnReset}>
-                <IconReset /><span>Clear</span>
+                <IconReset /><span>{t("ui.clear")}</span>
               </button>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
               <button type="button" onClick={handleShare} className={btnNormal}>
-                <IconShare /><span>Share</span>
+                <IconShare /><span>{t("ui.share")}</span>
               </button>
             </div>
             <div className="flex items-center gap-1">
               <button type="button"
                 onClick={() => { setMode(mode === 'import2' ? null : 'import2'); setWarnings([]) }}
                 className={mode === 'import2' ? btnActive : btnNormal}>
-                <IconImport /><span>Import</span>
+                <IconImport /><span>{t("ui.import")}</span>
               </button>
               <button type="button" onClick={() => handleExport('team2')} className={btnNormal}>
-                <IconExport /><span>Export</span>
+                <IconExport /><span>{t("ui.export")}</span>
               </button>
               <button type="button" onClick={() => handleReset('team2')} className={btnReset}>
-                <IconReset /><span>Clear</span>
+                <IconReset /><span>{t("ui.clear")}</span>
               </button>
             </div>
           </div>
@@ -251,13 +253,13 @@ export default function ControlBar() {
           <div className="h-px bg-gray-700/60" />
 
           <div className="flex items-center justify-between gap-2">
-            <ModBtn label="KO only" active={showKoOnly}
+            <ModBtn label={t("ui.ko_only")} active={showKoOnly}
               activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
             <div className="flex items-center gap-2">
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
               <button type="button" onClick={handleShare}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-gray-300 border-gray-600/40">
-                <IconShare /><span>Share</span>
+                <IconShare /><span>{t("ui.share")}</span>
               </button>
             </div>
           </div>

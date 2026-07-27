@@ -1,4 +1,5 @@
 import FiammaLogo from './FiammaLogo'
+import { useTranslation } from 'react-i18next'
 const IconGitHub = () => (
   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
     <path fillRule="evenodd" clipRule="evenodd"
@@ -38,6 +39,7 @@ const IconX = () => (
 )
 
 export default function Footer() {
+  const { t } = useTranslation()
   return (
     <footer className="bg-gray-800 border-t border-gray-700 py-3 px-4 mt-6">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
@@ -56,14 +58,14 @@ export default function Footer() {
 
         {/* ── CENTRO: social placeholder ── */}
         <div className="flex items-center gap-3 text-gray-600">
-          <span className="text-[10px] uppercase tracking-wider">Social — prossimamente</span>
+          <span className="text-[10px] uppercase tracking-wider">{t("report.social_coming_soon")}</span>
           <span className="flex items-center gap-1.5 opacity-40 cursor-not-allowed">
             <IconDiscord />
-            <span className="text-[10px]">Discord</span>
+            <span className="text-[10px]">{t("report.share_discord")}</span>
           </span>
           <span className="flex items-center gap-1.5 opacity-40 cursor-not-allowed">
             <IconX />
-            <span className="text-[10px]">Twitter/X</span>
+            <span className="text-[10px]">{t("report.share_twitter")}</span>
           </span>
         </div>
 

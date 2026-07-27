@@ -1,4 +1,6 @@
 import FiammaLogo from './FiammaLogo'
+import { useTranslation } from 'react-i18next'
+
 const IconGitHub = () => (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
     <path fillRule="evenodd" clipRule="evenodd"
@@ -13,6 +15,26 @@ const IconGitHub = () => (
     />
   </svg>
 )
+
+function LangToggle() {
+  const { i18n } = useTranslation()
+  const lang = i18n.language
+  const toggle = () => {
+    const next = lang === 'en' ? 'it' : 'en'
+    i18n.changeLanguage(next)
+    localStorage.setItem('lang', next)
+  }
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 text-gray-400 hover:text-white transition-colors"
+      aria-label="Switch language"
+    >
+      {lang === 'en' ? '🇮🇹' : '🇬🇧'}
+    </button>
+  )
+}
 
 export default function Header() {
   return (
@@ -51,16 +73,19 @@ export default function Header() {
         </span>
       </nav>
 
-      {/* ── DESTRA: link GitHub ── */}
-      <a
-        href="https://github.com/KrAros/vgc-overwhelm"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-gray-400 hover:text-white transition-colors shrink-0"
-        aria-label="GitHub repository"
-      >
-        <IconGitHub />
-      </a>
+      {/* ── DESTRA: toggle lingua + link GitHub ── */}
+      <div className="flex items-center gap-2 shrink-0">
+        <LangToggle />
+        <a
+          href="https://github.com/KrAros/vgc-overwhelm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-white transition-colors"
+          aria-label="GitHub repository"
+        >
+          <IconGitHub />
+        </a>
+      </div>
 
     </header>
   )

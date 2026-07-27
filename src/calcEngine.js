@@ -99,6 +99,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkBoost = 0,
     spAtkBoost = 0,
     atkAbilityFlags = {},
+    lastRespectsKOs = 0,
     level = 50,
   } = attacker
 
@@ -140,15 +141,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     ? WEATHER_BALL_TYPE[(field.weather || '').toLowerCase()] ?? null
     : null
   const effectiveMoveType = weatherBallType !== null ? weatherBallType : moveData.type
-  const effectiveBP       = isWeatherBall && weatherBallType !== null ? 100 : moveData.power
+  const isLastRespects = move === 'last respects'
+  const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
+  const effectiveBP    = isLastRespects ? lastRespectsBP
+    : isWeatherBall && weatherBallType !== null ? 100
+    : moveData.power
 
-  const moveType = effectiveMoveType
+  let moveType = effectiveMoveType
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
   const isContact = moveData.contact === true
   const isSpread  = moveData.spread === true
 
-  const effectiveness = getEffectiveness(moveType, defTypes)
   const isSpecial = moveData.category === 1
   // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk
   const isBodyPress = moveData.useDefAsStat === true
@@ -160,6 +164,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defAbilKey = normalizeAbilityKey(defAbility)
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
+
+  // Ate abilities: Normal -> altro tipo + x1.2 BP
+  let ateBoost = false
+  if (moveType === TYPES.NORMAL) {
+    if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }
+    if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }
+    if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }
+  }
+
+  // effectiveness calcolata DOPO la conversione ate
+  const effectiveness = getEffectiveness(moveType, defTypes)
 
   // ── Immunità ─────────────────────────────────────────────────────────────
   // Levitate: immune a mosse Ground
@@ -281,6 +296,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Fire Mane: ×1.5 BP su mosse Fire (Mega Pyroar)
   if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) {
     terrainBP = Math.floor(terrainBP * 1.5)
+  }
+
+  // Ate abilities: ×1.2 BP (pixilate, aerilate, refrigerate)
+  if (ateBoost) {
+    terrainBP = Math.floor(terrainBP * 1.2)
   }
 
   // Knock Off: ×1.5 BP se il difensore tiene un item rimovibile

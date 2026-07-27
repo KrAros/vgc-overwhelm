@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString, EOT_STRINGS } from '../utils/smogonString'
@@ -112,6 +113,7 @@ function TypeBadge({ typeIdx }) {
 // ── HpStep — step HP intermedio nel Damage Breakdown ─────────────────────────
 
 function HpStep({ range, defKey }) {
+  const { t } = useTranslation()
   return (
     <>
       <span className="text-gray-600 shrink-0 mb-8">→</span>
@@ -127,7 +129,7 @@ function HpStep({ range, defKey }) {
             <span className="absolute bottom-0 right-0 text-[10px] leading-none">❤️</span>
           </div>
         </div>
-        <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">HP</div>
+        <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.hp")}</div>
         <div className="text-xs font-bold text-gray-200 mt-1 whitespace-nowrap">
           {range[0] === range[1] ? range[0] : `${range[0]}–${range[1]}`}
         </div>
@@ -139,6 +141,7 @@ function HpStep({ range, defKey }) {
 // ── Turn narrative bar ────────────────────────────────────────────────────────
 
 function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, endOfTurnInfo, activeMove, defHP }) {
+  const { t } = useTranslation()
   const steps = []
 
   // 1. Mossa (avviene per prima nel turno)
@@ -153,7 +156,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
     steps.push(
       <span key="sitrus" className="flex items-center gap-1.5 text-green-400 text-xs font-medium">
         <img src={itemIconUrl('sitrus berry')} alt="" className="w-4 h-4 object-contain" onError={e => { e.target.style.display = 'none' }} />
-        <span>Sitrus Berry recovery</span>
+        <span>{t("eot.sitrus_recovery")}</span>
       </span>
     )
   }
@@ -206,6 +209,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
 // ── CopyCalcButton ────────────────────────────────────────────────────────────
 
 function CopyCalcButton({ smogon }) {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   return (
     <button
@@ -218,7 +222,7 @@ function CopyCalcButton({ smogon }) {
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
       </svg>
-      {copied ? 'Copied' : 'Copy calc'}
+      {copied ? 'Copied' : t('report.copy_calc')}
     </button>
   )
 }
@@ -226,6 +230,7 @@ function CopyCalcButton({ smogon }) {
 // ── MoveCard NCP style ────────────────────────────────────────────────────────
 
 function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
+  const { t } = useTranslation()
   const hko    = calcHKO(result.minPct)
   const smogon = buildSmogonString(atk, def, move, result, field)
   const rolls  = result.rolls
@@ -330,12 +335,12 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
         {/* Label + Copy + Close — prima riga della card, ha accesso a smogon e onClose */}
         <div className="flex items-center justify-between px-4 pt-2.5 pb-2 border-b border-gray-700/20">
-          <span className="text-[9px] tracking-[0.2em] text-gray-600 uppercase font-bold">Selected Matchup</span>
+          <span className="text-[9px] tracking-[0.2em] text-gray-600 uppercase font-bold">{t("report.selected_matchup")}</span>
           <div className="flex items-center gap-1.5">
             <CopyCalcButton smogon={smogon} />
             <button onClick={onClose} aria-label="Close report panel"
               className="text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
-              ✕ Close
+              {t("ui.close")}
             </button>
           </div>
         </div>
@@ -489,7 +494,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
           return (
             <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
-              <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">Damage Breakdown</div>
+              <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{t("report.damage_breakdown")}</div>
               <div className="flex items-center justify-center gap-1.5 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
 
                 {/* Start */}
@@ -497,7 +502,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">🤍</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">Start</div>
+                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.start")}</div>
                   <div className="text-[10px] text-gray-400 capitalize leading-tight truncate w-full text-center">{def.key.split('-')[0]}</div>
                   <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
                 </div>
@@ -559,7 +564,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">🎯</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">Result</div>
+                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.result")}</div>
                   {(() => {
                     if (isOHKO || hasOHKOChance) return (
                       <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">
@@ -585,7 +590,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
         {/* CARD 3: Damage Rolls */}
         <div id="damage-rolls-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
-          <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">Damage Rolls</div>
+          <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">{t("report.damage_rolls")}</div>
 
           {/* Roll chips */}
           <div className="flex flex-wrap gap-1.5 mb-4">
@@ -606,7 +611,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Barra segmentata MIN/MAX */}
           <div className="flex items-center gap-3">
             <div className="text-left shrink-0">
-              <div className="text-[10px] text-gray-500 uppercase">Min</div>
+              <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
               <div className="text-sm font-bold text-gray-200">{result.minDmg}</div>
             </div>
             <div className="flex-1 flex gap-[3px]">
@@ -618,7 +623,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               ))}
             </div>
             <div className="text-right shrink-0">
-              <div className="text-[10px] text-gray-500 uppercase">Max</div>
+              <div className="text-[10px] text-gray-500 uppercase">{t("report.max")}</div>
               <div className="text-sm font-bold text-gray-200">{result.maxDmg}</div>
             </div>
           </div>
@@ -698,6 +703,7 @@ function SinglePanel({ entry, onClose }) {
 // ── CumulativePanel ───────────────────────────────────────────────────────────
 
 function CumulativePanel({ entries }) {
+  const { t } = useTranslation()
   const [entry1, entry2] = entries
   const def = entry1.def
   const doubleTarget = useCalcStore(s => s.doubleTarget)
@@ -757,15 +763,15 @@ function CumulativePanel({ entries }) {
   }, [active1, active2])
 
   const badge = !cumulative ? null :
-    cumulative.minPct >= 100 ? { text: 'Guaranteed KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
+    cumulative.minPct >= 100 ? { text: 't("eot.guaranteed") + " KO"', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
     cumulative.koOf16 > 0    ? { text: `Likely KO (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
-                               { text: 'No KO', cls: 'bg-gray-800 border-gray-600 text-gray-500' }
+                               { text: t('report.no_ko'), cls: 'bg-gray-800 border-gray-600 text-gray-500' }
 
   return (
     <div>
       {/* SELECTED MATCHUP label */}
       <div className="mb-2">
-        <span className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold">Selected Matchup</span>
+        <span className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold">{t("report.selected_matchup")}</span>
       </div>
 
       {/* Card principale: due attaccanti affiancati → difensore */}
@@ -824,7 +830,7 @@ function CumulativePanel({ entries }) {
                     onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Defender</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">{t("report.defender")}</div>
                   <div className="text-sm font-bold text-white uppercase tracking-wide leading-tight mb-1.5">
                     {def.key.replace(/-/g, ' ').toUpperCase()}
                   </div>
@@ -842,12 +848,12 @@ function CumulativePanel({ entries }) {
           {/* Badge danno cumulativo */}
           {cumulative && (
             <div className="shrink-0 text-right ml-auto">
-              <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">Combined Damage</div>
+              <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
               <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
               <div className="mt-2">
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
-                  {cumulative.minPct >= 100 ? '✓ Guaranteed KO' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ No KO'}
+                  {cumulative.minPct >= 100 ? '✓ t("eot.guaranteed") + " KO"' : cumulative.koOf16 > 0 ? `⚡ Likely KO (${cumulative.koOf16}/16)` : '✗ {t("report.no_ko")}'}
                 </span>
               </div>
             </div>
@@ -894,7 +900,7 @@ function CumulativePanel({ entries }) {
             <div className="px-5 py-3 border-b border-gray-700/20">
               <div className="flex items-center gap-3">
                 <div className="text-left shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">Min</div>
+                  <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
                   <div className="text-sm font-bold text-gray-200">{cumulative.minSum}</div>
                 </div>
                 <div className="flex-1 flex gap-[3px]">
@@ -903,7 +909,7 @@ function CumulativePanel({ entries }) {
                   ))}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">Max</div>
+                  <div className="text-[10px] text-gray-500 uppercase">{t("report.max")}</div>
                   <div className="text-sm font-bold text-gray-200">{cumulative.maxSum}</div>
                 </div>
               </div>

@@ -1,9 +1,9 @@
-import { ABILITY_EFFECTS } from '../../data/abilityEffects.js'
+import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
 export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather }) {
-  const key = (ability || '').toLowerCase()
+  const key = normalizeAbilityKey(ability)
 
   const SPEED_WEATHER_MAP = {
     'sand-rush':   ['sand', 'sandstorm'],

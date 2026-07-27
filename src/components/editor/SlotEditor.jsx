@@ -13,6 +13,7 @@ import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
 import PresetSelect from './PresetSelect.jsx'
 import StatRow from './StatRow.jsx'
 import { PokemonSearch, MoveSearch, ItemSearch, AbilitySelect } from './SearchSelects.jsx'
+import { useTranslation } from 'react-i18next'
 import AbilityFlags from './AbilityFlags.jsx'
 import { slotToShowdown } from './showdownHelpers.js'
 import { ImportModal, DuplicateModal } from './Modals.jsx'
@@ -20,6 +21,7 @@ import { ImportModal, DuplicateModal } from './Modals.jsx'
 // ─── PokemonPanel ─────────────────────────────────────────────────────────────
 
 export default function PokemonPanel({ team, index, tailwindActive = false }) {
+  const { t } = useTranslation()
   const pokemon        = useCalcStore(s => s[team][index])
   const level          = useCalcStore(s => s.level)
   const setPokemon     = useCalcStore(s => s.setPokemon)
@@ -29,7 +31,8 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const setBoost       = useCalcStore(s => s.setBoost)
   const setItem        = useCalcStore(s => s.setItem)
   const setAbility     = useCalcStore(s => s.setAbility)
-  const setAbilityFlag = useCalcStore(s => s.setAbilityFlag)
+  const setAbilityFlag       = useCalcStore(s => s.setAbilityFlag)
+  const setLastRespectsKOs   = useCalcStore(s => s.setLastRespectsKOs)
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
   const weather        = useCalcStore(s => s.weather)
 
@@ -42,7 +45,9 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const nature       = pokemon?.nature || null
   const item         = pokemon?.item || null
   const ability      = pokemon?.ability || null
-  const abilityFlags = pokemon?.abilityFlags || {}
+  const abilityFlags     = pokemon?.abilityFlags || {}
+  const lastRespectsKOs  = pokemon?.lastRespectsKOs ?? 0
+  const hasLastRespects  = pokemon?.moves?.some(m => m === 'last respects')
   const total        = sps.reduce((a,b) => a+b, 0)
   const remaining    = 66 - total
 
@@ -113,12 +118,12 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 : showDuplicate ? 'bg-teal-800 border-teal-600 text-teal-200'
                 : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
               }`}
-              title="Duplicate Pokémon"
+              title={t("editor.duplicate_pokemon")}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
               </svg>
-              <span>Duplicate</span>
+              <span>{t("editor.duplicate")}</span>
             </button>
 
             <button
@@ -130,14 +135,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 : exportCopied ? 'bg-green-800 border-green-600 text-green-200'
                 : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
               }`}
-              title="Export to Showdown"
+              title={t("editor.export_showdown")}
             >
               {!exportCopied && (
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                 </svg>
               )}
-              <span>{exportCopied ? 'Copied' : 'Export'}</span>
+              <span>{exportCopied ? 'Copied' : t('ui.export')}</span>
             </button>
 
             <button
@@ -153,7 +158,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>Import</span>
+              <span>{t("ui.import")}</span>
             </button>
 
             <button
@@ -164,12 +169,12 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
                 : 'bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 border-red-900/30'
               }`}
-              title="Delete Pokémon"
+              title={t("editor.delete_pokemon")}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
-              <span>Delete</span>
+              <span>{t("ui.delete")}</span>
             </button>
           </div>
 
@@ -264,8 +269,8 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
         <>
           <div className="mb-2">
             <div className="flex items-center text-xs text-gray-500 mb-1 gap-2">
-              <span className="w-8 text-center">Stat</span>
-              <span className="w-7 text-center">Base</span>
+              <span className="w-8 text-center">{t("report.stat")}</span>
+              <span className="w-7 text-center">{t("report.base")}</span>
               <div className="flex-1 flex justify-center items-center gap-1.5">
                 <span>SP</span>
                 <span className={`text-[10px] font-bold px-1 rounded ${
@@ -276,9 +281,9 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                   ({remaining}/66)
                 </span>
               </div>
-              <span className="w-8 text-center">Tot</span>
-              <span className="w-12 text-center">Boost</span>
-              <span className="w-8 text-center">Mod</span>
+              <span className="w-8 text-center">{t("report.tot")}</span>
+              <span className="w-12 text-center">{t("report.boost")}</span>
+              <span className="w-8 text-center">{t("report.mod")}</span>
             </div>
             {STAT_NAMES.map((_, i) => (
               <StatRow
@@ -313,9 +318,34 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 value={pokemon?.moves[mi]}
                 placeholder={`Move ${mi+1}`}
                 onChange={m => handleMoveChange(mi, m)}
+                ability={ability}
               />
             ))}
           </div>
+
+          {/* Last Respects: contatore alleati KO */}
+          {hasLastRespects && (
+            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
+              <span className="text-gray-400 shrink-0">{t("editor.last_respects_allies")}</span>
+              <div className="flex gap-1">
+                {[0,1,2,3].map(n => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setLastRespectsKOs(team, index, n)}
+                    className={`w-5 h-5 rounded text-[10px] font-bold transition-colors ${
+                      lastRespectsKOs === n ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              <span className={lastRespectsKOs > 0 ? 'text-purple-300' : 'text-gray-500'}>
+                {50 + lastRespectsKOs * 50} BP
+              </span>
+            </div>
+          )}
         </>
       )}
     </div>

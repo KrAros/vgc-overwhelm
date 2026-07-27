@@ -28,6 +28,7 @@ const emptyPokemon = () => ({
   spDefBoost: 0,
   speBoost: 0,
   abilityFlags: { ...DEFAULT_ABILITY_FLAGS },
+  lastRespectsKOs: 0,
 })
 
 const emptyTeam = () => Array(6).fill(null).map(emptyPokemon)
@@ -270,6 +271,9 @@ const useCalcStore = create((set) => ({
       // I flag non vengono salvati su localStorage (sono stato effimero di battaglia)
       return { [team]: t }
     }),
+
+  setLastRespectsKOs: (team, index, kos) =>
+    set((s) => updateSlot(s, team, index, { lastRespectsKOs: Math.min(3, Math.max(0, kos)) })),
 
   // ── Utility: carica un team intero (usato dall'import Showdown) ──
   // Questo è già gestito slot per slot tramite setPokemon/setMove/ecc.,

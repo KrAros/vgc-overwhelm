@@ -4,6 +4,7 @@ import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
+import { useTranslation } from 'react-i18next'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES   = Object.keys(movesData).sort()
@@ -12,6 +13,7 @@ const ALL_ITEMS   = Object.keys(itemsData).sort()
 // ─── PokemonSearch ────────────────────────────────────────────────────────────
 
 export function PokemonSearch({ value, onChange }) {
+  const { t } = useTranslation()
   const [query, setQuery]   = useState('')
   const [focused, setFocused] = useState(false)
   const [open, setOpen]     = useState(false)
@@ -33,7 +35,7 @@ export function PokemonSearch({ value, onChange }) {
     <div className="relative flex items-center">
       <input
         className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
-        placeholder="Search Pokémon..."
+        placeholder={t("ui.search_pokemon")}
         value={focused ? query : (value || '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
@@ -69,7 +71,7 @@ export function PokemonSearch({ value, onChange }) {
 
 // ─── MoveSearch ───────────────────────────────────────────────────────────────
 
-export function MoveSearch({ value, onChange, placeholder }) {
+export function MoveSearch({ value, onChange, placeholder, ability }) {
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
   const [open, setOpen]   = useState(false)
@@ -94,7 +96,13 @@ export function MoveSearch({ value, onChange, placeholder }) {
   const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
     ? WEATHER_BALL_TYPES[wbWeatherKey]
     : null
-  const displayType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
+  // Ate abilities: Normal → Fairy (pixilate) / Flying (aerilate)
+  const abilityKey = (ability || '').toLowerCase().replace(/ /g, '-')
+  const ATE_MAP = { 'pixilate': 17, 'aerilate': 9 } // 17=Fairy, 9=Flying in TYPE_NAMES
+  const baseType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
+  const isNormalMove = baseType === 0 // 0 = Normal
+  const ateType = isNormalMove && ATE_MAP[abilityKey] !== undefined ? ATE_MAP[abilityKey] : null
+  const displayType = ateType !== null ? ateType : baseType
   const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100 : moveDetails?.power
 
   const categoryTitles = { 0: 'Fisico', 1: 'Speciale', 2: 'Stato' }
@@ -154,6 +162,7 @@ export function MoveSearch({ value, onChange, placeholder }) {
 // ─── ItemSearch ───────────────────────────────────────────────────────────────
 
 export function ItemSearch({ value, onChange }) {
+  const { t } = useTranslation()
   const [query, setQuery]   = useState('')
   const [focused, setFocused] = useState(false)
   const [open, setOpen]     = useState(false)
@@ -175,7 +184,7 @@ export function ItemSearch({ value, onChange }) {
     <div className="relative flex items-center">
       <input
         className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
-        placeholder="Search item..."
+        placeholder={t("ui.search_item")}
         value={focused ? query : (value ? value.replace(/-/g, ' ') : '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}

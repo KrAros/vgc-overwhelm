@@ -1,4 +1,5 @@
 import useCalcStore from '../store/useCalcStore'
+import { useTranslation } from 'react-i18next'
 
 const FIELDS = [
   { label: 'Grassy',   key: 'grassy',   color: 'text-green-400  border-green-400',  active: 'bg-green-400  text-gray-900' },
@@ -29,6 +30,7 @@ function Btn({ label, active, activeClass, onClick }) {
 }
 
 export default function TopBar() {
+  const { t } = useTranslation()
   const trickRoom    = useCalcStore(s => s.trickRoom)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
@@ -55,7 +57,7 @@ export default function TopBar() {
               trickRoom ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Trick Room
+            {t("ui.trick_room")}
           </button>
           <button
             onClick={toggleDoubleTarget}
@@ -64,7 +66,7 @@ export default function TopBar() {
               doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Double Target
+            {t("ui.double_target")}
           </button>
         </div>
 
@@ -81,7 +83,7 @@ export default function TopBar() {
                 !terrain ? 'bg-gray-500 text-white border-gray-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              None
+              {t("ui.none")}
             </button>
             {FIELDS.map(f => (
               <Btn key={f.key} label={f.label} active={terrain === f.key} activeClass={f.active} onClick={() => setTerrain(f.key)} />
@@ -102,7 +104,7 @@ export default function TopBar() {
                 !weather ? 'bg-gray-500 text-white border-gray-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              None
+              {t("ui.none")}
             </button>
             {WEATHERS.map(w => (
               <Btn key={w.key} label={w.label} active={weather === w.key} activeClass={w.active} onClick={() => setWeather(w.key)} />
@@ -115,7 +117,7 @@ export default function TopBar() {
       {/* ── MOBILE: layout a griglia compatta ── */}
       <div className="sm:hidden space-y-2">
 
-        {/* Riga 1: Level + Trick Room + Double Target */}
+        {/* Riga 1: Level + {t("ui.trick_room")} + {t("ui.double_target")} */}
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={toggleTrickRoom}
@@ -145,7 +147,7 @@ export default function TopBar() {
             onChange={e => setTerrain(e.target.value || null)}
             className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"
           >
-            <option value="">None</option>
+            <option value="">{t("ui.none")}</option>
             {FIELDS.map(f => (
               <option key={f.key} value={f.key}>{f.label}</option>
             ))}
@@ -157,7 +159,7 @@ export default function TopBar() {
             onChange={e => setWeather(e.target.value || null)}
             className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"
           >
-            <option value="">None</option>
+            <option value="">{t("ui.none")}</option>
             {WEATHERS.map(w => (
               <option key={w.key} value={w.key}>{w.label}</option>
             ))}

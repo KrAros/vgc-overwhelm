@@ -169,6 +169,9 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
     const wbBP = result.effectiveBP ?? 50
     moveName = `Weather Ball (${wbBP} BP ${wbTypeName})`
   }
+  if (move === 'last respects' && result.effectiveBP) {
+    moveName = `Last Respects (${result.effectiveBP} BP)`
+  }
 
   // Condizioni di campo in coda alla stringa
   const fieldParts = []

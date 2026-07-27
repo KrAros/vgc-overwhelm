@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
@@ -35,6 +36,7 @@ function calcAllMoves(atk, def, level, field) {
         atkItem:         atk.item || null,
         atkAbility:      atk.ability || null,
         atkAbilityFlags: atk.abilityFlags || {},
+        lastRespectsKOs: atk.lastRespectsKOs || 0,
         level,
       },
       defender: {
@@ -211,6 +213,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 export default function DamageTable({ onCellSelect }) {
   // Doppia selezione: { first, second }
   // Ogni entry: { ri, ci, dir, atk, def, field, allMoves } | null
+  const { t } = useTranslation()
   const [selectionState, setSelectionState] = useState({ first: null, second: null })
   const showKoOnly = useCalcStore(s => s.showKoOnly)
 
@@ -373,7 +376,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div
                         className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => focusEditor('team2', i)}
-                        title="Open in Team Editor"
+                        title={t("ui.open_in_team_editor")}
                       >
                         <img
                           src={spriteUrl(p.key)}
@@ -420,7 +423,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div
                         className="relative inline-block cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => focusEditor('team1', ri)}
-                        title="Open in Team Editor"
+                        title={t("ui.open_in_team_editor")}
                       >
                         <img
                           src={spriteUrl(row.key)}
@@ -486,7 +489,7 @@ export default function DamageTable({ onCellSelect }) {
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-orange-400 inline-block" /> <span className="text-orange-400">50 – 100%</span></div>
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> <span className="text-red-400">100%+</span></div>
         </div>
-        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">Quick Info</div>
+        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">{t("report.quick_info")}</div>
         <p className="text-[11px] text-gray-500 leading-relaxed">
           Select a cell to see detailed damage analysis and KO chance. Click a sprite to open it in the Team Editor.
         </p>
