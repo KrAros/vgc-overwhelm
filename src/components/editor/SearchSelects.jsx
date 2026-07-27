@@ -72,6 +72,7 @@ export function PokemonSearch({ value, onChange }) {
 // ─── MoveSearch ───────────────────────────────────────────────────────────────
 
 export function MoveSearch({ value, onChange, placeholder, ability }) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
   const [open, setOpen]   = useState(false)
@@ -142,7 +143,7 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
           <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[3px] shadow-sm shrink-0 ${
             TYPE_COLORS[TYPE_NAMES[displayType]] || 'bg-gray-600 text-white'
           }`}>
-            {TYPE_NAMES[displayType]}
+            {t(`types.${TYPE_NAMES[displayType]}`, { defaultValue: TYPE_NAMES[displayType] })}
           </span>
           <span className="flex items-center justify-center shrink-0 w-4 h-4" title={categoryTitles[moveDetails.category] || 'Status'}>
             {moveDetails.category === 1 ? (

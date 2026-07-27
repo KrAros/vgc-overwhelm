@@ -105,9 +105,11 @@ function simulateSitrus(rolls, defHP, eot = 0, condParts = [], useSitrus = true)
 // ── Type badge ────────────────────────────────────────────────────────────────
 
 function TypeBadge({ typeIdx }) {
+  const { t } = useTranslation()
   const name = TYPE_NAMES[typeIdx] || ''
   const cls  = TYPE_COLORS[name] || 'bg-gray-600 text-white'
-  return <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded ${cls}`}>{name.toUpperCase()}</span>
+  const displayName = t(`types.${name}`, { defaultValue: name })
+  return <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded ${cls}`}>{displayName.toUpperCase()}</span>
 }
 
 // ── HpStep — step HP intermedio nel Damage Breakdown ─────────────────────────

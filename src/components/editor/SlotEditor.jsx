@@ -218,7 +218,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                           TYPE_COLORS[typeName] || 'bg-gray-600 text-white'
                         }`}
                       >
-                        {typeName}
+                        {t(`types.${typeName}`, { defaultValue: typeName })}
                       </span>
                     )
                   })}
@@ -237,13 +237,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                   value={nature || ''}
                   onChange={e => setNature(team, index, e.target.value || null)}
                 >
-                  <option value="">Natura (neutra)</option>
+                  <option value="">{t('ui.nature_neutral')}</option>
                   {NATURES.map(n => {
                     const STAT_LABELS = ['','Atk','Def','SpA','SpD','Spe']
                     const mod = NATURE_MODIFIERS[n]
+                    const displayName = t(`natures.${n}`, { defaultValue: n.charAt(0).toUpperCase()+n.slice(1) })
                     const label = mod && mod[0] !== 0
-                      ? `${n.charAt(0).toUpperCase()+n.slice(1)} (+${STAT_LABELS[mod[0]]}, -${STAT_LABELS[mod[1]]})`
-                      : `${n.charAt(0).toUpperCase()+n.slice(1)}`
+                      ? `${displayName} (+${STAT_LABELS[mod[0]]}, -${STAT_LABELS[mod[1]]})`
+                      : displayName
                     return <option key={n} value={n}>{label}</option>
                   })}
                 </select>
