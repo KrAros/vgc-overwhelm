@@ -76,7 +76,7 @@
     "sitrus_berry": "Baccacedro",
     "sitrus_recovery": "Recupero Baccacedro",
     "sandstorm": "Tempesta di Sabbia",
-    "leftovers": "Resti",
+    "leftovers": "Avanzi",
     "copy_calc": "Copia",
     "legend": "Legenda",
     "start": "Inizio",
@@ -111,7 +111,7 @@
     "error_details": "Dettagli errore"
   },
   "eot": {
-    "leftovers_recovery": "recupero Resti",
+    "leftovers_recovery": "recupero Avanzi",
     "sitrus_recovery": "Recupero Baccacedro",
     "no_ko_in_6": "Nessun KO in 6 turni dopo",
     "guaranteed": "Garantito",
