@@ -434,39 +434,54 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
             <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
-            <div className="text-lg font-bold text-white uppercase tracking-wide mb-1.5 leading-tight">
-              {move.replace(/-/g, ' ')}
-              {recoilInfo && <span className="text-orange-400 text-[11px] font-normal ml-2 normal-case tracking-normal">({recoilInfo})</span>}
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <div className="text-lg font-bold text-white uppercase tracking-wide leading-tight">
+                {move.replace(/-/g, ' ')}
+                {recoilInfo && <span className="text-orange-400 text-[11px] font-normal ml-2 normal-case tracking-normal">({recoilInfo})</span>}
+              </div>
+              {isSpread && (
+                <span className="text-[10px] text-purple-400 font-bold uppercase tracking-widest border border-purple-700/40 rounded px-1.5 py-0.5">🌀 Spread</span>
+              )}
             </div>
             <div className="text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
             <div className="text-xs text-gray-500 mt-1">{result.minDmg} – {result.maxDmg} HP</div>
           </div>
 
-          {/* Colonna destra: spread + badge % + bottone rolls */}
-          <div className="shrink-0 flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-2 lg:self-start">
-            {isSpread && (
-              <span className="text-[10px] text-purple-400 font-bold uppercase tracking-widest">🌀 Spread Move</span>
-            )}
-            {(isOHKO || hasOHKOChance) ? (
-              <div className="border border-orange-700/50 rounded-lg px-4 py-2 text-center bg-orange-950/20 w-37.5">
-                <div className="text-[20px] font-black text-orange-400 leading-tight">{isOHKO ? '100%' : `${ohkoPct}%`}</div>
-                <div className="text-[9px] font-bold text-orange-400 uppercase tracking-widest mt-0.5">1HKO Chance</div>
+          {/* Colonna destra: badge KO — dimensioni uniformi, centrato */}
+          <div className="shrink-0 flex flex-col items-end justify-center lg:self-center">
+            {isOHKO ? (
+              <div className="border-2 border-red-500/70 rounded-xl px-5 py-4 text-center bg-red-950/30 w-36">
+                <div className="text-3xl font-black text-red-400 leading-tight">100%</div>
+                <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">1HKO {t('eot.guaranteed')}</div>
               </div>
-            ) : (
-              <div className="border border-gray-600/40 rounded-lg px-3 py-2 bg-gray-800/40 w-37.5 text-center">
-                <div className="text-[10px] font-semibold text-gray-300 leading-snug">
-                  {endOfTurnInfo?.text ?? (endOfTurnInfo?.hkoSuffix ? (endOfTurnInfo.guaranteed ? `Guaranteed ${endOfTurnInfo.hkoSuffix.replace('†','')}` : `${endOfTurnInfo.pct}% chance to ${endOfTurnInfo.hkoSuffix.replace('†','')}`) : hko)}
+            ) : hasOHKOChance ? (
+              <div className="border-2 border-orange-500/60 rounded-xl px-5 py-4 text-center bg-orange-950/20 w-36">
+                <div className="text-3xl font-black text-orange-400 leading-tight">{ohkoPct}%</div>
+                <div className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mt-1">1HKO Chance</div>
+              </div>
+            ) : endOfTurnInfo ? (
+              <div className="border-2 border-yellow-600/40 rounded-xl px-5 py-4 text-center bg-yellow-950/10 w-36">
+                <div className="text-2xl font-black text-yellow-300 leading-tight">
+                  {endOfTurnInfo.pct
+                    ? `${endOfTurnInfo.pct}%`
+                    : endOfTurnInfo.guaranteed
+                    ? endOfTurnInfo.hkoSuffix?.replace('†','')
+                    : '—'}
+                </div>
+                <div className="text-[10px] font-bold text-yellow-400 uppercase tracking-widest mt-1">
+                  {endOfTurnInfo.pct
+                    ? endOfTurnInfo.hkoSuffix?.replace('†','')
+                    : endOfTurnInfo.guaranteed
+                    ? t('eot.guaranteed')
+                    : '—'}
                 </div>
               </div>
+            ) : (
+              <div className="border-2 border-gray-600/30 rounded-xl px-5 py-4 text-center bg-gray-800/30 w-36">
+                <div className="text-2xl font-black text-gray-500 leading-tight">{hko ?? '—'}</div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko')}</div>
+              </div>
             )}
-            <button
-              type="button"
-              onClick={() => { const el = document.getElementById('damage-rolls-card'); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}
-              aria-label={t("report.scroll_rolls")}
-              className="text-[11px] font-semibold text-teal-300 uppercase tracking-[0.08em] border border-teal-700/50 rounded-lg px-4 py-1.5 hover:bg-teal-950/40 transition-colors w-37.5 text-center"
-            >
-              {t('report.scroll_to_rolls')}
-            </button>
           </div>
         </div>
 
@@ -527,9 +542,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       {/* ═══ CARD 2 + 3: BREAKDOWN | ROLLS ═══ */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-3">
 
-        {/* CARD 2: Damage Breakdown */}
+        {/* CARD 2: Breakdown Turno — logica differenziata per KO/EOT/no-EOT */}
         {(() => {
-          // HP running min/max attraverso gli step del turno
           const sitrusHeal = Math.floor(defHP * 0.25)
           let hpMin = Math.max(0, defHP - result.maxDmg)
           let hpMax = Math.max(0, defHP - result.minDmg)
@@ -541,9 +555,44 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           if (leftoversHP > 0) { hpMin = Math.min(hpMin + leftoversHP, defHP); hpMax = Math.min(hpMax + leftoversHP, defHP) }
           const hpAfterLefto = [hpMin, hpMax]
 
+          // Ci sono effetti fine turno rilevanti da mostrare?
+          const hasEOT = sitrus || (isSand && !isSandImmune) || leftoversHP > 0
+
+          // Caso 1: KO garantito — catena corta, no EOT, centrata verticalmente
+          if (isOHKO) {
+            return (
+              <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4 flex flex-col">
+                <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{t("report.turn_breakdown")}</div>
+                <div className="flex-1 flex items-center justify-center gap-3">
+                  <div className="flex flex-col items-center shrink-0 w-20">
+                    <span className="text-3xl mb-2">❤️</span>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide">{t("report.start")}</div>
+                    <div className="text-[10px] text-gray-400 capitalize truncate w-full text-center">{def.key.split('-')[0]}</div>
+                    <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
+                  </div>
+                  <span className="text-gray-600 mb-4">→</span>
+                  <div className="flex flex-col items-center shrink-0 w-23">
+                    <span className="text-3xl mb-2">⚔️</span>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide text-center w-full">{move.replace(/-/g, ' ')}</div>
+                    <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
+                  </div>
+                  <span className="text-gray-600 mb-4">→</span>
+                  <div className="flex flex-col items-center shrink-0 w-20 text-center">
+                    <span className="text-3xl mb-2">💀</span>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide">KO</div>
+                    <div className="text-xs font-bold text-red-400 mt-1">0 HP</div>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+
+          // Caso 2: KO chance o no KO — titolo sempre "Breakdown Turno"
+          const cardTitle = t("report.turn_breakdown")
+
           return (
             <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
-              <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{t("report.damage_breakdown")}</div>
+              <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{cardTitle}</div>
               <div className="flex items-center justify-center gap-1.5 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
 
                 {/* Start */}
@@ -567,6 +616,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 </div>
 
                 <HpStep range={hpAfterMove} defKey={def.key} />
+
+                {/* EOT visibili solo se rilevanti (no KO diretto) */}
 
                 {/* 2. Sitrus Berry */}
                 {sitrus && <>
@@ -615,22 +666,20 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   </div>
                   <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.result")}</div>
                   {(() => {
-                    if (isOHKO || hasOHKOChance) return (
-                      <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">
-                        {isOHKO ? '100%' : `${ohkoPct}%`}
-                      </div>
+                    if (hasOHKOChance) return (
+                      <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">{ohkoPct}%</div>
                     )
-                    const sandPct = (isSand && !isSandImmune)
-                      ? Math.round(Math.floor(defHP / 16) / defHP * 1000) / 10 : 0
-                    const minTotal = Math.round((result.minPct + sandPct) * 10) / 10
-                    const maxTotal = Math.round((result.maxPct + sandPct) * 10) / 10
+                    // Mostra % danno finale (dopo tutto l'EOT)
+                    const finalRange = leftoversHP > 0 ? hpAfterLefto : (isSand && !isSandImmune) ? hpAfterSand : sitrus ? hpAfterSitrus : hpAfterMove
+                    const minFinalPct = Math.round(Math.max(0, defHP - finalRange[1]) / defHP * 1000) / 10
+                    const maxFinalPct = Math.round(Math.max(0, defHP - finalRange[0]) / defHP * 1000) / 10
                     return (
                       <div className="text-sm font-black mt-1 whitespace-nowrap text-gray-200">
-                        {minTotal}–{maxTotal}%
+                        {minFinalPct}–{maxFinalPct}%
                       </div>
                     )
                   })()}
-                  {(isOHKO || hasOHKOChance) && <div className="text-[9px] text-orange-400 leading-tight whitespace-nowrap">1HKO chance</div>}
+                  {hasOHKOChance && <div className="text-[9px] text-orange-400 leading-tight whitespace-nowrap">1HKO chance</div>}
                 </div>
               </div>
             </div>
