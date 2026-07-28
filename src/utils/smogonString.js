@@ -27,8 +27,6 @@ export const EOT_STRINGS = {
   after:             'after',
   sitrusActivates:   (healed, hp, maxHp) => `La Sitrus Berry si attiva! +${healed} HP → ${hp}/${maxHp} HP`,
   eotDelta:          (sign, delta, hp, maxHp) => `Fine turno: ${sign}${Math.abs(delta)} HP → ${hp}/${maxHp} HP`,
-  showSim:           'Mostra simulazione turno per turno',
-  hideSim:           'Nascondi simulazione',
   turno:             (t) => `Turno ${t}:`,
   ko:                '→ KO',
 }

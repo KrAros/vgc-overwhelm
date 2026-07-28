@@ -53,7 +53,7 @@
     "refShort": "Rif",
     "critShort": "Crit",
     "twShort": "CV",
-    "import_paste_single": "Incolla qui il blocco Showdown di un singolo Pokémon...\n\nEsempio:\nGardevoir @ Lentiscelta\nAbilità: Traccia\nPS: 4 PS / 32 SpA / 30 Vel\nNatura Timida\n- Colpofatato\n- Psichico\n- Palla Ombra\n- Trick Room"
+    "import_paste_single": "Incolla qui il blocco Showdown di un singolo Pokémon...\n\nEsempio:\nGardevoir @ Choice Specs\nAbility: Trace\nSPs: 4 HP / 32 SpA / 30 Spe\nAdamant Nature\n- Moonblast\n- Psychic\n- Shadow Ball\n- Trick Room"
   },
   "report": {
     "selected_matchup": "Matchup Selezionato",
@@ -115,8 +115,6 @@
     "sitrus_recovery": "Recupero Baccacedro",
     "no_ko_in_6": "Nessun KO in 6 turni dopo",
     "guaranteed": "Garantito",
-    "show_sim": "Mostra simulazione turno per turno",
-    "hide_sim": "Nascondi simulazione",
     "sandstorm_damage": "danno tempesta di sabbia",
     "chance_to": "probabilità di",
     "after": "dopo",
