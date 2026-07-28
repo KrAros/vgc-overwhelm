@@ -140,14 +140,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const weatherBallType = isWeatherBall && field.weather
     ? WEATHER_BALL_TYPE[(field.weather || '').toLowerCase()] ?? null
     : null
-  const effectiveMoveType = weatherBallType !== null ? weatherBallType : moveData.type
+  let moveType = weatherBallType !== null ? weatherBallType : moveData.type
   const isLastRespects = move === 'last respects'
   const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
   const effectiveBP    = isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
     : moveData.power
-
-  let moveType = effectiveMoveType
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
   const isContact = moveData.contact === true
@@ -171,6 +169,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }
     if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }
     if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }
+    if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }
   }
 
   // effectiveness calcolata DOPO la conversione ate
@@ -485,5 +484,5 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     }
   }
 
-  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective, weatherBallType, effectiveBP }
+  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType }
 }

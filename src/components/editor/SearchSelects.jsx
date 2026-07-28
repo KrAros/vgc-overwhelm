@@ -98,9 +98,9 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
     ? WEATHER_BALL_TYPES[wbWeatherKey]
     : null
-  // Ate abilities: Normal → Fairy (pixilate) / Flying (aerilate)
+  // Ate abilities: Normal → Fairy (pixilate) / Flying (aerilate) / Ice (refrigerate) / Dragon (dragonize)
   const abilityKey = (ability || '').toLowerCase().replace(/ /g, '-')
-  const ATE_MAP = { 'pixilate': 17, 'aerilate': 9 } // 17=Fairy, 9=Flying in TYPE_NAMES
+  const ATE_MAP = { 'pixilate': 17, 'aerilate': 9, 'refrigerate': 5, 'dragonize': 14 } // indici in TYPE_NAMES
   const baseType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
   const isNormalMove = baseType === 0 // 0 = Normal
   const ateType = isNormalMove && ATE_MAP[abilityKey] !== undefined ? ATE_MAP[abilityKey] : null
@@ -226,6 +226,7 @@ export function ItemSearch({ value, onChange }) {
 // ─── AbilitySelect ────────────────────────────────────────────────────────────
 
 export function AbilitySelect({ value, abilities, onChange }) {
+  const { t } = useTranslation()
   const options = abilities && abilities.length > 0 ? abilities : (value ? [value] : [])
   return (
     <select
@@ -233,9 +234,11 @@ export function AbilitySelect({ value, abilities, onChange }) {
       value={value || ''}
       onChange={e => onChange(e.target.value)}
     >
-      {options.map(a => (
-        <option key={a} value={a}>{a.replace(/-/g, ' ')}</option>
-      ))}
+      {options.map(a => {
+        const key = a.toLowerCase().replace(/ /g, '-')
+        const displayName = t(`abilities.${key}`, { defaultValue: a.replace(/-/g, ' ') })
+        return <option key={a} value={a}>{displayName}</option>
+      })}
     </select>
   )
 }

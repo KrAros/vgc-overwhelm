@@ -248,28 +248,48 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   const rolls2 = result.rolls
 
   let eotSuffix = ''
-  if (eotNet !== 0 && result.minPct < 100) {
-    const eotParts = []
-    if (sandDmg2 > 0) eotParts.push('sandstorm damage')
-    if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
-    const condStr2 = eotParts.join(' and ')
-    const n = rolls2.length
-    const calcP = (hp, h) => {
-      if (h === 0) return hp <= 0 ? 1 : 0
-      let s = 0
-      for (const r of rolls2) s += calcP(hp - r + eotNet, h - 1)
-      return s / n
-    }
-    for (let hits = 2; hits <= 6; hits++) {
-      const prob = calcP(defHP2, hits)
-      if (prob > 0.0001) {
-        const pct = Math.round(prob * 1000) / 10
-        if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO after ${condStr2}`
-        else eotSuffix = ` -- ${pct}% chance to ${hits}HKO after ${condStr2}`
-        break
+  if (result.minPct < 100) {
+    if (eotNet !== 0) {
+      const eotParts = []
+      if (sandDmg2 > 0) eotParts.push('sandstorm damage')
+      if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
+      const condStr2 = eotParts.join(' and ')
+      const n = rolls2.length
+      const calcP = (hp, h) => {
+        if (h === 0) return hp <= 0 ? 1 : 0
+        let s = 0
+        for (const r of rolls2) s += calcP(hp - r + eotNet, h - 1)
+        return s / n
+      }
+      for (let hits = 2; hits <= 6; hits++) {
+        const prob = calcP(defHP2, hits)
+        if (prob > 0.0001) {
+          const pct = Math.round(prob * 1000) / 10
+          if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO after ${condStr2}`
+          else eotSuffix = ` -- ${pct}% chance to ${hits}HKO after ${condStr2}`
+          break
+        }
+      }
+      if (!eotSuffix && condStr2) eotSuffix = ` -- after ${condStr2}`
+    } else {
+      // Nessun EOT — calcola chance NHKO pura
+      const n = rolls2.length
+      const calcP = (hp, h) => {
+        if (h === 0) return hp <= 0 ? 1 : 0
+        let s = 0
+        for (const r of rolls2) s += calcP(hp - r, h - 1)
+        return s / n
+      }
+      for (let hits = 2; hits <= 6; hits++) {
+        const prob = calcP(defHP2, hits)
+        if (prob > 0.0001) {
+          const pct = Math.round(prob * 1000) / 10
+          if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO`
+          else eotSuffix = ` -- ${pct}% chance to ${hits}HKO`
+          break
+        }
       }
     }
-    if (!eotSuffix && condStr2) eotSuffix = ` -- after ${condStr2}`
   }
 
   return (

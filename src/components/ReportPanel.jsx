@@ -14,10 +14,13 @@ import { TYPES, TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
 function calcHKO(minPct) {
   if (minPct <= 0) return null
   const hits = Math.ceil(100 / minPct)
-  if (hits === 1) return 'Guaranteed OHKO'
-  if (hits === 2) return 'Guaranteed 2HKO'
-  if (hits === 3) return 'Guaranteed 3HKO'
-  return `Guaranteed ${hits}HKO`
+  return hits
+}
+
+function formatHKO(hits, t) {
+  if (!hits) return null
+  if (hits === 1) return `${t('eot.guaranteed')} OHKO`
+  return `${t('eot.guaranteed')} ${hits}HKO`
 }
 
 // ── Sitrus Berry simulation ───────────────────────────────────────────────────
@@ -185,11 +188,11 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
   }
 
   // 5. Risultato
-  if (endOfTurnInfo || sitrus) {
-    const text = sitrus ? sitrusText : endOfTurnInfo?.text
+  const resultText = sitrus ? sitrusText : endOfTurnInfo?.text
+  if (resultText) {
     steps.push(
       <span key="result" className="flex items-center gap-1.5 font-bold text-orange-400 text-xs">
-        🎯 <span>{text}</span>
+        🎯 <span>{resultText}</span>
       </span>
     )
   }
@@ -233,7 +236,7 @@ function CopyCalcButton({ smogon }) {
 
 function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
   const { t } = useTranslation()
-  const hko    = calcHKO(result.minPct)
+  const hko    = formatHKO(calcHKO(result.minPct), t)
   const smogon = buildSmogonString(atk, def, move, result, field)
   const rolls  = result.rolls
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
@@ -289,8 +292,21 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   }
 
   const endOfTurnInfo = (() => {
-    if (leftoversHP === 0 && sandDmgHP === 0) return null
     if (result.minPct >= 100) return null
+
+    // Nessun EOT — calcola chance NHKO pura, solo per badge (no breadcrumb)
+    if (leftoversHP === 0 && sandDmgHP === 0) {
+      for (let hits = 2; hits <= 6; hits++) {
+        const chance = computeKOChance(rolls, defHP, 0, hits)
+        if (chance > 0) {
+          const pct = Math.max(Math.min(Math.round(chance * 1000), 999), 1) / 10
+          const label = `${hits}HKO`
+          if (chance >= 1) return { hkoSuffix: `${label}†`, guaranteed: true }
+          return { hkoSuffix: `${label}†`, pct }
+        }
+      }
+      return null
+    }
     const parts = []
     if (isSand && !isSandImmune) parts.push('sand')
     if (leftoversHP > 0)         parts.push('left')
@@ -438,7 +454,9 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               </div>
             ) : (
               <div className="border border-gray-600/40 rounded-lg px-3 py-2 bg-gray-800/40 w-37.5 text-center">
-                <div className="text-[10px] font-semibold text-gray-300 leading-snug">{endOfTurnInfo?.text ?? hko}</div>
+                <div className="text-[10px] font-semibold text-gray-300 leading-snug">
+                  {endOfTurnInfo?.text ?? (endOfTurnInfo?.hkoSuffix ? (endOfTurnInfo.guaranteed ? `Guaranteed ${endOfTurnInfo.hkoSuffix.replace('†','')}` : `${endOfTurnInfo.pct}% chance to ${endOfTurnInfo.hkoSuffix.replace('†','')}`) : hko)}
+                </div>
               </div>
             )}
             <button
@@ -471,21 +489,34 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 px-4 py-3 border-t border-gray-700/20">
             {computedMoves.map(({ move: mv, result: res }) => {
               const isActive = mv === activeMoveKey
-              const pct = res.maxPct
-              const koColor = pct >= 100
-                ? 'border-red-500/50 text-red-300'
-                : pct >= 50
-                ? 'border-orange-500/40 text-orange-300'
-                : 'border-gray-600/40 text-gray-400'
+              const mData = movesData[mv]
+              const effectiveTypeIdx = res.effectiveMoveType ?? ((mv === 'weather ball' && res.weatherBallType != null) ? res.weatherBallType : mData?.type)
+              const moveTypeName = TYPE_NAMES[effectiveTypeIdx] || 'Normal'
+              const typeColor = TYPE_HEX[moveTypeName] || '#6b7280'
+              const hasKO = res.maxPct >= 100
+              const isHigh = res.maxPct >= 50
+              const pctColor = hasKO ? '#f87171' : isHigh ? '#fb923c' : 'var(--text-primary)'
+              const isStatus = mData?.category === 2
               return (
                 <button
                   key={mv}
                   type="button"
                   onClick={() => onMoveSelect(mv)}
-                  className={`px-3 py-2 rounded-lg border text-left transition-all bg-gray-800/30 ${koColor} ${isActive ? 'ring-1 ring-teal-400 bg-teal-950/20' : 'hover:bg-gray-800/60'}`}
+                  style={{ borderLeftColor: typeColor }}
+                  className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isActive ? 'ring-1 ring-teal-400 bg-teal-950/20' : 'hover:bg-gray-800/60'}`}
                 >
-                  <div className="text-[11px] font-semibold capitalize truncate tracking-wide">{mv.replace(/-/g, ' ')}</div>
-                  <div className="text-[11px] font-bold opacity-90 mt-0.5">{res.minPct}–{res.maxPct}%</div>
+                  <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{mv.replace(/-/g, ' ')}</div>
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
+                      {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
+                    </div>
+                    <span
+                      className="text-[9px] font-bold px-1 py-0.5 rounded shrink-0"
+                      style={{ background: typeColor + '33', color: typeColor }}
+                    >
+                      {t(`types.${moveTypeName}`, { defaultValue: moveTypeName }).toUpperCase()}
+                    </span>
+                  </div>
                 </button>
               )
             })}
@@ -896,13 +927,28 @@ function CumulativePanel({ entries }) {
                 <div className="grid grid-cols-2 gap-1.5">
                   {moves.map(({ move: mv, result: res }) => {
                     const isSel = mv === (sel || deflt?.move)
-                    const pct = res.maxPct
-                    const koColor = pct >= 100 ? 'border-red-500/50 text-red-300' : pct >= 50 ? 'border-orange-500/40 text-orange-300' : 'border-gray-600/40 text-gray-400'
+                    const mData = movesData[mv]
+                    const effectiveTypeIdx = res.effectiveMoveType ?? ((mv === 'weather ball' && res.weatherBallType != null) ? res.weatherBallType : mData?.type)
+                    const moveTypeName = TYPE_NAMES[effectiveTypeIdx] || 'Normal'
+                    const typeColor = TYPE_HEX[moveTypeName] || '#6b7280'
+                    const hasKO = res.maxPct >= 100
+                    const isHigh = res.maxPct >= 50
+                    const pctColor = hasKO ? '#f87171' : isHigh ? '#fb923c' : 'var(--text-primary)'
+                    const isStatus = mData?.category === 2
                     return (
                       <button key={mv} type="button" onClick={() => setSel(mv)}
-                        className={`px-3 py-2 rounded-lg border text-left transition-all bg-gray-800/30 ${koColor} ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
-                        <div className="text-[11px] font-semibold capitalize truncate tracking-wide">{mv.replace(/-/g, ' ')}</div>
-                        <div className="text-[11px] font-bold opacity-90 mt-0.5">{res.minPct}–{res.maxPct}%</div>
+                        style={{ borderLeftColor: typeColor }}
+                        className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
+                        <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{mv.replace(/-/g, ' ')}</div>
+                        <div className="flex items-center justify-between gap-1">
+                          <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
+                            {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
+                          </div>
+                          <span className="text-[9px] font-bold px-1 py-0.5 rounded shrink-0"
+                            style={{ background: typeColor + '33', color: typeColor }}>
+                            {t(`types.${moveTypeName}`, { defaultValue: moveTypeName }).toUpperCase()}
+                          </span>
+                        </div>
                       </button>
                     )
                   })}

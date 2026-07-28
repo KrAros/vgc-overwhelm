@@ -10,6 +10,7 @@ import useCalcStore from '../../store/useCalcStore'
  * Parsa un singolo blocco Showdown e popola lo slot corrente.
  */
 export function ImportModal({ team, index, onClose, alwaysOpen = false }) {
+  const { t } = useTranslation()
   const [text, setText] = useState('')
   const [warnings, setWarnings] = useState([])
 
@@ -36,11 +37,11 @@ export function ImportModal({ team, index, onClose, alwaysOpen = false }) {
   }
 
   return (
-    <div className={alwaysOpen ? '' : 'mt-2 p-2 bg-gray-900 rounded border border-gray-700'}>
+    <div className={alwaysOpen ? '' : 'my-3 mx-1 p-3 bg-gray-900 rounded border border-gray-700'}>
       <textarea
         autoFocus={!alwaysOpen}
         className="w-full h-36 bg-gray-800 text-gray-200 text-xs font-mono p-2 rounded border border-gray-700 resize-none outline-none focus:border-teal-500"
-        placeholder={"Paste the Showdown block for a single Pokémon here...\n\nExample:\nGardevoir @ Choice Specs\nAbility: Trace\nEVs: 4 HP / 32 SpA / 30 Spe\nTimid Nature\n- Moonblast\n- Psychic\n- Shadow Ball\n- Trick"}
+        placeholder={t("ui.import_paste_single")}
         value={text}
         onChange={e => setText(e.target.value)}
       />
