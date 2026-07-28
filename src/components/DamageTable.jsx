@@ -16,6 +16,7 @@ const SpreadIcon = () => (
   </svg>
 )
 
+
 function immuneLabel(result) {
   if (!result?.immune) return null
   if (result.reason === 'ability') {
@@ -66,9 +67,7 @@ function getBestMove(atk, def, level, field) {
 }
 
 // ── DamageCell ────────────────────────────────────────────────────────────────
-// selectionState: { first: {ri,ci,dir} | null, second: {ri,ci,dir} | null }
 
-// Formatta il nome del Pokémon per la tabella — gestisce forme Mega
 function formatPokeName(key) {
   if (!key) return ''
   if (key.endsWith('-mega') || key.endsWith('-mega-x') || key.endsWith('-mega-y')) {
@@ -81,7 +80,6 @@ function formatPokeName(key) {
 
 function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, isOnAxis, hasSelection, selDir }) {
   const { t } = useTranslation()
-  // Oscura le celle non sull'asse del difensore
   const dimCell = hasSelection && !isOnAxis
   if (!attacker?.key || !defender?.key) {
     if (showKoOnly) return <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
@@ -99,7 +97,6 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   const firstImmuneT1 = !d1 ? allMovesT1.find(({ result }) => result?.immune) : null
   const firstImmuneT2 = !d2 ? allMovesT2.find(({ result }) => result?.immune) : null
 
-  // KO filter: nascondi cella se né t1 né t2 raggiunge il 100%
   if (showKoOnly) {
     const t1Ko = d1 && d1.result.maxPct >= 100
     const t2Ko = d2 && d2.result.maxPct >= 100
@@ -110,11 +107,9 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     }
   }
 
-  // Quando showKoOnly è attivo, la metà che non fa KO viene silenziata visivamente
   const koFilterDimT1 = showKoOnly && !(d1 && d1.result.maxPct >= 100)
   const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
 
-  // Speed tier: chi va prima?
   const twAtk = field.atkTeamSide === 't2' ? field.tailwindT2 : field.tailwindT1
   const twDef = field.atkTeamSide === 't2' ? field.tailwindT1 : field.tailwindT2
   const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom, twAtk, twDef)
@@ -136,26 +131,28 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     return ''
   }
 
-  // Determina lo stato visivo di questa cella
   const { first, second } = selectionState
   const isFirst  = first  && first.ri  === ri && first.ci  === ci
   const isSecond = second && second.ri === ri && second.ci === ci
 
-  // Ring attorno alla td intera
   const cellRing = isFirst
     ? 'ring-2 ring-teal-400 ring-inset shadow-[0_0_16px_rgba(45,212,191,0.25)]'
     : isSecond
     ? 'ring-2 ring-violet-400 ring-inset shadow-[0_0_16px_rgba(167,139,250,0.25)]'
     : ''
 
-  const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false) => {
+  const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false, pokeName = '') => {
     const label = immune ? immuneLabel(immune.result) : null
 
-    // Sfondo della singola metà (sopra/sotto) quando è quella selezionata
     const halfSelected =
       (isFirst  && first.dir  === dir) ? 'bg-teal-900/40'   :
       (isSecond && second.dir === dir) ? 'bg-violet-900/40' :
       d ? bgClass(d.result.maxPct) : ''
+
+    // Fix 3: tooltip del fulmine con nome Pokémon + testo i18n
+    const goesFirstTitle = pokeName
+      ? `${pokeName} — ${t('ui.goes_first')}`
+      : t('ui.goes_first')
 
     return (
       <div
@@ -170,10 +167,14 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
       >
         {d ? (
           <>
-            <div className="text-gray-400 text-xs truncate flex items-center justify-center gap-1">
+            <div className={`text-xs truncate flex items-center justify-center gap-1 ${goesFirst ? 'text-yellow-200' : 'text-gray-400'}`}>
               {prefix} {d.move}
               {goesFirst && (
-                <span className="text-yellow-400 text-[9px] font-bold ml-0.5" title={t("ui.moves_first")}>⚡</span>
+                // Fix 3: testo più grande (text-xs invece di text-[9px]), tooltip con nome Pokémon
+                <span
+                  className="text-yellow-400 text-xs font-bold ml-0.5"
+                  title={goesFirstTitle}
+                >⚡</span>
               )}
               {movesData[d.move]?.spread === true && (
                 <span title={t("ui.spread_move")} className="text-yellow-400 inline-flex items-center">
@@ -203,8 +204,8 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
   return (
     <td className={`border-l border-t border-gray-700 ${cellRing} relative transition-all hover:brightness-125 w-25 min-w-25 max-w-25 ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
-      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1)}
-      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2)}
+      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1, attacker?.key)}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2, defender?.key)}
     </td>
   )
 }
@@ -212,8 +213,6 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 // ── DamageTable ───────────────────────────────────────────────────────────────
 
 export default function DamageTable({ onCellSelect }) {
-  // Doppia selezione: { first, second }
-  // Ogni entry: { ri, ci, dir, atk, def, field, allMoves } | null
   const { t } = useTranslation()
   const [selectionState, setSelectionState] = useState({ first: null, second: null })
   const showKoOnly = useCalcStore(s => s.showKoOnly)
@@ -233,7 +232,6 @@ export default function DamageTable({ onCellSelect }) {
   const tailwind     = useCalcStore(s => s.tailwind)
   const setEditorFocus = useCalcStore(s => s.setEditorFocus)
 
-  // Click sprite → apri tab nel TeamEditor e scrolla
   const focusEditor = (team, index) => {
     setEditorFocus(team, index)
     setTimeout(() => {
@@ -271,7 +269,6 @@ export default function DamageTable({ onCellSelect }) {
 
   const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
 
-  // Mappa abilità → meteo automatico al click cella
   const ABILITY_WEATHER = {
     'drizzle':        'rain',
     'primordial sea': 'heavy rain',
@@ -282,12 +279,10 @@ export default function DamageTable({ onCellSelect }) {
   }
 
   const handleSelect = (ri, ci, dir, atk, def, f, allMovesT1, allMovesT2) => {
-    // Auto-weather: attaccante ha priorità sul difensore
     const atkAbility = (atk?.ability || '').toLowerCase()
     const defAbility = (def?.ability || '').toLowerCase()
     const autoWeather = ABILITY_WEATHER[atkAbility] || ABILITY_WEATHER[defAbility] || null
     if (autoWeather) setTimeout(() => setWeatherDirect(autoWeather), 0)
-    // allMoves per il pannello: le mosse dell'attaccante corrente
     const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
 
     const atkTeam  = dir === 't1' ? 'team1' : 'team2'
@@ -324,19 +319,14 @@ export default function DamageTable({ onCellSelect }) {
       nextSel = [entry]
       return { first: entry, second: null }
     })
-    // Chiama onCellSelect dopo il ciclo di render
     setTimeout(() => onCellSelect?.(nextSel), 0)
   }
 
-  // Selezione attiva (per highlight e dimming) — lettura diretta, nessuna derivata intermedia
   const sel      = selectionState.first
   const selRi    = sel ? sel.ri  : null
   const selCi    = sel ? sel.ci  : null
   const selDir   = sel ? sel.dir : null
 
-  // Logica oscuramento: tieni visibile solo l'asse del DIFENSORE
-  // dir='t2' (T2 attacca T1): difensore è il Pokémon T1 → tieni la riga sel.ri
-  // dir='t1' (T1 attacca T2): difensore è il Pokémon T2 → tieni la colonna sel.ci
   const getIsOnDefenderAxis = (ri, ci) => {
     if (!sel) return true
     return sel.dir === 't2' ? ri === sel.ri : ci === sel.ci
@@ -344,6 +334,7 @@ export default function DamageTable({ onCellSelect }) {
 
   return (
     <div id="damage-table" className="mb-4">
+
       {/* Indicatore modalità cumulativa */}
       {selectionState.second && (
         <div className="mb-2 px-1">
@@ -358,7 +349,6 @@ export default function DamageTable({ onCellSelect }) {
         <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label={t("ui.damage_matrix")}>
           <thead>
             <tr>
-              {/* Intestazione angolo — sticky su mobile */}
               <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-20 min-w-20 max-w-20 border-r border-b border-gray-700/50">
                 T1 \ T2
               </th>
@@ -409,14 +399,13 @@ export default function DamageTable({ onCellSelect }) {
           <tbody>
             {team1.map((row, ri) => (
               <tr key={ri} className="transition-colors">
-                {/* Prima colonna sticky */}
                 <td className={`sticky left-0 z-10 p-2 text-center border-r border-t border-gray-700/50 w-20 min-w-20 max-w-20 h-14 overflow-hidden transition-all ${
                   selRi === ri && selDir === 't2'
-                    ? 'bg-teal-900/40'                          // difensore T1 (dir=t2)
+                    ? 'bg-teal-900/40'
                     : selRi === ri && selDir === 't1'
-                    ? 'bg-orange-900/40'                        // attaccante T1 (dir=t1)
+                    ? 'bg-orange-900/40'
                     : selRi !== null
-                    ? 'bg-gray-900 opacity-30'                  // altri T1 oscurati
+                    ? 'bg-gray-900 opacity-30'
                     : 'bg-gray-900'
                 }`}>
                   {row?.key ? (
@@ -491,24 +480,28 @@ export default function DamageTable({ onCellSelect }) {
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> <span className="text-red-400">100%+</span></div>
         </div>
         <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">{t("report.quick_info")}</div>
-        <p className="text-[11px] text-gray-500 leading-relaxed">
-          {t("report.quick_info_desc")}
-        </p>
+        <div className="space-y-1.5 text-[11px] text-gray-500 leading-relaxed">
+          <div className="flex items-start gap-1.5"><span className="text-gray-600 mt-0.5">›</span>{t("report.how_to_1")}</div>
+          <div className="flex items-start gap-1.5"><span className="text-gray-600 mt-0.5">›</span>{t("report.how_to_2")}</div>
+          <div className="flex items-start gap-1.5"><span className="text-violet-500 mt-0.5">›</span>{t("report.how_to_3")}</div>
+        </div>
       </aside>
       </div>
 
       {/* ── Legend riga compatta (schermi sotto xl) ── */}
       <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-500">
         <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">{t("report.legend")}</span>
-        <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> attacks</span>
-        <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> attacked by</span>
-        <span className="flex items-center gap-1"><span className="text-yellow-400">⚡</span> moves first</span>
+        <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> {t("report.attacks")}</span>
+        <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> {t("report.attacked_by")}</span>
+        <span className="flex items-center gap-1"><span className="text-yellow-400">⚡</span> {t("ui.moves_first")}</span>
         <span className="flex items-center gap-1"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</span>
         <span className="text-gray-600">|</span>
         <span className="text-green-400">0–25%</span>
         <span className="text-teal-300">25–50%</span>
         <span className="text-orange-400">50–100%</span>
         <span className="text-red-400">100%+ KO</span>
+        <span className="text-gray-600">|</span>
+        <span className="text-violet-400">{t("ui.cumulative_short")}</span>
       </div>
     </div>
   )

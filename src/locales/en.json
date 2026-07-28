@@ -53,7 +53,10 @@
     "refShort": "Ref",
     "critShort": "Crit",
     "twShort": "TW",
-    "import_paste_single": "Paste the Showdown block for a single Pokémon here...\n\nExample:\nGardevoir @ Choice Specs\nAbility: Trace\nEVs: 4 HP / 32 SpA / 30 Spe\nTimid Nature\n- Moonblast\n- Psychic\n- Shadow Ball\n- Trick Room"
+    "import_paste_single": "Paste the Showdown block for a single Pokémon here...\n\nExample:\nGardevoir @ Choice Specs\nAbility: Trace\nEVs: 4 HP / 32 SpA / 30 Spe\nTimid Nature\n- Moonblast\n- Psychic\n- Shadow Ball\n- Trick Room",
+    "cumulative_hint": "Click another row in the same column for cumulative damage",
+    "goes_first": "Goes first",
+    "cumulative_short": "✦ 2× same column = cumulative"
   },
   "report": {
     "selected_matchup": "Selected Matchup",
@@ -83,7 +86,7 @@
     "share_twitter": "Twitter/X",
     "share_discord": "Discord",
     "social_coming_soon": "Social — coming soon",
-    "quick_info": "Quick Info",
+    "quick_info": "How to use",
     "no_ko": "No KO",
     "copy_calc_aria": "Copy calc string",
     "close_aria": "Close report panel",
@@ -92,12 +95,17 @@
     "attacks": "Attacks",
     "attacked_by": "Attacked by",
     "spread_move": "Spread move",
-    "quick_info_desc": "Select a cell to see detailed damage analysis and KO chance. Click a sprite to open it in the Team Editor.",
+    "quick_info_desc": "Select a cell to see the full damage analysis. Click a sprite to open it in the Team Editor.",
     "attacker_n": "Attacker {{n}}",
     "moves": "Moves",
     "ko_threshold": "KO Threshold",
     "scroll_to_rolls": "Damage Rolls",
-    "likely_ko": "Likely KO"
+    "likely_ko": "Likely KO",
+    "how_to_1": "Click a cell → damage analysis",
+    "how_to_2": "Click a sprite → Team Editor",
+    "how_to_3": "Click 2 cells, same column → cumulative damage",
+    "attacks_short": "▶ attacks",
+    "attacked_by_short": "◀ attacked by"
   },
   "editor": {
     "delete_pokemon": "Delete Pokémon",

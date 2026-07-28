@@ -73,7 +73,6 @@ export default function Header() {
       {/* ── SINISTRA: fiamma + nome inline ── */}
       <div className="flex items-center gap-2 min-w-0">
         <FiammaLogo />
-        {/* tutto su una riga: "The Sixth" grigio + "Ember" bianco */}
         <span className="text-sm whitespace-nowrap">
           <span className="text-gray-400 font-normal">The Sixth </span>
           <span className="text-white font-medium">Ember</span>
@@ -84,22 +83,10 @@ export default function Header() {
         </span>
       </div>
 
-      {/* ── CENTRO: nav tab ── */}
+      {/* ── CENTRO: nav tab — solo Damage Calc, le voci future rimosse ── */}
       <nav className="flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
         <span className="text-xs px-3 py-1 rounded-full bg-teal-800 border border-teal-600 text-teal-200 font-medium">
           Damage Calc
-        </span>
-        <span className="relative text-xs px-3 py-1 rounded-full text-gray-600 cursor-not-allowed select-none">
-          Speed Tier
-          <span className="absolute -top-1.5 -right-1 text-[9px] bg-gray-700 text-gray-500 px-1 rounded-sm leading-tight">
-            presto
-          </span>
-        </span>
-        <span className="relative text-xs px-3 py-1 rounded-full text-gray-600 cursor-not-allowed select-none">
-          Meta
-          <span className="absolute -top-1.5 -right-1 text-[9px] bg-gray-700 text-gray-500 px-1 rounded-sm leading-tight">
-            presto
-          </span>
         </span>
       </nav>
 
