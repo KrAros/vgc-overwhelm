@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
+import { calcEOT, findBestNHKO } from '../lib/damage'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
-import { TYPES, TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
+import { TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
 
@@ -243,39 +244,13 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
   const defHP = result.defHP
   const defTypes = pokemonData[def.key]?.type || []
-  const SAND_IMMUNE_ABILITIES = ['sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat']
-  const defAbilityKey = (def.ability || '').toLowerCase()
-  const isSandImmune = defTypes.some(t => t === TYPES.ROCK || t === TYPES.STEEL || t === TYPES.GROUND)
-    || SAND_IMMUNE_ABILITIES.includes(defAbilityKey)
-    || def.item === 'safety goggles'
-  const weather = (field.weather || '').toLowerCase()
-  const isSand  = weather === 'sand' || weather === 'sandstorm'
-  const leftoversHP = def.item === 'leftovers' ? Math.floor(defHP / 16) : 0
-  const sandDmgHP   = isSand && !isSandImmune ? Math.floor(defHP / 16) : 0
-  const eot = leftoversHP - sandDmgHP
+  const { isSand, sandImmune: isSandImmune, sandDmgHP, leftoversHP, eotNet: eot } = calcEOT(def, defHP, field.weather, defTypes)
   const eotParts = []
   if (isSand && !isSandImmune) eotParts.push('sand')
   if (leftoversHP > 0)         eotParts.push('left')
   const sitrus = hasSitrus ? simulateSitrus(rolls, defHP, eot, eotParts) : null
 
-  function computeKOChance(damage, hp, eot, hits) {
-    const n = damage.length
-    if (hits === 1) {
-      // Il danno di fine turno (es. sand) può completare il KO nell'ultimo turno:
-      // KO se il colpo porta gli HP a <= 0 direttamente o entro il danno eot (solo se eot dannoso)
-      const threshold = hp + Math.min(eot, 0)
-      if (damage[n - 1] < threshold) return 0
-      for (let i = 0; i < n; i++) if (damage[i] >= threshold) return (n - i) / n
-      return 0
-    }
-    let sum = 0
-    for (let i = 0; i < n; i++) {
-      const c = computeKOChance(damage, hp - damage[i] + eot, eot, hits - 1)
-      if (c === 1) { sum += n - i; break }
-      else sum += c
-    }
-    return sum / n
-  }
+
 
   const formatSummary = (s) => {
     if (!s) return ''
@@ -294,36 +269,30 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    // Nessun EOT — calcola chance NHKO pura, solo per badge (no breadcrumb)
+    const best = findBestNHKO(rolls, defHP, eot)
+    if (!best || best.hits === 1) return null
+
+    const label = `${best.hits}HKO`
+
     if (leftoversHP === 0 && sandDmgHP === 0) {
-      for (let hits = 2; hits <= 6; hits++) {
-        const chance = computeKOChance(rolls, defHP, 0, hits)
-        if (chance > 0) {
-          const pct = Math.max(Math.min(Math.round(chance * 1000), 999), 1) / 10
-          const label = `${hits}HKO`
-          if (chance >= 1) return { hkoSuffix: `${label}†`, guaranteed: true }
-          return { hkoSuffix: `${label}†`, pct }
-        }
-      }
-      return null
+      // Nessun EOT — solo badge, nessun breadcrumb
+      return best.guaranteed
+        ? { hkoSuffix: label, guaranteed: true }
+        : { hkoSuffix: label, pct: best.pct }
     }
+
     const parts = []
     if (isSand && !isSandImmune) parts.push('sand')
     if (leftoversHP > 0)         parts.push('left')
     const partLabels = parts.map(p => p === 'sand' ? t('eot.sandstorm_damage') : t('eot.leftovers_recovery'))
     const condStr = partLabels.join(` ${t('eot.and')} `)
+
     if (eot === 0) return { text: `${condStr} ${t('eot.neutralize')}`, hkoSuffix: null }
-    for (let hits = 2; hits <= 6; hits++) {
-      const chance = computeKOChance(rolls, defHP, eot, hits)
-      if (chance > 0) {
-        const pct = Math.max(Math.min(Math.round(chance * 1000), 999), 1) / 10
-        const label = `${hits}HKO`
-        if (chance >= 1) return { text: `${t('eot.guaranteed')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: `${label}†`, guaranteed: true }
-        return { text: `${pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: `${label}†`, pct }
-      }
+
+    if (best.guaranteed) {
+      return { text: `${t('eot.guaranteed')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: label, guaranteed: true }
     }
-    if (condStr) return { text: `${t('eot.after')} ${condStr}`, hkoSuffix: null }
-    return null
+    return { text: `${best.pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: label, pct: best.pct }
   })()
 
   const moveRecoil = movesData[move]?.recoil || null
@@ -462,18 +431,14 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             ) : endOfTurnInfo ? (
               <div className="border-2 border-yellow-600/40 rounded-xl px-5 py-4 text-center bg-yellow-950/10 w-36">
                 <div className="text-2xl font-black text-yellow-300 leading-tight">
-                  {endOfTurnInfo.pct
-                    ? `${endOfTurnInfo.pct}%`
-                    : endOfTurnInfo.guaranteed
-                    ? endOfTurnInfo.hkoSuffix?.replace('†','')
-                    : '—'}
+                  {endOfTurnInfo.pct ? `${endOfTurnInfo.pct}%` : '100%'}
                 </div>
-                <div className="text-[10px] font-bold text-yellow-400 uppercase tracking-widest mt-1">
-                  {endOfTurnInfo.pct
-                    ? endOfTurnInfo.hkoSuffix?.replace('†','')
-                    : endOfTurnInfo.guaranteed
-                    ? t('eot.guaranteed')
-                    : '—'}
+                <div className="text-[10px] font-semibold text-yellow-400 leading-tight mt-1 px-1">
+                  {endOfTurnInfo.guaranteed && !endOfTurnInfo.text
+                    ? `${t('eot.guaranteed')} ${endOfTurnInfo.hkoSuffix}`
+                    : endOfTurnInfo.text
+                    ? endOfTurnInfo.text.replace(/^[\d.]+%\s+\S+\s+/, '').replace(/^Guaranteed\s+/, '')
+                    : endOfTurnInfo.hkoSuffix}
                 </div>
               </div>
             ) : (
@@ -554,9 +519,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           const hpAfterSand = [hpMin, hpMax]
           if (leftoversHP > 0) { hpMin = Math.min(hpMin + leftoversHP, defHP); hpMax = Math.min(hpMax + leftoversHP, defHP) }
           const hpAfterLefto = [hpMin, hpMax]
-
-          // Ci sono effetti fine turno rilevanti da mostrare?
-          const hasEOT = sitrus || (isSand && !isSandImmune) || leftoversHP > 0
 
           // Caso 1: KO garantito — catena corta, no EOT, centrata verticalmente
           if (isOHKO) {

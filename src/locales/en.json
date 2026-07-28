@@ -105,7 +105,8 @@
     "how_to_2": "Click a sprite → Team Editor",
     "how_to_3": "Click 2 cells, same column → cumulative damage",
     "attacks_short": "▶ attacks",
-    "attacked_by_short": "◀ attacked by"
+    "attacked_by_short": "◀ attacked by",
+    "turn_breakdown": "Turn breakdown"
   },
   "editor": {
     "delete_pokemon": "Delete Pokémon",

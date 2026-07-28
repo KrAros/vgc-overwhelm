@@ -105,7 +105,8 @@
     "how_to_2": "Clicca uno sprite → Team Editor",
     "how_to_3": "Clicca 2 celle, stessa colonna → danno cumulativo",
     "attacks_short": "▶ Attacca",
-    "attacked_by_short": "◀ Attaccato da"
+    "attacked_by_short": "◀ Attaccato da",
+    "turn_breakdown": "Breakdown turno"
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",

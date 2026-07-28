@@ -14,6 +14,7 @@
  */
 
 import movesData from '../data/moves.json'
+import { calcEOT, calcKOChance } from '../lib/damage'
 
 // ── Stringhe end-of-turn e Sitrus Berry (usate da ReportPanel) ───────────────
 export const EOT_STRINGS = {
@@ -233,17 +234,9 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   // EOT suffix — sandstorm damage e/o leftovers recovery (formato standard Smogon)
   const defPokeData2 = pokemonData[def.key]
   const defTypes2 = defPokeData2?.type || []
-  const SAND_IMMUNE = new Set([TYPES.ROCK, TYPES.STEEL, TYPES.GROUND])
-  const hasSandImmunity = defTypes2.some(t => SAND_IMMUNE.has(t))
-    || ['sand force','sand rush','sand veil','magic guard','overcoat'].includes((def.ability||'').toLowerCase())
-    || def.item === 'safety goggles'
-  const w2 = (field.weather||'').toLowerCase()
-  const isSand2 = w2 === 'sand' || w2 === 'sandstorm'
   const defHP2 = result.defHP
-  const sandDmg2 = isSand2 && !hasSandImmunity ? Math.floor(defHP2 / 16) : 0
-  const leftHP2  = def.item === 'leftovers' ? Math.floor(defHP2 / 16) : 0
-  const eotNet = leftHP2 - sandDmg2
   const rolls2 = result.rolls
+  const { sandDmgHP: sandDmg2, leftoversHP: leftHP2, eotNet } = calcEOT(def, defHP2, field.weather, defTypes2)
 
   let eotSuffix = ''
   if (result.minPct < 100) {
@@ -252,15 +245,8 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
       if (sandDmg2 > 0) eotParts.push('sandstorm damage')
       if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
       const condStr2 = eotParts.join(' and ')
-      const n = rolls2.length
-      const calcP = (hp, h) => {
-        if (h === 0) return hp <= 0 ? 1 : 0
-        let s = 0
-        for (const r of rolls2) s += calcP(hp - r + eotNet, h - 1)
-        return s / n
-      }
       for (let hits = 2; hits <= 6; hits++) {
-        const prob = calcP(defHP2, hits)
+        const prob = calcKOChance(rolls2, defHP2, eotNet, hits)
         if (prob > 0.0001) {
           const pct = Math.round(prob * 1000) / 10
           if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO after ${condStr2}`
@@ -270,16 +256,8 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
       }
       if (!eotSuffix && condStr2) eotSuffix = ` -- after ${condStr2}`
     } else {
-      // Nessun EOT — calcola chance NHKO pura
-      const n = rolls2.length
-      const calcP = (hp, h) => {
-        if (h === 0) return hp <= 0 ? 1 : 0
-        let s = 0
-        for (const r of rolls2) s += calcP(hp - r, h - 1)
-        return s / n
-      }
       for (let hits = 2; hits <= 6; hits++) {
-        const prob = calcP(defHP2, hits)
+        const prob = calcKOChance(rolls2, defHP2, 0, hits)
         if (prob > 0.0001) {
           const pct = Math.round(prob * 1000) / 10
           if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO`
