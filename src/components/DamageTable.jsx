@@ -6,6 +6,8 @@ import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { whoGoesFirst } from '../utils/speedOrder'
 
+const toTitleCase = s => s.replace(/(^|-)\w/g, c => c.replace('-', ' ').toUpperCase()).trim()
+
 const SpreadIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
     <line x1="5" y1="9" x2="5" y2="5" />
@@ -168,7 +170,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
         {d ? (
           <>
             <div className={`text-xs truncate flex items-center justify-center gap-1 ${goesFirst ? 'text-yellow-200' : 'text-gray-400'}`}>
-              {prefix} {d.move}
+              {prefix} {toTitleCase(d.move)}
               {goesFirst && (
                 // Fix 3: testo più grande (text-xs invece di text-[9px]), tooltip con nome Pokémon
                 <span
@@ -189,7 +191,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
         ) : label ? (
           <>
             <div className="text-gray-500 text-xs truncate">
-              {prefix} {immune.move}
+              {prefix} {toTitleCase(immune.move)}
             </div>
             <div className={`text-[10px] font-medium ${label.cls}`}>
               {label.text}
