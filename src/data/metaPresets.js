@@ -155,6 +155,15 @@ export const META_PRESETS = [
     sps: [18, 0, 10, 21, 0, 17],
     moves: ['hyper-beam', 'hyper-voice', 'quick-attack', 'detect'],
   },
+  {
+    slug: 'gholdengo',
+    label: 'Choice Scarf ',
+    nature: 'Modest',
+    item: 'choice scarf',
+    ability: 'good-as-gold',
+    sps: [1, 0, 2, 32, 0, 31],
+    moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
+  },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
   {

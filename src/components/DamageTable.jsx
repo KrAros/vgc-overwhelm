@@ -341,7 +341,7 @@ export default function DamageTable({ onCellSelect }) {
       {selectionState.second && (
         <div className="mb-2 px-1">
           <span className="text-xs text-violet-400">
-            📌 Cumulative mode active — see report above
+            {t('ui.cumulative_active')}
           </span>
         </div>
       )}

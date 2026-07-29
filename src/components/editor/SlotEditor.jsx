@@ -10,7 +10,7 @@ import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
 
 
 
-import PresetSelect from './PresetSelect.jsx'
+import PresetSelect, { CustomSetModal } from './PresetSelect.jsx'
 import StatRow from './StatRow.jsx'
 import { PokemonSearch, MoveSearch, ItemSearch, AbilitySelect } from './SearchSelects.jsx'
 import { useTranslation } from 'react-i18next'
@@ -36,9 +36,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
   const weather        = useCalcStore(s => s.weather)
 
-  const [showImport,    setShowImport]    = useState(false)
-  const [showDuplicate, setShowDuplicate] = useState(false)
-  const [exportCopied,  setExportCopied]  = useState(false)
+  const [showImport,     setShowImport]     = useState(false)
+  const [showDuplicate,  setShowDuplicate]  = useState(false)
+  const [exportCopied,   setExportCopied]   = useState(false)
+  const [showCustomModal, setShowCustomModal] = useState(false)
+  const [customRev,      setCustomRev]      = useState(0)
 
   const data         = pokemonData[pokemon?.key]
   const sps          = pokemon?.sps || [0,0,0,0,0,0]
@@ -109,6 +111,22 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
     <div className="p-3">
       {/* Barra bottoni — sempre visibile. Duplica/Esporta/Elimina disabilitati se slot vuoto */}
       <div className="flex justify-end gap-1.5 mb-2.5 text-xs">
+
+            {/* Salva Custom Set — visibile solo se c'è un Pokémon nello slot */}
+            {data && (
+              <button
+                type="button"
+                onClick={() => setShowCustomModal(true)}
+                className="flex items-center justify-center gap-1 px-2.5 py-1 rounded border transition bg-amber-900/30 hover:bg-amber-900/60 text-amber-300 border-amber-700/40"
+                title={t('editor.manage_custom_sets')}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+                <span>{t('editor.manage_custom_sets')}</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={data ? handleDuplicate : undefined}
@@ -165,7 +183,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               type="button"
               onClick={data ? () => { setPokemon(team, index, ''); setAbility(team, index, '') } : undefined}
               disabled={!data}
-              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ml-1 ${
+              className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
                 !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
                 : 'bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 border-red-900/30'
               }`}
@@ -184,6 +202,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
       )}
       {showDuplicate && data && (
         <DuplicateModal team={team} sourceIndex={index} onClose={() => setShowDuplicate(false)} />
+      )}
+      {showCustomModal && data && pokemon?.key && (
+        <CustomSetModal
+          slug={pokemon.key}
+          currentSlot={pokemon}
+          onClose={() => setShowCustomModal(false)}
+          onChanged={() => setCustomRev(r => r + 1)}
+        />
       )}
 
       <div className="flex gap-3 mb-3">
@@ -206,7 +232,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
             {pokemon?.key && (
               <>
                 <div className="flex-1 min-w-0">
-                  <PresetSelect team={team} index={index} currentSlug={pokemon?.key} />
+                  <PresetSelect team={team} index={index} currentSlug={pokemon?.key} currentSlot={pokemon} externalRev={customRev} />
                 </div>
                 <div className="flex gap-1 flex-wrap justify-end shrink-0">
                   {data?.type?.map(typeId => {
