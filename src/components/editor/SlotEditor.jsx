@@ -343,7 +343,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               <MoveSearch
                 key={mi}
                 value={pokemon?.moves[mi]}
-                placeholder={`Move ${mi+1}`}
+                placeholder={`${t('editor.move_slot')} ${mi+1}`}
                 onChange={m => handleMoveChange(mi, m)}
                 ability={ability}
               />

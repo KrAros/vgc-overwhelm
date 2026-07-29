@@ -157,7 +157,8 @@
     "duplicate": "Duplicate",
     "error_details": "Error details",
     "save_custom_set": "Save Custom Set",
-    "manage_custom_sets": "Custom Sets"
+    "manage_custom_sets": "Custom Sets",
+    "move_slot": "Move"
   },
   "eot": {
     "leftovers_recovery": "Leftovers recovery",
@@ -1857,5 +1858,31 @@
     "weak-armor": "When the Pokémon takes damage from a physical move, its Defense is lowered by 1 stage, but its Speed is boosted by 2 stages.",
     "white-smoke": "Stats cannot be lowered by other Pokémon\\",
     "zero-to-hero": "Changes into its Hero Form when it switches out of battle."
+  },
+  "abilities_desc_on": {
+    "flash-fire": "Flash Fire active — Fire moves boosted 1.5x",
+    "multiscale": "Multiscale active — damage halved (full HP)",
+    "shadow-shield": "Shadow Shield active — damage halved (full HP)",
+    "intimidate": "Intimidate active — opponent -1 Atk applied",
+    "defiant": "Intimidate active → Defiant: net +1 Atk",
+    "contrary": "Intimidate active → Contrary: drop reversed to +1 Atk",
+    "competitive": "Intimidate active → +2 Sp. Atk applied",
+    "sand-rush": "Sand Rush active — Speed ×2",
+    "chlorophyll": "Chlorophyll active — Speed ×2",
+    "swift-swim": "Swift Swim active — Speed ×2",
+    "slush-rush": "Slush Rush active — Speed ×2"
+  },
+  "abilities_desc_off": {
+    "flash-fire": "Immune to Fire — boost not yet activated",
+    "multiscale": "Multiscale inactive — HP not full",
+    "shadow-shield": "Shadow Shield inactive — HP not full",
+    "intimidate": "Intimidate not yet activated",
+    "defiant": "Triggers automatically when opponent uses Intimidate",
+    "contrary": "Triggers automatically when opponent uses Intimidate",
+    "competitive": "Triggers automatically when opponent uses Intimidate (+2 Sp. Atk)",
+    "sand-rush": "Doubles Speed in a sandstorm",
+    "chlorophyll": "Doubles Speed in harsh sunlight",
+    "swift-swim": "Doubles Speed in rain",
+    "slush-rush": "Doubles Speed in snow"
   }
 }

@@ -17,22 +17,20 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   const speedWeatherActive = speedWeatherConditions.includes((weather || '').toLowerCase())
 
   if (SPEED_WEATHER_MAP[key]) {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         speedWeatherActive
           ? 'bg-green-950/40 border-green-700/40 text-green-300'
           : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
       }`}>
-        {speedWeatherActive ? `⚡ ${fx?.descOn}` : `💡 ${fx?.descOff}`}
+        {speedWeatherActive
+          ? `⚡ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
+          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
       </div>
     )
   }
 
-
-
   if (key === 'flash-fire') {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-red-950/30 border border-red-800/30 rounded text-xs">
         <button
@@ -47,14 +45,15 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           }`} />
         </button>
         <span className={flags.flashFireActive ? 'text-red-300' : 'text-gray-500'}>
-          {flags.flashFireActive ? fx.descOn : fx.descOff}
+          {flags.flashFireActive
+            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
+            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
         </span>
       </div>
     )
   }
 
   if (key === 'multiscale' || key === 'shadow-shield') {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-blue-950/30 border border-blue-800/30 rounded text-xs">
         <button
@@ -69,7 +68,9 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           }`} />
         </button>
         <span className={flags.multiscaleActive ? 'text-blue-300' : 'text-gray-500'}>
-          {flags.multiscaleActive ? fx.descOn : fx.descOff}
+          {flags.multiscaleActive
+            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
+            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
         </span>
       </div>
     )
@@ -103,7 +104,6 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   }
 
   if (key === 'intimidate') {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className="flex items-center gap-2 mt-1 px-1 py-1 bg-yellow-950/30 border border-yellow-800/30 rounded text-xs">
         <button
@@ -118,40 +118,43 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           }`} />
         </button>
         <span className={flags.intimidateActive ? 'text-yellow-300' : 'text-gray-500'}>
-          {flags.intimidateActive ? fx.descOn : fx.descOff}
+          {flags.intimidateActive
+            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
+            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
         </span>
       </div>
     )
   }
 
   if (key === 'defiant' || key === 'contrary') {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         opponentHasIntimidateActive
           ? 'bg-green-950/40 border-green-700/40 text-green-300'
           : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
       }`}>
-        {opponentHasIntimidateActive ? `✅ ${fx.descOn}` : `💡 ${fx.descOff}`}
+        {opponentHasIntimidateActive
+          ? `✅ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
+          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
       </div>
     )
   }
 
   if (key === 'competitive') {
-    const fx = ABILITY_EFFECTS[key]
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         opponentHasIntimidateActive
           ? 'bg-pink-950/40 border-pink-700/40 text-pink-300'
           : 'bg-gray-800/60 border-gray-700/40 text-gray-500'
       }`}>
-        {opponentHasIntimidateActive ? `✅ ${fx.descOn}` : `💡 ${fx.descOff}`}
+        {opponentHasIntimidateActive
+          ? `✅ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
+          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
       </div>
     )
   }
 
-  // ── Box informativi statici — desc letta da abilityEffects.js ────────────
-  // In futuro: sostituire la stringa con una chiave i18n (es. 'ability.hospitality.desc')
+  // ── Box informativi statici ────────────────────────────────────────────────
   const abilityEffect = ABILITY_EFFECTS[key]
   if (abilityEffect?.desc) {
     const COLOR_MAP = {

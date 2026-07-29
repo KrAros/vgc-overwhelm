@@ -157,7 +157,8 @@
     "duplicate": "Duplica",
     "error_details": "Dettagli errore",
     "save_custom_set": "Salva custom set",
-    "manage_custom_sets": "Custom set"
+    "manage_custom_sets": "Custom set",
+    "move_slot": "Mossa"
   },
   "eot": {
     "leftovers_recovery": "recupero Avanzi",
@@ -1857,5 +1858,31 @@
     "weak-armor": "Quando subisce danno fisico, la Difesa scende di 1 grado ma la Velocità sale di 2 gradi.",
     "white-smoke": "Le statistiche non possono essere abbassate da altri Pokémon.",
     "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe."
+  },
+  "abilities_desc_on": {
+    "flash-fire": "Fuocosfera attivo — mosse Fuoco potenziate di ×1,5",
+    "multiscale": "Multiscaglia attivo — danno dimezzato (HP pieni)",
+    "shadow-shield": "Ombroscudo attivo — danno dimezzato (HP pieni)",
+    "intimidate": "Intimidazione attiva — avversario −1 Attacco applicato",
+    "defiant": "Intimidazione attiva → Sfida: risultato netto +1 Attacco",
+    "contrary": "Intimidazione attiva → Contrario: calo invertito a +1 Attacco",
+    "competitive": "Intimidazione attiva → +2 Attacco Speciale applicato",
+    "sand-rush": "Remasabbia attiva — Velocità ×2",
+    "chlorophyll": "Clorofilla attiva — Velocità ×2",
+    "swift-swim": "Nuotaveloce attivo — Velocità ×2",
+    "slush-rush": "Nevolocità attiva — Velocità ×2"
+  },
+  "abilities_desc_off": {
+    "flash-fire": "Immune al Fuoco — boost non ancora attivato",
+    "multiscale": "Multiscaglia inattivo — HP non pieni",
+    "shadow-shield": "Ombroscudo inattivo — HP non pieni",
+    "intimidate": "Intimidazione non ancora attivata",
+    "defiant": "Si attiva automaticamente quando l'avversario usa Intimidazione",
+    "contrary": "Si attiva automaticamente quando l'avversario usa Intimidazione",
+    "competitive": "Si attiva automaticamente quando l'avversario usa Intimidazione (+2 Att. Spec.)",
+    "sand-rush": "Raddoppia la Velocità durante una tempesta di sabbia",
+    "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
+    "swift-swim": "Raddoppia la Velocità sotto la pioggia",
+    "slush-rush": "Raddoppia la Velocità durante una nevicata"
   }
 }
