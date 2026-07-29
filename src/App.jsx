@@ -8,6 +8,8 @@ import ErrorBoundary from './components/ErrorBoundary'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import ControlBar from './components/ControlBar'
+import DebugPanel from './components/DebugPanel'
+import { IS_DEBUG } from './lib/debugBus'
 
 
 
@@ -95,6 +97,9 @@ function App() {
 
       {/* ── Footer ── */}
       <Footer />
+
+      {/* Pannello di debug: solo con ?debug=yes nell'URL */}
+      {IS_DEBUG && <DebugPanel />}
 
     </div>
   )
