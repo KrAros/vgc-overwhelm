@@ -93,7 +93,8 @@
     "team_imported": "Imported {{count}} Pokémon into Team {{n}}.",
     "team_copied": "Team {{n}} copied!",
     "link_copied": "Link copied!",
-    "import_panel_title": "Import Team {{n}}"
+    "import_panel_title": "Import Team {{n}}",
+    "import_names_of": "of"
   },
   "report": {
     "selected_matchup": "Selected Matchup",

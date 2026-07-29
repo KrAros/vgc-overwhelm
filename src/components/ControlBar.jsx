@@ -393,7 +393,7 @@ export default function ControlBar() {
           sps: p.sps,
           moves: p.moves.map(normalizeMove),
         }
-        results.push({ name, status: 'preset', label: p.label })
+        results.push({ name, status: 'preset', label: p.label, total: presets.length })
       } else {
         slots[i] = buildEmptySlot(slug)
         results.push({ name, status: 'stat', label: slug })
@@ -704,7 +704,7 @@ export default function ControlBar() {
                       r.status === 'preset'   ? '✅' :
                       r.status === 'stat'     ? '⚠️' : '❌'
                     const desc =
-                      r.status === 'preset'   ? `${r.label} — ${t('ui.import_names_result_preset')}` :
+                      r.status === 'preset'   ? `${r.label} — ${t('ui.import_names_result_preset')}${r.total > 1 ? ` (1 ${t('ui.import_names_of')} ${r.total})` : ''}` :
                       r.status === 'stat'     ? `${r.label} — ${t('ui.import_names_result_stat')}` :
                                                 t('ui.import_names_result_notfound')
                     return (
