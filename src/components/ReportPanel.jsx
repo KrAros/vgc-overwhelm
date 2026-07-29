@@ -152,7 +152,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
   // 1. Mossa (avviene per prima nel turno)
   steps.push(
     <span key="move" className="flex items-center gap-1.5 text-gray-300 text-xs font-medium">
-      ⚔️ <span className="capitalize">{activeMove?.replace(/-/g, ' ')}</span>
+      ⚔️ <span className="capitalize">{t(`moves.${activeMove}`, { defaultValue: activeMove?.replace(/-/g, ' ') })}</span>
     </span>
   )
 
@@ -405,7 +405,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
               <div className="text-lg font-bold text-white uppercase tracking-wide leading-tight">
-                {move.replace(/-/g, ' ')}
+                {t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}
                 {recoilInfo && <span className="text-orange-400 text-[11px] font-normal ml-2 normal-case tracking-normal">({recoilInfo})</span>}
               </div>
               {isSpread && (
@@ -485,7 +485,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   style={{ borderLeftColor: typeColor }}
                   className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isActive ? 'ring-1 ring-teal-400 bg-teal-950/20' : 'hover:bg-gray-800/60'}`}
                 >
-                  <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{mv.replace(/-/g, ' ')}</div>
+                  <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                   <div className="flex items-center justify-between gap-1">
                     <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                       {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
@@ -535,7 +535,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <span className="text-gray-600 mb-4">→</span>
                   <div className="flex flex-col items-center shrink-0 w-23">
                     <span className="text-3xl mb-2">⚔️</span>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide text-center w-full">{move.replace(/-/g, ' ')}</div>
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
                     <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                   </div>
                   <span className="text-gray-600 mb-4">→</span>
@@ -573,7 +573,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">⚔️</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center w-full">{move.replace(/-/g, ' ')}</div>
+                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
                   <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                 </div>
 
@@ -950,7 +950,7 @@ function CumulativePanel({ entries }) {
                       <button key={mv} type="button" onClick={() => setSel(mv)}
                         style={{ borderLeftColor: typeColor }}
                         className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
-                        <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{mv.replace(/-/g, ' ')}</div>
+                        <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                         <div className="flex items-center justify-between gap-1">
                           <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                             {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}

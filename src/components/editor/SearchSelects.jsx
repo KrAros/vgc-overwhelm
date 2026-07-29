@@ -81,7 +81,12 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   const weather = useCalcStore(s => s.weather)
 
   const filtered = query.length >= 2
-    ? ALL_MOVES.filter(m => m.includes(query.toLowerCase())).slice(0, 20)
+    ? ALL_MOVES.filter(m => {
+        const q = query.toLowerCase()
+        const enName = m.toLowerCase()
+        const itName = (itLocale.moves?.[m] || '').toLowerCase()
+        return enName.includes(q) || itName.includes(q)
+      }).slice(0, 20)
     : []
 
   const moveDetails = movesData[value]
@@ -116,8 +121,8 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
           className={`w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none capitalize ${
             value && !focused ? 'text-white' : 'text-gray-300'
           }`}
-          placeholder={focused ? placeholder : (value ? value.replace(/-/g, ' ') : placeholder)}
-          value={focused ? query : (value ? value.replace(/-/g, ' ') : '')}
+          placeholder={focused ? placeholder : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : placeholder)}
+          value={focused ? query : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : '')}
           onChange={e => { setQuery(e.target.value); setOpen(true) }}
           onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
           onBlur={() => { setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150) }}
@@ -130,7 +135,7 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
                 className="px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 cursor-pointer capitalize"
                 onMouseDown={() => { onChange(m); setQuery(''); setOpen(false) }}
               >
-                {m.replace(/-/g, ' ')}
+                {t(`moves.${m}`, { defaultValue: m.replace(/-/g, ' ') })}
               </div>
             ))}
           </div>

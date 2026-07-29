@@ -169,7 +169,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     const colorCls = COLOR_MAP[key] || 'bg-gray-800/60 border-gray-700/40 text-gray-500'
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${colorCls}`}>
-        💡 {abilityEffect.desc}
+        💡 {t(`abilities_desc.${key}`, { defaultValue: abilityEffect.desc })}
       </div>
     )
   }

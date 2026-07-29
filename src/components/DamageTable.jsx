@@ -170,7 +170,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
         {d ? (
           <>
             <div className={`text-xs truncate flex items-center justify-center gap-1 ${goesFirst ? 'text-yellow-200' : 'text-gray-400'}`}>
-              {prefix} {toTitleCase(d.move)}
+              {prefix} {t(`moves.${d.move}`, { defaultValue: toTitleCase(d.move) })}
               {goesFirst && (
                 // Fix 3: testo più grande (text-xs invece di text-[9px]), tooltip con nome Pokémon
                 <span
@@ -191,7 +191,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
         ) : label ? (
           <>
             <div className="text-gray-500 text-xs truncate">
-              {prefix} {toTitleCase(immune.move)}
+              {prefix} {t(`moves.${immune.move}`, { defaultValue: toTitleCase(immune.move) })}
             </div>
             <div className={`text-[10px] font-medium ${label.cls}`}>
               {label.text}
