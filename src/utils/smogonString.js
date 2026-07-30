@@ -14,7 +14,7 @@
  */
 
 import movesData from '../data/moves.json'
-import { calcEOT, calcKOChance } from '../lib/damage'
+import { calcEOT, findBestNHKO } from '../lib/damage'
 
 // ── Stringhe end-of-turn e Sitrus Berry (usate da ReportPanel) ───────────────
 export const EOT_STRINGS = {
@@ -238,33 +238,30 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   const rolls2 = result.rolls
   const { sandDmgHP: sandDmg2, leftoversHP: leftHP2, eotNet } = calcEOT(def, defHP2, field.weather, defTypes2)
 
+  // Prima qui c'erano due cicli quasi identici che rifacevano a mano il lavoro
+  // di findBestNHKO (§2.6): due implementazioni della stessa cosa, libere di
+  // divergere. Ora la fonte è una sola, e con la DP costa 0,1 ms invece di 270.
+  //
+  // minHits: 2 — la stringa parte dal 2HKO, come faceva il ciclo precedente.
+  // L'eventuale chance di OHKO è già mostrata a parte nel ReportPanel.
   let eotSuffix = ''
   if (result.minPct < 100) {
-    if (eotNet !== 0) {
-      const eotParts = []
-      if (sandDmg2 > 0) eotParts.push('sandstorm damage')
-      if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
-      const condStr2 = eotParts.join(' and ')
-      for (let hits = 2; hits <= 6; hits++) {
-        const prob = calcKOChance(rolls2, defHP2, eotNet, hits)
-        if (prob > 0.0001) {
-          const pct = Math.round(prob * 1000) / 10
-          if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO after ${condStr2}`
-          else eotSuffix = ` -- ${pct}% chance to ${hits}HKO after ${condStr2}`
-          break
-        }
-      }
-      if (!eotSuffix && condStr2) eotSuffix = ` -- after ${condStr2}`
-    } else {
-      for (let hits = 2; hits <= 6; hits++) {
-        const prob = calcKOChance(rolls2, defHP2, 0, hits)
-        if (prob > 0.0001) {
-          const pct = Math.round(prob * 1000) / 10
-          if (prob >= 0.9999) eotSuffix = ` -- guaranteed ${hits}HKO`
-          else eotSuffix = ` -- ${pct}% chance to ${hits}HKO`
-          break
-        }
-      }
+    const eotParts = []
+    if (sandDmg2 > 0) eotParts.push('sandstorm damage')
+    if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
+    const condStr2 = eotParts.join(' and ')
+
+    // Se sabbia e Leftovers si annullano (eotNet === 0) il KO si calcola senza
+    // EOT e la condizione non viene nominata: era già così prima.
+    const afterStr = eotNet !== 0 && condStr2 ? ` after ${condStr2}` : ''
+
+    const best = findBestNHKO(rolls2, defHP2, eotNet, { minHits: 2 })
+    if (best) {
+      eotSuffix = best.guaranteed
+        ? ` -- guaranteed ${best.hits}HKO${afterStr}`
+        : ` -- ${best.pct}% chance to ${best.hits}HKO${afterStr}`
+    } else if (afterStr) {
+      eotSuffix = ` --${afterStr}`
     }
   }
 
