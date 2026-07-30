@@ -36,91 +36,102 @@ import { calculateDamage } from '../calcEngine.js'
  * @property {number[]} rolls      — i 16 roll attesi, da NCP
  * @property {number}   [defHP]    — HP del difensore secondo NCP (facoltativo)
  * @property {string}   [nota]     — divergenza nota e sessione che la risolve
+ * @property {boolean}  [bugNoto]  — il motore diverge da NCP e sappiamo perché.
+ *                                   Il caso gira con `it.fails`: è verde finché
+ *                                   il bug c'è, e diventa rosso quando viene
+ *                                   corretto, per ricordarti di togliere il flag.
  */
 
 /** @type {CasoGolden[]} */
 const CASI_GOLDEN = [
-  // ── Batch 1 — baseline (compito tra A e B) ───────────────────────────────
+  // ── Batch 1 — baseline ───────────────────────────────────────────────────
+  // Tutti sulla stessa coppia Garchomp / Venusaur: ogni caso cambia una cosa
+  // sola rispetto al precedente, così un fallimento ha un solo sospetto.
   {
     nome: '01 — attacco fisico neutro, nessun modificatore',
-    skip: true,
     input: {
-      attacker: { atkPokemon: '', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, level: 50 },
-      defender: { defPokemon: '', defSPs: [0, 0, 0, 0, 0, 0], defNature: null },
-      move: '',
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: null, level: 50 },
+      defender: { defPokemon: 'venusaur', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'chlorophyll', defItem: null },
+      move: 'crunch',
       field: {},
     },
-    rolls: [],
+    rolls: [41, 42, 42, 43, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48, 48, 49],
+    defHP: 187,
+    nota: 'Formula base + conversione 1 SP = 8 EV su HP e Difesa. Danno base 41.',
   },
   {
-    nome: '02 — attacco speciale con STAB',
-    skip: true,
+    nome: '02 — attacco fisico con STAB',
     input: {
-      attacker: { atkPokemon: '', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, level: 50 },
-      defender: { defPokemon: '', defSPs: [0, 0, 0, 0, 0, 0], defNature: null },
-      move: '',
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: null, level: 50 },
+      defender: { defPokemon: 'venusaur', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'chlorophyll', defItem: null },
+      move: 'high horsepower',
       field: {},
     },
-    rolls: [],
+    rolls: [73, 73, 75, 76, 76, 78, 78, 79, 79, 81, 82, 82, 84, 84, 85, 87],
+    defHP: 187,
+    nota: 'STAB ×1.5 applicato DOPO il troncamento del roll. I doppioni (73,73) sono la firma di questo ordine: applicando lo STAB prima del roll uscirebbe 73,74,75,76,77…',
+  },
+  {
+    nome: '02b — attacco speciale con STAB',
+    input: {
+      attacker: { atkPokemon: 'venusaur', atkSPs: [32, 0, 32, 0, 0, 0], atkNature: 'hardy', atkAbility: 'chlorophyll', atkItem: null, level: 50 },
+      defender: { defPokemon: 'garchomp', defSPs: [0, 32, 0, 0, 0, 0], defNature: 'hardy', defAbility: 'sand veil', defItem: null },
+      move: 'energy ball',
+      field: {},
+    },
+    rolls: [58, 60, 60, 61, 61, 63, 63, 64, 64, 66, 66, 67, 67, 69, 69, 70],
+    defHP: 183,
+    nota: 'Ramo speciale: SpA, SpD e categoria mossa passano per codice diverso dai casi fisici.',
   },
   {
     nome: '03 — mossa spread in doubles',
-    skip: true,
     input: {
-      attacker: { atkPokemon: '', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, level: 50 },
-      defender: { defPokemon: '', defSPs: [0, 0, 0, 0, 0, 0], defNature: null },
-      move: '',
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: null, level: 50 },
+      defender: { defPokemon: 'venusaur', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'chlorophyll', defItem: null },
+      move: 'earthquake',
       field: { doubleTarget: true },
     },
-    rolls: [],
+    rolls: [58, 58, 60, 60, 60, 61, 61, 63, 63, 64, 64, 66, 66, 67, 67, 69],
+    defHP: 187,
+    nota: 'Penalità spread: 61 × 0.75 = 45.75, arrotondato SU a 46 (pokeRound). Con un floor uscirebbe 45 e la sequenza partirebbe da 57.',
   },
   {
     nome: '04 — attacco super efficace ×2',
-    skip: true,
     input: {
-      attacker: { atkPokemon: '', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, level: 50 },
-      defender: { defPokemon: '', defSPs: [0, 0, 0, 0, 0, 0], defNature: null },
-      move: '',
-      field: {},
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: null, level: 50 },
+      defender: { defPokemon: 'typhlosion', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'blaze', defItem: null },
+      move: 'earthquake',
+      field: { doubleTarget: true },
     },
-    rolls: [],
+    rolls: [116, 120, 120, 122, 122, 126, 126, 128, 128, 132, 132, 134, 134, 138, 138, 140],
+    defHP: 185,
+    nota: 'Tre verifiche insieme: efficacia ×2 dopo lo STAB (invertendo l\'ordine uscirebbe 117 invece di 116); pokeRound che arrotonda GIÙ (63 × 0.75 = 47.25 → 47), complementare al caso 03.',
   },
   {
-    nome: '05 — attacco con Choice Band',
-    skip: true,
+    nome: '05 — attacco con Life Orb',
     input: {
-      attacker: { atkPokemon: '', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, atkItem: 'choice band', level: 50 },
-      defender: { defPokemon: '', defSPs: [0, 0, 0, 0, 0, 0], defNature: null },
-      move: '',
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: 'life orb', level: 50 },
+      defender: { defPokemon: 'venusaur', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'chlorophyll', defItem: null },
+      move: 'crunch',
       field: {},
     },
-    rolls: [],
+    rolls: [53, 55, 55, 56, 56, 57, 57, 58, 58, 60, 60, 61, 61, 62, 62, 64],
+    defHP: 187,
+    nota: 'Moltiplicatore di danno finale 5324/4096 con pokeRound. Con un floor nove valori su sedici cambierebbero.',
   },
-
-  // ── Batch 2 — modificatori multipli (compito tra B e C) ──────────────────
-  // 06 Multiscale + Reflect
-  // 07 Filter/Solid Rock + resist berry
-  //    NOTA: `filter` oggi è un ramo morto in calcEngine (in abilityEffects.js
-  //    ha solo `desc`). Questo caso fallirà per assenza dell'abilità, non per
-  //    chainMods. Va risolto in D o F, non confonderlo con §1.2.
-  // 08 Life Orb + Multiscale
-  // 09 Fluffy contro mossa a contatto di tipo Fire
-  //    NOTA: stessa situazione di 07 — `fluffy` è un ramo morto oggi.
-  // 10 Colpo critico contro difensore a +2 Def dietro Reflect
-
-  // ── Batch 3 — crit e schermi (compito tra C e D) ─────────────────────────
-  // 11 Crit contro difensore a +2 Def
-  // 12 Crit contro attaccante a −1 Atk (Intimidate)
-  // 13 Crit attraverso Reflect
-  // 14 Aurora Veil da sola
-  // 15 Mossa Fire sotto pioggia intensa
-
-  // ── Batch 4 — combinazioni (compito tra D ed E) ──────────────────────────
-  // 16 Adaptability + super efficace
-  // 17 Ate ability (Pixilate) + Life Orb
-  // 18 Body Press contro difensore con boost
-  // 19 Spread + meteo + STAB
-  // 20 Multiscale + Filter + resist berry insieme
+  {
+    nome: '05b — item type-boost ×1.2 (Soft Sand)',
+    bugNoto: true,
+    input: {
+      attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: 'soft sand', level: 50 },
+      defender: { defPokemon: 'blastoise', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'torrent', defItem: null },
+      move: 'high horsepower',
+      field: {},
+    },
+    rolls: [78, 79, 79, 81, 82, 82, 84, 85, 85, 87, 87, 88, 90, 90, 91, 93],
+    defHP: 186,
+    nota: 'BUG CONFERMATO — §1.10. NCP applica il ×1.2 alla POTENZA BASE (95 → 114, danno base 62); il motore lo applica alla STATISTICA d\'attacco (182 → 218, danno base 61). Divergenza di 1 HP sul danno base, 1–2 HP sui roll. Vale per tutti gli item ×1.2 per tipo e per Muscle Band / Wise Glasses. Da correggere nella sessione D. ATTENZIONE: la maggior parte dei matchup NON distingue i due modelli (coincidono per arrotondamento) — Blastoise è uno dei 233 che li separa.',
+  },
 ]
 
 describe('calcEngine — casi golden da NCP', () => {
@@ -140,7 +151,10 @@ describe('calcEngine — casi golden da NCP', () => {
   })
 
   for (const caso of CASI_GOLDEN) {
-    const test = caso.skip ? it.skip : it
+    // `it.fails` si aspetta che il test fallisca: resta verde finché il bug
+    // esiste e diventa rosso quando viene corretto, ricordandoti di togliere
+    // il flag `bugNoto`. Un test rosso permanente lo smetteresti di guardare.
+    const test = caso.skip ? it.skip : caso.bugNoto ? it.fails : it
     test(caso.nome, () => {
       const risultato = calculateDamage({ ...caso.input, debug: false })
       expect(risultato).not.toBeNull()
