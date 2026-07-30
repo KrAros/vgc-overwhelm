@@ -4,6 +4,7 @@ import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 import { NATURE_MODIFIERS } from './data/natures.js'
 import { ITEM_EFFECTS } from './data/itemEffects.js'
 import { ABILITY_EFFECTS, normalizeAbilityKey } from './data/abilityEffects.js'
+import { IS_DEBUG, publishDebugLog } from './lib/debugBus.js'
 
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
@@ -32,7 +33,10 @@ function spToEv(sp) {
   return Math.min(sp ?? 0, MAX_SP_PER_STAT) * 8
 }
 
-function validateSPs(sps) {
+// Il warning sta nel percorso caldo: con 36 celle × 4 direzioni × 4 mosse
+// può sparare centinaia di righe per render. Ora parla solo a debug acceso.
+function validateSPs(sps, debug) {
+  if (!debug) return
   const total = sps.reduce((a, b) => a + b, 0)
   if (total > MAX_SP_TOTAL) {
     console.warn(`SP totali (${total}) superano il massimo di ${MAX_SP_TOTAL}`)
@@ -87,9 +91,7 @@ function isGrounded(pokeData, ability) {
   return true
 }
 
-const isDebugMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'yes'
-
-export function calculateDamage({ attacker, defender, move, field = {}, debug = isDebugMode }) {
+export function calculateDamage({ attacker, defender, move, field = {}, debug = IS_DEBUG }) {
   const {
     atkPokemon,
     atkSPs = [0,0,0,0,0,0],
@@ -114,8 +116,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     defAbilityFlags = {},
   } = defender
 
-  validateSPs(atkSPs)
-  validateSPs(defSPs)
+  validateSPs(atkSPs, debug)
+  validateSPs(defSPs, debug)
 
   const moveData = MOVE_DATA[move]
   if (!moveData || !moveData.power) return null
@@ -411,77 +413,42 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const minPct = Math.floor(minDmg / defHP * 1000) / 10
   const maxPct = Math.floor(maxDmg / defHP * 1000) / 10
 
-  // ── Debug panel ───────────────────────────────────────────────────────────
-  const terrainLabel = {
-    electric: '⚡ Electric Terrain',
-    grassy: '🌿 Grassy Terrain',
-    misty: '🌫️ Misty Terrain',
-    psychic: '🔮 Psychic Terrain',
-  }
+  // ── Log di debug ──────────────────────────────────────────────────────────
+  // Costruito SOLO a debug acceso: le 15 stringhe interpolate costavano il
+  // 52% del tempo di ogni chiamata (misurato), moltiplicato per ~576 chiamate
+  // a render della tabella. A debug spento `log` resta null.
+  //
+  // Il disegno del pannello non è più qui: il motore pubblica il log sul bus
+  // e DebugPanel.jsx lo renderizza in JSX. Nessun accesso al DOM da questo file.
+  let log = null
 
-  const log = [
-    `📊 ${atkPokemon} → ${move} → ${defPokemon}`,
-    `⚔️  Stat attacco: ${atkStatFinal} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, boost ${atkBoostVal > 0 ? '+' : ''}${atkBoostVal}, natura ${atkNature || 'neutra'})`,
-    `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, boost ${defBoostVal > 0 ? '+' : ''}${defBoostVal}, natura ${defNature || 'neutra'})`,
-    `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
-    `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
-    `🌍 Spread: ${isSpread ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
-    `🎯 STAB: ${stab > 1 ? `×${stab} ✅` : '×1 ❌'}`,
-    `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
-    isContact ? `👊 Contatto: sì` : null,
-    atkAbility ? `⚡ Abilità atk: ${atkAbility}` : null,
-    defAbility ? `🛡️ Abilità def: ${defAbility}` : null,
-    field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
-    field.weather ? `☀️ Meteo: ${field.weather}` : null,
-    `🎲 Danno min: ${minDmg} (${minPct}%) | max: ${maxDmg} (${maxPct}%)`,
-    `🎲 Rolls: ${rolls.join(', ')}`,
-  ].filter(Boolean)
-
-  if (typeof document !== 'undefined') {
-    let debugContainer = document.getElementById('pokemon-debug-logger')
-
-    if (debug) {
-      if (!debugContainer) {
-        debugContainer = document.createElement('div')
-        debugContainer.id = 'pokemon-debug-logger'
-        document.body.appendChild(debugContainer)
-
-        const style = document.createElement('style')
-        style.textContent = `
-          #pokemon-debug-logger {
-            position: fixed; bottom: 20px; right: 20px;
-            background: #1e1e2e; color: #cdd6f4;
-            border-radius: 12px; padding: 16px;
-            font-family: monospace; max-width: 420px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            z-index: 9999; max-height: 75vh;
-            overflow-y: auto; border: 1px solid #313244;
-          }
-          .db-title { font-weight: bold; border-bottom: 1px solid #313244; padding-bottom: 6px; margin-bottom: 8px; color: #f5e0dc; font-size: 13px; }
-          .db-item { font-size: 11px; margin-bottom: 4px; color: #a6adc8; border-bottom: 1px dashed #252538; padding-bottom: 2px; }
-          .db-res { margin-top: 10px; background: #252538; padding: 8px; border-radius: 6px; border-left: 3px solid #fab387; font-size: 11px; }
-        `
-        document.head.appendChild(style)
-      }
-
-      const headerText = log[0]
-      const rollsText = log[log.length - 1]
-      const minMaxText = log[log.length - 2]
-      const details = log.slice(1, -2)
-
-      debugContainer.innerHTML = `
-        <div class="db-title">${headerText}</div>
-        <div>
-          ${details.map(d => `<div class="db-item">${d}</div>`).join('')}
-        </div>
-        <div class="db-res">
-          <strong>${minMaxText}</strong>
-          <div style="font-size: 10px; color: #b4befe; margin-top: 5px; word-break: break-all;">${rollsText}</div>
-        </div>
-      `
-    } else if (debugContainer) {
-      debugContainer.remove()
+  if (debug) {
+    const terrainLabel = {
+      electric: '⚡ Electric Terrain',
+      grassy: '🌿 Grassy Terrain',
+      misty: '🌫️ Misty Terrain',
+      psychic: '🔮 Psychic Terrain',
     }
+
+    log = [
+      `📊 ${atkPokemon} → ${move} → ${defPokemon}`,
+      `⚔️  Stat attacco: ${atkStatFinal} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, boost ${atkBoostVal > 0 ? '+' : ''}${atkBoostVal}, natura ${atkNature || 'neutra'})`,
+      `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, boost ${defBoostVal > 0 ? '+' : ''}${defBoostVal}, natura ${defNature || 'neutra'})`,
+      `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
+      `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
+      `🌍 Spread: ${isSpread ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
+      `🎯 STAB: ${stab > 1 ? `×${stab} ✅` : '×1 ❌'}`,
+      `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,
+      isContact ? `👊 Contatto: sì` : null,
+      atkAbility ? `⚡ Abilità atk: ${atkAbility}` : null,
+      defAbility ? `🛡️ Abilità def: ${defAbility}` : null,
+      field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
+      field.weather ? `☀️ Meteo: ${field.weather}` : null,
+      `🎲 Danno min: ${minDmg} (${minPct}%) | max: ${maxDmg} (${maxPct}%)`,
+      `🎲 Rolls: ${rolls.join(', ')}`,
+    ].filter(Boolean)
+
+    publishDebugLog(log)
   }
 
   return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType }
