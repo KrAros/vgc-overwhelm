@@ -8,6 +8,7 @@
  */
 
 import { TYPES } from '../data/typeChart'
+import { MAX_HITS } from './rules.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
 
@@ -21,7 +22,10 @@ import { TYPES } from '../data/typeChart'
  * fermo a 6 turni (insieme alla chiave i18n `eot.no_ko_in_6`). Vanno allineati,
  * ma è un file fuori dallo scope di questa sessione.
  */
-export const MAX_HITS = 9
+// Ri-esportata per compatibilità: la definizione sta in `lib/rules.js` dalla
+// sessione C, insieme alle altre regole di gioco. I chiamanti storici
+// (`utils/smogonString.js`, i test) continuano a importarla da qui.
+export { MAX_HITS }
 
 /**
  * Sotto questa probabilità un KO viene considerato inesistente.

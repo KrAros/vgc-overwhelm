@@ -11,7 +11,8 @@
 
 import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
-import { calcFinalStat } from './statCalc'
+import { calcStat } from '../lib/stats.js'
+import { applyBoost, LEVEL, STAT_SPE } from '../lib/rules.js'
 
 const SPEED_WEATHER_CONDITIONS = {
   'sand-rush':   ['sand', 'sandstorm'],
@@ -20,20 +21,18 @@ const SPEED_WEATHER_CONDITIONS = {
   'slush-rush':  ['snow', 'hail'],
 }
 
-const BOOST_NUM = [2,2,2,2,2,2,2,3,4,5,6,7,8]
-const BOOST_DEN = [8,7,6,5,4,3,2,2,2,2,2,2,2]
-
 export function calcEffectiveSpe(pokemon, weather, tailwind = false) {
   if (!pokemon?.key) return 0
-  const base = pokemonData[pokemon.key]?.stats?.[5] ?? 0
-  const sp   = pokemon.sps?.[5] ?? 0
-  const boostVal = pokemon.speBoost ?? 0
+  const base = pokemonData[pokemon.key]?.stats?.[STAT_SPE] ?? 0
+  const sp   = pokemon.sps?.[STAT_SPE] ?? 0
 
-  let spe = calcFinalStat(base, sp, 50, pokemon.nature, 5)
-
-  if (boostVal !== 0) {
-    spe = Math.floor(spe * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
-  }
+  // La tabella boost arriva da lib/rules dalla sessione C: prima questo file
+  // ne aveva una copia propria, con 2/2 in posizione neutra invece di 1/1.
+  // Davano lo stesso risultato, ma erano due tabelle.
+  let spe = applyBoost(
+    calcStat(base, sp, LEVEL, pokemon.nature, STAT_SPE),
+    pokemon.speBoost ?? 0,
+  )
 
   // Tailwind raddoppia la Spe (si moltiplica con l'abilità meteo)
   if (tailwind) spe = spe * 2

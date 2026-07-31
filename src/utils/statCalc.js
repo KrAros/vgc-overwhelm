@@ -1,16 +1,20 @@
-import { NATURE_MODIFIERS } from '../data/natures'
-export const STAT_NAMES = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
+/**
+ * src/utils/statCalc.js
+ *
+ * ─── FILE DI COMPATIBILITÀ ─────────────────────────────────────────────────
+ * La formula vera vive in `src/lib/stats.js` dalla sessione C. Questo file
+ * resta solo per non riscrivere i suoi quattro chiamanti (`speedOrder.js`,
+ * `editor/StatRow.jsx`, `editor/SlotEditor.jsx`, `ReportPanel.jsx`) dentro una
+ * sessione il cui vincolo è "i numeri non si muovono".
+ *
+ * `calcFinalStat` è `calcStat` sotto un altro nome. La firma è identica —
+ * (base, sp, level, nature, statIdx) — quindi i chiamanti esistenti
+ * continuano a funzionare senza modifiche. La differenza è che ora possono
+ * anche passare `weather` e `pokeTypes` come sesto e settimo argomento e
+ * ottenere i bonus meteo, cosa che prima solo il motore sapeva fare.
+ *
+ * Quando i chiamanti saranno migrati a `lib/stats`, questo file sparisce.
+ */
 
-export function calcFinalStat(base, sp, level, nature, statIdx) {
-  const ev = Math.min(sp ?? 0, 32) * 8
-  const iv = 31
-  if (statIdx === 0) {
-    return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
-  }
-  const mod = nature && NATURE_MODIFIERS[nature]
-    ? (NATURE_MODIFIERS[nature][0] === statIdx ? 11
-      : NATURE_MODIFIERS[nature][1] === statIdx ? 9 : 10)
-    : 10
-  const raw = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5
-  return Math.floor(raw * mod / 10)
-}
+export { calcStat as calcFinalStat, calcStat, getBaseStat, getNatureModifier } from '../lib/stats.js'
+export { STAT_NAMES } from '../lib/rules.js'

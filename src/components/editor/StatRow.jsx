@@ -1,13 +1,11 @@
-import { calcFinalStat, STAT_NAMES } from '../../utils/statCalc'
+import { calcStat } from '../../lib/stats.js'
+import { applyBoost, STAT_NAMES, MAX_SP_PER_STAT } from '../../lib/rules.js'
 import { NATURE_MODIFIERS } from '../../data/natures.js'
-
-const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
-const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
 
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
 export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive, tailwindActive = false }) {
-  const finalStat = calcFinalStat(base, sp, level, nature, statIdx)
+  const finalStat = calcStat(base, sp, level, nature, statIdx)
 
   // Abilità meteo-velocità: raddoppiano la Spe sotto il meteo corrispondente
   const speedMult = statIdx === 5 ? (speedWeatherActive ? 2 : 1) * (tailwindActive ? 2 : 1) : 1
@@ -15,7 +13,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
   const effectiveStat = speedBase ?? finalStat
 
   const boostedStat = boostVal !== 0
-    ? Math.floor(effectiveStat * BOOST_NUM[6 + boostVal] / BOOST_DEN[6 + boostVal])
+    ? applyBoost(effectiveStat, boostVal)
     : speedBase  // se nessun boost ma abilità meteo attiva, mostra il valore ×2
 
   const mod = nature && NATURE_MODIFIERS[nature]
@@ -31,7 +29,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
       <span className="text-xs text-gray-500 w-8 text-center">{STAT_NAMES[statIdx]}</span>
       <span className="text-xs text-gray-400 w-7 text-center">{base}</span>
       <input
-        type="range" min="0" max="32" value={sp}
+        type="range" min="0" max={MAX_SP_PER_STAT} value={sp}
         onChange={e => onSpChange(parseInt(e.target.value))}
         className="flex-1 h-1 accent-teal-400"
       />
@@ -41,8 +39,8 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
         </span>
       )}
       <input
-        type="number" min="0" max="32" value={sp}
-        onChange={e => onSpChange(Math.min(32, Math.max(0, parseInt(e.target.value) || 0)))}
+        type="number" min="0" max={MAX_SP_PER_STAT} value={sp}
+        onChange={e => onSpChange(Math.min(MAX_SP_PER_STAT, Math.max(0, parseInt(e.target.value) || 0)))}
         className="w-11 bg-gray-700 text-white text-xs rounded px-1 py-0.5 outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
       <span className={`text-xs font-medium w-8 text-center ${statColor}`}>

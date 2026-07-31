@@ -1,88 +1,38 @@
 import pokemonData from './data/pokemon.json'
 import movesData from './data/moves.json'
 import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
-import { NATURE_MODIFIERS } from './data/natures.js'
 import { ITEM_EFFECTS } from './data/itemEffects.js'
 import { ABILITY_EFFECTS, normalizeAbilityKey } from './data/abilityEffects.js'
 import { IS_DEBUG, publishDebugLog } from './lib/debugBus.js'
+import {
+  LEVEL,
+  MAX_SP_TOTAL,
+  applyBoost,
+  totalSPs,
+  STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
+} from './lib/rules.js'
+import { calcStat, getBaseStat } from './lib/stats.js'
 
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
 
-const STAT_HP  = 0
-const STAT_ATT = 1
-const STAT_DEF = 2
-const STAT_SPA = 3
-const STAT_SPD = 4
+// Le costanti di regola, le tabelle boost e il calcolo delle statistiche vivono
+// in `lib/rules.js` e `lib/stats.js` dalla sessione C — vedi gli import in cima.
 
-const BOOST_NUM = [2,2,2,2,2,2,1,3,4,5,6,7,8]
-const BOOST_DEN = [8,7,6,5,4,3,1,2,2,2,2,2,2]
-
-function applyBoost(stat, boost) {
-  if (!boost) return stat
-  return Math.floor(stat * BOOST_NUM[6 + boost] / BOOST_DEN[6 + boost])
-}
-
-// Spread moves tracked via moveData.spread nel JSON — nessun Set separato
-
-const MAX_SP_PER_STAT = 32
-const MAX_SP_TOTAL = 66
-const IV = 31
-
-function spToEv(sp) {
-  return Math.min(sp ?? 0, MAX_SP_PER_STAT) * 8
-}
-
-// Il warning sta nel percorso caldo: con 36 celle × 4 direzioni × 4 mosse
-// può sparare centinaia di righe per render. Ora parla solo a debug acceso.
+/**
+ * Segnala uno spread illegale, ma solo a debug acceso.
+ *
+ * Il controllo sta nel percorso caldo: con 36 celle × 4 direzioni × 4 mosse
+ * può sparare centinaia di righe per render. Il vincolo dei 66 SP non è
+ * ancora mostrato all'utente da nessuna parte nell'interfaccia — è un punto
+ * aperto della sessione F.
+ */
 function validateSPs(sps, debug) {
   if (!debug) return
-  const total = sps.reduce((a, b) => a + b, 0)
+  const total = totalSPs(sps)
   if (total > MAX_SP_TOTAL) {
     console.warn(`SP totali (${total}) superano il massimo di ${MAX_SP_TOTAL}`)
   }
-}
-
-function getNatureModifier(nature, stat) {
-  if (!nature || !NATURE_MODIFIERS[nature]) return 10
-  const [boost, drop] = NATURE_MODIFIERS[nature]
-  if (boost === 0) return 10
-  if (stat === boost) return 11
-  if (stat === drop) return 9
-  return 10
-}
-
-function getBaseStat(pokemon, stat) {
-  if (!pokemon || !POKEMON_DATA[pokemon]) return 0
-  if (pokemon === 'aegislash' && stat === STAT_ATT) return 150
-  if (pokemon === 'aegislash' && stat === STAT_SPA) return 150
-  return POKEMON_DATA[pokemon].stats[stat]
-}
-
-function calcStat(base, sp, level = 50, nature = null, stat, weather = null, pokeTypes = []) {
-  const ev = spToEv(sp)
-  const iv = IV
-  let result
-  if (stat === STAT_HP) {
-    result = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
-  } else {
-    const raw = Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5
-    result = Math.floor(raw * getNatureModifier(nature, stat) / 10)
-  }
-
-  if (weather === 'sand' && stat === STAT_SPD) {
-    if (pokeTypes.includes(TYPES.ROCK)) {
-      result = Math.floor(result * 1.5)
-    }
-  }
-
-  if (weather === 'snow' && stat === STAT_DEF) {
-    if (pokeTypes.includes(TYPES.ICE)) {
-      result = Math.floor(result * 1.5)
-    }
-  }
-
-  return result
 }
 
 function isGrounded(pokeData, ability) {
@@ -102,7 +52,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     spAtkBoost = 0,
     atkAbilityFlags = {},
     lastRespectsKOs = 0,
-    level = 50,
+    level = LEVEL,
   } = attacker
 
   const {
