@@ -5,6 +5,8 @@ import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { whoGoesFirst } from '../utils/speedOrder'
+import { buildAttackerInput, buildDefenderInput, buildField } from '../lib/battleState'
+import useFieldState from '../hooks/useFieldState'
 
 const toTitleCase = s => s.replace(/(^|-)\w/g, c => c.replace('-', ' ').toUpperCase()).trim()
 
@@ -28,35 +30,12 @@ function immuneLabel(result) {
 }
 
 function calcAllMoves(atk, def, level, field) {
-  return (atk.moves || []).filter(Boolean).map(move => {
-    const result = calculateDamage({
-      attacker: {
-        atkPokemon:      atk.key,
-        atkSPs:          atk.sps || [0,0,0,0,0,0],
-        atkNature:       atk.nature,
-        atkBoost:        atk.atkBoost || 0,
-        spAtkBoost:      atk.spAtkBoost || 0,
-        atkItem:         atk.item || null,
-        atkAbility:      atk.ability || null,
-        atkAbilityFlags: atk.abilityFlags || {},
-        lastRespectsKOs: atk.lastRespectsKOs || 0,
-        level,
-      },
-      defender: {
-        defPokemon:      def.key,
-        defSPs:          def.sps || [0,0,0,0,0,0],
-        defNature:       def.nature,
-        defBoost:        def.defBoost || 0,
-        spDefBoost:      def.spDefBoost || 0,
-        defItem:         def.item || null,
-        defAbility:      def.ability || null,
-        defAbilityFlags: def.abilityFlags || {},
-      },
-      move,
-      field,
-    })
-    return { move, result }
-  })
+  const attacker = buildAttackerInput(atk, level)
+  const defender = buildDefenderInput(def)
+  return (atk.moves || []).filter(Boolean).map(move => ({
+    move,
+    result: calculateDamage({ attacker, defender, move, field }),
+  }))
 }
 
 function getBestMove(atk, def, level, field) {
@@ -158,10 +137,10 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
     return (
       <div
-        onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) }}
+        onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m, m) }}
         role="button"
         tabIndex={0}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, field, m, m) } }}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m, m) } }}
         aria-label={d ? `${dir === 't1' ? attacker?.key : defender?.key} uses ${d.move}, ${d.result.minPct}–${d.result.maxPct}% damage` : `${dir === 't1' ? '▶' : '◀'} no move`}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
@@ -222,16 +201,7 @@ export default function DamageTable({ onCellSelect }) {
   const team1 = useCalcStore(s => s.team1)
   const team2 = useCalcStore(s => s.team2)
   const level = useCalcStore(s => s.level)
-  const weather = useCalcStore(s => s.weather)
-  const terrain = useCalcStore(s => s.terrain)
-  const helpingHand = useCalcStore(s => s.helpingHand)
-  const auroraVeil  = useCalcStore(s => s.auroraVeil)
-  const lightScreen = useCalcStore(s => s.lightScreen)
-  const reflect     = useCalcStore(s => s.reflect)
-  const crit        = useCalcStore(s => s.crit)
-  const doubleTarget = useCalcStore(s => s.doubleTarget)
-  const trickRoom    = useCalcStore(s => s.trickRoom)
-  const tailwind     = useCalcStore(s => s.tailwind)
+  const campo = useFieldState()
   const setEditorFocus = useCalcStore(s => s.setEditorFocus)
 
   const focusEditor = (team, index) => {
@@ -241,33 +211,11 @@ export default function DamageTable({ onCellSelect }) {
     }, 50)
   }
 
-  const field = {
-    weather, terrain,
-    helpingHand: helpingHand.t1,
-    auroraVeil:  auroraVeil.t2,
-    lightScreen: lightScreen.t2,
-    reflect:     reflect.t2,
-    crit:        crit.t1,
-    doubleTarget,
-    trickRoom,
-    tailwindT1: tailwind.t1,
-    tailwindT2: tailwind.t2,
-    atkTeamSide: 't1',
-  }
-
-  const fieldReversed = {
-    weather, terrain,
-    helpingHand: helpingHand.t2,
-    auroraVeil:  auroraVeil.t1,
-    lightScreen: lightScreen.t1,
-    reflect:     reflect.t1,
-    crit:        crit.t2,
-    doubleTarget,
-    trickRoom,
-    tailwindT1: tailwind.t1,
-    tailwindT2: tailwind.t2,
-    atkTeamSide: 't2',
-  }
+  // Un solo stato di campo, due punti di vista. Prima erano due oggetti
+  // scritti a mano, con la corrispondenza lato/modificatore ricopiata due
+  // volte — vedi lib/battleState.js.
+  const field         = buildField(campo, 't1')
+  const fieldReversed = buildField(campo, 't2')
 
   const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
 
@@ -280,7 +228,7 @@ export default function DamageTable({ onCellSelect }) {
     'snow warning':   'snow',
   }
 
-  const handleSelect = (ri, ci, dir, atk, def, f, allMovesT1, allMovesT2) => {
+  const handleSelect = (ri, ci, dir, atk, def, allMovesT1, allMovesT2) => {
     const atkAbility = (atk?.ability || '').toLowerCase()
     const defAbility = (def?.ability || '').toLowerCase()
     const autoWeather = ABILITY_WEATHER[atkAbility] || ABILITY_WEATHER[defAbility] || null
@@ -292,7 +240,10 @@ export default function DamageTable({ onCellSelect }) {
     const atkIndex = dir === 't1' ? ri : ci
     const defIndex = dir === 't1' ? ci : ri
 
-    const entry = { ri, ci, dir, atk, def, field: f, allMoves, atkTeam, atkIndex, defTeam, defIndex }
+    // `field` non entra nell'entry: il ReportPanel lo ricostruisce dallo store
+    // a ogni render, così cambiare meteo col pannello aperto lo aggiorna.
+    // Portarselo dietro qui vorrebbe dire portarsi dietro un valore congelato.
+    const entry = { ri, ci, dir, atk, def, allMoves, atkTeam, atkIndex, defTeam, defIndex }
 
     let nextSel = null
     setSelectionState(prev => {

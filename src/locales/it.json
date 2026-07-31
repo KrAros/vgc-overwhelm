@@ -94,7 +94,9 @@
     "team_copied": "Team {{n}} copiato!",
     "link_copied": "Link copiato!",
     "import_panel_title": "Importa Team {{n}}",
-    "import_names_of": "di"
+    "import_names_of": "di",
+    "share_error": "Il link condiviso non è leggibile: potrebbe essere danneggiato o incompleto. I team sono stati lasciati vuoti.",
+    "dismiss": "Chiudi"
   },
   "report": {
     "selected_matchup": "Matchup Selezionato",

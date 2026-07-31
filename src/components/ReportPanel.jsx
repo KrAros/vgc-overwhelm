@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
+import { buildAttackerInput, buildDefenderInput, buildField } from '../lib/battleState'
+import useFieldState from '../hooks/useFieldState'
+import { IS_DEBUG } from '../lib/debugBus'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
 import { calcEOT, findBestNHKO } from '../lib/damage'
@@ -237,6 +240,28 @@ function CopyCalcButton({ smogon }) {
 
 function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
   const { t } = useTranslation()
+
+  // ── Pannello di debug: la cella cliccata, non l'ultima calcolata ──────────
+  // Il motore pubblica il log solo se glielo si chiede con `debug: true`, e la
+  // tabella non glielo chiede mai. Finora il pannello mostrava quindi
+  // l'ultimo dei ~576 calcoli del render, cioè uno a caso.
+  //
+  // Qui rifacciamo il calcolo della mossa che l'utente sta guardando, con il
+  // debug acceso, così il log pubblicato è il suo. Costa una chiamata in più
+  // (~1 µs dopo la sessione A) e solo con ?debug=yes nell'URL: a debug spento
+  // l'effetto esce subito. Rigirando a ogni cambio di mossa, il pannello segue
+  // anche i tab dentro il ReportPanel.
+  useEffect(() => {
+    if (!IS_DEBUG) return
+    calculateDamage({
+      attacker: buildAttackerInput(atk),
+      defender: buildDefenderInput(def),
+      move,
+      field,
+      debug: true,
+    })
+  }, [atk, def, move, field])
+
   const hko    = formatHKO(calcHKO(result.minPct), t)
   const smogon = buildSmogonString(atk, def, move, result, field)
   const rolls  = result.rolls
@@ -702,33 +727,20 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 function SinglePanel({ entry, onClose }) {
   const { t } = useTranslation()
   const { atk, def, dir } = entry
-  const doubleTarget = useCalcStore(s => s.doubleTarget)
-  const weather      = useCalcStore(s => s.weather)
-  const terrain      = useCalcStore(s => s.terrain)
-  const helpingHand  = useCalcStore(s => s.helpingHand)
-  const auroraVeil   = useCalcStore(s => s.auroraVeil)
-  const lightScreen  = useCalcStore(s => s.lightScreen)
-  const reflect      = useCalcStore(s => s.reflect)
-  const crit         = useCalcStore(s => s.crit)
+  const campo = useFieldState()
+
+  // Un solo campo, costruito una volta e usato sia dal calcolo che da MoveCard.
+  // Prima erano due oggetti identici scritti a mano, uno dentro il useMemo e
+  // uno fuori: due copie della stessa cosa che potevano divergere.
+  const field = useMemo(() => buildField(campo, dir), [campo, dir])
 
   const computedMoves = useMemo(() => {
-    const field = {
-      weather, terrain, doubleTarget,
-      helpingHand: dir === 't1' ? helpingHand.t1 : helpingHand.t2,
-      auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
-      lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
-      reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
-      crit:        dir === 't1' ? crit.t1         : crit.t2,
-    }
-    return (atk.moves || []).filter(Boolean).map(move => {
-      const result = calculateDamage({
-        attacker: { atkPokemon: atk.key, atkSPs: atk.sps || [0,0,0,0,0,0], atkNature: atk.nature, atkBoost: atk.atkBoost || 0, spAtkBoost: atk.spAtkBoost || 0, atkItem: atk.item || null, atkAbility: atk.ability || null, atkAbilityFlags: atk.abilityFlags || {}, level: 50 },
-        defender: { defPokemon: def.key, defSPs: def.sps || [0,0,0,0,0,0], defNature: def.nature, defBoost: def.defBoost || 0, spDefBoost: def.spDefBoost || 0, defItem: def.item || null, defAbility: def.ability || null, defAbilityFlags: def.abilityFlags || {} },
-        move, field,
-      })
-      return { move, result }
-    }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
-  }, [atk, def, dir, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
+    const attacker = buildAttackerInput(atk)
+    const defender = buildDefenderInput(def)
+    return (atk.moves || []).filter(Boolean)
+      .map(move => ({ move, result: calculateDamage({ attacker, defender, move, field }) }))
+      .filter(({ result }) => result && !result.immune && result.maxPct > 0)
+  }, [atk, def, field])
 
   const [selectedMove, setSelectedMove] = useState(null)
   const defaultMove = computedMoves.length > 0 ? computedMoves.reduce((a, b) => b.result.maxPct > a.result.maxPct ? b : a) : null
@@ -736,15 +748,6 @@ function SinglePanel({ entry, onClose }) {
   const active = computedMoves.find(m => m.move === activeMoveKey) || defaultMove
 
   if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">{t("ui.no_offensive_moves")}</div>
-
-  const field = {
-    weather, terrain, doubleTarget,
-    helpingHand: dir === 't1' ? helpingHand.t1 : helpingHand.t2,
-    auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
-    lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
-    reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
-    crit:        dir === 't1' ? crit.t1         : crit.t2,
-  }
 
   return active ? (
     <MoveCard
@@ -767,38 +770,21 @@ function CumulativePanel({ entries }) {
   const { t } = useTranslation()
   const [entry1, entry2] = entries
   const def = entry1.def
-  const doubleTarget = useCalcStore(s => s.doubleTarget)
-  const weather      = useCalcStore(s => s.weather)
-  const terrain      = useCalcStore(s => s.terrain)
-  const helpingHand  = useCalcStore(s => s.helpingHand)
-  const auroraVeil   = useCalcStore(s => s.auroraVeil)
-  const lightScreen  = useCalcStore(s => s.lightScreen)
-  const reflect      = useCalcStore(s => s.reflect)
-  const crit         = useCalcStore(s => s.crit)
+  const campo = useFieldState()
 
   const buildMoves = (atk, dir) => {
-    const field = {
-      weather, terrain, doubleTarget,
-      helpingHand: dir === 't1' ? helpingHand.t1 : helpingHand.t2,
-      auroraVeil:  dir === 't1' ? auroraVeil.t2  : auroraVeil.t1,
-      lightScreen: dir === 't1' ? lightScreen.t2  : lightScreen.t1,
-      reflect:     dir === 't1' ? reflect.t2      : reflect.t1,
-      crit:        dir === 't1' ? crit.t1         : crit.t2,
-    }
-    return (atk.moves || []).filter(Boolean).map(move => {
-      const result = calculateDamage({
-        attacker: { atkPokemon: atk.key, atkSPs: atk.sps || [0,0,0,0,0,0], atkNature: atk.nature, atkBoost: atk.atkBoost || 0, spAtkBoost: atk.spAtkBoost || 0, atkItem: atk.item || null, atkAbility: atk.ability || null, atkAbilityFlags: atk.abilityFlags || {}, level: 50 },
-        defender: { defPokemon: def.key, defSPs: def.sps || [0,0,0,0,0,0], defNature: def.nature, defBoost: def.defBoost || 0, spDefBoost: def.spDefBoost || 0, defItem: def.item || null, defAbility: def.ability || null, defAbilityFlags: def.abilityFlags || {} },
-        move, field,
-      })
-      return { move, result }
-    }).filter(({ result }) => result && !result.immune && result.maxPct > 0)
+    const attacker = buildAttackerInput(atk)
+    const defender = buildDefenderInput(def)
+    const field    = buildField(campo, dir)
+    return (atk.moves || []).filter(Boolean)
+      .map(move => ({ move, result: calculateDamage({ attacker, defender, move, field }) }))
+      .filter(({ result }) => result && !result.immune && result.maxPct > 0)
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const moves1 = useMemo(() => buildMoves(entry1.atk, entry1.dir), [entry1.atk, entry1.dir, def, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
+  const moves1 = useMemo(() => buildMoves(entry1.atk, entry1.dir), [entry1.atk, entry1.dir, def, campo])
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const moves2 = useMemo(() => buildMoves(entry2.atk, entry2.dir), [entry2.atk, entry2.dir, def, doubleTarget, weather, terrain, helpingHand, auroraVeil, lightScreen, reflect, crit])
+  const moves2 = useMemo(() => buildMoves(entry2.atk, entry2.dir), [entry2.atk, entry2.dir, def, campo])
 
   const [sel1, setSel1] = useState(null)
   const [sel2, setSel2] = useState(null)

@@ -122,6 +122,75 @@ export function applyBoost(stat, boost) {
   return Math.floor(stat * BOOST_NUM[i] / BOOST_DEN[i])
 }
 
+// ─── Formato di gioco ────────────────────────────────────────────────────────
+
+/**
+ * The Sixth Ember calcola solo lotte in doppio. Non è un'impostazione: è
+ * l'identità del prodotto, e questa costante esiste perché la formula del
+ * danno ha un punto in cui il formato cambia il risultato (vedi SCREEN_MOD).
+ *
+ * Non c'è nessun selettore singoli/doppi nell'interfaccia e non deve
+ * essercene uno: il valore sta qui perché l'harness della sessione H possa
+ * forzarlo per generare confronti in entrambe le modalità.
+ *
+ * ─── DA NON CONFONDERE CON `doubleTarget` ──────────────────────────────────
+ * `field.doubleTarget` dice quanti *bersagli vivi* ha davanti l'attaccante, e
+ * governa solo la penalità del 25% sulle mosse ad area. Sono due cose
+ * diverse: in doppio con un nemico solo rimasto la penalità cade, ma lo
+ * schermo resta ridotto di un terzo. Legare i due valori introdurrebbe un
+ * errore nuovo.
+ */
+export const FORMAT = 'doubles'
+
+// ─── Schermi ─────────────────────────────────────────────────────────────────
+/**
+ * Reflect, Light Screen e Aurora Veil riducono il danno di una frazione che
+ * dipende dal formato:
+ *
+ *   singoli   2048/4096 = ×0.5      il danno viene dimezzato
+ *   doppi     2732/4096 ≈ ×0.667    il danno cala di circa un terzo
+ *
+ * ─── PERCHÉ CONTA ──────────────────────────────────────────────────────────
+ * Fino alla sessione G il motore usava 2048 — il valore dei singoli — in
+ * un'app che fa solo doppi. Sbagliava sempre nella direzione peggiore:
+ * sottostimava il danno che stai per subire. Diceva che resisti, e morivi.
+ * Sul caso di verifica (Garchomp High Horsepower dietro Reflect) la
+ * differenza era fra "5HKO garantito" e "può morire in 3".
+ *
+ * In terza e quarta generazione la riduzione dipendeva davvero da quanti
+ * Pokémon c'erano in campo. Game Freak l'ha tolto in quinta. Champions è
+ * nona: 2732 sempre, dal primo turno all'ultimo, con due Pokémon o con uno.
+ *
+ * Fonte: NCP, `script_res/damage_MASTER.js`, funzione `calcFinalMods`:
+ *   finalMods.push(field.format !== "Singles" ? 0xAAC : 0x800)
+ * dove 0xAAC = 2732 e 0x800 = 2048.
+ */
+export const SCREEN_MOD_DOUBLES = 2732
+export const SCREEN_MOD_SINGLES = 2048
+
+/** Il valore effettivamente in uso, derivato da FORMAT. */
+export const SCREEN_MOD = FORMAT === 'singles' ? SCREEN_MOD_SINGLES : SCREEN_MOD_DOUBLES
+
+/**
+ * Le mosse che attraversano gli schermi come se non ci fossero.
+ *
+ * Le chiavi sono quelle di `moves.json` (minuscolo, spazi). Sono qui e non
+ * nei dati delle mosse per una ragione pratica: `moves.json` non ha ancora un
+ * insieme di flag (`sound`, `punch`, `bullet`… — §1.11 dell'analisi), e
+ * aggiungere un campo a tre voci su 809 avrebbe significato far passare un
+ * file da 126 KB attraverso una modifica manuale per tre chiavi.
+ *
+ * Quando i dati delle mosse verranno arricchiti, questa lista va spostata lì
+ * come `ignoresScreens: true` e questa costante cancellata.
+ *
+ * Fonte: NCP, `move_data.js` — le uniche tre voci con `ignoresScreens: true`.
+ */
+export const SCREEN_BYPASS_MOVES = new Set([
+  'brick break',
+  'psychic fangs',
+  'raging bull',
+])
+
 // ─── Ricerca del KO ──────────────────────────────────────────────────────────
 
 /**
