@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import useCalcStore from './store/useCalcStore'
 import TopBar from './components/TopBar'
 import DamageTable from './components/DamageTable'
@@ -16,8 +17,13 @@ import { IS_DEBUG } from './lib/debugBus'
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 function App() {
+  const { t } = useTranslation()
   const [reportSelection, setReportSelection] = useState(null)
   const reportRef = useRef(null)
+  // Un ?share= illeggibile prima falliva in silenzio: due team vuoti e nessuna
+  // spiegazione. Ora lo store lo segnala e qui lo diciamo.
+  const shareError      = useCalcStore(s => s.shareError)
+  const clearShareError = useCalcStore(s => s.clearShareError)
   const setTeam1Focus = useCalcStore(s => s.setTeam1Focus)
   const setTeam2Focus = useCalcStore(s => s.setTeam2Focus)
 
@@ -82,6 +88,22 @@ function App() {
           </ErrorBoundary>
 
           {/* ControlBar */}
+          {shareError && (
+            <div
+              role="alert"
+              className="mb-3 flex items-start gap-3 rounded-lg border border-amber-600/50 bg-amber-900/25 px-3 py-2 text-xs text-amber-200"
+            >
+              <span className="flex-1">{t('ui.share_error')}</span>
+              <button
+                type="button"
+                onClick={clearShareError}
+                className="shrink-0 rounded border border-amber-600/50 px-2 py-1 font-medium hover:bg-amber-800/40"
+              >
+                {t('ui.dismiss')}
+              </button>
+            </div>
+          )}
+
           <ControlBar />
 
           {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}

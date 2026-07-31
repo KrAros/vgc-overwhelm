@@ -7,10 +7,14 @@
  * stessa posizione, stesso contenuto — ma disegnato da React, che fa
  * l'escaping delle stringhe da solo (niente più innerHTML, niente più XSS).
  *
- * Mostra l'ultimo calcolo eseguito. Con la tabella 6×6 aperta i calcoli sono
- * centinaia per render, quindi "l'ultimo" è quello che capita: era già così
- * prima. Diventerà "la cella selezionata" nella sessione C, quando esisterà
- * battleState.js e non servirà duplicare la costruzione del campo per farlo.
+ * Mostra la cella selezionata. Dalla sessione C è `MoveCard` a rieseguire il
+ * calcolo della mossa attiva con `debug: true` subito dopo averla disegnata,
+ * quindi il log pubblicato è quello che l'utente sta effettivamente guardando
+ * — e cambia quando cambia il tab della mossa.
+ *
+ * Finché non si clicca una cella il pannello resta in attesa: la tabella non
+ * chiede mai il debug al motore, perché costruire le 15 stringhe del log per
+ * ognuno dei ~576 calcoli di un render sarebbe puro spreco.
  *
  * ─── PERCHÉ STILI INLINE E NON TAILWIND ────────────────────────────────────
  * Tailwind scansiona i sorgenti e mette in bundle ogni classe che trova, anche

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore, { encodeTeamsToURL } from '../store/useCalcStore'
+import useFieldState from '../hooks/useFieldState'
 import { parseShowdownPaste, teamToShowdown } from '../utils/showdownIO'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 import pokemonData from '../data/pokemon.json'
@@ -297,6 +298,7 @@ function TeamLibraryModal({ onClose, team1, team2, setTeam }) {
 
 export default function ControlBar() {
   const { t } = useTranslation()
+  const campo        = useFieldState()
   const helpingHand  = useCalcStore(s => s.helpingHand)
   const auroraVeil   = useCalcStore(s => s.auroraVeil)
   const lightScreen  = useCalcStore(s => s.lightScreen)
@@ -420,7 +422,9 @@ export default function ControlBar() {
   }
 
   function handleShare() {
-    const encoded = encodeTeamsToURL(team1, team2)
+    // Il campo entra nel link dalla sessione C: senza, "questo attacco sotto
+    // Trick Room con Reflect" arrivava all'altro come un attacco qualsiasi.
+    const encoded = encodeTeamsToURL(team1, team2, campo)
     const url = window.location.origin + window.location.pathname + `?share=${encoded}`
     navigator.clipboard.writeText(url).then(() => flash(t('ui.link_copied')))
   }

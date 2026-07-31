@@ -13,6 +13,14 @@
 
 import { create } from 'zustand'
 import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
+import { NATURE_MODIFIERS } from '../data/natures.js'
+import { MAX_SP_PER_STAT } from '../lib/rules.js'
+import pokemonData from '../data/pokemon.json'
+import movesData from '../data/moves.json'
+
+/** Valori di meteo e terreno che l'interfaccia può produrre. */
+const METEO_VALIDI   = ['sun', 'rain', 'sand', 'snow', 'harsh sunshine', 'heavy rain']
+const TERRENI_VALIDI = ['electric', 'grassy', 'psychic', 'misty']
 
 // ─── Struttura base di uno slot vuoto ────────────────────────────────────────
 const emptyPokemon = () => ({
@@ -71,23 +79,107 @@ function loadFromLocalStorage() {
   }
 }
 
-// ─── URL encoding/decoding ────────────────────────────────────────────────────
+// ─── URL condiviso ───────────────────────────────────────────────────────────
 /**
- * Comprime i due team in una stringa base64 adatta a un parametro URL.
+ * ─── PERCHÉ base64url E NON base64 ─────────────────────────────────────────
+ * L'alfabeto base64 standard contiene `+` e `/`. In una query string il `+`
+ * viene interpretato come spazio da `URLSearchParams.get()`, quindi un link
+ * che ne contenesse uno tornerebbe indietro corrotto e il team arriverebbe
+ * vuoto, senza spiegazioni.
  *
- * Salviamo solo i campi significativi per tenere l'URL breve:
- * key, moves, sps, nature, ability, item, i boost e abilityFlags.
- * I valori default (null, 0, boost a 0) vengono omessi per ridurre la size.
+ * Va detto con onestà: con i dati attuali quel caso **non si presenta**. Su
+ * testo ASCII i primi tre gruppi da 6 bit di ogni blocco non raggiungono mai
+ * i valori 62 e 63, e il quarto ci arriva solo se il byte è `>`, `?` o `~` —
+ * caratteri che non compaiono in nessuna chiave di pokemon/moves/items. Non è
+ * quindi la correzione di un bug vivo: è togliere di mezzo una mina prima di
+ * ampliare il payload, cosa che questa sessione sta facendo.
+ *
+ * L'altro motivo è che `escape`/`unescape`, usate prima per l'UTF-8, sono
+ * deprecate da vent'anni. `TextEncoder`/`TextDecoder` fanno la stessa cosa e
+ * sono la strada supportata.
+ *
+ * ─── I VECCHI LINK CONTINUANO A FUNZIONARE ─────────────────────────────────
+ * `fromBase64Url` rimette `+` e `/` al posto di `-` e `_` e ricostruisce il
+ * padding. Un link in base64 classico non contiene né `-` né `_`, quindi
+ * attraversa la conversione immutato e si decodifica come prima.
  */
-export function encodeTeamsToURL(team1, team2) {
+
+function toBase64Url(testo) {
+  const bytes = new TextEncoder().encode(testo)
+  let binario = ''
+  for (const b of bytes) binario += String.fromCharCode(b)
+  return btoa(binario).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+function fromBase64Url(codificato) {
+  const b64 = codificato.replace(/-/g, '+').replace(/_/g, '/')
+  const padding = b64.length % 4 ? '='.repeat(4 - (b64.length % 4)) : ''
+  const binario = atob(b64 + padding)
+  const bytes = Uint8Array.from(binario, c => c.charCodeAt(0))
+  return new TextDecoder().decode(bytes)
+}
+
+// ─── Validazione dello schema ────────────────────────────────────────────────
+/**
+ * Un link condiviso è testo che arriva da fuori: va trattato come tale.
+ * Prima, `decodeTeamsFromURL` faceva `JSON.parse` e spalmava i campi nello
+ * store senza controlli, quindi un payload costruito ad arte poteva
+ * infilare qualunque cosa dentro lo stato dell'applicazione.
+ *
+ * Queste funzioni non "riparano" un payload malformato: scartano ciò che non
+ * riconoscono e lasciano il valore neutro. Meglio uno slot vuoto che uno slot
+ * con dentro un oggetto arbitrario.
+ */
+
+const intero = (v, min, max, def = 0) => {
+  const n = Number(v)
+  if (!Number.isFinite(n)) return def
+  return Math.min(max, Math.max(min, Math.trunc(n)))
+}
+
+const testoValido = (v, vocabolario) =>
+  (typeof v === 'string' && Object.prototype.hasOwnProperty.call(vocabolario, v)) ? v : null
+
+const spsValidi = (v) =>
+  Array.isArray(v) && v.length === 6
+    ? v.map(n => intero(n, 0, MAX_SP_PER_STAT, 0))
+    : [0, 0, 0, 0, 0, 0]
+
+const mosseValide = (v) =>
+  Array.isArray(v)
+    ? [0, 1, 2, 3].map(i => testoValido(v[i], movesData))
+    : [null, null, null, null]
+
+// ─── Codifica ────────────────────────────────────────────────────────────────
+/**
+ * Comprime i due team e lo stato di campo in una stringa per l'URL.
+ *
+ * Si scrivono solo i valori diversi dal default, per tenere il link corto.
+ * Le coppie di lato (Reflect, Tailwind…) diventano un numero da 0 a 3:
+ * bit 0 = squadra 1, bit 1 = squadra 2.
+ *
+ * ─── COSA È CAMBIATO NELLA SESSIONE C ──────────────────────────────────────
+ * Prima il link portava solo i due team. Meteo, terreno, Trick Room, Tailwind,
+ * schermi, Helping Hand e critico restavano indietro, e con loro
+ * `abilityFlags` e `lastRespectsKOs`. In uno strumento per doubles il contesto
+ * *è* il calcolo: "quanto fa male questo attacco" senza "sotto Trick Room, con
+ * Reflect su" è una domanda diversa. Un link che perde il campo condivide un
+ * calcolo che non è quello che avevi davanti.
+ *
+ * @param {Array} team1
+ * @param {Array} team2
+ * @param {object} [campo] — stato di campo (vedi hooks/useFieldState)
+ * @returns {string} stringa base64url adatta a `?share=`
+ */
+export function encodeTeamsToURL(team1, team2, campo = null) {
+  const lato = (coppia) => (coppia?.t1 ? 1 : 0) | (coppia?.t2 ? 2 : 0)
+
   const minify = (slot) => {
     if (!slot?.key) return {}
     const s = {}
-    if (slot.key)     s.k  = slot.key
-    const moves = slot.moves.filter(Boolean)
-    if (moves.length) s.m  = slot.moves  // manteniamo i null per preservare le posizioni
-    const sps = slot.sps.filter(v => v > 0)
-    if (sps.length)   s.sp = slot.sps
+    s.k = slot.key
+    if (slot.moves?.some(Boolean)) s.m  = slot.moves
+    if (slot.sps?.some(v => v > 0)) s.sp = slot.sps
     if (slot.nature)  s.n  = slot.nature
     if (slot.ability) s.a  = slot.ability
     if (slot.item)    s.i  = slot.item
@@ -96,42 +188,114 @@ export function encodeTeamsToURL(team1, team2) {
     if (slot.spAtkBoost) s.sab = slot.spAtkBoost
     if (slot.spDefBoost) s.sdb = slot.spDefBoost
     if (slot.speBoost)   s.spb = slot.speBoost
+    if (slot.lastRespectsKOs) s.lr = slot.lastRespectsKOs
+
+    // I flag abilità: si scrive solo ciò che differisce dal default. Nota che
+    // `multiscaleActive` è `true` di default, quindi qui si registra quando è
+    // spento — al contrario degli altri.
+    const f = slot.abilityFlags || {}
+    const af = {}
+    if (f.intimidateActive)   af.i  = 1
+    if (f.flashFireActive)    af.ff = 1
+    if (f.multiscaleActive === false) af.ms = 0
+    if (f.supremeOverlordKOs) af.so = f.supremeOverlordKOs
+    if (Object.keys(af).length) s.af = af
+
     return s
   }
-  const data = {
-    t1: team1.map(minify),
-    t2: team2.map(minify),
+
+  const data = { t1: team1.map(minify), t2: team2.map(minify) }
+
+  if (campo) {
+    const f = {}
+    if (campo.weather)  f.w  = campo.weather
+    if (campo.terrain)  f.t  = campo.terrain
+    if (campo.trickRoom) f.tr = 1
+    if (campo.doubleTarget === false) f.dt = 0   // il default è acceso
+    const coppie = {
+      hh: campo.helpingHand, tw: campo.tailwind, av: campo.auroraVeil,
+      ls: campo.lightScreen, rf: campo.reflect,  cr: campo.crit,
+    }
+    for (const [chiave, valore] of Object.entries(coppie)) {
+      const n = lato(valore)
+      if (n) f[chiave] = n
+    }
+    if (Object.keys(f).length) data.f = f
   }
-  const json = JSON.stringify(data)
-  return btoa(unescape(encodeURIComponent(json)))
+
+  return toBase64Url(JSON.stringify(data))
 }
 
+// ─── Decodifica ──────────────────────────────────────────────────────────────
 /**
- * Ricostruisce i due team da una stringa base64.
- * Restituisce { team1, team2 } o null se la stringa è invalida.
+ * Ricostruisce team e campo da una stringa condivisa.
+ *
+ * @param {string} encoded
+ * @returns {{team1: Array, team2: Array, field: object|null}|null} null se illeggibile
  */
 export function decodeTeamsFromURL(encoded) {
   try {
-    const json = decodeURIComponent(escape(atob(encoded)))
-    const { t1, t2 } = JSON.parse(json)
+    const { t1, t2, f } = JSON.parse(fromBase64Url(encoded))
+
     const expand = (minSlots) =>
       Array.isArray(minSlots)
-        ? minSlots.map(s => ({
-            ...emptyPokemon(),
-            key:        s.k  || null,
-            moves:      s.m  || [null, null, null, null],
-            sps:        s.sp || [0, 0, 0, 0, 0, 0],
-            nature:     s.n  || null,
-            ability:    s.a  || null,
-            item:       s.i  || null,
-            atkBoost:   s.ab  || 0,
-            defBoost:   s.db  || 0,
-            spAtkBoost: s.sab || 0,
-            spDefBoost: s.sdb || 0,
-            speBoost:   s.spb || 0,
-          }))
+        ? minSlots.slice(0, 6).map(s => {
+            const grezzo = (s && typeof s === 'object') ? s : {}
+            const chiave = testoValido(grezzo.k, pokemonData)
+            if (!chiave) return emptyPokemon()
+
+            const af = (grezzo.af && typeof grezzo.af === 'object') ? grezzo.af : {}
+            return {
+              ...emptyPokemon(),
+              key:        chiave,
+              moves:      mosseValide(grezzo.m),
+              sps:        spsValidi(grezzo.sp),
+              nature:     testoValido(grezzo.n, NATURE_MODIFIERS),
+              ability:    typeof grezzo.a === 'string' ? grezzo.a : null,
+              item:       typeof grezzo.i === 'string' ? grezzo.i : null,
+              atkBoost:   intero(grezzo.ab,  -6, 6),
+              defBoost:   intero(grezzo.db,  -6, 6),
+              spAtkBoost: intero(grezzo.sab, -6, 6),
+              spDefBoost: intero(grezzo.sdb, -6, 6),
+              speBoost:   intero(grezzo.spb, -6, 6),
+              lastRespectsKOs: intero(grezzo.lr, 0, 3),
+              abilityFlags: {
+                ...DEFAULT_ABILITY_FLAGS,
+                intimidateActive:   af.i  === 1,
+                flashFireActive:    af.ff === 1,
+                multiscaleActive:   af.ms !== 0,
+                supremeOverlordKOs: intero(af.so, 0, 5),
+              },
+            }
+          })
         : emptyTeam()
-    return { team1: expand(t1), team2: expand(t2) }
+
+    // I team si normalizzano sempre a sei slot: un payload più corto o più
+    // lungo non deve produrre una griglia di dimensione strana.
+    const seiSlot = (t) => {
+      const e = expand(t)
+      while (e.length < 6) e.push(emptyPokemon())
+      return e
+    }
+
+    let field = null
+    if (f && typeof f === 'object') {
+      const coppia = (n) => ({ t1: (intero(n, 0, 3) & 1) === 1, t2: (intero(n, 0, 3) & 2) === 2 })
+      field = {
+        weather:      METEO_VALIDI.includes(f.w) ? f.w : null,
+        terrain:      TERRENI_VALIDI.includes(f.t) ? f.t : null,
+        trickRoom:    f.tr === 1,
+        doubleTarget: f.dt !== 0,
+        helpingHand:  coppia(f.hh),
+        tailwind:     coppia(f.tw),
+        auroraVeil:   coppia(f.av),
+        lightScreen:  coppia(f.ls),
+        reflect:      coppia(f.rf),
+        crit:         coppia(f.cr),
+      }
+    }
+
+    return { team1: seiSlot(t1), team2: seiSlot(t2), field }
   } catch {
     return null
   }
@@ -143,27 +307,49 @@ export function decodeTeamsFromURL(encoded) {
  *  1. Parametro ?share= nell'URL (link condiviso)
  *  2. localStorage (sessione precedente)
  *  3. Team vuoti (primo avvio)
+ *
+ * `shareError` vale `true` se c'era un `?share=` ma non si è riusciti a
+ * leggerlo. Serve a dirlo all'utente invece di mostrargli due team vuoti
+ * senza spiegazione, che è ciò che succedeva prima.
  */
-function getInitialTeams() {
-  // 1. Prova URL
+function getInitialState() {
+  let shareError = false
+
   try {
-    const params = new URLSearchParams(window.location.search)
-    const shared = params.get('share')
+    const shared = new URLSearchParams(window.location.search).get('share')
     if (shared) {
       const decoded = decodeTeamsFromURL(shared)
-      if (decoded) return decoded
+      if (decoded) {
+        return { team1: decoded.team1, team2: decoded.team2, field: decoded.field, shareError: false }
+      }
+      shareError = true
     }
-  } catch { /* noop */ }
+  } catch { /* window assente o query illeggibile: si prosegue */ }
 
-  // 2. Prova localStorage
   const fromLS = loadFromLocalStorage()
-  if (fromLS) return fromLS
+  if (fromLS) return { ...fromLS, field: null, shareError }
 
-  // 3. Team vuoti
-  return { team1: emptyTeam(), team2: emptyTeam() }
+  return { team1: emptyTeam(), team2: emptyTeam(), field: null, shareError }
 }
 
-const { team1: initialTeam1, team2: initialTeam2 } = getInitialTeams()
+const statoIniziale = getInitialState()
+const initialTeam1 = statoIniziale.team1
+const initialTeam2 = statoIniziale.team2
+
+/** Valori di campo iniziali: quelli del link condiviso, o i default. */
+const campoIniziale = {
+  weather: null,
+  terrain: null,
+  trickRoom: false,
+  doubleTarget: true,
+  helpingHand: { t1: false, t2: false },
+  tailwind:    { t1: false, t2: false },
+  auroraVeil:  { t1: false, t2: false },
+  lightScreen: { t1: false, t2: false },
+  reflect:     { t1: false, t2: false },
+  crit:        { t1: false, t2: false },
+  ...(statoIniziale.field || {}),
+}
 
 // ─── Helper interno: aggiorna un singolo slot e salva su localStorage ─────────
 // Riceve lo stato corrente, il team da modificare ('team1'/'team2'), l'indice
@@ -182,18 +368,15 @@ function updateSlot(state, team, index, patch) {
 // ─── Store ────────────────────────────────────────────────────────────────────
 const useCalcStore = create((set) => ({
   level: 50,
-  trickRoom: false,
-  doubleTarget: true,
   showKoOnly: false,
-  weather: null,
-  terrain: null,
-  helpingHand: { t1: false, t2: false },
-  tailwind:    { t1: false, t2: false },
-  auroraVeil:  { t1: false, t2: false },
-  lightScreen: { t1: false, t2: false },
-  reflect:     { t1: false, t2: false },
-  protect:     { t1: false, t2: false },
-  crit:        { t1: false, t2: false },
+  protect: { t1: false, t2: false },
+
+  // Stato di campo: dal link condiviso se c'è, altrimenti i default.
+  ...campoIniziale,
+
+  /** true se l'URL conteneva un ?share= illeggibile. Mostrato da App.jsx. */
+  shareError: statoIniziale.shareError,
+  clearShareError: () => set({ shareError: false }),
 
   team1: initialTeam1,
   team2: initialTeam2,

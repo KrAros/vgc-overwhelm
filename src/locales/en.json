@@ -94,7 +94,9 @@
     "team_copied": "Team {{n}} copied!",
     "link_copied": "Link copied!",
     "import_panel_title": "Import Team {{n}}",
-    "import_names_of": "of"
+    "import_names_of": "of",
+    "share_error": "This shared link could not be read — it may be damaged or incomplete. Your teams have been left empty.",
+    "dismiss": "Dismiss"
   },
   "report": {
     "selected_matchup": "Selected Matchup",
