@@ -154,7 +154,11 @@ export const ABILITY_EFFECTS = {
   'illusion': { desc: 'Enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move.' },
   'immunity': { desc: 'Cannot be poisoned or badly poisoned.' },
   'imposter': { desc: 'Transforms into the Pokémon in front of it. It also copies all of that Pokémon\'s stats apart from its HP.' },
-  'infiltrator': { desc: 'When using its moves, the Pokémon ignores the effects of targets\' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes.' },
+  // Sessione G: attivata la parte che tocca il danno — ignora gli schermi.
+  // Safeguard e substitute non sono modellati dal motore, quindi restano
+  // soltanto descritti. Niente `showInSmogon`, per lo stesso motivo per cui
+  // non ce l'ha `levitate`: cambia il numero solo in presenza di uno schermo.
+  'infiltrator': { infiltrator: true, desc: 'When using its moves, the Pokémon ignores the effects of targets\' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes.' },
   'innards-out': { desc: 'When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker.' },
   'inner-focus': { desc: 'Never flinches when attacked and is unaffected by Intimidate.' },
   'insomnia': { desc: 'Cannot become drowsy or be put to sleep.' },

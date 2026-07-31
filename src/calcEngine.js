@@ -7,10 +7,13 @@ import { IS_DEBUG, publishDebugLog } from './lib/debugBus.js'
 import {
   LEVEL,
   MAX_SP_TOTAL,
+  SCREEN_MOD,
+  SCREEN_BYPASS_MOVES,
   applyBoost,
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
 } from './lib/rules.js'
+import { pokeRound, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
 
 const POKEMON_DATA = pokemonData
@@ -273,12 +276,42 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     ) / 50
   ) + 2
 
-  // Spread: ×0.75 con pokeRound (half-up) come da formula Game Freak/Smogon
-  // pokeRound(n * 3072 / 4096) = floor se fraz ≤ 0.5, ceil se fraz > 0.5
+  // Spread: ×0.75 con pokeRound come da formula Game Freak/Smogon.
+  // `pokeRound` vive in lib/modifiers.js dalla sessione G — era la stessa
+  // espressione ricopiata tre volte in questo file. Numeri identici.
   if (isSpread && field.doubleTarget) {
-    const raw = baseDmg * 3072 / 4096
-    baseDmg = raw % 1 > 0.5 ? Math.ceil(raw) : Math.floor(raw)
+    baseDmg = pokeRound(baseDmg * 3072 / FIXED_POINT)
   }
+
+  // ── Schermi: quale si applica, e a chi ───────────────────────────────────
+  // Calcolato una volta sola, fuori dal loop: non dipende dal roll.
+  //
+  // 1. CHI BUCA LO SCHERMO
+  //    - un colpo critico lo ignora del tutto (è metà della correzione §1.3;
+  //      l'altra metà — il critico che ignora anche i boost — è di D)
+  //    - Brick Break, Psychic Fangs e Raging Bull passano attraverso
+  //    - Infiltrator passa attraverso qualunque schermo
+  //
+  // 2. QUALE SCHERMO
+  //    Ne parte UNO SOLO, con la precedenza di NCP: Aurora Veil per primo,
+  //    poi Reflect sul fisico, poi Light Screen sullo speciale.
+  //    Prima della sessione G i tre `if` erano indipendenti: attivando Aurora
+  //    Veil *e* Reflect il danno veniva dimezzato due volte (×0.25). Sono tre
+  //    interruttori separati nell'interfaccia, quindi capitava davvero.
+  //
+  //    La categoria guarda `isSpecial`, cioè la categoria della mossa — non
+  //    quale difesa la mossa colpisce. Body Press resta fisica e passa da
+  //    Reflect, com'è giusto.
+  const bypassaSchermi =
+    field.crit === true ||
+    SCREEN_BYPASS_MOVES.has(move) ||
+    atkAbilEffect?.infiltrator === true
+
+  const schermoAttivo = !bypassaSchermi && (
+    field.auroraVeil === true ||
+    (field.reflect     === true && !isSpecial) ||
+    (field.lightScreen === true &&  isSpecial)
+  )
 
   for (let r = 85; r <= 100; r++) {
     let damage = baseDmg
@@ -303,11 +336,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
     // dmgMult: moltiplicatori di danno finale (es. Life Orb)
     // Applicato DOPO efficacia tipo — ordine Smogon
-    // pokeRound: ceil se fraz > 0.5, floor altrimenti (identico a Smogon)
     if (atkItemEffect?.dmgMult) {
       const { num, den } = atkItemEffect.dmgMult
-      const raw = damage * num / den
-      damage = raw % 1 > 0.5 ? Math.ceil(raw) : Math.floor(raw)
+      damage = pokeRound(damage * num / den)
     }
 
     // ── Moltiplicatori abilità difensore (post-efficacia, come da formula Gen6+) ─
@@ -347,10 +378,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       damage = Math.floor(damage * 1.5)
     }
 
-    // Schermi difensivi
-    if (field.reflect     && !isSpecial) damage = Math.floor(damage * 0.5)
-    if (field.lightScreen &&  isSpecial) damage = Math.floor(damage * 0.5)
-    if (field.auroraVeil)               damage = Math.floor(damage * 0.5)
+    // Schermi difensivi — un solo schermo, mai due (vedi `schermoAttivo`)
+    if (schermoAttivo) {
+      damage = pokeRound(damage * SCREEN_MOD / FIXED_POINT)
+    }
 
     // Helping Hand
     if (field.helpingHand) damage = Math.floor(damage * 1.5)
