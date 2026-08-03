@@ -64,6 +64,12 @@ export function buildAttackerInput(slot, level = LEVEL) {
     atkNature:       s.nature ?? null,
     atkBoost:        s.atkBoost || 0,
     spAtkBoost:      s.spAtkBoost || 0,
+    // Body Press attacca con la PROPRIA Difesa, quindi il boost che conta è
+    // quello di Difesa dell'attaccante — non quello di Attacco. Senza questo
+    // campo il motore non aveva proprio modo di saperlo: `atkBoost` era
+    // l'unica cosa che gli arrivasse, e con Difesa −1 il danno andava su
+    // invece che giù. Vedi il caso golden `B8-bodypress-def-1-004`.
+    atkDefBoost:     s.defBoost || 0,
     atkItem:         s.item || null,
     atkAbility:      s.ability || null,
     atkAbilityFlags: s.abilityFlags || {},

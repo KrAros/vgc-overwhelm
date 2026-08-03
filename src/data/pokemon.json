@@ -20,7 +20,8 @@
 		"abilities": [
 			"overgrow",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": true
 	},
 	"ivysaur": {
 		"num": "#002",
@@ -43,7 +44,8 @@
 		"abilities": [
 			"overgrow",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": true
 	},
 	"venusaur": {
 		"num": "#003",
@@ -66,7 +68,8 @@
 		"abilities": [
 			"overgrow",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": false
 	},
 	"charmander": {
 		"num": "#004",
@@ -88,7 +91,8 @@
 		"abilities": [
 			"blaze",
 			"solar-power"
-		]
+		],
+		"canEvolve": true
 	},
 	"charmeleon": {
 		"num": "#005",
@@ -110,7 +114,8 @@
 		"abilities": [
 			"blaze",
 			"solar-power"
-		]
+		],
+		"canEvolve": true
 	},
 	"charizard": {
 		"num": "#006",
@@ -133,7 +138,8 @@
 		"abilities": [
 			"blaze",
 			"solar-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"squirtle": {
 		"num": "#007",
@@ -155,7 +161,8 @@
 		"abilities": [
 			"torrent",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"wartortle": {
 		"num": "#008",
@@ -177,7 +184,8 @@
 		"abilities": [
 			"torrent",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"blastoise": {
 		"num": "#009",
@@ -199,7 +207,8 @@
 		"abilities": [
 			"torrent",
 			"rain-dish"
-		]
+		],
+		"canEvolve": false
 	},
 	"caterpie": {
 		"num": "#010",
@@ -221,7 +230,8 @@
 		"abilities": [
 			"shield-dust",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"metapod": {
 		"num": "#011",
@@ -242,7 +252,8 @@
 		],
 		"abilities": [
 			"shed-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"butterfree": {
 		"num": "#012",
@@ -265,7 +276,8 @@
 		"abilities": [
 			"compound-eyes",
 			"tinted-lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"weedle": {
 		"num": "#013",
@@ -288,7 +300,8 @@
 		"abilities": [
 			"shield-dust",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"kakuna": {
 		"num": "#014",
@@ -310,7 +323,8 @@
 		],
 		"abilities": [
 			"shed-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"beedrill": {
 		"num": "#015",
@@ -333,7 +347,8 @@
 		"abilities": [
 			"swarm",
 			"sniper"
-		]
+		],
+		"canEvolve": false
 	},
 	"pidgey": {
 		"num": "#016",
@@ -357,7 +372,8 @@
 			"keen-eye",
 			"tangled-feet",
 			"big-pecks"
-		]
+		],
+		"canEvolve": true
 	},
 	"pidgeotto": {
 		"num": "#017",
@@ -381,7 +397,8 @@
 			"keen-eye",
 			"tangled-feet",
 			"big-pecks"
-		]
+		],
+		"canEvolve": true
 	},
 	"pidgeot": {
 		"num": "#018",
@@ -405,7 +422,8 @@
 			"keen-eye",
 			"tangled-feet",
 			"big-pecks"
-		]
+		],
+		"canEvolve": false
 	},
 	"rattata": {
 		"num": "#019",
@@ -428,7 +446,8 @@
 			"run-away",
 			"guts",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"rattata-alola": {
 		"num": "#019",
@@ -452,7 +471,8 @@
 			"gluttony",
 			"hustle",
 			"thick-fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"raticate": {
 		"num": "#020",
@@ -475,7 +495,8 @@
 			"run-away",
 			"guts",
 			"hustle"
-		]
+		],
+		"canEvolve": false
 	},
 	"raticate-alola": {
 		"num": "#020",
@@ -499,7 +520,8 @@
 			"gluttony",
 			"hustle",
 			"thick-fat"
-		]
+		],
+		"canEvolve": false
 	},
 	"spearow": {
 		"num": "#021",
@@ -522,7 +544,8 @@
 		"abilities": [
 			"keen-eye",
 			"sniper"
-		]
+		],
+		"canEvolve": true
 	},
 	"fearow": {
 		"num": "#022",
@@ -545,7 +568,8 @@
 		"abilities": [
 			"keen-eye",
 			"sniper"
-		]
+		],
+		"canEvolve": false
 	},
 	"ekans": {
 		"num": "#023",
@@ -568,7 +592,8 @@
 			"intimidate",
 			"shed-skin",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"arbok": {
 		"num": "#024",
@@ -591,7 +616,8 @@
 			"intimidate",
 			"shed-skin",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"pikachu": {
 		"num": "#025",
@@ -613,7 +639,8 @@
 		"abilities": [
 			"static",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": true
 	},
 	"raichu": {
 		"num": "#026",
@@ -635,7 +662,8 @@
 		"abilities": [
 			"static",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": false
 	},
 	"raichu-alola": {
 		"num": "#026",
@@ -657,7 +685,8 @@
 		],
 		"abilities": [
 			"surge-surfer"
-		]
+		],
+		"canEvolve": false
 	},
 	"sandshrew": {
 		"num": "#027",
@@ -679,7 +708,8 @@
 		"abilities": [
 			"sand-veil",
 			"sand-rush"
-		]
+		],
+		"canEvolve": true
 	},
 	"sandshrew-alola": {
 		"num": "#027",
@@ -702,7 +732,8 @@
 		"abilities": [
 			"snow-cloak",
 			"slush-rush"
-		]
+		],
+		"canEvolve": true
 	},
 	"sandslash": {
 		"num": "#028",
@@ -724,7 +755,8 @@
 		"abilities": [
 			"sand-veil",
 			"sand-rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"sandslash-alola": {
 		"num": "#028",
@@ -747,7 +779,8 @@
 		"abilities": [
 			"snow-cloak",
 			"slush-rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"nidoran-f": {
 		"num": "#029",
@@ -770,7 +803,8 @@
 			"poison-point",
 			"rivalry",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"nidorina": {
 		"num": "#030",
@@ -793,7 +827,8 @@
 			"poison-point",
 			"rivalry",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"nidoqueen": {
 		"num": "#031",
@@ -817,7 +852,8 @@
 			"poison-point",
 			"rivalry",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"nidoran-m": {
 		"num": "#032",
@@ -840,7 +876,8 @@
 			"poison-point",
 			"rivalry",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"nidorino": {
 		"num": "#033",
@@ -863,7 +900,8 @@
 			"poison-point",
 			"rivalry",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"nidoking": {
 		"num": "#034",
@@ -887,7 +925,8 @@
 			"poison-point",
 			"rivalry",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"clefairy": {
 		"num": "#035",
@@ -910,7 +949,8 @@
 			"cute-charm",
 			"magic-guard",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"clefable": {
 		"num": "#036",
@@ -933,7 +973,8 @@
 			"cute-charm",
 			"magic-guard",
 			"unaware"
-		]
+		],
+		"canEvolve": false
 	},
 	"vulpix": {
 		"num": "#037",
@@ -955,7 +996,8 @@
 		"abilities": [
 			"flash-fire",
 			"drought"
-		]
+		],
+		"canEvolve": true
 	},
 	"vulpix-alola": {
 		"num": "#037",
@@ -977,7 +1019,8 @@
 		"abilities": [
 			"snow-cloak",
 			"snow-warning"
-		]
+		],
+		"canEvolve": true
 	},
 	"ninetales": {
 		"num": "#038",
@@ -999,7 +1042,8 @@
 		"abilities": [
 			"flash-fire",
 			"drought"
-		]
+		],
+		"canEvolve": false
 	},
 	"ninetales-alola": {
 		"num": "#038",
@@ -1022,7 +1066,8 @@
 		"abilities": [
 			"snow-cloak",
 			"snow-warning"
-		]
+		],
+		"canEvolve": false
 	},
 	"jigglypuff": {
 		"num": "#039",
@@ -1046,7 +1091,8 @@
 			"cute-charm",
 			"competitive",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"wigglytuff": {
 		"num": "#040",
@@ -1070,7 +1116,8 @@
 			"cute-charm",
 			"competitive",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"zubat": {
 		"num": "#041",
@@ -1093,7 +1140,8 @@
 		"abilities": [
 			"inner-focus",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"golbat": {
 		"num": "#042",
@@ -1116,7 +1164,8 @@
 		"abilities": [
 			"inner-focus",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"oddish": {
 		"num": "#043",
@@ -1139,7 +1188,8 @@
 		"abilities": [
 			"chlorophyll",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"gloom": {
 		"num": "#044",
@@ -1162,7 +1212,8 @@
 		"abilities": [
 			"chlorophyll",
 			"stench"
-		]
+		],
+		"canEvolve": true
 	},
 	"vileplume": {
 		"num": "#045",
@@ -1185,7 +1236,8 @@
 		"abilities": [
 			"chlorophyll",
 			"effect-spore"
-		]
+		],
+		"canEvolve": false
 	},
 	"paras": {
 		"num": "#046",
@@ -1209,7 +1261,8 @@
 			"effect-spore",
 			"dry-skin",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"parasect": {
 		"num": "#047",
@@ -1233,7 +1286,8 @@
 			"effect-spore",
 			"dry-skin",
 			"damp"
-		]
+		],
+		"canEvolve": false
 	},
 	"venonat": {
 		"num": "#048",
@@ -1257,7 +1311,8 @@
 			"compound-eyes",
 			"tinted-lens",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"venomoth": {
 		"num": "#049",
@@ -1281,7 +1336,8 @@
 			"shield-dust",
 			"tinted-lens",
 			"wonder-skin"
-		]
+		],
+		"canEvolve": false
 	},
 	"diglett": {
 		"num": "#050",
@@ -1304,7 +1360,8 @@
 			"sand-veil",
 			"arena-trap",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"diglett-alola": {
 		"num": "#050",
@@ -1328,7 +1385,8 @@
 			"sand-veil",
 			"tangling-hair",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"dugtrio": {
 		"num": "#051",
@@ -1351,7 +1409,8 @@
 			"sand-veil",
 			"arena-trap",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"dugtrio-alola": {
 		"num": "#051",
@@ -1375,7 +1434,8 @@
 			"sand-veil",
 			"tangling-hair",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"meowth": {
 		"num": "#052",
@@ -1398,7 +1458,8 @@
 			"pickup",
 			"technician",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"meowth-alola": {
 		"num": "#052",
@@ -1421,7 +1482,8 @@
 			"pickup",
 			"technician",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"persian": {
 		"num": "#053",
@@ -1444,7 +1506,8 @@
 			"limber",
 			"technician",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"persian-alola": {
 		"num": "#053",
@@ -1467,7 +1530,8 @@
 			"fur-coat",
 			"technician",
 			"rattled"
-		]
+		],
+		"canEvolve": false
 	},
 	"psyduck": {
 		"num": "#054",
@@ -1490,7 +1554,8 @@
 			"damp",
 			"cloud-nine",
 			"swift-swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"golduck": {
 		"num": "#055",
@@ -1513,7 +1578,8 @@
 			"damp",
 			"cloud-nine",
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"mankey": {
 		"num": "#056",
@@ -1536,7 +1602,8 @@
 			"vital-spirit",
 			"anger-point",
 			"defiant"
-		]
+		],
+		"canEvolve": true
 	},
 	"primeape": {
 		"num": "#057",
@@ -1559,7 +1626,8 @@
 			"vital-spirit",
 			"anger-point",
 			"defiant"
-		]
+		],
+		"canEvolve": true
 	},
 	"growlithe": {
 		"num": "#058",
@@ -1582,7 +1650,8 @@
 			"intimidate",
 			"flash-fire",
 			"justified"
-		]
+		],
+		"canEvolve": true
 	},
 	"arcanine": {
 		"num": "#059",
@@ -1605,7 +1674,8 @@
 			"intimidate",
 			"flash-fire",
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"poliwag": {
 		"num": "#060",
@@ -1628,7 +1698,8 @@
 			"water-absorb",
 			"damp",
 			"swift-swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"poliwhirl": {
 		"num": "#061",
@@ -1651,7 +1722,8 @@
 			"water-absorb",
 			"damp",
 			"swift-swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"poliwrath": {
 		"num": "#062",
@@ -1675,7 +1747,8 @@
 			"water-absorb",
 			"damp",
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"abra": {
 		"num": "#063",
@@ -1698,7 +1771,8 @@
 			"synchronize",
 			"inner-focus",
 			"magic-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"kadabra": {
 		"num": "#064",
@@ -1721,7 +1795,8 @@
 			"synchronize",
 			"inner-focus",
 			"magic-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"alakazam": {
 		"num": "#065",
@@ -1744,7 +1819,8 @@
 			"synchronize",
 			"inner-focus",
 			"magic-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"machop": {
 		"num": "#066",
@@ -1767,7 +1843,8 @@
 			"guts",
 			"no-guard",
 			"steadfast"
-		]
+		],
+		"canEvolve": true
 	},
 	"machoke": {
 		"num": "#067",
@@ -1790,7 +1867,8 @@
 			"guts",
 			"no-guard",
 			"steadfast"
-		]
+		],
+		"canEvolve": true
 	},
 	"machamp": {
 		"num": "#068",
@@ -1813,7 +1891,8 @@
 			"guts",
 			"no-guard",
 			"steadfast"
-		]
+		],
+		"canEvolve": false
 	},
 	"bellsprout": {
 		"num": "#069",
@@ -1836,7 +1915,8 @@
 		"abilities": [
 			"chlorophyll",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"weepinbell": {
 		"num": "#070",
@@ -1859,7 +1939,8 @@
 		"abilities": [
 			"chlorophyll",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"victreebel": {
 		"num": "#071",
@@ -1882,7 +1963,8 @@
 		"abilities": [
 			"chlorophyll",
 			"gluttony"
-		]
+		],
+		"canEvolve": false
 	},
 	"tentacool": {
 		"num": "#072",
@@ -1906,7 +1988,8 @@
 			"clear-body",
 			"liquid-ooze",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"tentacruel": {
 		"num": "#073",
@@ -1930,7 +2013,8 @@
 			"clear-body",
 			"liquid-ooze",
 			"rain-dish"
-		]
+		],
+		"canEvolve": false
 	},
 	"geodude": {
 		"num": "#074",
@@ -1954,7 +2038,8 @@
 			"rock-head",
 			"sturdy",
 			"sand-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"geodude-alola": {
 		"num": "#074",
@@ -1978,7 +2063,8 @@
 			"magnet-pull",
 			"sturdy",
 			"galvanize"
-		]
+		],
+		"canEvolve": true
 	},
 	"graveler": {
 		"num": "#075",
@@ -2002,7 +2088,8 @@
 			"rock-head",
 			"sturdy",
 			"sand-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"graveler-alola": {
 		"num": "#075",
@@ -2026,7 +2113,8 @@
 			"magnet-pull",
 			"sturdy",
 			"galvanize"
-		]
+		],
+		"canEvolve": true
 	},
 	"golem": {
 		"num": "#076",
@@ -2050,7 +2138,8 @@
 			"rock-head",
 			"sturdy",
 			"sand-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"golem-alola": {
 		"num": "#076",
@@ -2074,7 +2163,8 @@
 			"magnet-pull",
 			"sturdy",
 			"galvanize"
-		]
+		],
+		"canEvolve": false
 	},
 	"ponyta": {
 		"num": "#077",
@@ -2097,7 +2187,8 @@
 			"run-away",
 			"flash-fire",
 			"flame-body"
-		]
+		],
+		"canEvolve": true
 	},
 	"rapidash": {
 		"num": "#078",
@@ -2120,7 +2211,8 @@
 			"run-away",
 			"flash-fire",
 			"flame-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"slowpoke": {
 		"num": "#079",
@@ -2144,7 +2236,8 @@
 			"oblivious",
 			"own-tempo",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"slowbro": {
 		"num": "#080",
@@ -2168,7 +2261,8 @@
 			"oblivious",
 			"own-tempo",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"magnemite": {
 		"num": "#081",
@@ -2192,7 +2286,8 @@
 			"magnet-pull",
 			"sturdy",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"magneton": {
 		"num": "#082",
@@ -2216,7 +2311,8 @@
 			"magnet-pull",
 			"sturdy",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"farfetch'd": {
 		"num": "#083",
@@ -2240,7 +2336,8 @@
 			"keen-eye",
 			"inner-focus",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"doduo": {
 		"num": "#084",
@@ -2264,7 +2361,8 @@
 			"run-away",
 			"early-bird",
 			"tangled-feet"
-		]
+		],
+		"canEvolve": true
 	},
 	"dodrio": {
 		"num": "#085",
@@ -2288,7 +2386,8 @@
 			"run-away",
 			"early-bird",
 			"tangled-feet"
-		]
+		],
+		"canEvolve": false
 	},
 	"seel": {
 		"num": "#086",
@@ -2311,7 +2410,8 @@
 			"thick-fat",
 			"hydration",
 			"ice-body"
-		]
+		],
+		"canEvolve": true
 	},
 	"dewgong": {
 		"num": "#087",
@@ -2335,7 +2435,8 @@
 			"thick-fat",
 			"hydration",
 			"ice-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"grimer": {
 		"num": "#088",
@@ -2358,7 +2459,8 @@
 			"stench",
 			"sticky-hold",
 			"poison-touch"
-		]
+		],
+		"canEvolve": true
 	},
 	"grimer-alola": {
 		"num": "#088",
@@ -2382,7 +2484,8 @@
 			"poison-touch",
 			"gluttony",
 			"power-of-alchemy"
-		]
+		],
+		"canEvolve": true
 	},
 	"muk": {
 		"num": "#089",
@@ -2405,7 +2508,8 @@
 			"stench",
 			"sticky-hold",
 			"poison-touch"
-		]
+		],
+		"canEvolve": false
 	},
 	"muk-alola": {
 		"num": "#089",
@@ -2429,7 +2533,8 @@
 			"poison-touch",
 			"gluttony",
 			"power-of-alchemy"
-		]
+		],
+		"canEvolve": false
 	},
 	"shellder": {
 		"num": "#090",
@@ -2452,7 +2557,8 @@
 			"shell-armor",
 			"skill-link",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"cloyster": {
 		"num": "#091",
@@ -2476,7 +2582,8 @@
 			"shell-armor",
 			"skill-link",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"gastly": {
 		"num": "#092",
@@ -2498,7 +2605,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"haunter": {
 		"num": "#093",
@@ -2520,7 +2628,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"gengar": {
 		"num": "#094",
@@ -2542,7 +2651,8 @@
 		],
 		"abilities": [
 			"cursed-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"onix": {
 		"num": "#095",
@@ -2566,7 +2676,8 @@
 			"rock-head",
 			"sturdy",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"drowzee": {
 		"num": "#096",
@@ -2589,7 +2700,8 @@
 			"insomnia",
 			"forewarn",
 			"inner-focus"
-		]
+		],
+		"canEvolve": true
 	},
 	"hypno": {
 		"num": "#097",
@@ -2612,7 +2724,8 @@
 			"insomnia",
 			"forewarn",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"krabby": {
 		"num": "#098",
@@ -2635,7 +2748,8 @@
 			"hyper-cutter",
 			"shell-armor",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"kingler": {
 		"num": "#099",
@@ -2658,7 +2772,8 @@
 			"hyper-cutter",
 			"shell-armor",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"voltorb": {
 		"num": "#100",
@@ -2681,7 +2796,8 @@
 			"soundproof",
 			"static",
 			"aftermath"
-		]
+		],
+		"canEvolve": true
 	},
 	"electrode": {
 		"num": "#101",
@@ -2704,7 +2820,8 @@
 			"soundproof",
 			"static",
 			"aftermath"
-		]
+		],
+		"canEvolve": false
 	},
 	"exeggcute": {
 		"num": "#102",
@@ -2727,7 +2844,8 @@
 		"abilities": [
 			"chlorophyll",
 			"harvest"
-		]
+		],
+		"canEvolve": true
 	},
 	"exeggutor": {
 		"num": "#103",
@@ -2750,7 +2868,8 @@
 		"abilities": [
 			"chlorophyll",
 			"harvest"
-		]
+		],
+		"canEvolve": false
 	},
 	"exeggutor-alola": {
 		"num": "#103",
@@ -2773,7 +2892,8 @@
 		"abilities": [
 			"frisk",
 			"harvest"
-		]
+		],
+		"canEvolve": false
 	},
 	"cubone": {
 		"num": "#104",
@@ -2796,7 +2916,8 @@
 			"rock-head",
 			"lightning-rod",
 			"battle-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"marowak": {
 		"num": "#105",
@@ -2819,7 +2940,8 @@
 			"rock-head",
 			"lightning-rod",
 			"battle-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"marowak-alola": {
 		"num": "#105",
@@ -2843,7 +2965,8 @@
 			"cursed-body",
 			"lightning-rod",
 			"rock-head"
-		]
+		],
+		"canEvolve": false
 	},
 	"hitmonlee": {
 		"num": "#106",
@@ -2866,7 +2989,8 @@
 			"limber",
 			"reckless",
 			"unburden"
-		]
+		],
+		"canEvolve": false
 	},
 	"hitmonchan": {
 		"num": "#107",
@@ -2889,7 +3013,8 @@
 			"keen-eye",
 			"iron-fist",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"lickitung": {
 		"num": "#108",
@@ -2912,7 +3037,8 @@
 			"own-tempo",
 			"oblivious",
 			"cloud-nine"
-		]
+		],
+		"canEvolve": true
 	},
 	"koffing": {
 		"num": "#109",
@@ -2935,7 +3061,8 @@
 			"levitate",
 			"neutralizing-gas",
 			"stench"
-		]
+		],
+		"canEvolve": true
 	},
 	"weezing": {
 		"num": "#110",
@@ -2958,7 +3085,8 @@
 			"levitate",
 			"neutralizing-gas",
 			"stench"
-		]
+		],
+		"canEvolve": false
 	},
 	"rhyhorn": {
 		"num": "#111",
@@ -2982,7 +3110,8 @@
 			"lightning-rod",
 			"rock-head",
 			"reckless"
-		]
+		],
+		"canEvolve": true
 	},
 	"rhydon": {
 		"num": "#112",
@@ -3006,7 +3135,8 @@
 			"lightning-rod",
 			"rock-head",
 			"reckless"
-		]
+		],
+		"canEvolve": true
 	},
 	"chansey": {
 		"num": "#113",
@@ -3029,7 +3159,8 @@
 			"natural-cure",
 			"serene-grace",
 			"healer"
-		]
+		],
+		"canEvolve": true
 	},
 	"tangela": {
 		"num": "#114",
@@ -3052,7 +3183,8 @@
 			"chlorophyll",
 			"leaf-guard",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"kangaskhan": {
 		"num": "#115",
@@ -3075,7 +3207,8 @@
 			"early-bird",
 			"scrappy",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"horsea": {
 		"num": "#116",
@@ -3098,7 +3231,8 @@
 			"swift-swim",
 			"sniper",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"seadra": {
 		"num": "#117",
@@ -3121,7 +3255,8 @@
 			"poison-point",
 			"sniper",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"goldeen": {
 		"num": "#118",
@@ -3144,7 +3279,8 @@
 			"swift-swim",
 			"water-veil",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": true
 	},
 	"seaking": {
 		"num": "#119",
@@ -3167,7 +3303,8 @@
 			"swift-swim",
 			"water-veil",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": false
 	},
 	"staryu": {
 		"num": "#120",
@@ -3190,7 +3327,8 @@
 			"illuminate",
 			"natural-cure",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"starmie": {
 		"num": "#121",
@@ -3214,7 +3352,8 @@
 			"illuminate",
 			"natural-cure",
 			"analytic"
-		]
+		],
+		"canEvolve": false
 	},
 	"mr. mime": {
 		"num": "#122",
@@ -3238,7 +3377,8 @@
 			"soundproof",
 			"filter",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"scyther": {
 		"num": "#123",
@@ -3262,7 +3402,8 @@
 			"swarm",
 			"technician",
 			"steadfast"
-		]
+		],
+		"canEvolve": true
 	},
 	"jynx": {
 		"num": "#124",
@@ -3286,7 +3427,8 @@
 			"oblivious",
 			"forewarn",
 			"dry-skin"
-		]
+		],
+		"canEvolve": false
 	},
 	"electabuzz": {
 		"num": "#125",
@@ -3308,7 +3450,8 @@
 		"abilities": [
 			"static",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"magmar": {
 		"num": "#126",
@@ -3330,7 +3473,8 @@
 		"abilities": [
 			"flame-body",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"pinsir": {
 		"num": "#127",
@@ -3353,7 +3497,8 @@
 			"hyper-cutter",
 			"mold-breaker",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"tauros": {
 		"num": "#128",
@@ -3376,7 +3521,8 @@
 			"intimidate",
 			"anger-point",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"magikarp": {
 		"num": "#129",
@@ -3398,7 +3544,8 @@
 		"abilities": [
 			"swift-swim",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"gyarados": {
 		"num": "#130",
@@ -3421,7 +3568,8 @@
 		"abilities": [
 			"intimidate",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"lapras": {
 		"num": "#131",
@@ -3445,7 +3593,8 @@
 			"water-absorb",
 			"shell-armor",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"ditto": {
 		"num": "#132",
@@ -3467,7 +3616,8 @@
 		"abilities": [
 			"limber",
 			"imposter"
-		]
+		],
+		"canEvolve": false
 	},
 	"eevee": {
 		"num": "#133",
@@ -3490,7 +3640,8 @@
 			"run-away",
 			"adaptability",
 			"anticipation"
-		]
+		],
+		"canEvolve": true
 	},
 	"vaporeon": {
 		"num": "#134",
@@ -3512,7 +3663,8 @@
 		"abilities": [
 			"water-absorb",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"jolteon": {
 		"num": "#135",
@@ -3534,7 +3686,8 @@
 		"abilities": [
 			"volt-absorb",
 			"quick-feet"
-		]
+		],
+		"canEvolve": false
 	},
 	"flareon": {
 		"num": "#136",
@@ -3556,7 +3709,8 @@
 		"abilities": [
 			"flash-fire",
 			"guts"
-		]
+		],
+		"canEvolve": false
 	},
 	"porygon": {
 		"num": "#137",
@@ -3579,7 +3733,8 @@
 			"trace",
 			"download",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"omanyte": {
 		"num": "#138",
@@ -3603,7 +3758,8 @@
 			"swift-swim",
 			"shell-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"omastar": {
 		"num": "#139",
@@ -3627,7 +3783,8 @@
 			"swift-swim",
 			"shell-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"kabuto": {
 		"num": "#140",
@@ -3651,7 +3808,8 @@
 			"swift-swim",
 			"battle-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"kabutops": {
 		"num": "#141",
@@ -3675,7 +3833,8 @@
 			"swift-swim",
 			"battle-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"aerodactyl": {
 		"num": "#142",
@@ -3699,7 +3858,8 @@
 			"rock-head",
 			"pressure",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"snorlax": {
 		"num": "#143",
@@ -3722,7 +3882,8 @@
 			"immunity",
 			"thick-fat",
 			"gluttony"
-		]
+		],
+		"canEvolve": false
 	},
 	"articuno": {
 		"num": "#144",
@@ -3745,7 +3906,8 @@
 		"abilities": [
 			"pressure",
 			"snow-cloak"
-		]
+		],
+		"canEvolve": false
 	},
 	"zapdos": {
 		"num": "#145",
@@ -3768,7 +3930,8 @@
 		"abilities": [
 			"pressure",
 			"static"
-		]
+		],
+		"canEvolve": false
 	},
 	"moltres": {
 		"num": "#146",
@@ -3791,7 +3954,8 @@
 		"abilities": [
 			"pressure",
 			"flame-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"dratini": {
 		"num": "#147",
@@ -3813,7 +3977,8 @@
 		"abilities": [
 			"shed-skin",
 			"marvel-scale"
-		]
+		],
+		"canEvolve": true
 	},
 	"dragonair": {
 		"num": "#148",
@@ -3835,7 +4000,8 @@
 		"abilities": [
 			"shed-skin",
 			"marvel-scale"
-		]
+		],
+		"canEvolve": true
 	},
 	"dragonite": {
 		"num": "#149",
@@ -3858,7 +4024,8 @@
 		"abilities": [
 			"inner-focus",
 			"multiscale"
-		]
+		],
+		"canEvolve": false
 	},
 	"mewtwo": {
 		"num": "#150",
@@ -3880,7 +4047,8 @@
 		"abilities": [
 			"pressure",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"mew": {
 		"num": "#151",
@@ -3901,7 +4069,8 @@
 		],
 		"abilities": [
 			"synchronize"
-		]
+		],
+		"canEvolve": false
 	},
 	"chikorita": {
 		"num": "#152",
@@ -3923,7 +4092,8 @@
 		"abilities": [
 			"overgrow",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"bayleef": {
 		"num": "#153",
@@ -3945,7 +4115,8 @@
 		"abilities": [
 			"overgrow",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"meganium": {
 		"num": "#154",
@@ -3967,7 +4138,8 @@
 		"abilities": [
 			"overgrow",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"cyndaquil": {
 		"num": "#155",
@@ -3989,7 +4161,8 @@
 		"abilities": [
 			"blaze",
 			"flash-fire"
-		]
+		],
+		"canEvolve": true
 	},
 	"quilava": {
 		"num": "#156",
@@ -4011,7 +4184,8 @@
 		"abilities": [
 			"blaze",
 			"flash-fire"
-		]
+		],
+		"canEvolve": true
 	},
 	"typhlosion": {
 		"num": "#157",
@@ -4033,7 +4207,8 @@
 		"abilities": [
 			"blaze",
 			"flash-fire"
-		]
+		],
+		"canEvolve": false
 	},
 	"totodile": {
 		"num": "#158",
@@ -4055,7 +4230,8 @@
 		"abilities": [
 			"torrent",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"croconaw": {
 		"num": "#159",
@@ -4077,7 +4253,8 @@
 		"abilities": [
 			"torrent",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"feraligatr": {
 		"num": "#160",
@@ -4099,7 +4276,8 @@
 		"abilities": [
 			"torrent",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"sentret": {
 		"num": "#161",
@@ -4122,7 +4300,8 @@
 			"run-away",
 			"keen-eye",
 			"frisk"
-		]
+		],
+		"canEvolve": true
 	},
 	"furret": {
 		"num": "#162",
@@ -4145,7 +4324,8 @@
 			"run-away",
 			"keen-eye",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"hoothoot": {
 		"num": "#163",
@@ -4169,7 +4349,8 @@
 			"insomnia",
 			"keen-eye",
 			"tinted-lens"
-		]
+		],
+		"canEvolve": true
 	},
 	"noctowl": {
 		"num": "#164",
@@ -4193,7 +4374,8 @@
 			"insomnia",
 			"keen-eye",
 			"tinted-lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"ledyba": {
 		"num": "#165",
@@ -4217,7 +4399,8 @@
 			"swarm",
 			"early-bird",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"ledian": {
 		"num": "#166",
@@ -4241,7 +4424,8 @@
 			"swarm",
 			"early-bird",
 			"iron-fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"spinarak": {
 		"num": "#167",
@@ -4265,7 +4449,8 @@
 			"swarm",
 			"insomnia",
 			"sniper"
-		]
+		],
+		"canEvolve": true
 	},
 	"ariados": {
 		"num": "#168",
@@ -4289,7 +4474,8 @@
 			"swarm",
 			"insomnia",
 			"sniper"
-		]
+		],
+		"canEvolve": false
 	},
 	"crobat": {
 		"num": "#169",
@@ -4312,7 +4498,8 @@
 		"abilities": [
 			"inner-focus",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"chinchou": {
 		"num": "#170",
@@ -4336,7 +4523,8 @@
 			"volt-absorb",
 			"illuminate",
 			"water-absorb"
-		]
+		],
+		"canEvolve": true
 	},
 	"lanturn": {
 		"num": "#171",
@@ -4360,7 +4548,8 @@
 			"volt-absorb",
 			"illuminate",
 			"water-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"pichu": {
 		"num": "#172",
@@ -4382,7 +4571,8 @@
 		"abilities": [
 			"static",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": true
 	},
 	"cleffa": {
 		"num": "#173",
@@ -4405,7 +4595,8 @@
 			"cute-charm",
 			"magic-guard",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"igglybuff": {
 		"num": "#174",
@@ -4429,7 +4620,8 @@
 			"cute-charm",
 			"competitive",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"togepi": {
 		"num": "#175",
@@ -4452,7 +4644,8 @@
 			"hustle",
 			"serene-grace",
 			"super-luck"
-		]
+		],
+		"canEvolve": true
 	},
 	"togetic": {
 		"num": "#176",
@@ -4476,7 +4669,8 @@
 			"hustle",
 			"serene-grace",
 			"super-luck"
-		]
+		],
+		"canEvolve": true
 	},
 	"natu": {
 		"num": "#177",
@@ -4500,7 +4694,8 @@
 			"synchronize",
 			"early-bird",
 			"magic-bounce"
-		]
+		],
+		"canEvolve": true
 	},
 	"xatu": {
 		"num": "#178",
@@ -4524,7 +4719,8 @@
 			"synchronize",
 			"early-bird",
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"mareep": {
 		"num": "#179",
@@ -4546,7 +4742,8 @@
 		"abilities": [
 			"static",
 			"plus"
-		]
+		],
+		"canEvolve": true
 	},
 	"flaaffy": {
 		"num": "#180",
@@ -4568,7 +4765,8 @@
 		"abilities": [
 			"static",
 			"plus"
-		]
+		],
+		"canEvolve": true
 	},
 	"ampharos": {
 		"num": "#181",
@@ -4590,7 +4788,8 @@
 		"abilities": [
 			"static",
 			"plus"
-		]
+		],
+		"canEvolve": false
 	},
 	"bellossom": {
 		"num": "#182",
@@ -4612,7 +4811,8 @@
 		"abilities": [
 			"chlorophyll",
 			"healer"
-		]
+		],
+		"canEvolve": false
 	},
 	"marill": {
 		"num": "#183",
@@ -4636,7 +4836,8 @@
 			"thick-fat",
 			"huge-power",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": true
 	},
 	"azumarill": {
 		"num": "#184",
@@ -4660,7 +4861,8 @@
 			"thick-fat",
 			"huge-power",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": false
 	},
 	"sudowoodo": {
 		"num": "#185",
@@ -4683,7 +4885,8 @@
 			"sturdy",
 			"rock-head",
 			"rattled"
-		]
+		],
+		"canEvolve": false
 	},
 	"politoed": {
 		"num": "#186",
@@ -4706,7 +4909,8 @@
 			"water-absorb",
 			"damp",
 			"drizzle"
-		]
+		],
+		"canEvolve": false
 	},
 	"hoppip": {
 		"num": "#187",
@@ -4730,7 +4934,8 @@
 			"chlorophyll",
 			"leaf-guard",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"skiploom": {
 		"num": "#188",
@@ -4754,7 +4959,8 @@
 			"chlorophyll",
 			"leaf-guard",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"jumpluff": {
 		"num": "#189",
@@ -4778,7 +4984,8 @@
 			"chlorophyll",
 			"leaf-guard",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"aipom": {
 		"num": "#190",
@@ -4801,7 +5008,8 @@
 			"run-away",
 			"pickup",
 			"skill-link"
-		]
+		],
+		"canEvolve": false
 	},
 	"sunkern": {
 		"num": "#191",
@@ -4824,7 +5032,8 @@
 			"chlorophyll",
 			"solar-power",
 			"early-bird"
-		]
+		],
+		"canEvolve": true
 	},
 	"sunflora": {
 		"num": "#192",
@@ -4847,7 +5056,8 @@
 			"chlorophyll",
 			"solar-power",
 			"early-bird"
-		]
+		],
+		"canEvolve": false
 	},
 	"yanma": {
 		"num": "#193",
@@ -4871,7 +5081,8 @@
 			"speed-boost",
 			"compound-eyes",
 			"frisk"
-		]
+		],
+		"canEvolve": true
 	},
 	"wooper": {
 		"num": "#194",
@@ -4895,7 +5106,8 @@
 			"damp",
 			"water-absorb",
 			"unaware"
-		]
+		],
+		"canEvolve": true
 	},
 	"quagsire": {
 		"num": "#195",
@@ -4919,7 +5131,8 @@
 			"damp",
 			"water-absorb",
 			"unaware"
-		]
+		],
+		"canEvolve": false
 	},
 	"espeon": {
 		"num": "#196",
@@ -4941,7 +5154,8 @@
 		"abilities": [
 			"synchronize",
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"umbreon": {
 		"num": "#197",
@@ -4963,7 +5177,8 @@
 		"abilities": [
 			"synchronize",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"murkrow": {
 		"num": "#198",
@@ -4987,7 +5202,8 @@
 			"insomnia",
 			"super-luck",
 			"prankster"
-		]
+		],
+		"canEvolve": true
 	},
 	"slowking": {
 		"num": "#199",
@@ -5011,7 +5227,8 @@
 			"oblivious",
 			"own-tempo",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"misdreavus": {
 		"num": "#200",
@@ -5032,7 +5249,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"unown": {
 		"num": "#201",
@@ -5053,7 +5271,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"wobbuffet": {
 		"num": "#202",
@@ -5075,7 +5294,8 @@
 		"abilities": [
 			"shadow-tag",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"girafarig": {
 		"num": "#203",
@@ -5099,7 +5319,8 @@
 			"inner-focus",
 			"early-bird",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": true
 	},
 	"pineco": {
 		"num": "#204",
@@ -5121,7 +5342,8 @@
 		"abilities": [
 			"sturdy",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"forretress": {
 		"num": "#205",
@@ -5144,7 +5366,8 @@
 		"abilities": [
 			"sturdy",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"dunsparce": {
 		"num": "#206",
@@ -5167,7 +5390,8 @@
 			"serene-grace",
 			"run-away",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"gligar": {
 		"num": "#207",
@@ -5191,7 +5415,8 @@
 			"hyper-cutter",
 			"sand-veil",
 			"immunity"
-		]
+		],
+		"canEvolve": true
 	},
 	"steelix": {
 		"num": "#208",
@@ -5215,7 +5440,8 @@
 			"rock-head",
 			"sturdy",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"snubbull": {
 		"num": "#209",
@@ -5238,7 +5464,8 @@
 			"intimidate",
 			"run-away",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"granbull": {
 		"num": "#210",
@@ -5261,7 +5488,8 @@
 			"intimidate",
 			"quick-feet",
 			"rattled"
-		]
+		],
+		"canEvolve": false
 	},
 	"qwilfish": {
 		"num": "#211",
@@ -5285,7 +5513,8 @@
 			"poison-point",
 			"swift-swim",
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"scizor": {
 		"num": "#212",
@@ -5309,7 +5538,8 @@
 			"swarm",
 			"technician",
 			"light-metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"shuckle": {
 		"num": "#213",
@@ -5333,7 +5563,8 @@
 			"sturdy",
 			"gluttony",
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"heracross": {
 		"num": "#214",
@@ -5357,7 +5588,8 @@
 			"swarm",
 			"guts",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"sneasel": {
 		"num": "#215",
@@ -5381,7 +5613,8 @@
 			"inner-focus",
 			"keen-eye",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"teddiursa": {
 		"num": "#216",
@@ -5404,7 +5637,8 @@
 			"pickup",
 			"quick-feet",
 			"honey-gather"
-		]
+		],
+		"canEvolve": true
 	},
 	"ursaring": {
 		"num": "#217",
@@ -5427,7 +5661,8 @@
 			"guts",
 			"quick-feet",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"slugma": {
 		"num": "#218",
@@ -5450,7 +5685,8 @@
 			"magma-armor",
 			"flame-body",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"magcargo": {
 		"num": "#219",
@@ -5474,7 +5710,8 @@
 			"magma-armor",
 			"flame-body",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"swinub": {
 		"num": "#220",
@@ -5498,7 +5735,8 @@
 			"oblivious",
 			"snow-cloak",
 			"thick-fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"piloswine": {
 		"num": "#221",
@@ -5522,7 +5760,8 @@
 			"oblivious",
 			"snow-cloak",
 			"thick-fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"corsola": {
 		"num": "#222",
@@ -5546,7 +5785,8 @@
 			"hustle",
 			"natural-cure",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"remoraid": {
 		"num": "#223",
@@ -5569,7 +5809,8 @@
 			"hustle",
 			"sniper",
 			"moody"
-		]
+		],
+		"canEvolve": true
 	},
 	"octillery": {
 		"num": "#224",
@@ -5592,7 +5833,8 @@
 			"suction-cups",
 			"sniper",
 			"moody"
-		]
+		],
+		"canEvolve": false
 	},
 	"delibird": {
 		"num": "#225",
@@ -5616,7 +5858,8 @@
 			"vital-spirit",
 			"hustle",
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"mantine": {
 		"num": "#226",
@@ -5640,7 +5883,8 @@
 			"swift-swim",
 			"water-absorb",
 			"water-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"skarmory": {
 		"num": "#227",
@@ -5664,7 +5908,8 @@
 			"keen-eye",
 			"sturdy",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"houndour": {
 		"num": "#228",
@@ -5688,7 +5933,8 @@
 			"early-bird",
 			"flash-fire",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"houndoom": {
 		"num": "#229",
@@ -5712,7 +5958,8 @@
 			"early-bird",
 			"flash-fire",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"kingdra": {
 		"num": "#230",
@@ -5736,7 +5983,8 @@
 			"swift-swim",
 			"sniper",
 			"damp"
-		]
+		],
+		"canEvolve": false
 	},
 	"phanpy": {
 		"num": "#231",
@@ -5758,7 +6006,8 @@
 		"abilities": [
 			"pickup",
 			"sand-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"donphan": {
 		"num": "#232",
@@ -5780,7 +6029,8 @@
 		"abilities": [
 			"sturdy",
 			"sand-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"porygon2": {
 		"num": "#233",
@@ -5803,7 +6053,8 @@
 			"trace",
 			"download",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"stantler": {
 		"num": "#234",
@@ -5826,7 +6077,8 @@
 			"intimidate",
 			"frisk",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": true
 	},
 	"smeargle": {
 		"num": "#235",
@@ -5849,7 +6101,8 @@
 			"own-tempo",
 			"technician",
 			"moody"
-		]
+		],
+		"canEvolve": false
 	},
 	"tyrogue": {
 		"num": "#236",
@@ -5872,7 +6125,8 @@
 			"guts",
 			"steadfast",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"hitmontop": {
 		"num": "#237",
@@ -5895,7 +6149,8 @@
 			"intimidate",
 			"technician",
 			"steadfast"
-		]
+		],
+		"canEvolve": false
 	},
 	"smoochum": {
 		"num": "#238",
@@ -5919,7 +6174,8 @@
 			"oblivious",
 			"forewarn",
 			"hydration"
-		]
+		],
+		"canEvolve": true
 	},
 	"elekid": {
 		"num": "#239",
@@ -5941,7 +6197,8 @@
 		"abilities": [
 			"static",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"magby": {
 		"num": "#240",
@@ -5963,7 +6220,8 @@
 		"abilities": [
 			"flame-body",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"miltank": {
 		"num": "#241",
@@ -5986,7 +6244,8 @@
 			"thick-fat",
 			"scrappy",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": false
 	},
 	"blissey": {
 		"num": "#242",
@@ -6009,7 +6268,8 @@
 			"natural-cure",
 			"serene-grace",
 			"healer"
-		]
+		],
+		"canEvolve": false
 	},
 	"raikou": {
 		"num": "#243",
@@ -6031,7 +6291,8 @@
 		"abilities": [
 			"pressure",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"entei": {
 		"num": "#244",
@@ -6053,7 +6314,8 @@
 		"abilities": [
 			"pressure",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"suicune": {
 		"num": "#245",
@@ -6075,7 +6337,8 @@
 		"abilities": [
 			"pressure",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"larvitar": {
 		"num": "#246",
@@ -6098,7 +6361,8 @@
 		"abilities": [
 			"guts",
 			"sand-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"pupitar": {
 		"num": "#247",
@@ -6120,7 +6384,8 @@
 		],
 		"abilities": [
 			"shed-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"tyranitar": {
 		"num": "#248",
@@ -6143,7 +6408,8 @@
 		"abilities": [
 			"sand-stream",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"lugia": {
 		"num": "#249",
@@ -6166,7 +6432,8 @@
 		"abilities": [
 			"pressure",
 			"multiscale"
-		]
+		],
+		"canEvolve": false
 	},
 	"ho-oh": {
 		"num": "#250",
@@ -6189,7 +6456,8 @@
 		"abilities": [
 			"pressure",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"celebi": {
 		"num": "#251",
@@ -6211,7 +6479,8 @@
 		],
 		"abilities": [
 			"natural-cure"
-		]
+		],
+		"canEvolve": false
 	},
 	"treecko": {
 		"num": "#252",
@@ -6233,7 +6502,8 @@
 		"abilities": [
 			"overgrow",
 			"unburden"
-		]
+		],
+		"canEvolve": true
 	},
 	"grovyle": {
 		"num": "#253",
@@ -6255,7 +6525,8 @@
 		"abilities": [
 			"overgrow",
 			"unburden"
-		]
+		],
+		"canEvolve": true
 	},
 	"sceptile": {
 		"num": "#254",
@@ -6277,7 +6548,8 @@
 		"abilities": [
 			"overgrow",
 			"unburden"
-		]
+		],
+		"canEvolve": false
 	},
 	"torchic": {
 		"num": "#255",
@@ -6299,7 +6571,8 @@
 		"abilities": [
 			"blaze",
 			"speed-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"combusken": {
 		"num": "#256",
@@ -6322,7 +6595,8 @@
 		"abilities": [
 			"blaze",
 			"speed-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"blaziken": {
 		"num": "#257",
@@ -6345,7 +6619,8 @@
 		"abilities": [
 			"blaze",
 			"speed-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"mudkip": {
 		"num": "#258",
@@ -6367,7 +6642,8 @@
 		"abilities": [
 			"torrent",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"marshtomp": {
 		"num": "#259",
@@ -6390,7 +6666,8 @@
 		"abilities": [
 			"torrent",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"swampert": {
 		"num": "#260",
@@ -6413,7 +6690,8 @@
 		"abilities": [
 			"torrent",
 			"damp"
-		]
+		],
+		"canEvolve": false
 	},
 	"poochyena": {
 		"num": "#261",
@@ -6436,7 +6714,8 @@
 			"run-away",
 			"quick-feet",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"mightyena": {
 		"num": "#262",
@@ -6459,7 +6738,8 @@
 			"intimidate",
 			"quick-feet",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"zigzagoon": {
 		"num": "#263",
@@ -6482,7 +6762,8 @@
 			"pickup",
 			"gluttony",
 			"quick-feet"
-		]
+		],
+		"canEvolve": true
 	},
 	"linoone": {
 		"num": "#264",
@@ -6505,7 +6786,8 @@
 			"pickup",
 			"gluttony",
 			"quick-feet"
-		]
+		],
+		"canEvolve": false
 	},
 	"wurmple": {
 		"num": "#265",
@@ -6527,7 +6809,8 @@
 		"abilities": [
 			"shield-dust",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"silcoon": {
 		"num": "#266",
@@ -6548,7 +6831,8 @@
 		],
 		"abilities": [
 			"shed-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"beautifly": {
 		"num": "#267",
@@ -6571,7 +6855,8 @@
 		"abilities": [
 			"swarm",
 			"rivalry"
-		]
+		],
+		"canEvolve": false
 	},
 	"cascoon": {
 		"num": "#268",
@@ -6592,7 +6877,8 @@
 		],
 		"abilities": [
 			"shed-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"dustox": {
 		"num": "#269",
@@ -6615,7 +6901,8 @@
 		"abilities": [
 			"shield-dust",
 			"compound-eyes"
-		]
+		],
+		"canEvolve": false
 	},
 	"lotad": {
 		"num": "#270",
@@ -6639,7 +6926,8 @@
 			"swift-swim",
 			"rain-dish",
 			"own-tempo"
-		]
+		],
+		"canEvolve": true
 	},
 	"lombre": {
 		"num": "#271",
@@ -6663,7 +6951,8 @@
 			"swift-swim",
 			"rain-dish",
 			"own-tempo"
-		]
+		],
+		"canEvolve": true
 	},
 	"ludicolo": {
 		"num": "#272",
@@ -6687,7 +6976,8 @@
 			"swift-swim",
 			"rain-dish",
 			"own-tempo"
-		]
+		],
+		"canEvolve": false
 	},
 	"seedot": {
 		"num": "#273",
@@ -6710,7 +7000,8 @@
 			"chlorophyll",
 			"early-bird",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"nuzleaf": {
 		"num": "#274",
@@ -6734,7 +7025,8 @@
 			"chlorophyll",
 			"early-bird",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"shiftry": {
 		"num": "#275",
@@ -6758,7 +7050,8 @@
 			"chlorophyll",
 			"wind-rider",
 			"pickpocket"
-		]
+		],
+		"canEvolve": false
 	},
 	"taillow": {
 		"num": "#276",
@@ -6781,7 +7074,8 @@
 		"abilities": [
 			"guts",
 			"scrappy"
-		]
+		],
+		"canEvolve": true
 	},
 	"swellow": {
 		"num": "#277",
@@ -6804,7 +7098,8 @@
 		"abilities": [
 			"guts",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"wingull": {
 		"num": "#278",
@@ -6828,7 +7123,8 @@
 			"keen-eye",
 			"hydration",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"pelipper": {
 		"num": "#279",
@@ -6852,7 +7148,8 @@
 			"keen-eye",
 			"drizzle",
 			"rain-dish"
-		]
+		],
+		"canEvolve": false
 	},
 	"ralts": {
 		"num": "#280",
@@ -6876,7 +7173,8 @@
 			"synchronize",
 			"trace",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"kirlia": {
 		"num": "#281",
@@ -6900,7 +7198,8 @@
 			"synchronize",
 			"trace",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"gardevoir": {
 		"num": "#282",
@@ -6924,7 +7223,8 @@
 			"synchronize",
 			"trace",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"surskit": {
 		"num": "#283",
@@ -6947,7 +7247,8 @@
 		"abilities": [
 			"swift-swim",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"masquerain": {
 		"num": "#284",
@@ -6970,7 +7271,8 @@
 		"abilities": [
 			"intimidate",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"shroomish": {
 		"num": "#285",
@@ -6993,7 +7295,8 @@
 			"effect-spore",
 			"poison-heal",
 			"quick-feet"
-		]
+		],
+		"canEvolve": true
 	},
 	"breloom": {
 		"num": "#286",
@@ -7017,7 +7320,8 @@
 			"effect-spore",
 			"poison-heal",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"slakoth": {
 		"num": "#287",
@@ -7038,7 +7342,8 @@
 		],
 		"abilities": [
 			"truant"
-		]
+		],
+		"canEvolve": true
 	},
 	"vigoroth": {
 		"num": "#288",
@@ -7059,7 +7364,8 @@
 		],
 		"abilities": [
 			"vital-spirit"
-		]
+		],
+		"canEvolve": true
 	},
 	"slaking": {
 		"num": "#289",
@@ -7080,7 +7386,8 @@
 		],
 		"abilities": [
 			"truant"
-		]
+		],
+		"canEvolve": false
 	},
 	"nincada": {
 		"num": "#290",
@@ -7103,7 +7410,8 @@
 		"abilities": [
 			"compound-eyes",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"ninjask": {
 		"num": "#291",
@@ -7126,7 +7434,8 @@
 		"abilities": [
 			"speed-boost",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"shedinja": {
 		"num": "#292",
@@ -7148,7 +7457,8 @@
 		],
 		"abilities": [
 			"wonder-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"whismur": {
 		"num": "#293",
@@ -7170,7 +7480,8 @@
 		"abilities": [
 			"soundproof",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"loudred": {
 		"num": "#294",
@@ -7192,7 +7503,8 @@
 		"abilities": [
 			"soundproof",
 			"scrappy"
-		]
+		],
+		"canEvolve": true
 	},
 	"exploud": {
 		"num": "#295",
@@ -7214,7 +7526,8 @@
 		"abilities": [
 			"soundproof",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"makuhita": {
 		"num": "#296",
@@ -7237,7 +7550,8 @@
 			"thick-fat",
 			"guts",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"hariyama": {
 		"num": "#297",
@@ -7260,7 +7574,8 @@
 			"thick-fat",
 			"guts",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"azurill": {
 		"num": "#298",
@@ -7284,7 +7599,8 @@
 			"thick-fat",
 			"huge-power",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": true
 	},
 	"nosepass": {
 		"num": "#299",
@@ -7307,7 +7623,8 @@
 			"sturdy",
 			"magnet-pull",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"skitty": {
 		"num": "#300",
@@ -7330,7 +7647,8 @@
 			"cute-charm",
 			"normalize",
 			"wonder-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"delcatty": {
 		"num": "#301",
@@ -7353,7 +7671,8 @@
 			"cute-charm",
 			"normalize",
 			"wonder-skin"
-		]
+		],
+		"canEvolve": false
 	},
 	"sableye": {
 		"num": "#302",
@@ -7377,7 +7696,8 @@
 			"keen-eye",
 			"stall",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"mawile": {
 		"num": "#303",
@@ -7401,7 +7721,8 @@
 			"hyper-cutter",
 			"intimidate",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"aron": {
 		"num": "#304",
@@ -7425,7 +7746,8 @@
 			"sturdy",
 			"rock-head",
 			"heavy-metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"lairon": {
 		"num": "#305",
@@ -7449,7 +7771,8 @@
 			"sturdy",
 			"rock-head",
 			"heavy-metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"aggron": {
 		"num": "#306",
@@ -7473,7 +7796,8 @@
 			"sturdy",
 			"rock-head",
 			"heavy-metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"meditite": {
 		"num": "#307",
@@ -7496,7 +7820,8 @@
 		"abilities": [
 			"pure-power",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"medicham": {
 		"num": "#308",
@@ -7519,7 +7844,8 @@
 		"abilities": [
 			"pure-power",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"electrike": {
 		"num": "#309",
@@ -7542,7 +7868,8 @@
 			"static",
 			"lightning-rod",
 			"minus"
-		]
+		],
+		"canEvolve": true
 	},
 	"manectric": {
 		"num": "#310",
@@ -7565,7 +7892,8 @@
 			"static",
 			"lightning-rod",
 			"minus"
-		]
+		],
+		"canEvolve": false
 	},
 	"plusle": {
 		"num": "#311",
@@ -7587,7 +7915,8 @@
 		"abilities": [
 			"plus",
 			"lightning-rod"
-		]
+		],
+		"canEvolve": false
 	},
 	"minun": {
 		"num": "#312",
@@ -7609,7 +7938,8 @@
 		"abilities": [
 			"minus",
 			"volt-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"volbeat": {
 		"num": "#313",
@@ -7632,7 +7962,8 @@
 			"illuminate",
 			"swarm",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"illumise": {
 		"num": "#314",
@@ -7655,7 +7986,8 @@
 			"oblivious",
 			"tinted-lens",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"roselia": {
 		"num": "#315",
@@ -7679,7 +8011,8 @@
 			"natural-cure",
 			"poison-point",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"gulpin": {
 		"num": "#316",
@@ -7702,7 +8035,8 @@
 			"liquid-ooze",
 			"sticky-hold",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"swalot": {
 		"num": "#317",
@@ -7725,7 +8059,8 @@
 			"liquid-ooze",
 			"sticky-hold",
 			"gluttony"
-		]
+		],
+		"canEvolve": false
 	},
 	"carvanha": {
 		"num": "#318",
@@ -7748,7 +8083,8 @@
 		"abilities": [
 			"rough-skin",
 			"speed-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"sharpedo": {
 		"num": "#319",
@@ -7771,7 +8107,8 @@
 		"abilities": [
 			"rough-skin",
 			"speed-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"wailmer": {
 		"num": "#320",
@@ -7794,7 +8131,8 @@
 			"water-veil",
 			"oblivious",
 			"pressure"
-		]
+		],
+		"canEvolve": true
 	},
 	"wailord": {
 		"num": "#321",
@@ -7817,7 +8155,8 @@
 			"water-veil",
 			"oblivious",
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"numel": {
 		"num": "#322",
@@ -7841,7 +8180,8 @@
 			"oblivious",
 			"simple",
 			"own-tempo"
-		]
+		],
+		"canEvolve": true
 	},
 	"camerupt": {
 		"num": "#323",
@@ -7865,7 +8205,8 @@
 			"magma-armor",
 			"solid-rock",
 			"anger-point"
-		]
+		],
+		"canEvolve": false
 	},
 	"torkoal": {
 		"num": "#324",
@@ -7888,7 +8229,8 @@
 			"white-smoke",
 			"drought",
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"spoink": {
 		"num": "#325",
@@ -7911,7 +8253,8 @@
 			"thick-fat",
 			"own-tempo",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"grumpig": {
 		"num": "#326",
@@ -7934,7 +8277,8 @@
 			"thick-fat",
 			"own-tempo",
 			"gluttony"
-		]
+		],
+		"canEvolve": false
 	},
 	"spinda": {
 		"num": "#327",
@@ -7957,7 +8301,8 @@
 			"own-tempo",
 			"tangled-feet",
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"trapinch": {
 		"num": "#328",
@@ -7980,7 +8325,8 @@
 			"hyper-cutter",
 			"arena-trap",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"vibrava": {
 		"num": "#329",
@@ -8002,7 +8348,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"flygon": {
 		"num": "#330",
@@ -8024,7 +8371,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"cacnea": {
 		"num": "#331",
@@ -8046,7 +8394,8 @@
 		"abilities": [
 			"sand-veil",
 			"water-absorb"
-		]
+		],
+		"canEvolve": true
 	},
 	"cacturne": {
 		"num": "#332",
@@ -8069,7 +8418,8 @@
 		"abilities": [
 			"sand-veil",
 			"water-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"swablu": {
 		"num": "#333",
@@ -8092,7 +8442,8 @@
 		"abilities": [
 			"natural-cure",
 			"cloud-nine"
-		]
+		],
+		"canEvolve": true
 	},
 	"altaria": {
 		"num": "#334",
@@ -8115,7 +8466,8 @@
 		"abilities": [
 			"natural-cure",
 			"cloud-nine"
-		]
+		],
+		"canEvolve": false
 	},
 	"zangoose": {
 		"num": "#335",
@@ -8137,7 +8489,8 @@
 		"abilities": [
 			"immunity",
 			"toxic-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"seviper": {
 		"num": "#336",
@@ -8159,7 +8512,8 @@
 		"abilities": [
 			"shed-skin",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"lunatone": {
 		"num": "#337",
@@ -8181,7 +8535,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"solrock": {
 		"num": "#338",
@@ -8203,7 +8558,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"barboach": {
 		"num": "#339",
@@ -8227,7 +8583,8 @@
 			"oblivious",
 			"anticipation",
 			"hydration"
-		]
+		],
+		"canEvolve": true
 	},
 	"whiscash": {
 		"num": "#340",
@@ -8251,7 +8608,8 @@
 			"oblivious",
 			"anticipation",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"corphish": {
 		"num": "#341",
@@ -8274,7 +8632,8 @@
 			"hyper-cutter",
 			"shell-armor",
 			"adaptability"
-		]
+		],
+		"canEvolve": true
 	},
 	"crawdaunt": {
 		"num": "#342",
@@ -8298,7 +8657,8 @@
 			"hyper-cutter",
 			"shell-armor",
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"baltoy": {
 		"num": "#343",
@@ -8320,7 +8680,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"claydol": {
 		"num": "#344",
@@ -8342,7 +8703,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"lileep": {
 		"num": "#345",
@@ -8365,7 +8727,8 @@
 		"abilities": [
 			"suction-cups",
 			"storm-drain"
-		]
+		],
+		"canEvolve": true
 	},
 	"cradily": {
 		"num": "#346",
@@ -8388,7 +8751,8 @@
 		"abilities": [
 			"suction-cups",
 			"storm-drain"
-		]
+		],
+		"canEvolve": false
 	},
 	"anorith": {
 		"num": "#347",
@@ -8411,7 +8775,8 @@
 		"abilities": [
 			"battle-armor",
 			"swift-swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"armaldo": {
 		"num": "#348",
@@ -8434,7 +8799,8 @@
 		"abilities": [
 			"battle-armor",
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"feebas": {
 		"num": "#349",
@@ -8457,7 +8823,8 @@
 			"swift-swim",
 			"oblivious",
 			"adaptability"
-		]
+		],
+		"canEvolve": true
 	},
 	"milotic": {
 		"num": "#350",
@@ -8480,7 +8847,8 @@
 			"marvel-scale",
 			"competitive",
 			"cute-charm"
-		]
+		],
+		"canEvolve": false
 	},
 	"castform": {
 		"num": "#351",
@@ -8501,7 +8869,8 @@
 		],
 		"abilities": [
 			"forecast"
-		]
+		],
+		"canEvolve": false
 	},
 	"kecleon": {
 		"num": "#352",
@@ -8523,7 +8892,8 @@
 		"abilities": [
 			"color-change",
 			"protean"
-		]
+		],
+		"canEvolve": false
 	},
 	"shuppet": {
 		"num": "#353",
@@ -8546,7 +8916,8 @@
 			"insomnia",
 			"frisk",
 			"cursed-body"
-		]
+		],
+		"canEvolve": true
 	},
 	"banette": {
 		"num": "#354",
@@ -8569,7 +8940,8 @@
 			"insomnia",
 			"frisk",
 			"cursed-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"duskull": {
 		"num": "#355",
@@ -8591,7 +8963,8 @@
 		"abilities": [
 			"levitate",
 			"frisk"
-		]
+		],
+		"canEvolve": true
 	},
 	"dusclops": {
 		"num": "#356",
@@ -8613,7 +8986,8 @@
 		"abilities": [
 			"pressure",
 			"frisk"
-		]
+		],
+		"canEvolve": true
 	},
 	"tropius": {
 		"num": "#357",
@@ -8637,7 +9011,8 @@
 			"chlorophyll",
 			"solar-power",
 			"harvest"
-		]
+		],
+		"canEvolve": false
 	},
 	"chimecho": {
 		"num": "#358",
@@ -8658,7 +9033,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"absol": {
 		"num": "#359",
@@ -8681,7 +9057,8 @@
 			"pressure",
 			"super-luck",
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"wynaut": {
 		"num": "#360",
@@ -8703,7 +9080,8 @@
 		"abilities": [
 			"shadow-tag",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"snorunt": {
 		"num": "#361",
@@ -8726,7 +9104,8 @@
 			"inner-focus",
 			"ice-body",
 			"moody"
-		]
+		],
+		"canEvolve": true
 	},
 	"glalie": {
 		"num": "#362",
@@ -8749,7 +9128,8 @@
 			"inner-focus",
 			"ice-body",
 			"moody"
-		]
+		],
+		"canEvolve": false
 	},
 	"spheal": {
 		"num": "#363",
@@ -8773,7 +9153,8 @@
 			"thick-fat",
 			"ice-body",
 			"oblivious"
-		]
+		],
+		"canEvolve": true
 	},
 	"sealeo": {
 		"num": "#364",
@@ -8797,7 +9178,8 @@
 			"thick-fat",
 			"ice-body",
 			"oblivious"
-		]
+		],
+		"canEvolve": true
 	},
 	"walrein": {
 		"num": "#365",
@@ -8821,7 +9203,8 @@
 			"thick-fat",
 			"ice-body",
 			"oblivious"
-		]
+		],
+		"canEvolve": false
 	},
 	"clamperl": {
 		"num": "#366",
@@ -8843,7 +9226,8 @@
 		"abilities": [
 			"shell-armor",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"huntail": {
 		"num": "#367",
@@ -8865,7 +9249,8 @@
 		"abilities": [
 			"swift-swim",
 			"water-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"gorebyss": {
 		"num": "#368",
@@ -8887,7 +9272,8 @@
 		"abilities": [
 			"swift-swim",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"relicanth": {
 		"num": "#369",
@@ -8911,7 +9297,8 @@
 			"swift-swim",
 			"rock-head",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"luvdisc": {
 		"num": "#370",
@@ -8933,7 +9320,8 @@
 		"abilities": [
 			"swift-swim",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"bagon": {
 		"num": "#371",
@@ -8955,7 +9343,8 @@
 		"abilities": [
 			"rock-head",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"shelgon": {
 		"num": "#372",
@@ -8977,7 +9366,8 @@
 		"abilities": [
 			"rock-head",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"salamence": {
 		"num": "#373",
@@ -9000,7 +9390,8 @@
 		"abilities": [
 			"intimidate",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"beldum": {
 		"num": "#374",
@@ -9023,7 +9414,8 @@
 		"abilities": [
 			"clear-body",
 			"light-metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"metang": {
 		"num": "#375",
@@ -9046,7 +9438,8 @@
 		"abilities": [
 			"clear-body",
 			"light-metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"metagross": {
 		"num": "#376",
@@ -9069,7 +9462,8 @@
 		"abilities": [
 			"clear-body",
 			"light-metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"regirock": {
 		"num": "#377",
@@ -9091,7 +9485,8 @@
 		"abilities": [
 			"clear-body",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"regice": {
 		"num": "#378",
@@ -9113,7 +9508,8 @@
 		"abilities": [
 			"clear-body",
 			"ice-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"registeel": {
 		"num": "#379",
@@ -9135,7 +9531,8 @@
 		"abilities": [
 			"clear-body",
 			"light-metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"latias": {
 		"num": "#380",
@@ -9157,7 +9554,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"latios": {
 		"num": "#381",
@@ -9179,7 +9577,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"kyogre": {
 		"num": "#382",
@@ -9200,7 +9599,8 @@
 		],
 		"abilities": [
 			"drizzle"
-		]
+		],
+		"canEvolve": false
 	},
 	"groudon": {
 		"num": "#383",
@@ -9221,7 +9621,8 @@
 		],
 		"abilities": [
 			"drought"
-		]
+		],
+		"canEvolve": false
 	},
 	"rayquaza": {
 		"num": "#384",
@@ -9243,7 +9644,8 @@
 		],
 		"abilities": [
 			"air-lock"
-		]
+		],
+		"canEvolve": false
 	},
 	"jirachi": {
 		"num": "#385",
@@ -9265,7 +9667,8 @@
 		],
 		"abilities": [
 			"serene-grace"
-		]
+		],
+		"canEvolve": false
 	},
 	"deoxys": {
 		"num": "#386",
@@ -9286,7 +9689,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"deoxys-attack": {
 		"num": "#386",
@@ -9307,7 +9711,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"deoxys-defense": {
 		"num": "#386",
@@ -9328,7 +9733,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"deoxys-speed": {
 		"num": "#386",
@@ -9349,7 +9755,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"turtwig": {
 		"num": "#387",
@@ -9371,7 +9778,8 @@
 		"abilities": [
 			"overgrow",
 			"shell-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"grotle": {
 		"num": "#388",
@@ -9393,7 +9801,8 @@
 		"abilities": [
 			"overgrow",
 			"shell-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"torterra": {
 		"num": "#389",
@@ -9416,7 +9825,8 @@
 		"abilities": [
 			"overgrow",
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"chimchar": {
 		"num": "#390",
@@ -9438,7 +9848,8 @@
 		"abilities": [
 			"blaze",
 			"iron-fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"monferno": {
 		"num": "#391",
@@ -9461,7 +9872,8 @@
 		"abilities": [
 			"blaze",
 			"iron-fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"infernape": {
 		"num": "#392",
@@ -9484,7 +9896,8 @@
 		"abilities": [
 			"blaze",
 			"iron-fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"piplup": {
 		"num": "#393",
@@ -9506,7 +9919,8 @@
 		"abilities": [
 			"torrent",
 			"competitive"
-		]
+		],
+		"canEvolve": true
 	},
 	"prinplup": {
 		"num": "#394",
@@ -9528,7 +9942,8 @@
 		"abilities": [
 			"torrent",
 			"competitive"
-		]
+		],
+		"canEvolve": true
 	},
 	"empoleon": {
 		"num": "#395",
@@ -9551,7 +9966,8 @@
 		"abilities": [
 			"torrent",
 			"competitive"
-		]
+		],
+		"canEvolve": false
 	},
 	"starly": {
 		"num": "#396",
@@ -9574,7 +9990,8 @@
 		"abilities": [
 			"keen-eye",
 			"reckless"
-		]
+		],
+		"canEvolve": true
 	},
 	"staravia": {
 		"num": "#397",
@@ -9597,7 +10014,8 @@
 		"abilities": [
 			"intimidate",
 			"reckless"
-		]
+		],
+		"canEvolve": true
 	},
 	"staraptor": {
 		"num": "#398",
@@ -9620,7 +10038,8 @@
 		"abilities": [
 			"intimidate",
 			"reckless"
-		]
+		],
+		"canEvolve": false
 	},
 	"bidoof": {
 		"num": "#399",
@@ -9643,7 +10062,8 @@
 			"simple",
 			"unaware",
 			"moody"
-		]
+		],
+		"canEvolve": true
 	},
 	"bibarel": {
 		"num": "#400",
@@ -9667,7 +10087,8 @@
 			"simple",
 			"unaware",
 			"moody"
-		]
+		],
+		"canEvolve": false
 	},
 	"kricketot": {
 		"num": "#401",
@@ -9689,7 +10110,8 @@
 		"abilities": [
 			"shed-skin",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"kricketune": {
 		"num": "#402",
@@ -9711,7 +10133,8 @@
 		"abilities": [
 			"swarm",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"shinx": {
 		"num": "#403",
@@ -9734,7 +10157,8 @@
 			"rivalry",
 			"intimidate",
 			"guts"
-		]
+		],
+		"canEvolve": true
 	},
 	"luxio": {
 		"num": "#404",
@@ -9757,7 +10181,8 @@
 			"rivalry",
 			"intimidate",
 			"guts"
-		]
+		],
+		"canEvolve": true
 	},
 	"luxray": {
 		"num": "#405",
@@ -9780,7 +10205,8 @@
 			"rivalry",
 			"intimidate",
 			"guts"
-		]
+		],
+		"canEvolve": false
 	},
 	"budew": {
 		"num": "#406",
@@ -9804,7 +10230,8 @@
 			"natural-cure",
 			"poison-point",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"roserade": {
 		"num": "#407",
@@ -9828,7 +10255,8 @@
 			"natural-cure",
 			"poison-point",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"cranidos": {
 		"num": "#408",
@@ -9850,7 +10278,8 @@
 		"abilities": [
 			"mold-breaker",
 			"sheer-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"rampardos": {
 		"num": "#409",
@@ -9872,7 +10301,8 @@
 		"abilities": [
 			"mold-breaker",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"shieldon": {
 		"num": "#410",
@@ -9895,7 +10325,8 @@
 		"abilities": [
 			"sturdy",
 			"soundproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"bastiodon": {
 		"num": "#411",
@@ -9918,7 +10349,8 @@
 		"abilities": [
 			"sturdy",
 			"soundproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"burmy": {
 		"num": "#412",
@@ -9940,7 +10372,8 @@
 		"abilities": [
 			"shed-skin",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"wormadam": {
 		"num": "#413",
@@ -9963,7 +10396,8 @@
 		"abilities": [
 			"anticipation",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"wormadam-sandy": {
 		"num": "#413",
@@ -9986,7 +10420,8 @@
 		"abilities": [
 			"anticipation",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"wormadam-trash": {
 		"num": "#413",
@@ -10009,7 +10444,8 @@
 		"abilities": [
 			"anticipation",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"mothim": {
 		"num": "#414",
@@ -10032,7 +10468,8 @@
 		"abilities": [
 			"swarm",
 			"tinted-lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"combee": {
 		"num": "#415",
@@ -10055,7 +10492,8 @@
 		"abilities": [
 			"honey-gather",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"vespiquen": {
 		"num": "#416",
@@ -10078,7 +10516,8 @@
 		"abilities": [
 			"pressure",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"pachirisu": {
 		"num": "#417",
@@ -10101,7 +10540,8 @@
 			"run-away",
 			"pickup",
 			"volt-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"buizel": {
 		"num": "#418",
@@ -10123,7 +10563,8 @@
 		"abilities": [
 			"swift-swim",
 			"water-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"floatzel": {
 		"num": "#419",
@@ -10145,7 +10586,8 @@
 		"abilities": [
 			"swift-swim",
 			"water-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"cherubi": {
 		"num": "#420",
@@ -10166,7 +10608,8 @@
 		],
 		"abilities": [
 			"chlorophyll"
-		]
+		],
+		"canEvolve": true
 	},
 	"cherrim": {
 		"num": "#421",
@@ -10187,7 +10630,8 @@
 		],
 		"abilities": [
 			"flower-gift"
-		]
+		],
+		"canEvolve": false
 	},
 	"shellos": {
 		"num": "#422",
@@ -10210,7 +10654,8 @@
 			"sticky-hold",
 			"storm-drain",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"gastrodon": {
 		"num": "#423",
@@ -10234,7 +10679,8 @@
 			"sticky-hold",
 			"storm-drain",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"ambipom": {
 		"num": "#424",
@@ -10257,7 +10703,8 @@
 			"technician",
 			"pickup",
 			"skill-link"
-		]
+		],
+		"canEvolve": false
 	},
 	"drifloon": {
 		"num": "#425",
@@ -10281,7 +10728,8 @@
 			"aftermath",
 			"unburden",
 			"flare-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"drifblim": {
 		"num": "#426",
@@ -10305,7 +10753,8 @@
 			"aftermath",
 			"unburden",
 			"flare-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"buneary": {
 		"num": "#427",
@@ -10328,7 +10777,8 @@
 			"run-away",
 			"klutz",
 			"limber"
-		]
+		],
+		"canEvolve": true
 	},
 	"lopunny": {
 		"num": "#428",
@@ -10351,7 +10801,8 @@
 			"cute-charm",
 			"klutz",
 			"limber"
-		]
+		],
+		"canEvolve": false
 	},
 	"mismagius": {
 		"num": "#429",
@@ -10372,7 +10823,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"honchkrow": {
 		"num": "#430",
@@ -10396,7 +10848,8 @@
 			"insomnia",
 			"super-luck",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"glameow": {
 		"num": "#431",
@@ -10419,7 +10872,8 @@
 			"limber",
 			"own-tempo",
 			"keen-eye"
-		]
+		],
+		"canEvolve": true
 	},
 	"purugly": {
 		"num": "#432",
@@ -10442,7 +10896,8 @@
 			"thick-fat",
 			"own-tempo",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"chingling": {
 		"num": "#433",
@@ -10463,7 +10918,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"stunky": {
 		"num": "#434",
@@ -10487,7 +10943,8 @@
 			"stench",
 			"aftermath",
 			"keen-eye"
-		]
+		],
+		"canEvolve": true
 	},
 	"skuntank": {
 		"num": "#435",
@@ -10511,7 +10968,8 @@
 			"stench",
 			"aftermath",
 			"keen-eye"
-		]
+		],
+		"canEvolve": false
 	},
 	"bronzor": {
 		"num": "#436",
@@ -10535,7 +10993,8 @@
 			"levitate",
 			"heatproof",
 			"heavy-metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"bronzong": {
 		"num": "#437",
@@ -10559,7 +11018,8 @@
 			"levitate",
 			"heatproof",
 			"heavy-metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"bonsly": {
 		"num": "#438",
@@ -10582,7 +11042,8 @@
 			"sturdy",
 			"rock-head",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"mime jr.": {
 		"num": "#439",
@@ -10606,7 +11067,8 @@
 			"soundproof",
 			"filter",
 			"technician"
-		]
+		],
+		"canEvolve": true
 	},
 	"happiny": {
 		"num": "#440",
@@ -10629,7 +11091,8 @@
 			"natural-cure",
 			"serene-grace",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"chatot": {
 		"num": "#441",
@@ -10653,7 +11116,8 @@
 			"keen-eye",
 			"tangled-feet",
 			"big-pecks"
-		]
+		],
+		"canEvolve": false
 	},
 	"spiritomb": {
 		"num": "#442",
@@ -10676,7 +11140,8 @@
 		"abilities": [
 			"pressure",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"gible": {
 		"num": "#443",
@@ -10699,7 +11164,8 @@
 		"abilities": [
 			"sand-veil",
 			"rough-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"gabite": {
 		"num": "#444",
@@ -10722,7 +11188,8 @@
 		"abilities": [
 			"sand-veil",
 			"rough-skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"garchomp": {
 		"num": "#445",
@@ -10745,7 +11212,8 @@
 		"abilities": [
 			"sand-veil",
 			"rough-skin"
-		]
+		],
+		"canEvolve": false
 	},
 	"munchlax": {
 		"num": "#446",
@@ -10768,7 +11236,8 @@
 			"pickup",
 			"thick-fat",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"riolu": {
 		"num": "#447",
@@ -10791,7 +11260,8 @@
 			"steadfast",
 			"inner-focus",
 			"prankster"
-		]
+		],
+		"canEvolve": true
 	},
 	"lucario": {
 		"num": "#448",
@@ -10815,7 +11285,8 @@
 			"steadfast",
 			"inner-focus",
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"hippopotas": {
 		"num": "#449",
@@ -10837,7 +11308,8 @@
 		"abilities": [
 			"sand-stream",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"hippowdon": {
 		"num": "#450",
@@ -10859,7 +11331,8 @@
 		"abilities": [
 			"sand-stream",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"skorupi": {
 		"num": "#451",
@@ -10883,7 +11356,8 @@
 			"battle-armor",
 			"sniper",
 			"keen-eye"
-		]
+		],
+		"canEvolve": true
 	},
 	"drapion": {
 		"num": "#452",
@@ -10907,7 +11381,8 @@
 			"battle-armor",
 			"sniper",
 			"keen-eye"
-		]
+		],
+		"canEvolve": false
 	},
 	"croagunk": {
 		"num": "#453",
@@ -10931,7 +11406,8 @@
 			"anticipation",
 			"dry-skin",
 			"poison-touch"
-		]
+		],
+		"canEvolve": true
 	},
 	"toxicroak": {
 		"num": "#454",
@@ -10955,7 +11431,8 @@
 			"anticipation",
 			"dry-skin",
 			"poison-touch"
-		]
+		],
+		"canEvolve": false
 	},
 	"carnivine": {
 		"num": "#455",
@@ -10976,7 +11453,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"finneon": {
 		"num": "#456",
@@ -10999,7 +11477,8 @@
 			"swift-swim",
 			"storm-drain",
 			"water-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"lumineon": {
 		"num": "#457",
@@ -11022,7 +11501,8 @@
 			"swift-swim",
 			"storm-drain",
 			"water-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"mantyke": {
 		"num": "#458",
@@ -11046,7 +11526,8 @@
 			"swift-swim",
 			"water-absorb",
 			"water-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"snover": {
 		"num": "#459",
@@ -11069,7 +11550,8 @@
 		"abilities": [
 			"snow-warning",
 			"soundproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"abomasnow": {
 		"num": "#460",
@@ -11092,7 +11574,8 @@
 		"abilities": [
 			"snow-warning",
 			"soundproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"weavile": {
 		"num": "#461",
@@ -11115,7 +11598,8 @@
 		"abilities": [
 			"pressure",
 			"pickpocket"
-		]
+		],
+		"canEvolve": false
 	},
 	"magnezone": {
 		"num": "#462",
@@ -11139,7 +11623,8 @@
 			"magnet-pull",
 			"sturdy",
 			"analytic"
-		]
+		],
+		"canEvolve": false
 	},
 	"lickilicky": {
 		"num": "#463",
@@ -11162,7 +11647,8 @@
 			"own-tempo",
 			"oblivious",
 			"cloud-nine"
-		]
+		],
+		"canEvolve": false
 	},
 	"rhyperior": {
 		"num": "#464",
@@ -11186,7 +11672,8 @@
 			"lightning-rod",
 			"solid-rock",
 			"reckless"
-		]
+		],
+		"canEvolve": false
 	},
 	"tangrowth": {
 		"num": "#465",
@@ -11209,7 +11696,8 @@
 			"chlorophyll",
 			"leaf-guard",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"electivire": {
 		"num": "#466",
@@ -11231,7 +11719,8 @@
 		"abilities": [
 			"motor-drive",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": false
 	},
 	"magmortar": {
 		"num": "#467",
@@ -11253,7 +11742,8 @@
 		"abilities": [
 			"flame-body",
 			"vital-spirit"
-		]
+		],
+		"canEvolve": false
 	},
 	"togekiss": {
 		"num": "#468",
@@ -11277,7 +11767,8 @@
 			"hustle",
 			"serene-grace",
 			"super-luck"
-		]
+		],
+		"canEvolve": false
 	},
 	"yanmega": {
 		"num": "#469",
@@ -11301,7 +11792,8 @@
 			"speed-boost",
 			"tinted-lens",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"leafeon": {
 		"num": "#470",
@@ -11323,7 +11815,8 @@
 		"abilities": [
 			"leaf-guard",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": false
 	},
 	"glaceon": {
 		"num": "#471",
@@ -11345,7 +11838,8 @@
 		"abilities": [
 			"snow-cloak",
 			"ice-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"gliscor": {
 		"num": "#472",
@@ -11369,7 +11863,8 @@
 			"hyper-cutter",
 			"sand-veil",
 			"poison-heal"
-		]
+		],
+		"canEvolve": false
 	},
 	"mamoswine": {
 		"num": "#473",
@@ -11393,7 +11888,8 @@
 			"oblivious",
 			"snow-cloak",
 			"thick-fat"
-		]
+		],
+		"canEvolve": false
 	},
 	"porygon-z": {
 		"num": "#474",
@@ -11416,7 +11912,8 @@
 			"adaptability",
 			"download",
 			"analytic"
-		]
+		],
+		"canEvolve": false
 	},
 	"gallade": {
 		"num": "#475",
@@ -11440,7 +11937,8 @@
 			"steadfast",
 			"sharpness",
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"probopass": {
 		"num": "#476",
@@ -11464,7 +11962,8 @@
 			"sturdy",
 			"magnet-pull",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"dusknoir": {
 		"num": "#477",
@@ -11486,7 +11985,8 @@
 		"abilities": [
 			"pressure",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"froslass": {
 		"num": "#478",
@@ -11509,7 +12009,8 @@
 		"abilities": [
 			"snow-cloak",
 			"cursed-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom": {
 		"num": "#479",
@@ -11531,7 +12032,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom-heat": {
 		"num": "#479",
@@ -11553,7 +12055,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom-wash": {
 		"num": "#479",
@@ -11575,7 +12078,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom-frost": {
 		"num": "#479",
@@ -11597,7 +12101,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom-fan": {
 		"num": "#479",
@@ -11619,7 +12124,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rotom-mow": {
 		"num": "#479",
@@ -11641,7 +12147,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"uxie": {
 		"num": "#480",
@@ -11662,7 +12169,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"mesprit": {
 		"num": "#481",
@@ -11683,7 +12191,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"azelf": {
 		"num": "#482",
@@ -11704,7 +12213,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"dialga": {
 		"num": "#483",
@@ -11727,7 +12237,8 @@
 		"abilities": [
 			"pressure",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"palkia": {
 		"num": "#484",
@@ -11750,7 +12261,8 @@
 		"abilities": [
 			"pressure",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"heatran": {
 		"num": "#485",
@@ -11773,7 +12285,8 @@
 		"abilities": [
 			"flash-fire",
 			"flame-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"regigigas": {
 		"num": "#486",
@@ -11794,7 +12307,8 @@
 		],
 		"abilities": [
 			"slow-start"
-		]
+		],
+		"canEvolve": false
 	},
 	"giratina": {
 		"num": "#487",
@@ -11817,7 +12331,8 @@
 		"abilities": [
 			"pressure",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"giratina-origin": {
 		"num": "#487",
@@ -11839,7 +12354,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"cresselia": {
 		"num": "#488",
@@ -11860,7 +12376,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"phione": {
 		"num": "#489",
@@ -11881,7 +12398,8 @@
 		],
 		"abilities": [
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"manaphy": {
 		"num": "#490",
@@ -11902,7 +12420,8 @@
 		],
 		"abilities": [
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"darkrai": {
 		"num": "#491",
@@ -11923,7 +12442,8 @@
 		],
 		"abilities": [
 			"bad-dreams"
-		]
+		],
+		"canEvolve": false
 	},
 	"shaymin": {
 		"num": "#492",
@@ -11944,7 +12464,8 @@
 		],
 		"abilities": [
 			"natural-cure"
-		]
+		],
+		"canEvolve": false
 	},
 	"shaymin-sky": {
 		"num": "#492",
@@ -11966,7 +12487,8 @@
 		],
 		"abilities": [
 			"serene-grace"
-		]
+		],
+		"canEvolve": false
 	},
 	"arceus": {
 		"num": "#493",
@@ -11987,7 +12509,8 @@
 		],
 		"abilities": [
 			"multitype"
-		]
+		],
+		"canEvolve": false
 	},
 	"victini": {
 		"num": "#494",
@@ -12009,7 +12532,8 @@
 		],
 		"abilities": [
 			"victory-star"
-		]
+		],
+		"canEvolve": false
 	},
 	"snivy": {
 		"num": "#495",
@@ -12031,7 +12555,8 @@
 		"abilities": [
 			"overgrow",
 			"contrary"
-		]
+		],
+		"canEvolve": true
 	},
 	"servine": {
 		"num": "#496",
@@ -12053,7 +12578,8 @@
 		"abilities": [
 			"overgrow",
 			"contrary"
-		]
+		],
+		"canEvolve": true
 	},
 	"serperior": {
 		"num": "#497",
@@ -12075,7 +12601,8 @@
 		"abilities": [
 			"overgrow",
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"tepig": {
 		"num": "#498",
@@ -12097,7 +12624,8 @@
 		"abilities": [
 			"blaze",
 			"thick-fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"pignite": {
 		"num": "#499",
@@ -12120,7 +12648,8 @@
 		"abilities": [
 			"blaze",
 			"thick-fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"emboar": {
 		"num": "#500",
@@ -12143,7 +12672,8 @@
 		"abilities": [
 			"blaze",
 			"reckless"
-		]
+		],
+		"canEvolve": false
 	},
 	"oshawott": {
 		"num": "#501",
@@ -12165,7 +12695,8 @@
 		"abilities": [
 			"torrent",
 			"shell-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"dewott": {
 		"num": "#502",
@@ -12187,7 +12718,8 @@
 		"abilities": [
 			"torrent",
 			"shell-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"samurott": {
 		"num": "#503",
@@ -12209,7 +12741,8 @@
 		"abilities": [
 			"torrent",
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"patrat": {
 		"num": "#504",
@@ -12232,7 +12765,8 @@
 			"run-away",
 			"keen-eye",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"watchog": {
 		"num": "#505",
@@ -12255,7 +12789,8 @@
 			"illuminate",
 			"keen-eye",
 			"analytic"
-		]
+		],
+		"canEvolve": false
 	},
 	"lillipup": {
 		"num": "#506",
@@ -12278,7 +12813,8 @@
 			"vital-spirit",
 			"pickup",
 			"run-away"
-		]
+		],
+		"canEvolve": true
 	},
 	"herdier": {
 		"num": "#507",
@@ -12301,7 +12837,8 @@
 			"intimidate",
 			"sand-rush",
 			"scrappy"
-		]
+		],
+		"canEvolve": true
 	},
 	"stoutland": {
 		"num": "#508",
@@ -12324,7 +12861,8 @@
 			"intimidate",
 			"sand-rush",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"purrloin": {
 		"num": "#509",
@@ -12347,7 +12885,8 @@
 			"limber",
 			"unburden",
 			"prankster"
-		]
+		],
+		"canEvolve": true
 	},
 	"liepard": {
 		"num": "#510",
@@ -12370,7 +12909,8 @@
 			"limber",
 			"unburden",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"pansage": {
 		"num": "#511",
@@ -12392,7 +12932,8 @@
 		"abilities": [
 			"gluttony",
 			"overgrow"
-		]
+		],
+		"canEvolve": true
 	},
 	"simisage": {
 		"num": "#512",
@@ -12414,7 +12955,8 @@
 		"abilities": [
 			"gluttony",
 			"overgrow"
-		]
+		],
+		"canEvolve": false
 	},
 	"pansear": {
 		"num": "#513",
@@ -12436,7 +12978,8 @@
 		"abilities": [
 			"gluttony",
 			"blaze"
-		]
+		],
+		"canEvolve": true
 	},
 	"simisear": {
 		"num": "#514",
@@ -12458,7 +13001,8 @@
 		"abilities": [
 			"gluttony",
 			"blaze"
-		]
+		],
+		"canEvolve": false
 	},
 	"panpour": {
 		"num": "#515",
@@ -12480,7 +13024,8 @@
 		"abilities": [
 			"gluttony",
 			"torrent"
-		]
+		],
+		"canEvolve": true
 	},
 	"simipour": {
 		"num": "#516",
@@ -12502,7 +13047,8 @@
 		"abilities": [
 			"gluttony",
 			"torrent"
-		]
+		],
+		"canEvolve": false
 	},
 	"munna": {
 		"num": "#517",
@@ -12525,7 +13071,8 @@
 			"forewarn",
 			"synchronize",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"musharna": {
 		"num": "#518",
@@ -12548,7 +13095,8 @@
 			"forewarn",
 			"synchronize",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"pidove": {
 		"num": "#519",
@@ -12572,7 +13120,8 @@
 			"big-pecks",
 			"super-luck",
 			"rivalry"
-		]
+		],
+		"canEvolve": true
 	},
 	"tranquill": {
 		"num": "#520",
@@ -12596,7 +13145,8 @@
 			"big-pecks",
 			"super-luck",
 			"rivalry"
-		]
+		],
+		"canEvolve": true
 	},
 	"unfezant": {
 		"num": "#521",
@@ -12620,7 +13170,8 @@
 			"big-pecks",
 			"super-luck",
 			"rivalry"
-		]
+		],
+		"canEvolve": false
 	},
 	"blitzle": {
 		"num": "#522",
@@ -12643,7 +13194,8 @@
 			"lightning-rod",
 			"motor-drive",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": true
 	},
 	"zebstrika": {
 		"num": "#523",
@@ -12666,7 +13218,8 @@
 			"lightning-rod",
 			"motor-drive",
 			"sap-sipper"
-		]
+		],
+		"canEvolve": false
 	},
 	"roggenrola": {
 		"num": "#524",
@@ -12689,7 +13242,8 @@
 			"sturdy",
 			"weak-armor",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"boldore": {
 		"num": "#525",
@@ -12712,7 +13266,8 @@
 			"sturdy",
 			"weak-armor",
 			"sand-force"
-		]
+		],
+		"canEvolve": true
 	},
 	"gigalith": {
 		"num": "#526",
@@ -12735,7 +13290,8 @@
 			"sturdy",
 			"sand-stream",
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"woobat": {
 		"num": "#527",
@@ -12759,7 +13315,8 @@
 			"unaware",
 			"klutz",
 			"simple"
-		]
+		],
+		"canEvolve": true
 	},
 	"swoobat": {
 		"num": "#528",
@@ -12783,7 +13340,8 @@
 			"unaware",
 			"klutz",
 			"simple"
-		]
+		],
+		"canEvolve": false
 	},
 	"drilbur": {
 		"num": "#529",
@@ -12806,7 +13364,8 @@
 			"sand-rush",
 			"sand-force",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": true
 	},
 	"excadrill": {
 		"num": "#530",
@@ -12830,7 +13389,8 @@
 			"sand-rush",
 			"sand-force",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"audino": {
 		"num": "#531",
@@ -12853,7 +13413,8 @@
 			"healer",
 			"regenerator",
 			"klutz"
-		]
+		],
+		"canEvolve": false
 	},
 	"timburr": {
 		"num": "#532",
@@ -12876,7 +13437,8 @@
 			"guts",
 			"sheer-force",
 			"iron-fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"gurdurr": {
 		"num": "#533",
@@ -12899,7 +13461,8 @@
 			"guts",
 			"sheer-force",
 			"iron-fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"conkeldurr": {
 		"num": "#534",
@@ -12922,7 +13485,8 @@
 			"guts",
 			"sheer-force",
 			"iron-fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"tympole": {
 		"num": "#535",
@@ -12945,7 +13509,8 @@
 			"swift-swim",
 			"hydration",
 			"water-absorb"
-		]
+		],
+		"canEvolve": true
 	},
 	"palpitoad": {
 		"num": "#536",
@@ -12969,7 +13534,8 @@
 			"swift-swim",
 			"hydration",
 			"water-absorb"
-		]
+		],
+		"canEvolve": true
 	},
 	"seismitoad": {
 		"num": "#537",
@@ -12993,7 +13559,8 @@
 			"swift-swim",
 			"poison-touch",
 			"water-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"throh": {
 		"num": "#538",
@@ -13016,7 +13583,8 @@
 			"guts",
 			"inner-focus",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"sawk": {
 		"num": "#539",
@@ -13039,7 +13607,8 @@
 			"sturdy",
 			"inner-focus",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"sewaddle": {
 		"num": "#540",
@@ -13063,7 +13632,8 @@
 			"swarm",
 			"chlorophyll",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"swadloon": {
 		"num": "#541",
@@ -13087,7 +13657,8 @@
 			"leaf-guard",
 			"chlorophyll",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"leavanny": {
 		"num": "#542",
@@ -13111,7 +13682,8 @@
 			"swarm",
 			"chlorophyll",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"venipede": {
 		"num": "#543",
@@ -13135,7 +13707,8 @@
 			"poison-point",
 			"swarm",
 			"speed-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"whirlipede": {
 		"num": "#544",
@@ -13159,7 +13732,8 @@
 			"poison-point",
 			"swarm",
 			"speed-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"scolipede": {
 		"num": "#545",
@@ -13183,7 +13757,8 @@
 			"poison-point",
 			"swarm",
 			"speed-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"cottonee": {
 		"num": "#546",
@@ -13207,7 +13782,8 @@
 			"prankster",
 			"infiltrator",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": true
 	},
 	"whimsicott": {
 		"num": "#547",
@@ -13231,7 +13807,8 @@
 			"prankster",
 			"infiltrator",
 			"chlorophyll"
-		]
+		],
+		"canEvolve": false
 	},
 	"petilil": {
 		"num": "#548",
@@ -13254,7 +13831,8 @@
 			"chlorophyll",
 			"own-tempo",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"lilligant": {
 		"num": "#549",
@@ -13277,7 +13855,8 @@
 			"chlorophyll",
 			"own-tempo",
 			"leaf-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"basculin": {
 		"num": "#550",
@@ -13300,7 +13879,8 @@
 			"reckless",
 			"adaptability",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"basculin-blue-striped": {
 		"num": "#550",
@@ -13323,7 +13903,8 @@
 			"rock-head",
 			"adaptability",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"sandile": {
 		"num": "#551",
@@ -13347,7 +13928,8 @@
 			"intimidate",
 			"moxie",
 			"anger-point"
-		]
+		],
+		"canEvolve": true
 	},
 	"krokorok": {
 		"num": "#552",
@@ -13371,7 +13953,8 @@
 			"intimidate",
 			"moxie",
 			"anger-point"
-		]
+		],
+		"canEvolve": true
 	},
 	"krookodile": {
 		"num": "#553",
@@ -13395,7 +13978,8 @@
 			"intimidate",
 			"moxie",
 			"anger-point"
-		]
+		],
+		"canEvolve": false
 	},
 	"darumaka": {
 		"num": "#554",
@@ -13417,7 +14001,8 @@
 		"abilities": [
 			"hustle",
 			"inner-focus"
-		]
+		],
+		"canEvolve": true
 	},
 	"darmanitan": {
 		"num": "#555",
@@ -13439,7 +14024,8 @@
 		"abilities": [
 			"sheer-force",
 			"zen-mode"
-		]
+		],
+		"canEvolve": false
 	},
 	"darmanitan-zen": {
 		"num": "#555",
@@ -13461,7 +14047,8 @@
 		],
 		"abilities": [
 			"zen-mode"
-		]
+		],
+		"canEvolve": false
 	},
 	"maractus": {
 		"num": "#556",
@@ -13484,7 +14071,8 @@
 			"water-absorb",
 			"chlorophyll",
 			"storm-drain"
-		]
+		],
+		"canEvolve": false
 	},
 	"dwebble": {
 		"num": "#557",
@@ -13508,7 +14096,8 @@
 			"sturdy",
 			"shell-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"crustle": {
 		"num": "#558",
@@ -13532,7 +14121,8 @@
 			"sturdy",
 			"shell-armor",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"scraggy": {
 		"num": "#559",
@@ -13556,7 +14146,8 @@
 			"shed-skin",
 			"moxie",
 			"intimidate"
-		]
+		],
+		"canEvolve": true
 	},
 	"scrafty": {
 		"num": "#560",
@@ -13580,7 +14171,8 @@
 			"shed-skin",
 			"moxie",
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"sigilyph": {
 		"num": "#561",
@@ -13604,7 +14196,8 @@
 			"wonder-skin",
 			"magic-guard",
 			"tinted-lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"yamask": {
 		"num": "#562",
@@ -13625,7 +14218,8 @@
 		],
 		"abilities": [
 			"mummy"
-		]
+		],
+		"canEvolve": true
 	},
 	"cofagrigus": {
 		"num": "#563",
@@ -13646,7 +14240,8 @@
 		],
 		"abilities": [
 			"mummy"
-		]
+		],
+		"canEvolve": false
 	},
 	"tirtouga": {
 		"num": "#564",
@@ -13670,7 +14265,8 @@
 			"solid-rock",
 			"sturdy",
 			"swift-swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"carracosta": {
 		"num": "#565",
@@ -13694,7 +14290,8 @@
 			"solid-rock",
 			"sturdy",
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"archen": {
 		"num": "#566",
@@ -13716,7 +14313,8 @@
 		],
 		"abilities": [
 			"defeatist"
-		]
+		],
+		"canEvolve": true
 	},
 	"archeops": {
 		"num": "#567",
@@ -13738,7 +14336,8 @@
 		],
 		"abilities": [
 			"defeatist"
-		]
+		],
+		"canEvolve": false
 	},
 	"trubbish": {
 		"num": "#568",
@@ -13761,7 +14360,8 @@
 			"stench",
 			"sticky-hold",
 			"aftermath"
-		]
+		],
+		"canEvolve": true
 	},
 	"garbodor": {
 		"num": "#569",
@@ -13784,7 +14384,8 @@
 			"stench",
 			"weak-armor",
 			"aftermath"
-		]
+		],
+		"canEvolve": false
 	},
 	"zorua": {
 		"num": "#570",
@@ -13805,7 +14406,8 @@
 		],
 		"abilities": [
 			"illusion"
-		]
+		],
+		"canEvolve": true
 	},
 	"zoroark": {
 		"num": "#571",
@@ -13826,7 +14428,8 @@
 		],
 		"abilities": [
 			"illusion"
-		]
+		],
+		"canEvolve": false
 	},
 	"minccino": {
 		"num": "#572",
@@ -13849,7 +14452,8 @@
 			"cute-charm",
 			"technician",
 			"skill-link"
-		]
+		],
+		"canEvolve": true
 	},
 	"cinccino": {
 		"num": "#573",
@@ -13872,7 +14476,8 @@
 			"cute-charm",
 			"technician",
 			"skill-link"
-		]
+		],
+		"canEvolve": false
 	},
 	"gothita": {
 		"num": "#574",
@@ -13895,7 +14500,8 @@
 			"frisk",
 			"competitive",
 			"shadow-tag"
-		]
+		],
+		"canEvolve": true
 	},
 	"gothorita": {
 		"num": "#575",
@@ -13918,7 +14524,8 @@
 			"frisk",
 			"competitive",
 			"shadow-tag"
-		]
+		],
+		"canEvolve": true
 	},
 	"gothitelle": {
 		"num": "#576",
@@ -13941,7 +14548,8 @@
 			"frisk",
 			"competitive",
 			"shadow-tag"
-		]
+		],
+		"canEvolve": false
 	},
 	"solosis": {
 		"num": "#577",
@@ -13964,7 +14572,8 @@
 			"overcoat",
 			"magic-guard",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"duosion": {
 		"num": "#578",
@@ -13987,7 +14596,8 @@
 			"overcoat",
 			"magic-guard",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"reuniclus": {
 		"num": "#579",
@@ -14010,7 +14620,8 @@
 			"overcoat",
 			"magic-guard",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"ducklett": {
 		"num": "#580",
@@ -14034,7 +14645,8 @@
 			"keen-eye",
 			"big-pecks",
 			"hydration"
-		]
+		],
+		"canEvolve": true
 	},
 	"swanna": {
 		"num": "#581",
@@ -14058,7 +14670,8 @@
 			"keen-eye",
 			"big-pecks",
 			"hydration"
-		]
+		],
+		"canEvolve": false
 	},
 	"vanillite": {
 		"num": "#582",
@@ -14081,7 +14694,8 @@
 			"ice-body",
 			"snow-cloak",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"vanillish": {
 		"num": "#583",
@@ -14104,7 +14718,8 @@
 			"ice-body",
 			"snow-cloak",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"vanilluxe": {
 		"num": "#584",
@@ -14127,7 +14742,8 @@
 			"ice-body",
 			"snow-warning",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"deerling": {
 		"num": "#585",
@@ -14151,7 +14767,8 @@
 			"chlorophyll",
 			"sap-sipper",
 			"serene-grace"
-		]
+		],
+		"canEvolve": true
 	},
 	"sawsbuck": {
 		"num": "#586",
@@ -14175,7 +14792,8 @@
 			"chlorophyll",
 			"sap-sipper",
 			"serene-grace"
-		]
+		],
+		"canEvolve": false
 	},
 	"emolga": {
 		"num": "#587",
@@ -14198,7 +14816,8 @@
 		"abilities": [
 			"static",
 			"motor-drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"karrablast": {
 		"num": "#588",
@@ -14221,7 +14840,8 @@
 			"swarm",
 			"shed-skin",
 			"no-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"escavalier": {
 		"num": "#589",
@@ -14245,7 +14865,8 @@
 			"swarm",
 			"shell-armor",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"foongus": {
 		"num": "#590",
@@ -14268,7 +14889,8 @@
 		"abilities": [
 			"effect-spore",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"amoonguss": {
 		"num": "#591",
@@ -14291,7 +14913,8 @@
 		"abilities": [
 			"effect-spore",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"frillish": {
 		"num": "#592",
@@ -14315,7 +14938,8 @@
 			"water-absorb",
 			"cursed-body",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"jellicent": {
 		"num": "#593",
@@ -14339,7 +14963,8 @@
 			"water-absorb",
 			"cursed-body",
 			"damp"
-		]
+		],
+		"canEvolve": false
 	},
 	"alomomola": {
 		"num": "#594",
@@ -14362,7 +14987,8 @@
 			"healer",
 			"hydration",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"joltik": {
 		"num": "#595",
@@ -14386,7 +15012,8 @@
 			"compound-eyes",
 			"unnerve",
 			"swarm"
-		]
+		],
+		"canEvolve": true
 	},
 	"galvantula": {
 		"num": "#596",
@@ -14410,7 +15037,8 @@
 			"compound-eyes",
 			"unnerve",
 			"swarm"
-		]
+		],
+		"canEvolve": false
 	},
 	"ferroseed": {
 		"num": "#597",
@@ -14432,7 +15060,8 @@
 		],
 		"abilities": [
 			"iron-barbs"
-		]
+		],
+		"canEvolve": true
 	},
 	"ferrothorn": {
 		"num": "#598",
@@ -14455,7 +15084,8 @@
 		"abilities": [
 			"iron-barbs",
 			"anticipation"
-		]
+		],
+		"canEvolve": false
 	},
 	"klink": {
 		"num": "#599",
@@ -14478,7 +15108,8 @@
 			"plus",
 			"minus",
 			"clear-body"
-		]
+		],
+		"canEvolve": true
 	},
 	"klang": {
 		"num": "#600",
@@ -14501,7 +15132,8 @@
 			"plus",
 			"minus",
 			"clear-body"
-		]
+		],
+		"canEvolve": true
 	},
 	"klinklang": {
 		"num": "#601",
@@ -14524,7 +15156,8 @@
 			"plus",
 			"minus",
 			"clear-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"tynamo": {
 		"num": "#602",
@@ -14545,7 +15178,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"eelektrik": {
 		"num": "#603",
@@ -14566,7 +15200,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": true
 	},
 	"eelektross": {
 		"num": "#604",
@@ -14587,7 +15222,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"elgyem": {
 		"num": "#605",
@@ -14610,7 +15246,8 @@
 			"telepathy",
 			"synchronize",
 			"analytic"
-		]
+		],
+		"canEvolve": true
 	},
 	"beheeyem": {
 		"num": "#606",
@@ -14633,7 +15270,8 @@
 			"telepathy",
 			"synchronize",
 			"analytic"
-		]
+		],
+		"canEvolve": false
 	},
 	"litwick": {
 		"num": "#607",
@@ -14657,7 +15295,8 @@
 			"flash-fire",
 			"flame-body",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"lampent": {
 		"num": "#608",
@@ -14681,7 +15320,8 @@
 			"flash-fire",
 			"flame-body",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"chandelure": {
 		"num": "#609",
@@ -14705,7 +15345,8 @@
 			"flash-fire",
 			"flame-body",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"axew": {
 		"num": "#610",
@@ -14728,7 +15369,8 @@
 			"rivalry",
 			"mold-breaker",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"fraxure": {
 		"num": "#611",
@@ -14751,7 +15393,8 @@
 			"rivalry",
 			"mold-breaker",
 			"unnerve"
-		]
+		],
+		"canEvolve": true
 	},
 	"haxorus": {
 		"num": "#612",
@@ -14774,7 +15417,8 @@
 			"rivalry",
 			"mold-breaker",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"cubchoo": {
 		"num": "#613",
@@ -14797,7 +15441,8 @@
 			"snow-cloak",
 			"slush-rush",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"beartic": {
 		"num": "#614",
@@ -14820,7 +15465,8 @@
 			"snow-cloak",
 			"slush-rush",
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"cryogonal": {
 		"num": "#615",
@@ -14841,7 +15487,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"shelmet": {
 		"num": "#616",
@@ -14864,7 +15511,8 @@
 			"hydration",
 			"shell-armor",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"accelgor": {
 		"num": "#617",
@@ -14887,7 +15535,8 @@
 			"hydration",
 			"sticky-hold",
 			"unburden"
-		]
+		],
+		"canEvolve": false
 	},
 	"stunfisk": {
 		"num": "#618",
@@ -14911,7 +15560,8 @@
 			"static",
 			"limber",
 			"sand-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"mienfoo": {
 		"num": "#619",
@@ -14934,7 +15584,8 @@
 			"inner-focus",
 			"regenerator",
 			"reckless"
-		]
+		],
+		"canEvolve": true
 	},
 	"mienshao": {
 		"num": "#620",
@@ -14957,7 +15608,8 @@
 			"inner-focus",
 			"regenerator",
 			"reckless"
-		]
+		],
+		"canEvolve": false
 	},
 	"druddigon": {
 		"num": "#621",
@@ -14980,7 +15632,8 @@
 			"rough-skin",
 			"sheer-force",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"golett": {
 		"num": "#622",
@@ -15004,7 +15657,8 @@
 			"iron-fist",
 			"klutz",
 			"no-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"golurk": {
 		"num": "#623",
@@ -15028,7 +15682,8 @@
 			"iron-fist",
 			"klutz",
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"pawniard": {
 		"num": "#624",
@@ -15052,7 +15707,8 @@
 			"defiant",
 			"inner-focus",
 			"pressure"
-		]
+		],
+		"canEvolve": true
 	},
 	"bisharp": {
 		"num": "#625",
@@ -15076,7 +15732,8 @@
 			"defiant",
 			"inner-focus",
 			"pressure"
-		]
+		],
+		"canEvolve": true
 	},
 	"bouffalant": {
 		"num": "#626",
@@ -15099,7 +15756,8 @@
 			"reckless",
 			"sap-sipper",
 			"soundproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"rufflet": {
 		"num": "#627",
@@ -15123,7 +15781,8 @@
 			"keen-eye",
 			"sheer-force",
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"braviary": {
 		"num": "#628",
@@ -15147,7 +15806,8 @@
 			"keen-eye",
 			"sheer-force",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"vullaby": {
 		"num": "#629",
@@ -15171,7 +15831,8 @@
 			"big-pecks",
 			"overcoat",
 			"weak-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"mandibuzz": {
 		"num": "#630",
@@ -15195,7 +15856,8 @@
 			"big-pecks",
 			"overcoat",
 			"weak-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"heatmor": {
 		"num": "#631",
@@ -15218,7 +15880,8 @@
 			"gluttony",
 			"flash-fire",
 			"white-smoke"
-		]
+		],
+		"canEvolve": false
 	},
 	"durant": {
 		"num": "#632",
@@ -15242,7 +15905,8 @@
 			"swarm",
 			"hustle",
 			"truant"
-		]
+		],
+		"canEvolve": false
 	},
 	"deino": {
 		"num": "#633",
@@ -15264,7 +15928,8 @@
 		],
 		"abilities": [
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"zweilous": {
 		"num": "#634",
@@ -15286,7 +15951,8 @@
 		],
 		"abilities": [
 			"hustle"
-		]
+		],
+		"canEvolve": true
 	},
 	"hydreigon": {
 		"num": "#635",
@@ -15308,7 +15974,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"larvesta": {
 		"num": "#636",
@@ -15331,7 +15998,8 @@
 		"abilities": [
 			"flame-body",
 			"swarm"
-		]
+		],
+		"canEvolve": true
 	},
 	"volcarona": {
 		"num": "#637",
@@ -15354,7 +16022,8 @@
 		"abilities": [
 			"flame-body",
 			"swarm"
-		]
+		],
+		"canEvolve": false
 	},
 	"cobalion": {
 		"num": "#638",
@@ -15376,7 +16045,8 @@
 		],
 		"abilities": [
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"terrakion": {
 		"num": "#639",
@@ -15398,7 +16068,8 @@
 		],
 		"abilities": [
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"virizion": {
 		"num": "#640",
@@ -15420,7 +16091,8 @@
 		],
 		"abilities": [
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"tornadus": {
 		"num": "#641",
@@ -15442,7 +16114,8 @@
 		"abilities": [
 			"prankster",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"tornadus-therian": {
 		"num": "#641",
@@ -15463,7 +16136,8 @@
 		],
 		"abilities": [
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"thundurus": {
 		"num": "#642",
@@ -15486,7 +16160,8 @@
 		"abilities": [
 			"prankster",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"thundurus-therian": {
 		"num": "#642",
@@ -15508,7 +16183,8 @@
 		],
 		"abilities": [
 			"volt-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"reshiram": {
 		"num": "#643",
@@ -15530,7 +16206,8 @@
 		],
 		"abilities": [
 			"turboblaze"
-		]
+		],
+		"canEvolve": false
 	},
 	"zekrom": {
 		"num": "#644",
@@ -15552,7 +16229,8 @@
 		],
 		"abilities": [
 			"teravolt"
-		]
+		],
+		"canEvolve": false
 	},
 	"landorus": {
 		"num": "#645",
@@ -15575,7 +16253,8 @@
 		"abilities": [
 			"sand-force",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"landorus-therian": {
 		"num": "#645",
@@ -15597,7 +16276,8 @@
 		],
 		"abilities": [
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"kyurem": {
 		"num": "#646",
@@ -15619,7 +16299,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"kyurem-black": {
 		"num": "#646",
@@ -15641,7 +16322,8 @@
 		],
 		"abilities": [
 			"teravolt"
-		]
+		],
+		"canEvolve": false
 	},
 	"kyurem-white": {
 		"num": "#646",
@@ -15663,7 +16345,8 @@
 		],
 		"abilities": [
 			"turboblaze"
-		]
+		],
+		"canEvolve": false
 	},
 	"keldeo": {
 		"num": "#647",
@@ -15685,7 +16368,8 @@
 		],
 		"abilities": [
 			"justified"
-		]
+		],
+		"canEvolve": false
 	},
 	"meloetta": {
 		"num": "#648",
@@ -15707,7 +16391,8 @@
 		],
 		"abilities": [
 			"serene-grace"
-		]
+		],
+		"canEvolve": false
 	},
 	"meloetta-pirouette": {
 		"num": "#648",
@@ -15729,7 +16414,8 @@
 		],
 		"abilities": [
 			"serene-grace"
-		]
+		],
+		"canEvolve": false
 	},
 	"genesect": {
 		"num": "#649",
@@ -15751,7 +16437,8 @@
 		],
 		"abilities": [
 			"download"
-		]
+		],
+		"canEvolve": false
 	},
 	"chespin": {
 		"num": "#650",
@@ -15773,7 +16460,8 @@
 		"abilities": [
 			"overgrow",
 			"bulletproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"quilladin": {
 		"num": "#651",
@@ -15795,7 +16483,8 @@
 		"abilities": [
 			"overgrow",
 			"bulletproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"chesnaught": {
 		"num": "#652",
@@ -15818,7 +16507,8 @@
 		"abilities": [
 			"overgrow",
 			"bulletproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"fennekin": {
 		"num": "#653",
@@ -15840,7 +16530,8 @@
 		"abilities": [
 			"blaze",
 			"magician"
-		]
+		],
+		"canEvolve": true
 	},
 	"braixen": {
 		"num": "#654",
@@ -15862,7 +16553,8 @@
 		"abilities": [
 			"blaze",
 			"magician"
-		]
+		],
+		"canEvolve": true
 	},
 	"delphox": {
 		"num": "#655",
@@ -15885,7 +16577,8 @@
 		"abilities": [
 			"blaze",
 			"magician"
-		]
+		],
+		"canEvolve": false
 	},
 	"froakie": {
 		"num": "#656",
@@ -15907,7 +16600,8 @@
 		"abilities": [
 			"torrent",
 			"protean"
-		]
+		],
+		"canEvolve": true
 	},
 	"frogadier": {
 		"num": "#657",
@@ -15929,7 +16623,8 @@
 		"abilities": [
 			"torrent",
 			"protean"
-		]
+		],
+		"canEvolve": true
 	},
 	"greninja": {
 		"num": "#658",
@@ -15952,7 +16647,8 @@
 		"abilities": [
 			"torrent",
 			"protean"
-		]
+		],
+		"canEvolve": false
 	},
 	"bunnelby": {
 		"num": "#659",
@@ -15975,7 +16671,8 @@
 			"pickup",
 			"cheek-pouch",
 			"huge-power"
-		]
+		],
+		"canEvolve": true
 	},
 	"diggersby": {
 		"num": "#660",
@@ -15999,7 +16696,8 @@
 			"pickup",
 			"cheek-pouch",
 			"huge-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"fletchling": {
 		"num": "#661",
@@ -16022,7 +16720,8 @@
 		"abilities": [
 			"big-pecks",
 			"gale-wings"
-		]
+		],
+		"canEvolve": true
 	},
 	"fletchinder": {
 		"num": "#662",
@@ -16045,7 +16744,8 @@
 		"abilities": [
 			"flame-body",
 			"gale-wings"
-		]
+		],
+		"canEvolve": true
 	},
 	"talonflame": {
 		"num": "#663",
@@ -16068,7 +16768,8 @@
 		"abilities": [
 			"flame-body",
 			"gale-wings"
-		]
+		],
+		"canEvolve": false
 	},
 	"scatterbug": {
 		"num": "#664",
@@ -16091,7 +16792,8 @@
 			"shield-dust",
 			"compound-eyes",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"spewpa": {
 		"num": "#665",
@@ -16113,7 +16815,8 @@
 		"abilities": [
 			"shed-skin",
 			"friend-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"vivillon": {
 		"num": "#666",
@@ -16137,7 +16840,8 @@
 			"shield-dust",
 			"compound-eyes",
 			"friend-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"litleo": {
 		"num": "#667",
@@ -16161,7 +16865,8 @@
 			"rivalry",
 			"unnerve",
 			"moxie"
-		]
+		],
+		"canEvolve": true
 	},
 	"pyroar": {
 		"num": "#668",
@@ -16185,7 +16890,8 @@
 			"rivalry",
 			"unnerve",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"flabebe": {
 		"num": "#669",
@@ -16207,7 +16913,8 @@
 		"abilities": [
 			"flower-veil",
 			"symbiosis"
-		]
+		],
+		"canEvolve": true
 	},
 	"floette": {
 		"num": "#670",
@@ -16229,7 +16936,8 @@
 		"abilities": [
 			"flower-veil",
 			"symbiosis"
-		]
+		],
+		"canEvolve": true
 	},
 	"florges": {
 		"num": "#671",
@@ -16251,7 +16959,8 @@
 		"abilities": [
 			"flower-veil",
 			"symbiosis"
-		]
+		],
+		"canEvolve": false
 	},
 	"skiddo": {
 		"num": "#672",
@@ -16273,7 +16982,8 @@
 		"abilities": [
 			"sap-sipper",
 			"grass-pelt"
-		]
+		],
+		"canEvolve": true
 	},
 	"gogoat": {
 		"num": "#673",
@@ -16295,7 +17005,8 @@
 		"abilities": [
 			"sap-sipper",
 			"grass-pelt"
-		]
+		],
+		"canEvolve": false
 	},
 	"pancham": {
 		"num": "#674",
@@ -16318,7 +17029,8 @@
 			"iron-fist",
 			"mold-breaker",
 			"scrappy"
-		]
+		],
+		"canEvolve": true
 	},
 	"pangoro": {
 		"num": "#675",
@@ -16342,7 +17054,8 @@
 			"iron-fist",
 			"mold-breaker",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"furfrou": {
 		"num": "#676",
@@ -16363,7 +17076,8 @@
 		],
 		"abilities": [
 			"fur-coat"
-		]
+		],
+		"canEvolve": false
 	},
 	"espurr": {
 		"num": "#677",
@@ -16386,7 +17100,8 @@
 			"keen-eye",
 			"infiltrator",
 			"own-tempo"
-		]
+		],
+		"canEvolve": true
 	},
 	"meowstic": {
 		"num": "#678",
@@ -16409,7 +17124,8 @@
 			"keen-eye",
 			"infiltrator",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"meowstic-f": {
 		"num": "#678",
@@ -16432,7 +17148,8 @@
 			"keen-eye",
 			"infiltrator",
 			"competitive"
-		]
+		],
+		"canEvolve": false
 	},
 	"honedge": {
 		"num": "#679",
@@ -16454,7 +17171,8 @@
 		],
 		"abilities": [
 			"no-guard"
-		]
+		],
+		"canEvolve": true
 	},
 	"doublade": {
 		"num": "#680",
@@ -16476,7 +17194,8 @@
 		],
 		"abilities": [
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"aegislash": {
 		"num": "#681",
@@ -16498,7 +17217,8 @@
 		],
 		"abilities": [
 			"stance-change"
-		]
+		],
+		"canEvolve": false
 	},
 	"aegislash-blade": {
 		"num": "#681",
@@ -16520,7 +17240,8 @@
 		],
 		"abilities": [
 			"stance-change"
-		]
+		],
+		"canEvolve": false
 	},
 	"spritzee": {
 		"num": "#682",
@@ -16542,7 +17263,8 @@
 		"abilities": [
 			"healer",
 			"aroma-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"aromatisse": {
 		"num": "#683",
@@ -16564,7 +17286,8 @@
 		"abilities": [
 			"healer",
 			"aroma-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"swirlix": {
 		"num": "#684",
@@ -16586,7 +17309,8 @@
 		"abilities": [
 			"sweet-veil",
 			"unburden"
-		]
+		],
+		"canEvolve": true
 	},
 	"slurpuff": {
 		"num": "#685",
@@ -16608,7 +17332,8 @@
 		"abilities": [
 			"sweet-veil",
 			"unburden"
-		]
+		],
+		"canEvolve": false
 	},
 	"inkay": {
 		"num": "#686",
@@ -16632,7 +17357,8 @@
 			"contrary",
 			"suction-cups",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"malamar": {
 		"num": "#687",
@@ -16656,7 +17382,8 @@
 			"contrary",
 			"suction-cups",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"binacle": {
 		"num": "#688",
@@ -16680,7 +17407,8 @@
 			"tough-claws",
 			"sniper",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"barbaracle": {
 		"num": "#689",
@@ -16704,7 +17432,8 @@
 			"tough-claws",
 			"sniper",
 			"pickpocket"
-		]
+		],
+		"canEvolve": false
 	},
 	"skrelp": {
 		"num": "#690",
@@ -16728,7 +17457,8 @@
 			"poison-point",
 			"poison-touch",
 			"adaptability"
-		]
+		],
+		"canEvolve": true
 	},
 	"dragalge": {
 		"num": "#691",
@@ -16752,7 +17482,8 @@
 			"poison-point",
 			"poison-touch",
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"clauncher": {
 		"num": "#692",
@@ -16773,7 +17504,8 @@
 		],
 		"abilities": [
 			"mega-launcher"
-		]
+		],
+		"canEvolve": true
 	},
 	"clawitzer": {
 		"num": "#693",
@@ -16794,7 +17526,8 @@
 		],
 		"abilities": [
 			"mega-launcher"
-		]
+		],
+		"canEvolve": false
 	},
 	"helioptile": {
 		"num": "#694",
@@ -16818,7 +17551,8 @@
 			"dry-skin",
 			"sand-veil",
 			"solar-power"
-		]
+		],
+		"canEvolve": true
 	},
 	"heliolisk": {
 		"num": "#695",
@@ -16842,7 +17576,8 @@
 			"dry-skin",
 			"sand-veil",
 			"solar-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"tyrunt": {
 		"num": "#696",
@@ -16865,7 +17600,8 @@
 		"abilities": [
 			"strong-jaw",
 			"sturdy"
-		]
+		],
+		"canEvolve": true
 	},
 	"tyrantrum": {
 		"num": "#697",
@@ -16888,7 +17624,8 @@
 		"abilities": [
 			"strong-jaw",
 			"rock-head"
-		]
+		],
+		"canEvolve": false
 	},
 	"amaura": {
 		"num": "#698",
@@ -16911,7 +17648,8 @@
 		"abilities": [
 			"refrigerate",
 			"snow-warning"
-		]
+		],
+		"canEvolve": true
 	},
 	"aurorus": {
 		"num": "#699",
@@ -16934,7 +17672,8 @@
 		"abilities": [
 			"refrigerate",
 			"snow-warning"
-		]
+		],
+		"canEvolve": false
 	},
 	"sylveon": {
 		"num": "#700",
@@ -16956,7 +17695,8 @@
 		"abilities": [
 			"cute-charm",
 			"pixilate"
-		]
+		],
+		"canEvolve": false
 	},
 	"hawlucha": {
 		"num": "#701",
@@ -16980,7 +17720,8 @@
 			"limber",
 			"unburden",
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"dedenne": {
 		"num": "#702",
@@ -17004,7 +17745,8 @@
 			"cheek-pouch",
 			"pickup",
 			"plus"
-		]
+		],
+		"canEvolve": false
 	},
 	"carbink": {
 		"num": "#703",
@@ -17027,7 +17769,8 @@
 		"abilities": [
 			"clear-body",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"goomy": {
 		"num": "#704",
@@ -17050,7 +17793,8 @@
 			"sap-sipper",
 			"hydration",
 			"gooey"
-		]
+		],
+		"canEvolve": true
 	},
 	"sliggoo": {
 		"num": "#705",
@@ -17073,7 +17817,8 @@
 			"sap-sipper",
 			"hydration",
 			"gooey"
-		]
+		],
+		"canEvolve": true
 	},
 	"goodra": {
 		"num": "#706",
@@ -17096,7 +17841,8 @@
 			"sap-sipper",
 			"hydration",
 			"gooey"
-		]
+		],
+		"canEvolve": false
 	},
 	"klefki": {
 		"num": "#707",
@@ -17119,7 +17865,8 @@
 		"abilities": [
 			"prankster",
 			"magician"
-		]
+		],
+		"canEvolve": false
 	},
 	"phantump": {
 		"num": "#708",
@@ -17143,7 +17890,8 @@
 			"natural-cure",
 			"frisk",
 			"harvest"
-		]
+		],
+		"canEvolve": true
 	},
 	"trevenant": {
 		"num": "#709",
@@ -17167,7 +17915,8 @@
 			"natural-cure",
 			"frisk",
 			"harvest"
-		]
+		],
+		"canEvolve": false
 	},
 	"pumpkaboo-small": {
 		"num": "#710",
@@ -17191,7 +17940,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": true
 	},
 	"pumpkaboo": {
 		"num": "#710",
@@ -17215,7 +17965,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": true
 	},
 	"pumpkaboo-large": {
 		"num": "#710",
@@ -17239,7 +17990,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": true
 	},
 	"pumpkaboo-super": {
 		"num": "#710",
@@ -17263,7 +18015,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": true
 	},
 	"gourgeist-small": {
 		"num": "#711",
@@ -17287,7 +18040,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"gourgeist": {
 		"num": "#711",
@@ -17311,7 +18065,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"gourgeist-large": {
 		"num": "#711",
@@ -17335,7 +18090,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"gourgeist-super": {
 		"num": "#711",
@@ -17359,7 +18115,8 @@
 			"pickup",
 			"frisk",
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"bergmite": {
 		"num": "#712",
@@ -17382,7 +18139,8 @@
 			"own-tempo",
 			"ice-body",
 			"sturdy"
-		]
+		],
+		"canEvolve": true
 	},
 	"avalugg": {
 		"num": "#713",
@@ -17405,7 +18163,8 @@
 			"own-tempo",
 			"ice-body",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"noibat": {
 		"num": "#714",
@@ -17429,7 +18188,8 @@
 			"frisk",
 			"infiltrator",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"noivern": {
 		"num": "#715",
@@ -17453,7 +18213,8 @@
 			"frisk",
 			"infiltrator",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"xerneas": {
 		"num": "#716",
@@ -17474,7 +18235,8 @@
 		],
 		"abilities": [
 			"fairy-aura"
-		]
+		],
+		"canEvolve": false
 	},
 	"yveltal": {
 		"num": "#717",
@@ -17496,7 +18258,8 @@
 		],
 		"abilities": [
 			"dark-aura"
-		]
+		],
+		"canEvolve": false
 	},
 	"zygarde": {
 		"num": "#718",
@@ -17518,7 +18281,8 @@
 		],
 		"abilities": [
 			"aura-break"
-		]
+		],
+		"canEvolve": false
 	},
 	"diancie": {
 		"num": "#719",
@@ -17540,7 +18304,8 @@
 		],
 		"abilities": [
 			"clear-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"hoopa": {
 		"num": "#720",
@@ -17562,7 +18327,8 @@
 		],
 		"abilities": [
 			"magician"
-		]
+		],
+		"canEvolve": false
 	},
 	"volcanion": {
 		"num": "#721",
@@ -17584,7 +18350,8 @@
 		],
 		"abilities": [
 			"water-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"rowlet": {
 		"num": "#722",
@@ -17607,7 +18374,8 @@
 		"abilities": [
 			"overgrow",
 			"long-reach"
-		]
+		],
+		"canEvolve": true
 	},
 	"dartrix": {
 		"num": "#723",
@@ -17630,7 +18398,8 @@
 		"abilities": [
 			"overgrow",
 			"long-reach"
-		]
+		],
+		"canEvolve": true
 	},
 	"decidueye": {
 		"num": "#724",
@@ -17653,7 +18422,8 @@
 		"abilities": [
 			"overgrow",
 			"long-reach"
-		]
+		],
+		"canEvolve": false
 	},
 	"litten": {
 		"num": "#725",
@@ -17675,7 +18445,8 @@
 		"abilities": [
 			"blaze",
 			"intimidate"
-		]
+		],
+		"canEvolve": true
 	},
 	"torracat": {
 		"num": "#726",
@@ -17697,7 +18468,8 @@
 		"abilities": [
 			"blaze",
 			"intimidate"
-		]
+		],
+		"canEvolve": true
 	},
 	"incineroar": {
 		"num": "#727",
@@ -17720,7 +18492,8 @@
 		"abilities": [
 			"blaze",
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"popplio": {
 		"num": "#728",
@@ -17742,7 +18515,8 @@
 		"abilities": [
 			"torrent",
 			"liquid-voice"
-		]
+		],
+		"canEvolve": true
 	},
 	"brionne": {
 		"num": "#729",
@@ -17764,7 +18538,8 @@
 		"abilities": [
 			"torrent",
 			"liquid-voice"
-		]
+		],
+		"canEvolve": true
 	},
 	"primarina": {
 		"num": "#730",
@@ -17787,7 +18562,8 @@
 		"abilities": [
 			"torrent",
 			"liquid-voice"
-		]
+		],
+		"canEvolve": false
 	},
 	"pikipek": {
 		"num": "#731",
@@ -17811,7 +18587,8 @@
 			"keen-eye",
 			"skill-link",
 			"pickup"
-		]
+		],
+		"canEvolve": true
 	},
 	"trumbeak": {
 		"num": "#732",
@@ -17835,7 +18612,8 @@
 			"keen-eye",
 			"skill-link",
 			"pickup"
-		]
+		],
+		"canEvolve": true
 	},
 	"toucannon": {
 		"num": "#733",
@@ -17859,7 +18637,8 @@
 			"keen-eye",
 			"skill-link",
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"yungoos": {
 		"num": "#734",
@@ -17882,7 +18661,8 @@
 			"stakeout",
 			"strong-jaw",
 			"adaptability"
-		]
+		],
+		"canEvolve": true
 	},
 	"gumshoos": {
 		"num": "#735",
@@ -17905,7 +18685,8 @@
 			"stakeout",
 			"strong-jaw",
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"grubbin": {
 		"num": "#736",
@@ -17926,7 +18707,8 @@
 		],
 		"abilities": [
 			"swarm"
-		]
+		],
+		"canEvolve": true
 	},
 	"charjabug": {
 		"num": "#737",
@@ -17948,7 +18730,8 @@
 		],
 		"abilities": [
 			"battery"
-		]
+		],
+		"canEvolve": true
 	},
 	"vikavolt": {
 		"num": "#738",
@@ -17970,7 +18753,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"crabrawler": {
 		"num": "#739",
@@ -17993,7 +18777,8 @@
 			"hyper-cutter",
 			"iron-fist",
 			"anger-point"
-		]
+		],
+		"canEvolve": true
 	},
 	"crabominable": {
 		"num": "#740",
@@ -18017,7 +18802,8 @@
 			"hyper-cutter",
 			"iron-fist",
 			"anger-point"
-		]
+		],
+		"canEvolve": false
 	},
 	"oricorio-fire": {
 		"num": "#741",
@@ -18039,7 +18825,8 @@
 		],
 		"abilities": [
 			"dancer"
-		]
+		],
+		"canEvolve": false
 	},
 	"oricorio-electric": {
 		"num": "#741",
@@ -18061,7 +18848,8 @@
 		],
 		"abilities": [
 			"dancer"
-		]
+		],
+		"canEvolve": false
 	},
 	"oricorio-psychic": {
 		"num": "#741",
@@ -18083,7 +18871,8 @@
 		],
 		"abilities": [
 			"dancer"
-		]
+		],
+		"canEvolve": false
 	},
 	"oricorio-ghost": {
 		"num": "#741",
@@ -18105,7 +18894,8 @@
 		],
 		"abilities": [
 			"dancer"
-		]
+		],
+		"canEvolve": false
 	},
 	"cutiefly": {
 		"num": "#742",
@@ -18129,7 +18919,8 @@
 			"honey-gather",
 			"shield-dust",
 			"sweet-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"ribombee": {
 		"num": "#743",
@@ -18153,7 +18944,8 @@
 			"honey-gather",
 			"shield-dust",
 			"sweet-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"rockruff": {
 		"num": "#744",
@@ -18176,7 +18968,8 @@
 			"keen-eye",
 			"vital-spirit",
 			"steadfast"
-		]
+		],
+		"canEvolve": true
 	},
 	"lycanroc-midday": {
 		"num": "#745",
@@ -18199,7 +18992,8 @@
 			"keen-eye",
 			"sand-rush",
 			"steadfast"
-		]
+		],
+		"canEvolve": false
 	},
 	"lycanroc-midnight": {
 		"num": "#745",
@@ -18222,7 +19016,8 @@
 			"keen-eye",
 			"vital-spirit",
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"lycanroc-dusk": {
 		"num": "#745",
@@ -18243,7 +19038,8 @@
 		],
 		"abilities": [
 			"tough-claws"
-		]
+		],
+		"canEvolve": false
 	},
 	"wishiwashi-solo": {
 		"num": "#746",
@@ -18264,7 +19060,8 @@
 		],
 		"abilities": [
 			"schooling"
-		]
+		],
+		"canEvolve": false
 	},
 	"whisiwashi-school": {
 		"num": "#746",
@@ -18286,7 +19083,8 @@
 		],
 		"abilities": [
 			"schooling"
-		]
+		],
+		"canEvolve": false
 	},
 	"mareanie": {
 		"num": "#747",
@@ -18310,7 +19108,8 @@
 			"merciless",
 			"limber",
 			"regenerator"
-		]
+		],
+		"canEvolve": true
 	},
 	"toxapex": {
 		"num": "#748",
@@ -18334,7 +19133,8 @@
 			"merciless",
 			"limber",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"mudbray": {
 		"num": "#749",
@@ -18357,7 +19157,8 @@
 			"own-tempo",
 			"stamina",
 			"inner-focus"
-		]
+		],
+		"canEvolve": true
 	},
 	"mudsdale": {
 		"num": "#750",
@@ -18380,7 +19181,8 @@
 			"own-tempo",
 			"stamina",
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"dewpider": {
 		"num": "#751",
@@ -18403,7 +19205,8 @@
 		"abilities": [
 			"water-bubble",
 			"water-absorb"
-		]
+		],
+		"canEvolve": true
 	},
 	"araquanid": {
 		"num": "#752",
@@ -18426,7 +19229,8 @@
 		"abilities": [
 			"water-bubble",
 			"water-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"fomantis": {
 		"num": "#753",
@@ -18448,7 +19252,8 @@
 		"abilities": [
 			"leaf-guard",
 			"contrary"
-		]
+		],
+		"canEvolve": true
 	},
 	"lurantis": {
 		"num": "#754",
@@ -18470,7 +19275,8 @@
 		"abilities": [
 			"leaf-guard",
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"morelull": {
 		"num": "#755",
@@ -18494,7 +19300,8 @@
 			"illuminate",
 			"effect-spore",
 			"rain-dish"
-		]
+		],
+		"canEvolve": true
 	},
 	"shiinotic": {
 		"num": "#756",
@@ -18518,7 +19325,8 @@
 			"illuminate",
 			"effect-spore",
 			"rain-dish"
-		]
+		],
+		"canEvolve": false
 	},
 	"salandit": {
 		"num": "#757",
@@ -18541,7 +19349,8 @@
 		"abilities": [
 			"corrosion",
 			"oblivious"
-		]
+		],
+		"canEvolve": true
 	},
 	"salazzle": {
 		"num": "#758",
@@ -18564,7 +19373,8 @@
 		"abilities": [
 			"corrosion",
 			"oblivious"
-		]
+		],
+		"canEvolve": false
 	},
 	"stufful": {
 		"num": "#759",
@@ -18588,7 +19398,8 @@
 			"fluffy",
 			"klutz",
 			"cute-charm"
-		]
+		],
+		"canEvolve": true
 	},
 	"bewear": {
 		"num": "#760",
@@ -18612,7 +19423,8 @@
 			"fluffy",
 			"klutz",
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"bounsweet": {
 		"num": "#761",
@@ -18635,7 +19447,8 @@
 			"leaf-guard",
 			"oblivious",
 			"sweet-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"steenee": {
 		"num": "#762",
@@ -18658,7 +19471,8 @@
 			"leaf-guard",
 			"oblivious",
 			"sweet-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"tsareena": {
 		"num": "#763",
@@ -18681,7 +19495,8 @@
 			"leaf-guard",
 			"queenly-majesty",
 			"sweet-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"comfey": {
 		"num": "#764",
@@ -18704,7 +19519,8 @@
 			"flower-veil",
 			"triage",
 			"natural-cure"
-		]
+		],
+		"canEvolve": false
 	},
 	"oranguru": {
 		"num": "#765",
@@ -18728,7 +19544,8 @@
 			"inner-focus",
 			"telepathy",
 			"symbiosis"
-		]
+		],
+		"canEvolve": false
 	},
 	"passimian": {
 		"num": "#766",
@@ -18750,7 +19567,8 @@
 		"abilities": [
 			"receiver",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"wimpod": {
 		"num": "#767",
@@ -18772,7 +19590,8 @@
 		],
 		"abilities": [
 			"wimp-out"
-		]
+		],
+		"canEvolve": true
 	},
 	"golisopod": {
 		"num": "#768",
@@ -18794,7 +19613,8 @@
 		],
 		"abilities": [
 			"emergency-exit"
-		]
+		],
+		"canEvolve": false
 	},
 	"sandygast": {
 		"num": "#769",
@@ -18817,7 +19637,8 @@
 		"abilities": [
 			"water-compaction",
 			"sand-veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"palossand": {
 		"num": "#770",
@@ -18840,7 +19661,8 @@
 		"abilities": [
 			"water-compaction",
 			"sand-veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"pyukumuku": {
 		"num": "#771",
@@ -18862,7 +19684,8 @@
 		"abilities": [
 			"innards-out",
 			"unaware"
-		]
+		],
+		"canEvolve": false
 	},
 	"type-null": {
 		"num": "#772",
@@ -18883,7 +19706,8 @@
 		],
 		"abilities": [
 			"battle-armor"
-		]
+		],
+		"canEvolve": true
 	},
 	"silvally": {
 		"num": "#773",
@@ -18904,7 +19728,8 @@
 		],
 		"abilities": [
 			"rks-system"
-		]
+		],
+		"canEvolve": false
 	},
 	"silvally-fire": {
 		"num": "#773",
@@ -19283,7 +20108,8 @@
 		],
 		"abilities": [
 			"shields-down"
-		]
+		],
+		"canEvolve": false
 	},
 	"minior-core": {
 		"num": "#774",
@@ -19326,7 +20152,8 @@
 		],
 		"abilities": [
 			"comatose"
-		]
+		],
+		"canEvolve": false
 	},
 	"turtonator": {
 		"num": "#776",
@@ -19348,7 +20175,8 @@
 		],
 		"abilities": [
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"togedemaru": {
 		"num": "#777",
@@ -19372,7 +20200,8 @@
 			"iron-barbs",
 			"lightning-rod",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"mimikyu": {
 		"num": "#778",
@@ -19394,7 +20223,8 @@
 		],
 		"abilities": [
 			"disguise"
-		]
+		],
+		"canEvolve": false
 	},
 	"bruxish": {
 		"num": "#779",
@@ -19418,7 +20248,8 @@
 			"dazzling",
 			"strong-jaw",
 			"wonder-skin"
-		]
+		],
+		"canEvolve": false
 	},
 	"drampa": {
 		"num": "#780",
@@ -19442,7 +20273,8 @@
 			"berserk",
 			"sap-sipper",
 			"cloud-nine"
-		]
+		],
+		"canEvolve": false
 	},
 	"dhelmise": {
 		"num": "#781",
@@ -19464,7 +20296,8 @@
 		],
 		"abilities": [
 			"steelworker"
-		]
+		],
+		"canEvolve": false
 	},
 	"jangmo-o": {
 		"num": "#782",
@@ -19487,7 +20320,8 @@
 			"bulletproof",
 			"soundproof",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"hakamo-o": {
 		"num": "#783",
@@ -19511,7 +20345,8 @@
 			"bulletproof",
 			"soundproof",
 			"overcoat"
-		]
+		],
+		"canEvolve": true
 	},
 	"kommo-o": {
 		"num": "#784",
@@ -19535,7 +20370,8 @@
 			"bulletproof",
 			"soundproof",
 			"overcoat"
-		]
+		],
+		"canEvolve": false
 	},
 	"tapu koko": {
 		"num": "#785",
@@ -19558,7 +20394,8 @@
 		"abilities": [
 			"electric-surge",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"tapu lele": {
 		"num": "#786",
@@ -19581,7 +20418,8 @@
 		"abilities": [
 			"psychic-surge",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"tapu bulu": {
 		"num": "#787",
@@ -19604,7 +20442,8 @@
 		"abilities": [
 			"grassy-surge",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"tapu fini": {
 		"num": "#788",
@@ -19627,7 +20466,8 @@
 		"abilities": [
 			"misty-surge",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"cosmog": {
 		"num": "#789",
@@ -19648,7 +20488,8 @@
 		],
 		"abilities": [
 			"unaware"
-		]
+		],
+		"canEvolve": true
 	},
 	"solgaleo": {
 		"num": "#791",
@@ -19670,7 +20511,8 @@
 		],
 		"abilities": [
 			"full-metal-body"
-		]
+		],
+		"canEvolve": false
 	},
 	"lunala": {
 		"num": "#792",
@@ -19692,7 +20534,8 @@
 		],
 		"abilities": [
 			"shadow-shield"
-		]
+		],
+		"canEvolve": false
 	},
 	"nihilego": {
 		"num": "#793",
@@ -19714,7 +20557,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"buzzwole": {
 		"num": "#794",
@@ -19736,7 +20580,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"pheromosa": {
 		"num": "#795",
@@ -19758,7 +20603,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"xurkitree": {
 		"num": "#796",
@@ -19779,7 +20625,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"celesteela": {
 		"num": "#797",
@@ -19801,7 +20648,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"kartana": {
 		"num": "#798",
@@ -19823,7 +20671,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"guzzlord": {
 		"num": "#799",
@@ -19845,7 +20694,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"necrozma": {
 		"num": "#800",
@@ -19866,7 +20716,8 @@
 		],
 		"abilities": [
 			"prism-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"necrozma-dusk": {
 		"num": "#800",
@@ -19888,7 +20739,8 @@
 		],
 		"abilities": [
 			"prism-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"necrozma-dawn": {
 		"num": "#800",
@@ -19910,7 +20762,8 @@
 		],
 		"abilities": [
 			"prism-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"necrozma-ultra": {
 		"num": "#800",
@@ -19932,7 +20785,8 @@
 		],
 		"abilities": [
 			"neuroforce"
-		]
+		],
+		"canEvolve": false
 	},
 	"magearna": {
 		"num": "#801",
@@ -19954,7 +20808,8 @@
 		],
 		"abilities": [
 			"soul-heart"
-		]
+		],
+		"canEvolve": false
 	},
 	"marshadow": {
 		"num": "#802",
@@ -19976,7 +20831,8 @@
 		],
 		"abilities": [
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"poipole": {
 		"num": "#803",
@@ -19997,7 +20853,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"naganadel": {
 		"num": "#804",
@@ -20019,7 +20876,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"stakataka": {
 		"num": "#805",
@@ -20041,7 +20899,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"blacephalon": {
 		"num": "#806",
@@ -20063,7 +20922,8 @@
 		],
 		"abilities": [
 			"beast-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"zeraora": {
 		"num": "#807",
@@ -20084,7 +20944,8 @@
 		],
 		"abilities": [
 			"volt-absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"venusaur-mega": {
 		"num": "",
@@ -20106,7 +20967,8 @@
 		],
 		"abilities": [
 			"thick-fat"
-		]
+		],
+		"canEvolve": false
 	},
 	"charizard-mega-x": {
 		"num": "",
@@ -20128,7 +20990,8 @@
 		],
 		"abilities": [
 			"tough-claws"
-		]
+		],
+		"canEvolve": false
 	},
 	"charizard-mega-y": {
 		"num": "",
@@ -20150,7 +21013,8 @@
 		],
 		"abilities": [
 			"drought"
-		]
+		],
+		"canEvolve": false
 	},
 	"blastoise-mega": {
 		"num": "",
@@ -20171,7 +21035,8 @@
 		],
 		"abilities": [
 			"mega-launcher"
-		]
+		],
+		"canEvolve": false
 	},
 	"alakazam-mega": {
 		"num": "",
@@ -20192,7 +21057,8 @@
 		],
 		"abilities": [
 			"trace"
-		]
+		],
+		"canEvolve": false
 	},
 	"gengar-mega": {
 		"num": "",
@@ -20214,7 +21080,8 @@
 		],
 		"abilities": [
 			"shadow-tag"
-		]
+		],
+		"canEvolve": false
 	},
 	"kangaskhan-mega": {
 		"num": "",
@@ -20235,7 +21102,8 @@
 		],
 		"abilities": [
 			"parental-bond"
-		]
+		],
+		"canEvolve": false
 	},
 	"pinsir-mega": {
 		"num": "",
@@ -20257,7 +21125,8 @@
 		],
 		"abilities": [
 			"aerilate"
-		]
+		],
+		"canEvolve": false
 	},
 	"gyarados-mega": {
 		"num": "",
@@ -20279,7 +21148,8 @@
 		],
 		"abilities": [
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"aerodactyl-mega": {
 		"num": "",
@@ -20301,7 +21171,8 @@
 		],
 		"abilities": [
 			"tough-claws"
-		]
+		],
+		"canEvolve": false
 	},
 	"mewtwo-mega-x": {
 		"num": "",
@@ -20323,7 +21194,8 @@
 		],
 		"abilities": [
 			"steadfast"
-		]
+		],
+		"canEvolve": false
 	},
 	"mewtwo-mega-y": {
 		"num": "",
@@ -20344,7 +21216,8 @@
 		],
 		"abilities": [
 			"insomnia"
-		]
+		],
+		"canEvolve": false
 	},
 	"ampharos-mega": {
 		"num": "",
@@ -20366,7 +21239,8 @@
 		],
 		"abilities": [
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"scizor-mega": {
 		"num": "",
@@ -20388,7 +21262,8 @@
 		],
 		"abilities": [
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"heracross-mega": {
 		"num": "",
@@ -20410,7 +21285,8 @@
 		],
 		"abilities": [
 			"skill-link"
-		]
+		],
+		"canEvolve": false
 	},
 	"houndoom-mega": {
 		"num": "",
@@ -20432,7 +21308,8 @@
 		],
 		"abilities": [
 			"solar-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"tyranitar-mega": {
 		"num": "",
@@ -20454,7 +21331,8 @@
 		],
 		"abilities": [
 			"sand-stream"
-		]
+		],
+		"canEvolve": false
 	},
 	"blaziken-mega": {
 		"num": "",
@@ -20476,7 +21354,8 @@
 		],
 		"abilities": [
 			"speed-boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"gardevoir-mega": {
 		"num": "",
@@ -20498,7 +21377,8 @@
 		],
 		"abilities": [
 			"pixilate"
-		]
+		],
+		"canEvolve": false
 	},
 	"mawile-mega": {
 		"num": "",
@@ -20520,7 +21400,8 @@
 		],
 		"abilities": [
 			"huge-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"aggron-mega": {
 		"num": "",
@@ -20541,7 +21422,8 @@
 		],
 		"abilities": [
 			"filter"
-		]
+		],
+		"canEvolve": false
 	},
 	"medicham-mega": {
 		"num": "",
@@ -20563,7 +21445,8 @@
 		],
 		"abilities": [
 			"pure-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"manectric-mega": {
 		"num": "",
@@ -20584,7 +21467,8 @@
 		],
 		"abilities": [
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"banette-mega": {
 		"num": "",
@@ -20605,7 +21489,8 @@
 		],
 		"abilities": [
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"absol-mega": {
 		"num": "",
@@ -20626,7 +21511,8 @@
 		],
 		"abilities": [
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"garchomp-mega": {
 		"num": "",
@@ -20648,7 +21534,8 @@
 		],
 		"abilities": [
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"lucario-mega": {
 		"num": "",
@@ -20670,7 +21557,8 @@
 		],
 		"abilities": [
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"abomasnow-mega": {
 		"num": "",
@@ -20692,7 +21580,8 @@
 		],
 		"abilities": [
 			"snow-warning"
-		]
+		],
+		"canEvolve": false
 	},
 	"beedrill-mega": {
 		"num": "",
@@ -20714,7 +21603,8 @@
 		],
 		"abilities": [
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"pidgeot-mega": {
 		"num": "",
@@ -20736,7 +21626,8 @@
 		],
 		"abilities": [
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"slowbro-mega": {
 		"num": "",
@@ -20758,7 +21649,8 @@
 		],
 		"abilities": [
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"steelix-mega": {
 		"num": "",
@@ -20780,7 +21672,8 @@
 		],
 		"abilities": [
 			"sand-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"sceptile-mega": {
 		"num": "",
@@ -20802,7 +21695,8 @@
 		],
 		"abilities": [
 			"lightning-rod"
-		]
+		],
+		"canEvolve": false
 	},
 	"swampert-mega": {
 		"num": "",
@@ -20824,7 +21718,8 @@
 		],
 		"abilities": [
 			"swift-swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"sableye-mega": {
 		"num": "",
@@ -20846,7 +21741,8 @@
 		],
 		"abilities": [
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"sharpedo-mega": {
 		"num": "",
@@ -20868,7 +21764,8 @@
 		],
 		"abilities": [
 			"strong-jaw"
-		]
+		],
+		"canEvolve": false
 	},
 	"camerupt-mega": {
 		"num": "",
@@ -20890,7 +21787,8 @@
 		],
 		"abilities": [
 			"sheer-force"
-		]
+		],
+		"canEvolve": false
 	},
 	"altaria-mega": {
 		"num": "",
@@ -20912,7 +21810,8 @@
 		],
 		"abilities": [
 			"pixilate"
-		]
+		],
+		"canEvolve": false
 	},
 	"glalie-mega": {
 		"num": "",
@@ -20933,7 +21832,8 @@
 		],
 		"abilities": [
 			"refrigerate"
-		]
+		],
+		"canEvolve": false
 	},
 	"salamence-mega": {
 		"num": "",
@@ -20955,7 +21855,8 @@
 		],
 		"abilities": [
 			"aerilate"
-		]
+		],
+		"canEvolve": false
 	},
 	"metagross-mega": {
 		"num": "",
@@ -20977,7 +21878,8 @@
 		],
 		"abilities": [
 			"tough-claws"
-		]
+		],
+		"canEvolve": false
 	},
 	"latias-mega": {
 		"num": "",
@@ -20999,7 +21901,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"latios-mega": {
 		"num": "",
@@ -21021,7 +21924,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"rayquaza-mega": {
 		"num": "",
@@ -21043,7 +21947,8 @@
 		],
 		"abilities": [
 			"delta-stream"
-		]
+		],
+		"canEvolve": false
 	},
 	"lopunny-mega": {
 		"num": "",
@@ -21065,7 +21970,8 @@
 		],
 		"abilities": [
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"gallade-mega": {
 		"num": "",
@@ -21087,7 +21993,8 @@
 		],
 		"abilities": [
 			"inner-focus"
-		]
+		],
+		"canEvolve": false
 	},
 	"audino-mega": {
 		"num": "",
@@ -21109,7 +22016,8 @@
 		],
 		"abilities": [
 			"healer"
-		]
+		],
+		"canEvolve": false
 	},
 	"diancie-mega": {
 		"num": "",
@@ -21131,7 +22039,8 @@
 		],
 		"abilities": [
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"hoopa-unbound": {
 		"num": "",
@@ -21153,7 +22062,8 @@
 		],
 		"abilities": [
 			"magician"
-		]
+		],
+		"canEvolve": false
 	},
 	"groudon-primal": {
 		"num": "",
@@ -21175,7 +22085,8 @@
 		],
 		"abilities": [
 			"desolate-land"
-		]
+		],
+		"canEvolve": false
 	},
 	"kyogre-primal": {
 		"num": "",
@@ -21196,7 +22107,8 @@
 		],
 		"abilities": [
 			"primordial-sea"
-		]
+		],
+		"canEvolve": false
 	},
 	"meltan": {
 		"num": "#808",
@@ -21217,7 +22129,8 @@
 		],
 		"abilities": [
 			"magnet pull"
-		]
+		],
+		"canEvolve": false
 	},
 	"melmetal": {
 		"num": "#809",
@@ -21238,7 +22151,8 @@
 		],
 		"abilities": [
 			"iron fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"grookey": {
 		"num": "#810",
@@ -21260,7 +22174,8 @@
 		"abilities": [
 			"overgrow",
 			"grassy surge"
-		]
+		],
+		"canEvolve": true
 	},
 	"thwackey": {
 		"num": "#811",
@@ -21282,7 +22197,8 @@
 		"abilities": [
 			"overgrow",
 			"grassy surge"
-		]
+		],
+		"canEvolve": true
 	},
 	"rillaboom": {
 		"num": "#812",
@@ -21304,7 +22220,8 @@
 		"abilities": [
 			"overgrow",
 			"grassy surge"
-		]
+		],
+		"canEvolve": false
 	},
 	"scorbunny": {
 		"num": "#813",
@@ -21326,7 +22243,8 @@
 		"abilities": [
 			"blaze",
 			"libero"
-		]
+		],
+		"canEvolve": true
 	},
 	"raboot": {
 		"num": "#814",
@@ -21348,7 +22266,8 @@
 		"abilities": [
 			"blaze",
 			"libero"
-		]
+		],
+		"canEvolve": true
 	},
 	"cinderace": {
 		"num": "#815",
@@ -21370,7 +22289,8 @@
 		"abilities": [
 			"blaze",
 			"libero"
-		]
+		],
+		"canEvolve": false
 	},
 	"sobble": {
 		"num": "#816",
@@ -21392,7 +22312,8 @@
 		"abilities": [
 			"torrent",
 			"sniper"
-		]
+		],
+		"canEvolve": true
 	},
 	"drizzile": {
 		"num": "#817",
@@ -21414,7 +22335,8 @@
 		"abilities": [
 			"torrent",
 			"sniper"
-		]
+		],
+		"canEvolve": true
 	},
 	"inteleon": {
 		"num": "#818",
@@ -21436,7 +22358,8 @@
 		"abilities": [
 			"torrent",
 			"sniper"
-		]
+		],
+		"canEvolve": false
 	},
 	"skwovet": {
 		"num": "#819",
@@ -21458,7 +22381,8 @@
 		"abilities": [
 			"cheek pouch",
 			"gluttony"
-		]
+		],
+		"canEvolve": true
 	},
 	"greedent": {
 		"num": "#820",
@@ -21480,7 +22404,8 @@
 		"abilities": [
 			"cheek pouch",
 			"gluttony"
-		]
+		],
+		"canEvolve": false
 	},
 	"rookidee": {
 		"num": "#821",
@@ -21503,7 +22428,8 @@
 			"keen eye",
 			"unnerve",
 			"big pecks"
-		]
+		],
+		"canEvolve": true
 	},
 	"corvisquire": {
 		"num": "#822",
@@ -21526,7 +22452,8 @@
 			"keen eye",
 			"unnerve",
 			"big pecks"
-		]
+		],
+		"canEvolve": true
 	},
 	"corviknight": {
 		"num": "#823",
@@ -21550,7 +22477,8 @@
 			"pressure",
 			"unnerve",
 			"mirror armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"blipbug": {
 		"num": "#824",
@@ -21573,7 +22501,8 @@
 			"swarm",
 			"compound eyes",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"dottler": {
 		"num": "#825",
@@ -21597,7 +22526,8 @@
 			"swarm",
 			"compound eyes",
 			"telepathy"
-		]
+		],
+		"canEvolve": true
 	},
 	"orbeetle": {
 		"num": "#826",
@@ -21621,7 +22551,8 @@
 			"swarm",
 			"frisk",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"nickit": {
 		"num": "#827",
@@ -21644,7 +22575,8 @@
 			"run away",
 			"unburden",
 			"stakeout"
-		]
+		],
+		"canEvolve": true
 	},
 	"thievul": {
 		"num": "#828",
@@ -21667,7 +22599,8 @@
 			"run away",
 			"unburden",
 			"stakeout"
-		]
+		],
+		"canEvolve": false
 	},
 	"gossifleur": {
 		"num": "#829",
@@ -21690,7 +22623,8 @@
 			"cotton down",
 			"regenerator",
 			"effect spore"
-		]
+		],
+		"canEvolve": true
 	},
 	"eldegoss": {
 		"num": "#830",
@@ -21713,7 +22647,8 @@
 			"cotton down",
 			"regenerator",
 			"effect spore"
-		]
+		],
+		"canEvolve": false
 	},
 	"wooloo": {
 		"num": "#831",
@@ -21736,7 +22671,8 @@
 			"fluffy",
 			"run away",
 			"bulletproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"dubwool": {
 		"num": "#832",
@@ -21759,7 +22695,8 @@
 			"fluffy",
 			"steadfast",
 			"bulletproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"chewtle": {
 		"num": "#833",
@@ -21782,7 +22719,8 @@
 			"strong jaw",
 			"shell armor",
 			"swift swim"
-		]
+		],
+		"canEvolve": true
 	},
 	"drednaw": {
 		"num": "#834",
@@ -21806,7 +22744,8 @@
 			"strong jaw",
 			"shell armor",
 			"swift swim"
-		]
+		],
+		"canEvolve": false
 	},
 	"yamper": {
 		"num": "#835",
@@ -21828,7 +22767,8 @@
 		"abilities": [
 			"ball fetch",
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"boltund": {
 		"num": "#836",
@@ -21850,7 +22790,8 @@
 		"abilities": [
 			"strong jaw",
 			"competitive"
-		]
+		],
+		"canEvolve": false
 	},
 	"rolycoly": {
 		"num": "#837",
@@ -21873,7 +22814,8 @@
 			"steam engine",
 			"heatproof",
 			"flash fire"
-		]
+		],
+		"canEvolve": true
 	},
 	"carkol": {
 		"num": "#838",
@@ -21897,7 +22839,8 @@
 			"steam engine",
 			"flame body",
 			"flash fire"
-		]
+		],
+		"canEvolve": true
 	},
 	"coalossal": {
 		"num": "#839",
@@ -21921,7 +22864,8 @@
 			"steam engine",
 			"flame body",
 			"flash fire"
-		]
+		],
+		"canEvolve": false
 	},
 	"applin": {
 		"num": "#840",
@@ -21945,7 +22889,8 @@
 			"ripen",
 			"gluttony",
 			"bulletproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"flapple": {
 		"num": "#841",
@@ -21969,7 +22914,8 @@
 			"ripen",
 			"gluttony",
 			"hustle"
-		]
+		],
+		"canEvolve": false
 	},
 	"appletun": {
 		"num": "#842",
@@ -21993,7 +22939,8 @@
 			"ripen",
 			"gluttony",
 			"thick fat"
-		]
+		],
+		"canEvolve": false
 	},
 	"silicobra": {
 		"num": "#843",
@@ -22016,7 +22963,8 @@
 			"sand spit",
 			"shed skin",
 			"sand veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"sandaconda": {
 		"num": "#844",
@@ -22039,7 +22987,8 @@
 			"sand spit",
 			"shed skin",
 			"sand veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"cramorant": {
 		"num": "#845",
@@ -22061,7 +23010,8 @@
 		],
 		"abilities": [
 			"gulp missile"
-		]
+		],
+		"canEvolve": false
 	},
 	"arrokuda": {
 		"num": "#846",
@@ -22083,7 +23033,8 @@
 		"abilities": [
 			"swift swim",
 			"propeller tail"
-		]
+		],
+		"canEvolve": true
 	},
 	"barraskewda": {
 		"num": "#847",
@@ -22105,7 +23056,8 @@
 		"abilities": [
 			"swift swim",
 			"propeller tail"
-		]
+		],
+		"canEvolve": false
 	},
 	"toxel": {
 		"num": "#848",
@@ -22129,7 +23081,8 @@
 			"rattled",
 			"static",
 			"klutz"
-		]
+		],
+		"canEvolve": true
 	},
 	"toxtricity": {
 		"num": "#849",
@@ -22153,7 +23106,8 @@
 			"punk rock",
 			"plus",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"toxtricitylowkey": {
 		"num": "#849",
@@ -22201,7 +23155,8 @@
 			"flash fire",
 			"white smoke",
 			"flame body"
-		]
+		],
+		"canEvolve": true
 	},
 	"centiskorch": {
 		"num": "#851",
@@ -22225,7 +23180,8 @@
 			"flash fire",
 			"white smoke",
 			"flame body"
-		]
+		],
+		"canEvolve": false
 	},
 	"clobbopus": {
 		"num": "#852",
@@ -22247,7 +23203,8 @@
 		"abilities": [
 			"limber",
 			"technician"
-		]
+		],
+		"canEvolve": true
 	},
 	"grapploct": {
 		"num": "#853",
@@ -22269,7 +23226,8 @@
 		"abilities": [
 			"limber",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"sinistea": {
 		"num": "#854",
@@ -22291,7 +23249,8 @@
 		"abilities": [
 			"weak armor",
 			"cursed body"
-		]
+		],
+		"canEvolve": true
 	},
 	"polteageist": {
 		"num": "#855",
@@ -22313,7 +23272,8 @@
 		"abilities": [
 			"weak armor",
 			"cursed body"
-		]
+		],
+		"canEvolve": false
 	},
 	"hatenna": {
 		"num": "#856",
@@ -22336,7 +23296,8 @@
 			"healer",
 			"anticipation",
 			"magic bounce"
-		]
+		],
+		"canEvolve": true
 	},
 	"hattrem": {
 		"num": "#857",
@@ -22359,7 +23320,8 @@
 			"healer",
 			"anticipation",
 			"magic bounce"
-		]
+		],
+		"canEvolve": true
 	},
 	"hatterene": {
 		"num": "#858",
@@ -22383,7 +23345,8 @@
 			"healer",
 			"anticipation",
 			"magic bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"impidimp": {
 		"num": "#859",
@@ -22407,7 +23370,8 @@
 			"prankster",
 			"frisk",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"morgrem": {
 		"num": "#860",
@@ -22431,7 +23395,8 @@
 			"prankster",
 			"frisk",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"grimmsnarl": {
 		"num": "#861",
@@ -22455,7 +23420,8 @@
 			"prankster",
 			"frisk",
 			"pickpocket"
-		]
+		],
+		"canEvolve": false
 	},
 	"obstagoon": {
 		"num": "#862",
@@ -22479,7 +23445,8 @@
 			"reckless",
 			"guts",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"perrserker": {
 		"num": "#863",
@@ -22502,7 +23469,8 @@
 			"battle armor",
 			"tough claws",
 			"steely spirit"
-		]
+		],
+		"canEvolve": false
 	},
 	"cursola": {
 		"num": "#864",
@@ -22524,7 +23492,8 @@
 		"abilities": [
 			"weak armor",
 			"perish body"
-		]
+		],
+		"canEvolve": false
 	},
 	"sirfetchd": {
 		"num": "#865",
@@ -22546,7 +23515,8 @@
 		"abilities": [
 			"steadfast",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"mrrime": {
 		"num": "#866",
@@ -22570,7 +23540,8 @@
 			"tangled feet",
 			"screen cleaner",
 			"ice body"
-		]
+		],
+		"canEvolve": false
 	},
 	"runerigus": {
 		"num": "#867",
@@ -22592,7 +23563,8 @@
 		],
 		"abilities": [
 			"wandering spirit"
-		]
+		],
+		"canEvolve": false
 	},
 	"milcery": {
 		"num": "#868",
@@ -22614,7 +23586,8 @@
 		"abilities": [
 			"sweet veil",
 			"aroma veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"alcremie": {
 		"num": "#869",
@@ -22636,7 +23609,8 @@
 		"abilities": [
 			"sweet veil",
 			"aroma veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"falinks": {
 		"num": "#870",
@@ -22658,7 +23632,8 @@
 		"abilities": [
 			"battle armor",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"pincurchin": {
 		"num": "#871",
@@ -22680,7 +23655,8 @@
 		"abilities": [
 			"lightning rod",
 			"electric surge"
-		]
+		],
+		"canEvolve": false
 	},
 	"snom": {
 		"num": "#872",
@@ -22703,7 +23679,8 @@
 		"abilities": [
 			"shield dust",
 			"ice scales"
-		]
+		],
+		"canEvolve": true
 	},
 	"frosmoth": {
 		"num": "#873",
@@ -22726,7 +23703,8 @@
 		"abilities": [
 			"shield dust",
 			"ice scales"
-		]
+		],
+		"canEvolve": false
 	},
 	"stonjourner": {
 		"num": "#874",
@@ -22747,7 +23725,8 @@
 		],
 		"abilities": [
 			"power spot"
-		]
+		],
+		"canEvolve": false
 	},
 	"eiscue": {
 		"num": "#875",
@@ -22768,7 +23747,8 @@
 		],
 		"abilities": [
 			"ice face"
-		]
+		],
+		"canEvolve": false
 	},
 	"eiscuenoice": {
 		"num": "#875",
@@ -22789,7 +23769,8 @@
 		],
 		"abilities": [
 			"ice face"
-		]
+		],
+		"canEvolve": false
 	},
 	"indeedee": {
 		"num": "#876",
@@ -22813,7 +23794,8 @@
 			"inner focus",
 			"synchronize",
 			"psychic surge"
-		]
+		],
+		"canEvolve": false
 	},
 	"indeedeef": {
 		"num": "#876",
@@ -22837,7 +23819,8 @@
 			"own tempo",
 			"synchronize",
 			"psychic surge"
-		]
+		],
+		"canEvolve": false
 	},
 	"morpeko": {
 		"num": "#877",
@@ -22859,7 +23842,8 @@
 		],
 		"abilities": [
 			"hunger switch"
-		]
+		],
+		"canEvolve": false
 	},
 	"morpekohangry": {
 		"num": "#877",
@@ -22881,7 +23865,8 @@
 		],
 		"abilities": [
 			"hunger switch"
-		]
+		],
+		"canEvolve": false
 	},
 	"cufant": {
 		"num": "#878",
@@ -22903,7 +23888,8 @@
 		"abilities": [
 			"sheer force",
 			"heavy metal"
-		]
+		],
+		"canEvolve": true
 	},
 	"copperajah": {
 		"num": "#879",
@@ -22925,7 +23911,8 @@
 		"abilities": [
 			"sheer force",
 			"heavy metal"
-		]
+		],
+		"canEvolve": false
 	},
 	"dracozolt": {
 		"num": "#880",
@@ -22949,7 +23936,8 @@
 			"volt absorb",
 			"hustle",
 			"sand rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"arctozolt": {
 		"num": "#881",
@@ -22973,7 +23961,8 @@
 			"volt absorb",
 			"static",
 			"slush rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"dracovish": {
 		"num": "#882",
@@ -22997,7 +23986,8 @@
 			"water absorb",
 			"strong jaw",
 			"sand rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"arctovish": {
 		"num": "#883",
@@ -23021,7 +24011,8 @@
 			"water absorb",
 			"ice body",
 			"slush rush"
-		]
+		],
+		"canEvolve": false
 	},
 	"duraludon": {
 		"num": "#884",
@@ -23045,7 +24036,8 @@
 			"light metal",
 			"heavy metal",
 			"stalwart"
-		]
+		],
+		"canEvolve": true
 	},
 	"dreepy": {
 		"num": "#885",
@@ -23069,7 +24061,8 @@
 			"clear body",
 			"infiltrator",
 			"cursed body"
-		]
+		],
+		"canEvolve": true
 	},
 	"drakloak": {
 		"num": "#886",
@@ -23093,7 +24086,8 @@
 			"clear body",
 			"infiltrator",
 			"cursed body"
-		]
+		],
+		"canEvolve": true
 	},
 	"dragapult": {
 		"num": "#887",
@@ -23117,7 +24111,8 @@
 			"clear body",
 			"infiltrator",
 			"cursed body"
-		]
+		],
+		"canEvolve": false
 	},
 	"zacian": {
 		"num": "#888",
@@ -23138,7 +24133,8 @@
 		],
 		"abilities": [
 			"intrepid sword"
-		]
+		],
+		"canEvolve": false
 	},
 	"zaciancrowned": {
 		"num": "#888",
@@ -23160,7 +24156,8 @@
 		],
 		"abilities": [
 			"intrepid sword"
-		]
+		],
+		"canEvolve": false
 	},
 	"zamazenta": {
 		"num": "#889",
@@ -23181,7 +24178,8 @@
 		],
 		"abilities": [
 			"dauntless shield"
-		]
+		],
+		"canEvolve": false
 	},
 	"zamazentacrowned": {
 		"num": "#889",
@@ -23203,7 +24201,8 @@
 		],
 		"abilities": [
 			"dauntless shield"
-		]
+		],
+		"canEvolve": false
 	},
 	"eternatus": {
 		"num": "#890",
@@ -23225,7 +24224,8 @@
 		],
 		"abilities": [
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"kubfu": {
 		"num": "#891",
@@ -23246,7 +24246,8 @@
 		],
 		"abilities": [
 			"inner focus"
-		]
+		],
+		"canEvolve": true
 	},
 	"urshifu": {
 		"num": "#892",
@@ -23268,7 +24269,8 @@
 		],
 		"abilities": [
 			"unseen fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"urshifurapidstrike": {
 		"num": "#892",
@@ -23290,7 +24292,8 @@
 		],
 		"abilities": [
 			"unseen fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"zarude": {
 		"num": "#893",
@@ -23312,7 +24315,8 @@
 		],
 		"abilities": [
 			"leaf guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"regieleki": {
 		"num": "#894",
@@ -23333,7 +24337,8 @@
 		],
 		"abilities": [
 			"transistor"
-		]
+		],
+		"canEvolve": false
 	},
 	"regidrago": {
 		"num": "#895",
@@ -23354,7 +24359,8 @@
 		],
 		"abilities": [
 			"dragons maw"
-		]
+		],
+		"canEvolve": false
 	},
 	"glastrier": {
 		"num": "#896",
@@ -23375,7 +24381,8 @@
 		],
 		"abilities": [
 			"chilling neigh"
-		]
+		],
+		"canEvolve": false
 	},
 	"spectrier": {
 		"num": "#897",
@@ -23396,7 +24403,8 @@
 		],
 		"abilities": [
 			"grim neigh"
-		]
+		],
+		"canEvolve": false
 	},
 	"calyrex": {
 		"num": "#898",
@@ -23418,7 +24426,8 @@
 		],
 		"abilities": [
 			"unnerve"
-		]
+		],
+		"canEvolve": false
 	},
 	"calyrexice": {
 		"num": "#898",
@@ -23440,7 +24449,8 @@
 		],
 		"abilities": [
 			"as one"
-		]
+		],
+		"canEvolve": false
 	},
 	"calyrexshadow": {
 		"num": "#898",
@@ -23462,7 +24472,8 @@
 		],
 		"abilities": [
 			"as one"
-		]
+		],
+		"canEvolve": false
 	},
 	"wyrdeer": {
 		"num": "#899",
@@ -23486,7 +24497,8 @@
 			"intimidate",
 			"frisk",
 			"sap sipper"
-		]
+		],
+		"canEvolve": false
 	},
 	"kleavor": {
 		"num": "#900",
@@ -23510,7 +24522,8 @@
 			"swarm",
 			"sheer force",
 			"steadfast"
-		]
+		],
+		"canEvolve": false
 	},
 	"ursaluna": {
 		"num": "#901",
@@ -23534,7 +24547,8 @@
 			"thick fat",
 			"unburden",
 			"guts"
-		]
+		],
+		"canEvolve": false
 	},
 	"ursalunabloodmoon": {
 		"num": "#901",
@@ -23556,7 +24570,8 @@
 		],
 		"abilities": [
 			"minds eye"
-		]
+		],
+		"canEvolve": false
 	},
 	"basculegion-m": {
 		"num": "#902",
@@ -23580,7 +24595,8 @@
 			"swift swim",
 			"adaptability",
 			"mold breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"basculegion-f": {
 		"num": "#902",
@@ -23604,7 +24620,8 @@
 			"swift swim",
 			"adaptability",
 			"mold breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"sneasler": {
 		"num": "#903",
@@ -23628,7 +24645,8 @@
 			"pressure",
 			"unburden",
 			"poison touch"
-		]
+		],
+		"canEvolve": false
 	},
 	"overqwil": {
 		"num": "#904",
@@ -23652,7 +24670,8 @@
 			"poison point",
 			"swift swim",
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"enamorus": {
 		"num": "#905",
@@ -23675,7 +24694,8 @@
 		"abilities": [
 			"cute charm",
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"sprigatito": {
 		"num": "#906",
@@ -23697,7 +24717,8 @@
 		"abilities": [
 			"overgrow",
 			"protean"
-		]
+		],
+		"canEvolve": true
 	},
 	"floragato": {
 		"num": "#907",
@@ -23719,7 +24740,8 @@
 		"abilities": [
 			"overgrow",
 			"protean"
-		]
+		],
+		"canEvolve": true
 	},
 	"meowscarada": {
 		"num": "#908",
@@ -23742,7 +24764,8 @@
 		"abilities": [
 			"overgrow",
 			"protean"
-		]
+		],
+		"canEvolve": false
 	},
 	"fuecoco": {
 		"num": "#909",
@@ -23764,7 +24787,8 @@
 		"abilities": [
 			"blaze",
 			"unaware"
-		]
+		],
+		"canEvolve": true
 	},
 	"crocalor": {
 		"num": "#910",
@@ -23786,7 +24810,8 @@
 		"abilities": [
 			"blaze",
 			"unaware"
-		]
+		],
+		"canEvolve": true
 	},
 	"skeledirge": {
 		"num": "#911",
@@ -23809,7 +24834,8 @@
 		"abilities": [
 			"blaze",
 			"unaware"
-		]
+		],
+		"canEvolve": false
 	},
 	"quaxly": {
 		"num": "#912",
@@ -23831,7 +24857,8 @@
 		"abilities": [
 			"torrent",
 			"moxie"
-		]
+		],
+		"canEvolve": true
 	},
 	"quaxwell": {
 		"num": "#913",
@@ -23853,7 +24880,8 @@
 		"abilities": [
 			"torrent",
 			"moxie"
-		]
+		],
+		"canEvolve": true
 	},
 	"quaquaval": {
 		"num": "#914",
@@ -23876,7 +24904,8 @@
 		"abilities": [
 			"torrent",
 			"moxie"
-		]
+		],
+		"canEvolve": false
 	},
 	"lechonk": {
 		"num": "#915",
@@ -23899,7 +24928,8 @@
 			"aroma veil",
 			"gluttony",
 			"thick fat"
-		]
+		],
+		"canEvolve": true
 	},
 	"oinkologne": {
 		"num": "#916",
@@ -23922,7 +24952,8 @@
 			"lingering aroma",
 			"gluttony",
 			"thick fat"
-		]
+		],
+		"canEvolve": false
 	},
 	"tarountula": {
 		"num": "#917",
@@ -23944,7 +24975,8 @@
 		"abilities": [
 			"insomnia",
 			"stakeout"
-		]
+		],
+		"canEvolve": true
 	},
 	"spidops": {
 		"num": "#918",
@@ -23966,7 +24998,8 @@
 		"abilities": [
 			"insomnia",
 			"stakeout"
-		]
+		],
+		"canEvolve": false
 	},
 	"nymble": {
 		"num": "#919",
@@ -23988,7 +25021,8 @@
 		"abilities": [
 			"swarm",
 			"tinted lens"
-		]
+		],
+		"canEvolve": true
 	},
 	"lokix": {
 		"num": "#920",
@@ -24011,7 +25045,8 @@
 		"abilities": [
 			"swarm",
 			"tinted lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"pawmi": {
 		"num": "#921",
@@ -24034,7 +25069,8 @@
 			"static",
 			"natural cure",
 			"iron fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"pawmo": {
 		"num": "#922",
@@ -24058,7 +25094,8 @@
 			"volt absorb",
 			"natural cure",
 			"iron fist"
-		]
+		],
+		"canEvolve": true
 	},
 	"pawmot": {
 		"num": "#923",
@@ -24082,7 +25119,8 @@
 			"volt absorb",
 			"natural cure",
 			"iron fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"tandemaus": {
 		"num": "#924",
@@ -24105,7 +25143,8 @@
 			"run away",
 			"pickup",
 			"own tempo"
-		]
+		],
+		"canEvolve": true
 	},
 	"maushold": {
 		"num": "#925",
@@ -24128,7 +25167,8 @@
 			"friend guard",
 			"cheek pouch",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"fidough": {
 		"num": "#926",
@@ -24150,7 +25190,8 @@
 		"abilities": [
 			"own tempo",
 			"klutz"
-		]
+		],
+		"canEvolve": true
 	},
 	"dachsbun": {
 		"num": "#927",
@@ -24172,7 +25213,8 @@
 		"abilities": [
 			"well-baked body",
 			"aroma veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"smoliv": {
 		"num": "#928",
@@ -24195,7 +25237,8 @@
 		"abilities": [
 			"early bird",
 			"harvest"
-		]
+		],
+		"canEvolve": true
 	},
 	"dolliv": {
 		"num": "#929",
@@ -24218,7 +25261,8 @@
 		"abilities": [
 			"early bird",
 			"harvest"
-		]
+		],
+		"canEvolve": true
 	},
 	"arboliva": {
 		"num": "#930",
@@ -24241,7 +25285,8 @@
 		"abilities": [
 			"seed sower",
 			"harvest"
-		]
+		],
+		"canEvolve": false
 	},
 	"squawkabilly": {
 		"num": "#931",
@@ -24265,7 +25310,8 @@
 			"intimidate",
 			"hustle",
 			"guts"
-		]
+		],
+		"canEvolve": false
 	},
 	"nacli": {
 		"num": "#932",
@@ -24288,7 +25334,8 @@
 			"purifying salt",
 			"sturdy",
 			"clear body"
-		]
+		],
+		"canEvolve": true
 	},
 	"naclstack": {
 		"num": "#933",
@@ -24311,7 +25358,8 @@
 			"purifying salt",
 			"sturdy",
 			"clear body"
-		]
+		],
+		"canEvolve": true
 	},
 	"garganacl": {
 		"num": "#934",
@@ -24334,7 +25382,8 @@
 			"purifying salt",
 			"sturdy",
 			"clear body"
-		]
+		],
+		"canEvolve": false
 	},
 	"charcadet": {
 		"num": "#935",
@@ -24356,7 +25405,8 @@
 		"abilities": [
 			"flash fire",
 			"flame body"
-		]
+		],
+		"canEvolve": true
 	},
 	"armarouge": {
 		"num": "#936",
@@ -24379,7 +25429,8 @@
 		"abilities": [
 			"flash fire",
 			"weak armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"ceruledge": {
 		"num": "#937",
@@ -24402,7 +25453,8 @@
 		"abilities": [
 			"flash fire",
 			"weak armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"tadbulb": {
 		"num": "#938",
@@ -24425,7 +25477,8 @@
 			"own tempo",
 			"static",
 			"damp"
-		]
+		],
+		"canEvolve": true
 	},
 	"bellibolt": {
 		"num": "#939",
@@ -24448,7 +25501,8 @@
 			"electromorphosis",
 			"static",
 			"damp"
-		]
+		],
+		"canEvolve": false
 	},
 	"wattrel": {
 		"num": "#940",
@@ -24472,7 +25526,8 @@
 			"wind power",
 			"volt absorb",
 			"competitive"
-		]
+		],
+		"canEvolve": true
 	},
 	"kilowattrel": {
 		"num": "#941",
@@ -24496,7 +25551,8 @@
 			"wind power",
 			"volt absorb",
 			"competitive"
-		]
+		],
+		"canEvolve": false
 	},
 	"maschiff": {
 		"num": "#942",
@@ -24519,7 +25575,8 @@
 			"intimidate",
 			"run away",
 			"stakeout"
-		]
+		],
+		"canEvolve": true
 	},
 	"mabosstiff": {
 		"num": "#943",
@@ -24542,7 +25599,8 @@
 			"intimidate",
 			"guard dog",
 			"stakeout"
-		]
+		],
+		"canEvolve": false
 	},
 	"shroodle": {
 		"num": "#944",
@@ -24566,7 +25624,8 @@
 			"unburden",
 			"pickpocket",
 			"prankster"
-		]
+		],
+		"canEvolve": true
 	},
 	"grafaiai": {
 		"num": "#945",
@@ -24590,7 +25649,8 @@
 			"unburden",
 			"poison touch",
 			"prankster"
-		]
+		],
+		"canEvolve": false
 	},
 	"bramblin": {
 		"num": "#946",
@@ -24613,7 +25673,8 @@
 		"abilities": [
 			"wind rider",
 			"infiltrator"
-		]
+		],
+		"canEvolve": true
 	},
 	"brambleghast": {
 		"num": "#947",
@@ -24636,7 +25697,8 @@
 		"abilities": [
 			"wind rider",
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"toedscool": {
 		"num": "#948",
@@ -24658,7 +25720,8 @@
 		],
 		"abilities": [
 			"mycelium might"
-		]
+		],
+		"canEvolve": true
 	},
 	"toedscruel": {
 		"num": "#949",
@@ -24680,7 +25743,8 @@
 		],
 		"abilities": [
 			"mycelium might"
-		]
+		],
+		"canEvolve": false
 	},
 	"klawf": {
 		"num": "#950",
@@ -24703,7 +25767,8 @@
 			"anger shell",
 			"shell armor",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"capsakid": {
 		"num": "#951",
@@ -24726,7 +25791,8 @@
 			"chlorophyll",
 			"insomnia",
 			"klutz"
-		]
+		],
+		"canEvolve": true
 	},
 	"scovillain": {
 		"num": "#952",
@@ -24750,7 +25816,8 @@
 			"chlorophyll",
 			"insomnia",
 			"moody"
-		]
+		],
+		"canEvolve": false
 	},
 	"rellor": {
 		"num": "#953",
@@ -24772,7 +25839,8 @@
 		"abilities": [
 			"compound eyes",
 			"shed skin"
-		]
+		],
+		"canEvolve": true
 	},
 	"rabsca": {
 		"num": "#954",
@@ -24795,7 +25863,8 @@
 		"abilities": [
 			"synchronize",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"flittle": {
 		"num": "#955",
@@ -24818,7 +25887,8 @@
 			"anticipation",
 			"frisk",
 			"speed boost"
-		]
+		],
+		"canEvolve": true
 	},
 	"espathra": {
 		"num": "#956",
@@ -24841,7 +25911,8 @@
 			"opportunist",
 			"frisk",
 			"speed boost"
-		]
+		],
+		"canEvolve": false
 	},
 	"tinkatink": {
 		"num": "#957",
@@ -24865,7 +25936,8 @@
 			"mold breaker",
 			"own tempo",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"tinkatuff": {
 		"num": "#958",
@@ -24889,7 +25961,8 @@
 			"mold breaker",
 			"own tempo",
 			"pickpocket"
-		]
+		],
+		"canEvolve": true
 	},
 	"tinkaton": {
 		"num": "#959",
@@ -24913,7 +25986,8 @@
 			"mold breaker",
 			"own tempo",
 			"pickpocket"
-		]
+		],
+		"canEvolve": false
 	},
 	"wiglett": {
 		"num": "#960",
@@ -24936,7 +26010,8 @@
 			"gooey",
 			"rattled",
 			"sand veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"wugtrio": {
 		"num": "#961",
@@ -24959,7 +26034,8 @@
 			"gooey",
 			"rattled",
 			"sand veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"bombirdier": {
 		"num": "#962",
@@ -24983,7 +26059,8 @@
 			"big pecks",
 			"keen eye",
 			"rocky payload"
-		]
+		],
+		"canEvolve": false
 	},
 	"finizen": {
 		"num": "#963",
@@ -25004,7 +26081,8 @@
 		],
 		"abilities": [
 			"water veil"
-		]
+		],
+		"canEvolve": true
 	},
 	"palafin": {
 		"num": "#964",
@@ -25025,7 +26103,8 @@
 		],
 		"abilities": [
 			"zero to hero"
-		]
+		],
+		"canEvolve": false
 	},
 	"palafinhero": {
 		"num": "#964",
@@ -25046,7 +26125,8 @@
 		],
 		"abilities": [
 			"zero to hero"
-		]
+		],
+		"canEvolve": false
 	},
 	"varoom": {
 		"num": "#965",
@@ -25069,7 +26149,8 @@
 		"abilities": [
 			"overcoat",
 			"slow start"
-		]
+		],
+		"canEvolve": true
 	},
 	"revavroom": {
 		"num": "#966",
@@ -25092,7 +26173,8 @@
 		"abilities": [
 			"overcoat",
 			"filter"
-		]
+		],
+		"canEvolve": false
 	},
 	"cyclizar": {
 		"num": "#967",
@@ -25115,7 +26197,8 @@
 		"abilities": [
 			"shed skin",
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"orthworm": {
 		"num": "#968",
@@ -25137,7 +26220,8 @@
 		"abilities": [
 			"earth eater",
 			"sand veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"glimmet": {
 		"num": "#969",
@@ -25160,7 +26244,8 @@
 		"abilities": [
 			"toxic debris",
 			"corrosion"
-		]
+		],
+		"canEvolve": true
 	},
 	"glimmora": {
 		"num": "#970",
@@ -25183,7 +26268,8 @@
 		"abilities": [
 			"toxic debris",
 			"corrosion"
-		]
+		],
+		"canEvolve": false
 	},
 	"greavard": {
 		"num": "#971",
@@ -25205,7 +26291,8 @@
 		"abilities": [
 			"pickup",
 			"fluffy"
-		]
+		],
+		"canEvolve": true
 	},
 	"houndstone": {
 		"num": "#972",
@@ -25227,7 +26314,8 @@
 		"abilities": [
 			"sand rush",
 			"fluffy"
-		]
+		],
+		"canEvolve": false
 	},
 	"flamigo": {
 		"num": "#973",
@@ -25251,7 +26339,8 @@
 			"scrappy",
 			"tangled feet",
 			"costar"
-		]
+		],
+		"canEvolve": false
 	},
 	"cetoddle": {
 		"num": "#974",
@@ -25274,7 +26363,8 @@
 			"thick fat",
 			"snow cloak",
 			"sheer force"
-		]
+		],
+		"canEvolve": true
 	},
 	"cetitan": {
 		"num": "#975",
@@ -25297,7 +26387,8 @@
 			"thick fat",
 			"slush rush",
 			"sheer force"
-		]
+		],
+		"canEvolve": false
 	},
 	"veluza": {
 		"num": "#976",
@@ -25320,7 +26411,8 @@
 		"abilities": [
 			"mold breaker",
 			"sharpness"
-		]
+		],
+		"canEvolve": false
 	},
 	"dondozo": {
 		"num": "#977",
@@ -25343,7 +26435,8 @@
 			"unaware",
 			"oblivious",
 			"water veil"
-		]
+		],
+		"canEvolve": false
 	},
 	"tatsugiri": {
 		"num": "#978",
@@ -25366,7 +26459,8 @@
 		"abilities": [
 			"commander",
 			"storm drain"
-		]
+		],
+		"canEvolve": false
 	},
 	"annihilape": {
 		"num": "#979",
@@ -25390,7 +26484,8 @@
 			"vital spirit",
 			"inner focus",
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"clodsire": {
 		"num": "#980",
@@ -25414,7 +26509,8 @@
 			"poison point",
 			"water absorb",
 			"unaware"
-		]
+		],
+		"canEvolve": false
 	},
 	"farigiraf": {
 		"num": "#981",
@@ -25438,7 +26534,8 @@
 			"cud chew",
 			"armor tail",
 			"sap sipper"
-		]
+		],
+		"canEvolve": false
 	},
 	"dudunsparce": {
 		"num": "#982",
@@ -25461,7 +26558,8 @@
 			"serene grace",
 			"run away",
 			"rattled"
-		]
+		],
+		"canEvolve": false
 	},
 	"dudunsparcethreesegment": {
 		"num": "#982",
@@ -25484,7 +26582,8 @@
 			"serene grace",
 			"run away",
 			"rattled"
-		]
+		],
+		"canEvolve": false
 	},
 	"kingambit": {
 		"num": "#983",
@@ -25508,7 +26607,8 @@
 			"defiant",
 			"supreme overlord",
 			"pressure"
-		]
+		],
+		"canEvolve": false
 	},
 	"greattusk": {
 		"num": "#984",
@@ -25530,7 +26630,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"screamtail": {
 		"num": "#985",
@@ -25552,7 +26653,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"brutebonnet": {
 		"num": "#986",
@@ -25574,7 +26676,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"fluttermane": {
 		"num": "#987",
@@ -25596,7 +26699,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"slitherwing": {
 		"num": "#988",
@@ -25618,7 +26722,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"sandyshocks": {
 		"num": "#989",
@@ -25640,7 +26745,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"irontreads": {
 		"num": "#990",
@@ -25662,7 +26768,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironbundle": {
 		"num": "#991",
@@ -25684,7 +26791,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironhands": {
 		"num": "#992",
@@ -25706,7 +26814,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironjugulis": {
 		"num": "#993",
@@ -25728,7 +26837,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironmoth": {
 		"num": "#994",
@@ -25750,7 +26860,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironthorns": {
 		"num": "#995",
@@ -25772,7 +26883,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"frigibax": {
 		"num": "#996",
@@ -25795,7 +26907,8 @@
 		"abilities": [
 			"thermal exchange",
 			"ice body"
-		]
+		],
+		"canEvolve": true
 	},
 	"arctibax": {
 		"num": "#997",
@@ -25818,7 +26931,8 @@
 		"abilities": [
 			"thermal exchange",
 			"ice body"
-		]
+		],
+		"canEvolve": true
 	},
 	"baxcalibur": {
 		"num": "#998",
@@ -25841,7 +26955,8 @@
 		"abilities": [
 			"thermal exchange",
 			"ice body"
-		]
+		],
+		"canEvolve": false
 	},
 	"gimmighoul": {
 		"num": "#999",
@@ -25862,7 +26977,8 @@
 		],
 		"abilities": [
 			"rattled"
-		]
+		],
+		"canEvolve": true
 	},
 	"gholdengo": {
 		"num": "#1000",
@@ -25884,7 +27000,8 @@
 		],
 		"abilities": [
 			"good as gold"
-		]
+		],
+		"canEvolve": false
 	},
 	"wochien": {
 		"num": "#1001",
@@ -25906,7 +27023,8 @@
 		],
 		"abilities": [
 			"tablets of ruin"
-		]
+		],
+		"canEvolve": false
 	},
 	"chienpao": {
 		"num": "#1002",
@@ -25928,7 +27046,8 @@
 		],
 		"abilities": [
 			"sword of ruin"
-		]
+		],
+		"canEvolve": false
 	},
 	"tinglu": {
 		"num": "#1003",
@@ -25950,7 +27069,8 @@
 		],
 		"abilities": [
 			"vessel of ruin"
-		]
+		],
+		"canEvolve": false
 	},
 	"chiyu": {
 		"num": "#1004",
@@ -25972,7 +27092,8 @@
 		],
 		"abilities": [
 			"beads of ruin"
-		]
+		],
+		"canEvolve": false
 	},
 	"roaringmoon": {
 		"num": "#1005",
@@ -25994,7 +27115,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironvaliant": {
 		"num": "#1006",
@@ -26016,7 +27138,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"koraidon": {
 		"num": "#1007",
@@ -26038,7 +27161,8 @@
 		],
 		"abilities": [
 			"orichalcum pulse"
-		]
+		],
+		"canEvolve": false
 	},
 	"miraidon": {
 		"num": "#1008",
@@ -26060,7 +27184,8 @@
 		],
 		"abilities": [
 			"hadron engine"
-		]
+		],
+		"canEvolve": false
 	},
 	"walkingwake": {
 		"num": "#1009",
@@ -26082,7 +27207,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironleaves": {
 		"num": "#1010",
@@ -26104,7 +27230,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"dipplin": {
 		"num": "#1011",
@@ -26128,7 +27255,8 @@
 			"supersweet syrup",
 			"gluttony",
 			"sticky hold"
-		]
+		],
+		"canEvolve": true
 	},
 	"poltchageist": {
 		"num": "#1012",
@@ -26151,7 +27279,8 @@
 		"abilities": [
 			"hospitality",
 			"heatproof"
-		]
+		],
+		"canEvolve": true
 	},
 	"sinistcha": {
 		"num": "#1013",
@@ -26174,7 +27303,8 @@
 		"abilities": [
 			"hospitality",
 			"heatproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"okidogi": {
 		"num": "#1014",
@@ -26197,7 +27327,8 @@
 		"abilities": [
 			"toxic chain",
 			"guard dog"
-		]
+		],
+		"canEvolve": false
 	},
 	"munkidori": {
 		"num": "#1015",
@@ -26220,7 +27351,8 @@
 		"abilities": [
 			"toxic chain",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"fezandipiti": {
 		"num": "#1016",
@@ -26243,7 +27375,8 @@
 		"abilities": [
 			"toxic chain",
 			"technician"
-		]
+		],
+		"canEvolve": false
 	},
 	"ogerpon": {
 		"num": "#1017",
@@ -26264,7 +27397,8 @@
 		],
 		"abilities": [
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	},
 	"ogerponcornerstone": {
 		"num": "#1017",
@@ -26286,7 +27420,8 @@
 		],
 		"abilities": [
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"ogerponhearthflame": {
 		"num": "#1017",
@@ -26308,7 +27443,8 @@
 		],
 		"abilities": [
 			"mold breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"ogerponwellspring": {
 		"num": "#1017",
@@ -26330,7 +27466,8 @@
 		],
 		"abilities": [
 			"water absorb"
-		]
+		],
+		"canEvolve": false
 	},
 	"archaludon": {
 		"num": "#1018",
@@ -26354,7 +27491,8 @@
 			"stamina",
 			"sturdy",
 			"stalwart"
-		]
+		],
+		"canEvolve": false
 	},
 	"hydrapple": {
 		"num": "#1019",
@@ -26378,7 +27516,8 @@
 			"supersweet syrup",
 			"regenerator",
 			"sticky hold"
-		]
+		],
+		"canEvolve": false
 	},
 	"gougingfire": {
 		"num": "#1020",
@@ -26400,7 +27539,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"ragingbolt": {
 		"num": "#1021",
@@ -26422,7 +27562,8 @@
 		],
 		"abilities": [
 			"protosynthesis"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironboulder": {
 		"num": "#1022",
@@ -26444,7 +27585,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"ironcrown": {
 		"num": "#1023",
@@ -26466,7 +27608,8 @@
 		],
 		"abilities": [
 			"quark drive"
-		]
+		],
+		"canEvolve": false
 	},
 	"terapagos": {
 		"num": "#1024",
@@ -26487,7 +27630,8 @@
 		],
 		"abilities": [
 			"tera shift"
-		]
+		],
+		"canEvolve": false
 	},
 	"terapagosterastal": {
 		"num": "#1024",
@@ -26508,7 +27652,8 @@
 		],
 		"abilities": [
 			"tera shell"
-		]
+		],
+		"canEvolve": false
 	},
 	"pecharunt": {
 		"num": "#1025",
@@ -26530,7 +27675,8 @@
 		],
 		"abilities": [
 			"poison puppeteer"
-		]
+		],
+		"canEvolve": false
 	},
 	"growlithehisui": {
 		"num": "#058",
@@ -26554,7 +27700,8 @@
 			"intimidate",
 			"flash fire",
 			"rock head"
-		]
+		],
+		"canEvolve": true
 	},
 	"arcaninehisui": {
 		"num": "#059",
@@ -26578,7 +27725,8 @@
 			"intimidate",
 			"flash fire",
 			"rock head"
-		]
+		],
+		"canEvolve": false
 	},
 	"voltorbhisui": {
 		"num": "#100",
@@ -26602,7 +27750,8 @@
 			"soundproof",
 			"static",
 			"aftermath"
-		]
+		],
+		"canEvolve": true
 	},
 	"electrodehisui": {
 		"num": "#101",
@@ -26626,7 +27775,8 @@
 			"soundproof",
 			"static",
 			"aftermath"
-		]
+		],
+		"canEvolve": false
 	},
 	"typhlosionhisui": {
 		"num": "#157",
@@ -26649,7 +27799,8 @@
 		"abilities": [
 			"blaze",
 			"frisk"
-		]
+		],
+		"canEvolve": false
 	},
 	"qwilfishhisui": {
 		"num": "#211",
@@ -26673,7 +27824,8 @@
 			"swift swim",
 			"poison point",
 			"intimidate"
-		]
+		],
+		"canEvolve": true
 	},
 	"sneaselhisui": {
 		"num": "#215",
@@ -26697,7 +27849,8 @@
 			"inner focus",
 			"keen eye",
 			"poison touch"
-		]
+		],
+		"canEvolve": true
 	},
 	"dialgaorigin": {
 		"num": "#483",
@@ -26720,7 +27873,8 @@
 		"abilities": [
 			"pressure",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"palkiaorigin": {
 		"num": "#484",
@@ -26743,7 +27897,8 @@
 		"abilities": [
 			"pressure",
 			"telepathy"
-		]
+		],
+		"canEvolve": false
 	},
 	"samurotthisui": {
 		"num": "#503",
@@ -26766,7 +27921,8 @@
 		"abilities": [
 			"torrent",
 			"sharpness"
-		]
+		],
+		"canEvolve": false
 	},
 	"lilliganthisui": {
 		"num": "#549",
@@ -26790,7 +27946,8 @@
 			"chlorophyll",
 			"hustle",
 			"leaf guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"zoruahisui": {
 		"num": "#570",
@@ -26812,7 +27969,8 @@
 		],
 		"abilities": [
 			"illusion"
-		]
+		],
+		"canEvolve": true
 	},
 	"zoroarkhisui": {
 		"num": "#571",
@@ -26834,7 +27992,8 @@
 		],
 		"abilities": [
 			"illusion"
-		]
+		],
+		"canEvolve": false
 	},
 	"braviaryhisui": {
 		"num": "#628",
@@ -26858,7 +28017,8 @@
 			"keen eye",
 			"sheer force",
 			"tinted lens"
-		]
+		],
+		"canEvolve": false
 	},
 	"sliggoohisui": {
 		"num": "#705",
@@ -26882,7 +28042,8 @@
 			"sap sipper",
 			"shell armor",
 			"gooey"
-		]
+		],
+		"canEvolve": true
 	},
 	"goodrahisui": {
 		"num": "#706",
@@ -26906,7 +28067,8 @@
 			"sap sipper",
 			"shell armor",
 			"gooey"
-		]
+		],
+		"canEvolve": false
 	},
 	"avalugghisui": {
 		"num": "#713",
@@ -26930,7 +28092,8 @@
 			"strong jaw",
 			"ice body",
 			"sturdy"
-		]
+		],
+		"canEvolve": false
 	},
 	"decidueyehisui": {
 		"num": "#724",
@@ -26953,7 +28116,8 @@
 		"abilities": [
 			"overgrow",
 			"scrappy"
-		]
+		],
+		"canEvolve": false
 	},
 	"taurospaldeaaqua": {
 		"num": "#128",
@@ -26977,7 +28141,8 @@
 			"intimidate",
 			"anger point",
 			"cud chew"
-		]
+		],
+		"canEvolve": false
 	},
 	"taurospaldeablaze": {
 		"num": "#128",
@@ -27001,7 +28166,8 @@
 			"intimidate",
 			"anger point",
 			"cud chew"
-		]
+		],
+		"canEvolve": false
 	},
 	"taurospaldeacombat": {
 		"num": "#128",
@@ -27024,7 +28190,8 @@
 			"intimidate",
 			"anger point",
 			"cud chew"
-		]
+		],
+		"canEvolve": false
 	},
 	"wooperpaldea": {
 		"num": "#194",
@@ -27048,7 +28215,8 @@
 			"poison point",
 			"water absorb",
 			"unaware"
-		]
+		],
+		"canEvolve": true
 	},
 	"barbaracle-mega": {
 		"num": "",
@@ -27070,7 +28238,8 @@
 		],
 		"abilities": [
 			"tough-claws"
-		]
+		],
+		"canEvolve": false
 	},
 	"pyroar-mega": {
 		"num": "",
@@ -27092,7 +28261,8 @@
 		],
 		"abilities": [
 			"fire-mane"
-		]
+		],
+		"canEvolve": false
 	},
 	"eelektross-mega": {
 		"num": "",
@@ -27113,7 +28283,8 @@
 		],
 		"abilities": [
 			"eelevate"
-		]
+		],
+		"canEvolve": false
 	},
 	"staraptor-mega": {
 		"num": "",
@@ -27135,7 +28306,8 @@
 		],
 		"abilities": [
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"meganium-mega": {
 		"num": "",
@@ -27157,7 +28329,8 @@
 		],
 		"abilities": [
 			"mega-sol"
-		]
+		],
+		"canEvolve": false
 	},
 	"feraligatr-mega": {
 		"num": "",
@@ -27179,7 +28352,8 @@
 		],
 		"abilities": [
 			"dragonize"
-		]
+		],
+		"canEvolve": false
 	},
 	"emboar-mega": {
 		"num": "",
@@ -27201,7 +28375,8 @@
 		],
 		"abilities": [
 			"mold-breaker"
-		]
+		],
+		"canEvolve": false
 	},
 	"dragonite-mega": {
 		"num": "",
@@ -27223,7 +28398,8 @@
 		],
 		"abilities": [
 			"multiscale"
-		]
+		],
+		"canEvolve": false
 	},
 	"chesnaught-mega": {
 		"num": "",
@@ -27245,7 +28421,8 @@
 		],
 		"abilities": [
 			"bulletproof"
-		]
+		],
+		"canEvolve": false
 	},
 	"delphox-mega": {
 		"num": "",
@@ -27267,7 +28444,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"greninja-mega": {
 		"num": "",
@@ -27289,7 +28467,8 @@
 		],
 		"abilities": [
 			"protean"
-		]
+		],
+		"canEvolve": false
 	},
 	"excadrill-mega": {
 		"num": "",
@@ -27311,7 +28490,8 @@
 		],
 		"abilities": [
 			"piercing-drill"
-		]
+		],
+		"canEvolve": false
 	},
 	"golurk-mega": {
 		"num": "",
@@ -27333,7 +28513,8 @@
 		],
 		"abilities": [
 			"unseen-fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"clefable-mega": {
 		"num": "",
@@ -27355,7 +28536,8 @@
 		],
 		"abilities": [
 			"magic-bounce"
-		]
+		],
+		"canEvolve": false
 	},
 	"victreebel-mega": {
 		"num": "",
@@ -27377,7 +28559,8 @@
 		],
 		"abilities": [
 			"innards-out"
-		]
+		],
+		"canEvolve": false
 	},
 	"drampa-mega": {
 		"num": "",
@@ -27399,7 +28582,8 @@
 		],
 		"abilities": [
 			"berserk"
-		]
+		],
+		"canEvolve": false
 	},
 	"froslass-mega": {
 		"num": "",
@@ -27421,7 +28605,8 @@
 		],
 		"abilities": [
 			"snow-warning"
-		]
+		],
+		"canEvolve": false
 	},
 	"hawlucha-mega": {
 		"num": "",
@@ -27443,7 +28628,8 @@
 		],
 		"abilities": [
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"crabominable-mega": {
 		"num": "",
@@ -27465,7 +28651,8 @@
 		],
 		"abilities": [
 			"iron-fist"
-		]
+		],
+		"canEvolve": false
 	},
 	"starmie-mega": {
 		"num": "",
@@ -27487,7 +28674,8 @@
 		],
 		"abilities": [
 			"huge-power"
-		]
+		],
+		"canEvolve": false
 	},
 	"chimecho-mega": {
 		"num": "",
@@ -27509,7 +28697,8 @@
 		],
 		"abilities": [
 			"levitate"
-		]
+		],
+		"canEvolve": false
 	},
 	"skarmory-mega": {
 		"num": "",
@@ -27531,7 +28720,8 @@
 		],
 		"abilities": [
 			"stalwart"
-		]
+		],
+		"canEvolve": false
 	},
 	"scovillain-mega": {
 		"num": "",
@@ -27553,7 +28743,8 @@
 		],
 		"abilities": [
 			"spicy-spray"
-		]
+		],
+		"canEvolve": false
 	},
 	"glimmora-mega": {
 		"num": "",
@@ -27575,7 +28766,8 @@
 		],
 		"abilities": [
 			"adaptability"
-		]
+		],
+		"canEvolve": false
 	},
 	"chandelure-mega": {
 		"num": "",
@@ -27597,7 +28789,8 @@
 		],
 		"abilities": [
 			"infiltrator"
-		]
+		],
+		"canEvolve": false
 	},
 	"floette-mega": {
 		"num": "",
@@ -27618,7 +28811,8 @@
 		],
 		"abilities": [
 			"fairy-aura"
-		]
+		],
+		"canEvolve": false
 	},
 	"meowstic-mega": {
 		"num": "",
@@ -27639,7 +28833,8 @@
 		],
 		"abilities": [
 			"trace"
-		]
+		],
+		"canEvolve": false
 	},
 	"raichu-mega-x": {
 		"num": "",
@@ -27661,7 +28856,8 @@
 		],
 		"abilities": [
 			"electric-surge"
-		]
+		],
+		"canEvolve": false
 	},
 	"raichu-mega-y": {
 		"num": "",
@@ -27683,7 +28879,8 @@
 		],
 		"abilities": [
 			"no-guard"
-		]
+		],
+		"canEvolve": false
 	},
 	"malamar-mega": {
 		"num": "",
@@ -27705,7 +28902,8 @@
 		],
 		"abilities": [
 			"contrary"
-		]
+		],
+		"canEvolve": false
 	},
 	"scrafty-mega": {
 		"num": "",
@@ -27727,7 +28925,8 @@
 		],
 		"abilities": [
 			"intimidate"
-		]
+		],
+		"canEvolve": false
 	},
 	"scolipede-mega": {
 		"num": "",
@@ -27749,7 +28948,8 @@
 		],
 		"abilities": [
 			"shell-armor"
-		]
+		],
+		"canEvolve": false
 	},
 	"dragalge-mega": {
 		"num": "",
@@ -27771,7 +28971,8 @@
 		],
 		"abilities": [
 			"regenerator"
-		]
+		],
+		"canEvolve": false
 	},
 	"falinks-mega": {
 		"num": "",
@@ -27792,6 +28993,7 @@
 		],
 		"abilities": [
 			"defiant"
-		]
+		],
+		"canEvolve": false
 	}
 }

@@ -95,8 +95,14 @@ const campoPieno = {
 
 describe('battleState — costruzione di attaccante e difensore', () => {
   it('l\'attaccante coincide con quello che costruiva la DamageTable', () => {
+    // L'oracolo storico fotografa la costruzione di PRIMA della sessione C, e
+    // resta quella: non va aggiornato a ogni cambiamento, altrimenti smette
+    // di essere un oracolo. La sessione D ha però aggiunto un campo che nel
+    // 2024 non esisteva proprio — `atkDefBoost`, il boost di Difesa che serve
+    // a Body Press — quindi lo dichiariamo qui, esplicitamente, invece di
+    // riscrivere la copia storica.
     expect(buildAttackerInput(houndstone, LEVEL))
-      .toEqual(attaccanteTabellaStorico(houndstone, 50))
+      .toEqual({ ...attaccanteTabellaStorico(houndstone, 50), atkDefBoost: 0 })
   })
 
   it('l\'attaccante porta lastRespectsKOs — è il campo che il pannello perdeva', () => {

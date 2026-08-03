@@ -19,7 +19,11 @@ export const ITEM_EFFECTS = {
   'muscle band':    { atkMult: 1.1, statType: 'physical',  showInSmogon: true },
   'wise glasses':   { atkMult: 1.1, statType: 'special',   showInSmogon: true },
   // ×1.1 su mosse da pugno (ignora l'effetto aggiuntivo sull'abilità)
-  'punching glove': { atkMult: 1.1, statType: 'physical',  showInSmogon: true },
+  // Punching Glove: ×1.1, ma solo sulle mosse pugno — non su tutte le fisiche
+  // come facevamo prima. Il flag `punch` in moves.json arriva dalla stessa
+  // generazione di `canEvolve`. In NCP toglie anche il contatto alla mossa
+  // (`damage_MASTER.js` riga 826): quello lo modelliamo qui sotto nel motore.
+  'punching glove': { atkMult: 1.1, soloMossePugno: true,  showInSmogon: true },
   // Orb leggendari: ×1.2 su Dragon/Steel per Dialga, Water/Dragon per Palkia,
   // Ghost/Dragon per Giratina. Qui senza logica di filtro tipo — mostrati sempre.
   'adamant orb':    { showInSmogon: true },
@@ -75,7 +79,12 @@ export const ITEM_EFFECTS = {
   'legend plate':   { showInSmogon: true },
 
   // ── Boost difesa ──────────────────────────────────────────────────────────
-  'eviolite':       { defMult: 1.5, spdMult: 1.5 },
+  // Eviolite: ×1.5 su entrambe le difese, ma SOLO se il Pokémon può ancora
+  // evolversi. `soloSeEvolvibile` è il cancello che il motore consulta contro
+  // il campo `canEvolve` di pokemon.json (generato da scripts/gen-flag-dati.mjs).
+  // Prima lo applicavamo a chiunque: Incineroar con l'Eviolite guadagnava un
+  // 50% di Difesa che nel gioco non esiste.
+  'eviolite':       { defMult: 1.5, spdMult: 1.5, soloSeEvolvibile: true },
   'assault vest':   { spdMult: 1.5 },
 
   // ── Resist Berries (×0.5 danno se il tipo della mossa corrisponde) ────────

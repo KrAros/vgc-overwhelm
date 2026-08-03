@@ -26,6 +26,12 @@ function immuneLabel(result) {
   if (result.reason === 'ability') {
     return { text: `Immune (${result.abilityName})`, cls: 'text-purple-400' }
   }
+  // Meteo estremo: la mossa non viene ridotta, fallisce. Il colore è quello
+  // del meteo perché la causa è di campo, non del difensore.
+  if (result.reason === 'weather') {
+    const nome = result.weatherName === 'heavy rain' ? 'Heavy Rain' : 'Harsh Sunshine'
+    return { text: `Fails (${nome})`, cls: 'text-sky-400' }
+  }
   return { text: 'Immune (tipo)', cls: 'text-gray-500' }
 }
 

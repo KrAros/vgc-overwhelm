@@ -63,7 +63,7 @@ function indicizza(chiavi) {
  * L'elenco è corto di proposito — le Mega e le Primal seguono una regola e
  * non stanno qui.
  */
-const ECCEZIONI_POKEMON = {
+export const ECCEZIONI_POKEMON = {
   'calyrexice': 'Calyrex-Ice Rider',
   'calyrexshadow': 'Calyrex-Shadow Rider',
   'toxtricitylowkey': 'Toxtricity-Low Key',

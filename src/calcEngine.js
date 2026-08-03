@@ -16,6 +16,12 @@ import {
 import { pokeRound, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
 
+/**
+ * Supreme Overlord: un moltiplicatore di potenza per ogni alleato caduto.
+ * I valori sono quelli di NCP (`calcBPMods` punto y), non 1+n×0.1 calcolato.
+ */
+const SUPREME_OVERLORD_BP = [0x119A, 0x1333, 0x14CD, 0x1666, 0x1800]
+
 const POKEMON_DATA = pokemonData
 const MOVE_DATA = movesData
 
@@ -38,6 +44,35 @@ function validateSPs(sps, debug) {
   }
 }
 
+/**
+ * Uno strumento è inamovibile solo per il Pokémon a cui appartiene.
+ *
+ * Oggi in Champions l'unico caso sono le Megapietre, ma la domanda giusta non
+ * è «questo è una Megapietra?» — è «questo strumento si può togliere a QUESTO
+ * Pokémon?». La differenza conta già adesso (Gholdengo con la Garchompite se
+ * la fa strappare) e conterà di più quando arriveranno i leggendari: Orbo Alfa
+ * e Omega, Orbo Platino, le Tavole con Multitipo, le Memorie con Sistema Alfa,
+ * le Unità di Genesect seguono tutte la stessa regola. Scritto così, aggiungere
+ * quei casi vorrà dire aggiungere righe qui dentro e nient'altro.
+ *
+ * `ITEM_EFFECTS[x].megaStone` contiene già lo slug della FORMA Mega
+ * (`'garchomp-mega'`, `'charizard-mega-x'`). Confrontiamo con il prefisso
+ * perché il difensore può essere:
+ *
+ *   - la forma base            `garchomp`        → `garchomp-mega` comincia per `garchomp-mega`
+ *   - una delle due Mega       `charizard`       → `charizard-mega-x` comincia per `charizard-mega`
+ *   - già la forma Mega        `garchomp-mega`   → coincidono
+ *
+ * @param {string} itemKey  chiave strumento minuscola
+ * @param {string} pokeKey  slug del Pokémon che lo tiene
+ * @returns {boolean} true se lo strumento NON può essere rimosso
+ */
+function isStrumentoInamovibile(itemKey, pokeKey) {
+  const formaMega = ITEM_EFFECTS[itemKey]?.megaStone
+  if (!formaMega || !pokeKey) return false
+  return formaMega === pokeKey || formaMega.startsWith(`${pokeKey}-mega`)
+}
+
 function isGrounded(pokeData, ability) {
   if (pokeData.type.includes(TYPES.FLYING)) return false
   if (ability === 'levitate') return false
@@ -53,6 +88,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkItem = null,
     atkBoost = 0,
     spAtkBoost = 0,
+    atkDefBoost = 0,
     atkAbilityFlags = {},
     lastRespectsKOs = 0,
     level = LEVEL,
@@ -103,11 +139,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     : moveData.power
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
-  const isContact = moveData.contact === true
+  // Il contatto "grezzo", quello scritto nei dati della mossa. Il contatto
+  // EFFETTIVO si decide più sotto, dopo aver letto lo strumento: Punching
+  // Glove, Protective Pads e Long Reach lo tolgono.
+  const isContactBase = moveData.contact === true
+  const isPunch = moveData.punch === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
-  // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk
+  // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk.
+  //
+  // ─── LA REGOLA PER INTERO (Bulbapedia, "Body Press (move)") ──────────────
+  // Cambia SOLO da dove si legge la statistica e quali stage si applicano:
+  // valgono quelli di Difesa, non quelli di Attacco. Tutto il resto resta il
+  // corredo OFFENSIVO dell'utente — strumento, abilità e bruciatura inclusi.
+  //
+  //   sì  → Huge Power, Choice Band, Slow Start, Defeatist  (modificano l'attacco)
+  //   no  → Fur Coat, Eviolite, Sword of Ruin               (modificano la difesa)
+  //
+  // Due conseguenze per il seguito di questa sessione:
+  //   1. quando Fur Coat entrerà in `dfMods`, deve restare confinata al
+  //      difensore: non deve mai gonfiare il Body Press di chi la possiede;
+  //   2. Intimidate abbassa lo stage di ATTACCO, quindi non tocca Body Press —
+  //      vedi il blocco Intimidate più sotto.
   const isBodyPress = moveData.useDefAsStat === true
   const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
@@ -130,6 +184,20 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // effectiveness calcolata DOPO la conversione ate
   const effectiveness = getEffectiveness(moveType, defTypes)
 
+  // ── Meteo: sole e pioggia, normali ed estremi ────────────────────────────
+  // NCP (`calcGeneralMods`, punto c) riconosce il sole con `indexOf("Sun") > -1`:
+  // il Sole Estremo di Desolate Land dà quindi lo stesso ×1.5 sul Fuoco del
+  // sole normale. Noi confrontavamo con `=== 'sun'`, e il boost non scattava.
+  //
+  // Il DIMEZZAMENTO del tipo opposto invece vale solo col meteo normale, e non
+  // perché sotto meteo estremo sia più clemente: là il tipo opposto non è
+  // dimezzato, è annullato del tutto (vedi l'immunità qui sotto).
+  const meteo = (field.weather || '').toLowerCase()
+  const isSoleEstremo    = meteo === 'harsh sunshine'
+  const isPioggiaEstrema = meteo === 'heavy rain'
+  const isSole    = meteo === 'sun'  || isSoleEstremo
+  const isPioggia = meteo === 'rain' || isPioggiaEstrema
+
   // ── Immunità ─────────────────────────────────────────────────────────────
   // Levitate: immune a mosse Ground
   const isLevitating = defAbilKey === 'levitate' && moveType === TYPES.GROUND
@@ -145,6 +213,14 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (effectiveness === 0) {
     return { immune: true, reason: 'type', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
+  // Meteo estremo: sotto Sole Estremo le mosse Acqua falliscono, sotto Pioggia
+  // Intensa falliscono le mosse Fuoco. Non è una riduzione del danno: in NCP
+  // (`immunityChecks`) la funzione esce subito con `damage: [0]`, esattamente
+  // come per un'immunità di tipo. Prima di questa sessione noi non facevamo né
+  // l'una né l'altra cosa e il colpo passava intero.
+  if ((isSoleEstremo && moveType === TYPES.WATER) || (isPioggiaEstrema && moveType === TYPES.FIRE)) {
+    return { immune: true, reason: 'weather', weatherName: meteo, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
 
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
@@ -153,7 +229,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
   // ── Boost di stat base ───────────────────────────────────────────────────
-  let atkBoostVal = isSpecial ? spAtkBoost : atkBoost
+  // Il boost da usare segue la STATISTICA, non la categoria della mossa.
+  // Per quasi tutte le mosse le due cose coincidono, ma Body Press è fisica e
+  // attacca con la Difesa: prima di questa sessione leggevamo comunque il
+  // boost di Attacco, quindi un Registeel a Difesa −1 tirava un Body Press
+  // *più forte* del normale se aveva l'Attacco a +1. NCP (`calcAttack`, punto
+  // a) sceglie `attackStat = DF` e legge `boosts[attackStat]`: qui facciamo lo
+  // stesso, indicizzando con `atkStatIdx` che è già stato deciso sopra.
+  let atkBoostVal = atkStatIdx === STAT_SPA ? spAtkBoost
+    : atkStatIdx === STAT_DEF ? atkDefBoost
+    : atkBoost
   const defBoostVal = isSpecial ? spDefBoost : defBoost
 
   // ── Intimidate → Defiant / Contrary (automatico, nessun toggle extra) ───
@@ -163,22 +248,43 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //   - Defiant:  -1 + 2 = +1 netto (drop avviene, poi +2 per ogni drop)
   //   - Contrary: -1 invertito = +1 (il drop diventa aumento)
   //   - Competitive: -1 Atk (normale) + 2 SpAtk separato
+  //
+  // Nota su Body Press: Intimidate abbassa l'ATTACCO, e Body Press non usa
+  // l'Attacco. Il calo va quindi applicato solo quando la statistica offensiva
+  // è davvero l'Attacco — altrimenti finirebbe per sottrarre uno stadio alla
+  // Difesa, che Intimidate non tocca. Per questo il controllo guarda
+  // `atkStatIdx` e non più `isSpecial`.
   if (defAbilEffect?.intimidate && defAbilityFlags.intimidateActive) {
-    if (!isSpecial) {
+    if (atkStatIdx === STAT_ATT) {
       // Atk drop — Defiant e Contrary lo invertono/compensano
       if (atkAbilEffect?.defiant)        atkBoostVal += 1  // -1 + 2 = +1
       else if (atkAbilEffect?.contrary)  atkBoostVal += 1  // invertito
       else                               atkBoostVal -= 1  // drop normale
     }
     // Competitive: +2 SpAtk indipendentemente dalla stat attaccata
-    if (atkAbilEffect?.competitive && isSpecial) {
+    if (atkAbilEffect?.competitive && atkStatIdx === STAT_SPA) {
       atkBoostVal += 2
     }
   }
 
-  const atkBoostEffective = Math.min(6, Math.max(-6, atkBoostVal))
+  // ── Il colpo critico ignora i boost che gli darebbero fastidio ───────────
+  // Seconda metà della correzione §1.3 — la prima (il critico che buca gli
+  // schermi) è arrivata in G. La regola, da NCP (`calcAttack` punto c e
+  // `calcDefense` punto e): con un critico si usa la statistica GREZZA quando
+  // il boost andrebbe a sfavore di chi attacca. Cioè:
+  //
+  //   - i cali d'attacco dell'attaccante  (boost < 0) vengono ignorati
+  //   - i boost di difesa del bersaglio   (boost > 0) vengono ignorati
+  //
+  // Gli altri restano: un critico di un Pokémon a +2 Attacco è comunque a +2.
+  // Scritto come clamp perché `applyBoost(stat, 0)` restituisce la statistica
+  // grezza: azzerare lo stadio e usare il valore grezzo sono la stessa cosa.
+  const atkBoostUsato = field.crit ? Math.max(0, atkBoostVal)  : atkBoostVal
+  const defBoostUsato = field.crit ? Math.min(0, defBoostVal)  : defBoostVal
+
+  const atkBoostEffective = Math.min(6, Math.max(-6, atkBoostUsato))
   let atkStatFinal = applyBoost(atkStat, atkBoostEffective)
-  let defStatFinal = applyBoost(defStat, defBoostVal)
+  let defStatFinal = applyBoost(defStat, defBoostUsato)
 
   // ── Item effects ─────────────────────────────────────────────────────────
   const atkItemKey = (atkItem || '').toLowerCase()
@@ -186,17 +292,38 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
+  // ── Contatto effettivo ───────────────────────────────────────────────────
+  // NCP (`checkContactOverride`, damage_MASTER.js riga 826) toglie il contatto
+  // quando l'attaccante ha Protective Pads, Long Reach, o Punching Glove su
+  // una mossa pugno. Non è un dettaglio estetico: da qui passano Tough Claws
+  // (che smette di applicarsi), Fluffy e — quando arriverà — Rocky Helmet.
+  const isContact = isContactBase && !(
+    atkItemKey === 'protective pads' ||
+    atkAbilKey === 'long-reach' ||
+    (atkItemKey === 'punching glove' && isPunch)
+  )
+
   if (atkItemEffect?.atkMult) {
     const isCorrectType = !atkItemEffect.statType
       || (atkItemEffect.statType === 'physical' && !isSpecial)
       || (atkItemEffect.statType === 'special'  &&  isSpecial)
-    if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.atkMult)
+    // `soloMossePugno`: Punching Glove vale sui pugni, non su tutte le mosse
+    // fisiche. Il flag `punch` in moves.json arriva da gen-flag-dati.mjs.
+    const pugnoOk = !atkItemEffect.soloMossePugno || isPunch
+    if (isCorrectType && pugnoOk) atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.atkMult)
   }
   if (atkItemEffect?.typBoost !== undefined && atkItemEffect.typBoost === moveType) {
     atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.typMult)
   }
-  if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.defMult)
-  if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.spdMult)
+  // `soloSeEvolvibile`: l'Eviolite funziona solo su chi può ancora evolversi.
+  // `canEvolve` è generato in pokemon.json da scripts/gen-flag-dati.mjs; per
+  // le poche voci non mappabili su NCP il campo è assente, e in quel caso
+  // preferiamo NON applicare il bonus piuttosto che applicarlo a caso.
+  const itemDifesaOk = !defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true
+  if (itemDifesaOk) {
+    if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.defMult)
+    if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.spdMult)
+  }
 
   // ── Ability effects su stat attaccante ───────────────────────────────────
 
@@ -207,13 +334,44 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkAbilEffect.atkMult)
   }
 
-  // Supreme Overlord (Kingambit): ×(1 + KOs×0.1) su Atk e SpAtk
-  // Es: 1 alleato KO = ×1.1, 5 alleati KO = ×1.5
-  if (atkAbilEffect?.supremeOverlord) {
-    const kos = Math.min(5, Math.max(0, atkAbilityFlags.supremeOverlordKOs || 0))
-    if (kos > 0) {
-      atkStatFinal = Math.floor(atkStatFinal * (1 + kos * 0.1))
-    }
+  // ── 0.5× difensive che agiscono sull'ATTACCO ─────────────────────────────
+  // Controintuitivo ma è così: Thick Fat, Heatproof, Purifying Salt e il lato
+  // difensivo di Water Bubble non riducono il danno finale, dimezzano la
+  // statistica d'attacco (NCP, `calcAtMods` punto h). La differenza si vede
+  // appena c'è un altro modificatore in giro, perché ogni catena arrotonda
+  // per conto suo.
+  const dimezzaAttacco =
+    (defAbilEffect?.thickFat && (moveType === TYPES.FIRE || moveType === TYPES.ICE)) ||
+    (defAbilEffect?.heatproof && moveType === TYPES.FIRE) ||
+    (defAbilEffect?.waterBubble && moveType === TYPES.FIRE) ||
+    (defAbilEffect?.purifyingSalt && moveType === TYPES.GHOST)
+  if (dimezzaAttacco) atkStatFinal = Math.floor(atkStatFinal * 0.5)
+
+  // Water Bubble in attacco: ×2 sulle mosse Acqua (`calcAtMods` punto g).
+  if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) {
+    atkStatFinal = Math.floor(atkStatFinal * 2)
+  }
+
+  // Fire Mane: ×1.5 sulle mosse Fuoco. Stava fra i modificatori di POTENZA;
+  // in NCP è un modificatore d'ATTACCO (`calcAtMods` punto d, 0x1800).
+  // Nessun golden lo copriva, quindi era un errore silenzioso: l'ho trovato
+  // leggendo il motore di riferimento, non guardando un test rosso.
+  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) {
+    atkStatFinal = Math.floor(atkStatFinal * 1.5)
+  }
+
+  // Flash Fire attivo: ×1.5 sulle mosse Fuoco. Anche questo era applicato al
+  // danno finale; in NCP sta in `calcAtMods`, insieme a Guts e ai vari Blaze.
+  // (L'immunità difensiva resta gestita prima del calcolo.)
+  if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
+    atkStatFinal = Math.floor(atkStatFinal * 1.5)
+  }
+
+  // Fur Coat: ×2 sulla Difesa fisica (`calcDefMods` punto e). È una catena
+  // ancora diversa — quella della difesa — e per questo non può essere
+  // scritta come «×0.5 al danno»: il risultato differisce per arrotondamento.
+  if (defAbilEffect?.furCoat && !isSpecial) {
+    defStatFinal = Math.floor(defStatFinal * 2)
   }
   
   // ── STAB ─────────────────────────────────────────────────────────────────
@@ -247,21 +405,45 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     terrainBP = Math.floor(terrainBP * 1.3)
   }
 
-  // Fire Mane: ×1.5 BP su mosse Fire (Mega Pyroar)
-  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) {
-    terrainBP = Math.floor(terrainBP * 1.5)
-  }
-
   // Ate abilities: ×1.2 BP (pixilate, aerilate, refrigerate)
   if (ateBoost) {
     terrainBP = Math.floor(terrainBP * 1.2)
   }
 
-  // Knock Off: ×1.5 BP se il difensore tiene un item rimovibile
-  // Le Mega Stone non possono essere rimosse
+  // Supreme Overlord (Kingambit): modificatore di POTENZA, non di statistica.
+  // NCP (`calcBPMods` punto y) usa una tabella esplicita invece di calcolare
+  // 1 + n×0.1, perché i valori in virgola fissa non sono i decimali tondi:
+  // 0x119A/4096 = 1,10009…, 0x14CD/4096 = 1,30005… La differenza è di un
+  // punto danno, ma è proprio il genere di punto che decide un 2HKO.
+  if (atkAbilEffect?.supremeOverlord) {
+    const kos = Math.min(5, Math.max(0, atkAbilityFlags.supremeOverlordKOs || 0))
+    if (kos > 0) {
+      terrainBP = pokeRound(terrainBP * SUPREME_OVERLORD_BP[kos - 1] / FIXED_POINT)
+    }
+  }
+
+  // Helping Hand: ×1.5 sulla POTENZA (`calcBPMods` punto s, 0x1800).
+  // Da noi era l'ultimo moltiplicatore del danno finale — cioè in fondo alla
+  // catena invece che in cima. Cinque golden lo dicevano.
+  if (field.helpingHand) {
+    terrainBP = pokeRound(terrainBP * 6144 / FIXED_POINT)
+  }
+
+  // Knock Off: ×1.5 BP se il difensore tiene uno strumento RIMOVIBILE.
+  //
+  // ─── COSA SBAGLIAVAMO ────────────────────────────────────────────────────
+  // Controllavamo lo STRUMENTO e non CHI LO TIENE: bastava che l'oggetto
+  // fosse una Megapietra perché saltasse il ×1.5. Ma una Megapietra è
+  // inamovibile solo addosso al Pokémon che ci si Megaevolve. Su chiunque
+  // altro è un oggetto qualunque, e Knock Off se lo porta via.
+  //
+  // Il caso che l'ha smascherato è `B8-knockoff-garchompite-021`: Gholdengo
+  // con la Garchompite. Gholdengo non si Megaevolve, quindi NCP applica il
+  // ×1.5 (126) mentre noi no (84). Rapporto 1,5 esatto — aveva ragione NCP.
+  // La stessa logica è in `cantRemoveItem` di NCP (`item_data.js`), che
+  // confronta lo strumento con la specie tramite `LOCK_ITEM_LOOKUP`.
   if (move === 'knock off' && defItemKey) {
-    const isMegaStone = !!(ITEM_EFFECTS[defItemKey]?.megaStone)
-    if (!isMegaStone) {
+    if (!isStrumentoInamovibile(defItemKey, defPokemon)) {
       terrainBP = Math.floor(terrainBP * 1.5)
     }
   }
@@ -316,11 +498,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   for (let r = 85; r <= 100; r++) {
     let damage = baseDmg
 
-    // Meteo
-    if (field.weather === 'sun'  && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
-    if (field.weather === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
-    if (field.weather === 'rain' && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
-    if (field.weather === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
+    // Meteo — il ×1.5 vale anche coi meteo estremi, il ×0.5 solo con quelli
+    // normali (col meteo estremo il tipo opposto è già uscito come immune)
+    if (isSole    && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
+    if (isPioggia && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
+    if (meteo === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
+    if (meteo === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
 
     // Critico
     if (field.crit) damage = Math.floor(damage * 1.5)
@@ -353,11 +536,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       damage = Math.floor(damage * 0.75)
     }
 
-    // Thick Fat: ×0.5 da Fire e Ice
-    if (defAbilEffect?.thickFat) {
-      if (moveType === TYPES.FIRE || moveType === TYPES.ICE) {
-        damage = Math.floor(damage * 0.5)
-      }
+    // Ice Scales: ×0.5 sulle mosse speciali (`calcFinalMods` punto j).
+    if (defAbilEffect?.iceScales && isSpecial) {
+      damage = Math.floor(damage * 0.5)
     }
 
     // Fluffy: ×0.5 da contatto, ×2 da Fire (si moltiplicano: Fire+contatto = ×1.0 netto)
@@ -372,19 +553,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       damage = Math.floor(damage * 0.5)
     }
 
-    // Flash Fire attaccante: ×1.5 Fire se il toggle è attivo
-    // (l'immunità difensiva è già gestita sopra, prima del calcolo)
-    if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
-      damage = Math.floor(damage * 1.5)
-    }
-
     // Schermi difensivi — un solo schermo, mai due (vedi `schermoAttivo`)
     if (schermoAttivo) {
       damage = pokeRound(damage * SCREEN_MOD / FIXED_POINT)
     }
-
-    // Helping Hand
-    if (field.helpingHand) damage = Math.floor(damage * 1.5)
 
     rolls.push(damage)
   }
