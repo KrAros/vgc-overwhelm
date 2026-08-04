@@ -164,7 +164,6 @@ export const CASI_GOLDEN = [
   },
   {
     nome: '05b — item type-boost ×1.2 (Soft Sand)',
-    bugNoto: true,
     input: {
       attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: 'soft sand', level: 50 },
       defender: { defPokemon: 'blastoise', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'torrent', defItem: null },
@@ -173,7 +172,7 @@ export const CASI_GOLDEN = [
     },
     rolls: [78, 79, 79, 81, 82, 82, 84, 85, 85, 87, 87, 88, 90, 90, 91, 93],
     defHP: 186,
-    nota: 'BUG CONFERMATO — §1.10. NCP applica il ×1.2 alla POTENZA BASE (95 → 114, danno base 62); il motore lo applica alla STATISTICA d\'attacco (182 → 218, danno base 61). Divergenza di 1 HP sul danno base, 1–2 HP sui roll. Vale per tutti gli item ×1.2 per tipo e per Muscle Band / Wise Glasses. Da correggere nella sessione D. ATTENZIONE: la maggior parte dei matchup NON distingue i due modelli (coincidono per arrotondamento) — Blastoise è uno dei 233 che li separa.',
+    nota: 'CHIUSO IN D-2. Era il §1.10: NCP applica il ×1.2 alla POTENZA BASE (95 → 114, danno base 62), noi lo applicavamo alla STATISTICA d\'attacco (182 → 218, danno base 61). Ora gli item type-boost hanno `bpMod: MOD.X1_2` e vivono nella catena BP, al punto k di calcBPMods. ATTENZIONE per chi legge in futuro: la maggior parte dei matchup NON distingue i due modelli, perché coincidono per arrotondamento — Blastoise è uno dei 233 che li separa, ed è per questo che questo caso vale.',
   },
 
   // ── Batch 2 — schermi (sessione G) ───────────────────────────────────────
@@ -192,7 +191,6 @@ export const CASI_GOLDEN = [
   },
   {
     nome: '07 — Reflect con item type-boost',
-    bugNoto: true,
     input: {
       attacker: { atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'hardy', atkAbility: 'sand veil', atkItem: 'soft sand', level: 50 },
       defender: { defPokemon: 'blastoise', defSPs: [32, 0, 32, 0, 0, 0], defNature: 'hardy', defAbility: 'torrent', defItem: null },
@@ -201,6 +199,6 @@ export const CASI_GOLDEN = [
     },
     rolls: [52, 53, 53, 54, 55, 55, 56, 57, 57, 58, 58, 59, 60, 60, 61, 62],
     defHP: 186,
-    nota: 'Il caso 05b con Reflect. NCP dà 52–62, il motore dopo G dà 51–61: l\'HP che manca NON è lo schermo, è il §1.10 ereditato dal 05b (i roll di partenza sono 76–91 invece di 78–93). Resta `bugNoto` finché D non corregge gli item type-boost; a quel punto si rovescia insieme al 05b. Se questo diventa verde mentre il 05b è ancora rosso, c\'è qualcosa che non torna negli schermi.',
+    nota: 'CHIUSO IN D-2, insieme al 05b — ed è questo il punto. Il caso 05b con Reflect: l\'HP che mancava dopo G non era lo schermo, era il §1.10 ereditato dal 05b. Il piano chiedeva che i due si rovesciassero INSIEME: se il 07 fosse diventato verde da solo, avrebbe significato che qualcosa non tornava in SCREEN_MOD. Sono passati insieme al primo giro della catena BP, quindi gli schermi di G reggono.',
   },
 ]

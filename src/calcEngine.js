@@ -13,7 +13,7 @@ import {
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
 } from './lib/rules.js'
-import { pokeRound, FIXED_POINT } from './lib/modifiers.js'
+import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
 
 /**
@@ -303,150 +303,200 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (atkItemKey === 'punching glove' && isPunch)
   )
 
-  if (atkItemEffect?.atkMult) {
-    const isCorrectType = !atkItemEffect.statType
-      || (atkItemEffect.statType === 'physical' && !isSpecial)
-      || (atkItemEffect.statType === 'special'  &&  isSpecial)
-    // `soloMossePugno`: Punching Glove vale sui pugni, non su tutte le mosse
-    // fisiche. Il flag `punch` in moves.json arriva da gen-flag-dati.mjs.
-    const pugnoOk = !atkItemEffect.soloMossePugno || isPunch
-    if (isCorrectType && pugnoOk) atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.atkMult)
-  }
-  if (atkItemEffect?.typBoost !== undefined && atkItemEffect.typBoost === moveType) {
-    atkStatFinal = Math.floor(atkStatFinal * atkItemEffect.typMult)
-  }
+  // ── CATENA DIFESA (`calcDefMods` di NCP) ─────────────────────────────────
+  // Ordine dei push copiato da NCP, NON dedotto: Fur Coat (punto e) viene
+  // PRIMA di Eviolite e Assault Vest (punto f). Da noi era l'inverso, e con
+  // entrambi attivi l'inversione cambia il risultato.
+  //
+  // Fur Coat e Assault Vest non coesistono mai — il primo vale solo sul
+  // fisico, il secondo solo sullo speciale — quindi l'unica coppia possibile
+  // in questa catena è Fur Coat + Eviolite.
+  //
   // `soloSeEvolvibile`: l'Eviolite funziona solo su chi può ancora evolversi.
   // `canEvolve` è generato in pokemon.json da scripts/gen-flag-dati.mjs; per
   // le poche voci non mappabili su NCP il campo è assente, e in quel caso
   // preferiamo NON applicare il bonus piuttosto che applicarlo a caso.
+  const dfMods = []
+
+  // Fur Coat: ×2 sulla Difesa fisica (`calcDefMods` punto e).
+  if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
+
   const itemDifesaOk = !defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true
   if (itemDifesaOk) {
-    if (defItemEffect?.defMult && !isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.defMult)
-    if (defItemEffect?.spdMult &&  isSpecial) defStatFinal = Math.floor(defStatFinal * defItemEffect.spdMult)
+    if (defItemEffect?.defMult && !isSpecial) dfMods.push(daDecimale(defItemEffect.defMult))
+    if (defItemEffect?.spdMult &&  isSpecial) dfMods.push(daDecimale(defItemEffect.spdMult))
   }
 
-  // ── Ability effects su stat attaccante ───────────────────────────────────
+  if (dfMods.length > 0) {
+    defStatFinal = Math.max(1, pokeRound(defStatFinal * chainMods(dfMods) / FIXED_POINT))
+  }
 
-  // Huge Power / Pure Power: ×2 Atk fisico
+  // ── CATENA ATTACCO (`calcAtMods` di NCP) ─────────────────────────────────
+  // L'ordine dei push è copiato da NCP. Da noi la Choice Band era il PRIMO
+  // moltiplicatore; in NCP è l'ULTIMO (punto j), dopo le abilità.
+  //
+  //   punto d → Fire Mane, Flash Fire attivo           ×1.5
+  //   punto g → Water Bubble sulle mosse Acqua,
+  //             Huge Power / Pure Power                ×2
+  //   punto h → abilità DIFENSIVE che dimezzano
+  //             l'attacco altrui                       ×0.5
+  //   punto j → Choice Band / Choice Specs             ×1.5
+  const atMods = []
+
+  // punto d — ×1.5 offensive.
+  // Fire Mane e Flash Fire stavano fra i modificatori di POTENZA o di danno
+  // finale: li ha spostati D leggendo NCP, non un test rosso.
+  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) atMods.push(MOD.X1_5)
+  if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
+    atMods.push(MOD.X1_5)
+  }
+
+  // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power.
+  if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) atMods.push(MOD.X2)
   if (atkAbilEffect?.atkMult) {
     const isCorrectType = !atkAbilEffect.statType
       || (atkAbilEffect.statType === 'physical' && !isSpecial)
-    if (isCorrectType) atkStatFinal = Math.floor(atkStatFinal * atkAbilEffect.atkMult)
+    if (isCorrectType) atMods.push(daDecimale(atkAbilEffect.atkMult))
   }
 
-  // ── 0.5× difensive che agiscono sull'ATTACCO ─────────────────────────────
+  // punto h — ×0.5 dalle abilità DIFENSIVE.
   // Controintuitivo ma è così: Thick Fat, Heatproof, Purifying Salt e il lato
   // difensivo di Water Bubble non riducono il danno finale, dimezzano la
-  // statistica d'attacco (NCP, `calcAtMods` punto h). La differenza si vede
-  // appena c'è un altro modificatore in giro, perché ogni catena arrotonda
-  // per conto suo.
+  // statistica d'attacco. Sono nella catena dell'ATTACCANTE pur appartenendo
+  // al difensore.
   const dimezzaAttacco =
     (defAbilEffect?.thickFat && (moveType === TYPES.FIRE || moveType === TYPES.ICE)) ||
     (defAbilEffect?.heatproof && moveType === TYPES.FIRE) ||
     (defAbilEffect?.waterBubble && moveType === TYPES.FIRE) ||
     (defAbilEffect?.purifyingSalt && moveType === TYPES.GHOST)
-  if (dimezzaAttacco) atkStatFinal = Math.floor(atkStatFinal * 0.5)
+  if (dimezzaAttacco) atMods.push(MOD.X0_5)
 
-  // Water Bubble in attacco: ×2 sulle mosse Acqua (`calcAtMods` punto g).
-  if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) {
-    atkStatFinal = Math.floor(atkStatFinal * 2)
+  // punto j — ×1.5 dagli strumenti: Choice Band e Choice Specs.
+  if (atkItemEffect?.atkMult === 1.5) {
+    const isCorrectType = !atkItemEffect.statType
+      || (atkItemEffect.statType === 'physical' && !isSpecial)
+      || (atkItemEffect.statType === 'special'  &&  isSpecial)
+    if (isCorrectType) atMods.push(MOD.X1_5)
   }
 
-  // Fire Mane: ×1.5 sulle mosse Fuoco. Stava fra i modificatori di POTENZA;
-  // in NCP è un modificatore d'ATTACCO (`calcAtMods` punto d, 0x1800).
-  // Nessun golden lo copriva, quindi era un errore silenzioso: l'ho trovato
-  // leggendo il motore di riferimento, non guardando un test rosso.
-  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) {
-    atkStatFinal = Math.floor(atkStatFinal * 1.5)
+  if (atMods.length > 0) {
+    atkStatFinal = Math.max(1, pokeRound(atkStatFinal * chainMods(atMods) / FIXED_POINT))
   }
 
-  // Flash Fire attivo: ×1.5 sulle mosse Fuoco. Anche questo era applicato al
-  // danno finale; in NCP sta in `calcAtMods`, insieme a Guts e ai vari Blaze.
-  // (L'immunità difensiva resta gestita prima del calcolo.)
-  if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
-    atkStatFinal = Math.floor(atkStatFinal * 1.5)
-  }
+  // (Fur Coat è salito nella catena di difesa, più sopra: in NCP è il punto e
+  // di `calcDefMods` e viene PRIMA di Eviolite, non dopo.)
 
-  // Fur Coat: ×2 sulla Difesa fisica (`calcDefMods` punto e). È una catena
-  // ancora diversa — quella della difesa — e per questo non può essere
-  // scritta come «×0.5 al danno»: il risultato differisce per arrotondamento.
-  if (defAbilEffect?.furCoat && !isSpecial) {
-    defStatFinal = Math.floor(defStatFinal * 2)
-  }
-  
   // ── STAB ─────────────────────────────────────────────────────────────────
   const stab = hasSTAB(moveType, atkTypes)
     ? (atkAbilEffect?.adaptability ? 2.0 : 1.5)
     : 1
 
-  const bp = effectiveBP
+  // ── CATENA POTENZA (`calcBPMods` di NCP) ─────────────────────────────────
+  // Rinominata da `terrainBP` a `modifiedBP`: il vecchio nome mentiva da
+  // tempo, perché la variabile non ha mai contenuto solo il terreno.
+  //
+  // L'ordine dei push è copiato da NCP, non scelto. Con `chainMods` l'ordine
+  // conta solo da TRE modificatori in su (vedi modifiers.test.js): quello che
+  // ha spostato i numeri qui non è il riordino, è la concatenazione. Il
+  // riordino serve per quando la catena si allargherà. Le lettere sono i
+  // punti di `calcBPMods` nel sorgente di riferimento, lasciate apposta per
+  // rendere il confronto meccanico.
+  //
+  //   c.i → abilità "ate" (Pixilate, Aerilate, …)      ×1.2   0x1333
+  //   e.iv→ Tough Claws                                 ×1.3   0x14CD
+  //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
+  //   k   → item type-boost                             ×1.2   0x1333
+  //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
+  //   s   → Helping Hand                                ×1.5   0x1800
+  //   v   → terreno offensivo                           ×1.3   0x14CD
+  //   w   → terreno difensivo (Misty/Grassy)            ×0.5   0x800
+  //   y   → Supreme Overlord                            tabella
+  //   z   → Punching Glove                              ×1.1   0x119A
+  //
+  // NOTA su j e k: in NCP sono un `else if`, ma la mutua esclusione è già
+  // garantita dal fatto che un Pokémon tiene un solo strumento.
   const defGrounded = isGrounded(defPokeData, defAbility)
   const atkGrounded = isGrounded(atkPokeData, atkAbility)
+  const bpMods = []
 
-  // ── Terrain boost potenza ─────────────────────────────────────────────────
-  let terrainBP = bp
-  if (field.terrain === 'electric' && moveType === TYPES.ELECTRIC && atkGrounded) {
-    terrainBP = Math.floor(terrainBP * 1.3)
-  }
-  if (field.terrain === 'grassy' && moveType === TYPES.GRASS && atkGrounded) {
-    terrainBP = Math.floor(terrainBP * 1.3)
-  }
-  if (field.terrain === 'psychic' && moveType === TYPES.PSYCHIC && atkGrounded) {
-    terrainBP = Math.floor(terrainBP * 1.3)
-  }
-  if (field.terrain === 'misty' && moveType === TYPES.DRAGON && defGrounded) {
-    terrainBP = Math.floor(terrainBP * 0.5)
-  }
-  if (field.terrain === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move)) {
-    terrainBP = Math.floor(terrainBP * 0.5)
-  }
-  // Tough Claws: ×1.3 BP su mosse contatto (Mega Metagross, Mega Barbaracle)
-  if (atkAbilEffect?.toughClaws && isContact) {
-    terrainBP = Math.floor(terrainBP * 1.3)
-  }
+  // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
+  if (ateBoost) bpMods.push(MOD.X1_2)
 
-  // Ate abilities: ×1.2 BP (pixilate, aerilate, refrigerate)
-  if (ateBoost) {
-    terrainBP = Math.floor(terrainBP * 1.2)
+  // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
+  // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.
+  if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+
+  // j / k — strumenti che modificano la potenza.
+  // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.
+  if (atkItemEffect?.bpMod) {
+    const tipoOk = atkItemEffect.typBoost === undefined
+      || atkItemEffect.typBoost === moveType
+    const categoriaOk = !atkItemEffect.statType
+      || (atkItemEffect.statType === 'physical' && !isSpecial)
+      || (atkItemEffect.statType === 'special'  &&  isSpecial)
+    // `soloMossePugno`: il Punching Glove vale sui pugni, non su tutte le
+    // mosse fisiche. Il flag `punch` in moves.json viene da gen-flag-dati.mjs.
+    const pugnoOk = !atkItemEffect.soloMossePugno || isPunch
+    if (tipoOk && categoriaOk && pugnoOk) bpMods.push(atkItemEffect.bpMod)
   }
 
-  // Supreme Overlord (Kingambit): modificatore di POTENZA, non di statistica.
-  // NCP (`calcBPMods` punto y) usa una tabella esplicita invece di calcolare
-  // 1 + n×0.1, perché i valori in virgola fissa non sono i decimali tondi:
-  // 0x119A/4096 = 1,10009…, 0x14CD/4096 = 1,30005… La differenza è di un
-  // punto danno, ma è proprio il genere di punto che decide un 2HKO.
-  if (atkAbilEffect?.supremeOverlord) {
-    const kos = Math.min(5, Math.max(0, atkAbilityFlags.supremeOverlordKOs || 0))
-    if (kos > 0) {
-      terrainBP = pokeRound(terrainBP * SUPREME_OVERLORD_BP[kos - 1] / FIXED_POINT)
-    }
-  }
-
-  // Helping Hand: ×1.5 sulla POTENZA (`calcBPMods` punto s, 0x1800).
-  // Da noi era l'ultimo moltiplicatore del danno finale — cioè in fondo alla
-  // catena invece che in cima. Cinque golden lo dicevano.
-  if (field.helpingHand) {
-    terrainBP = pokeRound(terrainBP * 6144 / FIXED_POINT)
-  }
-
-  // Knock Off: ×1.5 BP se il difensore tiene uno strumento RIMOVIBILE.
+  // o — Knock Off: ×1.5 se il difensore tiene uno strumento RIMOVIBILE.
   //
-  // ─── COSA SBAGLIAVAMO ────────────────────────────────────────────────────
   // Controllavamo lo STRUMENTO e non CHI LO TIENE: bastava che l'oggetto
   // fosse una Megapietra perché saltasse il ×1.5. Ma una Megapietra è
   // inamovibile solo addosso al Pokémon che ci si Megaevolve. Su chiunque
   // altro è un oggetto qualunque, e Knock Off se lo porta via.
-  //
-  // Il caso che l'ha smascherato è `B8-knockoff-garchompite-021`: Gholdengo
-  // con la Garchompite. Gholdengo non si Megaevolve, quindi NCP applica il
-  // ×1.5 (126) mentre noi no (84). Rapporto 1,5 esatto — aveva ragione NCP.
-  // La stessa logica è in `cantRemoveItem` di NCP (`item_data.js`), che
-  // confronta lo strumento con la specie tramite `LOCK_ITEM_LOOKUP`.
-  if (move === 'knock off' && defItemKey) {
-    if (!isStrumentoInamovibile(defItemKey, defPokemon)) {
-      terrainBP = Math.floor(terrainBP * 1.5)
-    }
+  // Stessa logica di `cantRemoveItem` in NCP (`item_data.js`).
+  if (move === 'knock off' && defItemKey && !isStrumentoInamovibile(defItemKey, defPokemon)) {
+    bpMods.push(MOD.X1_5)
   }
+
+  // s — Helping Hand.
+  if (field.helpingHand) bpMods.push(MOD.X1_5)
+
+  // v — terreno offensivo: potenzia le mosse del proprio tipo se
+  // l'ATTACCANTE è a terra.
+  if (atkGrounded && (
+    (field.terrain === 'electric' && moveType === TYPES.ELECTRIC) ||
+    (field.terrain === 'grassy'   && moveType === TYPES.GRASS) ||
+    (field.terrain === 'psychic'  && moveType === TYPES.PSYCHIC)
+  )) {
+    bpMods.push(MOD.X1_3)
+  }
+
+  // w — terreno difensivo: dimezza, e richiede che il DIFENSORE sia a terra.
+  //
+  // Due correzioni rispetto a prima, entrambe da `calcBPMods` punto w:
+  //  · `magnitude` è stata tolta dall'elenco. Dalla Gen 8 la mossa non esiste
+  //    più, e infatti in moves.json ha potenza 0: il motore usciva prima di
+  //    arrivare qui. Era codice morto, la rimozione non muove alcun numero.
+  //  · aggiunto il cancello `defGrounded`. Oggi è INOSSERVABILE — un
+  //    difensore non a terra è già immune a Earthquake, per tipo o per
+  //    Levitate — quindi nessun caso di test può dimostrarlo. Serve quando
+  //    arriveranno Air Balloon, Gravity e Magnet Rise, che oggi non
+  //    modelliamo (§1.13).
+  if (field.terrain === 'misty' && moveType === TYPES.DRAGON && defGrounded) {
+    bpMods.push(MOD.X0_5)
+  }
+  if (field.terrain === 'grassy' && defGrounded && ['earthquake', 'bulldoze'].includes(move)) {
+    bpMods.push(MOD.X0_5)
+  }
+
+  // y — Supreme Overlord (Kingambit). NCP usa una tabella esplicita invece di
+  // calcolare 1 + n×0.1, perché i valori in virgola fissa non sono i decimali
+  // tondi: 0x119A/4096 = 1,10009… La differenza è di un punto danno, ma è
+  // proprio il genere di punto che decide un 2HKO.
+  if (atkAbilEffect?.supremeOverlord) {
+    const kos = Math.min(5, Math.max(0, atkAbilityFlags.supremeOverlordKOs || 0))
+    if (kos > 0) bpMods.push(SUPREME_OVERLORD_BP[kos - 1])
+  }
+
+  // z — Punching Glove chiude la catena, dopo Supreme Overlord.
+  // (Già inserito sopra insieme agli altri strumenti: un Pokémon ne tiene uno
+  // solo, quindi la posizione relativa agli altri item non è osservabile.
+  // Rispetto a Supreme Overlord invece sì — vedi il caso dedicato.)
+
+  const modifiedBP = Math.max(1, pokeRound(effectiveBP * chainMods(bpMods) / FIXED_POINT))
 
   // ── Calcolo rolls (r = 85..100) ───────────────────────────────────────────
   const rolls = []
@@ -454,7 +504,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Base damage (fuori dal loop — identico per tutti i 16 roll)
   let baseDmg = Math.floor(
     Math.floor(
-      Math.floor((2 * level) / 5 + 2) * terrainBP * atkStatFinal / defStatFinal
+      Math.floor((2 * level) / 5 + 2) * modifiedBP * atkStatFinal / defStatFinal
     ) / 50
   ) + 2
 
@@ -495,6 +545,57 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (field.lightScreen === true &&  isSpecial)
   )
 
+  // ── CATENA FINALE: costruzione (`calcFinalMods` di NCP) ──────────────────
+  // L'ordine dei push è copiato da NCP. È la catena in cui eravamo più
+  // lontani: la nostra sequenza era quasi ROVESCIATA rispetto alla sua.
+  // Il Life Orb era il PRIMO modificatore, in NCP è il penultimo; lo schermo
+  // era l'ULTIMO, in NCP è il primo; le resist berry erano seconde, in NCP
+  // chiudono la catena.
+  //
+  //   a → schermo (Reflect / Light Screen / Aurora Veil)   ×0.667  0xAAC
+  //   g → Multiscale, Shadow Shield                        ×0.5    0x800
+  //   h → Fluffy da contatto                               ×0.5    0x800
+  //   j → Ice Scales sulle mosse speciali                  ×0.5    0x800
+  //   l → Filter, Solid Rock, Prism Armor                  ×0.75   0xC00
+  //   n → Fluffy sulle mosse Fuoco                         ×2      0x2000
+  //   p → Life Orb                                         ×1.2998 0x14CC
+  //   q → resist berry                                     ×0.5    0x800
+  //
+  // Fluffy compare DUE volte, e non è una svista: le due metà stanno in punti
+  // diversi della catena (h e n). Su una mossa Fuoco a contatto si applicano
+  // entrambe e il netto è ×1, ma passando per due arrotondamenti distinti.
+  const finalMods = []
+
+  if (schermoAttivo) finalMods.push(SCREEN_MOD)
+
+  if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
+    finalMods.push(MOD.X0_5)
+  }
+  if (defAbilEffect?.fluffy && isContact)          finalMods.push(MOD.X0_5)
+  if (defAbilEffect?.iceScales && isSpecial)       finalMods.push(MOD.X0_5)
+  if (defAbilEffect?.filter && effectiveness > 1)  finalMods.push(MOD.X0_75)
+  if (defAbilEffect?.fluffy && moveType === TYPES.FIRE) finalMods.push(MOD.X2)
+
+  if (atkItemEffect?.finalMod) finalMods.push(atkItemEffect.finalMod)
+
+  // q — resist berry.
+  //
+  // ─── LA CHILAN BERRY ERA MORTA ───────────────────────────────────────────
+  // La condizione era solo `effectiveness > 1`. NCP invece accetta anche
+  // `move.type === "Normal"`: le mosse Normali non sono super efficaci contro
+  // nessun tipo, quindi con la vecchia condizione la Chilan Berry — che
+  // resiste al Normale — non si attivava MAI. Era selezionabile
+  // nell'interfaccia, è legale in Champions (`ITEMS_CHAMPIONS` in vendor/ncp),
+  // e non faceva niente in nessuna condizione.
+  //
+  // NCP salta anche le bacche contro Unnerve e As One: non modelliamo
+  // nessuna delle due, quindi il cancello non serve ancora.
+  if (defItemEffect?.resistBerry !== undefined &&
+      defItemEffect.resistBerry === moveType &&
+      (effectiveness > 1 || moveType === TYPES.NORMAL)) {
+    finalMods.push(MOD.X0_5)
+  }
+
   for (let r = 85; r <= 100; r++) {
     let damage = baseDmg
 
@@ -517,45 +618,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // Efficacia tipo
     damage = Math.floor(damage * effectiveness)
 
-    // dmgMult: moltiplicatori di danno finale (es. Life Orb)
-    // Applicato DOPO efficacia tipo — ordine Smogon
-    if (atkItemEffect?.dmgMult) {
-      const { num, den } = atkItemEffect.dmgMult
-      damage = pokeRound(damage * num / den)
-    }
-
-    // ── Moltiplicatori abilità difensore (post-efficacia, come da formula Gen6+) ─
-
-    // Resist berry: ×0.5 se il tipo corrisponde e la mossa è SE
-    if (defItemEffect?.resistBerry !== undefined && defItemEffect.resistBerry === moveType && effectiveness > 1) {
-      damage = Math.floor(damage * 0.5)
-    }
-
-    // Filter / Solid Rock: ×0.75 su super effective
-    if (defAbilEffect?.filter && effectiveness > 1) {
-      damage = Math.floor(damage * 0.75)
-    }
-
-    // Ice Scales: ×0.5 sulle mosse speciali (`calcFinalMods` punto j).
-    if (defAbilEffect?.iceScales && isSpecial) {
-      damage = Math.floor(damage * 0.5)
-    }
-
-    // Fluffy: ×0.5 da contatto, ×2 da Fire (si moltiplicano: Fire+contatto = ×1.0 netto)
-    if (defAbilEffect?.fluffy) {
-      if (isContact)              damage = Math.floor(damage * 0.5)
-      if (moveType === TYPES.FIRE) damage = Math.floor(damage * 2.0)
-    }
-
-    // Multiscale / Shadow Shield: ×0.5 danno ricevuto se HP pieni
-    // Il toggle parte true di default — l'utente lo disattiva se il Pokémon è già danneggiato
-    if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
-      damage = Math.floor(damage * 0.5)
-    }
-
-    // Schermi difensivi — un solo schermo, mai due (vedi `schermoAttivo`)
-    if (schermoAttivo) {
-      damage = pokeRound(damage * SCREEN_MOD / FIXED_POINT)
+    // ── CATENA FINALE (`calcFinalMods` di NCP) ─────────────────────────────
+    // `finalMods` è costruita UNA volta sola, fuori dal loop: non dipende dal
+    // roll. Qui dentro si applica e basta.
+    if (finalMods.length > 0) {
+      damage = pokeRound(damage * chainMods(finalMods) / FIXED_POINT)
     }
 
     rolls.push(damage)
@@ -588,7 +655,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       `⚔️  Stat attacco: ${atkStatFinal} (base ${atkBase}, SP ${atkSPs[atkStatIdx]}, boost ${atkBoostVal > 0 ? '+' : ''}${atkBoostVal}, natura ${atkNature || 'neutra'})`,
       `🛡️  Stat difesa: ${defStatFinal} (base ${defBase}, SP ${defSPs[defStatIdx]}, boost ${defBoostVal > 0 ? '+' : ''}${defBoostVal}, natura ${defNature || 'neutra'})`,
       `❤️  HP difensore: ${defHP} (base ${getBaseStat(defPokemon, STAT_HP)}, SP ${defSPs[STAT_HP]})`,
-      `💥 Potenza mossa: ${bp}${terrainBP !== bp ? ` → ${terrainBP} (terreno)` : ''}`,
+      `💥 Potenza mossa: ${effectiveBP}${modifiedBP !== effectiveBP ? ` → ${modifiedBP} (catena BP: ${bpMods.length} modificator${bpMods.length === 1 ? 'e' : 'i'})` : ''}`,
       `🌍 Spread: ${isSpread ? (field.doubleTarget ? '×0.75 ✅' : 'mossa spread, ma single target ⚠️') : '❌'}`,
       `🎯 STAB: ${stab > 1 ? `×${stab} ✅` : '×1 ❌'}`,
       `🔥 Efficacia: ×${effectiveness}${effectiveness === 2 ? ' 🔥' : effectiveness === 4 ? ' 🔥🔥' : effectiveness === 0.5 ? ' ❄️' : ''}`,

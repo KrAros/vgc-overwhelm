@@ -1,11 +1,26 @@
 import { TYPES } from './typeChart.js'
+import { MOD } from '../lib/modifiers.js'
 
 // Effetti meccanici degli item sui calcoli danno.
-// atkMult:    moltiplica la stat d'attacco usata nel calcolo
-// defMult:    moltiplica la stat di difesa fisica
-// spdMult:    moltiplica la stat di difesa speciale
-// typBoost:   moltiplica il danno se il tipo della mossa coincide (TYPES.X)
-// statType:   restringe atkMult a 'physical' o 'special' (per Choice items)
+//
+// atkMult:    moltiplica la stat d'attacco (catena ATTACCO — solo i Choice)
+// defMult:    moltiplica la stat di difesa fisica (catena DIFESA)
+// spdMult:    moltiplica la stat di difesa speciale (catena DIFESA)
+// bpMod:      modificatore di POTENZA in virgola fissa (catena BP)
+// finalMod:   modificatore di DANNO FINALE in virgola fissa (catena FINALE)
+// typBoost:   tipo richiesto perché bpMod si applichi (TYPES.X)
+// statType:   restringe atkMult/bpMod a 'physical' o 'special'
+//
+// ─── PERCHÉ bpMod E NON UN DECIMALE ────────────────────────────────────────
+// Fino a D-2 gli item type-boost e i ×1.1 erano scritti come moltiplicatori
+// della STATISTICA d'attacco (`typMult: 1.2`, `atkMult: 1.1`). Nel gioco sono
+// modificatori di POTENZA, ed è una catena diversa che arrotonda per conto
+// suo. Il valore va scritto in virgola fissa perché i decimali tondi NON sono
+// i valori veri: 0x1333/4096 = 1,19995…, non 1.2.
+//
+// E soprattutto: Muscle Band e Punching Glove hanno lo STESSO ×1.1 nominale
+// ma due costanti diverse nel gioco (0x1199 = 4505 contro 0x119A = 4506).
+// Con `atkMult: 1.1` quella distinzione non è nemmeno esprimibile.
 // resistBerry: riduce il danno subito di ×0.5 se il tipo della mossa corrisponde
 // megaStone:  slug della forma Mega corrispondente (info, no effetto danno diretto)
 // utility:    flag per item che non impattano i rolls (solo dropdown)
@@ -14,16 +29,18 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical', showInSmogon: true },
   'choice specs':   { atkMult: 1.5, statType: 'special',  showInSmogon: true },
-  'life orb':       { dmgMult: { num: 5324, den: 4096 },    showInSmogon: true },
+  // Life Orb: modificatore di DANNO FINALE (`calcFinalMods` punto p).
+  // 0x14CC = 5324, cioè ×1,29980… — non ×1.3. La differenza è reale.
+  'life orb':       { finalMod: MOD.X1_3_ORB,               showInSmogon: true },
   // ×1.1 su mosse fisiche / speciali rispettivamente
-  'muscle band':    { atkMult: 1.1, statType: 'physical',  showInSmogon: true },
-  'wise glasses':   { atkMult: 1.1, statType: 'special',   showInSmogon: true },
+  'muscle band':    { bpMod: MOD.X1_1, statType: 'physical',  showInSmogon: true },
+  'wise glasses':   { bpMod: MOD.X1_1, statType: 'special',   showInSmogon: true },
   // ×1.1 su mosse da pugno (ignora l'effetto aggiuntivo sull'abilità)
   // Punching Glove: ×1.1, ma solo sulle mosse pugno — non su tutte le fisiche
   // come facevamo prima. Il flag `punch` in moves.json arriva dalla stessa
   // generazione di `canEvolve`. In NCP toglie anche il contatto alla mossa
   // (`damage_MASTER.js` riga 826): quello lo modelliamo qui sotto nel motore.
-  'punching glove': { atkMult: 1.1, soloMossePugno: true,  showInSmogon: true },
+  'punching glove': { bpMod: MOD.X1_1_ALT, soloMossePugno: true,  showInSmogon: true },
   // Orb leggendari: ×1.2 su Dragon/Steel per Dialga, Water/Dragon per Palkia,
   // Ghost/Dragon per Giratina. Qui senza logica di filtro tipo — mostrati sempre.
   'adamant orb':    { showInSmogon: true },
@@ -35,46 +52,46 @@ export const ITEM_EFFECTS = {
   'booster energy': { showInSmogon: true },
 
   // ── Type-boosting ×1.2 ────────────────────────────────────────────────────
-  'silk scarf':     { typBoost: TYPES.NORMAL,   typMult: 1.2, showInSmogon: true },
-  'black belt':     { typBoost: TYPES.FIGHTING, typMult: 1.2, showInSmogon: true },
-  'sharp beak':     { typBoost: TYPES.FLYING,   typMult: 1.2, showInSmogon: true },
-  'poison barb':    { typBoost: TYPES.POISON,   typMult: 1.2, showInSmogon: true },
-  'soft sand':      { typBoost: TYPES.GROUND,   typMult: 1.2, showInSmogon: true },
-  'hard stone':     { typBoost: TYPES.ROCK,     typMult: 1.2, showInSmogon: true },
-  'spell tag':      { typBoost: TYPES.GHOST,    typMult: 1.2, showInSmogon: true },
-  'metal coat':     { typBoost: TYPES.STEEL,    typMult: 1.2, showInSmogon: true },
-  'charcoal':       { typBoost: TYPES.FIRE,     typMult: 1.2, showInSmogon: true },
-  'mystic water':   { typBoost: TYPES.WATER,    typMult: 1.2, showInSmogon: true },
-  'miracle seed':   { typBoost: TYPES.GRASS,    typMult: 1.2, showInSmogon: true },
-  'magnet':         { typBoost: TYPES.ELECTRIC, typMult: 1.2, showInSmogon: true },
-  'twisted spoon':  { typBoost: TYPES.PSYCHIC,  typMult: 1.2, showInSmogon: true },
-  'never-melt-ice': { typBoost: TYPES.ICE,      typMult: 1.2, showInSmogon: true },
+  'silk scarf':     { typBoost: TYPES.NORMAL,   bpMod: MOD.X1_2, showInSmogon: true },
+  'black belt':     { typBoost: TYPES.FIGHTING, bpMod: MOD.X1_2, showInSmogon: true },
+  'sharp beak':     { typBoost: TYPES.FLYING,   bpMod: MOD.X1_2, showInSmogon: true },
+  'poison barb':    { typBoost: TYPES.POISON,   bpMod: MOD.X1_2, showInSmogon: true },
+  'soft sand':      { typBoost: TYPES.GROUND,   bpMod: MOD.X1_2, showInSmogon: true },
+  'hard stone':     { typBoost: TYPES.ROCK,     bpMod: MOD.X1_2, showInSmogon: true },
+  'spell tag':      { typBoost: TYPES.GHOST,    bpMod: MOD.X1_2, showInSmogon: true },
+  'metal coat':     { typBoost: TYPES.STEEL,    bpMod: MOD.X1_2, showInSmogon: true },
+  'charcoal':       { typBoost: TYPES.FIRE,     bpMod: MOD.X1_2, showInSmogon: true },
+  'mystic water':   { typBoost: TYPES.WATER,    bpMod: MOD.X1_2, showInSmogon: true },
+  'miracle seed':   { typBoost: TYPES.GRASS,    bpMod: MOD.X1_2, showInSmogon: true },
+  'magnet':         { typBoost: TYPES.ELECTRIC, bpMod: MOD.X1_2, showInSmogon: true },
+  'twisted spoon':  { typBoost: TYPES.PSYCHIC,  bpMod: MOD.X1_2, showInSmogon: true },
+  'never-melt-ice': { typBoost: TYPES.ICE,      bpMod: MOD.X1_2, showInSmogon: true },
   // Variante senza trattino — anche ReportPanel usa questa forma per Never-Melt Ice
-  'never-melt ice': { typBoost: TYPES.ICE,      typMult: 1.2, showInSmogon: true },
-  'dragon fang':    { typBoost: TYPES.DRAGON,   typMult: 1.2, showInSmogon: true },
-  'black glasses':  { typBoost: TYPES.DARK,     typMult: 1.2, showInSmogon: true },
-  'silver powder':  { typBoost: TYPES.BUG,      typMult: 1.2, showInSmogon: true },
+  'never-melt ice': { typBoost: TYPES.ICE,      bpMod: MOD.X1_2, showInSmogon: true },
+  'dragon fang':    { typBoost: TYPES.DRAGON,   bpMod: MOD.X1_2, showInSmogon: true },
+  'black glasses':  { typBoost: TYPES.DARK,     bpMod: MOD.X1_2, showInSmogon: true },
+  'silver powder':  { typBoost: TYPES.BUG,      bpMod: MOD.X1_2, showInSmogon: true },
   // Fairy Feather: ×1.2 su mosse Fairy (introdotto in Scarlet/Violet)
-  'fairy feather':  { typBoost: TYPES.FAIRY,    typMult: 1.2, showInSmogon: true },
+  'fairy feather':  { typBoost: TYPES.FAIRY,    bpMod: MOD.X1_2, showInSmogon: true },
 
   // ── Plates ×1.2 ───────────────────────────────────────────────────────────
-  'flame plate':    { typBoost: TYPES.FIRE,     typMult: 1.2, showInSmogon: true },
-  'splash plate':   { typBoost: TYPES.WATER,    typMult: 1.2, showInSmogon: true },
-  'zap plate':      { typBoost: TYPES.ELECTRIC, typMult: 1.2, showInSmogon: true },
-  'meadow plate':   { typBoost: TYPES.GRASS,    typMult: 1.2, showInSmogon: true },
-  'icicle plate':   { typBoost: TYPES.ICE,      typMult: 1.2, showInSmogon: true },
-  'fist plate':     { typBoost: TYPES.FIGHTING, typMult: 1.2, showInSmogon: true },
-  'toxic plate':    { typBoost: TYPES.POISON,   typMult: 1.2, showInSmogon: true },
-  'earth plate':    { typBoost: TYPES.GROUND,   typMult: 1.2, showInSmogon: true },
-  'sky plate':      { typBoost: TYPES.FLYING,   typMult: 1.2, showInSmogon: true },
-  'mind plate':     { typBoost: TYPES.PSYCHIC,  typMult: 1.2, showInSmogon: true },
-  'insect plate':   { typBoost: TYPES.BUG,      typMult: 1.2, showInSmogon: true },
-  'stone plate':    { typBoost: TYPES.ROCK,     typMult: 1.2, showInSmogon: true },
-  'spooky plate':   { typBoost: TYPES.GHOST,    typMult: 1.2, showInSmogon: true },
-  'draco plate':    { typBoost: TYPES.DRAGON,   typMult: 1.2, showInSmogon: true },
-  'dread plate':    { typBoost: TYPES.DARK,     typMult: 1.2, showInSmogon: true },
-  'iron plate':     { typBoost: TYPES.STEEL,    typMult: 1.2, showInSmogon: true },
-  'pixie plate':    { typBoost: TYPES.FAIRY,    typMult: 1.2, showInSmogon: true },
+  'flame plate':    { typBoost: TYPES.FIRE,     bpMod: MOD.X1_2, showInSmogon: true },
+  'splash plate':   { typBoost: TYPES.WATER,    bpMod: MOD.X1_2, showInSmogon: true },
+  'zap plate':      { typBoost: TYPES.ELECTRIC, bpMod: MOD.X1_2, showInSmogon: true },
+  'meadow plate':   { typBoost: TYPES.GRASS,    bpMod: MOD.X1_2, showInSmogon: true },
+  'icicle plate':   { typBoost: TYPES.ICE,      bpMod: MOD.X1_2, showInSmogon: true },
+  'fist plate':     { typBoost: TYPES.FIGHTING, bpMod: MOD.X1_2, showInSmogon: true },
+  'toxic plate':    { typBoost: TYPES.POISON,   bpMod: MOD.X1_2, showInSmogon: true },
+  'earth plate':    { typBoost: TYPES.GROUND,   bpMod: MOD.X1_2, showInSmogon: true },
+  'sky plate':      { typBoost: TYPES.FLYING,   bpMod: MOD.X1_2, showInSmogon: true },
+  'mind plate':     { typBoost: TYPES.PSYCHIC,  bpMod: MOD.X1_2, showInSmogon: true },
+  'insect plate':   { typBoost: TYPES.BUG,      bpMod: MOD.X1_2, showInSmogon: true },
+  'stone plate':    { typBoost: TYPES.ROCK,     bpMod: MOD.X1_2, showInSmogon: true },
+  'spooky plate':   { typBoost: TYPES.GHOST,    bpMod: MOD.X1_2, showInSmogon: true },
+  'draco plate':    { typBoost: TYPES.DRAGON,   bpMod: MOD.X1_2, showInSmogon: true },
+  'dread plate':    { typBoost: TYPES.DARK,     bpMod: MOD.X1_2, showInSmogon: true },
+  'iron plate':     { typBoost: TYPES.STEEL,    bpMod: MOD.X1_2, showInSmogon: true },
+  'pixie plate':    { typBoost: TYPES.FAIRY,    bpMod: MOD.X1_2, showInSmogon: true },
   // Legend Plate: Arceus usa il tipo della forma — mostrata sempre in Smogon
   'legend plate':   { showInSmogon: true },
 
