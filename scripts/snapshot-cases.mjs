@@ -515,7 +515,28 @@ function aggiungi(blocco, etichetta, input) {
 {
   // Difensore capace di evolversi: serve per far coesistere Eviolite e Fur Coat
   // nella catena di difesa. Nessun difensore preesistente ha canEvolve.
-  const dusclops = def('dusclops', 'bold', SP.difensore)
+  //
+  // ─── DUE TENTATIVI PRIMA DI TROVARE UN CASO CHE DICA QUALCOSA ────────────
+  // Fur Coat (×2) ed Eviolite (×1.5) concatenati danno esattamente ×3:
+  //
+  //     vecchio:  floor(floor(Def × 1.5) × 2)
+  //     nuovo:    pokeRound(Def × 3)
+  //
+  // 1° tentativo — Dusclops, Def 184. Le due formule divergono solo con Def
+  //    DISPARI: con Def pari `floor(×1.5)` non tronca niente. Caso cieco.
+  //
+  // 2° tentativo — Rhydon, Def 171 (dispari): la catena dà 512 contro 513.
+  //    Ma quel punto muore nella divisione `22 × BP × Atk / Def`, e il danno
+  //    esce identico. Anche col vecchio motore: 16/16 contro NCP. Ancora cieco.
+  //
+  // 3° — Chansey, Def 27: la catena dà 80 contro 81, e con una Difesa così
+  //    bassa un punto vale lo 1,2%. Il danno base passa da 90 a 88. QUESTO
+  //    caso sa distinguere le due formule.
+  //
+  // Morale: perché un caso serva non basta che la condizione sia presente,
+  // deve anche SOPRAVVIVERE fino al numero che confrontiamo.
+  const dusclops = def('dusclops', 'bold', SP.difensore)              // Def 184 — cieco, tenuto come controllo
+  const chansey  = def('chansey', 'bold', [32, 0, 0, 0, 32, 0])       // Def 27  — osservabile
 
   // ── Catena FINALE: >=2 modificatori ──────────────────────────────────────
   // Ordine NCP: schermo -> Multiscale -> Fluffy -> Ice Scales -> Filter ->
@@ -573,6 +594,44 @@ function aggiungi(blocco, etichetta, input) {
     })
   }
 
+  // ── Catena ATTACCO: configurazioni OSSERVABILI ───────────────────────────
+  // I casi qui sopra attivano le combinazioni giuste ma sono CIECHI: gli
+  // attaccanti che usano hanno statistiche pari (Chien-Pao 172, Incineroar
+  // 166, Iron Bundle 176, Garchomp 200) e il riordino della catena cambia la
+  // statistica solo di un punto, che poi muore nella divisione per la Difesa.
+  //
+  // Questi sotto sono stati TROVATI, non scelti: uno script ha girato vecchio
+  // e nuovo motore fianco a fianco su ogni combinazione di specie, natura e
+  // SP, tenendo solo quelle in cui i roll cambiano davvero. Su ognuna il
+  // vecchio motore divergeva da NCP e il nuovo lo azzecca 16/16.
+  const attacchiOsservabili = [
+    // nome                     attaccante     natura      SP           item             abilità        difensore   abil.dif.        mossa
+    ['band+thickfat',          'chienpao',    'adamant',  SP.fisico,   'choice band',   null,          'ursaluna', 'thick fat',      'icicle crash'],
+    ['specs+purifsalt',        'gholdengo',   'timid',    [0,0,0,24,0,30], 'choice specs', null,       'ironhands','purifying salt', 'shadow ball'],
+    ['firemane+band',          'incineroar',  'adamant',  SP.fisico,   'choice band',   'fire mane',   'amoonguss', null,            'flare blitz'],
+    ['firemane+thickfat',      'incineroar',  'jolly',    SP.fisico,   null,            'fire mane',   'ursaluna', 'thick fat',      'flare blitz'],
+    ['hugepower+band',         'garchomp',    'adamant',  [0,0,0,0,0,30], 'choice band', 'huge power',  'incineroar', null,           'dragon claw'],
+    ['waterbubble+specs',      'pelipper',    'timid',    SP.speciale, 'choice specs',  'water bubble','torkoal',  null,             'hydro pump'],
+  ]
+  for (const [nome, ap, anat, asps, item, abil, dp, dabil, mv] of attacchiOsservabili) {
+    aggiungi('B9', `at-oss-${nome}`, {
+      attacker: atk(ap, anat, asps, { atkItem: item, atkAbility: abil }),
+      defender: def(dp, 'careful', SP.difensore, { defAbility: dabil }),
+      move: mv,
+      field: field(),
+    })
+  }
+  // Flash Fire va acceso a mano: senza il flag l'abilità è solo un'immunità.
+  aggiungi('B9', 'at-oss-flashfire+band', {
+    attacker: atk('incineroar', 'adamant', SP.fisico, {
+      atkItem: 'choice band', atkAbility: 'flash fire',
+      atkAbilityFlags: { flashFireActive: true },
+    }),
+    defender: def('amoonguss', 'careful', SP.difensore),
+    move: 'flare blitz',
+    field: field(),
+  })
+
   // ── Catena DIFESA: >=2 modificatori ──────────────────────────────────────
   // Ordine NCP: Fur Coat -> Eviolite/Assault Vest. Da noi è l'inverso.
   // Fur Coat e Assault Vest NON coesistono mai: il primo vale solo sul fisico,
@@ -598,6 +657,31 @@ function aggiungi(blocco, etichetta, input) {
   })
   aggiungi('B9', 'df-solo-eviolite', {
     attacker: A.chompClaw[0], defender: { ...dusclops, defItem: 'eviolite' },
+    move: A.chompClaw[1], field: field(),
+  })
+
+  // Gli stessi casi su Chansey (Def 27): QUESTI sanno distinguere la catena
+  // concatenata dal vecchio troncamento a ogni passo.
+  const difeseDispari = [
+    ['furcoat+eviolite-claw',  A.chompClaw,   {}],
+    ['furcoat+eviolite-crunch',A.chienCrunch, {}],
+    ['furcoat+eviolite-crit',  A.chompClaw,   { crit: true }],
+    ['furcoat+eviolite-hh',    A.chompClaw,   { helpingHand: true }],
+  ]
+  for (const [nome, coppia, extraField] of difeseDispari) {
+    aggiungi('B9', `df-chansey-${nome}`, {
+      attacker: coppia[0],
+      defender: { ...chansey, defAbility: 'fur coat', defItem: 'eviolite' },
+      move: coppia[1],
+      field: field(extraField),
+    })
+  }
+  aggiungi('B9', 'df-chansey-solo-furcoat', {
+    attacker: A.chompClaw[0], defender: { ...chansey, defAbility: 'fur coat' },
+    move: A.chompClaw[1], field: field(),
+  })
+  aggiungi('B9', 'df-chansey-solo-eviolite', {
+    attacker: A.chompClaw[0], defender: { ...chansey, defItem: 'eviolite' },
     move: A.chompClaw[1], field: field(),
   })
 
