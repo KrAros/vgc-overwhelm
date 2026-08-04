@@ -485,6 +485,264 @@ function aggiungi(blocco, etichetta, input) {
   })
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// B9 — Catene di modificatori (sessione D-2)
+//
+// PERCHÉ ESISTE QUESTO BLOCCO.
+// `chainMods` concatena i modificatori in virgola fissa e arrotonda UNA volta
+// sola, invece di troncare dopo ognuno. Con zero o un modificatore nella stessa
+// catena le due formule danno lo stesso numero: la differenza si vede solo da
+// DUE in su.
+//
+// Misurato sui 318 casi preesistenti, per catena:
+//     potenza  239 casi a 0 mod · 77 a 1 · SOLO 2 a >=2
+//     attacco  307 a 0 · 11 a 1 · ZERO a >=2
+//     difesa   312 a 0 ·  6 a 1 · ZERO a >=2
+//     finale   278 a 0 · 40 a 1 · ZERO a >=2
+//
+// Cioè: senza questo blocco, `chainMods` passerebbe tutti i test restando
+// completamente non verificato su tre catene su quattro. I casi vanno quindi
+// generati PRIMA di toccare il motore.
+//
+// I nomi delle catene seguono NCP (vendor/ncp/damage_MASTER.js):
+//   bp = calcBPMods · at = calcAtMods · df = calcDefMods · fn = calcFinalMods
+//
+// VINCOLO: con uno schermo attivo la mossa deve essere NON-spread, altrimenti
+// l'harness NCP dichiara il caso inesprimibile (in NCP il formato governa
+// insieme penalità d'area e moltiplicatore dello schermo).
+// ═══════════════════════════════════════════════════════════════════════════
+
+{
+  // Difensore capace di evolversi: serve per far coesistere Eviolite e Fur Coat
+  // nella catena di difesa. Nessun difensore preesistente ha canEvolve.
+  const dusclops = def('dusclops', 'bold', SP.difensore)
+
+  // ── Catena FINALE: >=2 modificatori ──────────────────────────────────────
+  // Ordine NCP: schermo -> Multiscale -> Fluffy -> Ice Scales -> Filter ->
+  //             Life Orb -> resist berry. Da noi oggi è quasi rovesciato.
+  const finali = [
+    ['lifeorb+reflect',      A.chompClaw,  { ...D.incin },                                  { atkItem: 'life orb' }, { reflect: true }],
+    ['lifeorb+lightscreen',  A.fluttMoon,  { ...D.hands },                                  { atkItem: 'life orb' }, { lightScreen: true }],
+    ['lifeorb+auroraveil',   A.chienCrunch,{ ...D.gold },                                   { atkItem: 'life orb' }, { auroraVeil: true }],
+    ['lifeorb+multiscale',   A.chompClaw,  { ...D.dragonite, defAbility: 'multiscale' },    { atkItem: 'life orb' }, {}],
+    ['multiscale+reflect',   A.chompClaw,  { ...D.dragonite, defAbility: 'multiscale' },    {},                      { reflect: true }],
+    ['multiscale+berry',     A.chienIcicle,{ ...D.dragonite, defAbility: 'multiscale', defItem: 'yache berry' }, {}, {}],
+    ['filter+berry',         A.chienCrunch,{ ...D.gold, defAbility: 'filter', defItem: 'colbur berry' }, {},         {}],
+    ['icescales+lightscreen',A.fluttMoon,  { ...D.hands, defAbility: 'ice scales' },        {},                      { lightScreen: true }],
+    ['fluffy+reflect',       A.chompClaw,  { ...D.incin, defAbility: 'fluffy' },            {},                      { reflect: true }],
+    ['lifeorb+icescales',    A.fluttMoon,  { ...D.hands, defAbility: 'ice scales' },        { atkItem: 'life orb' }, {}],
+    ['fluffy+fuoco+lifeorb', A.incinFlare, { ...D.amoon, defAbility: 'fluffy' },            { atkItem: 'life orb' }, {}],
+    // tre modificatori nella stessa catena
+    ['filter+lifeorb+reflect', A.chienCrunch, { ...D.gold, defAbility: 'filter' },          { atkItem: 'life orb' }, { reflect: true }],
+    ['filter+lifeorb+berry',   A.chienCrunch, { ...D.gold, defAbility: 'filter', defItem: 'colbur berry' }, { atkItem: 'life orb' }, {}],
+    ['multiscale+lifeorb+veil',A.chompClaw,   { ...D.dragonite, defAbility: 'multiscale' }, { atkItem: 'life orb' }, { auroraVeil: true }],
+  ]
+  for (const [nome, coppia, difensore, extraAtk, extraField] of finali) {
+    aggiungi('B9', `fn-${nome}`, {
+      attacker: { ...coppia[0], ...extraAtk },
+      defender: difensore,
+      move: coppia[1],
+      field: field(extraField),
+    })
+  }
+
+  // ── Catena ATTACCO: >=2 modificatori ─────────────────────────────────────
+  // Ordine NCP: Fire Mane/Flash Fire -> Water Bubble/Huge Power ->
+  //             abilità difensive x0.5 -> Choice Band/Specs.
+  // Da noi la Choice Band è la PRIMA invece che l'ultima.
+  const attacchi = [
+    ['choiceband+thickfat',    A.chienIcicle, { ...D.ursa, defAbility: 'thick fat' },        { atkItem: 'choice band' }],
+    // NB: il difensore NON può essere di tipo Normale — sarebbe immune a Ghost
+    // e il caso non misurerebbe niente. Iron Hands (Fighting/Electric) prende 1x.
+    ['choicespecs+purifsalt',  A.fluttShadow, { ...D.hands, defAbility: 'purifying salt' }, { atkItem: 'choice specs' }],
+    ['firemane+choiceband',    A.incinFlare,  { ...D.amoon },                                { atkAbility: 'fire mane', atkItem: 'choice band' }],
+    ['firemane+thickfat',      A.incinFlare,  { ...D.ursa, defAbility: 'thick fat' },        { atkAbility: 'fire mane' }],
+    ['firemane+heatproof',     A.incinFlare,  { ...D.registeel, defAbility: 'heatproof' },   { atkAbility: 'fire mane' }],
+    ['waterbubble+choicespecs',A.bundleHydro, { ...D.torkoal },                              { atkAbility: 'water bubble', atkItem: 'choice specs' }],
+    ['hugepower+choiceband',   A.chompClaw,   { ...D.incin },                                { atkAbility: 'huge power', atkItem: 'choice band' }],
+    ['flashfire+choiceband',   A.incinFlare,  { ...D.amoon },                                { atkAbility: 'flash fire', atkItem: 'choice band', atkAbilityFlags: { flashFireActive: true } }],
+    // tre nella stessa catena
+    ['firemane+thickfat+band', A.incinFlare,  { ...D.ursa, defAbility: 'thick fat' },        { atkAbility: 'fire mane', atkItem: 'choice band' }],
+  ]
+  for (const [nome, coppia, difensore, extraAtk] of attacchi) {
+    aggiungi('B9', `at-${nome}`, {
+      attacker: { ...coppia[0], ...extraAtk },
+      defender: difensore,
+      move: coppia[1],
+      field: field(),
+    })
+  }
+
+  // ── Catena DIFESA: >=2 modificatori ──────────────────────────────────────
+  // Ordine NCP: Fur Coat -> Eviolite/Assault Vest. Da noi è l'inverso.
+  // Fur Coat e Assault Vest NON coesistono mai: il primo vale solo sul fisico,
+  // il secondo solo sullo speciale. L'unica coppia possibile è con Eviolite.
+  const difese = [
+    ['furcoat+eviolite-claw',  A.chompClaw,   {}],
+    ['furcoat+eviolite-crunch',A.chienCrunch, {}],
+    ['furcoat+eviolite-crit',  A.chompClaw,   { crit: true }],
+    ['furcoat+eviolite-hh',    A.chompClaw,   { helpingHand: true }],
+  ]
+  for (const [nome, coppia, extraField] of difese) {
+    aggiungi('B9', `df-${nome}`, {
+      attacker: coppia[0],
+      defender: { ...dusclops, defAbility: 'fur coat', defItem: 'eviolite' },
+      move: coppia[1],
+      field: field(extraField),
+    })
+  }
+  // Controlli a un modificatore solo, per isolare il contributo di ciascuno
+  aggiungi('B9', 'df-solo-furcoat', {
+    attacker: A.chompClaw[0], defender: { ...dusclops, defAbility: 'fur coat' },
+    move: A.chompClaw[1], field: field(),
+  })
+  aggiungi('B9', 'df-solo-eviolite', {
+    attacker: A.chompClaw[0], defender: { ...dusclops, defItem: 'eviolite' },
+    move: A.chompClaw[1], field: field(),
+  })
+
+  // ── Catena POTENZA: >=2 modificatori ─────────────────────────────────────
+  // Ordine NCP: ate -> Tough Claws -> Muscle Band -> type-boost -> Knock Off ->
+  //             Helping Hand -> terreno -> Supreme Overlord -> Punching Glove.
+  // Da noi il terreno è il PRIMO invece che il penultimo.
+  const potenze = [
+    ['typeboost+terrain',      A.rillaWood,  { atkItem: 'miracle seed' },                        { terrain: 'grassy' }],
+    ['muscleband+terrain',     A.rillaWood,  { atkItem: 'muscle band' },                         { terrain: 'grassy' }],
+    ['toughclaws+terrain',     A.rillaWood,  { atkAbility: 'tough claws' },                      { terrain: 'grassy' }],
+    ['helpinghand+terrain',    A.rillaWood,  {},                                                 { terrain: 'grassy', helpingHand: true }],
+    ['helpinghand+typeboost',  A.rillaWood,  { atkItem: 'miracle seed' },                        { helpingHand: true }],
+    ['toughclaws+helpinghand', A.chompClaw,  { atkAbility: 'tough claws' },                      { helpingHand: true }],
+    ['toughclaws+typeboost',   A.rillaWood,  { atkAbility: 'tough claws', atkItem: 'miracle seed' }, {}],
+    ['knockoff+helpinghand',   A.incinKnock, {},                                                 { helpingHand: true }],
+    ['punchglove+helpinghand', A.handsPunch, { atkItem: 'punching glove' },                      { helpingHand: true }],
+    ['ate+helpinghand',        A.dragoSpeed, { atkAbility: 'pixilate' },                         { helpingHand: true }],
+    ['ate+typeboost',          A.dragoSpeed, { atkAbility: 'pixilate', atkItem: 'fairy feather' }, {}],
+    ['overlord+helpinghand',   A.kingIron,   { atkAbility: 'supreme overlord', atkAbilityFlags: { supremeOverlordKOs: 2 } }, { helpingHand: true }],
+    ['overlord+typeboost',     A.kingIron,   { atkAbility: 'supreme overlord', atkItem: 'metal coat', atkAbilityFlags: { supremeOverlordKOs: 2 } }, {}],
+    ['overlord+terrain',       A.rillaWood,  { atkAbility: 'supreme overlord', atkAbilityFlags: { supremeOverlordKOs: 3 } }, { terrain: 'grassy' }],
+    // tre nella stessa catena
+    ['typeboost+terrain+hh',   A.rillaWood,  { atkItem: 'miracle seed' },                        { terrain: 'grassy', helpingHand: true }],
+    ['toughclaws+terrain+hh',  A.rillaWood,  { atkAbility: 'tough claws' },                      { terrain: 'grassy', helpingHand: true }],
+    ['ate+typeboost+hh',       A.dragoSpeed, { atkAbility: 'pixilate', atkItem: 'fairy feather' }, { helpingHand: true }],
+  ]
+  for (const [nome, coppia, extraAtk, extraField] of potenze) {
+    aggiungi('B9', `bp-${nome}`, {
+      attacker: { ...coppia[0], ...extraAtk },
+      defender: D.incin,
+      move: coppia[1],
+      field: field(extraField),
+    })
+  }
+
+  // ── Catene incrociate ────────────────────────────────────────────────────
+  // Modificatori in catene DIVERSE contemporaneamente: verificano che le
+  // quattro catene restino separate invece di mescolarsi.
+  aggiungi('B9', 'cross-terrain+lifeorb+multiscale', {
+    attacker: { ...A.rillaWood[0], atkItem: 'life orb' },
+    defender: { ...D.dragonite, defAbility: 'multiscale' },
+    move: A.rillaWood[1],
+    field: field({ terrain: 'grassy' }),
+  })
+  aggiungi('B9', 'cross-band+terrain+reflect', {
+    attacker: { ...A.rillaWood[0], atkItem: 'choice band' },
+    defender: D.incin,
+    move: A.rillaWood[1],
+    field: field({ terrain: 'grassy', reflect: true }),
+  })
+  aggiungi('B9', 'cross-typeboost+furcoat', {
+    attacker: { ...A.chompClaw[0], atkItem: 'dragon fang' },
+    defender: { ...dusclops, defAbility: 'fur coat', defItem: 'eviolite' },
+    move: A.chompClaw[1],
+    field: field(),
+  })
+
+  // ── Critico + boost ──────────────────────────────────────────────────────
+  // D ha corretto il critico perché ignori i cali d'attacco e i boost di
+  // difesa, ma NESSUN caso di caratterizzazione mette insieme le due cose:
+  // `snapshot:diff` uscì a zero. Qui si copre il buco.
+  const critBoost = [
+    ['atk+2',        2,  0],
+    ['atk-2',       -2,  0],
+    ['def+2',        0,  2],
+    ['def-2',        0, -2],
+    ['atk+2_def+2',  2,  2],
+    ['atk-2_def+2', -2,  2],
+    ['atk+2_def-2',  2, -2],
+  ]
+  for (const [nome, aB, dB] of critBoost) {
+    aggiungi('B9', `crit-boost-${nome}`, {
+      attacker: { ...A.chompClaw[0], atkBoost: aB },
+      defender: { ...D.incin, defBoost: dB },
+      move: A.chompClaw[1],
+      field: field({ crit: true }),
+    })
+    // stessa coppia senza critico: il confronto isola l'effetto del critico
+    aggiungi('B9', `nocrit-boost-${nome}`, {
+      attacker: { ...A.chompClaw[0], atkBoost: aB },
+      defender: { ...D.incin, defBoost: dB },
+      move: A.chompClaw[1],
+      field: field(),
+    })
+  }
+  // Critico + boost + schermo: il critico deve bucare lo schermo E ignorare
+  // il boost di difesa nello stesso calcolo.
+  aggiungi('B9', 'crit-boost-reflect', {
+    attacker: { ...A.chompClaw[0], atkBoost: 2 },
+    defender: { ...D.incin, defBoost: 2 },
+    move: A.chompClaw[1],
+    field: field({ crit: true, reflect: true }),
+  })
+
+  // ── Fire Mane e Punching Glove: singoli aggiuntivi ───────────────────────
+  // Un caso ciascuno esiste già (B6-007, B5-009/010), ma coprono una sola
+  // combinazione. Qui si aggiungono le varianti che D ha toccato.
+  aggiungi('B9', 'solo-firemane-crit', {
+    attacker: { ...A.incinFlare[0], atkAbility: 'fire mane' },
+    defender: D.amoon, move: A.incinFlare[1], field: field({ crit: true }),
+  })
+  aggiungi('B9', 'solo-firemane-sole', {
+    attacker: { ...A.incinFlare[0], atkAbility: 'fire mane' },
+    defender: D.amoon, move: A.incinFlare[1], field: field({ weather: 'sun' }),
+  })
+  // Punching Glove toglie il contatto: con Tough Claws il bonus NON si applica.
+  aggiungi('B9', 'solo-punchglove+toughclaws', {
+    attacker: { ...A.handsPunch[0], atkItem: 'punching glove', atkAbility: 'tough claws' },
+    defender: D.incin, move: A.handsPunch[1], field: field(),
+  })
+  aggiungi('B9', 'solo-toughclaws-senza-glove', {
+    attacker: { ...A.handsPunch[0], atkAbility: 'tough claws' },
+    defender: D.incin, move: A.handsPunch[1], field: field(),
+  })
+
+  // ── Chilan Berry: nasce DIVERGENTE, deve rovesciarsi ─────────────────────
+  // NCP attiva le resist berry con `typeEffectiveness > 1 || move.type ===
+  // "Normal"`. Noi richiediamo solo `effectiveness > 1`, quindi la Chilan
+  // Berry — che resiste al Normale, e il Normale non è super efficace contro
+  // nulla — oggi non fa NIENTE, pur essendo selezionabile nell'interfaccia
+  // ed essendo legale in Champions (ITEMS_CHAMPIONS in vendor/ncp).
+  // Questi casi devono nascere `divergente` e diventare `concorde`.
+  aggiungi('B9', 'chilan-normale-incin', {
+    attacker: A.dragoSpeed[0], defender: { ...D.incin, defItem: 'chilan berry' },
+    move: A.dragoSpeed[1], field: field(),
+  })
+  aggiungi('B9', 'chilan-normale-amoon', {
+    attacker: A.dragoSpeed[0], defender: { ...D.amoon, defItem: 'chilan berry' },
+    move: A.dragoSpeed[1], field: field(),
+  })
+  aggiungi('B9', 'chilan-normale-lifeorb', {
+    attacker: { ...A.dragoSpeed[0], atkItem: 'life orb' },
+    defender: { ...D.incin, defItem: 'chilan berry' },
+    move: A.dragoSpeed[1], field: field(),
+  })
+  // Controllo negativo: con Pixilate la mossa diventa Fairy, quindi la Chilan
+  // NON deve attivarsi né prima né dopo la correzione.
+  aggiungi('B9', 'chilan-ate-fairy', {
+    attacker: { ...A.dragoSpeed[0], atkAbility: 'pixilate' },
+    defender: { ...D.incin, defItem: 'chilan berry' },
+    move: A.dragoSpeed[1], field: field(),
+  })
+}
+
 // ─── Tag derivati ──────────────────────────────────────────────────────────
 
 /**
