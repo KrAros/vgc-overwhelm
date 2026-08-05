@@ -256,18 +256,29 @@ describe('lib/stats — getBaseStat', () => {
     expect(pokemonData.aegislash.stats[STAT_ATT]).toBe(50)
     expect(pokemonData.aegislash.stats[STAT_SPA]).toBe(50)
     // Ma Stance Change lo porta in forma Spada nel momento in cui attacca.
-    expect(getBaseStat('aegislash', STAT_ATT)).toBe(150)
-    expect(getBaseStat('aegislash', STAT_SPA)).toBe(150)
+    // I 140 sono il valore di Gen 9: fino alla sessione I avevamo 150 sia nel
+    // Pokédex sia in un numero fisso dentro getBaseStat.
+    expect(getBaseStat('aegislash', STAT_ATT)).toBe(140)
+    expect(getBaseStat('aegislash', STAT_SPA)).toBe(140)
   })
 
   it('Aegislash difende con i valori della forma Scudo', () => {
-    expect(getBaseStat('aegislash', STAT_DEF)).toBe(150)
-    expect(getBaseStat('aegislash', STAT_SPD)).toBe(150)
+    expect(getBaseStat('aegislash', STAT_DEF)).toBe(140)
+    expect(getBaseStat('aegislash', STAT_SPD)).toBe(140)
     expect(getBaseStat('aegislash', STAT_HP)).toBe(60)
   })
 
   it('l\'eccezione riguarda solo aegislash, non la entry -blade', () => {
-    expect(getBaseStat('aegislash-blade', STAT_ATT)).toBe(150)
+    expect(getBaseStat('aegislash-blade', STAT_ATT)).toBe(140)
     expect(getBaseStat('aegislash-blade', STAT_DEF)).toBe(50)
+  })
+
+  it('l\'override legge la forma Spada, non un numero scritto a mano', () => {
+    // La garanzia che i due valori non possano più divergere: se un giorno
+    // `aegislash-blade` cambia, l'override lo segue da solo.
+    expect(getBaseStat('aegislash', STAT_ATT))
+      .toBe(pokemonData['aegislash-blade'].stats[STAT_ATT])
+    expect(getBaseStat('aegislash', STAT_SPA))
+      .toBe(pokemonData['aegislash-blade'].stats[STAT_SPA])
   })
 })

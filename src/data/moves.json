@@ -150,7 +150,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"gust": {
 		"num": "16",
@@ -448,7 +449,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"growl": {
 		"num": "45",
@@ -746,7 +748,8 @@
 		"category": 0,
 		"power": 55,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"slicing": true
 	},
 	"solar beam": {
 		"num": "76",
@@ -1168,7 +1171,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 0,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"lick": {
 		"num": "122",
@@ -1347,7 +1351,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 0,
 		"power": 15,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"leech life": {
 		"num": "141",
@@ -1518,7 +1523,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"sharpen": {
 		"num": "159",
@@ -1565,7 +1571,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"substitute": {
 		"num": "164",
@@ -1659,7 +1666,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"curse": {
 		"num": "174",
@@ -1800,7 +1808,8 @@
 		"zname": "Acid Downpour",
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"mud-slap": {
 		"num": "189",
@@ -1818,7 +1827,8 @@
 		"zname": "Hydro Vortex",
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"spikes": {
 		"num": "191",
@@ -1836,7 +1846,8 @@
 		"zname": "Gigavolt Havoc",
 		"category": 1,
 		"power": 120,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"foresight": {
 		"num": "193",
@@ -2004,7 +2015,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"steel wing": {
 		"num": "211",
@@ -2214,7 +2226,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"vital throw": {
 		"num": "233",
@@ -2299,7 +2312,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"mirror coat": {
 		"num": "243",
@@ -2345,7 +2359,8 @@
 		"zname": "Never-Ending Nightmare",
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"future sight": {
 		"num": "248",
@@ -2401,7 +2416,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"stockpile": {
 		"num": "254",
@@ -2801,7 +2817,8 @@
 		"zname": "Shattered Psyche",
 		"category": 1,
 		"power": 95,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"feather dance": {
 		"num": "297",
@@ -2849,7 +2866,8 @@
 		"category": 0,
 		"power": 30,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bullet": true
 	},
 	"needle arm": {
 		"num": "302",
@@ -2878,7 +2896,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"poison fang": {
 		"num": "305",
@@ -2888,7 +2907,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"crush claw": {
 		"num": "306",
@@ -2898,7 +2918,8 @@
 		"category": 0,
 		"power": 75,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"blast burn": {
 		"num": "307",
@@ -2946,7 +2967,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"aromatherapy": {
 		"num": "312",
@@ -2974,7 +2996,8 @@
 		"category": 1,
 		"power": 60,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"slicing": true
 	},
 	"overheat": {
 		"num": "315",
@@ -3133,7 +3156,8 @@
 		"zname": "Bloom Doom",
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"aerial ace": {
 		"num": "332",
@@ -3143,7 +3167,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"icicle spear": {
 		"num": "333",
@@ -3189,7 +3214,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"frenzy plant": {
 		"num": "338",
@@ -3300,7 +3326,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"dragon dance": {
 		"num": "349",
@@ -3318,7 +3345,8 @@
 		"zname": "Continental Crush",
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"shock wave": {
 		"num": "351",
@@ -3412,7 +3440,8 @@
 		"category": 0,
 		"power": 0,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bullet": true
 	},
 	"healing wish": {
 		"num": "361",
@@ -3755,7 +3784,8 @@
 		"zname": "All-Out Pummeling",
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"rock polish": {
 		"num": "397",
@@ -3793,7 +3823,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"aqua tail": {
 		"num": "401",
@@ -3812,7 +3843,8 @@
 		"zname": "Bloom Doom",
 		"category": 0,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"air slash": {
 		"num": "403",
@@ -3821,7 +3853,8 @@
 		"zname": "Supersonic Skystrike",
 		"category": 1,
 		"power": 75,
-		"priority": 0
+		"priority": 0,
+		"slicing": true
 	},
 	"x-scissor": {
 		"num": "404",
@@ -3831,7 +3864,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"bug buzz": {
 		"num": "405",
@@ -3840,7 +3874,8 @@
 		"zname": "Savage Spin-Out",
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"dragon pulse": {
 		"num": "406",
@@ -3897,7 +3932,8 @@
 		"zname": "All-Out Pummeling",
 		"category": 1,
 		"power": 120,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"energy ball": {
 		"num": "412",
@@ -3906,7 +3942,8 @@
 		"zname": "Bloom Doom",
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"brave bird": {
 		"num": "413",
@@ -4000,7 +4037,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"thunder fang": {
 		"num": "422",
@@ -4010,7 +4048,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"ice fang": {
 		"num": "423",
@@ -4020,7 +4059,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"fire fang": {
 		"num": "424",
@@ -4030,7 +4070,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"shadow sneak": {
 		"num": "425",
@@ -4049,7 +4090,8 @@
 		"zname": "Tectonic Rage",
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"psycho cut": {
 		"num": "427",
@@ -4058,7 +4100,8 @@
 		"zname": "Shattered Psyche",
 		"category": 0,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"slicing": true
 	},
 	"zen headbutt": {
 		"num": "428",
@@ -4171,7 +4214,8 @@
 		"zname": "Continental Crush",
 		"category": 0,
 		"power": 150,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"cross poison": {
 		"num": "440",
@@ -4181,7 +4225,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"gunk shot": {
 		"num": "441",
@@ -4209,7 +4254,8 @@
 		"zname": "Corkscrew Crash",
 		"category": 0,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"stone edge": {
 		"num": "444",
@@ -4256,7 +4302,8 @@
 		"zname": "Supersonic Skystrike",
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"judgment": {
 		"num": "449",
@@ -4617,7 +4664,8 @@
 		"zname": "Gigavolt Havoc",
 		"category": 1,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"soak": {
 		"num": "487",
@@ -4664,7 +4712,8 @@
 		"zname": "Acid Downpour",
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"foul play": {
 		"num": "492",
@@ -4710,7 +4759,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"echoed voice": {
 		"num": "497",
@@ -4719,7 +4769,8 @@
 		"zname": "Breakneck Blitz",
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"chip away": {
 		"num": "498",
@@ -5066,7 +5117,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"razor shell": {
 		"num": "534",
@@ -5076,7 +5128,8 @@
 		"category": 0,
 		"power": 75,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"heat crash": {
 		"num": "535",
@@ -5181,7 +5234,8 @@
 		"category": 1,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"bullet": true
 	},
 	"techno blast": {
 		"num": "546",
@@ -5200,7 +5254,8 @@
 		"category": 1,
 		"power": 75,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"secret sword": {
 		"num": "548",
@@ -5275,7 +5330,8 @@
 		"category": 1,
 		"power": 55,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"icicle crash": {
 		"num": "556",
@@ -5453,7 +5509,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"parting shot": {
 		"num": "575",
@@ -5564,7 +5621,8 @@
 		"category": 1,
 		"power": 140,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"fairy lock": {
 		"num": "587",
@@ -5855,7 +5913,8 @@
 		"zname": "Supersonic Skystrike",
 		"category": 0,
 		"power": 100,
-		"priority": -3
+		"priority": -3,
+		"bullet": true
 	},
 	"brutal swing": {
 		"num": "",
@@ -5885,7 +5944,8 @@
 		"category": 1,
 		"power": 110,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"core enforcer": {
 		"num": "",
@@ -6067,7 +6127,8 @@
 		"zname": "Savage Spin-Out",
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"power trip": {
 		"num": "",
@@ -6095,7 +6156,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"psychic terrain": {
 		"num": "",
@@ -6169,7 +6231,8 @@
 		"category": 0,
 		"power": 125,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"sparkling aria": {
 		"num": "",
@@ -6179,7 +6242,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"spectral thief": {
 		"num": "",
@@ -6335,7 +6399,8 @@
 		"type": 17,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"apple acid": {
 		"num": "787",
@@ -6351,7 +6416,8 @@
 		"type": 2,
 		"category": 0,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"slicing": true
 	},
 	"aqua step": {
 		"num": "872",
@@ -6420,7 +6486,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"bitter blade": {
 		"num": "891",
@@ -6429,7 +6496,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"bitter malice": {
 		"num": "841",
@@ -6509,7 +6577,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"chilling water": {
 		"num": "886",
@@ -6599,7 +6668,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"doodle": {
 		"num": "867",
@@ -6624,7 +6694,8 @@
 		"type": 14,
 		"category": 2,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"dragon darts": {
 		"num": "751",
@@ -6879,7 +6950,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"bite": true
 	},
 	"jet punch": {
 		"num": "857",
@@ -6906,7 +6978,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"lash out": {
 		"num": "808",
@@ -6998,7 +7071,8 @@
 		"category": 0,
 		"power": 95,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"misty explosion": {
 		"num": "802",
@@ -7058,7 +7132,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"sound": true
 	},
 	"poltergeist": {
 		"num": "809",
@@ -7075,7 +7150,8 @@
 		"category": 0,
 		"power": 20,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"pounce": {
 		"num": "884",
@@ -7093,7 +7169,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"psychic noise": {
 		"num": "917",
@@ -7101,7 +7178,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 75,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"psyshield bash": {
 		"num": "828",
@@ -7118,7 +7196,8 @@
 		"type": 1,
 		"category": 0,
 		"power": 120,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"rage fist": {
 		"num": "889",
@@ -7327,7 +7406,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"slicing": true
 	},
 	"strange steam": {
 		"num": "790",
@@ -7370,7 +7450,8 @@
 		"type": 4,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"bullet": true
 	},
 	"tachyon cutter": {
 		"num": "911",
@@ -7378,7 +7459,8 @@
 		"type": 16,
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"slicing": true
 	},
 	"take heart": {
 		"num": "850",
@@ -7476,7 +7558,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"sound": true
 	},
 	"trailblaze": {
 		"num": "885",
