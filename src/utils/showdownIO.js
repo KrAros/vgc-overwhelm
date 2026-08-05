@@ -21,12 +21,49 @@ const STAT_IDX = { HP: 0, Atk: 1, Def: 2, SpA: 3, SpD: 4, Spe: 5 }
 
 // ─── Lookup helpers ───────────────────────────────────────────────────────────
 
+/**
+ * I casi in cui il nome visibile e lo slug non si assomigliano abbastanza.
+ * Chiave: nome già normalizzato. Sono cinque in tutto, e sono elencati per
+ * esteso invece di essere indovinati da una regola, perché una regola che
+ * riordina le parole («Dusk Mane Necrozma» → «necrozma-dusk») creerebbe più
+ * falsi positivi di quanti casi risolve.
+ *
+ * Ogni forma di Necrozma compare due volte: come la scriviamo noi e come la
+ * scrive Showdown, che mette il prefisso dall'altra parte.
+ */
+const ALIAS_POKEMON = {
+  'dusk-mane-necrozma': 'necrozma-dusk',
+  'necrozma-dusk-mane': 'necrozma-dusk',
+  'dawn-wings-necrozma': 'necrozma-dawn',
+  'necrozma-dawn-wings': 'necrozma-dawn',
+  'ultra-necrozma': 'necrozma-ultra',
+  'basculegion': 'basculegion-m',
+}
+
+/**
+ * Nome Showdown → nostro slug.
+ *
+ * Le chiavi di `pokemon.json` seguono una convenzione sola: solo `[a-z0-9-]`,
+ * il trattino come unico separatore. Qui applichiamo la STESSA normalizzazione
+ * al nome in arrivo, invece di provare due o tre forme a caso.
+ *
+ * Le tre `replace` in fila fanno tre pulizie in ordine: via punti, apostrofi e
+ * due punti (`Mr. Mime`, `Farfetch'd`, `Type: Null`), spazi e underscore
+ * diventano trattini (`Flutter Mane`), e l'ultima schiaccia i trattini doppi
+ * che le prime due possono aver prodotto. La `g` nella regex significa «tutte
+ * le occorrenze», non solo la prima.
+ *
+ * Prima della sessione I questa funzione provava solo il minuscolo e poi
+ * spazi→trattini: con le chiavi Gen 8-9 ancora collassate (`fluttermane`) non
+ * trovava niente, e 71 specie — cioè quasi tutto il meta di Reg M-B — non
+ * erano importabili da una paste.
+ */
 function findPokemonKey(name) {
   const slug = name.trim().toLowerCase()
   if (pokemonData[slug]) return slug
-  const dash = slug.replace(/\s+/g, '-')
-  if (pokemonData[dash]) return dash
-  return null
+  const norm = slug.replace(/[.'’:]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-')
+  if (pokemonData[norm]) return norm
+  return ALIAS_POKEMON[norm] ?? null
 }
 
 function findMoveKey(name) {

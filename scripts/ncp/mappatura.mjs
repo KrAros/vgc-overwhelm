@@ -64,16 +64,18 @@ function indicizza(chiavi) {
  * non stanno qui.
  */
 export const ECCEZIONI_POKEMON = {
-  'calyrexice': 'Calyrex-Ice Rider',
-  'calyrexshadow': 'Calyrex-Shadow Rider',
-  'toxtricitylowkey': 'Toxtricity-Low Key',
+  'calyrex-ice': 'Calyrex-Ice Rider',
+  'calyrex-shadow': 'Calyrex-Shadow Rider',
+  'toxtricity-low-key': 'Toxtricity-Low Key',
   'urshifu': 'Urshifu-Single Strike',
   'urshifu-rapid-strike': 'Urshifu-Rapid Strike',
   'type-null': 'Type: Null',
   'basculegion-m': 'Basculegion',
   'basculegion-f': 'Basculegion-F',
   'basculin-blue-striped': 'Basculin',
-  'whisiwashi-school': 'Wishiwashi-School',   // il refuso è nel nostro JSON
+  // `whisiwashi-school` stava qui per aggirare il refuso nel nostro slug. La
+  // sessione I l'ha corretto in `wishiwashi-school`, che ora si normalizza da
+  // solo su `Wishiwashi-School`: l'eccezione non serve più.
   'necrozma-dusk': 'Necrozma-Dusk-Mane',
   'necrozma-dawn': 'Necrozma-Dawn-Wings',
   'necrozma-ultra': 'Ultra Necrozma',

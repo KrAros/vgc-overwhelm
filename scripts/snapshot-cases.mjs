@@ -88,19 +88,19 @@ const A = {
   chompEq:    [atk('garchomp', 'adamant', SP.fisico), 'earthquake'],       // STAB fisico spread
   chompClaw:  [atk('garchomp', 'adamant', SP.fisico), 'dragon claw'],      // STAB fisico contatto
   chompRock:  [atk('garchomp', 'adamant', SP.fisico), 'rock slide'],       // non-STAB spread
-  fluttMoon:  [atk('fluttermane', 'modest', SP.speciale), 'moonblast'],    // STAB speciale
-  fluttShadow:[atk('fluttermane', 'modest', SP.speciale), 'shadow ball'],  // STAB speciale
+  fluttMoon:  [atk('flutter-mane', 'modest', SP.speciale), 'moonblast'],    // STAB speciale
+  fluttShadow:[atk('flutter-mane', 'modest', SP.speciale), 'shadow ball'],  // STAB speciale
   incinFlare: [atk('incineroar', 'adamant', SP.misto), 'flare blitz'],     // STAB Fire contatto
   incinKnock: [atk('incineroar', 'adamant', SP.misto), 'knock off'],       // STAB Dark contatto
   rillaWood:  [atk('rillaboom', 'adamant', SP.fisico), 'wood hammer'],     // STAB Grass contatto
-  chienCrunch:[atk('chienpao', 'jolly', SP.fisico), 'crunch'],             // STAB Dark contatto
-  chienIcicle:[atk('chienpao', 'jolly', SP.fisico), 'icicle crash'],       // STAB Ice
-  handsPunch: [atk('ironhands', 'adamant', SP.fisico), 'drain punch'],     // STAB Fighting
+  chienCrunch:[atk('chien-pao', 'jolly', SP.fisico), 'crunch'],             // STAB Dark contatto
+  chienIcicle:[atk('chien-pao', 'jolly', SP.fisico), 'icicle crash'],       // STAB Ice
+  handsPunch: [atk('iron-hands', 'adamant', SP.fisico), 'drain punch'],     // STAB Fighting
   goldRain:   [atk('gholdengo', 'modest', SP.speciale), 'make it rain'],   // STAB Steel spread
-  calyLance:  [atk('calyrexice', 'adamant', SP.fisico), 'glacial lance'],  // STAB Ice spread
+  calyLance:  [atk('calyrex-ice', 'adamant', SP.fisico), 'glacial lance'],  // STAB Ice spread
   torkoalHeat:[atk('torkoal', 'modest', SP.speciale), 'heat wave'],        // STAB Fire spread
-  bundleHydro:[atk('ironbundle', 'timid', SP.speciale), 'hydro pump'],     // STAB Water
-  boltDraco:  [atk('ragingbolt', 'modest', SP.speciale), 'draco meteor'],  // STAB Dragon
+  bundleHydro:[atk('iron-bundle', 'timid', SP.speciale), 'hydro pump'],     // STAB Water
+  boltDraco:  [atk('raging-bolt', 'modest', SP.speciale), 'draco meteor'],  // STAB Dragon
   ursaRush:   [atk('ursaluna', 'adamant', SP.fisico), 'headlong rush'],    // STAB Ground
   dragoSpeed: [atk('dragonite', 'adamant', SP.fisico), 'extreme speed'],   // non-STAB priorità
   kingIron:   [atk('kingambit', 'adamant', SP.fisico), 'iron head'],       // STAB Steel
@@ -114,14 +114,14 @@ const D = {
   amoon:    def('amoonguss', 'calm', SP.bulkySpe),
   rilla:    def('rillaboom', 'impish', SP.bulkyFis),
   lando:    def('landorus-therian', 'impish', SP.bulkyFis),   // Flying: immune a Ground
-  hands:    def('ironhands', 'adamant', SP.misto),
-  flutt:    def('fluttermane', 'timid', SP.vuoto),            // fragilissimo
+  hands:    def('iron-hands', 'adamant', SP.misto),
+  flutt:    def('flutter-mane', 'timid', SP.vuoto),            // fragilissimo
   gold:     def('gholdengo', 'bold', SP.difensore),
   torkoal:  def('torkoal', 'bold', SP.bulkyFis),
   dragonite:def('dragonite', 'careful', SP.difensore),
   chomp:    def('garchomp', 'jolly', SP.vuoto),
   ursa:     def('ursaluna', 'adamant', SP.bulkyFis),
-  caly:     def('calyrexice', 'brave', SP.bulkyFis),
+  caly:     def('calyrex-ice', 'brave', SP.bulkyFis),
   farigiraf:def('farigiraf', 'calm', SP.bulkySpe),
   whimsi:   def('whimsicott', 'timid', SP.vuoto),
   registeel:def('registeel', 'impish', SP.difensore),
@@ -606,8 +606,8 @@ function aggiungi(blocco, etichetta, input) {
   // vecchio motore divergeva da NCP e il nuovo lo azzecca 16/16.
   const attacchiOsservabili = [
     // nome                     attaccante     natura      SP           item             abilità        difensore   abil.dif.        mossa
-    ['band+thickfat',          'chienpao',    'adamant',  SP.fisico,   'choice band',   null,          'ursaluna', 'thick fat',      'icicle crash'],
-    ['specs+purifsalt',        'gholdengo',   'timid',    [0,0,0,24,0,30], 'choice specs', null,       'ironhands','purifying salt', 'shadow ball'],
+    ['band+thickfat',          'chien-pao',    'adamant',  SP.fisico,   'choice band',   null,          'ursaluna', 'thick fat',      'icicle crash'],
+    ['specs+purifsalt',        'gholdengo',   'timid',    [0,0,0,24,0,30], 'choice specs', null,       'iron-hands','purifying salt', 'shadow ball'],
     ['firemane+band',          'incineroar',  'adamant',  SP.fisico,   'choice band',   'fire mane',   'amoonguss', null,            'flare blitz'],
     ['firemane+thickfat',      'incineroar',  'jolly',    SP.fisico,   null,            'fire mane',   'ursaluna', 'thick fat',      'flare blitz'],
     ['hugepower+band',         'garchomp',    'adamant',  [0,0,0,0,0,30], 'choice band', 'huge power',  'incineroar', null,           'dragon claw'],
@@ -825,6 +825,153 @@ function aggiungi(blocco, etichetta, input) {
     defender: { ...D.incin, defItem: 'chilan berry' },
     move: A.dragoSpeed[1], field: field(),
   })
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// B10 — Anagrafica (sessione I)
+//
+// PERCHÉ ESISTE QUESTO BLOCCO.
+// La sessione I corregge base stats e tipi in `pokemon.json`. Il criterio di
+// accettazione era «ogni caso mosso nello snapshot coinvolge una delle specie
+// corrette» — ma misurando prima di scrivere è venuto fuori che NESSUNA delle
+// specie da correggere compariva nei 403 casi preesistenti. Il criterio era
+// soddisfatto muovendo zero casi: non falsificabile, quindi inutile.
+//
+// Questo blocco costruisce il bersaglio PRIMA di sparare. Viene generato con i
+// dati sbagliati di oggi, e la correzione lo muove. Da lì il criterio diventa
+// binario e verificabile in due letture:
+//     i 403 casi vecchi   → invariati al byte
+//     i casi B10          → mossi, ognuno nella direzione prevista
+//
+// NON copre le tre specie il cui unico errore è nella Velocità (Dodrio,
+// Chespin, Poipole): `calculateDamage` non legge la Velocità, quindi nessun
+// caso può renderle osservabili. Quelle sono verificate da
+// `src/__tests__/anagrafica.test.js`, che asserisce i valori direttamente.
+// ═══════════════════════════════════════════════════════════════════════════
+
+{
+  // ── Sonde ──────────────────────────────────────────────────────────────
+  // Quattro attacchi fissi scelti per discriminare i tipi che cambiano:
+  //   earthquake   Ground fisico  → legge la Difesa
+  //   moonblast    Fairy speciale → legge la Difesa Speciale
+  //   crunch       Dark fisico    → ×2 su Ghost e Psychic, ×0.5 su Fighting
+  //   make it rain Steel speciale → ×2 su Fairy/Ice/Rock, ×0.5 su Steel/Water
+  // Insieme distinguono ognuna delle coppie di tipi in gioco in questa sessione.
+  const SONDE = [
+    [atk('garchomp', 'adamant', SP.fisico), 'earthquake', 'eq'],
+    [atk('flutter-mane', 'modest', SP.speciale), 'moonblast', 'moon'],
+    [atk('chien-pao', 'jolly', SP.fisico), 'crunch', 'crunch'],
+    [atk('gholdengo', 'modest', SP.speciale), 'make it rain', 'rain'],
+  ]
+
+  // ── B10.1 — Stat difensive che cambiano ────────────────────────────────
+  // Aegislash 150→140 Def/SpD, Cresselia 120/130→110/120, Mega Alakazam
+  // 95→105 SpD, Wishiwashi-Solo 20→25 SpD, Inkay colonna sfalsata (Def 37→53).
+  {
+    const specie = ['aegislash', 'cresselia', 'alakazam-mega', 'wishiwashi-solo', 'inkay']
+    for (const chiave of specie) {
+      for (const [attaccante, mossa, nome] of [SONDE[0], SONDE[1]]) {
+        aggiungi('B10', `stat-def-${chiave}-${nome}`, {
+          attacker: attaccante,
+          defender: def(chiave, 'careful', SP.difensore),
+          move: mossa,
+          field: field(),
+        })
+      }
+    }
+  }
+
+  // ── B10.2 — Stat offensive che cambiano ────────────────────────────────
+  // Aegislash-Blade 150→140 Atk/SpA, Hoopa 100→110 Atk, Necrozma 107→127 SpA,
+  // Ultra Necrozma 161→167 SpA, Inkay 46→37 SpA.
+  {
+    const specie = ['aegislash-blade', 'hoopa', 'necrozma', 'necrozma-ultra', 'inkay']
+    const mosse = [['earthquake', 'eq'], ['shadow ball', 'shadow']]
+    const difensori = [D.incin, D.amoon]
+    for (const chiave of specie) {
+      for (const [mossa, nome] of mosse) {
+        for (const difensore of difensori) {
+          aggiungi('B10', `stat-atk-${chiave}-${nome}`, {
+            attacker: atk(chiave, 'quiet', SP.misto),
+            defender: difensore,
+            move: mossa,
+            field: field(),
+          })
+        }
+      }
+    }
+  }
+
+  // ── B10.3 — Tipi che cambiano, lato difensore ──────────────────────────
+  // Le sei forme reali più le tredici Mega. Marowak-Alola è nella lista pur
+  // essendo un cambio di solo ORDINE: serve come controllo negativo, perché
+  // `getEffectiveness` cicla sull'array e la moltiplicazione è commutativa.
+  // Se quel caso si muovesse, avremmo rotto qualcosa.
+  {
+    const specie = [
+      'decidueye', 'mimikyu', 'lurantis', 'dugtrio-alola', 'wishiwashi-school',
+      'marowak-alola',
+      'delphox-mega', 'greninja-mega', 'excadrill-mega', 'froslass-mega',
+      'crabominable-mega', 'starmie-mega', 'skarmory-mega', 'glimmora-mega',
+      'meowstic-mega', 'raichu-mega-x', 'raichu-mega-y', 'malamar-mega',
+      'scrafty-mega',
+    ]
+    for (const chiave of specie) {
+      for (const [attaccante, mossa, nome] of SONDE) {
+        aggiungi('B10', `tipo-def-${chiave}-${nome}`, {
+          attacker: attaccante,
+          defender: def(chiave, 'careful', SP.difensore),
+          move: mossa,
+          field: field(),
+        })
+      }
+    }
+  }
+
+  // ── B10.4 — Tipi che cambiano, lato attaccante (STAB) ──────────────────
+  // Il segnale più netto della sessione: una mossa che ACQUISTA lo STAB e una
+  // che lo PERDE, sulla stessa specie. Un ×1.5 che compare o sparisce non si
+  // confonde con nulla.
+  {
+    const coppie = [
+      // specie                mossa che acquista STAB   mossa che perde STAB
+      ['decidueye', 'shadow ball', null],
+      ['lurantis', 'energy ball', 'earthquake'],
+      ['dugtrio-alola', 'iron head', 'crunch'],
+      ['mimikyu', 'play rough', 'flash cannon'],
+      ['delphox-mega', 'psychic', 'flash cannon'],
+      ['greninja-mega', 'crunch', 'ice beam'],
+      ['excadrill-mega', 'iron head', 'psychic'],
+      ['froslass-mega', 'ice beam', 'crunch'],
+      ['crabominable-mega', 'ice punch', 'crunch'],
+      ['starmie-mega', 'psychic', 'flash cannon'],
+      ['skarmory-mega', 'iron head', 'psychic'],
+      ['glimmora-mega', 'power gem', 'surf'],
+      ['meowstic-mega', 'psychic', 'flash cannon'],
+      ['raichu-mega-x', null, 'close combat'],
+      ['raichu-mega-y', null, 'flash cannon'],
+      ['malamar-mega', 'psychic', 'flash cannon'],
+      ['scrafty-mega', 'crunch', 'ice beam'],
+    ]
+    // Il difensore è Amoonguss (Grass/Poison) e non Incineroar, e la ragione
+    // è una lezione già pagata in D-2: un caso può attivare la condizione
+    // giusta e restare comunque CIECO, se la differenza non sopravvive fino al
+    // numero confrontato. Incineroar è Fire/Dark, e sei di queste sonde sono
+    // Psychic: contro il Buio l'efficacia è zero, quindi lo STAB che compare o
+    // sparisce moltiplicava comunque per niente. Contro Amoonguss nessuna delle
+    // tredici mosse qui sotto è a efficacia zero.
+    for (const [chiave, acquista, perde] of coppie) {
+      for (const [mossa, verso] of [[acquista, 'stab+'], [perde, 'stab-']]) {
+        if (!mossa) continue
+        aggiungi('B10', `tipo-atk-${chiave}-${verso}`, {
+          attacker: atk(chiave, 'quiet', SP.misto),
+          defender: D.amoon,
+          move: mossa,
+          field: field(),
+        })
+      }
+    }
+  }
 }
 
 // ─── Tag derivati ──────────────────────────────────────────────────────────

@@ -82,7 +82,14 @@ export function getNatureModifier(nature, stat) {
  */
 export function getBaseStat(pokemon, stat) {
   if (!pokemon || !pokemonData[pokemon]) return 0
-  if (pokemon === 'aegislash' && (stat === STAT_ATT || stat === STAT_SPA)) return 150
+  if (pokemon === 'aegislash' && (stat === STAT_ATT || stat === STAT_SPA)) {
+    // Il valore viene LETTO dalla forma Spada, non scritto qui. Fino alla
+    // sessione I era un 150 hardcoded, e quando l'anagrafica ha portato
+    // Aegislash ai 140 di Gen 9 il numero fisso è rimasto indietro: il
+    // Pokédex diceva 140, il motore continuava a calcolare 150. Un dato in due
+    // posti è un dato che prima o poi diverge.
+    return pokemonData['aegislash-blade'].stats[stat]
+  }
   return pokemonData[pokemon].stats[stat]
 }
 

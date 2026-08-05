@@ -1417,7 +1417,7 @@
 		"name": "Dugtrio-Alola",
 		"type": [
 			8,
-			15
+			16
 		],
 		"mega": null,
 		"weight": 66.6,
@@ -2314,7 +2314,7 @@
 		],
 		"canEvolve": true
 	},
-	"farfetch'd": {
+	"farfetchd": {
 		"num": "#083",
 		"name": "Farfetch'd",
 		"type": [
@@ -2380,7 +2380,7 @@
 			70,
 			60,
 			60,
-			100
+			110
 		],
 		"abilities": [
 			"run-away",
@@ -2947,8 +2947,8 @@
 		"num": "#105",
 		"name": "Marowak-Alola",
 		"type": [
-			13,
-			1
+			1,
+			13
 		],
 		"mega": null,
 		"weight": 34,
@@ -3355,7 +3355,7 @@
 		],
 		"canEvolve": false
 	},
-	"mr. mime": {
+	"mr-mime": {
 		"num": "#122",
 		"name": "Mr. Mime",
 		"type": [
@@ -11045,7 +11045,7 @@
 		],
 		"canEvolve": true
 	},
-	"mime jr.": {
+	"mime-jr": {
 		"num": "#439",
 		"name": "Mime Jr.",
 		"type": [
@@ -12369,9 +12369,9 @@
 		"stats": [
 			120,
 			70,
-			120,
+			110,
 			75,
-			130,
+			120,
 			85
 		],
 		"abilities": [
@@ -16455,7 +16455,7 @@
 			65,
 			48,
 			45,
-			33
+			38
 		],
 		"abilities": [
 			"overgrow",
@@ -17210,9 +17210,9 @@
 		"stats": [
 			60,
 			50,
-			150,
+			140,
 			50,
-			150,
+			140,
 			60
 		],
 		"abilities": [
@@ -17232,9 +17232,9 @@
 		"gender": null,
 		"stats": [
 			60,
-			150,
+			140,
 			50,
-			150,
+			140,
 			50,
 			60
 		],
@@ -17348,9 +17348,9 @@
 		"stats": [
 			53,
 			54,
+			53,
 			37,
 			46,
-			45,
 			45
 		],
 		"abilities": [
@@ -18319,7 +18319,7 @@
 		"gender": 2,
 		"stats": [
 			80,
-			100,
+			110,
 			60,
 			150,
 			130,
@@ -18406,7 +18406,7 @@
 		"name": "Decidueye",
 		"type": [
 			4,
-			18
+			13
 		],
 		"mega": null,
 		"weight": 36.6,
@@ -19055,7 +19055,7 @@
 			20,
 			20,
 			25,
-			20,
+			25,
 			40
 		],
 		"abilities": [
@@ -19063,12 +19063,11 @@
 		],
 		"canEvolve": false
 	},
-	"whisiwashi-school": {
+	"wishiwashi-school": {
 		"num": "#746",
 		"name": "Wishiwashi-School",
 		"type": [
-			11,
-			17
+			2
 		],
 		"mega": null,
 		"weight": 78.6,
@@ -19186,7 +19185,7 @@
 	},
 	"dewpider": {
 		"num": "#751",
-		"name": "Dewpier",
+		"name": "Dewpider",
 		"type": [
 			2,
 			11
@@ -19259,7 +19258,7 @@
 		"num": "#754",
 		"name": "Lurantis",
 		"type": [
-			8
+			4
 		],
 		"mega": null,
 		"weight": 18.5,
@@ -20208,7 +20207,7 @@
 		"name": "Mimikyu",
 		"type": [
 			13,
-			16
+			17
 		],
 		"mega": null,
 		"weight": 0.7,
@@ -20373,7 +20372,7 @@
 		],
 		"canEvolve": false
 	},
-	"tapu koko": {
+	"tapu-koko": {
 		"num": "#785",
 		"name": "Tapu Koko",
 		"type": [
@@ -20397,7 +20396,7 @@
 		],
 		"canEvolve": false
 	},
-	"tapu lele": {
+	"tapu-lele": {
 		"num": "#786",
 		"name": "Tapu Lele",
 		"type": [
@@ -20421,7 +20420,7 @@
 		],
 		"canEvolve": false
 	},
-	"tapu bulu": {
+	"tapu-bulu": {
 		"num": "#787",
 		"name": "Tapu Bulu",
 		"type": [
@@ -20445,7 +20444,7 @@
 		],
 		"canEvolve": false
 	},
-	"tapu fini": {
+	"tapu-fini": {
 		"num": "#788",
 		"name": "Tapu Fini",
 		"type": [
@@ -20710,7 +20709,7 @@
 			97,
 			107,
 			101,
-			107,
+			127,
 			89,
 			79
 		],
@@ -20779,7 +20778,7 @@
 			97,
 			167,
 			97,
-			161,
+			167,
 			97,
 			129
 		],
@@ -20849,7 +20848,7 @@
 			67,
 			73,
 			67,
-			173
+			73
 		],
 		"abilities": [
 			"beast-boost"
@@ -21052,7 +21051,7 @@
 			50,
 			65,
 			175,
-			95,
+			105,
 			150
 		],
 		"abilities": [
@@ -23109,7 +23108,7 @@
 		],
 		"canEvolve": false
 	},
-	"toxtricitylowkey": {
+	"toxtricity-low-key": {
 		"num": "#849",
 		"name": "Toxtricity-Low-Key",
 		"type": [
@@ -23497,7 +23496,7 @@
 	},
 	"sirfetchd": {
 		"num": "#865",
-		"name": "Sirfetch\\u2019d",
+		"name": "Sirfetch'd",
 		"type": [
 			6
 		],
@@ -23518,7 +23517,7 @@
 		],
 		"canEvolve": false
 	},
-	"mrrime": {
+	"mr-rime": {
 		"num": "#866",
 		"name": "Mr. Rime",
 		"type": [
@@ -23750,7 +23749,7 @@
 		],
 		"canEvolve": false
 	},
-	"eiscuenoice": {
+	"eiscue-noice": {
 		"num": "#875",
 		"name": "Eiscue-Noice",
 		"type": [
@@ -23797,7 +23796,7 @@
 		],
 		"canEvolve": false
 	},
-	"indeedeef": {
+	"indeedee-f": {
 		"num": "#876",
 		"name": "Indeedee-F",
 		"type": [
@@ -23845,7 +23844,7 @@
 		],
 		"canEvolve": false
 	},
-	"morpekohangry": {
+	"morpeko-hangry": {
 		"num": "#877",
 		"name": "Morpeko-Hangry",
 		"type": [
@@ -24136,7 +24135,7 @@
 		],
 		"canEvolve": false
 	},
-	"zaciancrowned": {
+	"zacian-crowned": {
 		"num": "#888",
 		"name": "Zacian-Crowned",
 		"type": [
@@ -24181,7 +24180,7 @@
 		],
 		"canEvolve": false
 	},
-	"zamazentacrowned": {
+	"zamazenta-crowned": {
 		"num": "#889",
 		"name": "Zamazenta-Crowned",
 		"type": [
@@ -24272,7 +24271,7 @@
 		],
 		"canEvolve": false
 	},
-	"urshifurapidstrike": {
+	"urshifu-rapid-strike": {
 		"num": "#892",
 		"name": "Urshifu-Rapid-Strike",
 		"type": [
@@ -24429,7 +24428,7 @@
 		],
 		"canEvolve": false
 	},
-	"calyrexice": {
+	"calyrex-ice": {
 		"num": "#898",
 		"name": "Calyrex-Ice",
 		"type": [
@@ -24452,7 +24451,7 @@
 		],
 		"canEvolve": false
 	},
-	"calyrexshadow": {
+	"calyrex-shadow": {
 		"num": "#898",
 		"name": "Calyrex-Shadow",
 		"type": [
@@ -24550,7 +24549,7 @@
 		],
 		"canEvolve": false
 	},
-	"ursalunabloodmoon": {
+	"ursaluna-bloodmoon": {
 		"num": "#901",
 		"name": "Ursaluna-Bloodmoon",
 		"type": [
@@ -26106,7 +26105,7 @@
 		],
 		"canEvolve": false
 	},
-	"palafinhero": {
+	"palafin-hero": {
 		"num": "#964",
 		"name": "Palafin-Hero",
 		"type": [
@@ -26561,7 +26560,7 @@
 		],
 		"canEvolve": false
 	},
-	"dudunsparcethreesegment": {
+	"dudunsparce-three-segment": {
 		"num": "#982",
 		"name": "Dudunsparce-Three-Segment",
 		"type": [
@@ -26610,7 +26609,7 @@
 		],
 		"canEvolve": false
 	},
-	"greattusk": {
+	"great-tusk": {
 		"num": "#984",
 		"name": "Great Tusk",
 		"type": [
@@ -26633,7 +26632,7 @@
 		],
 		"canEvolve": false
 	},
-	"screamtail": {
+	"scream-tail": {
 		"num": "#985",
 		"name": "Scream Tail",
 		"type": [
@@ -26656,7 +26655,7 @@
 		],
 		"canEvolve": false
 	},
-	"brutebonnet": {
+	"brute-bonnet": {
 		"num": "#986",
 		"name": "Brute Bonnet",
 		"type": [
@@ -26679,7 +26678,7 @@
 		],
 		"canEvolve": false
 	},
-	"fluttermane": {
+	"flutter-mane": {
 		"num": "#987",
 		"name": "Flutter Mane",
 		"type": [
@@ -26702,7 +26701,7 @@
 		],
 		"canEvolve": false
 	},
-	"slitherwing": {
+	"slither-wing": {
 		"num": "#988",
 		"name": "Slither Wing",
 		"type": [
@@ -26725,7 +26724,7 @@
 		],
 		"canEvolve": false
 	},
-	"sandyshocks": {
+	"sandy-shocks": {
 		"num": "#989",
 		"name": "Sandy Shocks",
 		"type": [
@@ -26748,7 +26747,7 @@
 		],
 		"canEvolve": false
 	},
-	"irontreads": {
+	"iron-treads": {
 		"num": "#990",
 		"name": "Iron Treads",
 		"type": [
@@ -26771,7 +26770,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironbundle": {
+	"iron-bundle": {
 		"num": "#991",
 		"name": "Iron Bundle",
 		"type": [
@@ -26794,7 +26793,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironhands": {
+	"iron-hands": {
 		"num": "#992",
 		"name": "Iron Hands",
 		"type": [
@@ -26817,7 +26816,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironjugulis": {
+	"iron-jugulis": {
 		"num": "#993",
 		"name": "Iron Jugulis",
 		"type": [
@@ -26840,7 +26839,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironmoth": {
+	"iron-moth": {
 		"num": "#994",
 		"name": "Iron Moth",
 		"type": [
@@ -26863,7 +26862,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironthorns": {
+	"iron-thorns": {
 		"num": "#995",
 		"name": "Iron Thorns",
 		"type": [
@@ -27003,7 +27002,7 @@
 		],
 		"canEvolve": false
 	},
-	"wochien": {
+	"wo-chien": {
 		"num": "#1001",
 		"name": "Wo-Chien",
 		"type": [
@@ -27026,7 +27025,7 @@
 		],
 		"canEvolve": false
 	},
-	"chienpao": {
+	"chien-pao": {
 		"num": "#1002",
 		"name": "Chien-Pao",
 		"type": [
@@ -27049,7 +27048,7 @@
 		],
 		"canEvolve": false
 	},
-	"tinglu": {
+	"ting-lu": {
 		"num": "#1003",
 		"name": "Ting-Lu",
 		"type": [
@@ -27072,7 +27071,7 @@
 		],
 		"canEvolve": false
 	},
-	"chiyu": {
+	"chi-yu": {
 		"num": "#1004",
 		"name": "Chi-Yu",
 		"type": [
@@ -27095,7 +27094,7 @@
 		],
 		"canEvolve": false
 	},
-	"roaringmoon": {
+	"roaring-moon": {
 		"num": "#1005",
 		"name": "Roaring Moon",
 		"type": [
@@ -27118,7 +27117,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironvaliant": {
+	"iron-valiant": {
 		"num": "#1006",
 		"name": "Iron Valiant",
 		"type": [
@@ -27187,7 +27186,7 @@
 		],
 		"canEvolve": false
 	},
-	"walkingwake": {
+	"walking-wake": {
 		"num": "#1009",
 		"name": "Walking Wake",
 		"type": [
@@ -27210,7 +27209,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironleaves": {
+	"iron-leaves": {
 		"num": "#1010",
 		"name": "Iron Leaves",
 		"type": [
@@ -27400,7 +27399,7 @@
 		],
 		"canEvolve": false
 	},
-	"ogerponcornerstone": {
+	"ogerpon-cornerstone": {
 		"num": "#1017",
 		"name": "Ogerpon-Cornerstone",
 		"type": [
@@ -27423,7 +27422,7 @@
 		],
 		"canEvolve": false
 	},
-	"ogerponhearthflame": {
+	"ogerpon-hearthflame": {
 		"num": "#1017",
 		"name": "Ogerpon-Hearthflame",
 		"type": [
@@ -27446,7 +27445,7 @@
 		],
 		"canEvolve": false
 	},
-	"ogerponwellspring": {
+	"ogerpon-wellspring": {
 		"num": "#1017",
 		"name": "Ogerpon-Wellspring",
 		"type": [
@@ -27519,7 +27518,7 @@
 		],
 		"canEvolve": false
 	},
-	"gougingfire": {
+	"gouging-fire": {
 		"num": "#1020",
 		"name": "Gouging Fire",
 		"type": [
@@ -27542,7 +27541,7 @@
 		],
 		"canEvolve": false
 	},
-	"ragingbolt": {
+	"raging-bolt": {
 		"num": "#1021",
 		"name": "Raging Bolt",
 		"type": [
@@ -27565,7 +27564,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironboulder": {
+	"iron-boulder": {
 		"num": "#1022",
 		"name": "Iron Boulder",
 		"type": [
@@ -27588,7 +27587,7 @@
 		],
 		"canEvolve": false
 	},
-	"ironcrown": {
+	"iron-crown": {
 		"num": "#1023",
 		"name": "Iron Crown",
 		"type": [
@@ -27633,7 +27632,7 @@
 		],
 		"canEvolve": false
 	},
-	"terapagosterastal": {
+	"terapagos-terastal": {
 		"num": "#1024",
 		"name": "Terapagos-Terastal",
 		"type": [
@@ -27678,7 +27677,7 @@
 		],
 		"canEvolve": false
 	},
-	"growlithehisui": {
+	"growlithe-hisui": {
 		"num": "#058",
 		"name": "Growlithe-Hisui",
 		"type": [
@@ -27703,7 +27702,7 @@
 		],
 		"canEvolve": true
 	},
-	"arcaninehisui": {
+	"arcanine-hisui": {
 		"num": "#059",
 		"name": "Arcanine-Hisui",
 		"type": [
@@ -27728,7 +27727,7 @@
 		],
 		"canEvolve": false
 	},
-	"voltorbhisui": {
+	"voltorb-hisui": {
 		"num": "#100",
 		"name": "Voltorb-Hisui",
 		"type": [
@@ -27753,7 +27752,7 @@
 		],
 		"canEvolve": true
 	},
-	"electrodehisui": {
+	"electrode-hisui": {
 		"num": "#101",
 		"name": "Electrode-Hisui",
 		"type": [
@@ -27778,7 +27777,7 @@
 		],
 		"canEvolve": false
 	},
-	"typhlosionhisui": {
+	"typhlosion-hisui": {
 		"num": "#157",
 		"name": "Typhlosion-Hisui",
 		"type": [
@@ -27802,7 +27801,7 @@
 		],
 		"canEvolve": false
 	},
-	"qwilfishhisui": {
+	"qwilfish-hisui": {
 		"num": "#211",
 		"name": "Qwilfish-Hisui",
 		"type": [
@@ -27827,7 +27826,7 @@
 		],
 		"canEvolve": true
 	},
-	"sneaselhisui": {
+	"sneasel-hisui": {
 		"num": "#215",
 		"name": "Sneasel-Hisui",
 		"type": [
@@ -27852,7 +27851,7 @@
 		],
 		"canEvolve": true
 	},
-	"dialgaorigin": {
+	"dialga-origin": {
 		"num": "#483",
 		"name": "Dialga-Origin",
 		"type": [
@@ -27876,7 +27875,7 @@
 		],
 		"canEvolve": false
 	},
-	"palkiaorigin": {
+	"palkia-origin": {
 		"num": "#484",
 		"name": "Palkia-Origin",
 		"type": [
@@ -27900,7 +27899,7 @@
 		],
 		"canEvolve": false
 	},
-	"samurotthisui": {
+	"samurott-hisui": {
 		"num": "#503",
 		"name": "Samurott-Hisui",
 		"type": [
@@ -27924,7 +27923,7 @@
 		],
 		"canEvolve": false
 	},
-	"lilliganthisui": {
+	"lilligant-hisui": {
 		"num": "#549",
 		"name": "Lilligant-Hisui",
 		"type": [
@@ -27949,7 +27948,7 @@
 		],
 		"canEvolve": false
 	},
-	"zoruahisui": {
+	"zorua-hisui": {
 		"num": "#570",
 		"name": "Zorua-Hisui",
 		"type": [
@@ -27972,7 +27971,7 @@
 		],
 		"canEvolve": true
 	},
-	"zoroarkhisui": {
+	"zoroark-hisui": {
 		"num": "#571",
 		"name": "Zoroark-Hisui",
 		"type": [
@@ -27995,7 +27994,7 @@
 		],
 		"canEvolve": false
 	},
-	"braviaryhisui": {
+	"braviary-hisui": {
 		"num": "#628",
 		"name": "Braviary-Hisui",
 		"type": [
@@ -28020,7 +28019,7 @@
 		],
 		"canEvolve": false
 	},
-	"sliggoohisui": {
+	"sliggoo-hisui": {
 		"num": "#705",
 		"name": "Sliggoo-Hisui",
 		"type": [
@@ -28045,7 +28044,7 @@
 		],
 		"canEvolve": true
 	},
-	"goodrahisui": {
+	"goodra-hisui": {
 		"num": "#706",
 		"name": "Goodra-Hisui",
 		"type": [
@@ -28070,7 +28069,7 @@
 		],
 		"canEvolve": false
 	},
-	"avalugghisui": {
+	"avalugg-hisui": {
 		"num": "#713",
 		"name": "Avalugg-Hisui",
 		"type": [
@@ -28095,7 +28094,7 @@
 		],
 		"canEvolve": false
 	},
-	"decidueyehisui": {
+	"decidueye-hisui": {
 		"num": "#724",
 		"name": "Decidueye-Hisui",
 		"type": [
@@ -28119,7 +28118,7 @@
 		],
 		"canEvolve": false
 	},
-	"taurospaldeaaqua": {
+	"tauros-paldea-aqua": {
 		"num": "#128",
 		"name": "Tauros-Paldea-Aqua",
 		"type": [
@@ -28144,7 +28143,7 @@
 		],
 		"canEvolve": false
 	},
-	"taurospaldeablaze": {
+	"tauros-paldea-blaze": {
 		"num": "#128",
 		"name": "Tauros-Paldea-Blaze",
 		"type": [
@@ -28169,7 +28168,7 @@
 		],
 		"canEvolve": false
 	},
-	"taurospaldeacombat": {
+	"tauros-paldea-combat": {
 		"num": "#128",
 		"name": "Tauros-Paldea-Combat",
 		"type": [
@@ -28193,7 +28192,7 @@
 		],
 		"canEvolve": false
 	},
-	"wooperpaldea": {
+	"wooper-paldea": {
 		"num": "#194",
 		"name": "Wooper-Paldea",
 		"type": [
@@ -28429,7 +28428,7 @@
 		"name": "Delphox-Mega",
 		"type": [
 			1,
-			16
+			10
 		],
 		"mega": 1,
 		"weight": 39,
@@ -28452,7 +28451,7 @@
 		"name": "Greninja-Mega",
 		"type": [
 			2,
-			5
+			15
 		],
 		"mega": 1,
 		"weight": 40,
@@ -28475,7 +28474,7 @@
 		"name": "Excadrill-Mega",
 		"type": [
 			8,
-			10
+			16
 		],
 		"mega": 1,
 		"weight": 40.4,
@@ -28589,7 +28588,7 @@
 		"num": "",
 		"name": "Froslass-Mega",
 		"type": [
-			15,
+			5,
 			13
 		],
 		"mega": 1,
@@ -28636,7 +28635,7 @@
 		"name": "Crabominable-Mega",
 		"type": [
 			6,
-			15
+			5
 		],
 		"mega": 1,
 		"weight": 180,
@@ -28659,7 +28658,7 @@
 		"name": "Starmie-Mega",
 		"type": [
 			2,
-			16
+			10
 		],
 		"mega": 1,
 		"weight": 80,
@@ -28681,8 +28680,8 @@
 		"num": "",
 		"name": "Chimecho-Mega",
 		"type": [
-			16,
-			10
+			10,
+			16
 		],
 		"mega": 1,
 		"weight": 1,
@@ -28704,7 +28703,7 @@
 		"num": "",
 		"name": "Skarmory-Mega",
 		"type": [
-			10,
+			16,
 			9
 		],
 		"mega": 1,
@@ -28750,7 +28749,7 @@
 		"num": "",
 		"name": "Glimmora-Mega",
 		"type": [
-			2,
+			12,
 			7
 		],
 		"mega": 1,
@@ -28773,8 +28772,8 @@
 		"num": "",
 		"name": "Chandelure-Mega",
 		"type": [
-			13,
-			1
+			1,
+			13
 		],
 		"mega": 1,
 		"weight": 34.3,
@@ -28818,7 +28817,7 @@
 		"num": "",
 		"name": "Meowstic-Mega",
 		"type": [
-			16
+			10
 		],
 		"mega": 1,
 		"weight": 8.5,
@@ -28840,8 +28839,7 @@
 		"num": "",
 		"name": "Raichu-Mega-X",
 		"type": [
-			3,
-			6
+			3
 		],
 		"mega": 1,
 		"weight": 32,
@@ -28863,8 +28861,7 @@
 		"num": "",
 		"name": "Raichu-Mega-Y",
 		"type": [
-			3,
-			16
+			3
 		],
 		"mega": 1,
 		"weight": 24,
@@ -28887,7 +28884,7 @@
 		"name": "Malamar-Mega",
 		"type": [
 			15,
-			16
+			10
 		],
 		"mega": 1,
 		"weight": 47,
@@ -28909,7 +28906,7 @@
 		"num": "",
 		"name": "Scrafty-Mega",
 		"type": [
-			5,
+			15,
 			6
 		],
 		"mega": 1,
