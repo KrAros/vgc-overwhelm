@@ -103,6 +103,20 @@ export function caricaNCP() {
     leggi,
     /** La funzione di calcolo danni per Champions. */
     GET_DAMAGE_SV: leggi('GET_DAMAGE_SV'),
+    /**
+     * L'ingresso VERO di NCP, un livello sopra `GET_DAMAGE_SV`.
+     *
+     * Prepara i due Pokémon — Trace, Paradosso, Intimidate, Download,
+     * Intrepid Sword, semi del terreno, pesi — poi calcola le statistiche
+     * dopo i boost e infine chiama `GET_DAMAGE_SV` per le quattro mosse di
+     * ciascun lato.
+     *
+     * Fino a F-2 non lo usavamo, e quello strato non era coperto da nessun
+     * confronto: la prima sonda ha trovato quattordici divergenze su sedici.
+     * Vuole un oggetto campo con dei metodi invece del semplice `Side`;
+     * lo costruisce `costruisciCampo` nell'harness.
+     */
+    CALCULATE_ALL_MOVES_SV: leggi('CALCULATE_ALL_MOVES_SV'),
     /** Applica il moltiplicatore di boost (+1, -2…) a una statistica grezza. */
     getModifiedStat: leggi('getModifiedStat'),
     /** Il costruttore del lato campo, dal prelude. */

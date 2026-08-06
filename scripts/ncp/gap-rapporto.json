@@ -1,0 +1,1802 @@
+{
+  "meta": {
+    "generatedAt": "2026-08-06T10:29:17.779Z",
+    "ncpCommit": "7919130",
+    "ingresso": "CALCULATE_ALL_MOVES_SV",
+    "funzioniRaggiunte": 78,
+    "funzioniConsiderate": 55,
+    "abilitaSelezionabili": 310,
+    "abilitaSenzaEffetto": 282,
+    "abilitaNelGap": 130,
+    "strumentiSelezionabili": 317,
+    "strumentiSenzaEffetto": 185,
+    "strumentiNelGap": 41,
+    "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
+  },
+  "prove": {
+    "abilita": [
+      {
+        "chiave": "aerilate",
+        "nome": "Aerilate",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1072
+        }
+      },
+      {
+        "chiave": "air lock",
+        "nome": "Air Lock",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAirLock",
+          "file": "damage_MASTER.js",
+          "riga": 411
+        }
+      },
+      {
+        "chiave": "analytic",
+        "nome": "Analytic",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1639
+        }
+      },
+      {
+        "chiave": "armor tail",
+        "nome": "Armor Tail",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1155
+        }
+      },
+      {
+        "chiave": "as one",
+        "nome": "As One",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "aura break",
+        "nome": "Aura Break",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1576
+        }
+      },
+      {
+        "chiave": "battery",
+        "nome": "Battery",
+        "canale": "ID",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1611
+        }
+      },
+      {
+        "chiave": "battle armor",
+        "nome": "Battle Armor",
+        "canale": "STR",
+        "prova": {
+          "funzione": "critMove",
+          "file": "damage_MASTER.js",
+          "riga": 1018
+        }
+      },
+      {
+        "chiave": "battle bond",
+        "nome": "Battle Bond",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "beads of ruin",
+        "nome": "Beads of Ruin",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1000
+        }
+      },
+      {
+        "chiave": "blaze",
+        "nome": "Blaze",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1943
+        }
+      },
+      {
+        "chiave": "bulletproof",
+        "nome": "Bulletproof",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1113
+        }
+      },
+      {
+        "chiave": "clear body",
+        "nome": "Clear Body",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 567
+        }
+      },
+      {
+        "chiave": "cloud nine",
+        "nome": "Cloud Nine",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAirLock",
+          "file": "damage_MASTER.js",
+          "riga": 411
+        }
+      },
+      {
+        "chiave": "comatose",
+        "nome": "Comatose",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "commander",
+        "nome": "Commander",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "damp",
+        "nome": "Damp",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1137
+        }
+      },
+      {
+        "chiave": "dauntless shield",
+        "nome": "Dauntless Shield",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkSwordShield",
+          "file": "damage_MASTER.js",
+          "riga": 598
+        }
+      },
+      {
+        "chiave": "dazzling",
+        "nome": "Dazzling",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1155
+        }
+      },
+      {
+        "chiave": "defeatist",
+        "nome": "Defeatist",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1925
+        }
+      },
+      {
+        "chiave": "disguise",
+        "nome": "Disguise",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "download",
+        "nome": "Download",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkDownload",
+          "file": "damage_MASTER.js",
+          "riga": 647
+        }
+      },
+      {
+        "chiave": "dragonize",
+        "nome": "Dragonize",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1084
+        }
+      },
+      {
+        "chiave": "dragons maw",
+        "nome": "Dragon's Maw",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1947
+        }
+      },
+      {
+        "chiave": "dry skin",
+        "nome": "Dry Skin",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1110
+        }
+      },
+      {
+        "chiave": "earth eater",
+        "nome": "Earth Eater",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1112
+        }
+      },
+      {
+        "chiave": "electromorphosis",
+        "nome": "Electromorphosis",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1764
+        }
+      },
+      {
+        "chiave": "embody aspect",
+        "nome": "Embody Aspect",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkEmbodyAspect",
+          "file": "damage_MASTER.js",
+          "riga": 666
+        }
+      },
+      {
+        "chiave": "flare boost",
+        "nome": "Flare Boost",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1670
+        }
+      },
+      {
+        "chiave": "flower gift",
+        "nome": "Flower Gift",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "forecast",
+        "nome": "Forecast",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "friend guard",
+        "nome": "Friend Guard",
+        "canale": "ID",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1006
+        }
+      },
+      {
+        "chiave": "full metal body",
+        "nome": "Full Metal Body",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 567
+        }
+      },
+      {
+        "chiave": "galvanize",
+        "nome": "Galvanize",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1081
+        }
+      },
+      {
+        "chiave": "gorilla tactics",
+        "nome": "Gorilla Tactics",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1950
+        }
+      },
+      {
+        "chiave": "grass pelt",
+        "nome": "Grass Pelt",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcDefMods",
+          "file": "damage_MASTER.js",
+          "riga": 2104
+        }
+      },
+      {
+        "chiave": "guard dog",
+        "nome": "Guard Dog",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 564
+        }
+      },
+      {
+        "chiave": "gulp missile",
+        "nome": "Gulp Missile",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 387
+        }
+      },
+      {
+        "chiave": "guts",
+        "nome": "Guts",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1941
+        }
+      },
+      {
+        "chiave": "hadron engine",
+        "nome": "Hadron Engine",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1971
+        }
+      },
+      {
+        "chiave": "heavy metal",
+        "nome": "Heavy Metal",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getWeightMods",
+          "file": "damage_MASTER.js",
+          "riga": 717
+        }
+      },
+      {
+        "chiave": "hustle",
+        "nome": "Hustle",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAttack",
+          "file": "damage_MASTER.js",
+          "riga": 1896
+        }
+      },
+      {
+        "chiave": "hyper cutter",
+        "nome": "Hyper Cutter",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 567
+        }
+      },
+      {
+        "chiave": "ice face",
+        "nome": "Ice Face",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "illusion",
+        "nome": "Illusion",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "imposter",
+        "nome": "Imposter",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "inner focus",
+        "nome": "Inner Focus",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 568
+        }
+      },
+      {
+        "chiave": "intrepid sword",
+        "nome": "Intrepid Sword",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkSwordShield",
+          "file": "damage_MASTER.js",
+          "riga": 595
+        }
+      },
+      {
+        "chiave": "iron fist",
+        "nome": "Iron Fist",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1604
+        }
+      },
+      {
+        "chiave": "klutz",
+        "nome": "Klutz",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkKlutz",
+          "file": "damage_MASTER.js",
+          "riga": 448
+        }
+      },
+      {
+        "chiave": "libero",
+        "nome": "Libero",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcGeneralMods",
+          "file": "damage_MASTER.js",
+          "riga": 2231
+        }
+      },
+      {
+        "chiave": "light metal",
+        "nome": "Light Metal",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getWeightMods",
+          "file": "damage_MASTER.js",
+          "riga": 718
+        }
+      },
+      {
+        "chiave": "lightning rod",
+        "nome": "Lightning Rod",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1111
+        }
+      },
+      {
+        "chiave": "liquid voice",
+        "nome": "Liquid Voice",
+        "canale": "STR",
+        "prova": {
+          "funzione": "GET_DAMAGE_SV",
+          "file": "damage_SV.js",
+          "riga": 130
+        }
+      },
+      {
+        "chiave": "long reach",
+        "nome": "Long Reach",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkContactOverride",
+          "file": "damage_MASTER.js",
+          "riga": 826
+        }
+      },
+      {
+        "chiave": "marvel scale",
+        "nome": "Marvel Scale",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcDefMods",
+          "file": "damage_MASTER.js",
+          "riga": 2103
+        }
+      },
+      {
+        "chiave": "mega launcher",
+        "nome": "Mega Launcher",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1672
+        }
+      },
+      {
+        "chiave": "mega sol",
+        "nome": "Mega Sol",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMoveTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 729
+        }
+      },
+      {
+        "chiave": "mimicry",
+        "nome": "Mimicry",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMimicry",
+          "file": "damage_MASTER.js",
+          "riga": 430
+        }
+      },
+      {
+        "chiave": "minds eye",
+        "nome": "Mind's Eye",
+        "canale": "STR",
+        "prova": {
+          "funzione": "GET_DAMAGE_SV",
+          "file": "damage_SV.js",
+          "riga": 135
+        }
+      },
+      {
+        "chiave": "minus",
+        "nome": "Minus",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1951
+        }
+      },
+      {
+        "chiave": "mirror armor",
+        "nome": "Mirror Armor",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 572
+        }
+      },
+      {
+        "chiave": "mold breaker",
+        "nome": "Mold Breaker",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1001
+        }
+      },
+      {
+        "chiave": "motor drive",
+        "nome": "Motor Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1111
+        }
+      },
+      {
+        "chiave": "neuroforce",
+        "nome": "Neuroforce",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcFinalMods",
+          "file": "damage_MASTER.js",
+          "riga": 2336
+        }
+      },
+      {
+        "chiave": "neutralizing gas",
+        "nome": "Neutralizing Gas",
+        "canale": "ID",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1574
+        }
+      },
+      {
+        "chiave": "normalize",
+        "nome": "Normalize",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1070
+        }
+      },
+      {
+        "chiave": "oblivious",
+        "nome": "Oblivious",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 568
+        }
+      },
+      {
+        "chiave": "orichalcum pulse",
+        "nome": "Orichalcum Pulse",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1970
+        }
+      },
+      {
+        "chiave": "overgrow",
+        "nome": "Overgrow",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1942
+        }
+      },
+      {
+        "chiave": "own tempo",
+        "nome": "Own Tempo",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 568
+        }
+      },
+      {
+        "chiave": "parental bond",
+        "nome": "Parental Bond",
+        "canale": "STR",
+        "prova": {
+          "funzione": "setDamage",
+          "file": "damage_MASTER.js",
+          "riga": 1172
+        }
+      },
+      {
+        "chiave": "piercing drill",
+        "nome": "Piercing Drill",
+        "canale": "STR",
+        "prova": {
+          "funzione": "setIsQuarteredByProtect",
+          "file": "damage_MASTER.js",
+          "riga": 833
+        }
+      },
+      {
+        "chiave": "pixilate",
+        "nome": "Pixilate",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1075
+        }
+      },
+      {
+        "chiave": "plus",
+        "nome": "Plus",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1951
+        }
+      },
+      {
+        "chiave": "power of alchemy",
+        "nome": "Power of Alchemy",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "power spot",
+        "nome": "Power Spot",
+        "canale": "ID",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1616
+        }
+      },
+      {
+        "chiave": "protean",
+        "nome": "Protean",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcGeneralMods",
+          "file": "damage_MASTER.js",
+          "riga": 2231
+        }
+      },
+      {
+        "chiave": "protosynthesis",
+        "nome": "Protosynthesis",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "punk rock",
+        "nome": "Punk Rock",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1649
+        }
+      },
+      {
+        "chiave": "quark drive",
+        "nome": "Quark Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "queenly majesty",
+        "nome": "Queenly Majesty",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1155
+        }
+      },
+      {
+        "chiave": "rattled",
+        "nome": "Rattled",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 588
+        }
+      },
+      {
+        "chiave": "receiver",
+        "nome": "receiver",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 388
+        }
+      },
+      {
+        "chiave": "reckless",
+        "nome": "Reckless",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1604
+        }
+      },
+      {
+        "chiave": "refrigerate",
+        "nome": "Refrigerate",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkAbilityTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 1078
+        }
+      },
+      {
+        "chiave": "ripen",
+        "nome": "Ripen",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcFinalMods",
+          "file": "damage_MASTER.js",
+          "riga": 2407
+        }
+      },
+      {
+        "chiave": "rivalry",
+        "nome": "Rivalry",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1585
+        }
+      },
+      {
+        "chiave": "rocky payload",
+        "nome": "Rocky Payload",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1953
+        }
+      },
+      {
+        "chiave": "sand force",
+        "nome": "Sand Force",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1633
+        }
+      },
+      {
+        "chiave": "sap sipper",
+        "nome": "Sap Sipper",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1108
+        }
+      },
+      {
+        "chiave": "scrappy",
+        "nome": "Scrappy",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 568
+        }
+      },
+      {
+        "chiave": "sharpness",
+        "nome": "Sharpness",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1952
+        }
+      },
+      {
+        "chiave": "sheer force",
+        "nome": "Sheer Force",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1628
+        }
+      },
+      {
+        "chiave": "shell armor",
+        "nome": "Shell Armor",
+        "canale": "STR",
+        "prova": {
+          "funzione": "critMove",
+          "file": "damage_MASTER.js",
+          "riga": 1018
+        }
+      },
+      {
+        "chiave": "simple",
+        "nome": "Simple",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 561
+        }
+      },
+      {
+        "chiave": "slow start",
+        "nome": "Slow Start",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1924
+        }
+      },
+      {
+        "chiave": "sniper",
+        "nome": "Sniper",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcFinalMods",
+          "file": "damage_MASTER.js",
+          "riga": 2346
+        }
+      },
+      {
+        "chiave": "solar power",
+        "nome": "Solar Power",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1958
+        }
+      },
+      {
+        "chiave": "soundproof",
+        "nome": "Soundproof",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1114
+        }
+      },
+      {
+        "chiave": "stakeout",
+        "nome": "Stakeout",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1979
+        }
+      },
+      {
+        "chiave": "steelworker",
+        "nome": "Steelworker",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1949
+        }
+      },
+      {
+        "chiave": "steely spirit",
+        "nome": "Steely Spirit",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1674
+        }
+      },
+      {
+        "chiave": "storm drain",
+        "nome": "Storm Drain",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1110
+        }
+      },
+      {
+        "chiave": "strong jaw",
+        "nome": "Strong Jaw",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1673
+        }
+      },
+      {
+        "chiave": "sturdy",
+        "nome": "Sturdy",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1144
+        }
+      },
+      {
+        "chiave": "supersweet syrup",
+        "nome": "Supersweet Syrup",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkSupersweetSyrup",
+          "file": "damage_MASTER.js",
+          "riga": 549
+        }
+      },
+      {
+        "chiave": "swarm",
+        "nome": "Swarm",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1945
+        }
+      },
+      {
+        "chiave": "sword of ruin",
+        "nome": "Sword of Ruin",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1000
+        }
+      },
+      {
+        "chiave": "tablets of ruin",
+        "nome": "Tablets of Ruin",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1000
+        }
+      },
+      {
+        "chiave": "technician",
+        "nome": "Technician",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1669
+        }
+      },
+      {
+        "chiave": "tera shell",
+        "nome": "Tera Shell",
+        "canale": "STR",
+        "prova": {
+          "funzione": "GET_DAMAGE_SV",
+          "file": "damage_SV.js",
+          "riga": 135
+        }
+      },
+      {
+        "chiave": "teravolt",
+        "nome": "Teravolt",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1001
+        }
+      },
+      {
+        "chiave": "tinted lens",
+        "nome": "Tinted Lens",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcFinalMods",
+          "file": "damage_MASTER.js",
+          "riga": 2351
+        }
+      },
+      {
+        "chiave": "torrent",
+        "nome": "Torrent",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1944
+        }
+      },
+      {
+        "chiave": "toxic boost",
+        "nome": "Toxic Boost",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1671
+        }
+      },
+      {
+        "chiave": "trace",
+        "nome": "Trace",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 389
+        }
+      },
+      {
+        "chiave": "transistor",
+        "nome": "Transistor",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1946
+        }
+      },
+      {
+        "chiave": "turboblaze",
+        "nome": "Turboblaze",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1001
+        }
+      },
+      {
+        "chiave": "unaware",
+        "nome": "Unaware",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAttack",
+          "file": "damage_MASTER.js",
+          "riga": 1870
+        }
+      },
+      {
+        "chiave": "unnerve",
+        "nome": "Unnerve",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcFinalMods",
+          "file": "damage_MASTER.js",
+          "riga": 2406
+        }
+      },
+      {
+        "chiave": "unseen fist",
+        "nome": "Unseen Fist",
+        "canale": "STR",
+        "prova": {
+          "funzione": "setIsQuarteredByProtect",
+          "file": "damage_MASTER.js",
+          "riga": 833
+        }
+      },
+      {
+        "chiave": "vessel of ruin",
+        "nome": "Vessel of Ruin",
+        "canale": "STR",
+        "prova": {
+          "funzione": "abilityIgnore",
+          "file": "damage_MASTER.js",
+          "riga": 1000
+        }
+      },
+      {
+        "chiave": "volt absorb",
+        "nome": "Volt Absorb",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1111
+        }
+      },
+      {
+        "chiave": "water absorb",
+        "nome": "Water Absorb",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1110
+        }
+      },
+      {
+        "chiave": "well baked body",
+        "nome": "Well-Baked Body",
+        "canale": "STR",
+        "prova": {
+          "funzione": "immunityChecks",
+          "file": "damage_MASTER.js",
+          "riga": 1109
+        }
+      },
+      {
+        "chiave": "white smoke",
+        "nome": "White Smoke",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkIntimidate",
+          "file": "damage_MASTER.js",
+          "riga": 567
+        }
+      },
+      {
+        "chiave": "wind power",
+        "nome": "Wind Power",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcBPMods",
+          "file": "damage_MASTER.js",
+          "riga": 1764
+        }
+      },
+      {
+        "chiave": "wind rider",
+        "nome": "Wind Rider",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkWindRider",
+          "file": "damage_MASTER.js",
+          "riga": 604
+        }
+      },
+      {
+        "chiave": "wonder guard",
+        "nome": "Wonder Guard",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkTrace",
+          "file": "damage_MASTER.js",
+          "riga": 389
+        }
+      }
+    ],
+    "strumenti": [
+      {
+        "chiave": "shock drive",
+        "nome": "Shock Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMoveTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 746
+        }
+      },
+      {
+        "chiave": "burn drive",
+        "nome": "Burn Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMoveTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 743
+        }
+      },
+      {
+        "chiave": "chill drive",
+        "nome": "Chill Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMoveTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 744
+        }
+      },
+      {
+        "chiave": "douse drive",
+        "nome": "Douse Drive",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkMoveTypeChange",
+          "file": "damage_MASTER.js",
+          "riga": 745
+        }
+      },
+      {
+        "chiave": "deepseatooth",
+        "nome": "DeepSeaTooth",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1994
+        }
+      },
+      {
+        "chiave": "deepseascale",
+        "nome": "DeepSeaScale",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcDefMods",
+          "file": "damage_MASTER.js",
+          "riga": 2125
+        }
+      },
+      {
+        "chiave": "thick club",
+        "nome": "Thick Club",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1993
+        }
+      },
+      {
+        "chiave": "light ball",
+        "nome": "Light Ball",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 1995
+        }
+      },
+      {
+        "chiave": "adamant orb",
+        "nome": "Adamant Orb",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemDualTypeBoost",
+          "file": "item_data.js",
+          "riga": 569
+        }
+      },
+      {
+        "chiave": "air balloon",
+        "nome": "Air Balloon",
+        "canale": "STR",
+        "prova": {
+          "funzione": "pIsGrounded",
+          "file": "damage_MASTER.js",
+          "riga": 1298
+        }
+      },
+      {
+        "chiave": "metal powder",
+        "nome": "Metal Powder",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcDefMods",
+          "file": "damage_MASTER.js",
+          "riga": 2126
+        }
+      },
+      {
+        "chiave": "rose incense",
+        "nome": "Rose Incense",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemBoostType",
+          "file": "item_data.js",
+          "riga": 526
+        }
+      },
+      {
+        "chiave": "lustrous orb",
+        "nome": "Lustrous Orb",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemDualTypeBoost",
+          "file": "item_data.js",
+          "riga": 571
+        }
+      },
+      {
+        "chiave": "odd incense",
+        "nome": "Odd Incense",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemBoostType",
+          "file": "item_data.js",
+          "riga": 530
+        }
+      },
+      {
+        "chiave": "rock incense",
+        "nome": "Rock Incense",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemBoostType",
+          "file": "item_data.js",
+          "riga": 549
+        }
+      },
+      {
+        "chiave": "sea incense",
+        "nome": "Sea Incense",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemBoostType",
+          "file": "item_data.js",
+          "riga": 541
+        }
+      },
+      {
+        "chiave": "wave incense",
+        "nome": "Wave Incense",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemBoostType",
+          "file": "item_data.js",
+          "riga": 542
+        }
+      },
+      {
+        "chiave": "soul dew",
+        "nome": "Soul Dew",
+        "canale": "STR",
+        "prova": {
+          "funzione": "calcAtMods",
+          "file": "damage_MASTER.js",
+          "riga": 2001
+        }
+      },
+      {
+        "chiave": "griseous orb",
+        "nome": "Griseous Orb",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getItemDualTypeBoost",
+          "file": "item_data.js",
+          "riga": 573
+        }
+      },
+      {
+        "chiave": "flying gem",
+        "nome": "Flying Gem",
+        "canale": "STR",
+        "prova": {
+          "funzione": "basePowerFunc",
+          "file": "damage_MASTER.js",
+          "riga": 1400
+        }
+      },
+      {
+        "chiave": "kebia berry",
+        "nome": "Kebia Berry",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getBerryResistType",
+          "file": "item_data.js",
+          "riga": 604
+        }
+      },
+      {
+        "chiave": "iron ball",
+        "nome": "Iron Ball",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkKlutz",
+          "file": "damage_MASTER.js",
+          "riga": 451
+        }
+      },
+      {
+        "chiave": "macho brace",
+        "nome": "Macho Brace",
+        "canale": "STR",
+        "prova": {
+          "funzione": "checkKlutz",
+          "file": "damage_MASTER.js",
+          "riga": 449
+        }
+      },
+      {
+        "chiave": "float stone",
+        "nome": "Float Stone",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getWeightMods",
+          "file": "damage_MASTER.js",
+          "riga": 723
+        }
+      },
+      {
+        "chiave": "bug memory",
+        "nome": "Bug Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 737
+        }
+      },
+      {
+        "chiave": "dark memory",
+        "nome": "Dark Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 738
+        }
+      },
+      {
+        "chiave": "dragon memory",
+        "nome": "Dragon Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 739
+        }
+      },
+      {
+        "chiave": "electric memory",
+        "nome": "Electric Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 740
+        }
+      },
+      {
+        "chiave": "fairy memory",
+        "nome": "Fairy Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 741
+        }
+      },
+      {
+        "chiave": "fighting memory",
+        "nome": "Fighting Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 742
+        }
+      },
+      {
+        "chiave": "fire memory",
+        "nome": "Fire Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 743
+        }
+      },
+      {
+        "chiave": "flying memory",
+        "nome": "Flying Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 744
+        }
+      },
+      {
+        "chiave": "ghost memory",
+        "nome": "Ghost Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 745
+        }
+      },
+      {
+        "chiave": "grass memory",
+        "nome": "Grass Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 746
+        }
+      },
+      {
+        "chiave": "ground memory",
+        "nome": "Ground Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 747
+        }
+      },
+      {
+        "chiave": "ice memory",
+        "nome": "Ice Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 748
+        }
+      },
+      {
+        "chiave": "poison memory",
+        "nome": "Poison Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 749
+        }
+      },
+      {
+        "chiave": "psychic memory",
+        "nome": "Psychic Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 750
+        }
+      },
+      {
+        "chiave": "rock memory",
+        "nome": "Rock Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 751
+        }
+      },
+      {
+        "chiave": "steel memory",
+        "nome": "Steel Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 752
+        }
+      },
+      {
+        "chiave": "water memory",
+        "nome": "Water Memory",
+        "canale": "STR",
+        "prova": {
+          "funzione": "getMemoryType",
+          "file": "item_data.js",
+          "riga": 753
+        }
+      }
+    ]
+  },
+  "esclusioni": {
+    "funzioni": {
+      "buildDescription": "costruisce la stringa descrittiva, non il danno",
+      "appendIfSet": "formattazione della descrizione",
+      "toSmogonStat": "formattazione della descrizione",
+      "addLevelDesc": "formattazione della descrizione",
+      "numericSort": "ordinamento, nessun effetto",
+      "getHPInfo": "formattazione della descrizione",
+      "GET_DAMAGE_HANDLER": "smistatore di generazione",
+      "checkConditionalPriority": "priorità di mossa: non è un numero che mostriamo",
+      "canBeBurned": "richiede lo status, che non modelliamo (§1.12)",
+      "checkAddCalcQualifications": "calcoli dei turni successivi: funzione assente da noi",
+      "additionalDamageCalcs": "calcoli dei turni successivi: funzione assente da noi",
+      "ZMoves": "Z-mosse: fuori scope dichiarato",
+      "MaxMoves": "Dynamax: fuori scope dichiarato",
+      "getSignatureZMove": "Z-mosse: fuori scope dichiarato",
+      "checkMeFirst": "Me First non è modellata",
+      "statusMoves": "mosse di stato: potenza zero, nessun danno",
+      "NaturePower": "Nature Power non è modellata",
+      "NaturalGift": "Natural Gift non è modellata",
+      "getNaturalGift": "Natural Gift non è modellata",
+      "cantFlingItem": "Fling non è modellata",
+      "getFlingPower": "Fling non è modellata",
+      "cantRemoveItem": "rimozione strumento: non modellata",
+      "canMega": "Megaevoluzioni: fuori scope",
+      "getFinalSpeed": "velocità, non danno — la copre il punto 4 della sessione",
+      "getMoveCooldown": "ricarica delle mosse: non modellata"
+    },
+    "formeScelteAMano": [
+      "stance change",
+      "zen mode",
+      "schooling",
+      "shields down",
+      "zero to hero",
+      "power construct",
+      "tera shift",
+      "multitype",
+      "rks system"
+    ]
+  },
+  "anomalie": {
+    "abilitaConEffettoNonSelezionabili": [
+      "fire-mane"
+    ],
+    "strumentiConVoceNonSelezionabili": [
+      "punching glove",
+      "throat spray",
+      "booster energy",
+      "legend plate",
+      "slowbro-mega",
+      "slobronite",
+      "feraligatrite",
+      "dragonitite",
+      "greninjaite",
+      "excadrillite",
+      "golurknite",
+      "drampite",
+      "froslasite",
+      "hawluchite",
+      "starmieite",
+      "glimmorite",
+      "meowstite",
+      "barbaraclite",
+      "scraftite",
+      "scolipedonite"
+    ],
+    "nomiNonCapitalizzati": [
+      "abilità: receiver"
+    ]
+  }
+}

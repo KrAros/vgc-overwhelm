@@ -7,7 +7,7 @@
  * Esporta:
  *   SPEED_WEATHER_ABILITIES     tabella abilità → meteo che la accende
  *   speedWeatherAttiva(ability, weather) → boolean
- *   calcEffectiveSpe(pokemon, weather, tailwind) → number
+ *   calcEffectiveSpe(pokemon, weather, tailwind, terrain) → number
  *   whoGoesFirst(...) → 't1' | 't2' | null
  *
  * ─── LA TABELLA ERA IN TRE COPIE, E LE TRE NON COINCIDEVANO ────────────────
@@ -125,17 +125,22 @@ const ITEM_META_VELOCITA = new Set([
  *                               Unburden attivo sarebbe SBAGLIATO, non
  *                               incompleto. È l'unico che non va aggiunto
  *                               quando arriverà il resto.
+ *                               NOTA (F-2): NCP lo fa proprio nel modo
+ *                               ingenuo — `pokemon.item === ""`, riga 337.
+ *                               Nella loro interfaccia funziona perché lo
+ *                               strumento resta scritto finché non viene
+ *                               rimosso. Copiarlo da lì erediterebbe l'errore:
+ *                               qui l'oracolo non va trascritto.
  *   Utility Umbrella (punto f)  annulla Chlorophyll e Swift Swim, ma
  *                               l'ombrello non è in `items.json`: è un
  *                               buco di dati, non di motore
  *
- * Bloccato da niente:
- *   Surge Surfer (×2, punto f)  raddoppia sul Campo Elettrico, e il terreno
- *                               lo modelliamo già (`setTerrain` nello store,
- *                               `field.terrain` in `battleState`). Serve solo
- *                               far arrivare il terreno fin qui, che oggi non
- *                               arriva perché la firma non lo prevede.
- *                               Candidato immediato per F-2.
+ * Fatto in F-2:
+ *   Surge Surfer (×2, punto f)  raddoppia sul Campo Elettrico. Trascritto dal
+ *                               vendor (damage_MASTER.js:336): sta nello
+ *                               stesso blocco `×2` delle abilità meteo e NON
+ *                               ha un cancello sul contatto col terreno —
+ *                               verificato leggendo, non dedotto.
  *
  * Fuori portata per scelta:
  *   Grass/Water Pledge (punto h) le mosse Pledge non esistono nel modello
@@ -148,9 +153,12 @@ const ITEM_META_VELOCITA = new Set([
  * @param {object} pokemon — slot dallo store
  * @param {string|null} weather
  * @param {boolean} [tailwind=false]
+ * @param {string|null} [terrain=null] — serve a Surge Surfer. Ultimo parametro
+ *        e con un valore di riposo, così i chiamanti che non lo passano
+ *        continuano a funzionare come prima.
  * @returns {number}
  */
-export function calcEffectiveSpe(pokemon, weather, tailwind = false) {
+export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = null) {
   if (!pokemon?.key) return 0
   const base = pokemonData[pokemon.key]?.stats?.[STAT_SPE] ?? 0
   const sp   = pokemon.sps?.[STAT_SPE] ?? 0
@@ -172,6 +180,15 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false) {
 
   if (speedWeatherAttiva(pokemon.ability, weather)) altriMod *= 2
 
+  // Surge Surfer. Nel vendor sta nello stesso blocco `×2` delle abilità meteo
+  // (damage_MASTER.js:336), quindi qui accanto. Nessun cancello sul contatto
+  // col terreno: NCP non ce l'ha, e Raichu di Alola è comunque a terra —
+  // aggiungerlo sarebbe una condizione inosservabile, cioè non verificabile.
+  if (normalizeAbilityKey(pokemon.ability) === 'surge-surfer'
+      && String(terrain || '').toLowerCase() === 'electric') {
+    altriMod *= 2
+  }
+
   if (tailwind) altriMod *= 2
 
   return pokeRound(spe * altriMod)
@@ -180,14 +197,14 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false) {
 /**
  * Restituisce 't1' se T1 va prima, 't2' se T2 va prima, null se pareggio.
  */
-export function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom, tailwindT1 = false, tailwindT2 = false) {
+export function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom, tailwindT1 = false, tailwindT2 = false, terrain = null) {
   const p1 = movesData[bestMoveT1?.move]?.priority ?? 0
   const p2 = movesData[bestMoveT2?.move]?.priority ?? 0
 
   if (p1 !== p2) return p1 > p2 ? 't1' : 't2'
 
-  const spe1 = calcEffectiveSpe(t1, weather, tailwindT1)
-  const spe2 = calcEffectiveSpe(t2, weather, tailwindT2)
+  const spe1 = calcEffectiveSpe(t1, weather, tailwindT1, terrain)
+  const spe2 = calcEffectiveSpe(t2, weather, tailwindT2, terrain)
 
   if (spe1 === spe2) return null
   if (trickRoom) return spe1 < spe2 ? 't1' : 't2'

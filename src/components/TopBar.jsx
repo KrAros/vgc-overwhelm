@@ -59,15 +59,37 @@ export default function TopBar() {
           >
             {t("ui.trick_room")}
           </button>
-          <button
-            onClick={toggleDoubleTarget}
-            aria-pressed={doubleTarget}
-            className={`text-xs px-2 py-1 rounded border transition-colors ${
-              doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
-            }`}
-          >
-            {t("ui.double_target")}
-          </button>
+          {/* ─── Nemici in campo ───────────────────────────────────────────
+              Era un interruttore chiamato «2× Target», acceso o spento. Il
+              problema non era il nome: era che uno stato spento non dice cosa
+              sia lo stato spento. «2× Target» disattivato significa un
+              bersaglio solo, ma per saperlo bisognava conoscere il codice.
+              Due bottoni con l'etichetta sopra rendono visibili entrambe le
+              possibilità, e quale delle due è attiva.
+
+              La chiave nello store resta `doubleTarget`: cambiarla romperebbe
+              in silenzio i link condivisi già in giro (sessione C). `true` = 2
+              nemici = penalità d'area ×0.75, verificato in calcEngine:519. */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-gray-400">{t("ui.enemies_on_field")}</span>
+            <div className="flex rounded border border-gray-600 overflow-hidden" role="group"
+                 aria-label={t("ui.enemies_on_field")}>
+              {[true, false].map(due => (
+                <button
+                  key={String(due)}
+                  onClick={() => { if (doubleTarget !== due) toggleDoubleTarget() }}
+                  aria-pressed={doubleTarget === due}
+                  className={`text-xs px-2 py-1 transition-colors ${
+                    doubleTarget === due
+                      ? 'bg-yellow-500 text-gray-900'
+                      : 'text-gray-400 hover:bg-gray-700'
+                  }`}
+                >
+                  {due ? '2' : '1'}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="w-px h-6 bg-gray-700" />
@@ -127,14 +149,21 @@ export default function TopBar() {
           >
             TR
           </button>
-          <button
-            onClick={toggleDoubleTarget}
-            className={`text-xs px-3 py-2.5 rounded border transition-colors ${
-              doubleTarget ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400'
-            }`}
-          >
-            2× Target
-          </button>
+          <div className="flex rounded border border-gray-600 overflow-hidden" role="group"
+               aria-label={t("ui.enemies_on_field")}>
+            {[true, false].map(due => (
+              <button
+                key={String(due)}
+                onClick={() => { if (doubleTarget !== due) toggleDoubleTarget() }}
+                aria-pressed={doubleTarget === due}
+                className={`text-xs px-3 py-2.5 transition-colors ${
+                  doubleTarget === due ? 'bg-yellow-500 text-gray-900' : 'text-gray-400'
+                }`}
+              >
+                {t("ui.enemies_short")} {due ? '2' : '1'}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="h-px bg-gray-700/60" />

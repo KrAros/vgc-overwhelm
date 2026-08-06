@@ -17,6 +17,8 @@ import StatRow from './StatRow.jsx'
 import { PokemonSearch, MoveSearch, ItemSearch, AbilitySelect } from './SearchSelects.jsx'
 import { useTranslation } from 'react-i18next'
 import AbilityFlags from './AbilityFlags.jsx'
+import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
+import { strumentoNonCalcolato } from '../../lib/gap.js'
 import { slotToShowdown } from './showdownHelpers.js'
 import { ImportModal, DuplicateModal } from './Modals.jsx'
 
@@ -279,6 +281,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               </div>
               <div className="w-1/3">
                 <ItemSearch value={item} onChange={m => setItem(team, index, m)} />
+                {/* Gli strumenti non hanno un pannello descrittivo come le
+                    abilità: il badge va attaccato direttamente alla tendina. */}
+                {strumentoNonCalcolato(item) && (
+                  <div className="mt-1"><BadgeNonCalcolata tipo="item" /></div>
+                )}
               </div>
             </div>
           )}
