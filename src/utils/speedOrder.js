@@ -107,20 +107,43 @@ const ITEM_META_VELOCITA = new Set([
  * dei danni, e non aveva senso reintrodurlo qui.
  *
  * ─── COSA MANCA ANCORA, E PERCHÉ ──────────────────────────────────────────
- * `getFinalSpeed` ha altri rami che qui non ci sono, tutti per la stessa
- * ragione: leggono uno stato che il nostro modello non ha.
+ * `getFinalSpeed` ha altri rami che qui non ci sono. Elencati dopo averli
+ * CONTATI sul vendor, non a memoria — la prima stesura di questo commento
+ * diceva che mancavano tutti «per la stessa ragione», e non era vero.
  *
- *   paralisi (÷2)              nessuna condizione di stato — §1.12
- *   Quick Feet (×1.5)          idem, richiede uno status
- *   Unburden (×2)              richiede «ha PERSO l'item», non «non ha item».
- *                              Un Pokémon senza strumento non è sbilanciato:
- *                              trattare `item: null` come Unburden attivo
- *                              sarebbe sbagliato, non incompleto.
- *   Protosynthesis/Quark Drive richiedono la statistica più alta e il flag
- *   Slow Start, Surge Surfer   non ancora modellate
+ * Bloccati da uno stato che non modelliamo:
+ *   paralisi (÷2, punto 3)      nessuna condizione di stato — §1.12.
+ *                               Lo store non ha proprio un campo `status`.
+ *   Quick Feet (×1.5, punto d)  idem: si accende con uno status qualsiasi
+ *   Slow Start (×0.5, punto e)  richiede il conteggio dei turni in campo
+ *   Protosynthesis / Quark      richiedono il flag paradosso E il calcolo
+ *     Drive (×1.5, punto i)     della statistica più alta: nessuno dei due
+ *                               esiste in `abilityEffects.js`
+ *   Unburden (×2, punto f)      richiede «ha PERSO l'item», non «non ha
+ *                               item». Un Pokémon senza strumento non è
+ *                               sbilanciato: trattare `item: null` come
+ *                               Unburden attivo sarebbe SBAGLIATO, non
+ *                               incompleto. È l'unico che non va aggiunto
+ *                               quando arriverà il resto.
+ *   Utility Umbrella (punto f)  annulla Chlorophyll e Swift Swim, ma
+ *                               l'ombrello non è in `items.json`: è un
+ *                               buco di dati, non di motore
  *
- * Il ⚡ della matrice tace ancora in questi casi. La sessione F-2 li marca
- * nell'interfaccia insieme alle altre abilità non calcolate.
+ * Bloccato da niente:
+ *   Surge Surfer (×2, punto f)  raddoppia sul Campo Elettrico, e il terreno
+ *                               lo modelliamo già (`setTerrain` nello store,
+ *                               `field.terrain` in `battleState`). Serve solo
+ *                               far arrivare il terreno fin qui, che oggi non
+ *                               arriva perché la firma non lo prevede.
+ *                               Candidato immediato per F-2.
+ *
+ * Fuori portata per scelta:
+ *   Grass/Water Pledge (punto h) le mosse Pledge non esistono nel modello
+ *   Quick Powder (punto c)       vale solo per Ditto
+ *
+ * Finché mancano, il ⚡ della matrice tace nei casi corrispondenti: dice il
+ * falso solo se qualcuno si aspetta che sappia tutto. La sessione F-2 lo
+ * dichiara nell'interfaccia insieme alle altre abilità non calcolate.
  *
  * @param {object} pokemon — slot dallo store
  * @param {string|null} weather
