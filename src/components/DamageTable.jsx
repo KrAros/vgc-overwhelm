@@ -99,7 +99,7 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
   const twAtk = field.atkTeamSide === 't2' ? field.tailwindT2 : field.tailwindT1
   const twDef = field.atkTeamSide === 't2' ? field.tailwindT1 : field.tailwindT2
-  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom, twAtk, twDef)
+  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom, twAtk, twDef, field.terrain)
   const goesFirstT1 = speedFirst === 't1'
   const goesFirstT2 = speedFirst === 't2'
 

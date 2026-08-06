@@ -108,6 +108,38 @@ var jQuery = $
 // (identiche all'originale, righe 2164 e 1918 del file NCP) evita di caricare
 // tutto il resto.
 
+// ───────────────────────────────────────────────────────────────────────────
+// 3-bis. Le globali che servono SOLO all'ingresso alto
+// ───────────────────────────────────────────────────────────────────────────
+// `CALCULATE_ALL_MOVES_SV` è l'ingresso vero di NCP: prima prepara i due
+// Pokémon (Trace, Paradosso, Intimidate, Download, Sword/Shield, pesi) e poi
+// chiama `GET_DAMAGE_SV` quattro volte per lato. Fino alla sessione F-2 noi
+// entravamo direttamente da `GET_DAMAGE_SV`, e tutto lo strato di preparazione
+// non era mai stato confrontato con niente.
+//
+// Queste quattro variabili le dichiara `ap_calc.js` a livello di pagina e le
+// funzioni di preparazione le leggono e ci riscrivono dentro. Senza, il motore
+// si ferma con un ReferenceError alla prima chiamata.
+//
+// I valori iniziali NON sono arbitrari, sono quelli della pagina appena
+// caricata:
+//
+//   lastHighestStat    [-1, -1]        nessuna statistica ancora eletta come
+//                                      "più alta" per Protosynthesis/Quark Drive
+//   lastIntimidateState[false, false]  Intimidate non ancora applicato
+//   lastParadoxState   [false, false]  nessun boost paradosso in corso
+//   manualProtoQuark   false           l'utente non ha forzato a mano il boost
+//                                      dal menu: lo deduce il motore dai dati
+//
+// `manualProtoQuark` in particolare va lasciato a `false`: a `true` NCP salta
+// la propria logica e si aspetta che sia l'interfaccia a dire quale statistica
+// è stata potenziata. Noi vogliamo misurare la SUA logica, non sostituirla.
+
+var lastHighestStat = [-1, -1]
+var lastIntimidateState = [false, false]
+var lastParadoxState = [false, false]
+var manualProtoQuark = false
+
 function Side(format, terrain, weather, isGravity, isSR, spikes, isReflect, isLightScreen, isForesight, isHelpingHand, isFriendGuard, isBattery, isProtect, isPowerSpot, isSteelySpirit, isNeutralizingGas, isGmaxField, isFlowerGiftSpD, isFlowerGiftAtk, isTailwind, isSaltCure, isAuroraVeil, isSwamp, isSeaFire, isRedItem, isBlueItem, isCharge, isLeechSeed, isIngrain, isCurse, isBinding, isAquaRing, isNightmare) {
   this.format = format
   this.terrain = terrain

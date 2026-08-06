@@ -183,6 +183,39 @@ describe('calcEffectiveSpe', () => {
     expect(calcEffectiveSpe({ ...base, item: 'iron ball' }, null)).toBe(Math.floor(nudo / 2))
   })
 
+  // ── Surge Surfer (F-2) ───────────────────────────────────────────────────
+  // Un caso positivo e tre negativi. I negativi sono la parte che rende il
+  // criterio falsificabile: senza, «×2 sul Campo Elettrico» sarebbe soddisfatto
+  // anche da un'implementazione che raddoppia sempre.
+
+  it('Surge Surfer raddoppia sul Campo Elettrico', () => {
+    const nudo   = calcEffectiveSpe({ ...base }, null, false, 'electric')
+    const surfer = calcEffectiveSpe({ ...base, ability: 'surge surfer' }, null, false, 'electric')
+    expect(surfer).toBe(nudo * 2)
+  })
+
+  it('Surge Surfer non fa niente sugli altri tre terreni', () => {
+    for (const terreno of ['grassy', 'psychic', 'misty']) {
+      const nudo   = calcEffectiveSpe({ ...base }, null, false, terreno)
+      const surfer = calcEffectiveSpe({ ...base, ability: 'surge surfer' }, null, false, terreno)
+      expect(surfer, `Surge Surfer si attiva su ${terreno}`).toBe(nudo)
+    }
+  })
+
+  it('Surge Surfer non fa niente senza terreno', () => {
+    const nudo   = calcEffectiveSpe({ ...base }, null, false, null)
+    const surfer = calcEffectiveSpe({ ...base, ability: 'surge surfer' }, null, false, null)
+    expect(surfer).toBe(nudo)
+  })
+
+  it('il Campo Elettrico non tocca la velocità di chi non ha Surge Surfer', () => {
+    // Controllo incrociato: se questo fallisse, il ×2 sarebbe legato al
+    // terreno invece che all'abilità, e il test positivo passerebbe lo stesso.
+    const senzaCampo = calcEffectiveSpe({ ...base, ability: 'rough skin' }, null, false, null)
+    const conCampo   = calcEffectiveSpe({ ...base, ability: 'rough skin' }, null, false, 'electric')
+    expect(conCampo).toBe(senzaCampo)
+  })
+
   it('restituisce un intero: si confronta con === per decidere chi va prima', () => {
     for (const item of [null, 'choice scarf', 'iron ball']) {
       for (const tw of [false, true]) {

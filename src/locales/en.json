@@ -96,7 +96,14 @@
     "import_panel_title": "Import Team {{n}}",
     "import_names_of": "of",
     "share_error": "This shared link could not be read — it may be damaged or incomplete. Your teams have been left empty.",
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "enemies_on_field": "Enemies on field",
+    "enemies_short": "Enemies"
+  },
+  "gap": {
+    "badge": "Not calculated",
+    "spiegazioneAbilita": "this ability isn't included in the damage shown",
+    "spiegazioneItem": "this item isn't included in the damage shown"
   },
   "report": {
     "selected_matchup": "Selected Matchup",

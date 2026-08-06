@@ -13,6 +13,9 @@
     "snapshot:gen": "node scripts/gen-snapshot.mjs",
     "snapshot:diff": "node scripts/diff-snapshot.mjs",
     "ncp:gen": "node scripts/gen-ncp-golden.mjs",
+    "ncp:prep": "node scripts/gen-ncp-preparazione.mjs",
+    "gap:gen": "node scripts/gen-gap-noti.mjs",
+    "gap:report": "node scripts/gen-gap-noti.mjs --report",
     "ncp:report": "node scripts/gen-ncp-golden.mjs --report",
     "dati:flag": "node scripts/gen-flag-dati.mjs",
     "dati:flag:report": "node scripts/gen-flag-dati.mjs --report"

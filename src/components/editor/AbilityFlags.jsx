@@ -1,5 +1,7 @@
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
 import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
+import { abilitaNonCalcolata } from '../../lib/gap.js'
+import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
 import { useTranslation } from 'react-i18next'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
@@ -168,10 +170,24 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     }
     const colorCls = COLOR_MAP[key] || 'bg-gray-800/60 border-gray-700/40 text-gray-500'
     return (
-      <div className={`mt-1 px-1 py-1 rounded text-xs border ${colorCls}`}>
-        💡 {t(`abilities_desc.${key}`, { defaultValue: abilityEffect.desc })}
-      </div>
+      <>
+        <div className={`mt-1 px-1 py-1 rounded text-xs border ${colorCls}`}>
+          💡 {t(`abilities_desc.${key}`, { defaultValue: abilityEffect.desc })}
+        </div>
+        {/* Il caso peggiore per la fiducia: una descrizione tradotta che
+            promette un effetto, e un numero che non si muove. Il badge sta
+            sotto la descrizione, non al suo posto — la descrizione dice cosa
+            fa nel gioco, il badge dice che noi non la calcoliamo. */}
+        {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
+      </>
     )
+  }
+
+  // Nessuna voce in ABILITY_EFFECTS: fino a F-2 qui l'interfaccia non diceva
+  // niente. Per 228 abilità su 310 il silenzio era l'unica risposta — né una
+  // descrizione, né un avviso. Adesso, se il riferimento la calcola, lo diciamo.
+  if (abilitaNonCalcolata(ability)) {
+    return <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>
   }
 
   return null

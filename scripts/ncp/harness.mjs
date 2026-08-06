@@ -183,10 +183,19 @@ export function creaHarness() {
     if ((a.level ?? 50) !== 50) {
       return { ok: false, motivo: 'livello diverso da 50 — in Champions NCP lo forza a 50' }
     }
+    // Intimidate non è applicato da `GET_DAMAGE_SV`: lo applica
+    // `CALCULATE_ALL_MOVES_SV`, un livello sopra. Confrontare qui un caso con
+    // Intimidate acceso darebbe una divergenza finta, perché noi il calo lo
+    // applichiamo e questo ingresso no.
+    //
+    // Fino a F-2 la motivazione diceva «lo applica il wrapper d'interfaccia»,
+    // e la conclusione taciuta era «quindi non è verificabile». Era falso: è
+    // verificabile dall'ingresso alto, e da lì `calcolaConPreparazione` lo
+    // verifica. L'esclusione resta perché resta vera *per questo ingresso*.
     if (d.defAbilityFlags?.intimidateActive) {
       return {
         ok: false,
-        motivo: 'Intimidate attivo — in NCP il calo di Attacco lo applica il wrapper d\'interfaccia, non il motore',
+        motivo: 'Intimidate attivo — fuori portata da questo ingresso; lo copre `calcolaConPreparazione`',
       }
     }
     if ((a.lastRespectsKOs || 0) > 3) {
@@ -308,5 +317,175 @@ export function creaHarness() {
     }
   }
 
-  return { calcola, verificaAnagrafica: tr.verificaAnagrafica, traduttore: tr, ncp }
+  // ───────────────────────────────────────────────────────────────────────────
+  // L'ingresso alto: CALCULATE_ALL_MOVES_SV
+  // ───────────────────────────────────────────────────────────────────────────
+  //
+  // ─── PERCHÉ NON BASTAVA `calcola` ──────────────────────────────────────────
+  // `GET_DAMAGE_SV` riceve due Pokémon GIÀ PREPARATI. Tutto ciò che in NCP
+  // succede prima — Intimidate che abbassa l'Attacco, Intrepid Sword che lo
+  // alza, Booster Energy che accende Protosynthesis, Download che legge le
+  // difese avversarie — vive in `CALCULATE_ALL_MOVES_SV`, un livello sopra.
+  //
+  // Entrando in basso quello strato non era confrontato con niente. Peggio:
+  // `calcola` ESCLUDEVA i casi con Intimidate attivo dicendo che «lo applica
+  // il wrapper d'interfaccia» — il che era vero solo perché entravamo sotto al
+  // wrapper. L'esclusione è tolta: adesso lo strato lo eseguiamo.
+  //
+  // ─── COSA CAMBIA NELLA COSTRUZIONE ─────────────────────────────────────────
+  // Due differenze rispetto a `calcola`, entrambe obbligatorie:
+  //
+  //   1. `stats` NON va precalcolata. `CALCULATE_ALL_MOVES_SV` la ricava da
+  //      `rawStats` e `boosts` DOPO aver applicato Intimidate e compagnia. Se
+  //      la scrivessimo noi prima, verrebbe sovrascritta — ma i boost che
+  //      legge sarebbero quelli modificati, quindi il risultato sarebbe giusto
+  //      per caso. Meglio non dipendere da un caso.
+  //
+  //   2. Le quattro mosse devono essere quattro OGGETTI DISTINTI. Il motore
+  //      scrive dentro l'oggetto mossa (`checkMoveTypeChange` ne cambia il
+  //      tipo, `checkContactOverride` il contatto) e qui viene chiamato quattro
+  //      volte di fila per lato. Con lo stesso riferimento ripetuto, la
+  //      seconda chiamata partirebbe dalla mossa che la prima ha modificato.
+  //      In `calcola`, che chiama una volta sola, il problema non si vede.
+  //
+  // ─── COME SI LEGGE IL RISULTATO ────────────────────────────────────────────
+  // Restituisce `results[lato][mossa]`. Noi mettiamo l'attaccante come `p2`
+  // (indice 1) e leggiamo `results[1][0]`, perché il portatore dell'abilità di
+  // supporto — chi ha Intimidate — è il difensore, cioè `p1`.
+
+  /**
+   * L'oggetto campo che l'ingresso alto si aspetta: non un `Side`, ma un
+   * oggetto con dei metodi. Nell'app vera è il `Field` di `ap_calc.js`.
+   *
+   * `getSide(i)` restituisce il lato del giocatore i. Attenzione all'ordine in
+   * `CALCULATE_ALL_MOVES_SV`: quando p1 attacca gli viene passato `getSide(1)`,
+   * cioè il lato del DIFENSORE. È coerente col resto del motore — gli schermi
+   * che contano sono quelli di chi subisce — ma è controintuitivo da leggere.
+   */
+  function costruisciCampo(field, format) {
+    const latoP0 = costruisciLato(field, format)
+    const latoP1 = costruisciLato(field, format)
+    return {
+      getTerrain: () => TERRENO_NCP[field.terrain] || '',
+      getWeather: () => METEO_NCP[String(field.weather || '').toLowerCase()] || '',
+      getNeutralGas: () => false,
+      getSide: (i) => (i === 0 ? latoP0 : latoP1),
+      getTailwind: () => false,
+      getSwamp: () => false,
+    }
+  }
+
+  /**
+   * Come `calcola`, ma passando dallo strato di preparazione.
+   *
+   * @returns {{ok: true, rolls: number[], boostFinali: object}}
+   *        | {{ok: false, motivo: string}}
+   */
+  function calcolaConPreparazione({ attacker: a, defender: d, move, field = {} }) {
+    if ((a.level ?? 50) !== 50) {
+      return { ok: false, motivo: 'livello diverso da 50 — in Champions NCP lo forza a 50' }
+    }
+
+    const mossaNCP = tr.mossaNCP(move)
+    if (!mossaNCP) return { ok: false, motivo: `mossa non presente in NCP: ${move}` }
+    const datiMossa = ncp.mosse[mossaNCP]
+
+    const eSpread = datiMossa.isSpread === true
+    const schermoAttivo = !!(field.reflect || field.lightScreen || field.auroraVeil)
+    if (eSpread && !field.doubleTarget && schermoAttivo) {
+      return { ok: false, motivo: 'mossa ad area su bersaglio singolo con schermo attivo — non esprimibile' }
+    }
+    const format = (eSpread && !field.doubleTarget) ? 'Singles' : 'Doubles'
+
+    const att = costruisciPokemon({
+      slug: a.atkPokemon,
+      sps: a.atkSPs || [0, 0, 0, 0, 0, 0],
+      nature: a.atkNature,
+      ability: tr.abilitaNCP(a.atkAbility),
+      item: tr.strumentoNCP(a.atkItem),
+      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0 },
+      mossaNCP,
+      datiMossa,
+      extra: {
+        crit: field.crit,
+        lastRespectsKOs: a.lastRespectsKOs || 0,
+        abilitaAttiva: a.atkAbilityFlags?.flashFireActive || a.atkAbilityFlags?.abilityOn,
+        supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
+      },
+    })
+    if (!att) return { ok: false, motivo: `specie non presente in NCP: ${a.atkPokemon}` }
+
+    const dif = costruisciPokemon({
+      slug: d.defPokemon,
+      sps: d.defSPs || [0, 0, 0, 0, 0, 0],
+      nature: d.defNature,
+      ability: tr.abilitaNCP(d.defAbility),
+      item: tr.strumentoNCP(d.defItem),
+      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0 },
+      mossaNCP,
+      datiMossa,
+      // `abilityOn` sul difensore è il nostro `intimidateActive`: in NCP
+      // `checkIntimidate` parte solo se `source.abilityOn` è vero.
+      extra: {
+        hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
+        abilitaAttiva: d.defAbilityFlags?.intimidateActive,
+      },
+    })
+    if (!dif) return { ok: false, motivo: `specie non presente in NCP: ${d.defPokemon}` }
+
+    if (a.atkAbility && !att.pokemon.ability) {
+      return { ok: false, motivo: `abilità non presente in NCP: ${a.atkAbility}` }
+    }
+    if (d.defAbility && !dif.pokemon.ability) {
+      return { ok: false, motivo: `abilità non presente in NCP: ${d.defAbility}` }
+    }
+    if (a.atkItem && !att.pokemon.item) {
+      return { ok: false, motivo: `strumento non presente in NCP: ${a.atkItem}` }
+    }
+    if (d.defItem && !dif.pokemon.item) {
+      return { ok: false, motivo: `strumento non presente in NCP: ${d.defItem}` }
+    }
+
+    // Quattro oggetti mossa distinti per lato: vedi la nota sopra.
+    const clona = (m) => Object.assign({}, m)
+    att.pokemon.moves = [att.mossa, clona(att.mossa), clona(att.mossa), clona(att.mossa)]
+    dif.pokemon.moves = [clona(dif.mossa), clona(dif.mossa), clona(dif.mossa), clona(dif.mossa)]
+
+    let risultati
+    try {
+      // p1 = difensore (porta l'abilità di supporto), p2 = attaccante.
+      risultati = ncp.CALCULATE_ALL_MOVES_SV(dif.pokemon, att.pokemon, costruisciCampo(field, format))
+    } catch (e) {
+      return { ok: false, motivo: `errore dentro il motore NCP: ${e.message}` }
+    }
+
+    const esito = risultati?.[1]?.[0]
+    if (!esito) return { ok: false, motivo: 'nessun risultato dall\'ingresso alto' }
+    const danno = Array.isArray(esito.damage[0]) ? esito.damage[0] : esito.damage
+
+    const comune = {
+      ok: true,
+      format,
+      defHP: dif.pokemon.maxHP,
+      descrizione: esito.description,
+      // I boost DOPO la preparazione. Servono a distinguere una divergenza di
+      // formula da una di preparazione: se questi sono diversi dai nostri, il
+      // problema è a monte del danno.
+      boostFinali: { attaccante: { ...att.pokemon.boosts }, difensore: { ...dif.pokemon.boosts } },
+      entita: { pokemon: [a.atkPokemon, d.defPokemon], mosse: [move] },
+    }
+
+    if (!Array.isArray(danno) || danno.length !== 16) {
+      return { ...comune, nullo: true, rolls: [] }
+    }
+    return { ...comune, nullo: false, rolls: danno }
+  }
+
+  return {
+    calcola,
+    calcolaConPreparazione,
+    verificaAnagrafica: tr.verificaAnagrafica,
+    traduttore: tr,
+    ncp,
+  }
 }
