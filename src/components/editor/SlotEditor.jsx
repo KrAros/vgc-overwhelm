@@ -6,6 +6,8 @@ import useCalcStore from '../../store/useCalcStore'
 import { NATURES, NATURE_MODIFIERS } from '../../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
+import { speedWeatherAttiva } from '../../utils/speedOrder.js'
+import { MAX_SP_TOTAL, MAX_SP_PER_STAT } from '../../lib/rules.js'
 
 
 
@@ -51,7 +53,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const lastRespectsKOs  = pokemon?.lastRespectsKOs ?? 0
   const hasLastRespects  = pokemon?.moves?.some(m => m === 'last respects')
   const total        = sps.reduce((a,b) => a+b, 0)
-  const remaining    = 66 - total
+  const remaining    = MAX_SP_TOTAL - total
 
   const opponentTeam = useCalcStore(s => s[team === 'team1' ? 'team2' : 'team1'])
   const opponentHasIntimidateActive = opponentTeam.some(
@@ -61,7 +63,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const boostFields = [null,'atkBoost','defBoost','spAtkBoost','spDefBoost','speBoost']
 
   const handleSp = (i, val) => {
-    const newVal = Math.min(32, Math.max(0, val))
+    const newVal = Math.min(MAX_SP_PER_STAT, Math.max(0, val))
     const newSPs = [...sps]
     const diff   = newVal - sps[i]
     if (diff > remaining) return
@@ -305,7 +307,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                     ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
                     : 'bg-gray-700 text-gray-400'
                 }`}>
-                  ({remaining}/66)
+                  ({remaining}/{MAX_SP_TOTAL})
                 </span>
               </div>
               <span className="w-8 text-center">{t("report.tot")}</span>
@@ -323,16 +325,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 boostVal={boostFields[i] ? (pokemon?.[boostFields[i]] || 0) : 0}
                 onSpChange={val => handleSp(i, val)}
                 onBoostChange={val => boostFields[i] && setBoost(team, index, boostFields[i], val)}
-                speedWeatherActive={(() => {
-                  const SPEED_MAP = {
-                    'sand-rush':   ['sand', 'sandstorm'],
-                    'chlorophyll': ['sun', 'harsh sunshine'],
-                    'swift-swim':  ['rain', 'heavy rain'],
-                    'slush-rush':  ['snow', 'hail'],
-                  }
-                  const conditions = SPEED_MAP[(ability || '').toLowerCase()] || []
-                  return conditions.includes((weather || '').toLowerCase())
-                })()}
+                speedWeatherActive={speedWeatherAttiva(ability, weather)}
                 tailwindActive={i === 5 && tailwindActive}
               />
             ))}

@@ -128,6 +128,7 @@
     "social_coming_soon": "Social — coming soon",
     "quick_info": "How to use",
     "no_ko": "No KO",
+    "no_ko_in_n": "No KO in {{turni}} turns",
     "copy_calc_aria": "Copy calc string",
     "close_aria": "Close report panel",
     "scroll_rolls": "Scroll to damage rolls",
@@ -165,7 +166,7 @@
   "eot": {
     "leftovers_recovery": "Leftovers recovery",
     "sitrus_recovery": "Sitrus Berry recovery",
-    "no_ko_in_6": "No KO in 6 turns after",
+    "no_ko_in_n": "No KO in {{turni}} turns after",
     "guaranteed": "Guaranteed",
     "sandstorm_damage": "sandstorm damage",
     "chance_to": "chance to",

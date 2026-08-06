@@ -8,6 +8,7 @@ import { MOD } from '../lib/modifiers.js'
 // spdMult:    moltiplica la stat di difesa speciale (catena DIFESA)
 // bpMod:      modificatore di POTENZA in virgola fissa (catena BP)
 // finalMod:   modificatore di DANNO FINALE in virgola fissa (catena FINALE)
+// finalModSuperEff: come finalMod, ma solo quando l'efficacia è maggiore di 1
 // typBoost:   tipo richiesto perché bpMod si applichi (TYPES.X)
 // statType:   restringe atkMult/bpMod a 'physical' o 'special'
 //
@@ -29,6 +30,17 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical', showInSmogon: true },
   'choice specs':   { atkMult: 1.5, statType: 'special',  showInSmogon: true },
+  // Expert Belt: ×1.2 sul danno finale, ma SOLO contro un bersaglio che prende
+  // super efficace (`calcFinalMods` punto o). Serve un campo suo perché
+  // `finalMod` è incondizionato: scriverlo lì darebbe il ×1.2 anche su un
+  // colpo neutro, che è metà dei colpi.
+  //
+  // In NCP i punti o e p sono un `if / else if`: Expert Belt esclude Life Orb.
+  // Essendo l'item un campo solo, quell'esclusione non può mai servire — ma la
+  // riproduciamo lo stesso nel motore, perché copiare la specifica costa una
+  // riga e dedurre che «tanto non capita» è il tipo di ragionamento che
+  // invecchia male.
+  'expert belt':    { finalModSuperEff: MOD.X1_2,           showInSmogon: true },
   // Life Orb: modificatore di DANNO FINALE (`calcFinalMods` punto p).
   // 0x14CC = 5324, cioè ×1,29980… — non ×1.3. La differenza è reale.
   'life orb':       { finalMod: MOD.X1_3_ORB,               showInSmogon: true },

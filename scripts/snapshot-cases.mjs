@@ -974,6 +974,122 @@ function aggiungi(blocco, etichetta, input) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// B11 — Expert Belt e vocabolario del meteo (sessione F-1)
+//
+// PERCHÉ ESISTE QUESTO BLOCCO.
+// La sessione I ha lasciato una regola: prima di scrivere un criterio, verifica
+// che esista almeno un caso capace di farlo fallire. Expert Belt non compariva
+// in nessuno dei 540 casi né dei 500 golden — misurato con grep, non dedotto.
+// Implementarlo avrebbe quindi lasciato `snapshot:diff` a zero, e lo zero
+// avrebbe voluto dire "non c'è bersaglio", non "non ho rotto niente".
+//
+// Il blocco viene fotografato PRIMA della correzione, cioè con Expert Belt
+// ancora inerte. Dopo l'implementazione i casi super efficaci devono muoversi
+// e i controlli negativi devono restare fermi.
+//
+// L'EFFICACIA DEI TRE DIFENSORI, contro Earthquake (Terra) di Garchomp:
+//   incineroar   Fuoco/Buio     ×2  ×1  = ×2     → Expert Belt si attiva
+//   amoonguss    Erba/Veleno    ×½  ×2  = ×1     → controllo negativo
+//   rillaboom    Erba           ×½        = ×½    → controllo negativo
+//
+// I due controlli negativi non sono una formalità: la condizione di NCP è
+// `typeEffectiveness > 1`, e senza un caso a ×1 e uno a ×½ un `>=` scritto per
+// sbaglio passerebbe inosservato.
+// ═══════════════════════════════════════════════════════════════════════════
+
+{
+  const [chomp, eq] = A.chompEq
+
+  // ── Expert Belt da solo: uno che deve muoversi, due che non devono ───────
+  const bersagli = [
+    ['superefficace', D.incin],   // ×2
+    ['neutro',        D.amoon],   // ×1
+    ['resistito',     D.rilla],   // ×½
+  ]
+
+  for (const [nome, difensore] of bersagli) {
+    aggiungi('B11', `expertbelt-${nome}`, {
+      attacker: { ...chomp, atkItem: 'expert belt' },
+      defender: difensore,
+      move: eq,
+      field: field(),
+    })
+  }
+
+  // ── Confronto diretto con Life Orb ────────────────────────────────────────
+  // In NCP i due item stanno nello stesso `if/else if` (punti o e p di
+  // `calcFinalMods`). Essendo l'item un campo solo, l'esclusione è già
+  // garantita dai dati e l'`else` non può mai servire — ma tenere i due casi
+  // affiancati rende visibile che ×1.2 (0x1333) e ×1,2998 (0x14CC) sono due
+  // numeri diversi applicati nello stesso punto della catena.
+  aggiungi('B11', 'lifeorb-superefficace', {
+    attacker: { ...chomp, atkItem: 'life orb' },
+    defender: D.incin,
+    move: eq,
+    field: field(),
+  })
+
+  // ── Expert Belt dentro una catena di due e di tre ────────────────────────
+  // Con un modificatore solo la concatenazione coincide quasi sempre col
+  // troncamento (è la lezione di D-2). Serve un secondo modificatore nella
+  // STESSA catena finale perché l'aritmetica sia osservabile: lo schermo
+  // (0xAAC) sta al punto a, Expert Belt al punto o, la bacca al punto q.
+  //
+  // ─── PERCHÉ NON GARCHOMP ────────────────────────────────────────────────
+  // Il primo tentativo usava Earthquake come i casi qui sopra, ed è finito
+  // negli ESCLUSI dell'harness: una mossa ad area su bersaglio singolo con uno
+  // schermo attivo non è esprimibile in NCP, dove il formato governa insieme
+  // la penalità d'area e il moltiplicatore dello schermo. Sarebbero rimasti
+  // due casi vivi solo nello snapshot — cioè congelati, non verificati.
+  //
+  // Crunch di Chien-Pao è a bersaglio singolo e prende super efficace su
+  // Gholdengo (Buio contro Spettro ×2, contro Acciaio ×1), e la Colbur Berry
+  // resiste al Buio. Stessa catena, stesso punto della formula, ma con un
+  // caso che l'oracolo sa leggere.
+  const [chien, crunch] = A.chienCrunch
+
+  aggiungi('B11', 'expertbelt+reflect', {
+    attacker: { ...chien, atkItem: 'expert belt' },
+    defender: D.gold,
+    move: crunch,
+    field: field({ reflect: true }),
+  })
+
+  // Tre modificatori: schermo + Expert Belt + bacca resistente. Da tre in su
+  // l'ordine dentro la catena può contare (misurato in D-2: 279 terne su 729),
+  // quindi questo è anche il caso che verifica di aver copiato l'ordine di NCP
+  // e non uno qualsiasi.
+  aggiungi('B11', 'expertbelt+reflect+colbur', {
+    attacker: { ...chien, atkItem: 'expert belt' },
+    defender: { ...D.gold, defItem: 'colbur berry' },
+    move: crunch,
+    field: field({ reflect: true }),
+  })
+
+  // ── Vocabolario del meteo ────────────────────────────────────────────────
+  // B2 copre già `hail` e `sandstorm` sulle cinque coppie standard, ma solo
+  // una di quelle coppie ha un difensore che reagisce al meteo (Calyrex-Ice
+  // sotto neve). Questi casi aggiungono l'altra metà — il difensore Roccia
+  // sotto sabbia, che in B2 non c'è: `chompRock` colpisce Corviknight, che è
+  // Acciaio/Volante, e comunque Rock Slide è fisica mentre il bonus della
+  // sabbia è sulla Difesa Speciale.
+  //
+  // Tyranitar è Roccia/Buio e prende un attacco speciale: sotto `sand` il
+  // bonus c'è già oggi, sotto `sandstorm` no. Dopo la normalizzazione i due
+  // devono dare lo stesso numero — ed è una relazione, non un valore, quindi
+  // sopravvive a qualunque cambio futuro della formula.
+  const ttar = def('tyranitar', 'careful', SP.difensore)
+  for (const w of ['sand', 'sandstorm', null]) {
+    aggiungi('B11', `sabbia-roccia-${w ?? 'nessuno'}`, {
+      attacker: A.fluttMoon[0],
+      defender: ttar,
+      move: A.fluttMoon[1],
+      field: field({ weather: w }),
+    })
+  }
+}
+
 // ─── Tag derivati ──────────────────────────────────────────────────────────
 
 /**
@@ -1015,6 +1131,13 @@ export function calcolaTag(input) {
   // Conteggio dei modificatori finali potenzialmente concatenabili
   let mods = 0
   if (a.atkItem === 'life orb') mods++
+  // Expert Belt occupa il punto o della catena finale, subito prima di Life
+  // Orb. Conta come modificatore solo quando l'efficacia è maggiore di 1, ma
+  // qui l'efficacia non è calcolabile senza il Pokédex — e questo file non
+  // importa niente da `src/`. Lo conto sempre: sovrastima il tag di qualche
+  // caso, mai il contrario, e il tag serve a raggruppare il diff, non ad
+  // asserire.
+  if (a.atkItem === 'expert belt') mods++
   if (d.defItem && d.defItem.endsWith(' berry') && d.defItem !== 'sitrus berry') mods++
   if (d.defAbility && ['multiscale', 'shadow shield', 'filter', 'solid rock', 'thick fat', 'fluffy'].includes(d.defAbility)) mods++
   if (f.reflect) mods++
