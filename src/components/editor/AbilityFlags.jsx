@@ -1,4 +1,5 @@
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
+import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
 import { useTranslation } from 'react-i18next'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
@@ -7,16 +8,12 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   const { t } = useTranslation()
   const key = normalizeAbilityKey(ability)
 
-  const SPEED_WEATHER_MAP = {
-    'sand-rush':   ['sand', 'sandstorm'],
-    'chlorophyll': ['sun', 'harsh sunshine'],
-    'swift-swim':  ['rain', 'heavy rain'],
-    'slush-rush':  ['snow', 'hail'],
-  }
-  const speedWeatherConditions = SPEED_WEATHER_MAP[key] || []
-  const speedWeatherActive = speedWeatherConditions.includes((weather || '').toLowerCase())
+  // La tabella sta in `utils/speedOrder.js` dalla sessione F-1. Qui c'era una
+  // copia, in `SlotEditor.jsx` una terza, e le tre non davano la stessa
+  // risposta sulla stessa abilità.
+  const speedWeatherActive = speedWeatherAttiva(ability, weather)
 
-  if (SPEED_WEATHER_MAP[key]) {
+  if (SPEED_WEATHER_ABILITIES[key]) {
     return (
       <div className={`mt-1 px-1 py-1 rounded text-xs border ${
         speedWeatherActive

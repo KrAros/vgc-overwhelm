@@ -128,6 +128,7 @@
     "social_coming_soon": "Social — prossimamente",
     "quick_info": "Come si usa",
     "no_ko": "Nessun KO",
+    "no_ko_in_n": "Nessun KO in {{turni}} turni",
     "copy_calc_aria": "Copia stringa calcolo",
     "close_aria": "Chiudi pannello",
     "scroll_rolls": "Vai ai roll danno",
@@ -165,7 +166,7 @@
   "eot": {
     "leftovers_recovery": "recupero Avanzi",
     "sitrus_recovery": "Recupero Baccacedro",
-    "no_ko_in_6": "Nessun KO in 6 turni dopo",
+    "no_ko_in_n": "Nessun KO in {{turni}} turni dopo",
     "guaranteed": "Garantito",
     "sandstorm_damage": "danno tempesta di sabbia",
     "chance_to": "probabilità di",

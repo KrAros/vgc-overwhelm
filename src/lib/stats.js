@@ -107,10 +107,19 @@ export function getBaseStat(pokemon, stat) {
  * velocità) ottiene la statistica nuda, che è ciò che vuole mostrare.
  *
  * ─── NOTA SUI NOMI DEL METEO ───────────────────────────────────────────────
- * Il confronto è con `'sand'` e `'snow'` esatti. `'sandstorm'` e `'hail'`, che
- * compaiono in `speedOrder.js` fra i sinonimi accettati, qui non attivano
- * nulla. Oggi è innocuo perché l'interfaccia produce solo le prime due forme,
- * ma è una discrepanza reale: annotata per la sessione F.
+ * Il confronto è con `'sand'` e `'snow'` esatti, e resta così: dalla sessione
+ * F-1 il motore normalizza il meteo UNA volta all'ingresso di
+ * `calculateDamage` (`normalizzaMeteo` in `lib/rules.js`), quindi qui arriva
+ * sempre un nome canonico.
+ *
+ * Prima erano quattro liste di sinonimi in quattro file, e non coincidevano:
+ * questa ne conosceva due, `calcEOT` tre, `WEATHER_BALL_TYPE` otto. Da lì
+ * l'unica divergenza da NCP rimasta viva dopo D-2 — l'harness diceva
+ * all'oracolo «neve» e il motore leggeva «grandine», una parola che non
+ * conosceva.
+ *
+ * Chi chiama `calcStat` da fuori il motore (l'editor, `speedOrder`) o passa
+ * già un nome canonico, o non passa il meteo affatto.
  *
  * @param {number} base — statistica base dal Pokédex
  * @param {number} sp — SP investiti in questa statistica

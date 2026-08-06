@@ -8,7 +8,7 @@
  */
 
 import { TYPES } from '../data/typeChart'
-import { MAX_HITS } from './rules.js'
+import { MAX_HITS, normalizzaMeteo } from './rules.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
 
@@ -18,9 +18,9 @@ import { MAX_HITS } from './rules.js'
  * bloccava. Con la programmazione dinamica nove colpi costano 0,1 ms, e nove
  * è anche il tetto che usa il calculator di Smogon.
  *
- * NOTA: la simulazione della Sitrus Berry in ReportPanel.jsx ha un tetto suo,
- * fermo a 6 turni (insieme alla chiave i18n `eot.no_ko_in_6`). Vanno allineati,
- * ma è un file fuori dallo scope di questa sessione.
+ * Dalla sessione F-1 la simulazione della Sitrus Berry vive qui e usa lo stesso
+ * tetto: prima stava in ReportPanel.jsx con un 6 scritto a mano, e il pannello
+ * poteva dire «7HKO» nel badge e «nessun KO in 6 turni» nella riga sotto.
  */
 // Ri-esportata per compatibilità: la definizione sta in `lib/rules.js` dalla
 // sessione C, insieme alle altre regole di gioco. I chiamanti storici
@@ -77,8 +77,10 @@ export function isSandImmune(defTypes = [], ability = '', item = '') {
  * }}
  */
 export function calcEOT(def, defHP, weather, defTypes = []) {
-  const w = (weather || '').toLowerCase()
-  const isSand = w === 'sand' || w === 'sandstorm'
+  // Un solo nome per un solo meteo. Prima qui c'era `w === 'sand' || w ===
+  // 'sandstorm'`, cioè la terza delle quattro liste di sinonimi sparse per il
+  // progetto — e ognuna ne conosceva un pezzo diverso.
+  const isSand = normalizzaMeteo(weather) === 'sand'
   const sandImmune = isSandImmune(defTypes, def.ability || '', def.item || '')
   const sandDmgHP = isSand && !sandImmune ? Math.floor(defHP / 16) : 0
   const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'
@@ -227,8 +229,23 @@ export function calcKOChance(rolls, defHP, eotNet, hits) {
  * } | null}
  */
 export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_HITS } = {}) {
-  const cumulativa = koChanceCumulative(rolls, defHP, eotNet, maxHits)
+  return primoKO(koChanceCumulative(rolls, defHP, eotNet, maxHits), { minHits, maxHits })
+}
 
+/**
+ * La regola di lettura di una cumulativa: il primo numero di colpi la cui
+ * probabilità supera la soglia.
+ *
+ * Estratta da `findBestNHKO` nella sessione F-1 perché ora ci sono DUE
+ * distribuzioni — con e senza Sitrus Berry — e la cosa che non deve
+ * divergere fra le due è proprio questa regola. Finché è una funzione sola,
+ * non può.
+ *
+ * @param {number[]} cumulativa
+ * @param {object} [opzioni]
+ * @returns {{hits:number, chance:number, pct:number, guaranteed:boolean}|null}
+ */
+function primoKO(cumulativa, { minHits = 1, maxHits = MAX_HITS } = {}) {
   for (let hits = Math.max(minHits, 1); hits <= maxHits; hits++) {
     const chance = cumulativa[hits - 1]
     if (chance > SOGLIA_KO) {
@@ -241,4 +258,117 @@ export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_
     }
   }
   return null
+}
+
+// ── Sitrus Berry ──────────────────────────────────────────────────────────────
+
+/**
+ * La stessa DP di `koChanceCumulative`, ma con la Sitrus Berry nello stato.
+ *
+ * ─── PERCHÉ SERVE UNO STATO IN PIÙ ────────────────────────────────────────
+ * La bacca si mangia una volta sola, quando gli HP scendono a metà o sotto.
+ * Quindi «quanti HP mi restano» non basta più a descrivere un percorso: due
+ * percorsi con gli stessi HP sono diversi se uno ha già consumato la bacca e
+ * l'altro no. Lo stato diventa la coppia `(hp, bacca già usata)`.
+ *
+ * La coppia è codificata in un intero — `hp * 2 + usata` — invece che nella
+ * stringa `"${hp},${usata}"` che c'era prima in ReportPanel: stessa cosa, ma
+ * senza costruire e ri-analizzare centomila stringhe per calcolo.
+ *
+ * ─── L'ORDINE DENTRO IL TURNO ─────────────────────────────────────────────
+ *   1. sottrai il roll → se scende a 0 o sotto è KO, e il turno finisce lì
+ *   2. la bacca, se non è ancora stata usata e gli HP sono a metà o sotto
+ *   3. l'EOT (Avanzi positivo, sabbia negativo) → può uccidere anche lui
+ *   4. limita gli HP al massimo
+ *
+ * ─── LA SABBIA POTEVA UCCIDERE, MA NON NELLA NARRATIVA ────────────────────
+ * Il punto 4 del piano segnalava un `Math.max(hp + eot, 1)` che impediva alla
+ * sabbia di chiudere il conto. Stava nella parte deterministica di
+ * `simulateSitrus` — quella che disegnava il turno per turno — e quella parte
+ * non era renderizzata da nessun componente: `healTurns`, `midDmg` e `hko`
+ * venivano restituiti e mai letti. Il difetto era reale nel codice e
+ * invisibile a schermo. È stata rimossa invece che corretta: qui sotto,
+ * nella parte che invece finisce davvero sullo schermo, quel clamp non c'è
+ * mai stato e la sabbia uccide.
+ *
+ * @param {number[]} rolls
+ * @param {number}   defHP
+ * @param {object}   [opzioni]
+ * @param {number}   [opzioni.eotNet=0]
+ * @param {boolean}  [opzioni.conSitrus=true]
+ * @param {number}   [opzioni.maxHits=MAX_HITS]
+ * @returns {number[]} probabilità di aver fatto KO **entro** h colpi
+ */
+export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, maxHits = MAX_HITS } = {}) {
+  const cumulativa = new Array(Math.max(maxHits, 0)).fill(0)
+  if (!rolls || rolls.length === 0 || maxHits < 1) return cumulativa
+
+  const quotaRoll = 1 / rolls.length
+  const cura   = Math.floor(defHP / 4)
+  const soglia = Math.floor(defHP / 2)
+
+  // chiave = hp * 2 + (bacca usata ? 1 : 0)
+  let stati = new Map([[defHP * 2, 1]])
+  let koTotale = 0
+
+  for (let h = 0; h < maxHits; h++) {
+    const prossimi = new Map()
+
+    for (const [stato, prob] of stati) {
+      const hp    = stato >> 1
+      const usata = (stato & 1) === 1
+      const quota = prob * quotaRoll
+
+      for (const roll of rolls) {
+        let nuoviHP = hp - roll
+        if (nuoviHP <= 0) { koTotale += quota; continue }
+
+        let oraUsata = usata
+        if (conSitrus && !usata && nuoviHP <= soglia) {
+          nuoviHP = Math.min(nuoviHP + cura, defHP)
+          oraUsata = true
+        }
+
+        nuoviHP += eotNet
+        if (nuoviHP <= 0) { koTotale += quota; continue }
+        if (nuoviHP > defHP) nuoviHP = defHP
+
+        const chiave = nuoviHP * 2 + (oraUsata ? 1 : 0)
+        prossimi.set(chiave, (prossimi.get(chiave) || 0) + quota)
+      }
+    }
+
+    cumulativa[h] = koTotale
+    stati = prossimi
+
+    if (stati.size === 0) {
+      for (let k = h + 1; k < maxHits; k++) cumulativa[k] = koTotale
+      break
+    }
+  }
+
+  return cumulativa
+}
+
+/**
+ * Il miglior NHKO tenendo conto della Sitrus Berry.
+ *
+ * Stessa forma di ritorno e stessa regola di lettura di `findBestNHKO`: le due
+ * funzioni differiscono solo per la distribuzione da cui leggono.
+ *
+ * ─── PRIMA RISPONDEVANO A DUE DOMANDE DIVERSE ─────────────────────────────
+ * La versione in ReportPanel prendeva la probabilità di morire *esattamente* a
+ * quel turno, mentre `findBestNHKO` prende quella di essere morto *entro* quel
+ * turno. Nello stesso pannello, sulla stessa mossa, il badge diceva una cosa e
+ * la riga sotto un'altra — e quella del Sitrus era sempre la più bassa delle
+ * due, cioè sbagliava nella direzione che fa sopravvalutare la sopravvivenza.
+ * Per un tool da torneo è la direzione peggiore in cui sbagliare.
+ *
+ * @param {number[]} rolls
+ * @param {number}   defHP
+ * @param {object}   [opzioni] — come `koChanceSitrus`, più `minHits`
+ * @returns {{hits:number, chance:number, pct:number, guaranteed:boolean}|null}
+ */
+export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS } = {}) {
+  return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits }), { minHits, maxHits })
 }

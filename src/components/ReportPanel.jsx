@@ -6,7 +6,8 @@ import useFieldState from '../hooks/useFieldState'
 import { IS_DEBUG } from '../lib/debugBus'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
-import { calcEOT, findBestNHKO } from '../lib/damage'
+import { calcEOT, findBestNHKO, findBestNHKOSitrus } from '../lib/damage'
+import { MAX_HITS } from '../lib/rules'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
@@ -14,98 +15,54 @@ import movesData from '../data/moves.json'
 import { TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
 
 // ── Helpers generici ──────────────────────────────────────────────────────────
+//
+// Qui stavano `calcHKO` e `formatHKO`. Rimosse nella sessione F-1.
+//
+// `calcHKO` stimava i colpi come `ceil(100 / dannoMinimo%)`, cioè assumendo
+// che ogni colpo tirasse il roll più basso di tutti — e `formatHKO` etichettava
+// quella stima «Garantito». Ma l'unico punto in cui il risultato veniva
+// mostrato era il ramo finale del badge, quello raggiunto SOLO quando
+// `findBestNHKO` ha già risposto `null`: cioè quando un KO, entro nove colpi,
+// non esiste. Il pannello scriveva «Garantito 5HKO» dentro un riquadro
+// intitolato «NESSUN KO».
+//
+// Non era un numero impreciso, era un numero falso per costruzione. Al suo
+// posto c'è la frase che dice quello che il motore sa davvero:
+// «nessun KO in N turni», con N = MAX_HITS.
+//
+// ── Sitrus Berry ──────────────────────────────────────────────────────────────
 
-function calcHKO(minPct) {
-  if (minPct <= 0) return null
-  const hits = Math.ceil(100 / minPct)
-  return hits
-}
+/**
+ * Il riassunto testuale della Sitrus Berry.
+ *
+ * Il calcolo sta in `lib/damage.js` (`findBestNHKOSitrus`). Qui resta solo la
+ * presentazione — quali etichette accostare al numero — che è l'unica parte
+ * legata a i18n e ai componenti.
+ *
+ * Prima di F-1 questa funzione conteneva anche la DP con lo stato della bacca,
+ * un tetto di 6 turni scritto a mano contro i 9 di `findBestNHKO`, e una
+ * narrativa turno per turno che nessun componente renderizzava.
+ */
+function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true) {
+  const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus })
+  const parti = conSitrus ? [...condParts, 'sitrus'] : [...condParts]
 
-function formatHKO(hits, t) {
-  if (!hits) return null
-  if (hits === 1) return `${t('eot.guaranteed')} OHKO`
-  return `${t('eot.guaranteed')} ${hits}HKO`
-}
+  if (!best) return { summary: { type: 'noKo', condParts: parti } }
 
-// ── Sitrus Berry simulation ───────────────────────────────────────────────────
-
-function _calcSitrusProb(rolls, defHP, eot = 0, maxTurns = 6, useSitrus = true) {
-  const sitrusHeal = Math.floor(defHP * 0.25)
-  const halfHP     = Math.floor(defHP / 2)
-  let states = new Map()
-  states.set(`${defHP},0`, 1.0)
-  const koAtTurn = {}
-  for (let t = 1; t <= maxTurns; t++) {
-    const next = new Map()
-    let koThisTurn = 0
-    for (const [key, prob] of states) {
-      const comma = key.indexOf(',')
-      const hp    = parseInt(key.slice(0, comma))
-      const used  = key[comma + 1] === '1'
-      for (const dmg of rolls) {
-        const p     = prob / rolls.length
-        const newHp = hp - dmg
-        if (newHp <= 0) {
-          koThisTurn += p
-        } else {
-          let fHp = newHp, fUsed = used
-          if (useSitrus && !used && newHp <= halfHP) {
-            fHp = Math.min(newHp + sitrusHeal, defHP)
-            fUsed = true
-          }
-          fHp = fHp + eot
-          if (fHp <= 0) { koThisTurn += p; continue }
-          fHp = Math.min(fHp, defHP)
-          const nk = `${fHp},${fUsed ? 1 : 0}`
-          next.set(nk, (next.get(nk) || 0) + p)
-        }
-      }
-    }
-    koAtTurn[t] = koThisTurn
-    states = next
-    if (states.size === 0) break
-  }
-  return koAtTurn
-}
-
-function simulateSitrus(rolls, defHP, eot = 0, condParts = [], useSitrus = true) {
-  const midDmg     = rolls[Math.floor(rolls.length / 2)]
-  const sitrusHeal = Math.floor(defHP * 0.25)
-  let hp = defHP, sitrusUsed = false
-  const healTurns = []
-  for (let t = 1; t <= 6; t++) {
-    hp -= midDmg
-    if (hp <= 0) { healTurns.push({ t, hp: 0, ko: true }); break }
-    healTurns.push({ t, hp, ko: false })
-    if (useSitrus && !sitrusUsed && hp <= Math.floor(defHP / 2)) {
-      const healed = Math.min(hp + sitrusHeal, defHP) - hp
-      hp = Math.min(hp + sitrusHeal, defHP)
-      sitrusUsed = true
-      healTurns.push({ t, hp, heal: true, healed })
-    }
-    if (eot !== 0) {
-      const hpBefore = hp
-      hp = Math.min(Math.max(hp + eot, 1), defHP)
-      if (hp !== hpBefore) healTurns.push({ t, hp, eotDelta: hp - hpBefore, eot: true })
+  if (best.guaranteed) {
+    return {
+      summary: {
+        type: 'guaranteed', turn: best.hits, condParts: parti,
+        color: 'text-orange-400',
+      },
     }
   }
-  const koTurn = healTurns.find(r => r.ko)
-  const hko    = koTurn ? `${koTurn.t}HKO` : 'No KO in 6T'
-  const koAtTurn = _calcSitrusProb(rolls, defHP, eot, 6, useSitrus)
-  const bestTurn = Object.entries(koAtTurn).filter(([, p]) => p > 0.0001).sort((a, b) => Number(a[0]) - Number(b[0]))[0]
-  const totalKoProb = Object.values(koAtTurn).reduce((a, b) => a + b, 0)
-  const activeTurns = Object.values(koAtTurn).filter(p => p > 0.0001).length
-  const allParts = useSitrus ? [...condParts, 'sitrus'] : [...condParts]
-  let summary
-  if (!bestTurn || totalKoProb < 0.0001) {
-    summary = { type: 'noKo', condParts: allParts }
-  } else if (totalKoProb > 0.9999 && activeTurns === 1) {
-    summary = { type: 'guaranteed', turn: bestTurn[0], condParts: allParts, color: 'text-orange-400' }
-  } else {
-    const pct = Math.round(bestTurn[1] * 1000) / 10
-    summary = { type: 'chance', pct, turn: bestTurn[0], condParts: allParts, color: pct >= 50 ? 'text-orange-400' : 'text-yellow-400' }
+  return {
+    summary: {
+      type: 'chance', pct: best.pct, turn: best.hits, condParts: parti,
+      color: best.pct >= 50 ? 'text-orange-400' : 'text-yellow-400',
+    },
   }
-  return { healTurns, midDmg, hko, summary }
 }
 
 // ── Type badge ────────────────────────────────────────────────────────────────
@@ -262,7 +219,6 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
     })
   }, [atk, def, move, field])
 
-  const hko    = formatHKO(calcHKO(result.minPct), t)
   const smogon = buildSmogonString(atk, def, move, result, field)
   const rolls  = result.rolls
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
@@ -273,7 +229,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const eotParts = []
   if (isSand && !isSandImmune) eotParts.push('sand')
   if (leftoversHP > 0)         eotParts.push('left')
-  const sitrus = hasSitrus ? simulateSitrus(rolls, defHP, eot, eotParts) : null
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts) : null
 
 
 
@@ -285,7 +241,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       p === 'left'   ? t('eot.leftovers_recovery') : p
     )
     const condStr = partLabels.join(` ${t('eot.and')} `)
-    if (s.type === 'noKo')       return `${t('eot.no_ko_in_6')} ${condStr}`
+    if (s.type === 'noKo')       return `${t('eot.no_ko_in_n', { turni: MAX_HITS })} ${condStr}`
     if (s.type === 'guaranteed') return `${t('eot.guaranteed')} ${s.turn}HKO ${t('eot.after')} ${condStr}`
     if (s.type === 'chance')     return `${s.pct}% ${t('eot.chance_to')} ${s.turn}HKO ${t('eot.after')} ${condStr}`
     return condStr
@@ -468,8 +424,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               </div>
             ) : (
               <div className="border-2 border-gray-600/30 rounded-xl px-5 py-4 text-center bg-gray-800/30 w-36">
-                <div className="text-2xl font-black text-gray-500 leading-tight">{hko ?? '—'}</div>
-                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko')}</div>
+                <div className="text-2xl font-black text-gray-500 leading-tight">—</div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko_in_n', { turni: MAX_HITS })}</div>
               </div>
             )}
           </div>

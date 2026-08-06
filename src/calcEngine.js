@@ -10,6 +10,7 @@ import {
   SCREEN_MOD,
   SCREEN_BYPASS_MOVES,
   applyBoost,
+  normalizzaMeteo,
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
 } from './lib/rules.js'
@@ -115,6 +116,13 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defPokeData = POKEMON_DATA[defPokemon]
   if (!atkPokeData || !defPokeData) return null
 
+  // ── Il meteo, normalizzato una volta sola ────────────────────────────────
+  // Da qui in giù `meteo` è uno dei sei nomi canonici oppure null. Nessun
+  // altro punto del motore legge `field.weather`: se lo facesse, tornerebbe a
+  // vedere le forme grezze — `hail`, `sandstorm`, un `HAIL` maiuscolo — e
+  // ricomincerebbe la storia dei sinonimi sparsi.
+  const meteo = normalizzaMeteo(field.weather)
+
   // ── Weather Ball: tipo e BP cambiano in base al meteo ────────────────────
   // Senza meteo: Normal BP 50 — Con meteo: tipo corrispondente BP 100
   const WEATHER_BALL_TYPE = {
@@ -123,13 +131,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     sun:              TYPES.FIRE,
     'harsh sunshine': TYPES.FIRE,
     sand:             TYPES.ROCK,
-    sandstorm:        TYPES.ROCK,
     snow:             TYPES.ICE,
-    hail:             TYPES.ICE,
   }
   const isWeatherBall = move === 'weather ball'
-  const weatherBallType = isWeatherBall && field.weather
-    ? WEATHER_BALL_TYPE[(field.weather || '').toLowerCase()] ?? null
+  const weatherBallType = isWeatherBall && meteo
+    ? WEATHER_BALL_TYPE[meteo] ?? null
     : null
   let moveType = weatherBallType !== null ? weatherBallType : moveData.type
   const isLastRespects = move === 'last respects'
@@ -192,7 +198,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Il DIMEZZAMENTO del tipo opposto invece vale solo col meteo normale, e non
   // perché sotto meteo estremo sia più clemente: là il tipo opposto non è
   // dimezzato, è annullato del tutto (vedi l'immunità qui sotto).
-  const meteo = (field.weather || '').toLowerCase()
   const isSoleEstremo    = meteo === 'harsh sunshine'
   const isPioggiaEstrema = meteo === 'heavy rain'
   const isSole    = meteo === 'sun'  || isSoleEstremo
@@ -224,8 +229,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   const atkBase = getBaseStat(atkPokemon, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
-  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, field.weather, atkTypes)
-  const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, field.weather, defTypes)
+  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, meteo, atkTypes)
+  const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
   // ── Boost di stat base ───────────────────────────────────────────────────
@@ -558,6 +563,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //   j → Ice Scales sulle mosse speciali                  ×0.5    0x800
   //   l → Filter, Solid Rock, Prism Armor                  ×0.75   0xC00
   //   n → Fluffy sulle mosse Fuoco                         ×2      0x2000
+  //   o → Expert Belt, se super efficace                    ×1.2    0x1333
   //   p → Life Orb                                         ×1.2998 0x14CC
   //   q → resist berry                                     ×0.5    0x800
   //
@@ -576,7 +582,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (defAbilEffect?.filter && effectiveness > 1)  finalMods.push(MOD.X0_75)
   if (defAbilEffect?.fluffy && moveType === TYPES.FIRE) finalMods.push(MOD.X2)
 
-  if (atkItemEffect?.finalMod) finalMods.push(atkItemEffect.finalMod)
+  // o — Expert Belt, p — Life Orb.
+  //
+  // In NCP sono un `if / else if`, e lo teniamo: l'`else` non può scattare
+  // finché l'attaccante ha un item solo, ma è la specifica e costa una riga.
+  // L'ordine conta: o viene prima di p, e da tre modificatori in su nella
+  // stessa catena l'ordine è osservabile (misurato in D-2, 279 terne su 729).
+  if (atkItemEffect?.finalModSuperEff && effectiveness > 1) {
+    finalMods.push(atkItemEffect.finalModSuperEff)
+  } else if (atkItemEffect?.finalMod) {
+    finalMods.push(atkItemEffect.finalMod)
+  }
 
   // q — resist berry.
   //
@@ -663,7 +679,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       atkAbility ? `⚡ Abilità atk: ${atkAbility}` : null,
       defAbility ? `🛡️ Abilità def: ${defAbility}` : null,
       field.terrain ? `🌱 Terreno: ${terrainLabel[field.terrain] || field.terrain}` : null,
-      field.weather ? `☀️ Meteo: ${field.weather}` : null,
+      meteo ? `☀️ Meteo: ${meteo}` : null,
       `🎲 Danno min: ${minDmg} (${minPct}%) | max: ${maxDmg} (${maxPct}%)`,
       `🎲 Rolls: ${rolls.join(', ')}`,
     ].filter(Boolean)

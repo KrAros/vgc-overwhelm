@@ -191,6 +191,73 @@ export const SCREEN_BYPASS_MOVES = new Set([
   'raging bull',
 ])
 
+// ─── Il vocabolario del meteo ────────────────────────────────────────────────
+
+/**
+ * I sei nomi di meteo che il motore riconosce. Tutto il resto o si traduce in
+ * uno di questi, o non esiste.
+ */
+export const METEO_CANONICI = Object.freeze([
+  'sun', 'rain', 'sand', 'snow', 'harsh sunshine', 'heavy rain',
+])
+
+/**
+ * I nomi morti, e quello vivo in cui si traducono.
+ *
+ * ─── PERCHÉ `hail` NON È UN SINONIMO ───────────────────────────────────────
+ * La grandine, in Champions, non esiste: dalla nona generazione la condizione
+ * è la neve, che invece della sfilza di danni a fine turno dà +50% di Difesa
+ * ai Pokémon di tipo Ghiaccio. Non sono due nomi della stessa cosa, sono due
+ * meccaniche di cui una sola è ancora in gioco.
+ *
+ * Quindi qui non stiamo "accettando anche `hail`". Stiamo dicendo che chi
+ * scrive `hail` — un link condiviso vecchio, un caso di test ereditato — sta
+ * nominando una cosa che oggi si chiama neve, e la traduciamo una volta sola
+ * in ingresso invece di ricordarcene in ogni confronto.
+ *
+ * `sandstorm` è un caso più banale: è lo stesso meteo, scritto lungo.
+ *
+ * ─── QUESTA DECISIONE ERA GIÀ PRESA ────────────────────────────────────────
+ * `scripts/ncp/mappatura.mjs` mappa `hail: 'Snow'` e `sandstorm: 'Sand'` da
+ * quando esiste l'harness (sessione H), e il commento lì lo dichiara. Cioè:
+ * all'oracolo dicevamo "neve" da cinquecento casi, e al nostro motore
+ * continuavamo a dire "grandine". L'unica divergenza viva rimasta —
+ * `B2-weather-hail-039` — non era una meccanica sbagliata, era una parola che
+ * il motore non conosceva.
+ *
+ * Da notare che NCP, letteralmente, il bonus lo dà solo sotto `"Snow"`
+ * (`damage_MASTER.js` riga 2065): la sua `"Hail"` è la grandine vecchia, che
+ * serve alle generazioni precedenti. Noi quelle non le calcoliamo.
+ */
+const METEO_LEGACY = Object.freeze({
+  hail: 'snow',
+  sandstorm: 'sand',
+})
+
+/**
+ * Porta un nome di meteo alla forma canonica.
+ *
+ * Si applica UNA volta, all'ingresso del motore, e da lì in poi ogni confronto
+ * è con un nome canonico. È il contrario di quello che facevamo prima, cioè
+ * elencare i sinonimi in ogni punto in cui il meteo veniva letto: `calcStat`
+ * ne conosceva due, `calcEOT` tre, `WEATHER_BALL_TYPE` otto, `speedOrder`
+ * otto. Quattro liste che si potevano disallineare — e infatti erano
+ * disallineate.
+ *
+ * Un nome non riconosciuto torna `null`, cioè "nessun meteo": è la stessa
+ * cosa che il motore già faceva con una stringa vuota, e vale come difesa
+ * contro un `?share=` malformato.
+ *
+ * @param {string|null|undefined} meteo
+ * @returns {string|null} uno dei `METEO_CANONICI`, oppure null
+ */
+export function normalizzaMeteo(meteo) {
+  if (!meteo) return null
+  const s = String(meteo).trim().toLowerCase()
+  const tradotto = METEO_LEGACY[s] ?? s
+  return METEO_CANONICI.includes(tradotto) ? tradotto : null
+}
+
 // ─── Ricerca del KO ──────────────────────────────────────────────────────────
 
 /**
