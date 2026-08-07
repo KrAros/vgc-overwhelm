@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { calcStat } from '../../lib/stats.js'
 import { applyBoost, STAT_NAMES, MAX_SP_PER_STAT } from '../../lib/rules.js'
 import { NATURE_MODIFIERS } from '../../data/natures.js'

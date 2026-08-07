@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { TYPES } from './typeChart.js'
 import { MOD } from '../lib/modifiers.js'
 

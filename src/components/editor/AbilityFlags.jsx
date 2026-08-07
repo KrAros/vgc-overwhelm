@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
 import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
 import { abilitaNonCalcolata } from '../../lib/gap.js'

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 // ─── Normalizzazione chiave abilità ──────────────────────────────────────────
 // Converte un nome abilità in qualsiasi formato (es. "Flash Fire", "flash fire")
 // nella chiave usata in ABILITY_EFFECTS (es. "flash-fire").

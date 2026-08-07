@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './fonts.css'

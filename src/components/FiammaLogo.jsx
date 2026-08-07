@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 // Fiamma SVG condivisa tra Header e Footer — unica fonte di verità.
 
 export default function FiammaLogo({ size = 16 }) {

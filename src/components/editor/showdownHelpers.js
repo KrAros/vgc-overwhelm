@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'

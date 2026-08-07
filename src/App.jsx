@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from './store/useCalcStore'

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { useState } from 'react'
 import { STAT_NAMES } from '../../utils/statCalc'
 import pokemonData from '../../data/pokemon.json'

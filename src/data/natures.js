@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 export const NATURES = [
   'adamant','bashful','bold','brave','calm','careful','docile',
   'gentle','hardy','hasty','impish','jolly','lax','lonely',

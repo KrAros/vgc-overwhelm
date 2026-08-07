@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 /**
  * src/data/metaPresets.js
  * Set meta verificati da MetaVGC (Tenki's Cart Weekly #109 Reg MB, top 10).

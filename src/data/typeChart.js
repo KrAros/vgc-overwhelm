@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 // ID dei Tipi (0-17)
 export const TYPES = {
   NORMAL: 0,
