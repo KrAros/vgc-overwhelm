@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generatedAt": "2026-08-06T10:29:17.779Z",
+    "generatedAt": "2026-08-06T18:15:55.987Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 310,
-    "abilitaSenzaEffetto": 282,
-    "abilitaNelGap": 130,
-    "strumentiSelezionabili": 317,
+    "abilitaSenzaEffetto": 266,
+    "abilitaNelGap": 114,
+    "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 185,
     "strumentiNelGap": 41,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -136,16 +136,6 @@
         }
       },
       {
-        "chiave": "clear body",
-        "nome": "Clear Body",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 567
-        }
-      },
-      {
         "chiave": "cloud nine",
         "nome": "Cloud Nine",
         "canale": "STR",
@@ -186,16 +176,6 @@
         }
       },
       {
-        "chiave": "dauntless shield",
-        "nome": "Dauntless Shield",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkSwordShield",
-          "file": "damage_MASTER.js",
-          "riga": 598
-        }
-      },
-      {
         "chiave": "dazzling",
         "nome": "Dazzling",
         "canale": "STR",
@@ -223,16 +203,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "download",
-        "nome": "Download",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkDownload",
-          "file": "damage_MASTER.js",
-          "riga": 647
         }
       },
       {
@@ -336,16 +306,6 @@
         }
       },
       {
-        "chiave": "full metal body",
-        "nome": "Full Metal Body",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 567
-        }
-      },
-      {
         "chiave": "galvanize",
         "nome": "Galvanize",
         "canale": "STR",
@@ -373,16 +333,6 @@
           "funzione": "calcDefMods",
           "file": "damage_MASTER.js",
           "riga": 2104
-        }
-      },
-      {
-        "chiave": "guard dog",
-        "nome": "Guard Dog",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 564
         }
       },
       {
@@ -436,16 +386,6 @@
         }
       },
       {
-        "chiave": "hyper cutter",
-        "nome": "Hyper Cutter",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 567
-        }
-      },
-      {
         "chiave": "ice face",
         "nome": "Ice Face",
         "canale": "STR",
@@ -473,26 +413,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 388
-        }
-      },
-      {
-        "chiave": "inner focus",
-        "nome": "Inner Focus",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 568
-        }
-      },
-      {
-        "chiave": "intrepid sword",
-        "nome": "Intrepid Sword",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkSwordShield",
-          "file": "damage_MASTER.js",
-          "riga": 595
         }
       },
       {
@@ -626,16 +546,6 @@
         }
       },
       {
-        "chiave": "mirror armor",
-        "nome": "Mirror Armor",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 572
-        }
-      },
-      {
         "chiave": "mold breaker",
         "nome": "Mold Breaker",
         "canale": "STR",
@@ -686,16 +596,6 @@
         }
       },
       {
-        "chiave": "oblivious",
-        "nome": "Oblivious",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 568
-        }
-      },
-      {
         "chiave": "orichalcum pulse",
         "nome": "Orichalcum Pulse",
         "canale": "STR",
@@ -713,16 +613,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1942
-        }
-      },
-      {
-        "chiave": "own tempo",
-        "nome": "Own Tempo",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 568
         }
       },
       {
@@ -796,16 +686,6 @@
         }
       },
       {
-        "chiave": "protosynthesis",
-        "nome": "Protosynthesis",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
-        }
-      },
-      {
         "chiave": "punk rock",
         "nome": "Punk Rock",
         "canale": "STR",
@@ -813,16 +693,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1649
-        }
-      },
-      {
-        "chiave": "quark drive",
-        "nome": "Quark Drive",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
         }
       },
       {
@@ -926,16 +796,6 @@
         }
       },
       {
-        "chiave": "scrappy",
-        "nome": "Scrappy",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 568
-        }
-      },
-      {
         "chiave": "sharpness",
         "nome": "Sharpness",
         "canale": "STR",
@@ -963,16 +823,6 @@
           "funzione": "critMove",
           "file": "damage_MASTER.js",
           "riga": 1018
-        }
-      },
-      {
-        "chiave": "simple",
-        "nome": "Simple",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 561
         }
       },
       {
@@ -1273,16 +1123,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1109
-        }
-      },
-      {
-        "chiave": "white smoke",
-        "nome": "White Smoke",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 567
         }
       },
       {
@@ -1776,7 +1616,6 @@
     "strumentiConVoceNonSelezionabili": [
       "punching glove",
       "throat spray",
-      "booster energy",
       "legend plate",
       "slowbro-mega",
       "slobronite",

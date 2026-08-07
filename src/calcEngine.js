@@ -16,6 +16,7 @@ import {
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
+import { preparaCoppia } from './lib/preparazione.js'
 
 /**
  * Supreme Overlord: un moltiplicatore di potenza per ogni alleato caduto.
@@ -90,6 +91,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkBoost = 0,
     spAtkBoost = 0,
     atkDefBoost = 0,
+    // Gli altri due stadi dell'attaccante. Nessuna mossa li usa per attaccare,
+    // ma la preparazione sì: `statPiuAlta` confronta tutte e cinque le
+    // statistiche, e senza questi due un Pokémon paradosso potrebbe vedersi
+    // assegnare il potenziamento alla statistica sbagliata.
+    atkSpDefBoost = 0,
+    atkSpeBoost = 0,
     atkAbilityFlags = {},
     lastRespectsKOs = 0,
     level = LEVEL,
@@ -103,6 +110,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     defItem = null,
     defBoost = 0,
     spDefBoost = 0,
+    // Idem per il difensore: l'Attacco gli serve se qualcuno gli rimanda
+    // addosso un Intimidate con Mirror Armor, e la Velocità per la statistica
+    // più alta.
+    defAtkBoost = 0,
+    defSpAtkBoost = 0,
+    defSpeBoost = 0,
     defAbilityFlags = {},
   } = defender
 
@@ -233,44 +246,47 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
+  // ── LO STRATO DI PREPARAZIONE (`lib/preparazione.js`) ────────────────────
+  // Tutto quello che il riferimento fa ai due Pokémon PRIMA della formula:
+  // le abilità paradosso, Intrepid Sword e Dauntless Shield, Intimidate con le
+  // dodici abilità che lo contrastano, Download.
+  //
+  // Fino alla sessione J Intimidate era scritto qui sotto a mano, in una
+  // direzione sola e senza nessuna delle abilità che lo bloccano: davanti a
+  // Clear Body il danno usciva più basso di un terzo. Adesso il motore non
+  // decide più niente sugli stadi — li chiede, e li usa.
+  const preparazione = preparaCoppia({
+    attaccante: {
+      pokemon: atkPokemon, sps: atkSPs, natura: atkNature, livello: level,
+      abilita: atkAbility, strumento: atkItem,
+      abilitaAccesa: atkAbilityFlags.intimidateActive === true,
+      boosts: { at: atkBoost, df: atkDefBoost, sa: spAtkBoost, sd: atkSpDefBoost, sp: atkSpeBoost },
+    },
+    difensore: {
+      pokemon: defPokemon, sps: defSPs, natura: defNature,
+      abilita: defAbility, strumento: defItem,
+      abilitaAccesa: defAbilityFlags.intimidateActive === true,
+      boosts: { at: defAtkBoost, df: defBoost, sa: defSpAtkBoost, sd: spDefBoost, sp: defSpeBoost },
+    },
+    meteo: field.weather,
+    terreno: field.terrain,
+  })
+
   // ── Boost di stat base ───────────────────────────────────────────────────
   // Il boost da usare segue la STATISTICA, non la categoria della mossa.
   // Per quasi tutte le mosse le due cose coincidono, ma Body Press è fisica e
-  // attacca con la Difesa: prima di questa sessione leggevamo comunque il
+  // attacca con la Difesa: prima della sessione D leggevamo comunque il
   // boost di Attacco, quindi un Registeel a Difesa −1 tirava un Body Press
   // *più forte* del normale se aveva l'Attacco a +1. NCP (`calcAttack`, punto
   // a) sceglie `attackStat = DF` e legge `boosts[attackStat]`: qui facciamo lo
   // stesso, indicizzando con `atkStatIdx` che è già stato deciso sopra.
-  let atkBoostVal = atkStatIdx === STAT_SPA ? spAtkBoost
-    : atkStatIdx === STAT_DEF ? atkDefBoost
-    : atkBoost
-  const defBoostVal = isSpecial ? spDefBoost : defBoost
-
-  // ── Intimidate → Defiant / Contrary (automatico, nessun toggle extra) ───
-  // Il difensore ha Intimidate attivo: applica -1 Atk all'attaccante,
-  // MA se l'attaccante ha Defiant o Contrary, il risultato cambia.
-  //   - Normale:  atkBoostVal -= 1
-  //   - Defiant:  -1 + 2 = +1 netto (drop avviene, poi +2 per ogni drop)
-  //   - Contrary: -1 invertito = +1 (il drop diventa aumento)
-  //   - Competitive: -1 Atk (normale) + 2 SpAtk separato
   //
-  // Nota su Body Press: Intimidate abbassa l'ATTACCO, e Body Press non usa
-  // l'Attacco. Il calo va quindi applicato solo quando la statistica offensiva
-  // è davvero l'Attacco — altrimenti finirebbe per sottrarre uno stadio alla
-  // Difesa, che Intimidate non tocca. Per questo il controllo guarda
-  // `atkStatIdx` e non più `isSpecial`.
-  if (defAbilEffect?.intimidate && defAbilityFlags.intimidateActive) {
-    if (atkStatIdx === STAT_ATT) {
-      // Atk drop — Defiant e Contrary lo invertono/compensano
-      if (atkAbilEffect?.defiant)        atkBoostVal += 1  // -1 + 2 = +1
-      else if (atkAbilEffect?.contrary)  atkBoostVal += 1  // invertito
-      else                               atkBoostVal -= 1  // drop normale
-    }
-    // Competitive: +2 SpAtk indipendentemente dalla stat attaccata
-    if (atkAbilEffect?.competitive && atkStatIdx === STAT_SPA) {
-      atkBoostVal += 2
-    }
-  }
+  // Che Intimidate non tocchi Body Press adesso è una conseguenza e non una
+  // regola scritta a parte: Intimidate abbassa lo stadio `at`, e Body Press
+  // legge `df`.
+  const chiaveAtk = atkStatIdx === STAT_SPA ? 'sa' : atkStatIdx === STAT_DEF ? 'df' : 'at'
+  const atkBoostVal = preparazione.attaccante.boosts[chiaveAtk]
+  const defBoostVal = preparazione.difensore.boosts[isSpecial ? 'sd' : 'df']
 
   // ── Il colpo critico ignora i boost che gli darebbero fastidio ───────────
   // Seconda metà della correzione §1.3 — la prima (il critico che buca gli
@@ -292,8 +308,14 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   let defStatFinal = applyBoost(defStat, defBoostUsato)
 
   // ── Item effects ─────────────────────────────────────────────────────────
-  const atkItemKey = (atkItem || '').toLowerCase()
-  const defItemKey = (defItem || '').toLowerCase()
+  // Le chiavi arrivano dalla PREPARAZIONE, non dagli input: uno strumento può
+  // essersi consumato prima che la formula cominci. Oggi capita alla Booster
+  // Energy (accende l'abilità paradosso e sparisce) e all'Adrenaline Orb
+  // (scatta con Intimidate e sparisce). Chi legge `atkItem` direttamente da
+  // qui in giù vedrebbe uno strumento che nel gioco non c'è più — e Knock Off
+  // gli darebbe un ×1.5 che non gli spetta.
+  const atkItemKey = (preparazione.attaccante.strumento || '').toLowerCase()
+  const defItemKey = (preparazione.difensore.strumento || '').toLowerCase()
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
@@ -323,8 +345,25 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // preferiamo NON applicare il bonus piuttosto che applicarlo a caso.
   const dfMods = []
 
-  // Fur Coat: ×2 sulla Difesa fisica (`calcDefMods` punto e).
-  if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
+  // punto d — Protosynthesis / Quark Drive sul lato difensivo: ×1.3 se la
+  // statistica più alta è quella che sta subendo il colpo.
+  //
+  // ─── PERCHÉ È UN `else if` DI FUR COAT, E NON UN `if` A PARTE ────────────
+  // Nel riferimento i punti c, d ed e sono una catena unica: Marvel Scale /
+  // Grass Pelt, poi il paradosso, poi Fur Coat. Con un solo campo abilità le
+  // tre non possono coesistere, quindi l'esclusione non serve mai — ma
+  // l'ordine sì, perché se un giorno arrivasse un caso a tre modificatori
+  // la posizione dentro la catena cambierebbe il risultato (misurato in D-2).
+  // Scriverlo com'è costa un `else`; dedurre che «tanto non capita» è il tipo
+  // di ragionamento che invecchia male.
+  const paradossoDifesa = preparazione.difensore.paradosso && (
+    (preparazione.difensore.statPiuAlta === 'df' && !isSpecial) ||
+    (preparazione.difensore.statPiuAlta === 'sd' &&  isSpecial)
+  )
+
+  if (paradossoDifesa) dfMods.push(MOD.X1_3)
+  // punto e — Fur Coat: ×2 sulla Difesa fisica.
+  else if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
 
   const itemDifesaOk = !defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true
   if (itemDifesaOk) {
@@ -351,10 +390,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // punto d — ×1.5 offensive.
   // Fire Mane e Flash Fire stavano fra i modificatori di POTENZA o di danno
   // finale: li ha spostati D leggendo NCP, non un test rosso.
-  if (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) atMods.push(MOD.X1_5)
-  if (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) {
-    atMods.push(MOD.X1_5)
-  }
+  const puntoD =
+    (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) ||
+    (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE)
+
+  // punto e — Protosynthesis / Quark Drive sul lato offensivo: ×1.3 se la
+  // statistica più alta è quella con cui si sta attaccando.
+  //
+  // Nel riferimento d ed e sono lo stesso `if / else if`, quindi il ×1.3 del
+  // paradosso non si somma mai al ×1.5 di Fire Mane o Flash Fire. Con un campo
+  // abilità solo le due non possono nemmeno coesistere — l'`else` è qui per la
+  // stessa ragione dell'altro, in fondo alla catena di difesa.
+  //
+  // La condizione guarda la CATEGORIA della mossa, non la statistica usata:
+  // il riferimento scrive `move.category === "Physical"`. Su Body Press, che è
+  // fisica ma attacca con la Difesa, la statistica potenziata resta quindi
+  // l'Attacco. Trascritto, non corretto.
+  const paradossoAttacco = preparazione.attaccante.paradosso && (
+    (preparazione.attaccante.statPiuAlta === 'at' && !isSpecial) ||
+    (preparazione.attaccante.statPiuAlta === 'sa' &&  isSpecial)
+  )
+
+  if (puntoD) atMods.push(MOD.X1_5)
+  else if (paradossoAttacco) atMods.push(MOD.X1_3)
 
   // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power.
   if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) atMods.push(MOD.X2)

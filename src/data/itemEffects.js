@@ -60,8 +60,9 @@ export const ITEM_EFFECTS = {
   'griseous orb':   { showInSmogon: true },
   // Throat Spray: ×1.5 SpAtk dopo una mossa sonora. Trattato come attivo.
   'throat spray':   { showInSmogon: true },
-  // Booster Energy: attiva Protosynthesis / Quark Drive senza meteo/campo.
-  'booster energy': { showInSmogon: true },
+  // (Booster Energy stava qui con il solo `showInSmogon`, cioè fra le voci
+  // dichiarate e mai calcolate. Dalla sessione J ha un effetto vero e si è
+  // spostata più in basso, nella sezione della preparazione.)
 
   // ── Type-boosting ×1.2 ────────────────────────────────────────────────────
   'silk scarf':     { typBoost: TYPES.NORMAL,   bpMod: MOD.X1_2, showInSmogon: true },
@@ -223,6 +224,34 @@ export const ITEM_EFFECTS = {
   'scolipedonite':      { megaStone: 'scolipede-mega'   },
   'dragalgite':         { megaStone: 'dragalge-mega'    },
   'falinksite':         { megaStone: 'falinks-mega'     },
+
+  // ── Strumenti dello strato di preparazione (sessione J) ───────────────────
+  // Non stanno in nessuna delle quattro catene: agiscono PRIMA, su
+  // `lib/preparazione.js`, cambiando gli stadi di boost o accendendo
+  // un'abilità. Che il danno cambi è una conseguenza, non il meccanismo.
+  //
+  // ─── PERCHÉ NON HANNO `num` ───────────────────────────────────────────────
+  // `num` è l'indice Game Freak da cui `utils/sprite.js` costruisce l'URL
+  // dell'icona. `items.json` si fermava alla settima generazione (il massimo
+  // reale era 656, più le megapietre inventate); questi tre sono i primi
+  // strumenti di ottava e nona generazione del file, e l'indice che Champions
+  // usa per loro non lo conosco. Scriverne uno a caso darebbe un'icona
+  // sbagliata o rotta; ometterlo dà nessuna icona, che è la cosa vera.
+
+  // Clear Amulet: nessun calo di statistiche inflitto dall'avversario. Nel
+  // vendore è una delle condizioni di `checkIntimidate` (damage_MASTER.js:566),
+  // in mezzo alle quattro abilità che annullano il calo.
+  'clear amulet':   { bloccaCaliAvversari: true, showInSmogon: true },
+
+  // Booster Energy: accende Protosynthesis o Quark Drive senza sole né campo,
+  // e si consuma. Il consumo è la parte che si vede nel danno — uno strumento
+  // sparito non è più lì quando Knock Off va a cercarlo.
+  'booster energy': { accendeParadosso: true, showInSmogon: true },
+
+  // Adrenaline Orb: +1 Velocità quando arriva Intimidate, e si consuma.
+  // La Velocità non entra nel danno; il consumo sì, sempre per via di Knock
+  // Off. È l'unico motivo per cui questo strumento ha un effetto qui dentro.
+  'adrenaline orb': { orboAdrenalina: true, showInSmogon: true },
 
   // ── Utility (non impattano i rolls — solo presenza nel dropdown) ──────────
   // Il flag `utility: true` segnala al UI che l'item è riconosciuto

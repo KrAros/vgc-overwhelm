@@ -558,7 +558,10 @@
     "scraftinite": "Scraftinite",
     "slowbronite": "Slowbronite",
     "starminite": "Starminite",
-    "fairy feather": "Fairy Feather"
+    "fairy feather": "Fairy Feather",
+    "adrenaline orb": "Adrenaline Orb",
+    "booster energy": "Booster Energy",
+    "clear amulet": "Clear Amulet"
   },
   "abilities": {
     "stench": "Stench",
@@ -1867,7 +1870,15 @@
     "water-bubble": "Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.",
     "weak-armor": "When the Pokémon takes damage from a physical move, its Defense is lowered by 1 stage, but its Speed is boosted by 2 stages.",
     "white-smoke": "Stats cannot be lowered by other Pokémon\\",
-    "zero-to-hero": "Changes into its Hero Form when it switches out of battle."
+    "zero-to-hero": "Changes into its Hero Form when it switches out of battle.",
+    "full-metal-body": "Stats cannot be lowered by other Pokémon's moves or Abilities.",
+    "guard-dog": "Prevents the Pokémon from being forced out of battle. Intimidate raises its Attack by 1 stage instead of lowering it.",
+    "simple": "Stat changes the Pokémon receives are doubled.",
+    "intrepid-sword": "Boosts the Pokémon's Attack stat by 1 stage when it enters a battle.",
+    "dauntless-shield": "Boosts the Pokémon's Defense stat by 1 stage when it enters a battle.",
+    "download": "Compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk — whichever will be more effective.",
+    "protosynthesis": "Boosts the Pokémon's most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy.",
+    "quark-drive": "Boosts the Pokémon's most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy."
   },
   "abilities_desc_on": {
     "flash-fire": "Flash Fire active — Fire moves boosted 1.5x",

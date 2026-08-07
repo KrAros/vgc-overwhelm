@@ -1090,6 +1090,279 @@ function aggiungi(blocco, etichetta, input) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// B12 — Lo strato di preparazione (sessione J)
+//
+// PERCHÉ ESISTE QUESTO BLOCCO.
+// Il piano chiedeva, come criterio di J, che «`snapshot:diff` si muova». Prima
+// di scriverlo l'ho misurato sui 549 casi esistenti. Quanti erano capaci di
+// muoversi:
+//
+//   Intimidate contro una delle dodici abilità che lo contrastano     0
+//   Protosynthesis / Quark Drive                                      0
+//   Download                                                          0
+//   Intrepid Sword / Dauntless Shield                                 0
+//   Booster Energy                                                    0
+//   Intimidate sull'ATTACCANTE                                        0
+//
+// Zero su tutta la riga. Il corpus conteneva Intimidate solo con l'attaccante
+// ad abilità nulla, e Defiant / Contrary / Competitive solo contro un
+// difensore SENZA Intimidate. Il criterio, così com'era, sarebbe stato
+// soddisfatto anche da una sessione che non implementa niente — è il difetto
+// che il piano elenca nove volte e che questa volta è stato trovato prima.
+//
+// Quindi: questo blocco viene fotografato PRIMA della correzione, cioè con la
+// preparazione ancora sbagliata. Dopo l'implementazione `snapshot:diff` deve
+// muovere esattamente questi casi e nessuno degli altri 549.
+//
+// ─── I CONTROLLI CHE NON DEVONO MUOVERSI ──────────────────────────────────
+// Contrary, Defiant e Competitive oggi sono già d'accordo con il riferimento
+// (lo dicono i tre golden B6-abil-atk-*). Metterli qui, questa volta CONTRO un
+// Intimidate acceso, serve a dimostrare che riscrivere il blocco non li ha
+// spostati. Se si muovono, la trascrizione ha rotto la parte che funzionava.
+// ═══════════════════════════════════════════════════════════════════════════
+
+{
+  const [chomp, eq] = A.chompEq
+  const [flutt, moonblast] = A.fluttMoon
+
+  // Il difensore con Intimidate acceso: sempre lo stesso, così l'unica cosa
+  // che varia fra un caso e l'altro è l'abilità dell'attaccante.
+  const incinIntimida = {
+    ...D.incin,
+    defAbility: 'intimidate',
+    defAbilityFlags: { intimidateActive: true },
+  }
+
+  // ── Le dodici abilità di `checkIntimidate`, più la neutra ────────────────
+  // L'ordine è quello del vendor (damage_MASTER.js:559): prima chi inverte,
+  // poi chi annulla, poi chi rimbalza, poi chi raddoppia.
+  const contrastiIntimidate = [
+    'contrary',          // inverte  → +1   (già corretto oggi: non deve muoversi)
+    'guard dog',         // inverte  → +1
+    'clear body',        // annulla
+    'white smoke',       // annulla
+    'hyper cutter',      // annulla
+    'full metal body',   // annulla
+    'inner focus',       // annulla (da ottava generazione)
+    'oblivious',         // annulla (da ottava generazione)
+    'own tempo',         // annulla (da ottava generazione)
+    'scrappy',           // annulla (da ottava generazione)
+    'mirror armor',      // rimbalza al mittente
+    'simple',            // raddoppia → −2
+    'defiant',           // il calo si applica, poi +2 (già corretto oggi)
+    'pressure',          // neutra: il calo passa senza ostacoli (controllo)
+  ]
+
+  for (const nome of contrastiIntimidate) {
+    aggiungi('B12', `intimidate-vs-${nome.replace(/ /g, '_')}`, {
+      attacker: { ...chomp, atkAbility: nome },
+      defender: incinIntimida,
+      move: eq,
+      field: field(),
+    })
+  }
+
+  // Competitive alza l'Attacco Speciale: per vederlo serve una mossa speciale,
+  // altrimenti è una sonda cieca — la trappola in cui è caduta la prima misura
+  // di F-2, e la ragione per cui questo caso non usa Garchomp.
+  aggiungi('B12', 'intimidate-vs-competitive', {
+    attacker: { ...flutt, atkAbility: 'competitive' },
+    defender: incinIntimida,
+    move: moonblast,
+    field: field(),
+  })
+
+  // ── Clear Amulet: uno strumento dentro `checkIntimidate` ─────────────────
+  // Sta nella stessa condizione delle quattro abilità che annullano il calo.
+  // Fino a oggi non era nemmeno selezionabile: `items.json` si fermava alla
+  // settima generazione.
+  aggiungi('B12', 'intimidate-vs-clear_amulet', {
+    attacker: { ...chomp, atkAbility: 'pressure', atkItem: 'clear amulet' },
+    defender: incinIntimida,
+    move: eq,
+    field: field(),
+  })
+
+  // ── Adrenaline Orb: l'unico pezzo di Intimidate che si vede nel danno ────
+  // Alza la Velocità — invisibile qui — ma CONSUMA sé stesso, e uno strumento
+  // consumato non c'è più quando Knock Off va a cercarlo. Quindi l'attaccante
+  // deve essere lui a intimidire, e la mossa deve essere Knock Off.
+  const incinKnockIntimida = {
+    ...A.incinKnock[0],
+    atkAbility: 'intimidate',
+    atkAbilityFlags: { intimidateActive: true },
+  }
+
+  aggiungi('B12', 'adrenaline_orb-consumato', {
+    attacker: incinKnockIntimida,
+    defender: { ...D.chomp, defItem: 'adrenaline orb' },
+    move: 'knock off',
+    field: field(),
+  })
+
+  // Controllo: stesso strumento, Intimidate SPENTO. L'orbo resta addosso e
+  // Knock Off tiene il suo ×1.5. Senza questo caso, il precedente proverebbe
+  // solo che «qualcosa è cambiato».
+  aggiungi('B12', 'adrenaline_orb-controllo', {
+    attacker: { ...incinKnockIntimida, atkAbilityFlags: { intimidateActive: false } },
+    defender: { ...D.chomp, defItem: 'adrenaline orb' },
+    move: 'knock off',
+    field: field(),
+  })
+
+  // ── Mirror Armor visto dall'altro lato ───────────────────────────────────
+  // L'attaccante intimidisce, il difensore rimbalza, e il calo torna
+  // sull'Attacco di CHI ATTACCA. È l'unico caso in cui l'Intimidate
+  // dell'attaccante — che oggi non leggiamo affatto — sposta il danno della
+  // cella in cui si trova.
+  aggiungi('B12', 'intimidate-attaccante-vs-mirror_armor', {
+    attacker: {
+      ...A.incinKnock[0],
+      atkAbility: 'intimidate',
+      atkAbilityFlags: { intimidateActive: true },
+    },
+    defender: { ...D.chomp, defAbility: 'mirror armor' },
+    move: 'knock off',
+    field: field(),
+  })
+
+  // ── Intrepid Sword e Dauntless Shield ────────────────────────────────────
+  // In Champions si applicano SEMPRE: la condizione del vendore è
+  // `gen !== 9 || abilityOn`, e `gen` vale 10. Legarli al flag sarebbe
+  // costruire un controllo identico al bersaglio per definizione.
+  const zacian = atk('zacian', 'adamant', SP.fisico)
+
+  aggiungi('B12', 'intrepid_sword', {
+    attacker: { ...zacian, atkAbility: 'intrepid sword' },
+    defender: D.chomp,
+    move: 'play rough',
+    field: field(),
+  })
+  aggiungi('B12', 'intrepid_sword-controllo', {
+    attacker: { ...zacian, atkAbility: 'pressure' },
+    defender: D.chomp,
+    move: 'play rough',
+    field: field(),
+  })
+
+  const zamazenta = def('zamazenta', 'impish', SP.bulkyFis)
+
+  aggiungi('B12', 'dauntless_shield', {
+    attacker: chomp,
+    defender: { ...zamazenta, defAbility: 'dauntless shield' },
+    move: eq,
+    field: field(),
+  })
+  aggiungi('B12', 'dauntless_shield-controllo', {
+    attacker: chomp,
+    defender: { ...zamazenta, defAbility: 'pressure' },
+    move: eq,
+    field: field(),
+  })
+
+  // ── Abilità paradosso ────────────────────────────────────────────────────
+  // Roaring Moon ha l'Attacco come statistica più alta (139), Iron Valiant
+  // pure (130): con una mossa fisica il ×1.3 finisce sull'attacco e si vede.
+  // Iron Treads ha la Difesa più alta (120): lì il ×1.3 va sulla difesa.
+  //
+  // Le tre condizioni di accensione sono separate perché sono tre rami
+  // distinti del vendor, e un caso che le mescolasse non saprebbe dire quale
+  // ramo ha fallito.
+  const moonCrunch = atk('roaring-moon', 'serious', SP.vuoto)
+  const valiant = atk('iron-valiant', 'serious', SP.vuoto)
+
+  aggiungi('B12', 'protosynthesis-sole', {
+    attacker: { ...moonCrunch, atkAbility: 'protosynthesis' },
+    defender: D.chomp,
+    move: 'crunch',
+    field: field({ weather: 'sun' }),
+  })
+  aggiungi('B12', 'protosynthesis-booster_energy', {
+    attacker: { ...moonCrunch, atkAbility: 'protosynthesis', atkItem: 'booster energy' },
+    defender: D.chomp,
+    move: 'crunch',
+    field: field(),
+  })
+  aggiungi('B12', 'protosynthesis-spento', {
+    attacker: { ...moonCrunch, atkAbility: 'protosynthesis' },
+    defender: D.chomp,
+    move: 'crunch',
+    field: field(),
+  })
+  aggiungi('B12', 'quark_drive-campo', {
+    attacker: { ...valiant, atkAbility: 'quark drive' },
+    defender: D.chomp,
+    move: 'close combat',
+    field: field({ terrain: 'electric' }),
+  })
+  aggiungi('B12', 'quark_drive-booster_energy', {
+    attacker: { ...valiant, atkAbility: 'quark drive', atkItem: 'booster energy' },
+    defender: D.chomp,
+    move: 'close combat',
+    field: field(),
+  })
+  aggiungi('B12', 'quark_drive-spento', {
+    attacker: { ...valiant, atkAbility: 'quark drive' },
+    defender: D.chomp,
+    move: 'close combat',
+    field: field(),
+  })
+
+  // Il lato difensivo: `calcDefMods` punto d. Senza questo caso, metà del
+  // paradosso resterebbe non fotografata.
+  const treads = def('iron-treads', 'serious', SP.vuoto)
+
+  aggiungi('B12', 'quark_drive-difesa', {
+    attacker: chomp,
+    defender: { ...treads, defAbility: 'quark drive' },
+    move: eq,
+    field: field({ terrain: 'electric' }),
+  })
+  aggiungi('B12', 'quark_drive-difesa-spento', {
+    attacker: chomp,
+    defender: { ...treads, defAbility: 'quark drive' },
+    move: eq,
+    field: field(),
+  })
+
+  // Booster Energy consumato: il difensore lo tiene, l'abilità lo accende,
+  // e Knock Off non trova più niente da buttare via. Roaring Moon ha
+  // l'Attacco come statistica più alta, quindi il ×1.3 va sull'attacco e NON
+  // sulla difesa: il caso misura la sparizione dello strumento e nient'altro.
+  aggiungi('B12', 'booster_energy-consumato', {
+    attacker: A.incinKnock[0],
+    defender: { ...def('roaring-moon', 'serious', SP.vuoto), defAbility: 'protosynthesis', defItem: 'booster energy' },
+    move: 'knock off',
+    field: field(),
+  })
+  aggiungi('B12', 'booster_energy-controllo', {
+    attacker: A.incinKnock[0],
+    defender: { ...def('roaring-moon', 'serious', SP.vuoto), defAbility: 'pressure', defItem: 'booster energy' },
+    move: 'knock off',
+    field: field(),
+  })
+
+  // ── Download ─────────────────────────────────────────────────────────────
+  // Blissey ha Difesa 10 e Difesa Speciale 135: Download sceglie l'Attacco
+  // fisico. La mossa di prova è quindi fisica, o il boost c'è e non si vede.
+  const genesect = atk('genesect', 'serious', SP.vuoto)
+  const blissey = def('blissey', 'serious', SP.vuoto)
+
+  aggiungi('B12', 'download-fisico', {
+    attacker: { ...genesect, atkAbility: 'download' },
+    defender: blissey,
+    move: 'iron head',
+    field: field(),
+  })
+  aggiungi('B12', 'download-controllo', {
+    attacker: { ...genesect, atkAbility: 'pressure' },
+    defender: blissey,
+    move: 'iron head',
+    field: field(),
+  })
+}
+
 // ─── Tag derivati ──────────────────────────────────────────────────────────
 
 /**

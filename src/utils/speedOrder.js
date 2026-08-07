@@ -36,6 +36,7 @@ import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
 import { normalizeAbilityKey } from '../data/abilityEffects.js'
 import { calcStat } from '../lib/stats.js'
+import { preparaSingolo } from '../lib/preparazione.js'
 import { applyBoost, normalizzaMeteo, LEVEL, STAT_SPE } from '../lib/rules.js'
 import { pokeRound } from '../lib/modifiers.js'
 
@@ -116,9 +117,6 @@ const ITEM_META_VELOCITA = new Set([
  *                               Lo store non ha proprio un campo `status`.
  *   Quick Feet (×1.5, punto d)  idem: si accende con uno status qualsiasi
  *   Slow Start (×0.5, punto e)  richiede il conteggio dei turni in campo
- *   Protosynthesis / Quark      richiedono il flag paradosso E il calcolo
- *     Drive (×1.5, punto i)     della statistica più alta: nessuno dei due
- *                               esiste in `abilityEffects.js`
  *   Unburden (×2, punto f)      richiede «ha PERSO l'item», non «non ha
  *                               item». Un Pokémon senza strumento non è
  *                               sbilanciato: trattare `item: null` come
@@ -141,6 +139,24 @@ const ITEM_META_VELOCITA = new Set([
  *                               stesso blocco `×2` delle abilità meteo e NON
  *                               ha un cancello sul contatto col terreno —
  *                               verificato leggendo, non dedotto.
+ *
+ * Fatto in J:
+ *   Protosynthesis / Quark      ×1.5 quando la statistica più alta è la
+ *     Drive (×1.5, punto i)     Velocità. Il flag e la statistica più alta
+ *                               arrivano da `lib/preparazione.js`, che è lo
+ *                               stesso posto da cui li prende il motore del
+ *                               danno: una fonte sola per due consumatori.
+ *
+ *                               IL CONFINE: qui la statistica più alta è
+ *                               calcolata sui boost dello slot e basta, senza
+ *                               Intimidate né Intrepid Sword — questa
+ *                               funzione riceve un Pokémon alla volta e non sa
+ *                               chi ha davanti. Nel gioco quegli stadi
+ *                               possono spostare quale statistica è la più
+ *                               alta. Serve un paradosso con due statistiche
+ *                               a un soffio l'una dall'altra, quindi è un
+ *                               caso di confine — ma è un confine, e sta
+ *                               scritto invece che essere scoperto.
  *
  * Fuori portata per scelta:
  *   Grass/Water Pledge (punto h) le mosse Pledge non esistono nel modello
@@ -190,6 +206,12 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = n
   }
 
   if (tailwind) altriMod *= 2
+
+  // Punto i — Protosynthesis / Quark Drive. Il ×1.5 vale SOLO se la statistica
+  // più alta è la Velocità: sulle altre quattro il potenziamento è ×1.3 e vive
+  // nelle catene del danno, non qui.
+  const { paradosso, statPiuAlta } = preparaSingolo(pokemon, weather, terrain)
+  if (paradosso && statPiuAlta === 'sp') altriMod *= 1.5
 
   return pokeRound(spe * altriMod)
 }

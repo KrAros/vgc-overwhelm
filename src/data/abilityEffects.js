@@ -62,7 +62,7 @@ export const ABILITY_EFFECTS = {
     descOn:  'Intimidate active → Defiant: net +1 Atk',
     descOff: 'Triggers automatically when opponent uses Intimidate' },
 
-  'contrary':    { contrary: true,
+  'contrary':    { contrary: true, intimidateInverte: true,
     desc: 'Stat changes are reversed. Intimidate becomes +1 Atk.',
     descOn:  'Intimidate active → Contrary: drop reversed to +1 Atk',
     descOff: 'Triggers automatically when opponent uses Intimidate' },
@@ -98,6 +98,82 @@ export const ABILITY_EFFECTS = {
   'hospitality': { desc: 'Restores 1/4 of ally\'s max HP on entry.' },
   'eelevate':    { desc: 'Immune to Ground-type moves. Boosts highest stat by 1 when knocking out a target.' },
 
+  // ── Lo strato di preparazione (sessione J) ────────────────────────────────
+  //
+  // Queste abilità non stanno in nessuna delle quattro catene di
+  // moltiplicatori: agiscono PRIMA, in `lib/preparazione.js`, spostando gli
+  // stadi di boost o accendendo un flag. Il danno cambia di conseguenza.
+  //
+  // ─── I QUATTRO FLAG DI INTIMIDATE ─────────────────────────────────────────
+  // Sono i quattro rami di `checkIntimidate` (damage_MASTER.js:559), nello
+  // stesso ordine in cui il vendore li valuta:
+  //
+  //   intimidateInverte   il calo diventa +1        Contrary · Guard Dog
+  //   intimidateAnnulla   nessun calo               Clear Body e compagnia
+  //   intimidateRimbalza  il calo torna al mittente Mirror Armor
+  //   simple              il calo raddoppia         Simple
+  //
+  // L'ordine conta e non è quello che verrebbe in mente: Contrary e Guard Dog
+  // vengono valutate per PRIME, quindi hanno la meglio sul Clear Amulet ma non
+  // su Mirror Armor. Nel vendore c'è un commento che dice «for some reason»:
+  // è una stranezza del gioco, non una regola con una logica dietro.
+
+  'guard-dog':        { intimidateInverte: true,
+    desc: 'Prevents the Pokémon from being forced out of battle. Intimidate raises its Attack by 1 stage instead of lowering it.' },
+  'full-metal-body':  { intimidateAnnulla: true,
+    desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
+  'simple':           { simple: true,
+    desc: 'Stat changes the Pokémon receives are doubled.' },
+
+  // Intrepid Sword e Dauntless Shield: +1 alla statistica indicata entrando in
+  // campo. `boostIngresso` contiene la chiave della statistica, non un
+  // booleano, così l'implementazione è una riga sola per entrambe.
+  //
+  // In Champions si applicano SEMPRE. La condizione del vendore è
+  // `gen !== 9 || abilityOn`, e `gen` vale 10: la prima metà è già vera, il
+  // flag dell'interfaccia non viene mai letto. Legare il comportamento a un
+  // interruttore che il riferimento ignora produrrebbe due numeri diversi
+  // dallo stesso stato di gioco.
+  'intrepid-sword':   { boostIngresso: 'at',
+    desc: 'Boosts the Pokémon\'s Attack stat by 1 stage when it enters a battle.' },
+  'dauntless-shield': { boostIngresso: 'df',
+    desc: 'Boosts the Pokémon\'s Defense stat by 1 stage when it enters a battle.' },
+
+  // Download: +1 Attacco o +1 Att. Speciale a seconda di quale difesa
+  // avversaria è più bassa. Confronta le difese GIÀ modificate dai boost —
+  // quindi anche da quelli che Intimidate e Dauntless Shield hanno appena
+  // messo, perché nel vendore Download viene dopo.
+  'download':         { download: true,
+    desc: 'Compares an opposing Pokémon\'s Defense and Sp. Def stats before raising its own Attack or Sp. Atk — whichever will be more effective.' },
+
+  // Protosynthesis e Quark Drive: ×1.3 alla statistica più alta (×1.5 se è la
+  // Velocità, che nel danno non si vede). Il valore del campo dice cosa le
+  // accende: il sole per la prima, il campo elettrico per la seconda. La
+  // Booster Energy le accende entrambe.
+  //
+  // ─── IL SOLE ESTREMO NON LE ACCENDE ───────────────────────────────────────
+  // Nel vendore la condizione è `weather === 'Sun'`, un confronto esatto, non
+  // l'`indexOf("Sun")` che altrove fa passare anche il Sole Estremo di
+  // Desolate Land. Trascritto com'è: se un giorno si scoprirà che il gioco
+  // fa diversamente, il posto dove cambiarlo è uno solo.
+  'protosynthesis':   { paradosso: 'sun',
+    descOn:  'Protosynthesis active — highest stat boosted by 30%',
+    descOff: 'Protosynthesis inactive — needs harsh sunlight or Booster Energy',
+    desc: 'Boosts the Pokémon\'s most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy.' },
+  'quark-drive':      { paradosso: 'electric',
+    descOn:  'Quark Drive active — highest stat boosted by 30%',
+    descOff: 'Quark Drive inactive — needs Electric Terrain or Booster Energy',
+    desc: 'Boosts the Pokémon\'s most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy.' },
+
+  // ─── PERCHÉ RATTLED NON È QUI ─────────────────────────────────────────────
+  // `checkIntimidate` le dà +1 Velocità, e la preparazione lo calcola davvero
+  // (vedi `lib/preparazione.js`). Ma la Velocità non passa da qui: il ⚡ della
+  // matrice la ricava da `utils/speedOrder.js`, che non chiama la
+  // preparazione. Finché è così, Rattled non sposta nessun numero che l'app
+  // mostri — quindi resta senza voce, e il badge «non calcolata» le resta
+  // addosso. Dargliela adesso toglierebbe il badge a fronte di niente, che è
+  // esattamente la bugia che la sessione F-2 è servita a eliminare.
+
   // ── Descrizioni informative (nessun effetto sul calcolo) ──────────────────
   'aerilate': { desc: 'Normal-type moves become Flying-type moves and their power is boosted by 20%.' },
   'analytic': { desc: 'Boosts the power of the Pokémon\'s moves by 30% when the Pokémon is the last to move that turn.' },
@@ -109,7 +185,7 @@ export const ABILITY_EFFECTS = {
   'blaze': { desc: 'Boosts the power of the Pokémon\'s Fire-type moves by 50% when its HP drops to 1/3 or less of its max.' },
   'bulletproof': { desc: 'Immune to ball and bomb moves.' },
   'cheek-pouch': { desc: 'Restores 1/3 of max HP when eating a Berry, in addition to the Berry\'s effect.' },
-  'clear-body': { desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
+  'clear-body': { intimidateAnnulla: true, desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
   'cloud-nine': { desc: 'Eliminates the effects of weather.' },
   'compound-eyes': { desc: 'Boosts the accuracy of the Pokémon\'s moves by 30%.' },
   'corrosion': { desc: 'Can poison or badly poison targets even if they\'re Steel or Poison types.' },
@@ -150,7 +226,7 @@ export const ABILITY_EFFECTS = {
   'heavy-metal': { desc: 'Doubles the Pokémon\'s weight.' },
   'hunger-switch': { desc: 'Alternates between its Full Belly Mode and Hangry Mode at the end of every turn.' },
   'hustle': { desc: 'When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%.' },
-  'hyper-cutter': { desc: 'Attack stat cannot be lowered by other Pokémon\'s moves or Abilities.' },
+  'hyper-cutter': { intimidateAnnulla: true, desc: 'Attack stat cannot be lowered by other Pokémon\'s moves or Abilities.' },
   'ice-body': { desc: 'Has 1/16 of its max HP restored at the end of every turn in snow.' },
   'illuminate': { desc: 'Ignores changes to targets\' evasiveness and its accuracy cannot be lowered.' },
   'illusion': { desc: 'Enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move.' },
@@ -162,7 +238,7 @@ export const ABILITY_EFFECTS = {
   // non ce l'ha `levitate`: cambia il numero solo in presenza di uno schermo.
   'infiltrator': { infiltrator: true, desc: 'When using its moves, the Pokémon ignores the effects of targets\' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes.' },
   'innards-out': { desc: 'When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker.' },
-  'inner-focus': { desc: 'Never flinches when attacked and is unaffected by Intimidate.' },
+  'inner-focus': { intimidateAnnulla: true, desc: 'Never flinches when attacked and is unaffected by Intimidate.' },
   'insomnia': { desc: 'Cannot become drowsy or be put to sleep.' },
   'iron-fist': { desc: 'Boosts the power of the Pokémon\'s punching moves by 20%.' },
   'justified': { desc: 'When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage.' },
@@ -181,7 +257,7 @@ export const ABILITY_EFFECTS = {
   'mega-sol': { desc: 'Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight.' },
   'merciless': { desc: 'Attacks become critical hits if the target is poisoned or badly poisoned.' },
   'mimicry': { desc: 'Type changes depending on the terrain.' },
-  'mirror-armor': { desc: 'Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them.' },
+  'mirror-armor': { intimidateRimbalza: true, desc: 'Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them.' },
   'mold-breaker': { desc: 'Moves are unaffected by the Ability of the target (with certain exceptions).' },
   'moody': { desc: 'At the end of every turn, one of the Pokémon\'s stats will be boosted by 2 stages, but another will be lowered by 1 stage.' },
   'motor-drive': { desc: 'Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage.' },
@@ -189,11 +265,11 @@ export const ABILITY_EFFECTS = {
   'mummy': { desc: 'When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy.' },
   'natural-cure': { desc: 'Status conditions are cured when it switches out of battle.' },
   'no-guard': { desc: 'The accuracy of moves used both by and against the Pokémon becomes 100%.' },
-  'oblivious': { desc: 'Cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate.' },
+  'oblivious': { intimidateAnnulla: true, desc: 'Cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate.' },
   'opportunist': { desc: 'When an opponent\'s stats are boosted, the Pokémon boosts its own stats in the exact same way.' },
   'overcoat': { desc: 'Takes no damage from sandstorms and is immune to moves and Abilities involving powder.' },
   'overgrow': { desc: 'Boosts the power of the Pokémon\'s Grass-type moves by 50% when its HP drops to 1/3 or less of its max.' },
-  'own-tempo': { desc: 'Cannot become confused and is unaffected by Intimidate.' },
+  'own-tempo': { intimidateAnnulla: true, desc: 'Cannot become confused and is unaffected by Intimidate.' },
   'parental-bond': { desc: 'The parent and child attack one after the other. The power of the child\'s attacks is 1/4 of those of the parent.' },
   'pickpocket': { desc: 'When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item.' },
   'pickup': { desc: 'If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon.' },
@@ -223,7 +299,7 @@ export const ABILITY_EFFECTS = {
   'sand-stream': { desc: 'Summons a sandstorm for 5 turns when the Pokémon enters a battle.' },
   'sand-veil': { desc: 'Boosts the Pokémon\'s evasiveness by 25% in a sandstorm.' },
   'sap-sipper': { desc: 'Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage.' },
-  'scrappy': { desc: 'Can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate.' },
+  'scrappy': { intimidateAnnulla: true, desc: 'Can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate.' },
   'screen-cleaner': { desc: 'When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses.' },
   'shadow-tag': { desc: 'Opponents cannot be switched out of battle.' },
   'sharpness': { desc: 'Boosts the power of the Pokémon\'s slicing moves by 50%.' },
@@ -271,6 +347,6 @@ export const ABILITY_EFFECTS = {
   'water-absorb': { desc: 'Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.' },
   'water-bubble': { waterBubble: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.' },
   'weak-armor': { desc: 'When the Pokémon takes damage from a physical move, its Defense is lowered by 1 stage, but its Speed is boosted by 2 stages.' },
-  'white-smoke': { desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
+  'white-smoke': { intimidateAnnulla: true, desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
   'zero-to-hero': { desc: 'Changes into its Hero Form when it switches out of battle.' },
 }

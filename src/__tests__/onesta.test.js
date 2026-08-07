@@ -216,6 +216,56 @@ describe('calcEffectiveSpe', () => {
     expect(conCampo).toBe(senzaCampo)
   })
 
+  // ── Protosynthesis / Quark Drive (J) ─────────────────────────────────────
+  // Punto i di `getFinalSpeed`: ×1.5, ma SOLO se la statistica più alta è la
+  // Velocità. È la condizione che rende il caso interessante — e che rende
+  // necessari due Pokémon diversi invece di due configurazioni dello stesso.
+  //
+  // Iron Bundle ha la Velocità come statistica più alta (136): il ×1.5 arriva.
+  // Iron Treads ha la Difesa (120): il paradosso si accende lo stesso, ma sulla
+  // velocità non si vede niente. Senza il secondo caso, «×1.5 col paradosso»
+  // sarebbe soddisfatto anche da un'implementazione che ignora la condizione.
+
+  const bundle = { key: 'iron-bundle', sps: [0, 0, 0, 0, 0, 0], nature: 'serious', speBoost: 0 }
+  const treads = { key: 'iron-treads', sps: [0, 0, 0, 0, 0, 0], nature: 'serious', speBoost: 0 }
+
+  it('Quark Drive moltiplica per uno e mezzo se la Velocità è la statistica più alta', () => {
+    const nudo = calcEffectiveSpe({ ...bundle }, null, false, 'electric')
+    const quark = calcEffectiveSpe({ ...bundle, ability: 'quark drive' }, null, false, 'electric')
+    expect(quark).toBe(Math.floor(nudo * 1.5) + (((nudo * 1.5) % 1) > 0.5 ? 1 : 0))
+    expect(quark).toBeGreaterThan(nudo)
+  })
+
+  it('ma non se la statistica più alta è un\'altra', () => {
+    const nudo = calcEffectiveSpe({ ...treads }, null, false, 'electric')
+    const quark = calcEffectiveSpe({ ...treads, ability: 'quark drive' }, null, false, 'electric')
+    expect(quark).toBe(nudo)
+  })
+
+  it('e non senza Campo Elettrico', () => {
+    const nudo = calcEffectiveSpe({ ...bundle }, null, false, null)
+    const quark = calcEffectiveSpe({ ...bundle, ability: 'quark drive' }, null, false, null)
+    expect(quark).toBe(nudo)
+  })
+
+  it('la Booster Energy lo accende senza campo', () => {
+    const nudo = calcEffectiveSpe({ ...bundle }, null, false, null)
+    const conBooster = calcEffectiveSpe(
+      { ...bundle, ability: 'quark drive', item: 'booster energy' }, null, false, null,
+    )
+    expect(conBooster).toBeGreaterThan(nudo)
+  })
+
+  it('la Booster Energy non fa niente a chi non ha un\'abilità paradosso', () => {
+    // Controllo incrociato: senza, il ×1.5 potrebbe essere legato allo
+    // strumento invece che all'abilità.
+    const nudo = calcEffectiveSpe({ ...bundle, ability: 'rough skin' }, null, false, null)
+    const conBooster = calcEffectiveSpe(
+      { ...bundle, ability: 'rough skin', item: 'booster energy' }, null, false, null,
+    )
+    expect(conBooster).toBe(nudo)
+  })
+
   it('restituisce un intero: si confronta con === per decidere chi va prima', () => {
     for (const item of [null, 'choice scarf', 'iron ball']) {
       for (const tw of [false, true]) {

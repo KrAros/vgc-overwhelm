@@ -337,7 +337,13 @@ export default function DamageTable({ onCellSelect }) {
                             if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
                           }}
                         />
-                        {p.item && (
+                        {/* `itemIconUrl` restituisce null per gli strumenti senza indice
+                            sprite: i primi sono arrivati in J (Booster Energy, Clear
+                            Amulet, Adrenaline Orb). Senza questa guardia si
+                            renderizzerebbe un <img> senza sorgente, che a seconda del
+                            browser non emette nemmeno l'evento di errore da cui
+                            dipende il `display: none` qui sotto. */}
+                        {p.item && itemIconUrl(p.item) && (
                           <img
                             src={itemIconUrl(p.item)}
                             alt={p.item}
@@ -383,7 +389,13 @@ export default function DamageTable({ onCellSelect }) {
                             if (fb && e.target.src !== fb) { e.target.src = fb } else { e.target.style.display = 'none' }
                           }}
                         />
-                        {row.item && (
+                        {/* `itemIconUrl` restituisce null per gli strumenti senza indice
+                            sprite: i primi sono arrivati in J (Booster Energy, Clear
+                            Amulet, Adrenaline Orb). Senza questa guardia si
+                            renderizzerebbe un <img> senza sorgente, che a seconda del
+                            browser non emette nemmeno l'evento di errore da cui
+                            dipende il `display: none` qui sotto. */}
+                        {row.item && itemIconUrl(row.item) && (
                           <img
                             src={itemIconUrl(row.item)}
                             alt={row.item}

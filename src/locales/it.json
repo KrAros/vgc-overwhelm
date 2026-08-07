@@ -558,7 +558,10 @@
     "waterium z": "Waterium Z",
     "wave incense": "Incenso Onda",
     "whipped dream": "Sogno Panna",
-    "wiki berry": "Baccawiki"
+    "wiki berry": "Baccawiki",
+    "adrenaline orb": "Sferadrenalina",
+    "booster energy": "Energisfera",
+    "clear amulet": "Limpidamuleto"
   },
   "abilities": {
     "stench": "Tanfo",
@@ -1867,7 +1870,15 @@
     "water-bubble": "Dimezza il danno subito dalle mosse Fuoco, raddoppia la potenza delle mosse Acqua. Non può essere bruciato.",
     "weak-armor": "Quando subisce danno fisico, la Difesa scende di 1 grado ma la Velocità sale di 2 gradi.",
     "white-smoke": "Le statistiche non possono essere abbassate da altri Pokémon.",
-    "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe."
+    "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe.",
+    "full-metal-body": "Le statistiche non possono essere ridotte da mosse o abilità di altri Pokémon.",
+    "guard-dog": "Non può essere costretto a lasciare il campo. Prepotenza gli aumenta l'Attacco di un livello invece di ridurlo.",
+    "simple": "Le modifiche alle statistiche che riceve sono raddoppiate.",
+    "intrepid-sword": "Quando entra in campo, il suo Attacco aumenta di un livello.",
+    "dauntless-shield": "Quando entra in campo, la sua Difesa aumenta di un livello.",
+    "download": "Confronta Difesa e Difesa Speciale del bersaglio e aumenta il proprio Attacco o Attacco Speciale, a seconda di quale sia più efficace.",
+    "protosynthesis": "Aumenta del 30% la statistica più alta se la luce solare è intensa o se ha con sé una Energisfera.",
+    "quark-drive": "Aumenta del 30% la statistica più alta se è attivo il Campo Elettrico o se ha con sé una Energisfera."
   },
   "abilities_desc_on": {
     "flash-fire": "Fuocosfera attivo — mosse Fuoco potenziate di ×1,5",

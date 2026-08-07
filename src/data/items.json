@@ -1209,5 +1209,14 @@
   "fairy feather": {
     "name": "Fairy Feather",
     "num": 2401
+  },
+  "adrenaline orb": {
+    "name": "Adrenaline Orb"
+  },
+  "booster energy": {
+    "name": "Booster Energy"
+  },
+  "clear amulet": {
+    "name": "Clear Amulet"
   }
 }
