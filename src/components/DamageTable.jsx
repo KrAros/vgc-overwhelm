@@ -1,14 +1,28 @@
-import { useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { calculateDamage } from '../calcEngine'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
-import { whoGoesFirst } from '../utils/speedOrder'
-import { buildAttackerInput, buildDefenderInput, buildField } from '../lib/battleState'
+import { costruisciMatrice } from '../lib/matrice'
 import useFieldState from '../hooks/useFieldState'
 
 const toTitleCase = s => s.replace(/(^|-)\w/g, c => c.replace('-', ' ').toUpperCase()).trim()
+
+/**
+ * Abilità che impostano il meteo entrando in campo.
+ *
+ * Sta fuori dal componente per due motivi: è una costante, e `handleSelect`
+ * ora è in `useCallback` — una tabella ricreata a ogni render la renderebbe
+ * una dipendenza instabile, cioè annullerebbe la memoizzazione delle celle.
+ */
+const ABILITY_WEATHER = {
+  'drizzle':        'rain',
+  'primordial sea': 'heavy rain',
+  'drought':        'sun',
+  'desolate land':  'harsh sunshine',
+  'sand stream':    'sand',
+  'snow warning':   'snow',
+}
 
 const SpreadIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -35,24 +49,6 @@ function immuneLabel(result) {
   return { text: 'Immune (tipo)', cls: 'text-gray-500' }
 }
 
-function calcAllMoves(atk, def, level, field) {
-  const attacker = buildAttackerInput(atk, level)
-  const defender = buildDefenderInput(def)
-  return (atk.moves || []).filter(Boolean).map(move => ({
-    move,
-    result: calculateDamage({ attacker, defender, move, field }),
-  }))
-}
-
-function getBestMove(atk, def, level, field) {
-  const all = calcAllMoves(atk, def, level, field)
-  const effective = all.filter(({ result }) => result && !result.immune && result.maxPct > 0)
-  if (!effective.length) return null
-  return effective.reduce((best, cur) =>
-    cur.result.maxPct > best.result.maxPct ? cur : best
-  )
-}
-
 // ── DamageCell ────────────────────────────────────────────────────────────────
 
 function formatPokeName(key) {
@@ -65,24 +61,42 @@ function formatPokeName(key) {
   return key.split('-')[0]
 }
 
-function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect, ri, ci, selectionState, showKoOnly, isOnAxis, hasSelection, selDir }) {
+/**
+ * ─── LA CELLA NON CALCOLA PIÙ NIENTE ───────────────────────────────────────
+ * Prima ogni cella chiamava quattro volte il motore. Ora riceve `cella` già
+ * pronta da `lib/matrice.js`, calcolata una volta sola per l'intera griglia
+ * dentro un `useMemo` che non dipende dalla selezione.
+ *
+ * ─── PERCHÉ LE PROP SONO PRIMITIVE ─────────────────────────────────────────
+ * `memo` confronta le prop per identità. Prima ne arrivavano tre che erano
+ * oggetti nuovi a ogni render — `field`, `fieldReversed` e `selectionState` —
+ * più `onSelect`, che era una funzione nuova ogni volta: avvolgere la cella in
+ * `memo` senza toccarle non avrebbe evitato un solo render.
+ *
+ * Quindi la selezione arriva come due stringhe: `dirPrima` e `dirSeconda`
+ * valgono 't1'/'t2' se QUESTA cella è la prima o la seconda selezionata, e
+ * null altrimenti. Basta a decidere sia l'anello attorno alla cella sia quale
+ * delle due metà evidenziare.
+ */
+const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelect, ri, ci, dirPrima, dirSeconda, showKoOnly, isOnAxis, hasSelection, selDir }) {
   const { t } = useTranslation()
   const dimCell = hasSelection && !isOnAxis
-  if (!attacker?.key || !defender?.key) {
+  if (!cella) {
     if (showKoOnly) return <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
     return (
       <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">—</td>
     )
   }
 
-  const allMovesT1 = calcAllMoves(attacker, defender, level, field)
-  const allMovesT2 = calcAllMoves(defender, attacker, level, fieldReversed)
-
-  const d1 = getBestMove(attacker, defender, level, field)
-  const d2 = getBestMove(defender, attacker, level, fieldReversed)
-
-  const firstImmuneT1 = !d1 ? allMovesT1.find(({ result }) => result?.immune) : null
-  const firstImmuneT2 = !d2 ? allMovesT2.find(({ result }) => result?.immune) : null
+  const {
+    mosseT1: allMovesT1,
+    mosseT2: allMovesT2,
+    migliore1: d1,
+    migliore2: d2,
+    immune1: firstImmuneT1,
+    immune2: firstImmuneT2,
+    primo,
+  } = cella
 
   if (showKoOnly) {
     const t1Ko = d1 && d1.result.maxPct >= 100
@@ -97,11 +111,8 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
   const koFilterDimT1 = showKoOnly && !(d1 && d1.result.maxPct >= 100)
   const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
 
-  const twAtk = field.atkTeamSide === 't2' ? field.tailwindT2 : field.tailwindT1
-  const twDef = field.atkTeamSide === 't2' ? field.tailwindT1 : field.tailwindT2
-  const speedFirst = whoGoesFirst(attacker, defender, d1, d2, field.weather, field.trickRoom, twAtk, twDef, field.terrain)
-  const goesFirstT1 = speedFirst === 't1'
-  const goesFirstT2 = speedFirst === 't2'
+  const goesFirstT1 = primo === 't1'
+  const goesFirstT2 = primo === 't2'
 
   const colorClass = (pct) => {
     if (!pct) return 'text-teal-300'
@@ -118,9 +129,8 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     return ''
   }
 
-  const { first, second } = selectionState
-  const isFirst  = first  && first.ri  === ri && first.ci  === ci
-  const isSecond = second && second.ri === ri && second.ci === ci
+  const isFirst  = dirPrima   !== null
+  const isSecond = dirSeconda !== null
 
   const cellRing = isFirst
     ? 'ring-2 ring-teal-400 ring-inset shadow-[0_0_16px_rgba(45,212,191,0.25)]'
@@ -132,8 +142,8 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
     const label = immune ? immuneLabel(immune.result) : null
 
     const halfSelected =
-      (isFirst  && first.dir  === dir) ? 'bg-teal-900/40'   :
-      (isSecond && second.dir === dir) ? 'bg-violet-900/40' :
+      dirPrima   === dir ? 'bg-teal-900/40'   :
+      dirSeconda === dir ? 'bg-violet-900/40' :
       d ? bgClass(d.result.maxPct) : ''
 
     // Fix 3: tooltip del fulmine con nome Pokémon + testo i18n
@@ -143,10 +153,10 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
 
     return (
       <div
-        onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m, m) }}
+        onClick={() => { const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m) }}
         role="button"
         tabIndex={0}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m, m) } }}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m) } }}
         aria-label={d ? `${dir === 't1' ? attacker?.key : defender?.key} uses ${d.move}, ${d.result.minPct}–${d.result.maxPct}% damage` : `${dir === 't1' ? '▶' : '◀'} no move`}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
@@ -195,6 +205,16 @@ function DamageCell({ attacker, defender, level, field, fieldReversed, onSelect,
       {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2, defender?.key)}
     </td>
   )
+})
+
+/**
+ * La direzione selezionata per questa cella, o null.
+ *
+ * Serve a passare alla cella una stringa invece dell'oggetto `selectionState`,
+ * che sarebbe una prop nuova a ogni render e vanificherebbe `memo`.
+ */
+function dirSelezionata(voce, ri, ci) {
+  return voce && voce.ri === ri && voce.ci === ci ? voce.dir : null
 }
 
 // ── DamageTable ───────────────────────────────────────────────────────────────
@@ -217,29 +237,32 @@ export default function DamageTable({ onCellSelect }) {
     }, 50)
   }
 
-  // Un solo stato di campo, due punti di vista. Prima erano due oggetti
-  // scritti a mano, con la corrispondenza lato/modificatore ricopiata due
-  // volte — vedi lib/battleState.js.
-  const field         = buildField(campo, 't1')
-  const fieldReversed = buildField(campo, 't2')
+  // ─── IL CALCOLO STA QUI, UNA VOLTA SOLA ──────────────────────────────────
+  // `costruisciMatrice` costruisce da sé i due orientamenti del campo (era
+  // `field` e `fieldReversed`, scritti a mano; vedi lib/battleState.js) e
+  // restituisce le 36 celle già risolte.
+  //
+  // Le dipendenze sono quattro, e sono tutte quelle da cui i numeri
+  // dipendono: i due team, lo stato di campo e il livello. La selezione NON
+  // ne fa parte, ed è il punto: cliccare una cella faceva rirendere
+  // DamageTable e ricalcolare l'intera griglia — 576 chiamate al motore per
+  // aprire un pannello che quei numeri se li porta già dietro. Ora quel click
+  // costa zero chiamate.
+  //
+  // `campo` arriva già memoizzato da `useFieldState`, quindi il confronto per
+  // identità funziona: senza quello, questo useMemo non salterebbe mai.
+  const matrice = useMemo(
+    () => costruisciMatrice(team1, team2, campo, level),
+    [team1, team2, campo, level],
+  )
 
   const setWeatherDirect = useCalcStore(s => s.setWeatherDirect)
 
-  const ABILITY_WEATHER = {
-    'drizzle':        'rain',
-    'primordial sea': 'heavy rain',
-    'drought':        'sun',
-    'desolate land':  'harsh sunshine',
-    'sand stream':    'sand',
-    'snow warning':   'snow',
-  }
-
-  const handleSelect = (ri, ci, dir, atk, def, allMovesT1, allMovesT2) => {
+  const handleSelect = useCallback((ri, ci, dir, atk, def, allMoves) => {
     const atkAbility = (atk?.ability || '').toLowerCase()
     const defAbility = (def?.ability || '').toLowerCase()
     const autoWeather = ABILITY_WEATHER[atkAbility] || ABILITY_WEATHER[defAbility] || null
     if (autoWeather) setTimeout(() => setWeatherDirect(autoWeather), 0)
-    const allMoves = dir === 't1' ? allMovesT1 : allMovesT2
 
     const atkTeam  = dir === 't1' ? 'team1' : 'team2'
     const defTeam  = dir === 't1' ? 'team2' : 'team1'
@@ -279,7 +302,7 @@ export default function DamageTable({ onCellSelect }) {
       return { first: entry, second: null }
     })
     setTimeout(() => onCellSelect?.(nextSel), 0)
-  }
+  }, [onCellSelect, setWeatherDirect])
 
   const sel      = selectionState.first
   const selRi    = sel ? sel.ri  : null
@@ -413,14 +436,13 @@ export default function DamageTable({ onCellSelect }) {
                 {team2.map((col, ci) => (
                   <DamageCell
                     key={ci}
+                    cella={matrice[ri]?.[ci] ?? null}
                     attacker={row}
                     defender={col}
-                    level={level}
-                    field={field}
-                    fieldReversed={fieldReversed}
                     ri={ri}
                     ci={ci}
-                    selectionState={selectionState}
+                    dirPrima={dirSelezionata(selectionState.first, ri, ci)}
+                    dirSeconda={dirSelezionata(selectionState.second, ri, ci)}
                     onSelect={handleSelect}
                     showKoOnly={showKoOnly}
                     isOnAxis={getIsOnDefenderAxis(ri, ci)}

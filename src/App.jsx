@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from './store/useCalcStore'
 import TopBar from './components/TopBar'
@@ -27,7 +27,11 @@ function App() {
   const setTeam1Focus = useCalcStore(s => s.setTeam1Focus)
   const setTeam2Focus = useCalcStore(s => s.setTeam2Focus)
 
-  const handleCellSelect = (sel) => {
+  // In useCallback perché `DamageTable` la usa dentro il proprio useCallback:
+  // se cambiasse identità a ogni render di App — e App rirende a ogni
+  // selezione — `handleSelect` cambierebbe con lei e il `memo` sulle celle
+  // non salterebbe un solo render.
+  const handleCellSelect = useCallback((sel) => {
     setReportSelection(sel || null)
     if (sel) {
       // Seleziona in background i tab del TeamEditor per attaccante e difensore
@@ -48,7 +52,7 @@ function App() {
         document.getElementById('damage-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 50)
     }
-  }
+  }, [setTeam1Focus, setTeam2Focus])
 
   return (
     <div className="min-h-screen text-white flex flex-col">

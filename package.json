@@ -12,6 +12,8 @@
     "test:run": "vitest run",
     "snapshot:gen": "node scripts/gen-snapshot.mjs",
     "snapshot:diff": "node scripts/diff-snapshot.mjs",
+    "matrice:gen": "node scripts/gen-matrice.mjs",
+    "matrice:report": "node scripts/gen-matrice.mjs --report",
     "ncp:gen": "node scripts/gen-ncp-golden.mjs",
     "ncp:prep": "node scripts/gen-ncp-preparazione.mjs",
     "gap:gen": "node scripts/gen-gap-noti.mjs",

@@ -45,13 +45,72 @@ const emptyTeam = () => Array(6).fill(null).map(emptyPokemon)
 const LS_KEY = 'vgc-overwhelm-teams'
 
 // ─── Salvataggio su localStorage ─────────────────────────────────────────────
-function saveToLocalStorage(team1, team2) {
+/**
+ * ─── PERCHÉ UN RITARDO, E PERCHÉ NON È UNA MISURA DI PRESTAZIONI ───────────
+ * Ogni `setSPs`, `setBoost`, `setMove` serializzava entrambi i team e faceva
+ * una scrittura sincrona. Trascinando uno slider erano decine di scritture al
+ * secondo, ed è la ragione per cui l'intervento era in lista.
+ *
+ * Misurato: il payload è 3,18 kB e `JSON.stringify` costa **8,2 µs**, contro i
+ * circa 7 ms di ricalcolo della matrice che lo stesso movimento di slider
+ * provoca comunque. È lo **0,1%** del lavoro. Chiamarla ottimizzazione
+ * sarebbe disonesto: serve a non martellare il disco, non a far andare più
+ * veloce l'interfaccia. Come per il font, il modo giusto di etichettarla è
+ * igiene.
+ *
+ * ─── PERCHÉ NON `persist` DI ZUSTAND ───────────────────────────────────────
+ * Il piano proponeva il middleware `persist`. Toglierebbe una sessantina di
+ * righe, ma reidrata da solo all'avvio, e qui l'avvio ha una precedenza
+ * precisa: **l'URL condiviso vince su localStorage** (vedi `statoIniziale`).
+ * Riprodurla con `persist` significa `skipHydration` più idratazione manuale,
+ * cioè rimettere la complessità che il middleware doveva togliere — su un
+ * percorso che la sessione C ha sistemato e che è nella lista dei flussi da
+ * ripercorrere a mano prima del lancio. Il guadagno misurato non giustifica
+ * quel rischio, quindi si tocca solo la scrittura e il caricamento resta
+ * quello di prima.
+ */
+const RITARDO_SALVATAGGIO = 300
+
+let timerSalvataggio = null
+let daSalvare = null
+
+/** Scrive subito quello che è in attesa. */
+function scriviSubito() {
+  if (timerSalvataggio) {
+    clearTimeout(timerSalvataggio)
+    timerSalvataggio = null
+  }
+  if (!daSalvare) return
+  const contenuto = daSalvare
+  daSalvare = null
   try {
-    localStorage.setItem(LS_KEY, JSON.stringify({ team1, team2 }))
+    localStorage.setItem(LS_KEY, JSON.stringify(contenuto))
   } catch {
     // localStorage pieno o non disponibile (es. incognito con storage bloccato)
   }
 }
+
+function saveToLocalStorage(team1, team2) {
+  daSalvare = { team1, team2 }
+  if (timerSalvataggio) clearTimeout(timerSalvataggio)
+  timerSalvataggio = setTimeout(scriviSubito, RITARDO_SALVATAGGIO)
+}
+
+/**
+ * Se la pagina se ne va prima dello scadere del ritardo, l'ultima modifica
+ * andrebbe persa. `pagehide` copre chiusura, ricarica e navigazione indietro;
+ * `visibilitychange` copre il passaggio ad un'altra app su telefono, dove il
+ * sistema può chiudere la scheda senza altro preavviso.
+ */
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+  window.addEventListener('pagehide', scriviSubito)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') scriviSubito()
+  })
+}
+
+/** Esposta per i test: forza la scrittura senza aspettare il ritardo. */
+export { scriviSubito as salvaSubito, RITARDO_SALVATAGGIO }
 
 // ─── Caricamento da localStorage ─────────────────────────────────────────────
 /**

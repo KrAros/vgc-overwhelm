@@ -1,0 +1,55 @@
+/**
+ * src/fonts.css
+ *
+ * ─── PERCHÉ NON `@fontsource-variable/inter` ───────────────────────────────
+ * Quel pacchetto dichiara sette sottoinsiemi (latin, latin-ext, cyrillic,
+ * cyrillic-ext, greek, greek-ext, vietnamese) e la build li copiava tutti in
+ * `dist/`: 213,4 kB di woff2, di cui il browser ne scarica **uno solo**,
+ * perché ogni @font-face ha il suo `unicode-range` e i caratteri degli altri
+ * sei non compaiono in nessuna pagina di questa app.
+ *
+ * Quindi il guadagno in trasferimento è **zero**, misurato: erano 47,1 kB
+ * scaricati prima e sono 47,1 kB adesso. Quello che si toglie sono 165 kB di
+ * file che vengono pubblicati e mai chiesti. È igiene del deploy, non
+ * prestazioni, ed è giusto chiamarla così.
+ *
+ * ─── PERCHÉ NON L'IMPORT `inter/latin.css` ─────────────────────────────────
+ * La strada ovvia sarebbe `import '@fontsource-variable/inter/latin.css'`.
+ * Non funziona, e fallisce nel modo peggiore: nella versione 5.3.0 quel file
+ * **non esiste**, l'export map manda `./*` su `./*.css`, e la build passa
+ * lo stesso. Verificato sull'output: il CSS finale conteneva **zero**
+ * @font-face invece di sette, cioè l'app sarebbe stata pubblicata senza
+ * Inter, senza che nessun test se ne accorgesse.
+ *
+ * Dichiarare qui i due @font-face che servono costa dieci righe ed è
+ * verificabile guardando il CSS generato.
+ *
+ * ─── PERCHÉ ANCHE latin-ext ────────────────────────────────────────────────
+ * L'italiano sta tutto in `latin` (à è é ì ò ù sono sotto U+00FF). `latin-ext`
+ * serve ai nomi che arrivano da fuori: un incolla di Showdown o un nome di
+ * team scritto da un utente possono contenere lettere che in `latin` non ci
+ * sono. Il browser lo scarica solo se quei caratteri compaiono davvero,
+ * quindi nel caso normale il costo resta zero.
+ */
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+                 U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+                 U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+                 U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}

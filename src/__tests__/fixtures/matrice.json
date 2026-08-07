@@ -1,0 +1,3516 @@
+{
+ "meta": {
+  "generatedAt": "2026-08-07T06:12:56.324Z",
+  "commit": "0a9e6c7",
+  "celle": 180,
+  "scenari": 5,
+  "note": "Caratterizzazione dello strato sopra il motore, trascritto da DamageTable.jsx @ 0a9e6c7. Congela il comportamento prima della sessione E."
+ },
+ "scenari": [
+  {
+   "nome": "neutro",
+   "celle": [
+    [
+     {
+      "t1": [
+       "earthquake 93.9-112.6",
+       "rock slide 11.4-13.8",
+       "dragon claw 25.3-29.5",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 56.1-66.8",
+       "shadow ball 50.2-58.8",
+       "thunderbolt IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 133.5-158.9",
+       "rock slide 65.6-79.8",
+       "dragon claw 72.3-85",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 23.5-27.8",
+       "dark pulse 52.9-62.5",
+       "snarl 27.2-32",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "earthquake 74.3-87.1",
+       "rock slide 8.9-10.6",
+       "dragon claw 19.5-23.4",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 62.5-73.7",
+       "iron head 70.5-83.4",
+       "brick break 44.3-52.4",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 60-71.2",
+       "rock slide 7.7-9",
+       "dragon claw 32.1-39",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge IMM:type:type",
+       "thunder punch IMM:type:type",
+       "volt switch IMM:type:type",
+       "zap cannon IMM:type:type"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": null,
+      "immune1": null,
+      "immune2": "wild charge",
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": null
+     },
+     {
+      "t1": [
+       "earthquake 41.8-50.2",
+       "rock slide 10-12.2",
+       "dragon claw 44.1-53",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 47-56.1",
+       "aqua jet 10.6-12.8",
+       "u-turn 18.1-21.9",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "knock off 84.3-101.2",
+       "flare blitz 104.8-124",
+       "fake out IMM:type:type",
+       "parting shot ~"
+      ],
+      "t2": [
+       "make it rain 18.3-22.4",
+       "shadow ball 17.2-20.1",
+       "thunderbolt 25.2-30.4",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "thunderbolt",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 29.8-35.8",
+       "flare blitz 37.3-44",
+       "fake out 16.4-20.1",
+       "parting shot ~"
+      ],
+      "t2": [
+       "heat wave 16-18.9",
+       "dark pulse 17.8-21.2",
+       "snarl 9.1-10.9",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 16.2-19.5",
+       "flare blitz 80.4-94.9",
+       "fake out 4.4-5.5",
+       "parting shot ~"
+      ],
+      "t2": [
+       "sucker punch 34.4-41.3",
+       "iron head 39.6-46.5",
+       "brick break 98.8-117.2",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "brick break",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 9-10.7",
+       "flare blitz 33.4-39.9",
+       "fake out 7.7-9.4",
+       "parting shot ~"
+      ],
+      "t2": [
+       "wild charge 60.3-71.2",
+       "thunder punch 50-59.1",
+       "volt switch 9.1-10.9",
+       "zap cannon 15.5-18.9"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 37.4-44.9",
+       "flare blitz 22.9-27.2",
+       "fake out 10.6-12.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "earthquake 94.2-112",
+       "rock slide 46.5-55.1",
+       "dragon claw 50-60.3",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 8.9-11.1",
+       "flare blitz 46.9-55.3",
+       "fake out 10.6-12.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "close combat 106.8-125.2",
+       "aqua jet 24.1-28.7",
+       "u-turn 20.6-24.7",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "wood hammer 41.5-49.3",
+       "grassy glide 19.2-22.8",
+       "u-turn 7.8-9.6",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 67.5-79.3",
+       "shadow ball 60.8-72",
+       "thunderbolt 22.3-26.8",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 58.9-69.4",
+       "grassy glide 26.8-32",
+       "u-turn 46.2-55.2",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 113.9-134",
+       "dark pulse 64.2-75.9",
+       "snarl 32.4-39.1",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 31.8-37.9",
+       "grassy glide 15-17.8",
+       "u-turn 25.1-30.1",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 67.5-80.4",
+       "iron head 77-91",
+       "brick break 48-56.9",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 54-63.5",
+       "grassy glide 24.8-29.6",
+       "u-turn 10.3-12.4",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 29-34.6",
+       "thunder punch 24-28.4",
+       "volt switch 7.8-9.4",
+       "zap cannon 13.4-16.2"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-88.2",
+       "grassy glide 34.2-40.6",
+       "u-turn 29.4-34.7",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 22.3-26.8",
+       "rock slide 22.3-26.8",
+       "dragon claw 48.6-58.6",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-87.7",
+       "grassy glide 34-40.7",
+       "u-turn 29-34.6",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 51.9-60.8",
+       "aqua jet 5.5-6.7",
+       "u-turn 40.2-48",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 4.8-5.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "make it rain 56.4-67.3",
+       "shadow ball 51.2-60.6",
+       "thunderbolt 18.6-22.2",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 29.1-34.3",
+       "pollen puff 19.4-23.1",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "heat wave 96.3-112.9",
+       "dark pulse 53.3-63.7",
+       "snarl 27.9-33.1",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 12.8-15.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "sucker punch 46.6-54.9",
+       "iron head 52.8-62.6",
+       "brick break 16.5-19.6",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 25.7-30.9",
+       "pollen puff 8.5-10.3",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "wild charge 20.2-23.8",
+       "thunder punch 17-20.2",
+       "volt switch 6.2-7.7",
+       "zap cannon 10.8-13.4"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 13.3-16",
+       "pollen puff 18.1-21.9",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "earthquake 31-36.7",
+       "rock slide 15.5-18.6",
+       "dragon claw 34.1-40.4",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 37.4-44.1",
+       "pollen puff 25.1-29.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "close combat 17-20.7",
+       "aqua jet 4.1-4.6",
+       "u-turn 13.9-16.5",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "extreme speed IMM:type:type",
+       "body slam IMM:type:type",
+       "brick break IMM:type:type",
+       "close combat IMM:type:type"
+      ],
+      "t2": [
+       "make it rain 26.4-32.3",
+       "shadow ball 24.1-28.8",
+       "thunderbolt 18.2-21.1",
+       "protect ~"
+      ],
+      "migliore1": null,
+      "migliore2": "make it rain",
+      "immune1": "extreme speed",
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 38-44.7",
+       "body slam 40.2-47.7",
+       "brick break 70.1-83.5",
+       "close combat 111.9-132.8"
+      ],
+      "t2": [
+       "heat wave 11.1-12.9",
+       "dark pulse 25.2-30",
+       "snarl 12.9-15.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 10-12.2",
+       "body slam 10.6-12.8",
+       "brick break 75.9-91.6",
+       "close combat 122.9-145.2"
+      ],
+      "t2": [
+       "sucker punch 34.1-40.5",
+       "iron head 38.8-45.8",
+       "brick break 11.7-14.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 17.1-20.6",
+       "body slam 18.4-21.8",
+       "brick break 16.3-19.3",
+       "close combat 25.7-30.4"
+      ],
+      "t2": [
+       "wild charge 29.4-34.7",
+       "thunder punch 24.7-28.8",
+       "volt switch 6.4-7.6",
+       "zap cannon 10.5-12.9"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 24-28.3",
+       "body slam 25.1-29.9",
+       "brick break 21.9-26.2",
+       "close combat 35.2-41.7"
+      ],
+      "t2": [
+       "earthquake IMM:type:type",
+       "rock slide 22.9-27.6",
+       "dragon claw 48.8-58.2",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 24-28.4",
+       "body slam 25.1-30.1",
+       "brick break 44.6-53.6",
+       "close combat 70.3-83.7"
+      ],
+      "t2": [
+       "close combat 12.9-15.2",
+       "aqua jet 2.9-3.5",
+       "u-turn 4.7-5.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "moonblast 22.2-26.5",
+       "shadow ball 75.9-90.3",
+       "icy wind 6.6-7.8",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 106.7-128.3",
+       "shadow ball 99.2-116.4",
+       "thunderbolt 35.8-42.5",
+       "protect ~"
+      ],
+      "migliore1": "shadow ball",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 44.7-53.7",
+       "shadow ball 18.6-22.3",
+       "icy wind 5.9-7.4",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 44.7-53.7",
+       "dark pulse 50-60.4",
+       "snarl 25.3-31.3",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 29-35.1",
+       "shadow ball 12.2-15",
+       "icy wind 4.4-5",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 129.8-152.9",
+       "iron head 297-350.7",
+       "brick break IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 79.8-95.2",
+       "shadow ball 33.4-39.9",
+       "icy wind 11.5-13.7",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 112.6-132.8",
+       "thunder punch 94-110.4",
+       "volt switch 11.9-15.6",
+       "zap cannon 20.8-25.3"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 83.4-99.4",
+       "shadow ball 35.8-42.2",
+       "icy wind 49.1-59.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 88-104.4",
+       "rock slide 43.2-52.2",
+       "dragon claw IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 227.9-270.3",
+       "shadow ball 23.4-28.4",
+       "icy wind 16.2-19.5",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat IMM:type:type",
+       "aqua jet 22.3-26.8",
+       "u-turn 9.7-11.1",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "aqua jet",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ]
+   ]
+  },
+  {
+   "nome": "sole-reflect-t2-hh-t1",
+   "celle": [
+    [
+     {
+      "t1": [
+       "earthquake 93.9-110.8",
+       "rock slide 11.4-13.8",
+       "dragon claw 25.3-29.5",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 56.1-66.8",
+       "shadow ball 50.2-58.8",
+       "thunderbolt IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 133.5-158.9",
+       "rock slide 65.6-79.1",
+       "dragon claw 70.1-84.3",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 35.2-41.7",
+       "dark pulse 52.9-62.5",
+       "snarl 27.2-32",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "earthquake 72.6-85.4",
+       "rock slide 8.9-10.6",
+       "dragon claw 18.9-22.9",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 62.5-73.7",
+       "iron head 70.5-83.4",
+       "brick break 44.3-52.4",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 60-71.2",
+       "rock slide 7.2-9",
+       "dragon claw 32.1-38.1",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge IMM:type:type",
+       "thunder punch IMM:type:type",
+       "volt switch IMM:type:type",
+       "zap cannon IMM:type:type"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": null,
+      "immune1": null,
+      "immune2": "wild charge",
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 41.7-49.1",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": null
+     },
+     {
+      "t1": [
+       "earthquake 41.3-49.1",
+       "rock slide 10.6-12.8",
+       "dragon claw 45.2-52.5",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 47-56.1",
+       "aqua jet 5.3-6.4",
+       "u-turn 18.1-21.9",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "knock off 84.9-101.2",
+       "flare blitz 156.6-185.5",
+       "fake out IMM:type:type",
+       "parting shot ~"
+      ],
+      "t2": [
+       "make it rain 18.3-22.4",
+       "shadow ball 17.2-20.1",
+       "thunderbolt 25.2-30.4",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "thunderbolt",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 29.8-35",
+       "flare blitz 55.2-64.9",
+       "fake out 17.1-20.1",
+       "parting shot ~"
+      ],
+      "t2": [
+       "heat wave 24.1-28.7",
+       "dark pulse 17.8-21.2",
+       "snarl 9.1-10.9",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 16.2-18.9",
+       "flare blitz 118.9-141.3",
+       "fake out 4.4-5",
+       "parting shot ~"
+      ],
+      "t2": [
+       "sucker punch 34.4-41.3",
+       "iron head 39.6-46.5",
+       "brick break 98.8-117.2",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "brick break",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 9-10.7",
+       "flare blitz 50.6-59.6",
+       "fake out 7.7-9",
+       "parting shot ~"
+      ],
+      "t2": [
+       "wild charge 60.3-71.2",
+       "thunder punch 50-59.1",
+       "volt switch 9.1-10.9",
+       "zap cannon 15.5-18.9"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 37.9-44.9",
+       "flare blitz 34.7-41.1",
+       "fake out 10.1-12.2",
+       "parting shot ~"
+      ],
+      "t2": [
+       "earthquake 94.2-112",
+       "rock slide 46.5-55.1",
+       "dragon claw 50-60.3",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 9.4-11.1",
+       "flare blitz 69.8-82.6",
+       "fake out 10.6-12.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "close combat 106.8-125.2",
+       "aqua jet 11.4-13.7",
+       "u-turn 20.6-24.7",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "wood hammer 41.5-49.3",
+       "grassy glide 18.6-22.2",
+       "u-turn 7.8-9.6",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 67.5-79.3",
+       "shadow ball 60.8-72",
+       "thunderbolt 22.3-26.8",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 58.9-69.4",
+       "grassy glide 26.8-32",
+       "u-turn 46.2-54.4",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 170.9-201.1",
+       "dark pulse 64.2-75.9",
+       "snarl 32.4-39.1",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 31.8-37.9",
+       "grassy glide 14.5-17.3",
+       "u-turn 25.1-29.6",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 67.5-80.4",
+       "iron head 77-91",
+       "brick break 48-56.9",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 53.6-63.5",
+       "grassy glide 24.4-29.1",
+       "u-turn 10.3-12.4",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 29-34.6",
+       "thunder punch 24-28.4",
+       "volt switch 7.8-9.4",
+       "zap cannon 13.4-16.2"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-87.7",
+       "grassy glide 33.6-40.1",
+       "u-turn 28.8-34.2",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 22.3-26.8",
+       "rock slide 22.3-26.8",
+       "dragon claw 48.6-58.6",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-87.7",
+       "grassy glide 34-40.2",
+       "u-turn 29-34",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 51.9-60.8",
+       "aqua jet 2.7-3.3",
+       "u-turn 40.2-48",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 7.2-8.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "make it rain 56.4-67.3",
+       "shadow ball 51.2-60.6",
+       "thunderbolt 18.6-22.2",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 43.2-51.4",
+       "pollen puff 29.1-34.3",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "heat wave 143-168.9",
+       "dark pulse 53.3-63.7",
+       "snarl 27.9-33.1",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 18.9-22.9",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "sucker punch 46.6-54.9",
+       "iron head 52.8-62.6",
+       "brick break 16.5-19.6",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 39-46.3",
+       "pollen puff 12.8-15.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "wild charge 20.2-23.8",
+       "thunder punch 17-20.2",
+       "volt switch 6.2-7.7",
+       "zap cannon 10.8-13.4"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 20.3-24",
+       "pollen puff 27.2-32.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "earthquake 31-36.7",
+       "rock slide 15.5-18.6",
+       "dragon claw 34.1-40.4",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 55.8-65.9",
+       "pollen puff 37.4-44.1",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "close combat 17-20.7",
+       "aqua jet 1.5-2",
+       "u-turn 13.9-16.5",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "extreme speed IMM:type:type",
+       "body slam IMM:type:type",
+       "brick break IMM:type:type",
+       "close combat IMM:type:type"
+      ],
+      "t2": [
+       "make it rain 26.4-32.3",
+       "shadow ball 24.1-28.8",
+       "thunderbolt 18.2-21.1",
+       "protect ~"
+      ],
+      "migliore1": null,
+      "migliore2": "make it rain",
+      "immune1": "extreme speed",
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 37.3-44",
+       "body slam 39.5-47",
+       "brick break 104.4-123.8",
+       "close combat 112.6-132"
+      ],
+      "t2": [
+       "heat wave 16.4-20",
+       "dark pulse 25.2-30",
+       "snarl 12.9-15.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 10-11.7",
+       "body slam 10.6-12.8",
+       "brick break 113.9-136.3",
+       "close combat 122.3-144.6"
+      ],
+      "t2": [
+       "sucker punch 34.1-40.5",
+       "iron head 38.8-45.8",
+       "brick break 11.7-14.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 17.1-20.1",
+       "body slam 18-21.4",
+       "brick break 24-28.3",
+       "close combat 25.3-30"
+      ],
+      "t2": [
+       "wild charge 29.4-34.7",
+       "thunder punch 24.7-28.8",
+       "volt switch 6.4-7.6",
+       "zap cannon 10.5-12.9"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 23.5-27.8",
+       "body slam 25.1-29.4",
+       "brick break 33.1-39",
+       "close combat 35.2-41.7"
+      ],
+      "t2": [
+       "earthquake IMM:type:type",
+       "rock slide 22.9-27.6",
+       "dragon claw 48.8-58.2",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 23.4-27.9",
+       "body slam 25.1-29.6",
+       "brick break 65.9-78.2",
+       "close combat 70.9-83.2"
+      ],
+      "t2": [
+       "close combat 12.9-15.2",
+       "aqua jet 1.1-1.7",
+       "u-turn 4.7-5.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "moonblast 33.1-39.7",
+       "shadow ball 113.2-134.9",
+       "icy wind 9.6-11.4",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 106.7-128.3",
+       "shadow ball 99.2-116.4",
+       "thunderbolt 35.8-42.5",
+       "protect ~"
+      ],
+      "migliore1": "shadow ball",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 65.6-78.3",
+       "shadow ball 28.3-33.5",
+       "icy wind 9.7-11.1",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 67.9-80.5",
+       "dark pulse 50-60.4",
+       "snarl 25.3-31.3",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 43.5-51.9",
+       "shadow ball 18.4-21.7",
+       "icy wind 6.1-7.8",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 129.8-152.9",
+       "iron head 297-350.7",
+       "brick break IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 118.4-139.9",
+       "shadow ball 50.6-59.6",
+       "icy wind 17.1-20.6",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 112.6-132.8",
+       "thunder punch 94-110.4",
+       "volt switch 11.9-15.6",
+       "zap cannon 20.8-25.3"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 126.2-148.6",
+       "shadow ball 53.4-63.1",
+       "icy wind 72.7-85.5",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 88-104.4",
+       "rock slide 43.2-52.2",
+       "dragon claw IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 341.8-402.2",
+       "shadow ball 35.1-41.8",
+       "icy wind 24.5-29",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat IMM:type:type",
+       "aqua jet 11.1-13.4",
+       "u-turn 9.7-11.1",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "aqua jet",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ]
+   ]
+  },
+  {
+   "nome": "pioggia-trickroom-tailwind-t2",
+   "celle": [
+    [
+     {
+      "t1": [
+       "earthquake 93.9-112.6",
+       "rock slide 11.4-13.8",
+       "dragon claw 25.3-29.5",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 56.1-66.8",
+       "shadow ball 50.2-58.8",
+       "thunderbolt IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 133.5-158.9",
+       "rock slide 65.6-79.8",
+       "dragon claw 72.3-85",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 11.2-13.9",
+       "dark pulse 52.9-62.5",
+       "snarl 27.2-32",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 74.3-87.1",
+       "rock slide 8.9-10.6",
+       "dragon claw 19.5-23.4",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 62.5-73.7",
+       "iron head 70.5-83.4",
+       "brick break 44.3-52.4",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 60-71.2",
+       "rock slide 7.7-9",
+       "dragon claw 32.1-39",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge IMM:type:type",
+       "thunder punch IMM:type:type",
+       "volt switch IMM:type:type",
+       "zap cannon IMM:type:type"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": null,
+      "immune1": null,
+      "immune2": "wild charge",
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 41.8-50.2",
+       "rock slide 10-12.2",
+       "dragon claw 44.1-53",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 47-56.1",
+       "aqua jet 16-19.2",
+       "u-turn 18.1-21.9",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "knock off 84.3-101.2",
+       "flare blitz 50.6-61.4",
+       "fake out IMM:type:type",
+       "parting shot ~"
+      ],
+      "t2": [
+       "make it rain 18.3-22.4",
+       "shadow ball 17.2-20.1",
+       "thunderbolt 25.2-30.4",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "thunderbolt",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 29.8-35.8",
+       "flare blitz 17.9-21.6",
+       "fake out 16.4-20.1",
+       "parting shot ~"
+      ],
+      "t2": [
+       "heat wave 7.4-9.1",
+       "dark pulse 17.8-21.2",
+       "snarl 9.1-10.9",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 16.2-19.5",
+       "flare blitz 37.9-46.9",
+       "fake out 4.4-5.5",
+       "parting shot ~"
+      ],
+      "t2": [
+       "sucker punch 34.4-41.3",
+       "iron head 39.6-46.5",
+       "brick break 98.8-117.2",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "brick break",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 9-10.7",
+       "flare blitz 16.7-19.7",
+       "fake out 7.7-9.4",
+       "parting shot ~"
+      ],
+      "t2": [
+       "wild charge 60.3-71.2",
+       "thunder punch 50-59.1",
+       "volt switch 9.1-10.9",
+       "zap cannon 15.5-18.9"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 37.4-44.9",
+       "flare blitz 11.2-13.3",
+       "fake out 10.6-12.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "earthquake 94.2-112",
+       "rock slide 46.5-55.1",
+       "dragon claw 50-60.3",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 8.9-11.1",
+       "flare blitz 23.4-27.3",
+       "fake out 10.6-12.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "close combat 106.8-125.2",
+       "aqua jet 35.6-42.5",
+       "u-turn 20.6-24.7",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "wood hammer 41.5-49.3",
+       "grassy glide 19.2-22.8",
+       "u-turn 7.8-9.6",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 67.5-79.3",
+       "shadow ball 60.8-72",
+       "thunderbolt 22.3-26.8",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 58.9-69.4",
+       "grassy glide 26.8-32",
+       "u-turn 46.2-55.2",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 56.9-67",
+       "dark pulse 64.2-75.9",
+       "snarl 32.4-39.1",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 31.8-37.9",
+       "grassy glide 15-17.8",
+       "u-turn 25.1-30.1",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 67.5-80.4",
+       "iron head 77-91",
+       "brick break 48-56.9",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 54-63.5",
+       "grassy glide 24.8-29.6",
+       "u-turn 10.3-12.4",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 29-34.6",
+       "thunder punch 24-28.4",
+       "volt switch 7.8-9.4",
+       "zap cannon 13.4-16.2"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-88.2",
+       "grassy glide 34.2-40.6",
+       "u-turn 29.4-34.7",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 22.3-26.8",
+       "rock slide 22.3-26.8",
+       "dragon claw 48.6-58.6",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 74.3-87.7",
+       "grassy glide 34-40.7",
+       "u-turn 29-34.6",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 51.9-60.8",
+       "aqua jet 8.3-10",
+       "u-turn 40.2-48",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 4.8-5.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "make it rain 56.4-67.3",
+       "shadow ball 51.2-60.6",
+       "thunderbolt 18.6-22.2",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "sludge bomb 29.1-34.3",
+       "pollen puff 19.4-23.1",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "heat wave 46.6-55.9",
+       "dark pulse 53.3-63.7",
+       "snarl 27.9-33.1",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 12.8-15.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "sucker punch 46.6-54.9",
+       "iron head 52.8-62.6",
+       "brick break 16.5-19.6",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "sludge bomb 25.7-30.9",
+       "pollen puff 8.5-10.3",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "wild charge 20.2-23.8",
+       "thunder punch 17-20.2",
+       "volt switch 6.2-7.7",
+       "zap cannon 10.8-13.4"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "sludge bomb 13.3-16",
+       "pollen puff 18.1-21.9",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "earthquake 31-36.7",
+       "rock slide 15.5-18.6",
+       "dragon claw 34.1-40.4",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "sludge bomb 37.4-44.1",
+       "pollen puff 25.1-29.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "close combat 17-20.7",
+       "aqua jet 5.6-7.2",
+       "u-turn 13.9-16.5",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "extreme speed IMM:type:type",
+       "body slam IMM:type:type",
+       "brick break IMM:type:type",
+       "close combat IMM:type:type"
+      ],
+      "t2": [
+       "make it rain 26.4-32.3",
+       "shadow ball 24.1-28.8",
+       "thunderbolt 18.2-21.1",
+       "protect ~"
+      ],
+      "migliore1": null,
+      "migliore2": "make it rain",
+      "immune1": "extreme speed",
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 38-44.7",
+       "body slam 40.2-47.7",
+       "brick break 70.1-83.5",
+       "close combat 111.9-132.8"
+      ],
+      "t2": [
+       "heat wave 5.2-6.4",
+       "dark pulse 25.2-30",
+       "snarl 12.9-15.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 10-12.2",
+       "body slam 10.6-12.8",
+       "brick break 75.9-91.6",
+       "close combat 122.9-145.2"
+      ],
+      "t2": [
+       "sucker punch 34.1-40.5",
+       "iron head 38.8-45.8",
+       "brick break 11.7-14.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 17.1-20.6",
+       "body slam 18.4-21.8",
+       "brick break 16.3-19.3",
+       "close combat 25.7-30.4"
+      ],
+      "t2": [
+       "wild charge 29.4-34.7",
+       "thunder punch 24.7-28.8",
+       "volt switch 6.4-7.6",
+       "zap cannon 10.5-12.9"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 24-28.3",
+       "body slam 25.1-29.9",
+       "brick break 21.9-26.2",
+       "close combat 35.2-41.7"
+      ],
+      "t2": [
+       "earthquake IMM:type:type",
+       "rock slide 22.9-27.6",
+       "dragon claw 48.8-58.2",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 24-28.4",
+       "body slam 25.1-30.1",
+       "brick break 44.6-53.6",
+       "close combat 70.3-83.7"
+      ],
+      "t2": [
+       "close combat 12.9-15.2",
+       "aqua jet 4.1-5.2",
+       "u-turn 4.7-5.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "moonblast 22.2-26.5",
+       "shadow ball 75.9-90.3",
+       "icy wind 6.6-7.8",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 106.7-128.3",
+       "shadow ball 99.2-116.4",
+       "thunderbolt 35.8-42.5",
+       "protect ~"
+      ],
+      "migliore1": "shadow ball",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "moonblast 44.7-53.7",
+       "shadow ball 18.6-22.3",
+       "icy wind 5.9-7.4",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 22.3-26.8",
+       "dark pulse 50-60.4",
+       "snarl 25.3-31.3",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 29-35.1",
+       "shadow ball 12.2-15",
+       "icy wind 4.4-5",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 129.8-152.9",
+       "iron head 297-350.7",
+       "brick break IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "moonblast 79.8-95.2",
+       "shadow ball 33.4-39.9",
+       "icy wind 11.5-13.7",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 112.6-132.8",
+       "thunder punch 94-110.4",
+       "volt switch 11.9-15.6",
+       "zap cannon 20.8-25.3"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "moonblast 83.4-99.4",
+       "shadow ball 35.8-42.2",
+       "icy wind 49.1-59.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 88-104.4",
+       "rock slide 43.2-52.2",
+       "dragon claw IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "moonblast 227.9-270.3",
+       "shadow ball 23.4-28.4",
+       "icy wind 16.2-19.5",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat IMM:type:type",
+       "aqua jet 33.5-40.2",
+       "u-turn 9.7-11.1",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "aqua jet",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ]
+   ]
+  },
+  {
+   "nome": "elettrico-lightscreen-t1-crit-t1",
+   "celle": [
+    [
+     {
+      "t1": [
+       "earthquake 142.7-169.2",
+       "rock slide 17.4-21",
+       "dragon claw 37.3-44.5",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 37.4-44.3",
+       "shadow ball 33.1-39.5",
+       "thunderbolt IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 200-238.8",
+       "rock slide 99.2-118.6",
+       "dragon claw 107.4-128.3",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 15.5-18.7",
+       "dark pulse 35.2-41.7",
+       "snarl 18.1-21.3",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "earthquake 110.6-130.7",
+       "rock slide 13.9-16.2",
+       "dragon claw 29-34.6",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 62.5-73.7",
+       "iron head 70.5-83.4",
+       "brick break 44.3-52.4",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 90.5-107.2",
+       "rock slide 11.1-13.3",
+       "dragon claw 48.9-58.3",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge IMM:type:type",
+       "thunder punch IMM:type:type",
+       "volt switch IMM:type:type",
+       "zap cannon IMM:type:type"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": null,
+      "immune1": null,
+      "immune2": "wild charge",
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 63.1-74.8",
+       "rock slide 15.5-18.7",
+       "dragon claw 133.6-158.2",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 41.7-50.2",
+       "rock slide 10.1-12.2",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": null
+     },
+     {
+      "t1": [
+       "earthquake 63.1-74.8",
+       "rock slide 15-17.8",
+       "dragon claw 67.5-79.3",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 47-56.1",
+       "aqua jet 10.6-12.8",
+       "u-turn 18.1-21.9",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "knock off 127.7-151.8",
+       "flare blitz 156.6-185.5",
+       "fake out IMM:type:type",
+       "parting shot ~"
+      ],
+      "t2": [
+       "make it rain 12.6-14.9",
+       "shadow ball 11.4-13.2",
+       "thunderbolt 22.4-26.4",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "thunderbolt",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 44.7-53.7",
+       "flare blitz 55.9-65.6",
+       "fake out 25.3-29.8",
+       "parting shot ~"
+      ],
+      "t2": [
+       "heat wave 10.9-12.6",
+       "dark pulse 12-14.3",
+       "snarl 6.3-7.4",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 24.5-29",
+       "flare blitz 120.6-141.8",
+       "fake out 6.7-8.3",
+       "parting shot ~"
+      ],
+      "t2": [
+       "sucker punch 34.4-41.3",
+       "iron head 39.6-46.5",
+       "brick break 98.8-117.2",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "brick break",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 20.6-24.4",
+       "flare blitz 50.6-59.6",
+       "fake out 12-14.1",
+       "parting shot ~"
+      ],
+      "t2": [
+       "wild charge 77.5-91.9",
+       "thunder punch 65.5-77.5",
+       "volt switch 8-9.7",
+       "zap cannon 13.2-16"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 56.6-67.3",
+       "flare blitz 34.7-41.1",
+       "fake out 16-19.2",
+       "parting shot ~"
+      ],
+      "t2": [
+       "earthquake 94.2-112",
+       "rock slide 46.5-55.1",
+       "dragon claw 50-60.3",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 13.9-16.7",
+       "flare blitz 70.3-82.6",
+       "fake out 15.6-18.9",
+       "parting shot ~"
+      ],
+      "t2": [
+       "close combat 106.8-125.2",
+       "aqua jet 24.1-28.7",
+       "u-turn 20.6-24.7",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "wood hammer 63.2-74",
+       "grassy glide 28.9-34.3",
+       "u-turn 12-14.4",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 45.2-52.5",
+       "shadow ball 40.7-48",
+       "thunderbolt 19.5-23.4",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 88-104.4",
+       "grassy glide 40.2-48.5",
+       "u-turn 70.1-82.8",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 75.9-89.3",
+       "dark pulse 43-50.8",
+       "snarl 21.7-26.2",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 48-56.9",
+       "grassy glide 22.3-26.8",
+       "u-turn 37.9-45.2",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 67.5-80.4",
+       "iron head 77-91",
+       "brick break 48-56.9",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 80.2-95.2",
+       "grassy glide 37.3-44.2",
+       "u-turn 15.4-18.4",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 37.4-44.6",
+       "thunder punch 31.8-37.4",
+       "volt switch 6.7-8.3",
+       "zap cannon 11.7-13.9"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 112.2-132",
+       "grassy glide 51.3-60.9",
+       "u-turn 43.8-51.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 22.3-26.8",
+       "rock slide 22.3-26.8",
+       "dragon claw 48.6-58.6",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 111.1-131.2",
+       "grassy glide 51.9-60.8",
+       "u-turn 44.1-51.9",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 51.9-60.8",
+       "aqua jet 5.5-6.7",
+       "u-turn 40.2-48",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 7.2-8.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "make it rain 37.8-45",
+       "shadow ball 34.1-40.4",
+       "thunderbolt 16-19.1",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 43.2-51.4",
+       "pollen puff 29.1-34.3",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "heat wave 64.2-75.1",
+       "dark pulse 35.7-42.4",
+       "snarl 18.6-22.2",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 19.5-23.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "sucker punch 46.6-54.9",
+       "iron head 52.8-62.6",
+       "brick break 16.5-19.6",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 39-46.3",
+       "pollen puff 12.8-15.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "wild charge 26.4-31",
+       "thunder punch 21.7-25.9",
+       "volt switch 5.6-6.7",
+       "zap cannon 9.8-11.3"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 20.3-24",
+       "pollen puff 27.2-32.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "earthquake 31-36.7",
+       "rock slide 15.5-18.6",
+       "dragon claw 34.1-40.4",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 55.8-65.9",
+       "pollen puff 37.4-44.1",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "close combat 17-20.7",
+       "aqua jet 4.1-4.6",
+       "u-turn 13.9-16.5",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "extreme speed IMM:type:type",
+       "body slam IMM:type:type",
+       "brick break IMM:type:type",
+       "close combat IMM:type:type"
+      ],
+      "t2": [
+       "make it rain 17.6-21.1",
+       "shadow ball 15.8-19.4",
+       "thunderbolt 15.8-18.8",
+       "protect ~"
+      ],
+      "migliore1": null,
+      "migliore2": "make it rain",
+      "immune1": "extreme speed",
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 56.7-67.1",
+       "body slam 60.4-71.6",
+       "brick break 105.9-125.3",
+       "close combat 168.6-198.5"
+      ],
+      "t2": [
+       "heat wave 7.6-8.8",
+       "dark pulse 17-20",
+       "snarl 8.8-10.5",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 15.6-18.4",
+       "body slam 16.2-18.9",
+       "brick break 113.9-136.3",
+       "close combat 183.2-216.7"
+      ],
+      "t2": [
+       "sucker punch 34.1-40.5",
+       "iron head 38.8-45.8",
+       "brick break 11.7-14.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 26.1-30.9",
+       "body slam 27.4-32.6",
+       "brick break 24-28.7",
+       "close combat 38.6-45.4"
+      ],
+      "t2": [
+       "wild charge 38.2-45.2",
+       "thunder punch 31.7-37.6",
+       "volt switch 5.2-6.4",
+       "zap cannon 9.4-11.1"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 35.8-42.2",
+       "body slam 37.9-44.9",
+       "brick break 33.1-39",
+       "close combat 52.9-62.5"
+      ],
+      "t2": [
+       "earthquake IMM:type:type",
+       "rock slide 22.9-27.6",
+       "dragon claw 48.8-58.2",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 35.7-42.4",
+       "body slam 37.9-45.2",
+       "brick break 68.1-80.4",
+       "close combat 106.1-125.1"
+      ],
+      "t2": [
+       "close combat 12.9-15.2",
+       "aqua jet 2.9-3.5",
+       "u-turn 4.7-5.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "moonblast 33.1-39.7",
+       "shadow ball 113.2-134.9",
+       "icy wind 9.6-11.4",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 70.8-85",
+       "shadow ball 65.6-77.6",
+       "thunderbolt 31.3-36.5",
+       "protect ~"
+      ],
+      "migliore1": "shadow ball",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 67.9-80.5",
+       "shadow ball 28.3-33.5",
+       "icy wind 9.7-11.1",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 29.8-35.8",
+       "dark pulse 33.5-40.2",
+       "snarl 17.1-20.8",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 44.1-52.5",
+       "shadow ball 18.4-22.3",
+       "icy wind 6.1-7.8",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 129.8-152.9",
+       "iron head 297-350.7",
+       "brick break IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 121-142.4",
+       "shadow ball 50.6-59.6",
+       "icy wind 17.1-20.6",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 145.5-172.3",
+       "thunder punch 121.6-144",
+       "volt switch 11.1-13.4",
+       "zap cannon 18.6-22.3"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 126.2-148.6",
+       "shadow ball 53.4-63.1",
+       "icy wind 74.8-89.8",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 88-104.4",
+       "rock slide 43.2-52.2",
+       "dragon claw IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 341.8-404.4",
+       "shadow ball 35.7-42.4",
+       "icy wind 24.5-29",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat IMM:type:type",
+       "aqua jet 22.3-26.8",
+       "u-turn 9.7-11.1",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "aqua jet",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ]
+   ]
+  },
+  {
+   "nome": "neve-auroraveil-t2-bersaglio-singolo",
+   "celle": [
+    [
+     {
+      "t1": [
+       "earthquake 84.3-100",
+       "rock slide 10.2-12.6",
+       "dragon claw 16.8-19.8",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 74.8-88.2",
+       "shadow ball 50.2-58.8",
+       "thunderbolt IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 120.1-141",
+       "rock slide 59.7-70.8",
+       "dragon claw 48.5-56.7",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 31.5-36.8",
+       "dark pulse 52.9-62.5",
+       "snarl 35.8-43.3",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "earthquake 64.8-76.5",
+       "rock slide 8.3-9.4",
+       "dragon claw 12.8-15.6",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 62.5-73.7",
+       "iron head 70.5-83.4",
+       "brick break 44.3-52.4",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 54.5-64.8",
+       "rock slide 6.8-8.1",
+       "dragon claw 21.4-26.1",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge IMM:type:type",
+       "thunder punch IMM:type:type",
+       "volt switch IMM:type:type",
+       "zap cannon IMM:type:type"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": null,
+      "immune1": null,
+      "immune2": "wild charge",
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "earthquake 37.4-44.3",
+       "rock slide 9-11.2",
+       "dragon claw 59.3-70.5",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 56.1-66.8",
+       "rock slide 13.9-16.5",
+       "dragon claw 88.7-105.8",
+       "protect ~"
+      ],
+      "migliore1": "dragon claw",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": null
+     },
+     {
+      "t1": [
+       "earthquake 36.8-44.1",
+       "rock slide 8.9-11.1",
+       "dragon claw 29.6-35.1",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 47-56.1",
+       "aqua jet 10.6-12.8",
+       "u-turn 18.1-21.9",
+       "protect ~"
+      ],
+      "migliore1": "earthquake",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "knock off 56-67.4",
+       "flare blitz 69.8-82.5",
+       "fake out IMM:type:type",
+       "parting shot ~"
+      ],
+      "t2": [
+       "make it rain 25.2-30.4",
+       "shadow ball 17.2-20.1",
+       "thunderbolt 25.2-30.4",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 20.1-23.8",
+       "flare blitz 24.6-29.1",
+       "fake out 11.1-13.4",
+       "parting shot ~"
+      ],
+      "t2": [
+       "heat wave 21.8-25.8",
+       "dark pulse 17.8-21.2",
+       "snarl 12-14.9",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 10.6-12.8",
+       "flare blitz 53.6-63.1",
+       "fake out 2.7-3.9",
+       "parting shot ~"
+      ],
+      "t2": [
+       "sucker punch 34.4-41.3",
+       "iron head 39.6-46.5",
+       "brick break 98.8-117.2",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "brick break",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 6-7.2",
+       "flare blitz 22.3-26.6",
+       "fake out 5.1-6.4",
+       "parting shot ~"
+      ],
+      "t2": [
+       "wild charge 60.3-71.2",
+       "thunder punch 50-59.1",
+       "volt switch 9.1-10.9",
+       "zap cannon 15.5-18.9"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "knock off 25.1-29.9",
+       "flare blitz 15.5-18.1",
+       "fake out 6.9-8.5",
+       "parting shot ~"
+      ],
+      "t2": [
+       "earthquake 125.2-149.4",
+       "rock slide 62.6-74.7",
+       "dragon claw 50-60.3",
+       "protect ~"
+      ],
+      "migliore1": "knock off",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "knock off 6.1-7.2",
+       "flare blitz 31.2-36.8",
+       "fake out 7.2-8.3",
+       "parting shot ~"
+      ],
+      "t2": [
+       "close combat 106.8-125.2",
+       "aqua jet 24.1-28.7",
+       "u-turn 20.6-24.7",
+       "protect ~"
+      ],
+      "migliore1": "flare blitz",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "wood hammer 27.7-33.1",
+       "grassy glide 12.6-15",
+       "u-turn 5.4-6.6",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 89.9-106.7",
+       "shadow ball 60.8-72",
+       "thunderbolt 22.3-26.8",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 39.5-46.2",
+       "grassy glide 17.9-21.6",
+       "u-turn 30.5-36.5",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 150.8-178.7",
+       "dark pulse 64.2-75.9",
+       "snarl 44.1-52.5",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 21.2-25.1",
+       "grassy glide 10-11.7",
+       "u-turn 16.7-20.1",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 67.5-80.4",
+       "iron head 77-91",
+       "brick break 48-56.9",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 36-42.4",
+       "grassy glide 16.7-19.7",
+       "u-turn 6.8-8.1",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 29-34.6",
+       "thunder punch 24-28.4",
+       "volt switch 7.8-9.4",
+       "zap cannon 13.4-16.2"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "wood hammer 49.7-58.8",
+       "grassy glide 22.9-27.2",
+       "u-turn 19.7-22.9",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 30.7-36.3",
+       "rock slide 30.7-36.3",
+       "dragon claw 48.6-58.6",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "wood hammer 49.7-58.6",
+       "grassy glide 22.9-27.3",
+       "u-turn 19.5-22.9",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat 51.9-60.8",
+       "aqua jet 5.5-6.7",
+       "u-turn 40.2-48",
+       "protect ~"
+      ],
+      "migliore1": "wood hammer",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 3-3.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "make it rain 75.6-89.6",
+       "shadow ball 51.2-60.6",
+       "thunderbolt 18.6-22.2",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 19.4-23.1",
+       "pollen puff 12.6-15.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "heat wave 127.4-150.2",
+       "dark pulse 53.3-63.7",
+       "snarl 37.3-44",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb IMM:type:type",
+       "pollen puff 8.3-10.6",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "sucker punch 46.6-54.9",
+       "iron head 52.8-62.6",
+       "brick break 16.5-19.6",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 17.1-20.6",
+       "pollen puff 5.5-6.8",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "wild charge 20.2-23.8",
+       "thunder punch 17-20.2",
+       "volt switch 6.2-7.7",
+       "zap cannon 10.8-13.4"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 9-10.6",
+       "pollen puff 12.2-14.4",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "earthquake 42.4-50.2",
+       "rock slide 21.7-25.3",
+       "dragon claw 34.1-40.4",
+       "protect ~"
+      ],
+      "migliore1": "pollen puff",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "sludge bomb 25.1-29.6",
+       "pollen puff 16.7-19.5",
+       "spore ~",
+       "rage powder ~"
+      ],
+      "t2": [
+       "close combat 17-20.7",
+       "aqua jet 4.1-4.6",
+       "u-turn 13.9-16.5",
+       "protect ~"
+      ],
+      "migliore1": "sludge bomb",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "extreme speed IMM:type:type",
+       "body slam IMM:type:type",
+       "brick break IMM:type:type",
+       "close combat IMM:type:type"
+      ],
+      "t2": [
+       "make it rain 35.8-42.9",
+       "shadow ball 24.1-28.8",
+       "thunderbolt 18.2-21.1",
+       "protect ~"
+      ],
+      "migliore1": null,
+      "migliore2": "make it rain",
+      "immune1": "extreme speed",
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 25.3-29.8",
+       "body slam 26.8-32",
+       "brick break 70.1-83.5",
+       "close combat 74.6-88.8"
+      ],
+      "t2": [
+       "heat wave 14.7-17.6",
+       "dark pulse 25.2-30",
+       "snarl 17.6-21.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dark pulse",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 6.7-8.3",
+       "body slam 7.2-8.3",
+       "brick break 75.9-91.6",
+       "close combat 82.1-96.6"
+      ],
+      "t2": [
+       "sucker punch 34.1-40.5",
+       "iron head 38.8-45.8",
+       "brick break 11.7-14.1",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 11.5-13.7",
+       "body slam 12.4-14.5",
+       "brick break 16.3-19.3",
+       "close combat 17.1-20.1"
+      ],
+      "t2": [
+       "wild charge 29.4-34.7",
+       "thunder punch 24.7-28.8",
+       "volt switch 6.4-7.6",
+       "zap cannon 10.5-12.9"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "extreme speed 16-18.7",
+       "body slam 16.5-19.7",
+       "brick break 21.9-26.2",
+       "close combat 23.5-27.8"
+      ],
+      "t2": [
+       "earthquake IMM:type:type",
+       "rock slide 30.5-36.4",
+       "dragon claw 48.8-58.2",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "dragon claw",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     },
+     {
+      "t1": [
+       "extreme speed 16.2-18.9",
+       "body slam 16.7-20.1",
+       "brick break 44.6-53.6",
+       "close combat 46.9-55.8"
+      ],
+      "t2": [
+       "close combat 12.9-15.2",
+       "aqua jet 2.9-3.5",
+       "u-turn 4.7-5.8",
+       "protect ~"
+      ],
+      "migliore1": "close combat",
+      "migliore2": "close combat",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ],
+    [
+     {
+      "t1": [
+       "moonblast 15-17.4",
+       "shadow ball 50.6-60.2",
+       "icy wind 5.4-6.6",
+       "protect ~"
+      ],
+      "t2": [
+       "make it rain 145.5-170.8",
+       "shadow ball 99.2-116.4",
+       "thunderbolt 35.8-42.5",
+       "protect ~"
+      ],
+      "migliore1": "shadow ball",
+      "migliore2": "make it rain",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 29.8-35.8",
+       "shadow ball 12.6-14.9",
+       "icy wind 5.2-6.7",
+       "protect ~"
+      ],
+      "t2": [
+       "heat wave 60.4-71.6",
+       "dark pulse 50-60.4",
+       "snarl 35.8-42.5",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "heat wave",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 19.5-23.4",
+       "shadow ball 8.3-10",
+       "icy wind 3.9-4.4",
+       "protect ~"
+      ],
+      "t2": [
+       "sucker punch 129.8-152.9",
+       "iron head 297-350.7",
+       "brick break IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "iron head",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 53.2-63.5",
+       "shadow ball 22.3-26.6",
+       "icy wind 10.3-12.4",
+       "protect ~"
+      ],
+      "t2": [
+       "wild charge 112.6-132.8",
+       "thunder punch 94-110.4",
+       "volt switch 11.9-15.6",
+       "zap cannon 20.8-25.3"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "wild charge",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 55.6-66.3",
+       "shadow ball 24-28.3",
+       "icy wind 44.3-52.9",
+       "protect ~"
+      ],
+      "t2": [
+       "earthquake 117.1-139.5",
+       "rock slide 58.9-70.1",
+       "dragon claw IMM:type:type",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "earthquake",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t1"
+     },
+     {
+      "t1": [
+       "moonblast 151.9-180.4",
+       "shadow ball 15.6-18.9",
+       "icy wind 14.5-17.3",
+       "protect ~"
+      ],
+      "t2": [
+       "close combat IMM:type:type",
+       "aqua jet 22.3-26.8",
+       "u-turn 9.7-11.1",
+       "protect ~"
+      ],
+      "migliore1": "moonblast",
+      "migliore2": "aqua jet",
+      "immune1": null,
+      "immune2": null,
+      "primo": "t2"
+     }
+    ]
+   ]
+  }
+ ]
+}

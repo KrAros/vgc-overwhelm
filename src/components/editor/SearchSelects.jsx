@@ -3,13 +3,48 @@ import { useState } from 'react'
 import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
-import itLocale    from '../../locales/it.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n.js'
 
 const ALL_POKEMON = Object.keys(pokemonData).sort()
 const ALL_MOVES   = Object.keys(movesData).sort()
 const ALL_ITEMS   = Object.keys(itemsData).sort()
+
+/**
+ * ─── LA RICERCA BIDIREZIONALE SENZA L'IMPORT DIRETTO ───────────────────────
+ * Questo file importava `it.json` per conto suo, ed era il motivo per cui il
+ * locale italiano non poteva uscire dal bundle: anche togliendolo da
+ * `i18n.js` sarebbe rientrato da qui.
+ *
+ * Ora le traduzioni si chiedono a i18next, che tiene in memoria i pacchetti
+ * **caricati**. Per un utente italiano sono due — `en` (fallback, sempre nel
+ * bundle) e `it` — quindi cercare "terremoto" o "earthquake" funziona
+ * entrambe le volte, come prima. Per un utente inglese c'è solo `en`: la
+ * ricerca in italiano non è disponibile, il che è coerente con un'interfaccia
+ * che è tutta in inglese.
+ *
+ * Non si usa `t()` in un ciclo: sarebbero ottocento chiamate per battuta.
+ * `getResourceBundle` restituisce l'oggetto e il confronto avviene su quello.
+ */
+function nomiTradotti(sezione) {
+  const nomi = []
+  for (const lingua of i18n.languages || []) {
+    const pacchetto = i18n.getResourceBundle(lingua, 'translation')
+    if (pacchetto?.[sezione]) nomi.push(pacchetto[sezione])
+  }
+  return nomi
+}
+
+/** true se `chiave` corrisponde alla query in inglese o in una lingua caricata. */
+function corrisponde(chiave, query, sezione) {
+  if (chiave.toLowerCase().includes(query)) return true
+  for (const nomi of nomiTradotti(sezione)) {
+    const tradotto = nomi[chiave]
+    if (tradotto && tradotto.toLowerCase().includes(query)) return true
+  }
+  return false
+}
 
 // ─── PokemonSearch ────────────────────────────────────────────────────────────
 
@@ -81,12 +116,7 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   const weather = useCalcStore(s => s.weather)
 
   const filtered = query.length >= 2
-    ? ALL_MOVES.filter(m => {
-        const q = query.toLowerCase()
-        const enName = m.toLowerCase()
-        const itName = (itLocale.moves?.[m] || '').toLowerCase()
-        return enName.includes(q) || itName.includes(q)
-      }).slice(0, 20)
+    ? ALL_MOVES.filter(m => corrisponde(m, query.toLowerCase(), 'moves')).slice(0, 20)
     : []
 
   const moveDetails = movesData[value]
@@ -175,12 +205,7 @@ export function ItemSearch({ value, onChange }) {
   const [open, setOpen]     = useState(false)
 
   const filtered = query.length >= 2
-    ? ALL_ITEMS.filter(i => {
-        const q = query.toLowerCase()
-        const enName = i.toLowerCase()
-        const itName = (itLocale.items?.[i] || '').toLowerCase()
-        return enName.includes(q) || itName.includes(q)
-      }).slice(0, 20)
+    ? ALL_ITEMS.filter(i => corrisponde(i, query.toLowerCase(), 'items')).slice(0, 20)
     : []
 
   const hasValue = focused ? query.length > 0 : !!value

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FiammaLogo from './FiammaLogo'
 import { useTranslation } from 'react-i18next'
+import { caricaLingua } from '../i18n.js'
 
 const IconGitHub = () => (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -22,10 +23,27 @@ function LangToggle() {
   const lang = i18n.language
   const [open, setOpen] = useState(false)
 
+  /**
+   * `it.json` non è più nel bundle: si scarica alla prima richiesta. Da qui
+   * in poi `caricaLingua` è idempotente, quindi tornare avanti e indietro fra
+   * le due lingue non ripete nessuna richiesta.
+   *
+   * Il menù si chiude subito, senza aspettare: il file pesa poche decine di
+   * kB e tenere aperta la tendina durante il caricamento sembrerebbe un
+   * blocco.
+   */
   const select = (l) => {
-    i18n.changeLanguage(l)
-    localStorage.setItem('lang', l)
     setOpen(false)
+    caricaLingua(l).then(() => {
+      // `<html lang>` restava fermo su quello di index.html: screen reader e
+      // traduttori automatici leggevano la lingua sbagliata.
+      document.documentElement.lang = l
+    })
+    try {
+      localStorage.setItem('lang', l)
+    } catch {
+      // Storage bloccato: la scelta vale per questa sessione e basta.
+    }
   }
 
   const LANGS = [
