@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 /**
  * src/utils/sprite.js
  * Funzioni pure per la risoluzione degli URL sprite di Pokémon HOME.

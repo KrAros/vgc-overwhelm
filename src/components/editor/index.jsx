@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 KrAros
+
 import { useState, useEffect } from 'react'
 import useCalcStore from '../../store/useCalcStore'
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'

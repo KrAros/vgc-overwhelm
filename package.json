@@ -3,6 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Calcolatore di danno per Pokémon Champions — VGC doppi, livello 50, sistema SP",
+  "license": "AGPL-3.0-or-later",
+  "author": "KrAros",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrAros/vgc-overwhelm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KrAros/vgc-overwhelm/issues"
+  },
+  "homepage": "https://github.com/KrAros/vgc-overwhelm#readme",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
