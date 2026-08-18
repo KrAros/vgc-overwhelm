@@ -32,9 +32,12 @@ import { ITEM_EFFECTS } from '../data/itemEffects.js'
 import { abilitaNonCalcolata, strumentoNonCalcolato, metaGap, elencoGap } from '../lib/gap.js'
 import abilities from '../data/abilities.json' with { type: 'json' }
 import items from '../data/items.json' with { type: 'json' }
+// `haEffetto` arriva da qui e non è più ridefinito nel file: prima ne esisteva
+// una copia identica a quella del generatore, quindi il test controllava il
+// generatore con la definizione del generatore — ed è il motivo per cui non ha
+// mai visto Pixilate. La seconda fonte indipendente è `inventarioMotore.test.js`.
+import { haEffetto } from '../../scripts/campi-meta.mjs'
 
-const SOLO_META = new Set(['desc', 'descOn', 'descOff', 'showInSmogon', 'name'])
-const haEffetto = (v) => Object.keys(v).some(k => !SOLO_META.has(k))
 const norm = (s) => String(s || '').toLowerCase().replace(/[.'’:]/g, '').replace(/[\s\-_]+/g, '')
 
 /**

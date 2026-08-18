@@ -1,30 +1,21 @@
 {
   "meta": {
-    "generatedAt": "2026-08-06T18:15:55.987Z",
+    "generatedAt": "2026-08-18T06:33:39.601Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 310,
     "abilitaSenzaEffetto": 266,
-    "abilitaNelGap": 114,
+    "abilitaNelGap": 109,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 185,
-    "strumentiNelGap": 41,
+    "strumentiSenzaEffetto": 190,
+    "strumentiNelGap": 40,
+    "badgeToltiDallaSecondaFonte": 5,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
   },
   "prove": {
     "abilita": [
-      {
-        "chiave": "aerilate",
-        "nome": "Aerilate",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1072
-        }
-      },
       {
         "chiave": "air lock",
         "nome": "Air Lock",
@@ -203,16 +194,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "dragonize",
-        "nome": "Dragonize",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1084
         }
       },
       {
@@ -476,16 +457,6 @@
         }
       },
       {
-        "chiave": "long reach",
-        "nome": "Long Reach",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkContactOverride",
-          "file": "damage_MASTER.js",
-          "riga": 826
-        }
-      },
-      {
         "chiave": "marvel scale",
         "nome": "Marvel Scale",
         "canale": "STR",
@@ -636,16 +607,6 @@
         }
       },
       {
-        "chiave": "pixilate",
-        "nome": "Pixilate",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1075
-        }
-      },
-      {
         "chiave": "plus",
         "nome": "Plus",
         "canale": "STR",
@@ -733,16 +694,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1604
-        }
-      },
-      {
-        "chiave": "refrigerate",
-        "nome": "Refrigerate",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1078
         }
       },
       {
@@ -1355,16 +1306,6 @@
           "funzione": "basePowerFunc",
           "file": "damage_MASTER.js",
           "riga": 1400
-        }
-      },
-      {
-        "chiave": "kebia berry",
-        "nome": "Kebia Berry",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getBerryResistType",
-          "file": "item_data.js",
-          "riga": 604
         }
       },
       {
