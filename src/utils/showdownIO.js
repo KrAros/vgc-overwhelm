@@ -16,9 +16,49 @@ import movesData     from '../data/moves.json'
 import itemsData     from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import { NATURES }   from '../data/natures.js'
+import { spToEv, EV_PER_SP, MAX_SP_PER_STAT } from '../lib/rules.js'
 
-const SP_TO_EV = (sp) => sp
-const EV_TO_SP = (ev) => Math.min(32, ev)
+/**
+ * ─── SP ⇄ EV ───────────────────────────────────────────────────────────────
+ *
+ * Champions investe in SP, Showdown in EV, e `rules.js` fissa il cambio:
+ * **1 SP vale 8 EV** (`EV_PER_SP`). Fino alla sessione L queste due funzioni
+ * non convertivano affatto:
+ *
+ *     SP_TO_EV = (sp) => sp                → esportava «EVs: 32», che in
+ *                                            Showdown è quasi niente
+ *     EV_TO_SP = (ev) => Math.min(32, ev)  → troncava invece di dividere
+ *
+ * Con il troncamento un normale 252/4/252 diventava 32/4/32: il 252 finiva
+ * giusto per caso (il tetto coincide), ma il 4 valeva otto volte l'intenzione
+ * e il totale usciva 68 su un tetto di 66 — l'editor scriveva `(-2/66)` e
+ * lasciava passare.
+ *
+ * Con la divisione il tetto non si può più sforare, e non è una stima:
+ * 508 EV — il massimo legale in Showdown — fanno 63,5 SP, e l'arrotondamento
+ * aggiunge al più mezzo punto per statistica, cioè 3 in tutto. Il peggior caso
+ * è 66,5, che su interi è **66**. Esattamente il tetto, mai oltre.
+ *
+ * Le due funzioni vanno cambiate INSIEME: correggere solo la lettura
+ * romperebbe l'andata e ritorno, perché l'export scriverebbe ancora gli SP
+ * grezzi e la rilettura li dividerebbe per otto.
+ *
+ * Il tetto a 252 nell'export è quello di Showdown: 32 SP varrebbero 256 EV,
+ * che lì è illegale. Il giro resta stabile lo stesso — 32 → 252 → 32 —
+ * perché 252/8 arrotonda a 32.
+ *
+ * CONFINE DICHIARATO. L'SP è un'unità più grossa dell'EV, quindi il giro
+ * EV → SP → EV non conserva il TOTALE: 252/4/252 fa 508 in entrata e
+ * 252/8/252 = 512 in uscita, perché i 4 EV di avanzo arrotondano a 1 SP e
+ * tornano indietro come 8. Nel caso peggiore ogni statistica guadagna 4 EV,
+ * quindi al più +24 sul totale. È il prezzo dell'arrotondamento verso il
+ * massimo: con `Math.floor` il totale non crescerebbe mai, ma un set 252
+ * perderebbe un punto e non sarebbe più massimale — che è il caso comune.
+ * Il per-statistica resta sempre legale; è solo la somma che può eccedere i
+ * 508 di Showdown.
+ */
+const SP_TO_EV = (sp) => Math.min(252, spToEv(sp))
+const EV_TO_SP = (ev) => Math.min(MAX_SP_PER_STAT, Math.round((ev || 0) / EV_PER_SP))
 const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
 const STAT_IDX = { HP: 0, Atk: 1, Def: 2, SpA: 3, SpD: 4, Spe: 5 }
 

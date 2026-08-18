@@ -31,6 +31,8 @@
     "ncp:gen": "node scripts/gen-ncp-golden.mjs",
     "ncp:prep": "node scripts/gen-ncp-preparazione.mjs",
     "gap:gen": "node scripts/gen-gap-noti.mjs",
+    "forme:gen": "node scripts/gen-forme-sprite.mjs",
+    "forme:report": "node scripts/gen-forme-sprite.mjs --report",
     "inventario:gen": "node scripts/gen-inventario-motore.mjs",
     "inventario:report": "node scripts/gen-inventario-motore.mjs --report",
     "gap:report": "node scripts/gen-gap-noti.mjs --report",
