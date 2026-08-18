@@ -14,6 +14,10 @@
  */
 
 import pokemonData from '../data/pokemon.json'
+import formeSpriteData from '../data/formeSprite.json'
+
+/** Solo la mappa: i metadati della generazione non servono a runtime. */
+const formeSprite = formeSpriteData.forme
 
 /**
  * Risolve il numero Pokédex di uno slug, gestendo forme regionali e mega
@@ -35,19 +39,34 @@ export function resolveNum(key) {
 
 /**
  * URL primario Pokémon HOME (128px icon).
- * Forme: f00 = base, f01 = mega-x / alola / forme speciali, f02 = mega-y
+ *
+ * ─── IL SUFFISSO DI FORMA ARRIVA DA UNA TABELLA, NON DA UNA REGOLA ─────────
+ * Fino alla sessione L il suffisso era calcolato così:
+ *
+ *     isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
+ *
+ * Solo mega e Alola avevano un suffisso proprio; Hisui, Galar, Paldea,
+ * Therian, Origin, i Rider di Calyrex e Urshifu Pluricolpo ricadevano su
+ * `f00`, cioè sull'icona della FORMA BASE. Contato: 152 specie su 57 file,
+ * quindi almeno 95 mostravano l'immagine di un altro Pokémon — mentre il
+ * calcolo usava le statistiche giuste.
+ *
+ * Adesso il suffisso viene da `formeSprite.json`, generato chiedendo al
+ * server quali posizioni esistono (`npm run forme:gen`) e verificato a occhio
+ * su un foglio di contatto: l'esistenza dell'URL non prova l'identità della
+ * forma, e in tre gruppi — Ogerpon, Tauros di Paldea, Pumpkaboo/Gourgeist —
+ * l'ordine dei nostri dati non è quello di HOME.
+ *
+ * Chi non è in tabella ricade su `f00`, che è il comportamento di prima: sono
+ * le 51 Megaevoluzioni inventate da Champions, per cui HOME non ha un'icona.
  */
 export function spriteUrl(key) {
   if (!key) return null
   const data = pokemonData[key]
   if (!data) return null
-  const isMegaY = key.includes('-mega-y')
-  const isMegaX = key.includes('-mega-x')
-  const isMega  = data.mega === 1
-  const isAlola = key.includes('-alola')
   const num = resolveNum(key)
   if (!num) return null
-  const form = isMegaY ? 'f02' : (isMegaX || isMega || isAlola) ? 'f01' : 'f00'
+  const form = formeSprite[key] || 'f00'
   return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
 }
 
