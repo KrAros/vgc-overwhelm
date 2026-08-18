@@ -1,0 +1,476 @@
+{
+  "meta": {
+    "generatedAt": "2026-08-18T06:33:39.863Z",
+    "superficie": [
+      "src/calcEngine.js",
+      "src/lib",
+      "src/utils"
+    ],
+    "fileEsaminati": 15,
+    "abilitaNelMotore": 17,
+    "strumentiNelMotore": 27,
+    "classificate": 9,
+    "badgeDaTogliere": 5,
+    "collisioniResidue": 4,
+    "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
+  },
+  "classificate": [
+    {
+      "chiave": "pixilate",
+      "tipo": "abilita",
+      "verdetto": "badge-sbagliato",
+      "nota": "calcEngine:200 — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP",
+      "prova": {
+        "file": "src/calcEngine.js",
+        "riga": 200,
+        "testo": "if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }"
+      }
+    },
+    {
+      "chiave": "aerilate",
+      "tipo": "abilita",
+      "verdetto": "badge-sbagliato",
+      "nota": "calcEngine:201 — Normale→Volante e ×1,2",
+      "prova": {
+        "file": "src/calcEngine.js",
+        "riga": 201,
+        "testo": "if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }"
+      }
+    },
+    {
+      "chiave": "refrigerate",
+      "tipo": "abilita",
+      "verdetto": "badge-sbagliato",
+      "nota": "calcEngine:202 — Normale→Ghiaccio e ×1,2",
+      "prova": {
+        "file": "src/calcEngine.js",
+        "riga": 202,
+        "testo": "if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }"
+      }
+    },
+    {
+      "chiave": "dragonize",
+      "tipo": "abilita",
+      "verdetto": "badge-sbagliato",
+      "nota": "calcEngine:203 — Normale→Drago e ×1,2",
+      "prova": {
+        "file": "src/calcEngine.js",
+        "riga": 203,
+        "testo": "if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }"
+      }
+    },
+    {
+      "chiave": "long reach",
+      "tipo": "abilita",
+      "verdetto": "badge-sbagliato",
+      "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
+      "prova": {
+        "file": "src/calcEngine.js",
+        "riga": 332,
+        "testo": "atkAbilKey === 'long-reach' ||"
+      }
+    },
+    {
+      "chiave": "rattled",
+      "tipo": "abilita",
+      "verdetto": "effetto-non-osservabile",
+      "nota": "preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461",
+      "prova": {
+        "file": "src/lib/preparazione.js",
+        "riga": 275,
+        "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
+      }
+    },
+    {
+      "chiave": "sand force",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "damage.js:47 la rende immune al danno da sabbia. NCP la calcola per il +30% di potenza in calcBPMods:1633, che noi non facciamo",
+      "prova": {
+        "file": "src/lib/damage.js",
+        "riga": 47,
+        "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+      }
+    },
+    {
+      "chiave": "iron ball",
+      "tipo": "strumenti",
+      "verdetto": "meccanica-diversa",
+      "nota": "speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:451, che è l'annullamento dello strumento",
+      "prova": {
+        "file": "src/utils/speedOrder.js",
+        "riga": 93,
+        "testo": "'macho brace', 'iron ball',"
+      }
+    },
+    {
+      "chiave": "macho brace",
+      "tipo": "strumenti",
+      "verdetto": "meccanica-diversa",
+      "nota": "speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:449",
+      "prova": {
+        "file": "src/utils/speedOrder.js",
+        "riga": 93,
+        "testo": "'macho brace', 'iron ball',"
+      }
+    }
+  ],
+  "inventario": {
+    "abilita": [
+      {
+        "chiave": "aerilate",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 201,
+          "testo": "if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }"
+        }
+      },
+      {
+        "chiave": "chlorophyll",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 64,
+          "testo": "'chlorophyll': ['sun', 'harsh sunshine'],"
+        }
+      },
+      {
+        "chiave": "dragonize",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 203,
+          "testo": "if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }"
+        }
+      },
+      {
+        "chiave": "flash fire",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 232,
+          "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
+        }
+      },
+      {
+        "chiave": "levitate",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 83,
+          "testo": "if (ability === 'levitate') return false"
+        }
+      },
+      {
+        "chiave": "long reach",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 332,
+          "testo": "atkAbilKey === 'long-reach' ||"
+        }
+      },
+      {
+        "chiave": "magic guard",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 47,
+          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "overcoat",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 47,
+          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "pixilate",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 200,
+          "testo": "if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }"
+        }
+      },
+      {
+        "chiave": "rattled",
+        "prova": {
+          "file": "src/lib/preparazione.js",
+          "riga": 275,
+          "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
+        }
+      },
+      {
+        "chiave": "refrigerate",
+        "prova": {
+          "file": "src/calcEngine.js",
+          "riga": 202,
+          "testo": "if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }"
+        }
+      },
+      {
+        "chiave": "sand force",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 47,
+          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "sand rush",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 47,
+          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "sand veil",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 47,
+          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "slush rush",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 67,
+          "testo": "'slush-rush':  ['snow'],"
+        }
+      },
+      {
+        "chiave": "surge surfer",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 206,
+          "testo": "if (normalizeAbilityKey(pokemon.ability) === 'surge-surfer'"
+        }
+      },
+      {
+        "chiave": "swift swim",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 65,
+          "testo": "'swift-swim':  ['rain', 'heavy rain'],"
+        }
+      }
+    ],
+    "strumenti": [
+      {
+        "chiave": "eviolite",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 86,
+          "testo": "'assault vest', 'eviolite',"
+        }
+      },
+      {
+        "chiave": "leftovers",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 89,
+          "testo": "const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'"
+        }
+      },
+      {
+        "chiave": "choice scarf",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 197,
+          "testo": "if (item === 'choice scarf') altriMod *= 1.5"
+        }
+      },
+      {
+        "chiave": "chilan berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 90,
+          "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
+        }
+      },
+      {
+        "chiave": "tanga berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 89,
+          "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
+        }
+      },
+      {
+        "chiave": "colbur berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 89,
+          "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
+        }
+      },
+      {
+        "chiave": "haban berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 89,
+          "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
+        }
+      },
+      {
+        "chiave": "wacan berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 87,
+          "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
+        }
+      },
+      {
+        "chiave": "chople berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 88,
+          "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
+        }
+      },
+      {
+        "chiave": "occa berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 87,
+          "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
+        }
+      },
+      {
+        "chiave": "coba berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 88,
+          "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
+        }
+      },
+      {
+        "chiave": "kasib berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 89,
+          "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
+        }
+      },
+      {
+        "chiave": "rindo berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 87,
+          "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
+        }
+      },
+      {
+        "chiave": "shuca berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 88,
+          "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
+        }
+      },
+      {
+        "chiave": "yache berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 87,
+          "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
+        }
+      },
+      {
+        "chiave": "kebia berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 88,
+          "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
+        }
+      },
+      {
+        "chiave": "payapa berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 88,
+          "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
+        }
+      },
+      {
+        "chiave": "charti berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 89,
+          "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
+        }
+      },
+      {
+        "chiave": "babiri berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 90,
+          "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
+        }
+      },
+      {
+        "chiave": "passho berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 87,
+          "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
+        }
+      },
+      {
+        "chiave": "roseli berry",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 90,
+          "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
+        }
+      },
+      {
+        "chiave": "iron ball",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 93,
+          "testo": "'macho brace', 'iron ball',"
+        }
+      },
+      {
+        "chiave": "macho brace",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 93,
+          "testo": "'macho brace', 'iron ball',"
+        }
+      },
+      {
+        "chiave": "sitrus berry",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 92,
+          "testo": "const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'"
+        }
+      },
+      {
+        "chiave": "assault vest",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 86,
+          "testo": "'assault vest', 'eviolite',"
+        }
+      },
+      {
+        "chiave": "luminous moss",
+        "prova": {
+          "file": "src/utils/smogonString.js",
+          "riga": 90,
+          "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
+        }
+      },
+      {
+        "chiave": "safety goggles",
+        "prova": {
+          "file": "src/lib/damage.js",
+          "riga": 60,
+          "testo": "item.toLowerCase() === 'safety goggles'"
+        }
+      }
+    ]
+  }
+}

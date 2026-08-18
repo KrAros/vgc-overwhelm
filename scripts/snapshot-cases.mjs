@@ -108,6 +108,11 @@ const A = {
   dragoSpeed: [atk('dragonite', 'adamant', SP.fisico), 'extreme speed'],   // non-STAB priorità
   kingIron:   [atk('kingambit', 'adamant', SP.fisico), 'iron head'],       // STAB Steel
   pelipSurf:  [atk('pelipper', 'modest', SP.speciale), 'surf'],            // STAB Water spread
+  // Aggiunto in F-3: era l'unico tipo senza un attaccante nel catalogo, e
+  // senza di lui Kebia Berry non era esprimibile. Amoonguss è Erba/Veleno
+  // (STAB) e Whimsicott è Erba/Folletto: il Veleno ci va ×4, quindi la resist
+  // berry si attiva davvero — le berry richiedono il super efficace.
+  amoonSludge:[atk('amoonguss', 'modest', SP.speciale), 'sludge bomb'],    // STAB Poison
 }
 
 // ─── Difensori ricorrenti ──────────────────────────────────────────────────
@@ -281,6 +286,11 @@ function aggiungi(blocco, etichetta, input) {
     // Difensore — resist berry (si attivano solo su super efficace)
     { nome: 'yache berry',    side: 'def', coppia: A.calyLance,   difensore: D.dragonite },
     { nome: 'chople berry',   side: 'def', coppia: A.handsPunch,  difensore: D.gold },
+    // Kebia Berry — l'unica delle diciotto resist berry senza effetto in
+    // ITEM_EFFECTS, trovata in F-3. Prima di questo caso nessuno dei 584
+    // casi la nominava: il criterio «snapshot:diff si muove» sarebbe stato
+    // vuoto, quindi la fotografia si scatta qui, PRIMA della correzione.
+    { nome: 'kebia berry',    side: 'def', coppia: A.amoonSludge, difensore: D.whimsi },
   ]
 
   // Due varianti per item: campo vuoto, e con crit — il crit è il modificatore

@@ -124,6 +124,10 @@ export const ITEM_EFFECTS = {
   // Trattate come sempre attive (nessun tracking consumo)
   'colbur berry':   { resistBerry: TYPES.DARK     },
   'chople berry':   { resistBerry: TYPES.FIGHTING },
+  // Mancava: era l'unica dei diciotto tipi con una resist berry a non avere
+  // una riga qui, mentre `smogonString.js` la stampava già fra gli item
+  // difensivi. Trovata in F-3 dall'inventario del motore.
+  'kebia berry':    { resistBerry: TYPES.POISON   },
   'roseli berry':   { resistBerry: TYPES.FAIRY    },
   'shuca berry':    { resistBerry: TYPES.GROUND   },
   'occa berry':     { resistBerry: TYPES.FIRE     },

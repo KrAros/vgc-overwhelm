@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Configurazione personale di Claude Code: permessi e preferenze di chi
+# sviluppa, non del progetto. Le skill in .claude/skills/ restano tracciate.
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

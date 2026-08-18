@@ -81,6 +81,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../src/data/abilityEffects.js'
+import { badgeDaTogliere } from './classificazione-badge.mjs'
+import { haEffetto } from './campi-meta.mjs'
 import { ITEM_EFFECTS } from '../src/data/itemEffects.js'
 
 const QUI = path.dirname(fileURLToPath(import.meta.url))
@@ -248,11 +250,10 @@ function chiusura(radice) {
 /** Toglie spazi, trattini, punti e apostrofi: «Punk Rock» e «punk-rock» coincidono. */
 const norm = (s) => String(s).toLowerCase().replace(/[.'’:]/g, '').replace(/[\s\-_]+/g, '')
 
-const SOLO_META = new Set(['desc', 'descOn', 'descOff', 'showInSmogon', 'name'])
-
-function haEffetto(voce) {
-  return Object.keys(voce).some(k => !SOLO_META.has(k))
-}
+// `haEffetto` e l'elenco dei campi meta stanno in `campi-meta.mjs`: ne
+// esistevano due copie, una qui e una in `gap.test.js`, ed è il motivo per cui
+// il punto cieco è sopravvissuto. Due copie della stessa assunzione non sono
+// due verifiche.
 
 function costruisciIndice(corpi, funzioni) {
   const perLetterale = new Map()
@@ -321,9 +322,25 @@ export function generaGap() {
   const rilevanti = [...visti].filter(f => !(f in FUORI_SUPERFICIE))
   const indice = costruisciIndice(corpi, rilevanti)
 
+  // ── La seconda fonte ─────────────────────────────────────────────────────
+  // `haEffetto` qui sopra guarda SOLO le tabelle, e le tabelle non sanno che
+  // il motore implementa Pixilate per nome a `calcEngine.js:200`. Risultato:
+  // badge «non calcolata» su un numero corretto, per sei voci.
+  //
+  // `classificazione-badge.mjs` elenca le voci su cui il motore ramifica
+  // davvero, classificate a mano. Quelle marcate `badge-sbagliato` escono di
+  // qui. Le altre restano: `sand force` la nominiamo per l'immunità alla
+  // sabbia, mentre NCP la calcola per il +30% di potenza — meccanica diversa,
+  // badge corretto.
+  //
+  // Chi le scopre è `npm run inventario:gen`, che si rifiuta di scrivere se
+  // una collisione non è classificata.
+  const togli = badgeDaTogliere()
   const abTrovate = cerca(abSenzaEffetto, indice)
     .filter(a => !FORME_SCELTE_A_MANO.has(a.chiave))
+    .filter(a => !togli.abilita.includes(a.chiave))
   const itTrovati = cerca(itSenzaEffetto, indice)
+    .filter(a => !togli.strumenti.includes(a.chiave))
 
   // Anomalie: effetti scritti per voci che nessuno può selezionare.
   const abSelezionabili = new Set(Object.keys(abilita).map(normalizeAbilityKey))
@@ -352,6 +369,7 @@ export function generaGap() {
       strumentiSelezionabili: Object.keys(strumenti).length,
       strumentiSenzaEffetto: itSenzaEffetto.length,
       strumentiNelGap: itTrovati.length,
+      badgeToltiDallaSecondaFonte: togli.abilita.length + togli.strumenti.length,
       note: 'Voci che il riferimento NCP calcola nel danno e il nostro motore no. '
           + 'Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` '
           + 'dopo ogni sessione che aggiunge effetti.',
