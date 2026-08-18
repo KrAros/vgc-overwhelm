@@ -448,13 +448,24 @@ export default function ControlBar() {
     { label: t('ui.twShort'),   mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
+  // Cinque di queste sei levette SONO mosse, quindi l'etichetta la prendono da
+  // `moves.*`, che è la fonte unica dei nomi ed è già tradotta in ogni lingua.
+  //
+  // Prima ognuna aveva una copia propria dentro `ui.*`, e le copie erano
+  // invecchiate: in italiano `ui.helpingHand` diceva ancora «Helping Hand»,
+  // `ui.auroraVeil` «Aurora Veil», mentre `moves` diceva da sempre «Altruismo»
+  // e «Velaurora». Una seconda copia della stessa verità è la forma di difetto
+  // che questo repository ha già incontrato tre volte — il badge in F-3, la
+  // conversione SP⇄EV in L — e si chiude togliendo la copia, non aggiornandola.
+  //
+  // `crit` resta in `ui`: è l'unica delle sei che non è una mossa.
   const MODS_DESKTOP = [
-    { label: t('ui.helpingHand'), mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
-    { label: t('ui.auroraVeil'),  mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
-    { label: t('ui.lightScreen'), mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
-    { label: t('ui.reflect'),     mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
-    { label: t('ui.crit'),        mod: 'crit',        active: 'bg-red-400    text-gray-900' },
-    { label: t('ui.tailwind'),    mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
+    { label: t('moves.helping hand'), mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
+    { label: t('moves.aurora veil'),  mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
+    { label: t('moves.light screen'), mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
+    { label: t('moves.reflect'),      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
+    { label: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
   const modVals = { helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind }
