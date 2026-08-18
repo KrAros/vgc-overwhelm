@@ -60,7 +60,11 @@ export default function TopBar() {
               trickRoom ? 'bg-yellow-500 text-gray-900 border-yellow-500' : 'border-gray-600 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            {t("ui.trick_room")}
+            {/* Anche questa è una mossa: l'etichetta viene da `moves`, che è la
+                fonte unica dei nomi. La copia in `ui.trick_room` era rimasta
+                «Trick Room» anche in italiano, mentre `moves` dice
+                «Distortozona» da sempre. */}
+            {t("moves.trick room")}
           </button>
           {/* ─── Nemici in campo ───────────────────────────────────────────
               Era un interruttore chiamato «2× Target», acceso o spento. Il
