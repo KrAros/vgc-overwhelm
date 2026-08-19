@@ -28,13 +28,22 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
   const hasBoost = statIdx !== 0
 
   return (
-    <div className="flex items-center gap-2 mb-1">
+    /* `flex-wrap` solo sotto `sm`: su telefono il gruppo dello stadio va a capo
+       (vedi in fondo). Sopra i 640 px `sm:flex-nowrap` tiene tutto in riga,
+       come è sempre stato — il desktop non cambia di un pixel. */
+    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 mb-1">
       <span className="text-xs text-gray-500 w-8 text-center">{STAT_NAMES[statIdx]}</span>
       <span className="text-xs text-gray-400 w-7 text-center">{base}</span>
+      {/* `min-w-0` non è cosmesi: senza, la riga sborda di 62 px a 360 px.
+          Un elemento flex non scende sotto la propria dimensione minima di
+          contenuto, e un input[type=range] in Chrome ne ha una intrinseca di
+          circa 129 px. Con i sei figli a larghezza fissa (216 px) più gli
+          spazi (56 px) si arriva a 401, e la PAGINA INTERA scorre lateralmente
+          — non solo questa riga. `flex-1` da solo non basta mai in questo caso. */}
       <input
         type="range" min="0" max={MAX_SP_PER_STAT} value={sp}
         onChange={e => onSpChange(parseInt(e.target.value))}
-        className="flex-1 h-1 accent-teal-400"
+        className="flex-1 min-w-0 h-1 accent-teal-400"
       />
       {(isBoost || isDrop) && (
         <span className={`text-[10px] font-bold shrink-0 ml-1 ${isBoost ? 'text-red-400' : 'text-blue-400'}`}>
@@ -49,8 +58,20 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
       <span className={`text-xs font-medium w-8 text-center ${statColor}`}>
         {finalStat}
       </span>
+      {/* Lo stadio (-6…+6) e il valore che ne risulta.
+
+          Su telefono vanno A CAPO: `w-full` dentro un contenitore `flex-wrap`
+          non entra accanto agli altri e passa alla riga sotto. Da `sm` in su
+          `sm:w-auto` li rimette in linea, e il desktop resta identico.
+
+          Perché: a 360 px la riga ha 310 px utili e i sei figli a larghezza
+          fissa ne mangiano 272, lasciando 46 px al cursore per un intervallo
+          di 253 valori. Mandando a capo questi due si liberano 96 px e il
+          cursore arriva a ~142. `min-w-0` sul cursore serve comunque, ma da
+          solo trasformava uno sbordamento in un cursore inutilizzabile —
+          cioè metteva a posto la misura peggiorando l'uso. */}
       {hasBoost ? (
-        <>
+        <div className="w-full sm:w-auto flex items-center justify-end gap-2">
           <select
             value={boostVal}
             onChange={e => onBoostChange(parseInt(e.target.value))}
@@ -63,12 +84,15 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
           <span className={`text-xs w-8 text-center ${boostedStat ? (speedBase || boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-600'}`}>
             {boostedStat ?? '—'}
           </span>
-        </>
+        </div>
       ) : (
-        <>
-          <div className="w-12" aria-hidden="true" />
-          <div className="w-8"  aria-hidden="true" />
-        </>
+        /* Segnaposto: servono solo ad allineare le colonne sul desktop, quindi
+           su telefono non devono esistere — altrimenti occuperebbero una riga
+           vuota tutta loro. */
+        <div className="hidden sm:flex items-center gap-2" aria-hidden="true">
+          <div className="w-12" />
+          <div className="w-8" />
+        </div>
       )}
     </div>
   )
