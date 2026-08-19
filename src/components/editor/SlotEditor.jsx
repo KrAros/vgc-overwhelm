@@ -232,13 +232,24 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
           />
         )}
         <div className="flex-1 flex flex-col gap-1.5">
-          <div className="flex gap-2 items-center">
-            <div className={pokemon?.key ? "w-1/3 shrink-0" : "flex-1"}>
+          {/* `flex-wrap` solo sotto `sm`: la tendina del set va a capo, i badge
+              dei tipi restano accanto alla ricerca. `order-last` serve a questo
+              — senza, sarebbero i badge a finire sulla terza riga.
+
+              A 360 px questa riga stringeva il set a 3-23 px di testo, cioè
+              «Set v» delle foto. La ricerca prende un terzo e i badge dei tipi
+              non si comprimono: quello che restava era tutto per la tendina. */}
+          <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center">
+            {/* Su telefono metà riga invece di un terzo: a 360 px un terzo vale
+                78 px e «flutter-mane» ne chiede 98 — è il «Charizard·» delle
+                foto. Lo spazio c'è perché in P-2/5 la tendina del set è andata
+                a capo, lasciando la prima riga alla ricerca e ai badge. */}
+            <div className={pokemon?.key ? "w-1/2 sm:w-1/3 shrink-0" : "flex-1"}>
               <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
             </div>
             {pokemon?.key && (
               <>
-                <div className="flex-1 min-w-0">
+                <div className="w-full order-last sm:order-0 sm:w-auto sm:flex-1 min-w-0">
                   <PresetSelect team={team} index={index} currentSlug={pokemon?.key} currentSlot={pokemon} externalRev={customRev} />
                 </div>
                 <div className="flex gap-1 flex-wrap justify-end shrink-0">
@@ -260,11 +271,21 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
             )}
           </div>
           {data && (
-            <div className="flex gap-2 w-full">
-              <div className="w-1/3">
+            /* Su telefono i tre controlli si impilano invece di dividersi la
+               riga in tre. A 360 px un terzo vale ~93 px, che meno il padding e
+               la freccia lascia 53 px di testo: «Decisa (+Atk, -SpA)» ne chiede
+               152 e «Corpo Aureo» 96. Tre colonne non possono funzionare a
+               questa larghezza con nessuna dimensione di carattere leggibile —
+               misurato su tutte le nature e le abilità, non stimato.
+
+               Una tendina troppo stretta NON si vede col criterio del testo
+               tagliato: il browser clippa da sé l'opzione scelta e scrollWidth
+               resta uguale a clientWidth. Serve la misura aggiunta in P-2/4. */
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
+              <div className="w-full sm:w-1/3">
                 <AbilitySelect value={ability} abilities={data?.abilities} onChange={a => setAbility(team, index, a)} />
               </div>
-              <div className="w-1/3">
+              <div className="w-full sm:w-1/3">
                 <select
                   className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
                   value={nature || ''}
@@ -282,7 +303,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                   })}
                 </select>
               </div>
-              <div className="w-1/3">
+              <div className="w-full sm:w-1/3">
                 <ItemSearch value={item} onChange={m => setItem(team, index, m)} />
                 {/* Gli strumenti non hanno un pannello descrittivo come le
                     abilità: il badge va attaccato direttamente alla tendina. */}
@@ -341,7 +362,16 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 mt-2">
+          {/* Una colonna su telefono. Misurato: con due colonne ogni cella è
+              larga 152 px, ma gli altri elementi (badge del tipo, potenza) ne
+              consumano circa 126 e al campo di testo restano 26-50 px — cioè
+              «Lanciafia» delle foto. A colonna singola la cella vale 310 px e
+              il campo ne prende ~184, che basta a «Lanciafiamme» (95 px).
+
+              Costa altezza: quattro righe invece di due. È lo stesso scambio
+              accettato per StatRow e per le celle della matrice — non
+              nascondere l'informazione si paga in verticale. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-2">
             {[0,1,2,3].map(mi => (
               <MoveSearch
                 key={mi}

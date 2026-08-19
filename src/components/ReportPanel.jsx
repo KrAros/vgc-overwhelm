@@ -68,6 +68,23 @@ function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = t
   }
 }
 
+// ── Freccia «attacca» ─────────────────────────────────────────────────────────
+
+/**
+ * Una sola definizione per le due viste del pannello, singola e doppia.
+ *
+ * Serviva in due punti e il disegno è identico: copiarlo avrebbe creato la
+ * seconda copia che questo progetto passa le sessioni a togliere. Cambia solo
+ * l'orientamento, che è una classe passata da fuori.
+ */
+function FrecciaAttacco({ className = '' }) {
+  return (
+    <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className={className} aria-hidden="true">
+      <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
 // ── Type badge ────────────────────────────────────────────────────────────────
 
 function TypeBadge({ typeIdx }) {
@@ -335,7 +352,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
         <div className="flex flex-col lg:flex-row lg:items-center px-4 lg:px-5 py-4 gap-4 lg:gap-0">
 
           {/* Attaccante */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
             <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(atk.key)}
@@ -354,15 +371,21 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             </div>
           </div>
 
-          {/* Freccia ⚡ → */}
-          <div className="flex items-center px-2 lg:px-6 shrink-0">
-            <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className="w-10 lg:w-16">
-              <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          {/* Freccia. Su telefono i due Pokémon sono IMPILATI, uno sopra
+              l'altro, quindi una freccia orizzontale indica una direzione che
+              sullo schermo non esiste: l'avversario sta sotto, non a destra.
+              `rotate-90` la fa puntare in basso, `lg:rotate-0` la rimette
+              orizzontale quando i due tornano affiancati.
+
+              `h-10` sul contenitore serve perché una rotazione non cambia il
+              riquadro di layout: senza, la freccia verticale sborderebbe dal
+              proprio spazio alto 9 px e finirebbe sopra i nomi. */}
+          <div className="flex items-center justify-center px-2 lg:px-6 shrink-0 h-10 lg:h-auto">
+            <FrecciaAttacco className="w-10 lg:w-16 rotate-90 lg:rotate-0" />
           </div>
 
           {/* Difensore */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
             <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(def.key)}
@@ -384,6 +407,15 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Separatore verticale */}
           <div className="hidden lg:block w-px bg-gray-700/40 mx-6 self-stretch" />
 
+          {/* Mossa selezionata e riquadro KO, AFFIANCATI su telefono.
+
+              `lg:contents` è la chiave: sotto i 1024 px questo contenitore
+              mette i due elementi in riga; sopra, `display: contents` lo fa
+              sparire dall'albero di layout e i due tornano figli diretti
+              dell'intestazione, esattamente com'erano. Il desktop non cambia
+              di un pixel e non c'è una seconda copia del markup. */}
+          <div className="flex items-center gap-3 lg:contents">
+
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
             <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
@@ -396,24 +428,24 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 <span className="text-[10px] text-purple-400 font-bold uppercase tracking-widest border border-purple-700/40 rounded px-1.5 py-0.5">🌀 Spread</span>
               )}
             </div>
-            <div className="text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
+            <div className="text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
             <div className="text-xs text-gray-500 mt-1">{result.minDmg} – {result.maxDmg} HP</div>
           </div>
 
           {/* Colonna destra: badge KO — dimensioni uniformi, centrato */}
           <div className="shrink-0 flex flex-col items-end justify-center lg:self-center">
             {isOHKO ? (
-              <div className="border-2 border-red-500/70 rounded-xl px-5 py-4 text-center bg-red-950/30 w-36">
+              <div className="border-2 border-red-500/70 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-red-950/30 w-28 lg:w-36">
                 <div className="text-3xl font-black text-red-400 leading-tight">100%</div>
                 <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">1HKO {t('eot.guaranteed')}</div>
               </div>
             ) : hasOHKOChance ? (
-              <div className="border-2 border-orange-500/60 rounded-xl px-5 py-4 text-center bg-orange-950/20 w-36">
+              <div className="border-2 border-orange-500/60 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-orange-950/20 w-28 lg:w-36">
                 <div className="text-3xl font-black text-orange-400 leading-tight">{ohkoPct}%</div>
                 <div className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mt-1">1HKO Chance</div>
               </div>
             ) : endOfTurnInfo ? (
-              <div className="border-2 border-yellow-600/40 rounded-xl px-5 py-4 text-center bg-yellow-950/10 w-36">
+              <div className="border-2 border-yellow-600/40 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-yellow-950/10 w-28 lg:w-36">
                 <div className="text-2xl font-black text-yellow-300 leading-tight">
                   {endOfTurnInfo.pct ? `${endOfTurnInfo.pct}%` : '100%'}
                 </div>
@@ -426,11 +458,13 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 </div>
               </div>
             ) : (
-              <div className="border-2 border-gray-600/30 rounded-xl px-5 py-4 text-center bg-gray-800/30 w-36">
+              <div className="border-2 border-gray-600/30 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-gray-800/30 w-28 lg:w-36">
                 <div className="text-2xl font-black text-gray-500 leading-tight">—</div>
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko_in_n', { turni: MAX_HITS })}</div>
               </div>
             )}
+          </div>
+
           </div>
         </div>
 
@@ -469,7 +503,21 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   style={{ borderLeftColor: typeColor }}
                   className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isActive ? 'ring-1 ring-teal-400 bg-teal-950/20' : 'hover:bg-gray-800/60'}`}
                 >
-                  <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
+                  {/* Niente `truncate` qui. Il nome della mossa è il contenuto
+                      più utile del pannello, e su telefono era quello
+                      illeggibile: a 360 px il bottone ha ~124 px utili e
+                      «Lanciafiamme» a 20 px ne chiede 132.
+
+                      Rimpicciolire il carattere avrebbe corretto QUESTA mossa e
+                      non la classe: il nome più lungo in italiano è «Adesso
+                      Faccio sul Serio», 23 caratteri, che chiederebbe ~250 px —
+                      nessuna dimensione leggibile lo fa entrare. Misurato su
+                      tutte e 809 le mosse, non stimato sull'esempio a portata.
+
+                      Andare a capo invece vale per ogni nome e per entrambe le
+                      lingue. `break-words` serve per i nomi che sono una parola
+                      sola: «Elettrocannone» non ha spazi dove spezzarsi. */}
+                  <div className="text-[20px] text-gray-300 capitalize break-words mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                   <div className="flex items-center justify-between gap-1">
                     <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                       {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
@@ -539,7 +587,25 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           return (
             <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
               <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{cardTitle}</div>
-              <div className="flex items-center justify-center gap-1.5 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
+              {/* Su telefono i passi VANNO A CAPO invece di scorrere.
+
+                  Prima erano tre cose insieme, e insieme facevano un difetto:
+                  il contenitore scorreva in orizzontale, la barra di
+                  scorrimento era nascosta (`scrollbarWidth: none`), e
+                  `justify-center` spingeva il contenuto in eccesso fuori da
+                  ENTRAMBI i lati. Nella foto di Simone si leggeva «TART» a
+                  sinistra e «RESUL» a destra: non era testo troncato, era la
+                  striscia intera tagliata ai due capi — e con `justify-center`
+                  la parte a sinistra non si raggiunge nemmeno scorrendo.
+
+                  Il criterio del testo tagliato non poteva vederlo: esclude
+                  apposta i contenitori con `overflow-x: auto`, classificandoli
+                  come scorrimento voluto. Qui lo scorrimento c'era, la
+                  volontà no.
+
+                  Da `lg` in su nulla cambia: i passi stanno in riga e il
+                  contenitore torna a scorrere se serve. */}
+              <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-1.5 lg:overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
 
                 {/* Start */}
                 <div className="flex flex-col items-center shrink-0 w-20">
@@ -783,17 +849,26 @@ function CumulativePanel({ entries }) {
       {/* Card principale: due attaccanti affiancati → difensore */}
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
 
-        {/* Header: [atk1] + [atk2] → [def] */}
-        <div className="flex flex-col lg:flex-row lg:items-center px-5 py-4 gap-4 border-b border-gray-700/20">
+        {/* Header: [atk1] + [atk2] → [def]
+
+            Su telefono diventa una colonna centrata che si legge come
+            l'equazione che è: attaccante 1, «+», attaccante 2, freccia in
+            basso, difensore. La disposizione orizzontale non è un ripiego da
+            schermo largo — è la stessa relazione, e in verticale resta
+            leggibile perché il «+» e la freccia dicono due cose diverse: il
+            primo unisce due pari, la seconda indica un bersaglio.
+
+            Sopra i 1024 px non cambia niente. */}
+        <div className="flex flex-col items-center lg:items-center lg:flex-row px-5 py-4 gap-4 border-b border-gray-700/20">
 
           {/* Attaccanti */}
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex flex-col items-center gap-4 lg:flex-row lg:flex-wrap">
             {[entry1, entry2].map((entry, idx) => {
               const atkTypes = pokemonData[entry.atk.key]?.type || []
               const borderColor = TYPE_HEX[TYPE_NAMES[atkTypes[0]]] || '#4b5563'
               const accentCls = idx === 0 ? 'text-teal-300' : 'text-violet-300'
               return (
-                <div key={idx} className="flex items-center gap-3 shrink-0">
+                <div key={idx} className="flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-3 shrink-0">
                   <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                     style={{ borderColor }}>
                     <img src={spriteUrl(entry.atk.key)} alt={entry.atk.key}
@@ -811,8 +886,14 @@ function CumulativePanel({ entries }) {
                       {atkTypes.map(t => <TypeBadge key={t} typeIdx={t} />)}
                     </div>
                   </div>
+                  {/* Il «+» esisteva già, ma stava DENTRO la riga del primo
+                      attaccante: su telefono finiva a destra del nome, dove
+                      non univa niente. `w-full` dentro un contenitore
+                      `flex-wrap` lo manda su una riga propria, centrata fra i
+                      due attaccanti; `lg:w-auto` lo rimette in linea sopra i
+                      1024 px. */}
                   {idx === 0 && (
-                    <div className="flex items-center px-3 shrink-0 text-gray-500 text-xl font-light">+</div>
+                    <div className="w-full lg:w-auto flex items-center justify-center px-3 shrink-0 text-gray-500 text-3xl lg:text-xl font-light leading-none">+</div>
                   )}
                 </div>
               )
@@ -823,12 +904,20 @@ function CumulativePanel({ entries }) {
           {/* Separatore */}
           <div className="hidden lg:block w-px bg-gray-700/30 mx-4 self-stretch" />
 
+          {/* Freccia verso il difensore. In questa vista non esisteva: c'era
+              solo il separatore verticale qui sopra, che su telefono è
+              nascosto. Senza, i tre Pokémon incolonnati non dicevano più chi
+              attacca chi. */}
+          <div className="lg:hidden flex items-center justify-center h-10 shrink-0">
+            <FrecciaAttacco className="w-10 rotate-90" />
+          </div>
+
           {/* Difensore */}
           {(() => {
             const defTypes = pokemonData[def.key]?.type || []
             const borderColor = TYPE_HEX[TYPE_NAMES[defTypes[0]]] || '#4b5563'
             return (
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
                 <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                   style={{ borderColor }}>
                   <img src={spriteUrl(def.key)} alt={def.key}
@@ -853,7 +942,7 @@ function CumulativePanel({ entries }) {
 
           {/* Badge danno cumulativo */}
           {cumulative && (
-            <div className="shrink-0 text-right ml-auto">
+            <div className="shrink-0 w-full text-center lg:w-auto lg:text-right lg:ml-auto">
               <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
               <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
@@ -895,7 +984,21 @@ function CumulativePanel({ entries }) {
                       <button key={mv} type="button" onClick={() => setSel(mv)}
                         style={{ borderLeftColor: typeColor }}
                         className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
-                        <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
+                        {/* Niente `truncate` qui. Il nome della mossa è il contenuto
+                      più utile del pannello, e su telefono era quello
+                      illeggibile: a 360 px il bottone ha ~124 px utili e
+                      «Lanciafiamme» a 20 px ne chiede 132.
+
+                      Rimpicciolire il carattere avrebbe corretto QUESTA mossa e
+                      non la classe: il nome più lungo in italiano è «Adesso
+                      Faccio sul Serio», 23 caratteri, che chiederebbe ~250 px —
+                      nessuna dimensione leggibile lo fa entrare. Misurato su
+                      tutte e 809 le mosse, non stimato sull'esempio a portata.
+
+                      Andare a capo invece vale per ogni nome e per entrambe le
+                      lingue. `break-words` serve per i nomi che sono una parola
+                      sola: «Elettrocannone» non ha spazi dove spezzarsi. */}
+                  <div className="text-[20px] text-gray-300 capitalize break-words mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                         <div className="flex items-center justify-between gap-1">
                           <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                             {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
