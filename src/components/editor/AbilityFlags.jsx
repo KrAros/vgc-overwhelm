@@ -249,7 +249,6 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         <div className={`mt-1 px-1 py-1 rounded text-xs border ${attiva ? ACCESO : SPENTO}`}>
           {attiva ? '✅ ' : '💡 '}
           {t(`abilities_desc.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.desc })}
-          {!attiva && <> — {t('ui.ate_inerte')}</>}
         </div>
         {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
       </>

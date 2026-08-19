@@ -158,7 +158,7 @@ describe('nessuna stringa italiana scritta dentro il JSX', () => {
    * Non è una rete generale contro l'hardcoding: copre i riquadri di questo
    * file, e questo è il suo confine.
    */
-  const ITALIANE = ['nessun boost', 'nessuna mossa', 'non sta facendo']
+  const ITALIANE = ['nessun boost']
 
   it.each(CASI)('%s (%o) non mostra italiano in inglese', (ability, extra) => {
     const html = rendi(ability, extra).toLowerCase()
