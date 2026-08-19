@@ -1,16 +1,17 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "f399b56",
+    "commit": "d685767",
     "lighthouse": "13.4.1",
     "chrome": "Google Chrome 151.0.7922.137",
     "nota": "Punteggi Lighthouse NON confrontabili fra versioni maggiori: le curve cambiano."
   },
   "controllo": {
     "descrizione": "LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling",
-    "lcp_mobile_ms": 2050,
-    "lcp_desktop_ms": 444.153,
-    "rapporto": 4.62,
+    "bersaglio": "deploy",
+    "lcp_mobile_ms": 2205,
+    "lcp_desktop_ms": 443.029,
+    "rapporto": 4.98,
     "esito": "si muove"
   },
   "misure": [
@@ -22,7 +23,7 @@
       "categorie": {
         "performance": {
           "mediana": 97,
-          "min": 97,
+          "min": 93,
           "max": 98
         },
         "accessibility": {
@@ -48,14 +49,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2050,
-          "min": 1956.992,
-          "max": 2130
+          "mediana": 2130,
+          "min": 1973.689,
+          "max": 2389.018
         },
         "largest-contentful-paint": {
-          "mediana": 2050,
-          "min": 1956.992,
-          "max": 2205
+          "mediana": 2205,
+          "min": 1973.689,
+          "max": 2389.018
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -64,16 +65,104 @@
         },
         "cumulative-layout-shift": {
           "mediana": 0.012,
-          "min": 0.012,
+          "min": 0,
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2050,
-          "min": 1956.992,
-          "max": 2130
+          "mediana": 2130,
+          "min": 1973.689,
+          "max": 4390.642
         }
       },
-      "trasferito_kB": 267.7,
+      "falliti": {
+        "performance": [
+          {
+            "audit": "largest-contentful-paint",
+            "peso": 25,
+            "nodi": 0
+          },
+          {
+            "audit": "first-contentful-paint",
+            "peso": 10,
+            "nodi": 0
+          },
+          {
+            "audit": "speed-index",
+            "peso": 10,
+            "nodi": 0
+          },
+          {
+            "audit": "cache-insight",
+            "peso": 0,
+            "nodi": 6
+          },
+          {
+            "audit": "interactive",
+            "peso": 0,
+            "nodi": 0
+          },
+          {
+            "audit": "lcp-breakdown-insight",
+            "peso": 0,
+            "nodi": 2
+          },
+          {
+            "audit": "network-dependency-tree-insight",
+            "peso": 0,
+            "nodi": 3
+          },
+          {
+            "audit": "render-blocking-insight",
+            "peso": 0,
+            "nodi": 1
+          },
+          {
+            "audit": "unused-javascript",
+            "peso": 0,
+            "nodi": 2
+          }
+        ],
+        "accessibility": [
+          {
+            "audit": "button-name",
+            "peso": 10,
+            "nodi": 7
+          },
+          {
+            "audit": "select-name",
+            "peso": 10,
+            "nodi": 2
+          },
+          {
+            "audit": "color-contrast",
+            "peso": 7,
+            "nodi": 33
+          },
+          {
+            "audit": "skip-link",
+            "peso": 3,
+            "nodi": 1
+          },
+          {
+            "audit": "label-content-name-mismatch",
+            "peso": 0,
+            "nodi": 1
+          }
+        ],
+        "agentic-browsing": [
+          {
+            "audit": "agent-accessibility-tree",
+            "peso": 1,
+            "nodi": 1
+          }
+        ]
+      },
+      "falliti_stabili": {
+        "performance": false,
+        "accessibility": true,
+        "agentic-browsing": true
+      },
+      "trasferito_kB": 267.6,
       "richieste": 8
     },
     {
@@ -84,7 +173,7 @@
       "categorie": {
         "performance": {
           "mediana": 100,
-          "min": 99,
+          "min": 100,
           "max": 100
         },
         "accessibility": {
@@ -110,14 +199,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 444.153,
-          "min": 402.603,
-          "max": 699.561
+          "mediana": 443.029,
+          "min": 406.05,
+          "max": 492.164
         },
         "largest-contentful-paint": {
-          "mediana": 444.153,
-          "min": 402.603,
-          "max": 699.561
+          "mediana": 443.029,
+          "min": 406.05,
+          "max": 492.164
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -130,12 +219,62 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 444.153,
-          "min": 402.603,
-          "max": 1069.5
+          "mediana": 443.029,
+          "min": 406.05,
+          "max": 492.497
         }
       },
-      "trasferito_kB": 267.8,
+      "falliti": {
+        "performance": [
+          {
+            "audit": "cache-insight",
+            "peso": 0,
+            "nodi": 6
+          },
+          {
+            "audit": "network-dependency-tree-insight",
+            "peso": 0,
+            "nodi": 3
+          },
+          {
+            "audit": "render-blocking-insight",
+            "peso": 0,
+            "nodi": 1
+          },
+          {
+            "audit": "unused-javascript",
+            "peso": 0,
+            "nodi": 2
+          }
+        ],
+        "accessibility": [
+          {
+            "audit": "color-contrast",
+            "peso": 7,
+            "nodi": 38
+          },
+          {
+            "audit": "target-size",
+            "peso": 7,
+            "nodi": 2
+          },
+          {
+            "audit": "skip-link",
+            "peso": 3,
+            "nodi": 1
+          },
+          {
+            "audit": "label-content-name-mismatch",
+            "peso": 0,
+            "nodi": 1
+          }
+        ]
+      },
+      "falliti_stabili": {
+        "performance": true,
+        "accessibility": true
+      },
+      "trasferito_kB": 267.6,
       "richieste": 8
     },
     {
@@ -172,19 +311,19 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2406.389,
-          "min": 2405.355,
-          "max": 2418.723
+          "mediana": 2411.582,
+          "min": 2405.181,
+          "max": 2460.704
         },
         "largest-contentful-paint": {
-          "mediana": 2556.389,
-          "min": 2555.355,
-          "max": 2568.723
+          "mediana": 2561.088,
+          "min": 2460.704,
+          "max": 2562.528
         },
         "total-blocking-time": {
-          "mediana": 53,
-          "min": 36,
-          "max": 69
+          "mediana": 39,
+          "min": 0,
+          "max": 70
         },
         "cumulative-layout-shift": {
           "mediana": 0.012,
@@ -192,10 +331,93 @@
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2406.389,
-          "min": 2405.355,
-          "max": 2418.723
+          "mediana": 2411.582,
+          "min": 2405.181,
+          "max": 2460.704
         }
+      },
+      "falliti": {
+        "performance": [
+          {
+            "audit": "largest-contentful-paint",
+            "peso": 25,
+            "nodi": 0
+          },
+          {
+            "audit": "first-contentful-paint",
+            "peso": 10,
+            "nodi": 0
+          },
+          {
+            "audit": "speed-index",
+            "peso": 10,
+            "nodi": 0
+          },
+          {
+            "audit": "interactive",
+            "peso": 0,
+            "nodi": 0
+          },
+          {
+            "audit": "max-potential-fid",
+            "peso": 0,
+            "nodi": 0
+          },
+          {
+            "audit": "network-dependency-tree-insight",
+            "peso": 0,
+            "nodi": 3
+          },
+          {
+            "audit": "render-blocking-insight",
+            "peso": 0,
+            "nodi": 1
+          },
+          {
+            "audit": "unused-javascript",
+            "peso": 0,
+            "nodi": 2
+          }
+        ],
+        "accessibility": [
+          {
+            "audit": "button-name",
+            "peso": 10,
+            "nodi": 7
+          },
+          {
+            "audit": "select-name",
+            "peso": 10,
+            "nodi": 2
+          },
+          {
+            "audit": "color-contrast",
+            "peso": 7,
+            "nodi": 33
+          },
+          {
+            "audit": "skip-link",
+            "peso": 3,
+            "nodi": 1
+          },
+          {
+            "audit": "label-content-name-mismatch",
+            "peso": 0,
+            "nodi": 1
+          }
+        ],
+        "agentic-browsing": [
+          {
+            "audit": "agent-accessibility-tree",
+            "peso": 1,
+            "nodi": 1
+          }
+        ]
+      },
+      "falliti_stabili": {
+        "performance": false,
+        "accessibility": true,
+        "agentic-browsing": true
       },
       "trasferito_kB": 266.3,
       "richieste": 8
@@ -234,14 +456,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 527.027,
-          "min": 494.683,
-          "max": 539.533
+          "mediana": 525.291,
+          "min": 497.48,
+          "max": 532.715
         },
         "largest-contentful-paint": {
-          "mediana": 527.027,
-          "min": 494.683,
-          "max": 539.533
+          "mediana": 525.291,
+          "min": 497.48,
+          "max": 532.715
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -254,10 +476,55 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 527.027,
-          "min": 494.683,
-          "max": 539.533
+          "mediana": 525.291,
+          "min": 497.48,
+          "max": 532.715
         }
+      },
+      "falliti": {
+        "performance": [
+          {
+            "audit": "network-dependency-tree-insight",
+            "peso": 0,
+            "nodi": 3
+          },
+          {
+            "audit": "render-blocking-insight",
+            "peso": 0,
+            "nodi": 1
+          },
+          {
+            "audit": "unused-javascript",
+            "peso": 0,
+            "nodi": 2
+          }
+        ],
+        "accessibility": [
+          {
+            "audit": "color-contrast",
+            "peso": 7,
+            "nodi": 38
+          },
+          {
+            "audit": "target-size",
+            "peso": 7,
+            "nodi": 2
+          },
+          {
+            "audit": "skip-link",
+            "peso": 3,
+            "nodi": 1
+          },
+          {
+            "audit": "label-content-name-mismatch",
+            "peso": 0,
+            "nodi": 1
+          }
+        ]
+      },
+      "falliti_stabili": {
+        "performance": true,
+        "accessibility": true
       },
       "trasferito_kB": 266.3,
       "richieste": 8
