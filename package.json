@@ -35,6 +35,8 @@
     "forme:report": "node scripts/gen-forme-sprite.mjs --report",
     "lighthouse:gen": "node scripts/gen-lighthouse.mjs",
     "lighthouse:report": "node scripts/gen-lighthouse.mjs --report",
+    "layout:gen": "node scripts/gen-layout.mjs",
+    "layout:report": "node scripts/gen-layout.mjs --report",
     "inventario:gen": "node scripts/gen-inventario-motore.mjs",
     "inventario:report": "node scripts/gen-inventario-motore.mjs --report",
     "gap:report": "node scripts/gen-gap-noti.mjs --report",
@@ -61,6 +63,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "lighthouse": "13.4.1",
+    "puppeteer-core": "25.8.0",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.10",
     "vitest": "^4.1.10"

@@ -1,0 +1,820 @@
+{
+  "condizioni": {
+    "misurato": "2026-08-19",
+    "commit": "dbe6268",
+    "larghezza": 360,
+    "chrome": "Google Chrome 151.0.7922.137",
+    "puppeteer": "25.8.0",
+    "nota": "Registro, non rete: dipende da un browser vero. Si rilegge con l'occhio."
+  },
+  "misure": [
+    {
+      "scenario": "vuoto",
+      "descrizione": "la pagina come la trova chi arriva la prima volta",
+      "lingua": "en",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "nessun nome di Pokémon nel documento",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 0,
+        "nodi": []
+      },
+      "scorrimento_pagina_px": 0,
+      "wcag_258": {
+        "quanti": 0,
+        "sottodimensionati": 3,
+        "nodi": []
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 40,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 60,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors bg-yellow-500 text-gra",
+            "w": 83,
+            "h": 36
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors text-gray-400",
+            "w": 83,
+            "h": 36
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 1,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 0
+      },
+      "viewport": {
+        "innerWidth": 360,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 360
+      },
+      "pannello_rapporto": false,
+      "nodi_totali": 459
+    },
+    {
+      "scenario": "squadra",
+      "descrizione": "due squadre meta caricate — editor e matrice pieni",
+      "lingua": "en",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "Garchomp compare nel documento",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 46,
+        "nodi": [
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 94,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Icy Wind ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Dragon Claw ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Flamethrower ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          }
+        ]
+      },
+      "scorrimento_pagina_px": 62,
+      "wcag_258": {
+        "quanti": 2,
+        "sottodimensionati": 39,
+        "nodi": [
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          },
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          }
+        ]
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 166,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 60,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors bg-yellow-500 text-gra",
+            "w": 83,
+            "h": 36
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors text-gray-400",
+            "w": 83,
+            "h": 36
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 1,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 23
+      },
+      "viewport": {
+        "innerWidth": 422,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 422
+      },
+      "pannello_rapporto": false,
+      "nodi_totali": 1365
+    },
+    {
+      "scenario": "rapporto",
+      "descrizione": "squadre caricate e una cella cliccata — il ReportPanel esiste",
+      "lingua": "en",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "il ReportPanel è montato (unica <section>)",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 48,
+        "nodi": [
+          {
+            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
+            "scroll": 129,
+            "visibile": 119,
+            "ellissi": true,
+            "testo": "Flamethrower"
+          },
+          {
+            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
+            "scroll": 122,
+            "visibile": 119,
+            "ellissi": true,
+            "testo": "Dragon Claw"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 94,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Icy Wind ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Dragon Claw ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Flamethrower ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 101,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Earthquake ⚡"
+          }
+        ]
+      },
+      "scorrimento_pagina_px": 62,
+      "wcag_258": {
+        "quanti": 2,
+        "sottodimensionati": 39,
+        "nodi": [
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          },
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          }
+        ]
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 168,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 60,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "w": 64,
+            "h": 27
+          },
+          {
+            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "w": 52,
+            "h": 27
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 2,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 23
+      },
+      "viewport": {
+        "innerWidth": 422,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 422
+      },
+      "pannello_rapporto": true,
+      "nodi_totali": 1504
+    },
+    {
+      "scenario": "vuoto",
+      "descrizione": "la pagina come la trova chi arriva la prima volta",
+      "lingua": "it",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "nessun nome di Pokémon nel documento",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 0,
+        "nodi": []
+      },
+      "scorrimento_pagina_px": 0,
+      "wcag_258": {
+        "quanti": 0,
+        "sottodimensionati": 3,
+        "nodi": []
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 40,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 56,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors bg-yellow-500 text-gra",
+            "w": 74,
+            "h": 36
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors text-gray-400",
+            "w": 74,
+            "h": 36
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 1,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 0
+      },
+      "viewport": {
+        "innerWidth": 360,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 360
+      },
+      "pannello_rapporto": false,
+      "nodi_totali": 459
+    },
+    {
+      "scenario": "squadra",
+      "descrizione": "due squadre meta caricate — editor e matrice pieni",
+      "lingua": "it",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "Garchomp compare nel documento",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 48,
+        "nodi": [
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 103,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 102,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Lanciafiamme ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          }
+        ]
+      },
+      "scorrimento_pagina_px": 62,
+      "wcag_258": {
+        "quanti": 2,
+        "sottodimensionati": 40,
+        "nodi": [
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          },
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          }
+        ]
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 166,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 56,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors bg-yellow-500 text-gra",
+            "w": 74,
+            "h": 36
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 transition-colors text-gray-400",
+            "w": 74,
+            "h": 36
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 1,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 23
+      },
+      "viewport": {
+        "innerWidth": 422,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 422
+      },
+      "pannello_rapporto": false,
+      "nodi_totali": 1365
+    },
+    {
+      "scenario": "rapporto",
+      "descrizione": "squadre caricate e una cella cliccata — il ReportPanel esiste",
+      "lingua": "it",
+      "larghezza": 360,
+      "controllo": {
+        "descrizione": "il ReportPanel è montato (unica <section>)",
+        "esito": "attivo"
+      },
+      "lingua_applicata": "sì",
+      "tagliati": {
+        "quanti": 49,
+        "nodi": [
+          {
+            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
+            "scroll": 132,
+            "visibile": 119,
+            "ellissi": true,
+            "testo": "Lanciafiamme"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 103,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 93,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Ventogelato"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 102,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Lanciafiamme ⚡"
+          }
+        ]
+      },
+      "scorrimento_pagina_px": 62,
+      "wcag_258": {
+        "quanti": 2,
+        "sottodimensionati": 40,
+        "nodi": [
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          },
+          {
+            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
+            "w": 10,
+            "h": 16,
+            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
+            "distanza": 0
+          }
+        ]
+      },
+      "piccoli_fuori_scope": {
+        "quanti": 168,
+        "nodi": [
+          {
+            "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
+            "w": 1,
+            "h": 1
+          },
+          {
+            "nodo": "button.flex items-center gap-1 text-[11px] font-bold px-2 py-1 roun",
+            "w": 56,
+            "h": 27
+          },
+          {
+            "nodo": "a.text-gray-400 hover:text-white transition-colors",
+            "w": 16,
+            "h": 16
+          },
+          {
+            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "w": 67,
+            "h": 27
+          },
+          {
+            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "w": 55,
+            "h": 27
+          },
+          {
+            "nodo": "button.text-xs px-3 py-2.5 rounded border transition-colors border-",
+            "w": 41,
+            "h": 38
+          }
+        ]
+      },
+      "esclusioni": {
+        "contenitori_scorrevoli": 2,
+        "nascosti_1px": 1,
+        "sbordano_ma_visibili": 23
+      },
+      "viewport": {
+        "innerWidth": 422,
+        "htmlClientWidth": 360,
+        "htmlScrollWidth": 422
+      },
+      "pannello_rapporto": true,
+      "nodi_totali": 1504
+    }
+  ]
+}
