@@ -7,7 +7,7 @@ import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
-import { ABILITA_ATE, TIPO_PALLA_CLIMA, normalizzaMeteo } from '../../lib/rules.js'
+import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n.js'
 
@@ -136,10 +136,7 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   // dentro il componente. Ora la fa `normalizzaMeteo`, che è la stessa
   // funzione da cui passa il motore, e che gestisce anche il maiuscolo.
   const isWeatherBall = value === 'weather ball'
-  const meteoCanonico = normalizzaMeteo(weather)
-  const wbTypeIdx = isWeatherBall && meteoCanonico
-    ? TIPO_PALLA_CLIMA[meteoCanonico] ?? null
-    : null
+  const wbTypeIdx = tipoPallaClima(value, weather)
   // Abilità «-ate»: la tabella sta in `data/typeChart.js` dalla sessione Q.
   // Qui c'era una copia scritta con gli indici numerici, mentre il motore usava
   // le costanti TYPES.*: due rappresentazioni diverse della stessa cosa, che

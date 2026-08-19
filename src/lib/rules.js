@@ -103,6 +103,25 @@ export const TIPO_PALLA_CLIMA = Object.freeze({
   snow:             TYPES.ICE,
 })
 
+/**
+ * Il tipo che Palla Clima assume col meteo dato, oppure `null` se la mossa non
+ * è Palla Clima o se non c'è meteo.
+ *
+ * Esiste perché la stessa domanda serviva in tre posti — il motore, il badge
+ * del tipo mossa nell'editor, e da Q/3b il riquadro delle abilità «-ate», che
+ * deve sapere se il moveset contiene ancora una mossa Normale. Scriverla tre
+ * volte era il modo garantito di farle divergere.
+ *
+ * Restituisce `null` invece del tipo base di proposito: il motore distingue
+ * «Palla Clima senza meteo» da «Palla Clima con meteo» anche per la potenza
+ * (50 contro 100), e quel `null` è parte del risultato che espone.
+ */
+export function tipoPallaClima(nomeMossa, meteo) {
+  if (nomeMossa !== 'weather ball') return null
+  const canonico = normalizzaMeteo(meteo)
+  return canonico ? TIPO_PALLA_CLIMA[canonico] ?? null : null
+}
+
 export const ABILITA_ATE = Object.freeze({
   'pixilate':    TYPES.FAIRY,
   'aerilate':    TYPES.FLYING,

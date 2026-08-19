@@ -17,7 +17,7 @@ import {
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
   ABILITA_ATE,
-  TIPO_PALLA_CLIMA,
+  tipoPallaClima,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
@@ -143,12 +143,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // ── Weather Ball: tipo e BP cambiano in base al meteo ────────────────────
   // Senza meteo: Normal BP 50 — Con meteo: tipo corrispondente BP 100
-  // La tabella sta in `lib/rules.js` dalla sessione Q: ne esisteva una copia
-  // in `SearchSelects.jsx` con due chiavi in più.
+  // Tabella e regola stanno in `lib/rules.js` dalla sessione Q: la stessa
+  // domanda serve al motore, al badge del tipo mossa e al riquadro delle -ate.
   const isWeatherBall = move === 'weather ball'
-  const weatherBallType = isWeatherBall && meteo
-    ? TIPO_PALLA_CLIMA[meteo] ?? null
-    : null
+  const weatherBallType = tipoPallaClima(move, meteo)
   let moveType = weatherBallType !== null ? weatherBallType : moveData.type
   const isLastRespects = move === 'last respects'
   const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null

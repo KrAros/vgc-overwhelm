@@ -316,6 +316,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
           {data && ability && (
             <AbilityFlags
               ability={ability}
+              moves={pokemon?.moves}
               flags={abilityFlags}
               opponentHasIntimidateActive={opponentHasIntimidateActive}
               onFlagChange={(flag, val) => setAbilityFlag(team, index, flag, val)}

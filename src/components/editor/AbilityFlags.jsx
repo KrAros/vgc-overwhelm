@@ -2,6 +2,9 @@
 // Copyright (C) 2026 KrAros
 
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
+import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
+import { TYPES } from '../../data/typeChart.js'
+import movesData from '../../data/moves.json'
 import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
 import { abilitaNonCalcolata } from '../../lib/gap.js'
 import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
@@ -59,7 +62,7 @@ const PERNO_SPENTO = 'bg-gray-600'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
-export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather }) {
+export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather, moves }) {
   const { t } = useTranslation()
   const key = normalizeAbilityKey(ability)
 
@@ -203,6 +206,45 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           ? `✅ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
           : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
       </div>
+    )
+  }
+
+  /**
+   * ─── LE ABILITÀ «-ATE» ───────────────────────────────────────────────────
+   *
+   * Pixilate, Aerilate, Refrigerate e Dragonize trasformano le mosse Normali.
+   * Il loro stato non dipende dal campo né da una levetta: dipende dal
+   * MOVESET. Se il set non ha nessuna mossa Normale, l'abilità è del tutto
+   * inerte — e prima di Q quell'errore di costruzione era invisibile, perché
+   * il riquadro era grigio esattamente come quando lavorava.
+   *
+   * Palla Clima va chiesta a `tipoPallaClima`, non al tipo scritto nei dati:
+   * sotto il sole è Fuoco, e il motore applica le -ate solo se il tipo È
+   * ancora Normale dopo la conversione del meteo (`calcEngine.js`, in
+   * quest'ordine). Guardare il tipo base direbbe «verde» su un set in cui
+   * l'abilità non tocca niente.
+   */
+  if (ABILITA_ATE[key] !== undefined) {
+    const attiva = (moves || []).some((m) => {
+      if (!m) return false
+      // Le mosse di stato sono escluse. Protect è di tipo Normale e
+      // categoria 2: l'abilità gliene cambierebbe il tipo, ma Protect non fa
+      // danno, quindi nessun numero si muove. Il verde di questa tavolozza
+      // significa «sta toccando il numero che stai guardando», e su una mossa
+      // di stato sarebbe una promessa che non si mantiene.
+      if (movesData[m]?.category === 2) return false
+      const tipo = tipoPallaClima(m, weather) ?? movesData[m]?.type
+      return tipo === TYPES.NORMAL
+    })
+    return (
+      <>
+        <div className={`mt-1 px-1 py-1 rounded text-xs border ${attiva ? ACCESO : SPENTO}`}>
+          {attiva ? '✅ ' : '💡 '}
+          {t(`abilities_desc.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.desc })}
+          {!attiva && <> — {t('ui.ate_inerte')}</>}
+        </div>
+        {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
+      </>
     )
   }
 

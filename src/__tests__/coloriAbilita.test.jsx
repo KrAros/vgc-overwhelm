@@ -109,11 +109,22 @@ const CASI = [
   ['fluffy',           {}, 'gray', 'statico'],
   ['levitate',         {}, 'gray', 'statico'],
 
-  // ── le quattro -ate: lo stato dal moveset arriva in Q/3 ──────────────────
-  ['pixilate',         {}, 'gray', 'nessun moveset passato'],
-  ['aerilate',         {}, 'gray', 'nessun moveset passato'],
-  ['refrigerate',      {}, 'gray', 'nessun moveset passato'],
-  ['dragonize',        {}, 'gray', 'nessun moveset passato'],
+  // ── le quattro -ate: lo stato viene dal MOVESET (Q/3b) ───────────────────
+  // Senza mosse Normali l'abilità è del tutto inerte, e prima di Q quel
+  // difetto di costruzione era invisibile: grigio identico a quando lavorava.
+  ['pixilate',         {},                                        'gray',  'nessun moveset'],
+  // Protect è Normale ma di stato: non fa danno, quindi l'abilità non muove
+  // nessun numero. Il caso è qui apposta — al primo giro dava verde.
+  ['pixilate',         { moves: ['earthquake', 'protect'] },      'gray',  'solo una Normale di stato'],
+  ['pixilate',         { moves: ['hyper voice', 'earthquake'] },  'green', 'ha Hyper Voice'],
+  ['aerilate',         { moves: ['hyper voice'] },                'green', 'ha Hyper Voice'],
+  ['refrigerate',      { moves: ['hyper voice'] },                'green', 'ha Hyper Voice'],
+  ['dragonize',        { moves: ['hyper voice'] },                'green', 'ha Hyper Voice'],
+  // Palla Clima è Normale solo SENZA meteo: sotto il sole è Fuoco, e il motore
+  // applica le -ate solo dopo la conversione del meteo. Guardare il tipo base
+  // direbbe «verde» su un set in cui l'abilità non tocca niente.
+  ['pixilate',         { moves: ['weather ball'] },               'green', 'Palla Clima senza meteo'],
+  ['pixilate',         { moves: ['weather ball'], weather: 'sun' }, 'gray', 'Palla Clima sotto il sole'],
 
   // ── il default ───────────────────────────────────────────────────────────
   ['poison heal',      {}, 'gray', 'statico'],
