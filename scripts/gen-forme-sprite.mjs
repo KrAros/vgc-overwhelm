@@ -104,6 +104,28 @@ function numeroDi(chiave) {
 
 const urlDi = (num, forma) => `${BASE}icon${num}_${forma}_s0.png`
 
+/**
+ * ─── LA SECONDA FONTE ──────────────────────────────────────────────────────
+ *
+ * `sprite.js` usa pokemon-zone come ripiego quando HOME non risponde, ma
+ * questo generatore sondava SOLO HOME. La sessione L aveva quindi concluso —
+ * onestamente, e col numero contato — che le Megaevoluzioni di Champions non
+ * hanno icona: HOME non le ha mai avute.
+ *
+ * Non era il quadro completo. Era la superficie scelta.
+ *
+ * Pokemon-zone ne ha una parte, e all'indice di forma IDENTICO a quello di
+ * HOME: `f01` là ⇄ `_01_` qui. Verificato guardando le immagini, non i codici
+ * di stato — `..._0398_01_0.webp` È Mega Staraptor, e per settimane l'app ha
+ * mostrato Staraptor base al suo posto.
+ *
+ * Il ramo `mdicon02` non è completo né simmetrico: ha megaevoluzioni che HOME
+ * non ha, e gli mancano forme base che HOME ha. Le due fonti si coprono a
+ * vicenda, ed è per questo che vanno sondate entrambe.
+ */
+const ZONE = 'https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/'
+const urlZone = (num, forma) => `${ZONE}ui_PokeIcon_02_${num}_${forma.slice(1)}_0.webp`
+
 /** Esiste? Una sola richiesta HEAD, senza scaricare l'immagine. */
 async function esiste(url) {
   try {
@@ -142,7 +164,9 @@ console.log(`Specie coinvolte       ${daSondare.reduce((a, [, k]) => a + k.lengt
 console.log('\nSondaggio in corso…')
 
 const tabella = {}
+const fonti = {}          // chiave → 'home' | 'zone' | 'nessuna'
 const mancanti = []
+const soloZone = []
 const lavori = []
 
 for (const [num, chiavi] of daSondare) {
@@ -150,10 +174,27 @@ for (const [num, chiavi] of daSondare) {
     // La posizione è l'ipotesi; l'eccezione scritta a mano ha la precedenza.
     const forma = ORDINE_CORRETTO[chiave] ?? `f${String(i).padStart(2, '0')}`
     lavori.push(async () => {
-      const ok = await esiste(urlDi(num, forma))
-      if (ok) tabella[chiave] = forma
-      else mancanti.push({ chiave, num, forma })
-      return ok
+      // Prima HOME, che è la fonte primaria di `sprite.js`. Se non ce l'ha, si
+      // chiede al ripiego invece di rinunciare: è il passo che mancava.
+      if (await esiste(urlDi(num, forma))) {
+        tabella[chiave] = forma
+        fonti[chiave] = 'home'
+        return true
+      }
+      if (await esiste(urlZone(num, forma))) {
+        tabella[chiave] = forma
+        fonti[chiave] = 'zone'
+        soloZone.push({ chiave, num, forma })
+        return true
+      }
+      // Nessuna delle due. La posizione entra COMUNQUE in tabella, con la
+      // fonte `nessuna`: così `sprite.js` sa che l'indice è quello e che non
+      // esiste un'immagine, e può non mostrarne nessuna invece di ripiegare
+      // sulla forma base — che è un Pokémon diverso.
+      tabella[chiave] = forma
+      fonti[chiave] = 'nessuna'
+      mancanti.push({ chiave, num, forma })
+      return false
     })
   })
 }
@@ -163,14 +204,25 @@ const trovati = esiti.filter(Boolean).length
 
 console.log(`\nPosizioni provate      ${esiti.length}`)
 console.log(`Esistono               ${trovati}`)
-console.log(`Non esistono           ${mancanti.length}`)
+console.log(`  di cui su HOME       ${trovati - soloZone.length}`)
+console.log(`  di cui SOLO su zone  ${soloZone.length}`)
+console.log(`Non esistono da nessuna parte  ${mancanti.length}`)
+
+if (soloZone.length) {
+  console.log('\n── recuperate dalla seconda fonte ─────────────────────────')
+  soloZone.forEach(m => console.log(`  ${m.chiave.padEnd(28)} ${m.num}_${m.forma}`))
+  console.log('\nQueste NON esistono su HOME. `sprite.js` proverà HOME, prenderà')
+  console.log('403, e il ripiego consegnerà l\'icona giusta. RIGUARDARE il foglio')
+  console.log('di contatto: 200 non prova che l\'immagine sia la forma giusta.')
+}
 
 if (mancanti.length) {
   console.log('\n── posizioni che il server non ha ─────────────────────────')
   mancanti.slice(0, 25).forEach(m => console.log(`  ${m.chiave.padEnd(28)} ${m.num}_${m.forma}`))
   if (mancanti.length > 25) console.log(`  … e altre ${mancanti.length - 25}`)
-  console.log('\nQueste specie restano senza suffisso: `sprite.js` ricade su f00,')
-  console.log('cioè sul comportamento di prima. Meglio di un URL rotto.')
+  console.log('\nNessuna delle due fonti le ha. Entrano in tabella con fonte')
+  console.log('`nessuna`, così `sprite.js` non mostra icona invece di mostrare')
+  console.log('quella della forma base, che è un Pokémon diverso.')
 }
 
 if (SCRIVI) {
@@ -179,15 +231,20 @@ if (SCRIVI) {
   fs.writeFileSync(dove, JSON.stringify({
     meta: {
       generatedAt: new Date().toISOString(),
-      fonte: BASE,
-      metodo: 'HEAD 200 su ogni posizione, indice = ordine in pokemon.json',
+      fonti: { home: BASE, zone: ZONE },
+      metodo: 'HEAD 200 su ENTRAMBE le fonti, indice = ordine in pokemon.json',
       specieConForma: Object.keys(ordinata).length,
-      posizioniAssenti: mancanti.length,
-      note: 'Suffisso di forma per le icone di Pokémon HOME. Chi non è qui usa f00. '
-          + 'Rigenerare con `npm run forme:gen`, e RIGUARDARE il foglio di contatto: '
-          + 'l\'esistenza dell\'URL non prova che l\'icona sia la forma giusta.',
+      soloSecondaFonte: soloZone.length,
+      posizioniAssentiOvunque: mancanti.length,
+      note: 'Suffisso di forma delle icone. `fonte` dice quale server ce l\'ha: '
+          + '`home`, `zone` (solo il ripiego), o `nessuna` — e in quel caso '
+          + 'sprite.js non mostra icona, invece di ripiegare sulla forma base '
+          + 'che è un Pokémon diverso. Rigenerare con `npm run forme:gen`, e '
+          + 'RIGUARDARE il foglio di contatto: l\'esistenza dell\'URL non prova '
+          + 'che l\'icona sia la forma giusta.',
     },
     forme: ordinata,
+    fonte: Object.fromEntries(Object.keys(ordinata).map(k => [k, fonti[k]])),
   }, null, 2) + '\n')
   console.log(`\nScritto ${path.relative(RADICE, dove)}`)
 
@@ -197,9 +254,15 @@ if (SCRIVI) {
       <div class="num">#${num}</div>
       ${chiavi.map((k) => {
         const forma = tabella[k]
-        return `<figure class="${forma ? '' : 'assente'}">
-          ${forma ? `<img src="${urlDi(num, forma)}" alt="${k}">` : '<div class="vuoto">—</div>'}
-          <figcaption>${k}<br><small>${forma || 'nessuna'}</small></figcaption>
+        const fonte = fonti[k]
+        // L'immagine va chiesta al server che ce l'ha, altrimenti il foglio
+        // mostrerebbe un buco proprio dove c'è la novità da verificare.
+        const src = fonte === 'home' ? urlDi(num, forma)
+                  : fonte === 'zone' ? urlZone(num, forma)
+                  : null
+        return `<figure class="${src ? '' : 'assente'}${fonte === 'zone' ? ' zone' : ''}">
+          ${src ? `<img src="${src}" alt="${k}">` : '<div class="vuoto">—</div>'}
+          <figcaption>${k}<br><small>${forma} · ${fonte}</small></figcaption>
         </figure>`
       }).join('')}
     </div>`).join('')

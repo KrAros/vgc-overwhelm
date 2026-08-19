@@ -120,41 +120,60 @@ describe('traduzioni — l\'interfaccia italiana è in italiano', () => {
   })
 
   /**
-   * ─── I NOMI DELLE ABILITÀ DENTRO LE DESCRIZIONI ──────────────────────────
+   * ─── NESSUNA STRINGA TRONCATA ────────────────────────────────────────────
    *
-   * `abilities_desc_on.defiant` diceva «Intimidazione attiva → Sfida», e
-   * `abilities_desc.contrary` «L'Intimidazione diventa +1 Attacco». Erano
-   * traduzioni LETTERALI dei nomi inglesi, scritte a mano dentro le frasi,
-   * mentre i nomi ufficiali italiani stavano già in `abilities.*`:
-   * Prepotenza, Agonismo, Inversione, Tenacia.
+   * `en.json` aveva **52** descrizioni di abilità tagliate al primo apostrofo:
+   * «Boosts the Pokémon\» e basta. Un problema di escape, non di traduzione —
+   * l'italiano era integro — e l'inglese è la lingua predefinita dell'app.
    *
-   * Tredici stringhe su due lingue. È la regola nata in M — se una stringa
-   * esiste già in `abilities`, l'interfaccia la legge da lì — applicata
-   * dentro le frasi con l'annidamento `$t(abilities.X)` di i18next.
-   *
-   * Questo test asserisce la PROPRIETÀ, non le tredici stringhe: una
-   * descrizione che nomina un'abilità deve nominarla come la nomina
-   * `abilities.*`. Chi riscrivesse «Sfida» a mano lo farebbe diventare rosso.
+   * Il testo intero esisteva in `data/abilityEffects.js`, che il componente usa
+   * come `defaultValue`. Ma una chiave PRESENTE vince sul valore di ripiego:
+   * la copia rotta faceva ombra all'originale sano. Due copie, e quella che
+   * l'utente leggeva era la sbagliata.
    */
-  it('le descrizioni nominano le abilità col nome ufficiale della lingua', () => {
-    const sbagliate = []
+  it('nessuna stringa finisce troncata', () => {
+    const tronche = []
     for (const [nome, dizionario] of [['en', inglese], ['it', italiano]]) {
+      for (const [chiave, valore] of Object.entries(foglie(dizionario))) {
+        if (typeof valore === 'string' && valore.endsWith('\\')) tronche.push(`${nome} ${chiave}`)
+      }
+    }
+    expect(tronche).toEqual([])
+  })
+
+  /**
+   * ─── I NOMI DELLE ABILITÀ SI LEGGONO DALLA FONTE ─────────────────────────
+   *
+   * Una descrizione che nomina un'abilità deve farlo con `$t(abilities.X)`,
+   * non riscrivendone il nome a mano.
+   *
+   * Segnalato da Simone una volta sola — «Multiscaglia» invece di
+   * «Multisquame» — contate **cinque** traduzioni inventate: Fuocosfera per
+   * Fuocardore, Nuotaveloce per Nuotovelox, Nevolocità per Spalaneve. E prima
+   * ancora: Intimidazione per Prepotenza, Sfida per Agonismo, Contrario per
+   * Inversione.
+   *
+   * La versione precedente di questo test copriva quattro abilità su 306,
+   * elencate a mano. Questa asserisce la proprietà su tutte: nessun nome
+   * ufficiale compare come testo letterale dentro una descrizione.
+   */
+  it('le descrizioni nominano le abilità solo tramite $t(abilities.X)', () => {
+    const aMano = []
+    for (const [nome, dizionario] of [['en', inglese], ['it', italiano]]) {
+      // Nomi lunghi almeno quattro lettere: sotto, il rischio di incrociare
+      // una parola comune supera l'informazione.
+      const nomi = Object.entries(dizionario.abilities).filter(([, v]) => typeof v === 'string' && v.length > 3)
       for (const sezione of ['abilities_desc', 'abilities_desc_on', 'abilities_desc_off']) {
         for (const [chiave, testo] of Object.entries(dizionario[sezione] || {})) {
-          // Le abilità che le descrizioni citano davvero per nome.
-          for (const citata of ['intimidate', 'defiant', 'contrary', 'competitive']) {
-            const ufficiale = dizionario.abilities[citata]
-            const inglese_ = inglese.abilities[citata]
-            // Cita il nome INGLESE dentro il testo italiano, oppure un nome che
-            // non è quello ufficiale: in entrambi i casi è una copia a mano.
-            const citaInglese = nome === 'it' && new RegExp(`\\b${inglese_}\\b`).test(testo)
-            const annidato = testo.includes(`$t(abilities.${citata})`)
-            if (citaInglese && !annidato) sbagliate.push(`${nome} ${sezione}.${chiave} nomina «${inglese_}» invece di «${ufficiale}»`)
+          for (const [abilita, ufficiale] of nomi) {
+            if (testo.includes(`$t(abilities.${abilita})`)) continue
+            const parola = new RegExp(`\\b${ufficiale.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`)
+            if (parola.test(testo)) aMano.push(`${nome} ${sezione}.${chiave} scrive «${ufficiale}» a mano`)
           }
         }
       }
     }
-    expect(sbagliate).toEqual([])
+    expect(aMano).toEqual([])
   })
 
   it('nessuna stringa italiana contiene una parola inglese rimasta a metà', () => {

@@ -16,8 +16,17 @@
 import pokemonData from '../data/pokemon.json'
 import formeSpriteData from '../data/formeSprite.json'
 
-/** Solo la mappa: i metadati della generazione non servono a runtime. */
+/** Solo le mappe: i metadati della generazione non servono a runtime. */
 const formeSprite = formeSpriteData.forme
+/** chiave → 'home' | 'zone' | 'nessuna'. Chi non è in tabella non ha forme. */
+const fonteSprite = formeSpriteData.fonte
+
+const HOME = 'https://resource.pokemon-home.com/battledata/img/pokei128/'
+const ZONE = 'https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/'
+
+const urlHome = (num, forma) => `${HOME}icon${num}_${forma}_s0.png`
+/** L'indice di pokemon-zone è LO STESSO di HOME: `f01` là, `_01_` qui. */
+const urlZone = (num, forma) => `${ZONE}ui_PokeIcon_02_${num}_${forma.slice(1)}_0.webp`
 
 /**
  * Risolve il numero Pokédex di uno slug, gestendo forme regionali e mega
@@ -57,8 +66,20 @@ export function resolveNum(key) {
  * forma, e in tre gruppi — Ogerpon, Tauros di Paldea, Pumpkaboo/Gourgeist —
  * l'ordine dei nostri dati non è quello di HOME.
  *
- * Chi non è in tabella ricade su `f00`, che è il comportamento di prima: sono
- * le 51 Megaevoluzioni inventate da Champions, per cui HOME non ha un'icona.
+ * ─── LA SECONDA FONTE, E PERCHÉ MEGA STARAPTOR MOSTRAVA STARAPTOR ─────────
+ *
+ * Fino alla sessione R il generatore sondava SOLO Pokémon HOME. Le forme che
+ * HOME non ha — le Megaevoluzioni inventate da Champions — venivano scartate
+ * dalla tabella, e qui `formeSprite[key] || 'f00'` trasformava «non lo so» in
+ * «è la forma base». Il risultato: `icon0398_f00_s0.png`, che risponde 200 e
+ * consegna Staraptor base. Il ripiego non scattava mai, perché il primo URL
+ * non falliva: falliva l'informazione, non la richiesta.
+ *
+ * Pokemon-zone quelle icone ce le ha, e all'indice di forma IDENTICO. Ora la
+ * tabella dice, per ogni posizione, QUALE server ce l'ha, e si chiede a
+ * quello. Dove non ce l'ha nessuno — 17 forme di Silvally, minior-core,
+ * terapagos-terastal — non si mostra icona: un buco è onesto, l'immagine di un
+ * altro Pokémon no.
  */
 export function spriteUrl(key) {
   if (!key) return null
@@ -66,17 +87,27 @@ export function spriteUrl(key) {
   if (!data) return null
   const num = resolveNum(key)
   if (!num) return null
-  const form = formeSprite[key] || 'f00'
-  return `https://resource.pokemon-home.com/battledata/img/pokei128/icon${num}_${form}_s0.png`
+  const forma = formeSprite[key] || 'f00'
+  const fonte = fonteSprite?.[key]
+  if (fonte === 'nessuna') return null
+  return fonte === 'zone' ? urlZone(num, forma) : urlHome(num, forma)
 }
 
 /**
- * URL fallback pokemon-zone, usato in onError quando HOME non risponde.
+ * L'altra fonte, usata in `onError` quando la prima non risponde.
+ *
+ * Prima era `_01_` FISSO, cioè sempre la PRIMA forma alternativa: per un
+ * Pokémon in forma base il ripiego chiedeva un'altra forma. Non si vedeva
+ * perché HOME quasi sempre risponde, ma era la stessa bugia in attesa.
  */
 export function fallbackSpriteUrl(key) {
   const num = resolveNum(key)
   if (!num) return null
-  return `https://assets.pokemon-zone.com/champions-assets/uicontents/scriptableobject/mdicon02/mdiconpersonal02/standard02/ui_PokeIcon_02_${num}_01_0.webp`
+  const forma = formeSprite[key] || 'f00'
+  const fonte = fonteSprite?.[key]
+  if (fonte === 'nessuna') return null
+  // Il ripiego è sempre l'ALTRA fonte rispetto a quella scelta da `spriteUrl`.
+  return fonte === 'zone' ? urlHome(num, forma) : urlZone(num, forma)
 }
 /**
  * URL icona strumento — usa l'index GF (num) da items.json.
