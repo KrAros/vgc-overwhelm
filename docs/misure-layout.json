@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "c3773f9",
+    "commit": "0231ac4",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -181,65 +181,13 @@
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
-        "quanti": 6,
-        "nodi": [
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 71,
-            "spazio": 4,
-            "testo": "Blank Set"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 70,
-            "spazio": 53,
-            "testo": "Sand Veil"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 168,
-            "spazio": 53,
-            "testo": "Adamant (+Atk, -SpA)"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 71,
-            "spazio": 25,
-            "testo": "Blank Set"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 102,
-            "spazio": 53,
-            "testo": "Good as Gold"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 168,
-            "spazio": 53,
-            "testo": "Adamant (+Atk, -SpA)"
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "wcag_258": {
-        "quanti": 2,
-        "sottodimensionati": 39,
-        "nodi": [
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          },
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          }
-        ]
+        "quanti": 0,
+        "sottodimensionati": 37,
+        "nodi": []
       },
       "piccoli_fuori_scope": {
         "quanti": 166,
@@ -390,65 +338,13 @@
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
-        "quanti": 6,
-        "nodi": [
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 71,
-            "spazio": 4,
-            "testo": "Blank Set"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 70,
-            "spazio": 53,
-            "testo": "Sand Veil"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 168,
-            "spazio": 53,
-            "testo": "Adamant (+Atk, -SpA)"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 71,
-            "spazio": 25,
-            "testo": "Blank Set"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 102,
-            "spazio": 53,
-            "testo": "Good as Gold"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 168,
-            "spazio": 53,
-            "testo": "Adamant (+Atk, -SpA)"
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "wcag_258": {
-        "quanti": 2,
-        "sottodimensionati": 39,
-        "nodi": [
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          },
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          }
-        ]
+        "quanti": 0,
+        "sottodimensionati": 37,
+        "nodi": []
       },
       "piccoli_fuori_scope": {
         "quanti": 168,
@@ -671,65 +567,13 @@
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
-        "quanti": 6,
-        "nodi": [
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 72,
-            "spazio": 23,
-            "testo": "Set vuoto"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 83,
-            "spazio": 53,
-            "testo": "Sabbiavelo"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 152,
-            "spazio": 53,
-            "testo": "Decisa (+Atk, -SpA)"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 72,
-            "spazio": 3,
-            "testo": "Set vuoto"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 96,
-            "spazio": 53,
-            "testo": "Corpo Aureo"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 152,
-            "spazio": 53,
-            "testo": "Decisa (+Atk, -SpA)"
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "wcag_258": {
-        "quanti": 2,
-        "sottodimensionati": 40,
-        "nodi": [
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          },
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          }
-        ]
+        "quanti": 0,
+        "sottodimensionati": 37,
+        "nodi": []
       },
       "piccoli_fuori_scope": {
         "quanti": 166,
@@ -880,65 +724,13 @@
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
-        "quanti": 6,
-        "nodi": [
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 72,
-            "spazio": 23,
-            "testo": "Set vuoto"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 83,
-            "spazio": 53,
-            "testo": "Sabbiavelo"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 152,
-            "spazio": 53,
-            "testo": "Decisa (+Atk, -SpA)"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
-            "serve": 72,
-            "spazio": 3,
-            "testo": "Set vuoto"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 96,
-            "spazio": 53,
-            "testo": "Corpo Aureo"
-          },
-          {
-            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
-            "serve": 152,
-            "spazio": 53,
-            "testo": "Decisa (+Atk, -SpA)"
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "wcag_258": {
-        "quanti": 2,
-        "sottodimensionati": 40,
-        "nodi": [
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          },
-          {
-            "nodo": "button.absolute right-2 text-gray-400 hover:text-white text-xs font",
-            "w": 10,
-            "h": 16,
-            "confligge": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "distanza": 0
-          }
-        ]
+        "quanti": 0,
+        "sottodimensionati": 37,
+        "nodi": []
       },
       "piccoli_fuori_scope": {
         "quanti": 168,

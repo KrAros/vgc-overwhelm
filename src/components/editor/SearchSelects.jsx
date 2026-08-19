@@ -86,7 +86,12 @@ export function PokemonSearch({ value, onChange }) {
         <button
           type="button"
           onMouseDown={handleClear}
-          className="absolute right-2 text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
+          /* 24×24 è il minimo di WCAG 2.5.8: il bersaglio misurava 10×16 e
+             stava a distanza ZERO dal campo di testo, quindi col pollice si
+             centrava l'uno per l'altro. Il glifo resta della stessa dimensione
+             — cresce solo l'area toccabile. `top-1/2 -translate-y-1/2` allinea
+             questa copia all'altra (riga ~237), che già lo faceva. */
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
         >
           ✕
         </button>
@@ -234,7 +239,8 @@ export function ItemSearch({ value, onChange }) {
         <button
           type="button"
           onMouseDown={handleClear}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
+          /* Stessa correzione della copia sopra: 24×24, minimo di WCAG 2.5.8. */
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
         >
           ✕
         </button>
