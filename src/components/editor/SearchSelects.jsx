@@ -7,7 +7,7 @@ import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
-import { ABILITA_ATE } from '../../lib/rules.js'
+import { ABILITA_ATE, TIPO_PALLA_CLIMA, normalizzaMeteo } from '../../lib/rules.js'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n.js'
 
@@ -130,17 +130,15 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
 
   const moveDetails = movesData[value]
 
-  // Weather Ball: tipo e BP cambiano col meteo
-  const WEATHER_BALL_TYPES = {
-    rain: 2, 'heavy rain': 2,
-    sun: 1,  'harsh sunshine': 1,
-    sand: 12, sandstorm: 12,
-    snow: 5,  hail: 5,
-  }
+  // Palla Clima: tipo e BP cambiano col meteo. La tabella sta in
+  // `lib/rules.js` dalla sessione Q — qui ce n'era una copia con due chiavi in
+  // più, `sandstorm` e `hail`, che erano una normalizzazione riscritta a mano
+  // dentro il componente. Ora la fa `normalizzaMeteo`, che è la stessa
+  // funzione da cui passa il motore, e che gestisce anche il maiuscolo.
   const isWeatherBall = value === 'weather ball'
-  const wbWeatherKey = weather ? weather.toLowerCase() : null
-  const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
-    ? WEATHER_BALL_TYPES[wbWeatherKey]
+  const meteoCanonico = normalizzaMeteo(weather)
+  const wbTypeIdx = isWeatherBall && meteoCanonico
+    ? TIPO_PALLA_CLIMA[meteoCanonico] ?? null
     : null
   // Abilità «-ate»: la tabella sta in `data/typeChart.js` dalla sessione Q.
   // Qui c'era una copia scritta con gli indici numerici, mentre il motore usava

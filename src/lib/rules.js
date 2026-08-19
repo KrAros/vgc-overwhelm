@@ -74,6 +74,35 @@ import { TYPES } from '../data/typeChart.js'
  *
  * Le chiavi sono normalizzate col trattino, come `normalizeAbilityKey`.
  */
+/**
+ * Il tipo che Palla Clima assume sotto ogni meteo.
+ *
+ * ─── ANCHE QUESTA ERA IN DUE COPIE, E NON COINCIDEVANO ────────────────────
+ *
+ * `calcEngine.js` la scriveva con le costanti TYPES.* e sei chiavi;
+ * `SearchSelects.jsx`, per il badge del tipo mossa, con gli indici numerici e
+ * OTTO — le stesse sei più `sandstorm` e `hail`.
+ *
+ * Le due chiavi in più non erano un difetto vivo: `normalizzaMeteo` traduce
+ * `sandstorm → sand` e `hail → snow` in ingresso, e il motore normalizza prima
+ * di leggere la tabella (`calcEngine.js:141`). Erano una terza espressione
+ * della stessa normalizzazione, scritta a mano dentro un componente.
+ *
+ * Non un bug, ma il modo in cui i bug nascono: due tabelle che oggi dicono la
+ * stessa cosa con chiavi diverse, e nessuno che garantisca che continuino.
+ *
+ * Le chiavi sono i meteo CANONICI. Chi legge da uno stato non normalizzato
+ * deve passare da `normalizzaMeteo` prima, come fa il motore.
+ */
+export const TIPO_PALLA_CLIMA = Object.freeze({
+  rain:             TYPES.WATER,
+  'heavy rain':     TYPES.WATER,
+  sun:              TYPES.FIRE,
+  'harsh sunshine': TYPES.FIRE,
+  sand:             TYPES.ROCK,
+  snow:             TYPES.ICE,
+})
+
 export const ABILITA_ATE = Object.freeze({
   'pixilate':    TYPES.FAIRY,
   'aerilate':    TYPES.FLYING,

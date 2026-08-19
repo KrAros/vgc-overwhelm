@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-19T12:36:10.099Z",
+    "generatedAt": "2026-08-19T12:45:02.110Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -22,7 +22,7 @@
       "nota": "tabella ABILITA_ATE in lib/rules.js, applicata dal motore — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP",
       "prova": {
         "file": "src/lib/rules.js",
-        "riga": 78,
+        "riga": 107,
         "testo": "'pixilate':    TYPES.FAIRY,"
       }
     },
@@ -33,7 +33,7 @@
       "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Volante e ×1,2",
       "prova": {
         "file": "src/lib/rules.js",
-        "riga": 79,
+        "riga": 108,
         "testo": "'aerilate':    TYPES.FLYING,"
       }
     },
@@ -44,7 +44,7 @@
       "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Ghiaccio e ×1,2",
       "prova": {
         "file": "src/lib/rules.js",
-        "riga": 80,
+        "riga": 109,
         "testo": "'refrigerate': TYPES.ICE,"
       }
     },
@@ -55,7 +55,7 @@
       "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Drago e ×1,2",
       "prova": {
         "file": "src/lib/rules.js",
-        "riga": 81,
+        "riga": 110,
         "testo": "'dragonize':   TYPES.DRAGON,"
       }
     },
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 334,
+        "riga": 329,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -121,7 +121,7 @@
         "chiave": "aerilate",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 79,
+          "riga": 108,
           "testo": "'aerilate':    TYPES.FLYING,"
         }
       },
@@ -137,7 +137,7 @@
         "chiave": "dragonize",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 81,
+          "riga": 110,
           "testo": "'dragonize':   TYPES.DRAGON,"
         }
       },
@@ -145,7 +145,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 234,
+          "riga": 229,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -153,7 +153,7 @@
         "chiave": "levitate",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 84,
+          "riga": 85,
           "testo": "if (ability === 'levitate') return false"
         }
       },
@@ -161,7 +161,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 334,
+          "riga": 329,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -185,7 +185,7 @@
         "chiave": "pixilate",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 78,
+          "riga": 107,
           "testo": "'pixilate':    TYPES.FAIRY,"
         }
       },
@@ -201,7 +201,7 @@
         "chiave": "refrigerate",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 80,
+          "riga": 109,
           "testo": "'refrigerate': TYPES.ICE,"
         }
       },
