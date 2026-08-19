@@ -68,6 +68,23 @@ function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = t
   }
 }
 
+// ── Freccia «attacca» ─────────────────────────────────────────────────────────
+
+/**
+ * Una sola definizione per le due viste del pannello, singola e doppia.
+ *
+ * Serviva in due punti e il disegno è identico: copiarlo avrebbe creato la
+ * seconda copia che questo progetto passa le sessioni a togliere. Cambia solo
+ * l'orientamento, che è una classe passata da fuori.
+ */
+function FrecciaAttacco({ className = '' }) {
+  return (
+    <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className={className} aria-hidden="true">
+      <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
 // ── Type badge ────────────────────────────────────────────────────────────────
 
 function TypeBadge({ typeIdx }) {
@@ -364,9 +381,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               riquadro di layout: senza, la freccia verticale sborderebbe dal
               proprio spazio alto 9 px e finirebbe sopra i nomi. */}
           <div className="flex items-center justify-center px-2 lg:px-6 shrink-0 h-10 lg:h-auto">
-            <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className="w-10 lg:w-16 rotate-90 lg:rotate-0">
-              <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <FrecciaAttacco className="w-10 lg:w-16 rotate-90 lg:rotate-0" />
           </div>
 
           {/* Difensore */}
@@ -834,17 +849,26 @@ function CumulativePanel({ entries }) {
       {/* Card principale: due attaccanti affiancati → difensore */}
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
 
-        {/* Header: [atk1] + [atk2] → [def] */}
-        <div className="flex flex-col lg:flex-row lg:items-center px-5 py-4 gap-4 border-b border-gray-700/20">
+        {/* Header: [atk1] + [atk2] → [def]
+
+            Su telefono diventa una colonna centrata che si legge come
+            l'equazione che è: attaccante 1, «+», attaccante 2, freccia in
+            basso, difensore. La disposizione orizzontale non è un ripiego da
+            schermo largo — è la stessa relazione, e in verticale resta
+            leggibile perché il «+» e la freccia dicono due cose diverse: il
+            primo unisce due pari, la seconda indica un bersaglio.
+
+            Sopra i 1024 px non cambia niente. */}
+        <div className="flex flex-col items-center lg:items-center lg:flex-row px-5 py-4 gap-4 border-b border-gray-700/20">
 
           {/* Attaccanti */}
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex flex-col items-center gap-4 lg:flex-row lg:flex-wrap">
             {[entry1, entry2].map((entry, idx) => {
               const atkTypes = pokemonData[entry.atk.key]?.type || []
               const borderColor = TYPE_HEX[TYPE_NAMES[atkTypes[0]]] || '#4b5563'
               const accentCls = idx === 0 ? 'text-teal-300' : 'text-violet-300'
               return (
-                <div key={idx} className="flex items-center gap-3 shrink-0">
+                <div key={idx} className="flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-3 shrink-0">
                   <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                     style={{ borderColor }}>
                     <img src={spriteUrl(entry.atk.key)} alt={entry.atk.key}
@@ -862,8 +886,14 @@ function CumulativePanel({ entries }) {
                       {atkTypes.map(t => <TypeBadge key={t} typeIdx={t} />)}
                     </div>
                   </div>
+                  {/* Il «+» esisteva già, ma stava DENTRO la riga del primo
+                      attaccante: su telefono finiva a destra del nome, dove
+                      non univa niente. `w-full` dentro un contenitore
+                      `flex-wrap` lo manda su una riga propria, centrata fra i
+                      due attaccanti; `lg:w-auto` lo rimette in linea sopra i
+                      1024 px. */}
                   {idx === 0 && (
-                    <div className="flex items-center px-3 shrink-0 text-gray-500 text-xl font-light">+</div>
+                    <div className="w-full lg:w-auto flex items-center justify-center px-3 shrink-0 text-gray-500 text-3xl lg:text-xl font-light leading-none">+</div>
                   )}
                 </div>
               )
@@ -874,12 +904,20 @@ function CumulativePanel({ entries }) {
           {/* Separatore */}
           <div className="hidden lg:block w-px bg-gray-700/30 mx-4 self-stretch" />
 
+          {/* Freccia verso il difensore. In questa vista non esisteva: c'era
+              solo il separatore verticale qui sopra, che su telefono è
+              nascosto. Senza, i tre Pokémon incolonnati non dicevano più chi
+              attacca chi. */}
+          <div className="lg:hidden flex items-center justify-center h-10 shrink-0">
+            <FrecciaAttacco className="w-10 rotate-90" />
+          </div>
+
           {/* Difensore */}
           {(() => {
             const defTypes = pokemonData[def.key]?.type || []
             const borderColor = TYPE_HEX[TYPE_NAMES[defTypes[0]]] || '#4b5563'
             return (
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
                 <div className="w-18 h-18 lg:w-20 lg:h-20 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden"
                   style={{ borderColor }}>
                   <img src={spriteUrl(def.key)} alt={def.key}
@@ -904,7 +942,7 @@ function CumulativePanel({ entries }) {
 
           {/* Badge danno cumulativo */}
           {cumulative && (
-            <div className="shrink-0 text-right ml-auto">
+            <div className="shrink-0 w-full text-center lg:w-auto lg:text-right lg:ml-auto">
               <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
               <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
