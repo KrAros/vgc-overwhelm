@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "e097c49",
+    "commit": "99d029b",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -91,79 +91,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 10,
-        "nodi": [
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 95,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 94,
-            "visibile": 52,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 80,
-            "visibile": 25,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 46,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 89,
-            "visibile": 32,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 98,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 85,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 77,
-            "visibile": 46,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 65,
-            "visibile": 57,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 86,
-            "visibile": 28,
-            "ellissi": false,
-            "testo": ""
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
@@ -234,79 +163,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 10,
-        "nodi": [
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 95,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 94,
-            "visibile": 52,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 80,
-            "visibile": 25,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 46,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 89,
-            "visibile": 32,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 98,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 85,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 77,
-            "visibile": 46,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 65,
-            "visibile": 57,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 86,
-            "visibile": 28,
-            "ellissi": false,
-            "testo": ""
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
@@ -449,79 +307,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 10,
-        "nodi": [
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 95,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 95,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 34,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 48,
-            "visibile": 36,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 98,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 84,
-            "visibile": 30,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 79,
-            "visibile": 50,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 84,
-            "visibile": 26,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 60,
-            "visibile": 31,
-            "ellissi": false,
-            "testo": ""
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {
@@ -592,79 +379,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 10,
-        "nodi": [
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 95,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 95,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 34,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 48,
-            "visibile": 36,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 75,
-            "visibile": 39,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1",
-            "scroll": 98,
-            "visibile": 76,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 84,
-            "visibile": 30,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 79,
-            "visibile": 50,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 84,
-            "visibile": 26,
-            "ellissi": false,
-            "testo": ""
-          },
-          {
-            "nodo": "input.w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none ca",
-            "scroll": 60,
-            "visibile": 31,
-            "ellissi": false,
-            "testo": ""
-          }
-        ]
+        "quanti": 0,
+        "nodi": []
       },
       "scorrimento_pagina_px": 0,
       "tendine_strette": {

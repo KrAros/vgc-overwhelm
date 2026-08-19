@@ -240,7 +240,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               «Set v» delle foto. La ricerca prende un terzo e i badge dei tipi
               non si comprimono: quello che restava era tutto per la tendina. */}
           <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center">
-            <div className={pokemon?.key ? "w-1/3 shrink-0" : "flex-1"}>
+            {/* Su telefono metà riga invece di un terzo: a 360 px un terzo vale
+                78 px e «flutter-mane» ne chiede 98 — è il «Charizard·» delle
+                foto. Lo spazio c'è perché in P-2/5 la tendina del set è andata
+                a capo, lasciando la prima riga alla ricerca e ai badge. */}
+            <div className={pokemon?.key ? "w-1/2 sm:w-1/3 shrink-0" : "flex-1"}>
               <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
             </div>
             {pokemon?.key && (
@@ -358,7 +362,16 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 mt-2">
+          {/* Una colonna su telefono. Misurato: con due colonne ogni cella è
+              larga 152 px, ma gli altri elementi (badge del tipo, potenza) ne
+              consumano circa 126 e al campo di testo restano 26-50 px — cioè
+              «Lanciafia» delle foto. A colonna singola la cella vale 310 px e
+              il campo ne prende ~184, che basta a «Lanciafiamme» (95 px).
+
+              Costa altezza: quattro righe invece di due. È lo stesso scambio
+              accettato per StatRow e per le celle della matrice — non
+              nascondere l'informazione si paga in verticale. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-2">
             {[0,1,2,3].map(mi => (
               <MoveSearch
                 key={mi}
