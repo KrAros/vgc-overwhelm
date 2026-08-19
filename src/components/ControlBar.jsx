@@ -557,17 +557,23 @@ export default function ControlBar() {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 1</span>
+              {/* aria-label sui bottoni icona di questo ramo `sm:hidden`.
+                  Il gemello desktop (righe ~518-549) rende le stesse azioni
+                  con <IconImport /><span>{t('ui.import')}</span>: lì il testo
+                  è già il nome accessibile, qui l'icona è sola. Si leggono le
+                  STESSE chiavi — la copia mobile non deve dire cose diverse
+                  dalla copia desktop, e non deve avere stringhe proprie. */}
               <div className="flex gap-1">
-                <button type="button"
+                <button type="button" aria-label={t('ui.import')}
                   onClick={() => openImport('import1')}
                   className={`${mode === 'import1' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-3 py-2.5 rounded border`}>
                   <IconImport />
                 </button>
-                <button type="button" onClick={() => handleExport('team1')}
+                <button type="button" aria-label={t('ui.export')} onClick={() => handleExport('team1')}
                   className="text-[10px] px-3 py-2.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
                   <IconExport />
                 </button>
-                <button type="button" onClick={() => handleReset('team1')}
+                <button type="button" aria-label={t('ui.clear')} onClick={() => handleReset('team1')}
                   className="text-[10px] px-3 py-2.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
                   <IconReset />
                 </button>
@@ -588,16 +594,16 @@ export default function ControlBar() {
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 2</span>
               <div className="flex gap-1">
-                <button type="button"
+                <button type="button" aria-label={t('ui.import')}
                   onClick={() => openImport('import2')}
                   className={`${mode === 'import2' ? 'text-teal-300 border-teal-600 bg-teal-900/40' : 'text-gray-400 border-gray-600 bg-gray-700/40'} text-[10px] px-3 py-2.5 rounded border`}>
                   <IconImport />
                 </button>
-                <button type="button" onClick={() => handleExport('team2')}
+                <button type="button" aria-label={t('ui.export')} onClick={() => handleExport('team2')}
                   className="text-[10px] px-3 py-2.5 rounded border text-gray-400 border-gray-600 bg-gray-700/40">
                   <IconExport />
                 </button>
-                <button type="button" onClick={() => handleReset('team2')}
+                <button type="button" aria-label={t('ui.clear')} onClick={() => handleReset('team2')}
                   className="text-[10px] px-3 py-2.5 rounded border text-red-400 border-red-900/40 bg-red-950/20">
                   <IconReset />
                 </button>
@@ -619,7 +625,7 @@ export default function ControlBar() {
               activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
             <div className="flex items-center gap-2">
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
-              <button type="button" onClick={() => setShowLibrary(true)}
+              <button type="button" aria-label={t('ui.team_library')} onClick={() => setShowLibrary(true)}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-amber-300 border-amber-700/40">
                 <IconLibrary />
               </button>

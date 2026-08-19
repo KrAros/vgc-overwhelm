@@ -72,6 +72,19 @@ const RADICE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SCRIVI = !process.argv.includes('--report')
 const RIPETIZIONI = Number(process.argv.find((a) => a.startsWith('--run='))?.slice(6) ?? 5)
 
+/** `--solo=locale` e `--profilo=mobile` restringono la misura, per il ciclo
+ *  di lavoro: 13 secondi invece di cinque minuti.
+ *
+ *  Una selezione parziale FORZA la modalità report. Scrivere il registro con
+ *  metà delle combinazioni produrrebbe un file che sembra completo e non lo è
+ *  — cioè la classe di difetto che questo progetto insegue da tredici
+ *  sessioni: una fonte che dice più di quello che sa. */
+const SOLO = process.argv.find((a) => a.startsWith('--solo='))?.slice(7)
+const PROFILO = process.argv.find((a) => a.startsWith('--profilo='))?.slice(10)
+const PARZIALE = Boolean(SOLO || PROFILO)
+const BERSAGLI = SOLO ? [SOLO] : ['deploy', 'locale']
+const PROFILI = PROFILO ? [PROFILO] : ['mobile', 'desktop']
+
 const DEPLOY = 'https://kraros.github.io/vgc-overwhelm/'
 const PORTA = 4173
 const LOCALE = `http://localhost:${PORTA}/vgc-overwhelm/`
@@ -119,10 +132,27 @@ function unRun(url, profilo) {
   const metriche = {}
   for (const k of METRICHE) metriche[k] = +r.audits[k].numericValue.toFixed(3)
 
+  /** Non basta il punteggio: senza sapere QUALI audit falliscono, un «84 → 92»
+   *  non si attribuisce a niente. Si registrano id, peso e numero di nodi —
+   *  il peso perché è quello che muove il punteggio, i nodi perché sono il
+   *  lavoro da fare. */
+  const falliti = {}
+  for (const [cat, v] of Object.entries(r.categories)) {
+    const lista = []
+    for (const ref of v.auditRefs) {
+      const a = r.audits[ref.id]
+      if (a && a.score !== null && a.score < 1) {
+        lista.push({ audit: a.id, peso: ref.weight, nodi: (a.details?.items ?? []).length })
+      }
+    }
+    if (lista.length) falliti[cat] = lista.sort((x, y) => y.peso - x.peso || x.audit.localeCompare(y.audit))
+  }
+
   const rete = r.audits['network-requests']?.details?.items ?? []
   return {
     categorie,
     metriche,
+    falliti,
     trasferito_kB: +(rete.reduce((s, i) => s + (i.transferSize || 0), 0) / 1024).toFixed(1),
     richieste: rete.length,
     versione: r.lighthouseVersion,
@@ -139,12 +169,28 @@ function misura(url, profilo) {
     process.stderr.write(`    run ${i + 1}/${RIPETIZIONI}  performance ${run[i].categorie.performance}\n`)
   }
   const su = (f) => Object.fromEntries(Object.keys(f(run[0])).map((k) => [k, riassumi(run.map((r) => f(r)[k]))]))
+
+  /** Gli audit falliti dovrebbero essere identici a ogni run — ma NON tutti:
+   *  quelli di `performance` dipendono da soglie sui millisecondi, quindi
+   *  entrano ed escono da soli. Quelli di `accessibility` no: leggono il DOM.
+   *
+   *  Un flag globale «qualcosa è cambiato» qui sarebbe inutilizzabile — direbbe
+   *  sempre instabile per colpa di Performance, e coprirebbe proprio la
+   *  categoria che si vuole usare come oracolo. Si misura PER CATEGORIA. */
+  const stabile = {}
+  for (const cat of new Set(run.flatMap((r) => Object.keys(r.falliti)))) {
+    const impronta = (r) => JSON.stringify(r.falliti[cat] ?? [])
+    stabile[cat] = run.every((r) => impronta(r) === impronta(run[0]))
+  }
+
   return {
     profilo,
     url,
     ripetizioni: RIPETIZIONI,
     categorie: su((r) => r.categorie),
     metriche: su((r) => r.metriche),
+    falliti: run[0].falliti,
+    falliti_stabili: stabile,   // per categoria: vedi il commento in `misura`
     trasferito_kB: run[0].trasferito_kB,
     richieste: run[0].richieste,
   }
@@ -176,24 +222,40 @@ async function conAnteprima(fn) {
 }
 
 const misure = []
-console.error('Deploy pubblico:')
-for (const profilo of ['mobile', 'desktop']) misure.push({ bersaglio: 'deploy', ...misura(DEPLOY, profilo) })
-console.error('Anteprima locale:')
-await conAnteprima(async () => {
-  for (const profilo of ['mobile', 'desktop']) misure.push({ bersaglio: 'locale', ...misura(LOCALE, profilo) })
-})
-
-/** Il controllo dichiarato: mobile e desktop sul deploy devono DIVERGERE. */
-const m = misure.find((x) => x.bersaglio === 'deploy' && x.profilo === 'mobile')
-const d = misure.find((x) => x.bersaglio === 'deploy' && x.profilo === 'desktop')
-const rapporto = m.metriche['largest-contentful-paint'].mediana / d.metriche['largest-contentful-paint'].mediana
-const controllo = {
-  descrizione: 'LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling',
-  lcp_mobile_ms: m.metriche['largest-contentful-paint'].mediana,
-  lcp_desktop_ms: d.metriche['largest-contentful-paint'].mediana,
-  rapporto: +rapporto.toFixed(2),
-  esito: rapporto > 1.5 ? 'si muove' : 'CIECO — misura da buttare',
+if (BERSAGLI.includes('deploy')) {
+  console.error('Deploy pubblico:')
+  for (const profilo of PROFILI) misure.push({ bersaglio: 'deploy', ...misura(DEPLOY, profilo) })
 }
+if (BERSAGLI.includes('locale')) {
+  console.error('Anteprima locale:')
+  await conAnteprima(async () => {
+    for (const profilo of PROFILI) misure.push({ bersaglio: 'locale', ...misura(LOCALE, profilo) })
+  })
+}
+
+/** Il controllo dichiarato: mobile e desktop sullo STESSO bersaglio devono
+ *  divergere. Con una selezione parziale può mancare uno dei due profili: in
+ *  quel caso si dichiara «non calcolabile», non si finge che sia passato.
+ *  Un controllo che si auto-assolve quando non può girare è peggio di nessun
+ *  controllo. */
+function calcolaControllo() {
+  for (const b of ['deploy', 'locale']) {
+    const m = misure.find((x) => x.bersaglio === b && x.profilo === 'mobile')
+    const d = misure.find((x) => x.bersaglio === b && x.profilo === 'desktop')
+    if (!m || !d) continue
+    const rapporto = m.metriche['largest-contentful-paint'].mediana / d.metriche['largest-contentful-paint'].mediana
+    return {
+      descrizione: 'LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling',
+      bersaglio: b,
+      lcp_mobile_ms: m.metriche['largest-contentful-paint'].mediana,
+      lcp_desktop_ms: d.metriche['largest-contentful-paint'].mediana,
+      rapporto: +rapporto.toFixed(2),
+      esito: rapporto > 1.5 ? 'si muove' : 'CIECO — misura da buttare',
+    }
+  }
+  return { descrizione: 'serve la coppia mobile+desktop sullo stesso bersaglio', esito: 'non calcolabile (selezione parziale)' }
+}
+const controllo = calcolaControllo()
 
 const uscita = {
   condizioni: {
@@ -216,10 +278,17 @@ for (const x of misure) {
   for (const [k, v] of Object.entries(x.metriche))
     console.log(`   ${k.padEnd(28)} ${String(v.mediana).padStart(8)}   (${v.min}–${v.max})`)
   console.log(`   ${'trasferito'.padEnd(18)} ${x.trasferito_kB} kB in ${x.richieste} richieste`)
+  for (const [cat, lista] of Object.entries(x.falliti)) {
+    const nota = x.falliti_stabili[cat] ? '' : '   !! CAMBIA fra run'
+    console.log(`   ── audit falliti · ${cat}${nota}`)
+    for (const a of lista) console.log(`      peso ${String(a.peso).padStart(2)} · ${String(a.nodi).padStart(2)} nodi · ${a.audit}`)
+  }
 }
-console.log(`\ncontrollo: LCP mobile/desktop = ${controllo.rapporto}× → ${controllo.esito}`)
+console.log(`\ncontrollo: ${controllo.rapporto ? `LCP mobile/desktop = ${controllo.rapporto}× → ` : ''}${controllo.esito}`)
 
-if (SCRIVI) {
+if (SCRIVI && PARZIALE) {
+  console.log('\n(selezione parziale: registro NON scritto — sarebbe incompleto e non lo direbbe)')
+} else if (SCRIVI) {
   const dest = path.join(RADICE, 'docs/misure-lighthouse.json')
   fs.writeFileSync(dest, JSON.stringify(uscita, null, 2) + '\n')
   console.log(`\nscritto ${path.relative(RADICE, dest)}`)
