@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "99d029b",
+    "commit": "282141e",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -150,7 +150,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1377
+      "nodi_totali": 1381
     },
     {
       "scenario": "rapporto",
@@ -222,7 +222,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1516
+      "nodi_totali": 1520
     },
     {
       "scenario": "vuoto",
@@ -366,7 +366,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1377
+      "nodi_totali": 1381
     },
     {
       "scenario": "rapporto",
@@ -438,7 +438,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1516
+      "nodi_totali": 1520
     }
   ]
 }

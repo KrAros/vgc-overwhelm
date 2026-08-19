@@ -28,10 +28,18 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
   const hasBoost = statIdx !== 0
 
   return (
-    /* `flex-wrap` solo sotto `sm`: su telefono il gruppo dello stadio va a capo
-       (vedi in fondo). Sopra i 640 px `sm:flex-nowrap` tiene tutto in riga,
-       come è sempre stato — il desktop non cambia di un pixel. */
-    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 mb-1">
+    /* Tutto su UNA riga, anche su telefono.
+
+       In P-2/2 avevo mandato a capo lo stadio per dare al cursore 142 px invece
+       di 46. Simone ha guardato il risultato sul telefono e la scelta era
+       sbagliata: lo stadio finiva sotto, allineato a destra, e non si capiva
+       più a quale statistica appartenesse. Un controllo largo di cui non sai
+       cosa comanda vale meno di un controllo stretto che si capisce.
+
+       Lo spazio si recupera da `gap-1` invece di `gap-2` — sei spazi, 24 px —
+       e dal badge della natura, che su telefono mostra solo la freccia. Il
+       desktop resta identico: `sm:gap-2` e il testo completo. */
+    <div className="flex items-center gap-1 sm:gap-2 mb-1">
       <span className="text-xs text-gray-500 w-8 text-center">{STAT_NAMES[statIdx]}</span>
       <span className="text-xs text-gray-400 w-7 text-center">{base}</span>
       {/* `min-w-0` non è cosmesi: senza, la riga sborda di 62 px a 360 px.
@@ -46,8 +54,12 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
         className="flex-1 min-w-0 h-1 accent-teal-400"
       />
       {(isBoost || isDrop) && (
-        <span className={`text-[10px] font-bold shrink-0 ml-1 ${isBoost ? 'text-red-400' : 'text-blue-400'}`}>
-          {isBoost ? '▲ +10%' : '▼ -10%'}
+        /* Su telefono solo la freccia: «+10%» e «-10%» sono gli unici due
+           valori possibili, quindi la freccia da sola dice già tutto e libera
+           una quarantina di pixel per il cursore. Il desktop mostra il testo
+           intero. */
+        <span className={`text-[10px] font-bold shrink-0 sm:ml-1 ${isBoost ? 'text-red-400' : 'text-blue-400'}`}>
+          {isBoost ? '▲' : '▼'}<span className="hidden sm:inline">{isBoost ? ' +10%' : ' -10%'}</span>
         </span>
       )}
       <input
@@ -58,20 +70,16 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
       <span className={`text-xs font-medium w-8 text-center ${statColor}`}>
         {finalStat}
       </span>
-      {/* Lo stadio (-6…+6) e il valore che ne risulta.
+      {/* Lo stadio (-6…+6) e il valore che ne risulta, sulla STESSA riga della
+          statistica a cui appartengono.
 
-          Su telefono vanno A CAPO: `w-full` dentro un contenitore `flex-wrap`
-          non entra accanto agli altri e passa alla riga sotto. Da `sm` in su
-          `sm:w-auto` li rimette in linea, e il desktop resta identico.
-
-          Perché: a 360 px la riga ha 310 px utili e i sei figli a larghezza
-          fissa ne mangiano 272, lasciando 46 px al cursore per un intervallo
-          di 253 valori. Mandando a capo questi due si liberano 96 px e il
-          cursore arriva a ~142. `min-w-0` sul cursore serve comunque, ma da
-          solo trasformava uno sbordamento in un cursore inutilizzabile —
-          cioè metteva a posto la misura peggiorando l'uso. */}
+          In P-2/2 li avevo mandati a capo su telefono per allargare il cursore.
+          Guardato sul telefono, non funzionava: finivano su una riga propria
+          allineata a destra, e non si capiva più a quale statistica si
+          riferissero. Un controllo largo di cui non sai cosa comanda vale meno
+          di un controllo stretto che si capisce. Correzione rifatta. */}
       {hasBoost ? (
-        <div className="w-full sm:w-auto flex items-center justify-end gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <select
             value={boostVal}
             onChange={e => onBoostChange(parseInt(e.target.value))}
@@ -86,10 +94,12 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
           </span>
         </div>
       ) : (
-        /* Segnaposto: servono solo ad allineare le colonne sul desktop, quindi
-           su telefono non devono esistere — altrimenti occuperebbero una riga
-           vuota tutta loro. */
-        <div className="hidden sm:flex items-center gap-2" aria-hidden="true">
+        /* Segnaposto per la riga HP, che non ha stadio. Servono su ENTRAMBI i
+           formati: ora che tutto sta su una riga sola, senza di questi il
+           cursore degli HP sarebbe più lungo di quello delle altre statistiche
+           e le colonne non si allineerebbero più — cioè si ricreerebbe, in
+           altra forma, il problema di leggibilità appena corretto. */
+        <div className="flex items-center gap-1 sm:gap-2" aria-hidden="true">
           <div className="w-12" />
           <div className="w-8" />
         </div>
