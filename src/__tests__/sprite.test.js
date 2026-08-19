@@ -60,18 +60,22 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
     expect(collisioni, 'specie in tabella che condividono un file').toEqual([])
   })
 
-  it('chi resta senza icona propria: solo le Mega di Champions e Silvally', () => {
-    // Il limite dichiarato, contato invece che stimato. Due famiglie sole:
+  it('ogni forma dentro un gruppo è in tabella, senza eccezioni', () => {
+    // ─── COS'È CAMBIATO IN R, E PERCHÉ ────────────────────────────────────
     //
-    //   -mega     Megaevoluzioni inventate da Champions, che Pokémon HOME non
-    //             ha mai avuto. 51 posizioni provate e assenti.
-    //   silvally  HOME tiene una sola icona per tutte e diciotto le forme-tipo,
-    //             e in effetti sono identiche: il colore cambia solo il disco.
+    // La sessione L scriveva qui: «le Mega di Champions HOME non le ha mai
+    // avute, 51 posizioni provate e assenti», e le lasciava fuori dalla
+    // tabella — dove `sprite.js` ricadeva su `f00`, cioè sull'icona della
+    // forma base.
     //
-    // Se un giorno questa lista crescesse, vorrebbe dire che una famiglia è
-    // uscita dalla tabella e ha ricominciato a mostrare l'icona della base.
-    // Solo dentro i gruppi con più forme: una specie che di forme non ne ha
-    // non è in tabella per costruzione, e `f00` è la risposta giusta.
+    // Era vero e misurato, ma su UNA SOLA fonte. Il generatore sondava solo
+    // Pokémon HOME, mentre `sprite.js` usa pokemon-zone come ripiego: quel
+    // server le Mega di Champions ce le ha, all'indice di forma identico.
+    //
+    // Ora ogni posizione entra in tabella con la fonte che ce l'ha — `home`,
+    // `zone`, o `nessuna` — e questo elenco è VUOTO per costruzione. Il
+    // limite non è più «chi manca», è «chi manca ovunque», ed è nel test
+    // qui sotto.
     const perNumero = new Map()
     for (const k of Object.keys(pokemonData)) {
       const n = resolveNum(k)
@@ -86,10 +90,42 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
 
     // Elencate per nome invece che per espressione: un elenco che cresce si
     // vede, un'espressione che si allarga no.
-    expect(scoperti, 'oltre a Mega e Silvally, HOME non ha queste forme').toEqual([
-      'minior-core',        // sette varianti di colore, HOME ne tiene una sola
-      'terapagos-terastal', // forma di sola battaglia
+    expect(scoperti, 'ogni forma di un gruppo deve avere una voce').toEqual([])
+  })
+
+  it('chi non ha icona su NESSUNA delle due fonti, contato per nome', () => {
+    // Il limite vero, dopo R. Diciannove posizioni, tre famiglie:
+    //
+    //   silvally  HOME tiene una sola icona per tutte e diciotto le forme-tipo,
+    //             e in effetti sono identiche: cambia solo il colore del disco.
+    //   minior-core        sette varianti di colore, una sola icona
+    //   terapagos-terastal forma di sola battaglia
+    //
+    // Per queste `spriteUrl` restituisce `null` e non si mostra icona. Un buco
+    // è onesto; l'immagine di un altro Pokémon no — ed era quello che
+    // succedeva prima, con `|| 'f00'`.
+    const senzaIcona = Object.entries(formeSprite.fonte)
+      .filter(([, f]) => f === 'nessuna')
+      .map(([k]) => k)
+      .sort()
+    expect(senzaIcona).toEqual([
+      'minior-core',
+      'silvally-bug', 'silvally-dark', 'silvally-dragon', 'silvally-electric',
+      'silvally-fairy', 'silvally-fighting', 'silvally-fire', 'silvally-flying',
+      'silvally-ghost', 'silvally-grass', 'silvally-ground', 'silvally-ice',
+      'silvally-poison', 'silvally-psychic', 'silvally-rock', 'silvally-steel',
+      'silvally-water',
+      'terapagos-terastal',
     ])
+  })
+
+  it('le Mega di Champions ora hanno un\'icona, dalla seconda fonte', () => {
+    // La ragione per cui R esiste: Mega Staraptor mostrava Staraptor base.
+    const daZone = Object.entries(formeSprite.fonte).filter(([, f]) => f === 'zone')
+    expect(daZone.length, 'forme recuperate dal ripiego').toBe(32)
+    expect(formeSprite.forme['staraptor-mega']).toBe('f01')
+    expect(formeSprite.fonte['staraptor-mega']).toBe('zone')
+    expect(spriteUrl('staraptor-mega')).toContain('_0398_01_0.webp')
   })
 
   it('le forme del meta chiedono la propria icona, non quella della base', () => {
@@ -138,7 +174,8 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
   })
 
   it('la tabella dichiara come è stata costruita', () => {
-    expect(formeSprite.meta.fonte).toContain('pokemon-home')
+    expect(formeSprite.meta.fonti.home).toContain('pokemon-home')
+    expect(formeSprite.meta.fonti.zone).toContain('pokemon-zone')
     expect(formeSprite.meta.metodo).toBeTruthy()
     expect(formeSprite.meta.specieConForma).toBe(Object.keys(formeSprite.forme).length)
   })
