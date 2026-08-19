@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "d685767",
+    "commit": "bac7918",
     "lighthouse": "13.4.1",
     "chrome": "Google Chrome 151.0.7922.137",
     "nota": "Punteggi Lighthouse NON confrontabili fra versioni maggiori: le curve cambiano."
@@ -9,9 +9,9 @@
   "controllo": {
     "descrizione": "LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling",
     "bersaglio": "deploy",
-    "lcp_mobile_ms": 2205,
-    "lcp_desktop_ms": 443.029,
-    "rapporto": 4.98,
+    "lcp_mobile_ms": 1980,
+    "lcp_desktop_ms": 430,
+    "rapporto": 4.6,
     "esito": "si muove"
   },
   "misure": [
@@ -22,14 +22,14 @@
       "ripetizioni": 5,
       "categorie": {
         "performance": {
-          "mediana": 97,
-          "min": 93,
+          "mediana": 98,
+          "min": 96,
           "max": 98
         },
         "accessibility": {
-          "mediana": 84,
-          "min": 84,
-          "max": 84
+          "mediana": 96,
+          "min": 96,
+          "max": 96
         },
         "best-practices": {
           "mediana": 100,
@@ -42,21 +42,21 @@
           "max": 100
         },
         "agentic-browsing": {
-          "mediana": 50,
-          "min": 50,
-          "max": 50
+          "mediana": 100,
+          "min": 100,
+          "max": 100
         }
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2130,
-          "min": 1973.689,
-          "max": 2389.018
+          "mediana": 1980,
+          "min": 1969.55,
+          "max": 2217.448
         },
         "largest-contentful-paint": {
-          "mediana": 2205,
-          "min": 1973.689,
-          "max": 2389.018
+          "mediana": 1980,
+          "min": 1969.55,
+          "max": 2217.448
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -65,13 +65,13 @@
         },
         "cumulative-layout-shift": {
           "mediana": 0.012,
-          "min": 0,
+          "min": 0.012,
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2130,
-          "min": 1973.689,
-          "max": 4390.642
+          "mediana": 1980,
+          "min": 1969.55,
+          "max": 2910.099
         }
       },
       "falliti": {
@@ -102,11 +102,6 @@
             "nodi": 0
           },
           {
-            "audit": "lcp-breakdown-insight",
-            "peso": 0,
-            "nodi": 2
-          },
-          {
             "audit": "network-dependency-tree-insight",
             "peso": 0,
             "nodi": 3
@@ -124,45 +119,17 @@
         ],
         "accessibility": [
           {
-            "audit": "button-name",
-            "peso": 10,
-            "nodi": 7
-          },
-          {
-            "audit": "select-name",
-            "peso": 10,
-            "nodi": 2
-          },
-          {
             "audit": "color-contrast",
             "peso": 7,
             "nodi": 33
-          },
-          {
-            "audit": "skip-link",
-            "peso": 3,
-            "nodi": 1
-          },
-          {
-            "audit": "label-content-name-mismatch",
-            "peso": 0,
-            "nodi": 1
-          }
-        ],
-        "agentic-browsing": [
-          {
-            "audit": "agent-accessibility-tree",
-            "peso": 1,
-            "nodi": 1
           }
         ]
       },
       "falliti_stabili": {
-        "performance": false,
-        "accessibility": true,
-        "agentic-browsing": true
+        "performance": true,
+        "accessibility": true
       },
-      "trasferito_kB": 267.6,
+      "trasferito_kB": 267.9,
       "richieste": 8
     },
     {
@@ -177,9 +144,9 @@
           "max": 100
         },
         "accessibility": {
-          "mediana": 90,
-          "min": 90,
-          "max": 90
+          "mediana": 92,
+          "min": 92,
+          "max": 92
         },
         "best-practices": {
           "mediana": 100,
@@ -199,14 +166,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 443.029,
-          "min": 406.05,
-          "max": 492.164
+          "mediana": 430,
+          "min": 404.601,
+          "max": 484.327
         },
         "largest-contentful-paint": {
-          "mediana": 443.029,
-          "min": 406.05,
-          "max": 492.164
+          "mediana": 430,
+          "min": 404.601,
+          "max": 484.327
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -219,13 +186,18 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 443.029,
-          "min": 406.05,
-          "max": 492.497
+          "mediana": 580.974,
+          "min": 531.55,
+          "max": 764.195
         }
       },
       "falliti": {
         "performance": [
+          {
+            "audit": "speed-index",
+            "peso": 10,
+            "nodi": 0
+          },
           {
             "audit": "cache-insight",
             "peso": 0,
@@ -257,24 +229,14 @@
             "audit": "target-size",
             "peso": 7,
             "nodi": 2
-          },
-          {
-            "audit": "skip-link",
-            "peso": 3,
-            "nodi": 1
-          },
-          {
-            "audit": "label-content-name-mismatch",
-            "peso": 0,
-            "nodi": 1
           }
         ]
       },
       "falliti_stabili": {
-        "performance": true,
+        "performance": false,
         "accessibility": true
       },
-      "trasferito_kB": 267.6,
+      "trasferito_kB": 267.9,
       "richieste": 8
     },
     {
@@ -285,13 +247,13 @@
       "categorie": {
         "performance": {
           "mediana": 94,
-          "min": 94,
+          "min": 93,
           "max": 94
         },
         "accessibility": {
-          "mediana": 84,
-          "min": 84,
-          "max": 84
+          "mediana": 96,
+          "min": 96,
+          "max": 96
         },
         "best-practices": {
           "mediana": 100,
@@ -304,26 +266,26 @@
           "max": 100
         },
         "agentic-browsing": {
-          "mediana": 50,
-          "min": 50,
-          "max": 50
+          "mediana": 100,
+          "min": 100,
+          "max": 100
         }
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2411.582,
-          "min": 2405.181,
-          "max": 2460.704
+          "mediana": 2408.393,
+          "min": 2406.46,
+          "max": 2555.081
         },
         "largest-contentful-paint": {
-          "mediana": 2561.088,
-          "min": 2460.704,
-          "max": 2562.528
+          "mediana": 2556.886,
+          "min": 2555.081,
+          "max": 2565.252
         },
         "total-blocking-time": {
-          "mediana": 39,
+          "mediana": 56,
           "min": 0,
-          "max": 70
+          "max": 69
         },
         "cumulative-layout-shift": {
           "mediana": 0.012,
@@ -331,9 +293,9 @@
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2411.582,
-          "min": 2405.181,
-          "max": 2460.704
+          "mediana": 2408.393,
+          "min": 2406.46,
+          "max": 2555.081
         }
       },
       "falliti": {
@@ -381,45 +343,17 @@
         ],
         "accessibility": [
           {
-            "audit": "button-name",
-            "peso": 10,
-            "nodi": 7
-          },
-          {
-            "audit": "select-name",
-            "peso": 10,
-            "nodi": 2
-          },
-          {
             "audit": "color-contrast",
             "peso": 7,
             "nodi": 33
-          },
-          {
-            "audit": "skip-link",
-            "peso": 3,
-            "nodi": 1
-          },
-          {
-            "audit": "label-content-name-mismatch",
-            "peso": 0,
-            "nodi": 1
-          }
-        ],
-        "agentic-browsing": [
-          {
-            "audit": "agent-accessibility-tree",
-            "peso": 1,
-            "nodi": 1
           }
         ]
       },
       "falliti_stabili": {
         "performance": false,
-        "accessibility": true,
-        "agentic-browsing": true
+        "accessibility": true
       },
-      "trasferito_kB": 266.3,
+      "trasferito_kB": 266.5,
       "richieste": 8
     },
     {
@@ -434,9 +368,9 @@
           "max": 100
         },
         "accessibility": {
-          "mediana": 90,
-          "min": 90,
-          "max": 90
+          "mediana": 92,
+          "min": 92,
+          "max": 92
         },
         "best-practices": {
           "mediana": 100,
@@ -456,14 +390,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 525.291,
-          "min": 497.48,
-          "max": 532.715
+          "mediana": 531.172,
+          "min": 505.365,
+          "max": 537.531
         },
         "largest-contentful-paint": {
-          "mediana": 525.291,
-          "min": 497.48,
-          "max": 532.715
+          "mediana": 531.172,
+          "min": 505.365,
+          "max": 537.531
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -476,9 +410,9 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 525.291,
-          "min": 497.48,
-          "max": 532.715
+          "mediana": 531.172,
+          "min": 505.365,
+          "max": 537.531
         }
       },
       "falliti": {
@@ -509,16 +443,6 @@
             "audit": "target-size",
             "peso": 7,
             "nodi": 2
-          },
-          {
-            "audit": "skip-link",
-            "peso": 3,
-            "nodi": 1
-          },
-          {
-            "audit": "label-content-name-mismatch",
-            "peso": 0,
-            "nodi": 1
           }
         ]
       },
@@ -526,7 +450,7 @@
         "performance": true,
         "accessibility": true
       },
-      "trasferito_kB": 266.3,
+      "trasferito_kB": 266.5,
       "richieste": 8
     }
   ]
