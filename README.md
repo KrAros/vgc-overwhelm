@@ -14,6 +14,20 @@ davvero come oracolo e non citato a memoria: 509 configurazioni della formula e
 
 ---
 
+## Dove vive
+
+Il sito sta su **https://kraros.github.io/vgc-overwhelm/**, pubblicato
+automaticamente a ogni push su `modern` — ma **solo se lint, suite completa e
+`snapshot:diff` passano**. Il workflow è in
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): se la verifica
+fallisce, online resta la versione di prima.
+
+Il percorso `/vgc-overwhelm/` è dichiarato come `base` in `vite.config.js` e
+vale anche in sviluppo, così l'indirizzo locale ha la stessa forma di quello
+pubblicato.
+
+---
+
 ## Avvio
 
 Serve **Node 20.19+, 22.13+ o 24+** — è l'intersezione di quello che chiedono
@@ -22,7 +36,8 @@ Sviluppato e verificato su **Node 24.18.0 · npm 11.16.0**.
 
 ```bash
 npm install
-npm run dev        # server di sviluppo
+npm run dev        # server di sviluppo, su /vgc-overwhelm/
+npm run dev -- --host   # anche dagli altri dispositivi della rete locale
 npm run build      # bundle di produzione in dist/
 npm run preview    # serve dist/ per controllarlo
 ```
@@ -49,7 +64,7 @@ schermi e le priorità già applicati.
 - Interfaccia in italiano e inglese
 
 Quello che il motore **non** modella porta un badge visibile nell'interfaccia:
-114 abilità e 41 strumenti sono dichiarati non calcolati anziché essere
+109 abilità e 40 strumenti sono dichiarati non calcolati anziché essere
 calcolati male in silenzio.
 
 ---
@@ -67,8 +82,8 @@ Numeri letti dall'esecuzione, non dichiarati a memoria:
 
 | | Copre | Entra da |
 |---|---|---|
-| **1727 test** su 24 file<br><small>1726 verdi · 1 saltato</small> | — | — |
-| **584 casi** di caratterizzazione formula | che il motore non cambi numeri per sbaglio | `calculateDamage` |
+| **1752 test** su 27 file<br><small>1751 verdi · 1 saltato</small> | — | — |
+| **586 casi** di caratterizzazione formula | che il motore non cambi numeri per sbaglio | `calculateDamage` |
 | **180 celle** di caratterizzazione matrice<br><small>5 scenari</small> | la logica di `DamageTable` | il componente |
 | **509 golden** dal riferimento | la formula contro NCP | `GET_DAMAGE_SV` |
 | **27 golden** di preparazione | Intimidate, abilità paradosso, Spada e Scudo, Download | `CALCULATE_ALL_MOVES_SV` |
@@ -108,17 +123,17 @@ L'aritmetica sta in `src/lib/` e in `calcEngine.js`, ed è pura: nessun
 componente calcola danno. `vendor/ncp/` non viene importato da una sola riga di
 `src/`, quindi non entra mai nel bundle — c'è un test che lo verifica.
 
-Bundle misurato sull'ultima build (`96 moduli, 712 ms`):
+Bundle misurato sull'ultima build (`97 moduli`):
 
 | chunk | grezzo | gzip |
 |---|---|---|
-| `dati` | 390,45 kB | 93,21 kB |
+| `dati` | 396,32 kB | 95,02 kB |
 | `vendor` | 239,00 kB | 75,55 kB |
-| `index` | 149,08 kB | 40,26 kB |
-| `it` | 63,41 kB | 24,45 kB |
+| `index` | 149,05 kB | 40,23 kB |
+| `it` | 63,29 kB | 24,38 kB |
 | runtime | 0,56 kB | 0,36 kB |
 
-Un visitatore inglese scarica **209,38 kB** di JavaScript compresso — somma
+Un visitatore inglese scarica **211,16 kB** di JavaScript compresso — somma
 fatta a mano, `it` escluso perché lo prende solo chi passa all'italiano.
 
 ---
