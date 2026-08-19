@@ -67,47 +67,57 @@ function rendi(ability, extra = {}) {
   return renderToStaticMarkup(<AbilityFlags {...props} />)
 }
 
-/** [abilità, stato, colore atteso, descrizione dello stato] */
+/**
+ * [abilità, stato, colore atteso, descrizione dello stato]
+ *
+ * Aggiornata in Q/2: 19 righe su 30 sono cambiate, e ognuna è una decisione.
+ * Il colore ora dice UNA cosa — se uno stato variabile è attivo — invece di
+ * contendersi il canale fra «cosa fa l'abilità» e «è accesa».
+ */
 const CASI = [
-  // ── guidati dallo stato: grigio spento, colorato attivo ──────────────────
-  ['chlorophyll',      {},                                     'gray',   'nessun meteo'],
-  ['chlorophyll',      { weather: 'sun' },                     'green',  'sole'],
-  ['defiant',          {},                                     'gray',   'nessun Intimidate'],
-  ['defiant',          { opponentHasIntimidateActive: true },  'green',  'Intimidate avversario'],
-  ['competitive',      {},                                     'gray',   'nessun Intimidate'],
-  ['competitive',      { opponentHasIntimidateActive: true },  'pink',   'Intimidate avversario'],
+  // ── stato dal campo o dall'avversario ────────────────────────────────────
+  ['chlorophyll',      {},                                     'gray',  'nessun meteo'],
+  ['chlorophyll',      { weather: 'sun' },                     'green', 'sole'],
+  ['defiant',          {},                                     'gray',  'nessun Intimidate'],
+  ['defiant',          { opponentHasIntimidateActive: true },  'green', 'Intimidate avversario'],
+  ['competitive',      {},                                     'gray',  'nessun Intimidate'],
+  // era ROSA: stessa condizione di defiant, colore diverso. Divergenza chiusa.
+  ['competitive',      { opponentHasIntimidateActive: true },  'green', 'Intimidate avversario'],
 
-  // ── colore fisso: NON cambia fra spento e acceso ─────────────────────────
-  ['flash fire',       {},                                     'red',    'levetta spenta'],
-  ['flash fire',       { flags: { flashFireActive: true } },   'red',    'levetta accesa'],
-  ['multiscale',       {},                                     'blue',   'levetta spenta'],
-  ['multiscale',       { flags: { multiscaleActive: true } },  'blue',   'levetta accesa'],
-  ['supreme overlord', { flags: { supremeOverlordKOs: 0 } },   'purple', 'nessun KO alleato'],
-  ['supreme overlord', { flags: { supremeOverlordKOs: 3 } },   'purple', 'tre KO alleati'],
-  ['intimidate',       {},                                     'yellow', 'levetta spenta'],
-  ['intimidate',       { flags: { intimidateActive: true } },  'yellow', 'levetta accesa'],
+  // ── stato da una levetta: prima il fondo NON cambiava ────────────────────
+  ['flash fire',       {},                                     'gray',  'levetta spenta'],
+  ['flash fire',       { flags: { flashFireActive: true } },   'green', 'levetta accesa'],
+  ['multiscale',       {},                                     'gray',  'levetta spenta'],
+  ['multiscale',       { flags: { multiscaleActive: true } },  'green', 'levetta accesa'],
+  ['supreme overlord', { flags: { supremeOverlordKOs: 0 } },   'gray',  'nessun KO alleato'],
+  ['supreme overlord', { flags: { supremeOverlordKOs: 3 } },   'green', 'tre KO alleati'],
+  ['intimidate',       {},                                     'gray',  'levetta spenta'],
+  ['intimidate',       { flags: { intimidateActive: true } },  'green', 'levetta accesa'],
 
-  // ── semantici: le dieci di COLOR_MAP ─────────────────────────────────────
-  ['huge power',       {}, 'red',    'statico'],
-  ['pure power',       {}, 'red',    'statico'],
-  ['adaptability',     {}, 'teal',   'statico'],
-  ['fire mane',        {}, 'orange', 'statico'],
-  ['tough claws',      {}, 'yellow', 'statico'],
-  ['thick fat',        {}, 'blue',   'statico'],
-  ['filter',           {}, 'indigo', 'statico'],
-  ['solid rock',       {}, 'indigo', 'statico'],
-  ['fluffy',           {}, 'pink',   'statico'],
-  ['levitate',         {}, 'sky',    'statico'],
+  // ── le dieci che erano colorate per «cosa fanno» ─────────────────────────
+  // Sempre attive, nessuno stato da calcolare: grigie. Il limite è dichiarato
+  // nella tavolozza — grigio qui vuol dire «nessuno stato calcolabile», non
+  // «inattiva».
+  ['huge power',       {}, 'gray', 'statico'],
+  ['pure power',       {}, 'gray', 'statico'],
+  ['adaptability',     {}, 'gray', 'statico'],
+  ['fire mane',        {}, 'gray', 'statico'],
+  ['tough claws',      {}, 'gray', 'statico'],
+  ['thick fat',        {}, 'gray', 'statico'],
+  ['filter',           {}, 'gray', 'statico'],
+  ['solid rock',       {}, 'gray', 'statico'],
+  ['fluffy',           {}, 'gray', 'statico'],
+  ['levitate',         {}, 'gray', 'statico'],
 
-  // ── le quattro -ate: nessuno stato, oggi tutte grigie ────────────────────
-  ['pixilate',         {}, 'gray',   'statico'],
-  ['aerilate',         {}, 'gray',   'statico'],
-  ['refrigerate',      {}, 'gray',   'statico'],
-  ['dragonize',        {}, 'gray',   'statico'],
+  // ── le quattro -ate: lo stato dal moveset arriva in Q/3 ──────────────────
+  ['pixilate',         {}, 'gray', 'nessun moveset passato'],
+  ['aerilate',         {}, 'gray', 'nessun moveset passato'],
+  ['refrigerate',      {}, 'gray', 'nessun moveset passato'],
+  ['dragonize',        {}, 'gray', 'nessun moveset passato'],
 
   // ── il default ───────────────────────────────────────────────────────────
-  ['poison heal',      {}, 'gray',   'statico'],
-  ['sturdy',           {}, 'gray',   'statico'],
+  ['poison heal',      {}, 'gray', 'statico'],
+  ['sturdy',           {}, 'gray', 'statico'],
 ]
 
 describe('colori dei riquadri abilità — caratterizzazione', () => {
@@ -126,16 +136,15 @@ describe('colori dei riquadri abilità — caratterizzazione', () => {
   })
 })
 
-describe('la proprietà che la sessione Q vuole stabilire', () => {
+describe('la proprietà stabilita dalla sessione Q', () => {
   /**
-   * Oggi FALLIREBBE, ed è giusto così: è scritta qui perché il criterio della
-   * sessione sia leggibile accanto allo stato di partenza. Verrà attivata
-   * quando lo schema sarà applicato.
+   * Attivata in Q/2. Prima falliva su 19 casi su 30.
    *
-   * Il criterio: ogni riquadro usa una sola delle tre tavolozze, e la scelta è
-   * calcolata dallo stato invece che letta da una tabella scritta a mano.
+   * È l'asserzione che impedisce a un colore nuovo di rientrare di soppiatto:
+   * qualunque tinta fuori dalle tre — un rosso «solo per questa abilità», un
+   * viola «che sta bene» — fa diventare rosso questo test.
    */
-  it.skip('ogni riquadro usa solo grigio, verde o ambra', () => {
+  it('ogni riquadro usa solo grigio, verde o ambra', () => {
     const fuori = CASI
       .map(([a, extra]) => [a, famigliaColore(rendi(a, extra))])
       .filter(([, c]) => !['gray', 'green', 'amber(badge)'].includes(c))
