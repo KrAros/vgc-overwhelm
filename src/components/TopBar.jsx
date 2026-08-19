@@ -175,10 +175,24 @@ export default function TopBar() {
 
         <div className="h-px bg-gray-700/60" />
 
-        {/* Riga 2: Field + Weather come select */}
+        {/* Riga 2: Field + Weather come select
+
+            `aria-labelledby` invece di `aria-label`: il nome accessibile PUNTA
+            allo <span> già visibile qui accanto, invece di ricopiarne la
+            stringa. Se un giorno l'etichetta cambia, il nome per gli screen
+            reader cambia con lei — non c'è una seconda copia che possa
+            invecchiare. È la regola nata in M applicata all'accessibilità.
+
+            Perché servivano: questo ramo `sm:hidden` rende Campo e Meteo come
+            <select>, mentre il ramo desktop (riga 51) li rende come gruppi di
+            bottoni, dove il testo del bottone È già il nome accessibile. I due
+            markup sono diversi apposta — un <select> nativo su telefono apre
+            la rotella di sistema — ma la copia mobile era l'unica senza nome,
+            e valeva 10 punti su 100 di Accessibilità. */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.field")}</span>
+          <span id="tb-mob-campo" className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.field")}</span>
           <select
+            aria-labelledby="tb-mob-campo"
             value={terrain ?? ''}
             onChange={e => setTerrain(e.target.value || null)}
             className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"
@@ -189,8 +203,9 @@ export default function TopBar() {
             ))}
           </select>
 
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.weather")}</span>
+          <span id="tb-mob-meteo" className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.weather")}</span>
           <select
+            aria-labelledby="tb-mob-meteo"
             value={weather ?? ''}
             onChange={e => setWeather(e.target.value || null)}
             className="flex-1 bg-gray-700 text-xs text-gray-200 rounded px-2 py-1 outline-none border border-gray-600"

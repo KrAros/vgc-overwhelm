@@ -57,11 +57,16 @@ function LangToggle() {
 
   return (
     <div className="relative">
+      {/* Il nome accessibile deve CONTENERE il testo visibile («EN»), altrimenti
+          chi usa il controllo vocale dice «premi EN» e non succede niente: il
+          comando cerca «Cambia lingua». È l'audit label-content-name-mismatch,
+          peso 0 — non muove il punteggio, ma è l'unico fra i difetti misurati
+          che rende un controllo IRRAGGIUNGIBILE invece che solo anonimo. */}
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
         className="flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white transition-colors"
-        aria-label={t('aria.switch_language')}
+        aria-label={`${t('aria.switch_language')} (${current.code.toUpperCase()})`}
       >
         <span>{current.flag}</span>
         <span>{current.code.toUpperCase()}</span>

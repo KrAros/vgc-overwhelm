@@ -59,19 +59,35 @@ function App() {
 
   return (
     <div className="min-h-screen text-white flex flex-col">
-      <a href="#main-content"
-        style={{ position:'absolute', width:'1px', height:'1px', padding:0, margin:'-1px', overflow:'hidden', clip:'rect(0,0,0,0)', whiteSpace:'nowrap', border:0 }}
-        onFocus={e => Object.assign(e.target.style, { position:'fixed', top:'8px', left:'8px', width:'auto', height:'auto', padding:'6px 12px', margin:0, overflow:'visible', clip:'auto', whiteSpace:'normal', background:'#14b8a6', color:'#111', borderRadius:'6px', fontSize:'14px', fontWeight:600, zIndex:9999 })}
-        onBlur={e => Object.assign(e.target.style, { position:'absolute', width:'1px', height:'1px', padding:0, margin:'-1px', overflow:'hidden', clip:'rect(0,0,0,0)', whiteSpace:'nowrap' })}
+      {/* Skip link. Tre difetti corretti in P, tutti nello stesso punto:
+
+          1. puntava a #main-content, e NESSUN elemento aveva quell'id — il
+             link non portava da nessuna parte. È il difetto vero, ed è quello
+             che `analisi-critica.md` §4.5 non aveva visto: descriveva il
+             problema come cosmetico perché il file era stato letto, non usato.
+          2. lo stato di focus era gestito con Object.assign sullo stile inline
+             in onFocus/onBlur — cioè React che riscrive il DOM a mano per fare
+             quello che una pseudo-classe CSS fa da sola.
+          3. il testo era hardcoded in inglese in un'app bilingue.
+
+          `sr-only` nasconde il link agli occhi lasciandolo agli screen reader;
+          `focus:not-sr-only` lo rende visibile quando ci si arriva col Tab. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-9999
+                   focus:rounded-md focus:bg-teal-500 focus:px-3 focus:py-1.5
+                   focus:text-sm focus:font-semibold focus:text-gray-900"
       >
-        Skip to main content
+        {t('ui.skip_to_content')}
       </a>
 
       {/* ── Navbar header ── */}
       <Header />
 
       {/* ── Contenuto principale ── */}
-      <main className="flex-1 px-3 py-3 sm:p-4">
+      {/* id="main-content": il bersaglio dello skip link qui sopra. Prima di P
+          non esisteva in tutto src/, quindi il link cadeva nel vuoto. */}
+      <main id="main-content" className="flex-1 px-3 py-3 sm:p-4">
         <div className="max-w-7xl mx-auto">
 
           {/* ReportPanel */}
