@@ -147,6 +147,25 @@ describe('colori dei riquadri abilità — caratterizzazione', () => {
   })
 })
 
+describe('nessuna stringa italiana scritta dentro il JSX', () => {
+  /**
+   * `'nessun boost'` era hardcoded in italiano nel riquadro di Supreme
+   * Overlord: un utente inglese lo leggeva così. È la famiglia di difetti
+   * della sessione M, e `traduzioni.test.js` non poteva vederlo — sorveglia i
+   * file di traduzione, non le stringhe scritte nei componenti.
+   *
+   * La suite gira in inglese, quindi qui basta cercare la parola italiana.
+   * Non è una rete generale contro l'hardcoding: copre i riquadri di questo
+   * file, e questo è il suo confine.
+   */
+  const ITALIANE = ['nessun boost', 'nessuna mossa', 'non sta facendo']
+
+  it.each(CASI)('%s (%o) non mostra italiano in inglese', (ability, extra) => {
+    const html = rendi(ability, extra).toLowerCase()
+    expect(ITALIANE.filter((p) => html.includes(p))).toEqual([])
+  })
+})
+
 describe('la proprietà stabilita dalla sessione Q', () => {
   /**
    * Attivata in Q/2. Prima falliva su 19 casi su 30.

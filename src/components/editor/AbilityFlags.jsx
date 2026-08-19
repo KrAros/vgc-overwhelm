@@ -152,7 +152,15 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           ))}
         </div>
         <span className={kos > 0 ? TESTO_ACCESO : TESTO_SPENTO}>
-          {kos > 0 ? `×${mult} Atk/SpAtk` : 'nessun boost'}
+          {/* Era `'nessun boost'`, scritto in italiano dentro il JSX: un utente
+              inglese lo leggeva così. `traduzioni.test.js` non poteva vederlo —
+              sorveglia i file di traduzione, non le stringhe scritte nei
+              componenti. È la famiglia di difetti della sessione M, trovata
+              qui mentre si guardavano i colori.
+
+              `×1,3 Atk/SpAtk` resta com'è: sono le sigle delle statistiche,
+              che il progetto tiene in inglese per decisione dichiarata. */}
+          {kos > 0 ? `×${mult} Atk/SpAtk` : t('editor.no_boost')}
         </span>
       </div>
     )
