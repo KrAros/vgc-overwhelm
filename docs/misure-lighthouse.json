@@ -1,0 +1,266 @@
+{
+  "condizioni": {
+    "misurato": "2026-08-19",
+    "commit": "f399b56",
+    "lighthouse": "13.4.1",
+    "chrome": "Google Chrome 151.0.7922.137",
+    "nota": "Punteggi Lighthouse NON confrontabili fra versioni maggiori: le curve cambiano."
+  },
+  "controllo": {
+    "descrizione": "LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling",
+    "lcp_mobile_ms": 2050,
+    "lcp_desktop_ms": 444.153,
+    "rapporto": 4.62,
+    "esito": "si muove"
+  },
+  "misure": [
+    {
+      "bersaglio": "deploy",
+      "profilo": "mobile",
+      "url": "https://kraros.github.io/vgc-overwhelm/",
+      "ripetizioni": 5,
+      "categorie": {
+        "performance": {
+          "mediana": 97,
+          "min": 97,
+          "max": 98
+        },
+        "accessibility": {
+          "mediana": 84,
+          "min": 84,
+          "max": 84
+        },
+        "best-practices": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "agentic-browsing": {
+          "mediana": 50,
+          "min": 50,
+          "max": 50
+        }
+      },
+      "metriche": {
+        "first-contentful-paint": {
+          "mediana": 2050,
+          "min": 1956.992,
+          "max": 2130
+        },
+        "largest-contentful-paint": {
+          "mediana": 2050,
+          "min": 1956.992,
+          "max": 2205
+        },
+        "total-blocking-time": {
+          "mediana": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cumulative-layout-shift": {
+          "mediana": 0.012,
+          "min": 0.012,
+          "max": 0.012
+        },
+        "speed-index": {
+          "mediana": 2050,
+          "min": 1956.992,
+          "max": 2130
+        }
+      },
+      "trasferito_kB": 267.7,
+      "richieste": 8
+    },
+    {
+      "bersaglio": "deploy",
+      "profilo": "desktop",
+      "url": "https://kraros.github.io/vgc-overwhelm/",
+      "ripetizioni": 5,
+      "categorie": {
+        "performance": {
+          "mediana": 100,
+          "min": 99,
+          "max": 100
+        },
+        "accessibility": {
+          "mediana": 90,
+          "min": 90,
+          "max": 90
+        },
+        "best-practices": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "agentic-browsing": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metriche": {
+        "first-contentful-paint": {
+          "mediana": 444.153,
+          "min": 402.603,
+          "max": 699.561
+        },
+        "largest-contentful-paint": {
+          "mediana": 444.153,
+          "min": 402.603,
+          "max": 699.561
+        },
+        "total-blocking-time": {
+          "mediana": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cumulative-layout-shift": {
+          "mediana": 0.011,
+          "min": 0.011,
+          "max": 0.011
+        },
+        "speed-index": {
+          "mediana": 444.153,
+          "min": 402.603,
+          "max": 1069.5
+        }
+      },
+      "trasferito_kB": 267.8,
+      "richieste": 8
+    },
+    {
+      "bersaglio": "locale",
+      "profilo": "mobile",
+      "url": "http://localhost:4173/vgc-overwhelm/",
+      "ripetizioni": 5,
+      "categorie": {
+        "performance": {
+          "mediana": 94,
+          "min": 94,
+          "max": 94
+        },
+        "accessibility": {
+          "mediana": 84,
+          "min": 84,
+          "max": 84
+        },
+        "best-practices": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "agentic-browsing": {
+          "mediana": 50,
+          "min": 50,
+          "max": 50
+        }
+      },
+      "metriche": {
+        "first-contentful-paint": {
+          "mediana": 2406.389,
+          "min": 2405.355,
+          "max": 2418.723
+        },
+        "largest-contentful-paint": {
+          "mediana": 2556.389,
+          "min": 2555.355,
+          "max": 2568.723
+        },
+        "total-blocking-time": {
+          "mediana": 53,
+          "min": 36,
+          "max": 69
+        },
+        "cumulative-layout-shift": {
+          "mediana": 0.012,
+          "min": 0.012,
+          "max": 0.012
+        },
+        "speed-index": {
+          "mediana": 2406.389,
+          "min": 2405.355,
+          "max": 2418.723
+        }
+      },
+      "trasferito_kB": 266.3,
+      "richieste": 8
+    },
+    {
+      "bersaglio": "locale",
+      "profilo": "desktop",
+      "url": "http://localhost:4173/vgc-overwhelm/",
+      "ripetizioni": 5,
+      "categorie": {
+        "performance": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "accessibility": {
+          "mediana": 90,
+          "min": 90,
+          "max": 90
+        },
+        "best-practices": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        },
+        "agentic-browsing": {
+          "mediana": 100,
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metriche": {
+        "first-contentful-paint": {
+          "mediana": 527.027,
+          "min": 494.683,
+          "max": 539.533
+        },
+        "largest-contentful-paint": {
+          "mediana": 527.027,
+          "min": 494.683,
+          "max": 539.533
+        },
+        "total-blocking-time": {
+          "mediana": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cumulative-layout-shift": {
+          "mediana": 0.011,
+          "min": 0.011,
+          "max": 0.011
+        },
+        "speed-index": {
+          "mediana": 527.027,
+          "min": 494.683,
+          "max": 539.533
+        }
+      },
+      "trasferito_kB": 266.3,
+      "richieste": 8
+    }
+  ]
+}
