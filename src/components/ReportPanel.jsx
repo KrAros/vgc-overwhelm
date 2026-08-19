@@ -469,7 +469,21 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   style={{ borderLeftColor: typeColor }}
                   className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isActive ? 'ring-1 ring-teal-400 bg-teal-950/20' : 'hover:bg-gray-800/60'}`}
                 >
-                  <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
+                  {/* Niente `truncate` qui. Il nome della mossa è il contenuto
+                      più utile del pannello, e su telefono era quello
+                      illeggibile: a 360 px il bottone ha ~124 px utili e
+                      «Lanciafiamme» a 20 px ne chiede 132.
+
+                      Rimpicciolire il carattere avrebbe corretto QUESTA mossa e
+                      non la classe: il nome più lungo in italiano è «Adesso
+                      Faccio sul Serio», 23 caratteri, che chiederebbe ~250 px —
+                      nessuna dimensione leggibile lo fa entrare. Misurato su
+                      tutte e 809 le mosse, non stimato sull'esempio a portata.
+
+                      Andare a capo invece vale per ogni nome e per entrambe le
+                      lingue. `break-words` serve per i nomi che sono una parola
+                      sola: «Elettrocannone» non ha spazi dove spezzarsi. */}
+                  <div className="text-[20px] text-gray-300 capitalize break-words mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                   <div className="flex items-center justify-between gap-1">
                     <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                       {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
@@ -895,7 +909,21 @@ function CumulativePanel({ entries }) {
                       <button key={mv} type="button" onClick={() => setSel(mv)}
                         style={{ borderLeftColor: typeColor }}
                         className={`text-left rounded-lg border border-gray-700/40 border-l-[3px] bg-gray-800/30 px-3 py-2 transition-all ${isSel ? `ring-1 ${ringCls} bg-teal-950/20` : 'hover:bg-gray-800/60'}`}>
-                        <div className="text-[20px] text-gray-300 capitalize truncate mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
+                        {/* Niente `truncate` qui. Il nome della mossa è il contenuto
+                      più utile del pannello, e su telefono era quello
+                      illeggibile: a 360 px il bottone ha ~124 px utili e
+                      «Lanciafiamme» a 20 px ne chiede 132.
+
+                      Rimpicciolire il carattere avrebbe corretto QUESTA mossa e
+                      non la classe: il nome più lungo in italiano è «Adesso
+                      Faccio sul Serio», 23 caratteri, che chiederebbe ~250 px —
+                      nessuna dimensione leggibile lo fa entrare. Misurato su
+                      tutte e 809 le mosse, non stimato sull'esempio a portata.
+
+                      Andare a capo invece vale per ogni nome e per entrambe le
+                      lingue. `break-words` serve per i nomi che sono una parola
+                      sola: «Elettrocannone» non ha spazi dove spezzarsi. */}
+                  <div className="text-[20px] text-gray-300 capitalize break-words mb-1">{t(`moves.${mv}`, { defaultValue: mv.replace(/-/g, ' ') })}</div>
                         <div className="flex items-center justify-between gap-1">
                           <div className="text-[13px] font-semibold" style={{ color: isStatus ? 'var(--text-muted)' : pctColor }}>
                             {isStatus ? '—' : `${res.minPct}–${res.maxPct}%`}
