@@ -16,6 +16,7 @@ import {
   normalizzaMeteo,
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
+  ABILITA_ATE,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
@@ -195,12 +196,13 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
 
   // Ate abilities: Normal -> altro tipo + x1.2 BP
+  // La tabella sta in `data/typeChart.js` dalla sessione Q. Qui c'erano quattro
+  // `if`, e in `SearchSelects.jsx` la stessa corrispondenza scritta con gli
+  // indici numerici: due copie che concordavano senza che niente lo garantisse.
   let ateBoost = false
-  if (moveType === TYPES.NORMAL) {
-    if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }
-    if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }
-    if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }
-    if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }
+  if (moveType === TYPES.NORMAL && ABILITA_ATE[atkAbilKey] !== undefined) {
+    moveType = ABILITA_ATE[atkAbilKey]
+    ateBoost = true
   }
 
   // effectiveness calcolata DOPO la conversione ate

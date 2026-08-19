@@ -7,6 +7,7 @@ import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
+import { ABILITA_ATE } from '../../lib/rules.js'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n.js'
 
@@ -141,12 +142,14 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
     ? WEATHER_BALL_TYPES[wbWeatherKey]
     : null
-  // Ate abilities: Normal → Fairy (pixilate) / Flying (aerilate) / Ice (refrigerate) / Dragon (dragonize)
+  // Abilità «-ate»: la tabella sta in `data/typeChart.js` dalla sessione Q.
+  // Qui c'era una copia scritta con gli indici numerici, mentre il motore usava
+  // le costanti TYPES.*: due rappresentazioni diverse della stessa cosa, che
+  // concordavano senza che niente lo garantisse.
   const abilityKey = (ability || '').toLowerCase().replace(/ /g, '-')
-  const ATE_MAP = { 'pixilate': 17, 'aerilate': 9, 'refrigerate': 5, 'dragonize': 14 } // indici in TYPE_NAMES
   const baseType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
   const isNormalMove = baseType === 0 // 0 = Normal
-  const ateType = isNormalMove && ATE_MAP[abilityKey] !== undefined ? ATE_MAP[abilityKey] : null
+  const ateType = isNormalMove && ABILITA_ATE[abilityKey] !== undefined ? ABILITA_ATE[abilityKey] : null
   const displayType = ateType !== null ? ateType : baseType
   const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100 : moveDetails?.power
 

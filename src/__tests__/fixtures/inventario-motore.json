@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-18T06:33:39.863Z",
+    "generatedAt": "2026-08-19T12:36:10.099Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -19,44 +19,44 @@
       "chiave": "pixilate",
       "tipo": "abilita",
       "verdetto": "badge-sbagliato",
-      "nota": "calcEngine:200 — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP",
+      "nota": "tabella ABILITA_ATE in lib/rules.js, applicata dal motore — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP",
       "prova": {
-        "file": "src/calcEngine.js",
-        "riga": 200,
-        "testo": "if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }"
+        "file": "src/lib/rules.js",
+        "riga": 78,
+        "testo": "'pixilate':    TYPES.FAIRY,"
       }
     },
     {
       "chiave": "aerilate",
       "tipo": "abilita",
       "verdetto": "badge-sbagliato",
-      "nota": "calcEngine:201 — Normale→Volante e ×1,2",
+      "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Volante e ×1,2",
       "prova": {
-        "file": "src/calcEngine.js",
-        "riga": 201,
-        "testo": "if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }"
+        "file": "src/lib/rules.js",
+        "riga": 79,
+        "testo": "'aerilate':    TYPES.FLYING,"
       }
     },
     {
       "chiave": "refrigerate",
       "tipo": "abilita",
       "verdetto": "badge-sbagliato",
-      "nota": "calcEngine:202 — Normale→Ghiaccio e ×1,2",
+      "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Ghiaccio e ×1,2",
       "prova": {
-        "file": "src/calcEngine.js",
-        "riga": 202,
-        "testo": "if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }"
+        "file": "src/lib/rules.js",
+        "riga": 80,
+        "testo": "'refrigerate': TYPES.ICE,"
       }
     },
     {
       "chiave": "dragonize",
       "tipo": "abilita",
       "verdetto": "badge-sbagliato",
-      "nota": "calcEngine:203 — Normale→Drago e ×1,2",
+      "nota": "tabella ABILITA_ATE in lib/rules.js — Normale→Drago e ×1,2",
       "prova": {
-        "file": "src/calcEngine.js",
-        "riga": 203,
-        "testo": "if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }"
+        "file": "src/lib/rules.js",
+        "riga": 81,
+        "testo": "'dragonize':   TYPES.DRAGON,"
       }
     },
     {
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 332,
+        "riga": 334,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -120,9 +120,9 @@
       {
         "chiave": "aerilate",
         "prova": {
-          "file": "src/calcEngine.js",
-          "riga": 201,
-          "testo": "if (atkAbilKey === 'aerilate')    { moveType = TYPES.FLYING; ateBoost = true }"
+          "file": "src/lib/rules.js",
+          "riga": 79,
+          "testo": "'aerilate':    TYPES.FLYING,"
         }
       },
       {
@@ -136,16 +136,16 @@
       {
         "chiave": "dragonize",
         "prova": {
-          "file": "src/calcEngine.js",
-          "riga": 203,
-          "testo": "if (atkAbilKey === 'dragonize')   { moveType = TYPES.DRAGON; ateBoost = true }"
+          "file": "src/lib/rules.js",
+          "riga": 81,
+          "testo": "'dragonize':   TYPES.DRAGON,"
         }
       },
       {
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 232,
+          "riga": 234,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -153,7 +153,7 @@
         "chiave": "levitate",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 83,
+          "riga": 84,
           "testo": "if (ability === 'levitate') return false"
         }
       },
@@ -161,7 +161,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 332,
+          "riga": 334,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -184,9 +184,9 @@
       {
         "chiave": "pixilate",
         "prova": {
-          "file": "src/calcEngine.js",
-          "riga": 200,
-          "testo": "if (atkAbilKey === 'pixilate')    { moveType = TYPES.FAIRY;  ateBoost = true }"
+          "file": "src/lib/rules.js",
+          "riga": 78,
+          "testo": "'pixilate':    TYPES.FAIRY,"
         }
       },
       {
@@ -200,9 +200,9 @@
       {
         "chiave": "refrigerate",
         "prova": {
-          "file": "src/calcEngine.js",
-          "riga": 202,
-          "testo": "if (atkAbilKey === 'refrigerate') { moveType = TYPES.ICE;    ateBoost = true }"
+          "file": "src/lib/rules.js",
+          "riga": 80,
+          "testo": "'refrigerate': TYPES.ICE,"
         }
       },
       {

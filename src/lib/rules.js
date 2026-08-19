@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
+import { TYPES } from '../data/typeChart.js'
+
 /**
  * src/lib/rules.js
  *
@@ -33,6 +35,52 @@
 // ─── Livello e IV ────────────────────────────────────────────────────────────
 
 /** Champions gioca a livello fisso. Non è un default modificabile: è la regola. */
+// ─── Abilità «-ate» ───────────────────────────────────────────────────────────
+
+/**
+ * Le abilità che trasformano le mosse di tipo Normale in un altro tipo e ne
+ * aumentano la potenza del 20%.
+ *
+ * ─── PERCHÉ ERA IN DUE COPIE, E PERCHÉ STA QUI ────────────────────────────
+ *
+ * Fino alla sessione Q la corrispondenza esisteva due volte, in due
+ * rappresentazioni diverse:
+ *
+ *   calcEngine.js       quattro `if` con le costanti TYPES.*
+ *   SearchSelects.jsx   un ATE_MAP con gli indici numerici, per il badge del
+ *                       tipo mossa nell'editor
+ *
+ * Le due concordavano — verificato prima di unificarle: 17 Fairy, 9 Flying,
+ * 5 Ice, 14 Dragon — quindi non c'era un difetto vivo. Ma niente lo
+ * garantiva, e la sessione Q stava per aggiungerne una terza per decidere il
+ * colore del riquadro dell'abilità.
+ *
+ * ─── E PERCHÉ QUI E NON IN `data/typeChart.js` ────────────────────────────
+ *
+ * Prima l'avevo messa lì, dove vive `TYPES`: entrambi i consumatori già
+ * importavano da quel file, quindi non nasceva nessuna dipendenza nuova.
+ *
+ * Sbagliato, e l'ha detto un test rosso. `gen-inventario-motore.mjs` — la
+ * seconda fonte nata in F-3, quella che impedisce al badge «non calcolata» di
+ * mentire — scandaglia `['src/calcEngine.js', 'src/lib', 'src/utils']`.
+ * `src/data/` NON è nella superficie. Spostando la tabella lì avevo portato
+ * quattro abilità fuori dal raggio della rete: l'inventario avrebbe smesso di
+ * vedere che il motore ci ramifica sopra, ed è esattamente il difetto di F-3
+ * che tornava.
+ *
+ * Avevo barattato la visibilità di una rete di sicurezza per un'estetica del
+ * grafo dei moduli. Il costo vero — un import in più — è onesto: la regola
+ * dipende davvero dagli id dei tipi.
+ *
+ * Le chiavi sono normalizzate col trattino, come `normalizeAbilityKey`.
+ */
+export const ABILITA_ATE = Object.freeze({
+  'pixilate':    TYPES.FAIRY,
+  'aerilate':    TYPES.FLYING,
+  'refrigerate': TYPES.ICE,
+  'dragonize':   TYPES.DRAGON,
+})
+
 export const LEVEL = 50
 
 /** Gli IV sono fissi a 31 in Champions — non esiste la variabilità classica. */
