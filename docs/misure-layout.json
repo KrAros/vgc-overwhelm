@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-19",
-    "commit": "dbe6268",
+    "commit": "c3773f9",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -23,6 +23,10 @@
         "nodi": []
       },
       "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 0,
+        "nodi": []
+      },
       "wcag_258": {
         "quanti": 0,
         "sottodimensionati": 3,
@@ -175,7 +179,48 @@
           }
         ]
       },
-      "scorrimento_pagina_px": 62,
+      "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 6,
+        "nodi": [
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 71,
+            "spazio": 4,
+            "testo": "Blank Set"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 70,
+            "spazio": 53,
+            "testo": "Sand Veil"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 168,
+            "spazio": 53,
+            "testo": "Adamant (+Atk, -SpA)"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 71,
+            "spazio": 25,
+            "testo": "Blank Set"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 102,
+            "spazio": 53,
+            "testo": "Good as Gold"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 168,
+            "spazio": 53,
+            "testo": "Adamant (+Atk, -SpA)"
+          }
+        ]
+      },
       "wcag_258": {
         "quanti": 2,
         "sottodimensionati": 39,
@@ -234,15 +279,15 @@
       "esclusioni": {
         "contenitori_scorrevoli": 1,
         "nascosti_1px": 1,
-        "sbordano_ma_visibili": 23
+        "sbordano_ma_visibili": 0
       },
       "viewport": {
-        "innerWidth": 422,
+        "innerWidth": 360,
         "htmlClientWidth": 360,
-        "htmlScrollWidth": 422
+        "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1365
+      "nodi_totali": 1377
     },
     {
       "scenario": "rapporto",
@@ -255,22 +300,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 48,
+        "quanti": 46,
         "nodi": [
-          {
-            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
-            "scroll": 129,
-            "visibile": 119,
-            "ellissi": true,
-            "testo": "Flamethrower"
-          },
-          {
-            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
-            "scroll": 122,
-            "visibile": 119,
-            "ellissi": true,
-            "testo": "Dragon Claw"
-          },
           {
             "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
             "scroll": 101,
@@ -340,10 +371,65 @@
             "visibile": 91,
             "ellissi": true,
             "testo": "▶ Earthquake ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 97,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "◀ Thunderbolt ⚡"
           }
         ]
       },
-      "scorrimento_pagina_px": 62,
+      "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 6,
+        "nodi": [
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 71,
+            "spazio": 4,
+            "testo": "Blank Set"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 70,
+            "spazio": 53,
+            "testo": "Sand Veil"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 168,
+            "spazio": 53,
+            "testo": "Adamant (+Atk, -SpA)"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 71,
+            "spazio": 25,
+            "testo": "Blank Set"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 102,
+            "spazio": 53,
+            "testo": "Good as Gold"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 168,
+            "spazio": 53,
+            "testo": "Adamant (+Atk, -SpA)"
+          }
+        ]
+      },
       "wcag_258": {
         "quanti": 2,
         "sottodimensionati": 39,
@@ -402,15 +488,15 @@
       "esclusioni": {
         "contenitori_scorrevoli": 2,
         "nascosti_1px": 1,
-        "sbordano_ma_visibili": 23
+        "sbordano_ma_visibili": 0
       },
       "viewport": {
-        "innerWidth": 422,
+        "innerWidth": 360,
         "htmlClientWidth": 360,
-        "htmlScrollWidth": 422
+        "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1504
+      "nodi_totali": 1516
     },
     {
       "scenario": "vuoto",
@@ -427,6 +513,10 @@
         "nodi": []
       },
       "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 0,
+        "nodi": []
+      },
       "wcag_258": {
         "quanti": 0,
         "sottodimensionati": 3,
@@ -579,7 +669,48 @@
           }
         ]
       },
-      "scorrimento_pagina_px": 62,
+      "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 6,
+        "nodi": [
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 72,
+            "spazio": 23,
+            "testo": "Set vuoto"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 83,
+            "spazio": 53,
+            "testo": "Sabbiavelo"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 152,
+            "spazio": 53,
+            "testo": "Decisa (+Atk, -SpA)"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 72,
+            "spazio": 3,
+            "testo": "Set vuoto"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 96,
+            "spazio": 53,
+            "testo": "Corpo Aureo"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 152,
+            "spazio": 53,
+            "testo": "Decisa (+Atk, -SpA)"
+          }
+        ]
+      },
       "wcag_258": {
         "quanti": 2,
         "sottodimensionati": 40,
@@ -638,15 +769,15 @@
       "esclusioni": {
         "contenitori_scorrevoli": 1,
         "nascosti_1px": 1,
-        "sbordano_ma_visibili": 23
+        "sbordano_ma_visibili": 0
       },
       "viewport": {
-        "innerWidth": 422,
+        "innerWidth": 360,
         "htmlClientWidth": 360,
-        "htmlScrollWidth": 422
+        "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1365
+      "nodi_totali": 1377
     },
     {
       "scenario": "rapporto",
@@ -659,15 +790,8 @@
       },
       "lingua_applicata": "sì",
       "tagliati": {
-        "quanti": 49,
+        "quanti": 48,
         "nodi": [
-          {
-            "nodo": "div.text-[20px] text-gray-300 capitalize truncate mb-1",
-            "scroll": 132,
-            "visibile": 119,
-            "ellissi": true,
-            "testo": "Lanciafiamme"
-          },
           {
             "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
             "scroll": 99,
@@ -744,10 +868,58 @@
             "visibile": 91,
             "ellissi": true,
             "testo": "▶ Lanciafiamme ⚡"
+          },
+          {
+            "nodo": "div.text-xs truncate flex items-center justify-center gap-1 text",
+            "scroll": 99,
+            "visibile": 91,
+            "ellissi": true,
+            "testo": "▶ Terremoto ⚡"
           }
         ]
       },
-      "scorrimento_pagina_px": 62,
+      "scorrimento_pagina_px": 0,
+      "tendine_strette": {
+        "quanti": 6,
+        "nodi": [
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 72,
+            "spazio": 23,
+            "testo": "Set vuoto"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 83,
+            "spazio": 53,
+            "testo": "Sabbiavelo"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 152,
+            "spazio": 53,
+            "testo": "Decisa (+Atk, -SpA)"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-gray-300 rounded px-2 py-1 o",
+            "serve": 72,
+            "spazio": 3,
+            "testo": "Set vuoto"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 96,
+            "spazio": 53,
+            "testo": "Corpo Aureo"
+          },
+          {
+            "nodo": "select.w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outl",
+            "serve": 152,
+            "spazio": 53,
+            "testo": "Decisa (+Atk, -SpA)"
+          }
+        ]
+      },
       "wcag_258": {
         "quanti": 2,
         "sottodimensionati": 40,
@@ -806,15 +978,15 @@
       "esclusioni": {
         "contenitori_scorrevoli": 2,
         "nascosti_1px": 1,
-        "sbordano_ma_visibili": 23
+        "sbordano_ma_visibili": 0
       },
       "viewport": {
-        "innerWidth": 422,
+        "innerWidth": 360,
         "htmlClientWidth": 360,
-        "htmlScrollWidth": 422
+        "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1504
+      "nodi_totali": 1516
     }
   ]
 }

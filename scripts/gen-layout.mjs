@@ -239,6 +239,39 @@ function misuraNellaPagina() {
     }
   }
 
+  // ── 3b. tendine il cui testo scelto non ci sta ─────────────────────────────
+  /** CRITERIO AGGIUNTO A META SESSIONE, perché il primo non vedeva il difetto 1.
+   *
+   *  Un <select> taglia da sé il testo dell'opzione scelta: il browser lo
+   *  clippa internamente e `scrollWidth` resta uguale a `clientWidth`. La
+   *  misura 1 gli passa accanto senza vederlo.
+   *
+   *  Portando i 48 «tagliati» a zero avrei quindi dichiarato il layout a posto
+   *  con «Set v» e «Natura (N» ancora sullo schermo — esattamente i difetti
+   *  fotografati da Simone.
+   *
+   *  Si misura confrontando la larghezza del testo scelto, resa con lo stesso
+   *  font del controllo, con lo spazio disponibile. I 20 px sottratti sono la
+   *  freccia più il padding: è una stima dichiarata, non una misura, e rende il
+   *  conteggio leggermente prudente invece che generoso. */
+  const tendineStrette = []
+  for (const s of document.querySelectorAll('select')) {
+    const r = s.getBoundingClientRect()
+    if (!r.width) continue
+    const scelto = s.options[s.selectedIndex]?.text ?? ''
+    const metro = document.createElement('span')
+    const cs = getComputedStyle(s)
+    metro.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font:${cs.font};letter-spacing:${cs.letterSpacing}`
+    metro.textContent = scelto
+    document.body.appendChild(metro)
+    const serve = metro.getBoundingClientRect().width
+    metro.remove()
+    const spazio = r.width - 20
+    if (serve > spazio) {
+      tendineStrette.push({ nodo: scheda(s), serve: Math.round(serve), spazio: Math.round(spazio), testo: scelto })
+    }
+  }
+
   // ── 4. bersagli sotto i 44 px ──────────────────────────────────────────────
   /** Misurato ma FUORI SCOPE per P-2: non è uno dei quattro difetti. Si
    *  registra perché costa zero ed è la base per una sessione futura. */
@@ -249,6 +282,7 @@ function misuraNellaPagina() {
   return {
     tagliati: { quanti: tagliati.length, nodi: tagliati.slice(0, 12) },
     scorrimento_pagina_px: scorrimento,
+    tendine_strette: { quanti: tendineStrette.length, nodi: tendineStrette.slice(0, 8) },
     wcag_258: { quanti: violazioni.length, sottodimensionati: sottodim.length, nodi: violazioni.slice(0, 8) },
     piccoli_fuori_scope: { quanti: piccoli.length, nodi: piccoli.slice(0, 6) },
     esclusioni,
@@ -344,11 +378,13 @@ for (const m of misure) {
   console.log(`\n── ${m.scenario} · ${m.lingua} · ${m.larghezza}px${guaio ? '   !! ' + m.controllo.esito + ' / lingua ' + m.lingua_applicata : ''}`)
   console.log(`   testo tagliato        ${String(m.tagliati.quanti).padStart(3)}`)
   console.log(`   scorrimento pagina    ${String(m.scorrimento_pagina_px).padStart(3)} px`)
+  console.log(`   tendine strette       ${String(m.tendine_strette.quanti).padStart(3)}`)
   console.log(`   WCAG 2.5.8 violati    ${String(m.wcag_258.quanti).padStart(3)}   (su ${m.wcag_258.sottodimensionati} sottodimensionati)`)
   console.log(`   sotto 44px (f.scopo)  ${String(m.piccoli_fuori_scope.quanti).padStart(3)}`)
   console.log(`   esclusi: ${m.esclusioni.contenitori_scorrevoli} scorrevoli, ${m.esclusioni.nascosti_1px} nascosti, ${m.esclusioni.sbordano_ma_visibili} sbordano-ma-visibili`)
   console.log(`   ${m.nodi_totali} nodi · pannello ${m.pannello_rapporto ? 'sì' : 'no'} · viewport ${JSON.stringify(m.viewport)}`)
-  for (const t of m.tagliati.nodi.slice(0, 4)) console.log(`      tagliato: ${t.scroll}>${t.visibile}  «${t.testo}»  ${t.nodo}`)
+  for (const t of m.tagliati.nodi.slice(0, 3)) console.log(`      tagliato: ${t.scroll}>${t.visibile}  «${t.testo}»`)
+  for (const s of m.tendine_strette.nodi.slice(0, 4)) console.log(`      tendina: ${s.serve}>${s.spazio}  «${s.testo}»`)
   for (const v of m.wcag_258.nodi.slice(0, 4)) console.log(`      2.5.8 ${v.w}×${v.h} a ${v.distanza}px da ${v.confligge.slice(0, 50)}`)
 }
 
