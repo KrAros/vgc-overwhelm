@@ -3,6 +3,23 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  /**
+   * ─── IL PERCORSO BASE ──────────────────────────────────────────────────────
+   * Su GitHub Pages un repository di progetto non vive alla radice del dominio
+   * ma sotto il proprio nome: `krAros.github.io/vgc-overwhelm/`. Senza questa
+   * riga il build cerca `/assets/index-xxx.js` alla radice, non lo trova, e la
+   * pagina esce **bianca** — con la build verde e nessun errore.
+   *
+   * Vale anche in sviluppo, di proposito. Tenerlo solo in produzione farebbe
+   * girare `npm run dev` alla radice e nasconderebbe fino al deploy proprio la
+   * classe di difetti che questa riga esiste per evitare. Il server di sviluppo
+   * stampa l'indirizzo completo all'avvio, quindi non c'è niente da indovinare.
+   *
+   * Il giorno in cui il sito passa a `sixthember.gg` questa riga torna a `'/'`
+   * e si aggiunge `public/CNAME`.
+   */
+  base: '/vgc-overwhelm/',
+
   plugins: [
     react(),
     tailwindcss(),

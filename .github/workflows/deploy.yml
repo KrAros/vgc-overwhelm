@@ -1,0 +1,91 @@
+# Pubblicazione su GitHub Pages.
+#
+# Due lavori separati, e la separazione è il punto:
+#
+#   verifica  gira su OGNI push e su ogni pull request — anche sui branch di
+#             sessione. Non pubblica niente.
+#   pubblica  gira solo su `modern`, e SOLO se `verifica` è passato.
+#
+# Così la rete costruita in tredici sessioni sta a guardia dell'uscita: se un
+# test è rosso, il sito online resta quello di prima. Non esce mai una versione
+# che non ha superato la suite.
+#
+# L'indirizzo prodotto è  https://kraros.github.io/vgc-overwhelm/
+# e corrisponde al `base` dichiarato in `vite.config.js`. Se un giorno si passa
+# a un dominio proprio, vanno cambiati entrambi.
+
+name: Verifica e pubblica
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  # Permette di lanciarlo a mano dalla scheda Actions, senza fare un push.
+  workflow_dispatch:
+
+# Il token serve a scrivere su Pages; `contents: read` basta per il checkout.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  verifica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # La versione è quella su cui il progetto è sviluppato. `npm ci` invece di
+      # `npm install` perché installa esattamente il package-lock committato:
+      # un aggiornamento silenzioso di dipendenza non deve poter cambiare il
+      # risultato della verifica.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Suite completa
+        run: npm run test:run
+
+      # La caratterizzazione del motore: deve essere a ZERO. È la stessa
+      # verifica che si fa a mano prima di ogni merge.
+      - name: Snapshot a zero divergenze
+        run: npm run snapshot:diff
+
+      - name: Build
+        run: npm run build
+
+      # L'artefatto lo carica solo il ramo che pubblica, ma il build gira
+      # comunque su tutti: un errore di build su un branch di sessione va visto
+      # lì, non al momento del merge.
+      - name: Prepara l'artefatto per Pages
+        if: github.ref == 'refs/heads/modern'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  pubblica:
+    # `needs` è ciò che impedisce di pubblicare con i test rossi.
+    needs: verifica
+    if: github.ref == 'refs/heads/modern'
+    runs-on: ubuntu-latest
+
+    # La coda sta QUI e non in cima al file. Messa a livello globale, un push
+    # su un branch di sessione avrebbe annullato una pubblicazione di `modern`
+    # già in corso — due cose che non hanno niente a che vedere fra loro.
+    # `cancel-in-progress: false` perché una pubblicazione a metà è peggio di
+    # una pubblicazione in ritardo: si aspetta che finisca.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Pubblica su Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
