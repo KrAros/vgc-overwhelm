@@ -335,7 +335,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
         <div className="flex flex-col lg:flex-row lg:items-center px-4 lg:px-5 py-4 gap-4 lg:gap-0">
 
           {/* Attaccante */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
             <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[atkTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(atk.key)}
@@ -354,15 +354,23 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
             </div>
           </div>
 
-          {/* Freccia ⚡ → */}
-          <div className="flex items-center px-2 lg:px-6 shrink-0">
-            <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className="w-10 lg:w-16">
+          {/* Freccia. Su telefono i due Pokémon sono IMPILATI, uno sopra
+              l'altro, quindi una freccia orizzontale indica una direzione che
+              sullo schermo non esiste: l'avversario sta sotto, non a destra.
+              `rotate-90` la fa puntare in basso, `lg:rotate-0` la rimette
+              orizzontale quando i due tornano affiancati.
+
+              `h-10` sul contenitore serve perché una rotazione non cambia il
+              riquadro di layout: senza, la freccia verticale sborderebbe dal
+              proprio spazio alto 9 px e finirebbe sopra i nomi. */}
+          <div className="flex items-center justify-center px-2 lg:px-6 shrink-0 h-10 lg:h-auto">
+            <svg width="64" height="14" viewBox="0 0 64 14" fill="none" className="w-10 lg:w-16 rotate-90 lg:rotate-0">
               <path d="M0 7 H58 M52 1 L60 7 L52 13" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
           {/* Difensore */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
             <div className="w-18 h-18 lg:w-26 lg:h-26 bg-gray-800/60 rounded-full flex items-center justify-center border-2 shrink-0 overflow-hidden" style={{borderColor: TYPE_HEX[TYPE_NAMES[defTypes2[0]]] || '#4b5563'}}>
               <img
                 src={spriteUrl(def.key)}
@@ -384,6 +392,15 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Separatore verticale */}
           <div className="hidden lg:block w-px bg-gray-700/40 mx-6 self-stretch" />
 
+          {/* Mossa selezionata e riquadro KO, AFFIANCATI su telefono.
+
+              `lg:contents` è la chiave: sotto i 1024 px questo contenitore
+              mette i due elementi in riga; sopra, `display: contents` lo fa
+              sparire dall'albero di layout e i due tornano figli diretti
+              dell'intestazione, esattamente com'erano. Il desktop non cambia
+              di un pixel e non c'è una seconda copia del markup. */}
+          <div className="flex items-center gap-3 lg:contents">
+
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
             <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
@@ -396,24 +413,24 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 <span className="text-[10px] text-purple-400 font-bold uppercase tracking-widest border border-purple-700/40 rounded px-1.5 py-0.5">🌀 Spread</span>
               )}
             </div>
-            <div className="text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
+            <div className="text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
             <div className="text-xs text-gray-500 mt-1">{result.minDmg} – {result.maxDmg} HP</div>
           </div>
 
           {/* Colonna destra: badge KO — dimensioni uniformi, centrato */}
           <div className="shrink-0 flex flex-col items-end justify-center lg:self-center">
             {isOHKO ? (
-              <div className="border-2 border-red-500/70 rounded-xl px-5 py-4 text-center bg-red-950/30 w-36">
+              <div className="border-2 border-red-500/70 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-red-950/30 w-28 lg:w-36">
                 <div className="text-3xl font-black text-red-400 leading-tight">100%</div>
                 <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">1HKO {t('eot.guaranteed')}</div>
               </div>
             ) : hasOHKOChance ? (
-              <div className="border-2 border-orange-500/60 rounded-xl px-5 py-4 text-center bg-orange-950/20 w-36">
+              <div className="border-2 border-orange-500/60 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-orange-950/20 w-28 lg:w-36">
                 <div className="text-3xl font-black text-orange-400 leading-tight">{ohkoPct}%</div>
                 <div className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mt-1">1HKO Chance</div>
               </div>
             ) : endOfTurnInfo ? (
-              <div className="border-2 border-yellow-600/40 rounded-xl px-5 py-4 text-center bg-yellow-950/10 w-36">
+              <div className="border-2 border-yellow-600/40 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-yellow-950/10 w-28 lg:w-36">
                 <div className="text-2xl font-black text-yellow-300 leading-tight">
                   {endOfTurnInfo.pct ? `${endOfTurnInfo.pct}%` : '100%'}
                 </div>
@@ -426,11 +443,13 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 </div>
               </div>
             ) : (
-              <div className="border-2 border-gray-600/30 rounded-xl px-5 py-4 text-center bg-gray-800/30 w-36">
+              <div className="border-2 border-gray-600/30 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-gray-800/30 w-28 lg:w-36">
                 <div className="text-2xl font-black text-gray-500 leading-tight">—</div>
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko_in_n', { turni: MAX_HITS })}</div>
               </div>
             )}
+          </div>
+
           </div>
         </div>
 
@@ -553,7 +572,25 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           return (
             <div id="damage-breakdown-card" className="bg-gray-900 rounded-xl border border-gray-700/40 px-5 py-4">
               <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-4">{cardTitle}</div>
-              <div className="flex items-center justify-center gap-1.5 overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
+              {/* Su telefono i passi VANNO A CAPO invece di scorrere.
+
+                  Prima erano tre cose insieme, e insieme facevano un difetto:
+                  il contenitore scorreva in orizzontale, la barra di
+                  scorrimento era nascosta (`scrollbarWidth: none`), e
+                  `justify-center` spingeva il contenuto in eccesso fuori da
+                  ENTRAMBI i lati. Nella foto di Simone si leggeva «TART» a
+                  sinistra e «RESUL» a destra: non era testo troncato, era la
+                  striscia intera tagliata ai due capi — e con `justify-center`
+                  la parte a sinistra non si raggiunge nemmeno scorrendo.
+
+                  Il criterio del testo tagliato non poteva vederlo: esclude
+                  apposta i contenitori con `overflow-x: auto`, classificandoli
+                  come scorrimento voluto. Qui lo scorrimento c'era, la
+                  volontà no.
+
+                  Da `lg` in su nulla cambia: i passi stanno in riga e il
+                  contenitore torna a scorrere se serve. */}
+              <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-1.5 lg:overflow-x-auto pb-1" style={{scrollbarWidth:'none'}}>
 
                 {/* Start */}
                 <div className="flex flex-col items-center shrink-0 w-20">
