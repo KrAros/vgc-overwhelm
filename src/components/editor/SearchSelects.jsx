@@ -7,6 +7,7 @@ import pokemonData from '../../data/pokemon.json'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
+import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n.js'
 
@@ -129,24 +130,21 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
 
   const moveDetails = movesData[value]
 
-  // Weather Ball: tipo e BP cambiano col meteo
-  const WEATHER_BALL_TYPES = {
-    rain: 2, 'heavy rain': 2,
-    sun: 1,  'harsh sunshine': 1,
-    sand: 12, sandstorm: 12,
-    snow: 5,  hail: 5,
-  }
+  // Palla Clima: tipo e BP cambiano col meteo. La tabella sta in
+  // `lib/rules.js` dalla sessione Q — qui ce n'era una copia con due chiavi in
+  // più, `sandstorm` e `hail`, che erano una normalizzazione riscritta a mano
+  // dentro il componente. Ora la fa `normalizzaMeteo`, che è la stessa
+  // funzione da cui passa il motore, e che gestisce anche il maiuscolo.
   const isWeatherBall = value === 'weather ball'
-  const wbWeatherKey = weather ? weather.toLowerCase() : null
-  const wbTypeIdx = isWeatherBall && wbWeatherKey && WEATHER_BALL_TYPES[wbWeatherKey] !== undefined
-    ? WEATHER_BALL_TYPES[wbWeatherKey]
-    : null
-  // Ate abilities: Normal → Fairy (pixilate) / Flying (aerilate) / Ice (refrigerate) / Dragon (dragonize)
+  const wbTypeIdx = tipoPallaClima(value, weather)
+  // Abilità «-ate»: la tabella sta in `data/typeChart.js` dalla sessione Q.
+  // Qui c'era una copia scritta con gli indici numerici, mentre il motore usava
+  // le costanti TYPES.*: due rappresentazioni diverse della stessa cosa, che
+  // concordavano senza che niente lo garantisse.
   const abilityKey = (ability || '').toLowerCase().replace(/ /g, '-')
-  const ATE_MAP = { 'pixilate': 17, 'aerilate': 9, 'refrigerate': 5, 'dragonize': 14 } // indici in TYPE_NAMES
   const baseType = isWeatherBall && wbTypeIdx !== null ? wbTypeIdx : moveDetails?.type
   const isNormalMove = baseType === 0 // 0 = Normal
-  const ateType = isNormalMove && ATE_MAP[abilityKey] !== undefined ? ATE_MAP[abilityKey] : null
+  const ateType = isNormalMove && ABILITA_ATE[abilityKey] !== undefined ? ABILITA_ATE[abilityKey] : null
   const displayType = ateType !== null ? ateType : baseType
   const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100 : moveDetails?.power
 

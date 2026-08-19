@@ -48,19 +48,19 @@ export const CLASSIFICAZIONE = {
   abilita: {
     'pixilate': {
       verdetto: 'badge-sbagliato',
-      nota: 'calcEngine:200 — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP',
+      nota: 'tabella ABILITA_ATE in lib/rules.js, applicata dal motore — Normale→Folletto e ×1,2 sulla potenza, esattamente checkAbilityTypeChange di NCP',
     },
     'aerilate': {
       verdetto: 'badge-sbagliato',
-      nota: 'calcEngine:201 — Normale→Volante e ×1,2',
+      nota: 'tabella ABILITA_ATE in lib/rules.js — Normale→Volante e ×1,2',
     },
     'refrigerate': {
       verdetto: 'badge-sbagliato',
-      nota: 'calcEngine:202 — Normale→Ghiaccio e ×1,2',
+      nota: 'tabella ABILITA_ATE in lib/rules.js — Normale→Ghiaccio e ×1,2',
     },
     'dragonize': {
       verdetto: 'badge-sbagliato',
-      nota: 'calcEngine:203 — Normale→Drago e ×1,2',
+      nota: 'tabella ABILITA_ATE in lib/rules.js — Normale→Drago e ×1,2',
     },
     'long reach': {
       verdetto: 'badge-sbagliato',
