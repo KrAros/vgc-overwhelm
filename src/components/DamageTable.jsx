@@ -167,7 +167,19 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
       >
         {d ? (
           <>
-            <div className={`text-xs truncate flex items-center justify-center gap-1 ${goesFirst ? 'text-yellow-200' : 'text-gray-400'}`}>
+            {/* Niente `truncate`: nasconde il nome della mossa, che è
+                l'informazione della cella.
+
+                Misurato a 360 px: 38 mezze celle su 72 sbordavano, di 2-12 px
+                su 91 disponibili. Allargare la cella di 12 px o rimpicciolire
+                il carattere avrebbe azzerato il conteggio di oggi e lasciato in
+                piedi la classe — «Adesso Faccio sul Serio» chiede ~190 px, e
+                nessuna larghezza di cella in una griglia 6×6 lo regge.
+
+                Andare a capo vale per ogni nome. `flex-wrap` serve perché il
+                contenitore è flex: senza, il ⚡ resterebbe incollato alla riga
+                e la spingerebbe fuori lo stesso. */}
+            <div className={`text-xs flex flex-wrap items-center justify-center gap-x-1 wrap-break-word ${goesFirst ? 'text-yellow-200' : 'text-gray-400'}`}>
               {prefix} {t(`moves.${d.move}`, { defaultValue: toTitleCase(d.move) })}
               {goesFirst && (
                 // Fix 3: testo più grande (text-xs invece di text-[9px]), tooltip con nome Pokémon
