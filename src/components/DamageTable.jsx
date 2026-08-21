@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { costruisciMatrice } from '../lib/matrice'
 import useFieldState from '../hooks/useFieldState'
+import useBordiScorrimento from '../hooks/useBordiScorrimento'
 
 const toTitleCase = s => s.replace(/(^|-)\w/g, c => c.replace('-', ' ').toUpperCase()).trim()
 
@@ -235,6 +236,9 @@ function dirSelezionata(voce, ri, ci) {
 // ── DamageTable ───────────────────────────────────────────────────────────────
 
 export default function DamageTable({ onCellSelect }) {
+  // Il riferimento al contenitore che scorre, e i due bordi che ne derivano.
+  const contenitore = useRef(null)
+  const bordi = useBordiScorrimento(contenitore)
   const { t } = useTranslation()
   const [selectionState, setSelectionState] = useState({ first: null, second: null })
   const showKoOnly = useCalcStore(s => s.showKoOnly)
@@ -342,7 +346,33 @@ export default function DamageTable({ onCellSelect }) {
       )}
 
       <div className="xl:flex xl:gap-3 xl:items-start">
-      <div className="overflow-x-auto rounded-xl border border-gray-700/40 xl:flex-1 xl:min-w-0">
+      {/* ─── LA MATRICE DICHIARA DI SCORRERE ─────────────────────────────
+          Difetto 3 delle foto: a 360 px si vedono tre colonne su sei e niente
+          segnala che ce ne siano altre. La barra di scorrimento su telefono
+          non c'è, e `justify-center` non aiuta.
+
+          Due sfumature, una per lato, ACCESE SOLO QUANDO si può ancora
+          scorrere in quella direzione — una sfumatura fissa direbbe «c'è
+          dell'altro» anche in fondo, cioè mentirebbe proprio quando l'utente
+          cerca conferma di aver visto tutto.
+
+          Il wrapper `relative` sta FUORI dal contenitore che scorre: dentro,
+          le sfumature scorrerebbero col contenuto invece di restare ai bordi.
+          `pointer-events-none` perché non devono intercettare il dito, e
+          `aria-hidden` perché non aggiungono informazione a chi non vede: per
+          quello c'è già `role="grid"`. */}
+      <div className="relative xl:flex-1 xl:min-w-0">
+      {bordi.inizio && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 w-8 z-30 rounded-l-xl
+                     bg-gradient-to-r from-gray-900 to-transparent" />
+      )}
+      {bordi.fine && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 z-30 rounded-r-xl
+                     bg-gradient-to-l from-gray-900 to-transparent" />
+      )}
+      <div ref={contenitore} className="overflow-x-auto rounded-xl border border-gray-700/40">
         <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label={t("ui.damage_matrix")}>
           <thead>
             <tr>
@@ -469,6 +499,7 @@ export default function DamageTable({ onCellSelect }) {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
 
       {/* ── Legend sidebar (desktop largo) ── */}
