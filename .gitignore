@@ -26,3 +26,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Documenti di lavoro interni — scelta di Simone, 21 agosto 2026.
+#
+# CLAUDE.md e il piano sono il diario del risanamento: ogni criterio
+# sbagliato, ogni punto cieco, ogni errore scritto per esteso. Servono a chi
+# lavora al progetto, non a chi lo visita, e restano sul disco esattamente
+# dove erano — sono solo usciti dal repository pubblico.
+#
+# ATTENZIONE: questo li toglie da qui in avanti. Sono ancora leggibili nei
+# commit fino al 21 agosto 2026, perche' `git rm` non riscrive la storia.
+# Chiuderlo anche all'indietro richiede un filter-repo e un force-push.
+CLAUDE.md
+docs/piano-risanamento.md
+docs/analisi-critica.md

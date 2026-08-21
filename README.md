@@ -152,9 +152,9 @@ nessuno se n'era accorto.</small>
 ## Contribuire
 
 Le regole stanno in **[CONTRIBUTING.md](CONTRIBUTING.md)**, e non sono
-decorative: questo repository ha una disciplina di verifica scritta in
-[CLAUDE.md](CLAUDE.md) che nasce da dodici sessioni di risanamento e da una
-lista di errori realmente commessi. Vale la pena leggerla prima di aprire una PR.
+decorative: questo repository ha una disciplina di verifica nata da dodici
+sessioni di risanamento e da una lista di errori realmente commessi. Vale la
+pena leggerla prima di aprire una PR.
 
 I lavori che servono di più e costano poco a chi arriva: preset del meta,
 traduzioni, e le abilità che oggi portano il badge «non calcolata».

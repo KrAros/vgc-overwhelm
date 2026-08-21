@@ -53,8 +53,8 @@ errore, non un progresso.
 ## Le regole di verifica
 
 Nascono da dodici sessioni di risanamento e da una lista di errori realmente
-commessi, che sta in [CLAUDE.md](CLAUDE.md). Vale la pena leggerla: quasi ogni
-regola qui sotto è il fossile di una svista costata una sessione.
+commessi. Quasi ogni regola qui sotto è il fossile di una svista costata una
+sessione: non sono principi astratti, sono cicatrici.
 
 **Criteri misurati, mai dedotti.** Se scrivi un numero in una PR — «questo copre
 64 abilità», «il bundle cala di 30 kB» — dev'essere stato **letto** da
@@ -120,8 +120,7 @@ un bug: è l'ingresso sbagliato.
 
 ## Cosa NON correggere
 
-Sembrano difetti e sono decisioni. La lista completa e motivata sta in
-[CLAUDE.md](CLAUDE.md); le più segnalate:
+Sembrano difetti e sono decisioni. Le più segnalate:
 
 - `buildSmogonString` mostra gli **SP**, non gli EV calcolati
 - i nomi delle mosse in export sono **sempre in inglese**
