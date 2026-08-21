@@ -89,38 +89,45 @@ describe('editor pieno — la semina', () => {
 })
 
 /**
- * ─── CARATTERIZZAZIONE, NON ANCORA UN CRITERIO ─────────────────────────────
+ * ─── DA CARATTERIZZAZIONE A CRITERIO ───────────────────────────────────────
  *
- * Questi numeri NON sono lo stato desiderato: sono lo stato di oggi, scattato
- * il giorno in cui il buco è stato scoperto. Cinquanta controlli dell'editor
- * non hanno nome accessibile.
+ * In P-2/1 questi numeri erano un debito scritto: 14 <select> senza nome su
+ * 18, e 36 <input> su 36. Erano asserzioni esatte apposta, perché anche un
+ * MIGLIORAMENTO diventasse rosso e il progresso si vedesse invece di scivolare
+ * dentro un test già verde.
  *
- * Sono scritti come asserzioni esatte apposta. Così:
- *   - un peggioramento diventa rosso, che è quello che serve subito
- *   - un MIGLIORAMENTO diventa rosso anche lui, e chi paga il debito deve
- *     abbassare il numero a mano — cioè il progresso si vede invece di
- *     scivolare dentro un test già verde
+ * Pagato in S. I cinquanta controlli stavano in quattro componenti soli:
  *
- * Il debito va pagato in una sessione dedicata, dove dare un nome a cinquanta
- * controlli è l'unico criterio: servono chiavi di traduzione nuove, e
- * `traduzioni.test.js` vieta stringhe identiche fra le due lingue salvo
- * quindici elencate. Mescolarlo al lavoro sul layout sarebbe applicare due
- * criteri di segno diverso nella stessa sessione.
+ *   StatRow          cursore, campo numerico e stadio × 6 statistiche × 2
+ *                    squadre = 36 nodi. Il nome porta dentro la sigla della
+ *                    statistica, altrimenti uno screen reader legge dodici
+ *                    cursori identici
+ *   SearchSelects    le tre ricerche e la tendina abilità
+ *   SlotEditor       la natura
  *
- * I bottoni sono già a zero: li ha chiusi la sessione P.
+ * Dove esisteva già una stringa — `ui.search_pokemon`, `ui.search_item` — il
+ * nome la RILEGGE invece di duplicarla. Sei chiavi nuove in `aria.*`, solo
+ * dove non c'era niente da riusare.
+ *
+ * Da qui in poi sono zero, e restano zero.
  */
 describe('editor pieno — controlli senza nome accessibile', () => {
-  it('nessun <button> senza nome — chiuso in P, e deve restare così', () => {
+  it('nessun <button> senza nome', () => {
     expect(esito.bottoni).toEqual([])
   })
 
-  it('<select> senza nome: 14 su 18 — debito noto, da abbassare', () => {
-    expect({ senzaNome: esito.tendine.length, totali: esito.totali.tendine })
-      .toEqual({ senzaNome: 14, totali: 18 })
+  it('nessun <select> senza nome', () => {
+    expect(esito.tendine).toEqual([])
   })
 
-  it('<input> senza nome: 36 su 36 — debito noto, da abbassare', () => {
-    expect({ senzaNome: esito.campi.length, totali: esito.totali.campi })
-      .toEqual({ senzaNome: 36, totali: 36 })
+  it('nessun <input> senza nome', () => {
+    expect(esito.campi).toEqual([])
+  })
+
+  /** Che i controlli ci siano davvero: senza, tre elenchi vuoti confrontati
+   *  con tre elenchi vuoti passerebbero dicendo niente. */
+  it('i controlli da verificare esistono', () => {
+    expect(esito.totali.tendine).toBeGreaterThan(10)
+    expect(esito.totali.campi).toBeGreaterThan(30)
   })
 })

@@ -288,6 +288,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               <div className="w-full sm:w-1/3">
                 <select
                   className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
+                  aria-label={t('aria.nature')}
                   value={nature || ''}
                   onChange={e => setNature(team, index, e.target.value || null)}
                 >

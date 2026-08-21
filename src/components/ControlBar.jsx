@@ -485,7 +485,17 @@ export default function ControlBar() {
 
         {/* ── DESKTOP ── */}
         <div className="hidden sm:block space-y-2">
-          <div className="flex items-center justify-between gap-2">
+          {/* `flex-wrap` fino a 1280 px. Questa riga tiene l'etichetta Team 1,
+              i modificatori, il filtro KO, gli altri modificatori e Team 2:
+              senza andare a capo non ci sta, e a sbordare non era la riga ma la
+              PAGINA INTERA. Misurato: 414 px di scorrimento a 700, 314 a 800,
+              214 a 900, 90 a 1024, zero a 1280.
+
+              Nessuno l'aveva visto perché le sessioni sul telefono misuravano a
+              360 px, dove il ramo `sm:hidden` prende il posto di questo, e
+              quelle sul desktop a 1280, dove ci sta. Il difetto viveva
+              esattamente nella fascia che nessuna delle due guardava. */}
+          <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold shrink-0">Team 1</span>
               <div className="flex items-center gap-1">
@@ -512,7 +522,10 @@ export default function ControlBar() {
 
           <div className="h-px bg-gray-700/60" />
 
-          <div className="flex items-center justify-between gap-2">
+          {/* Stessa correzione della riga qui sopra: senza `flex-wrap` i sei
+              bottoni delle due squadre non ci stanno fra 640 e 800 px, e a
+              sbordare è la pagina. Misurato: 149 px a 640, 89 a 700. */}
+          <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-2">
             <div className="flex items-center gap-1">
               <button type="button"
                 onClick={() => openImport('import1')}

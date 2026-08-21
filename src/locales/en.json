@@ -3,6 +3,7 @@
     "skip_to_content": "Skip to main content",
     "options": "Options",
     "field": "Field",
+    "disclaimer": "Fan-made project. Not affiliated with Nintendo, Game Freak or The Pokémon Company. Pokémon and all related names are trademarks of their respective owners.",
     "weather": "Weather",
     "none": "None",
     "team1": "Team 1",
@@ -187,7 +188,13 @@
     "team_modifiers": "Team modifiers and actions",
     "switch_language": "Switch language",
     "github_repo": "GitHub repository",
-    "battle_conditions": "Battle conditions"
+    "battle_conditions": "Battle conditions",
+    "sp_slider": "{{stat}} SP — slider",
+    "sp_value": "{{stat}} SP — exact value",
+    "stage": "{{stat}} — stat stage",
+    "nature": "Nature",
+    "search_move": "Search move",
+    "ability": "Ability"
   },
   "natures": {
     "adamant": "Adamant",
