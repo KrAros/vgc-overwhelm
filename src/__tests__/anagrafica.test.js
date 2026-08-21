@@ -32,6 +32,7 @@ import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 import { TYPE_NAMES } from '../data/typeChart.js'
 import abilitiesData from '../data/abilities.json'
+import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 /** Indici di `stats`: [PS, Att, Dif, Att.Sp, Dif.Sp, Vel]. */
 const STATS_CORRETTE = {
@@ -143,6 +144,37 @@ describe('guardie di forma su tutto pokemon.json', () => {
       .filter(([, v]) => typeof v?.name === 'string' && v.name && v.name[0] !== v.name[0].toUpperCase())
       .map(([slug, v]) => `${slug} → ${v.name}`)
     expect(minuscole, 'finiscono nella riga `Ability:` del paste Showdown').toEqual([])
+  })
+
+  /**
+   * ─── LA TABELLA DI MECCANICA NON CONTIENE TESTO ──────────────────────────
+   *
+   * Fino a T ogni voce di `ABILITY_EFFECTS` portava anche `desc`, `descOn` e
+   * `descOff`: 198 voci, di cui 153 senza un solo campo meccanico. E quel
+   * testo era duplicato nei file di traduzione.
+   *
+   * Non era ridondanza innocua: `AbilityFlags` lo usava come `defaultValue`, e
+   * una chiave presente nel locale vince sul ripiego. In R si è scoperto che
+   * 52 descrizioni inglesi erano troncate, e la copia rotta faceva ombra
+   * all'originale sano che stava proprio lì. Si è potuto correggere solo
+   * perché la seconda copia era intera: la volta dopo poteva andare al
+   * contrario.
+   *
+   * Questa asserzione impedisce che una descrizione rientri di soppiatto nella
+   * tabella sbagliata.
+   */
+  it('ABILITY_EFFECTS non contiene descrizioni', () => {
+    const conTesto = Object.entries(ABILITY_EFFECTS)
+      .filter(([, v]) => 'desc' in v || 'descOn' in v || 'descOff' in v)
+      .map(([k]) => k)
+    expect(conTesto, 'il testo vive in locales/*.json, non qui').toEqual([])
+  })
+
+  it('ogni voce di ABILITY_EFFECTS ha una ragione meccanica per esserci', () => {
+    const vuote = Object.entries(ABILITY_EFFECTS)
+      .filter(([, v]) => Object.keys(v).length === 0)
+      .map(([k]) => k)
+    expect(vuote).toEqual([])
   })
 
   it('ogni indice di tipo sta fra 0 e 17', () => {

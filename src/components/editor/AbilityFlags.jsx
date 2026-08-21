@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
-import { ABILITY_EFFECTS, normalizeAbilityKey } from '../../data/abilityEffects.js'
+// Solo `normalizeAbilityKey`: da T il componente NON legge più testo dal file
+// di meccaniche. Le descrizioni vivono nei file di traduzione, e basta.
+import { normalizeAbilityKey } from '../../data/abilityEffects.js'
 import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
 import { TYPES } from '../../data/typeChart.js'
 import movesData from '../../data/moves.json'
@@ -63,7 +65,7 @@ const PERNO_SPENTO = 'bg-gray-600'
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
 export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather, moves }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const key = normalizeAbilityKey(ability)
 
   // La tabella sta in `utils/speedOrder.js` dalla sessione F-1. Qui c'era una
@@ -79,8 +81,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           : SPENTO
       }`}>
         {speedWeatherActive
-          ? `⚡ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
-          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
+          ? `⚡ ${t(`abilities_desc_on.${key}`)}`
+          : `💡 ${t(`abilities_desc_off.${key}`)}`}
       </div>
     )
   }
@@ -101,8 +103,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         </button>
         <span className={flags.flashFireActive ? TESTO_ACCESO : TESTO_SPENTO}>
           {flags.flashFireActive
-            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
-            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
         </span>
       </div>
     )
@@ -124,8 +126,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         </button>
         <span className={flags.multiscaleActive ? TESTO_ACCESO : TESTO_SPENTO}>
           {flags.multiscaleActive
-            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
-            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
         </span>
       </div>
     )
@@ -182,8 +184,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         </button>
         <span className={flags.intimidateActive ? TESTO_ACCESO : TESTO_SPENTO}>
           {flags.intimidateActive
-            ? t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })
-            : t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
         </span>
       </div>
     )
@@ -197,8 +199,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           : SPENTO
       }`}>
         {opponentHasIntimidateActive
-          ? `✅ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
-          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
+          ? `✅ ${t(`abilities_desc_on.${key}`)}`
+          : `💡 ${t(`abilities_desc_off.${key}`)}`}
       </div>
     )
   }
@@ -211,8 +213,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
           : SPENTO
       }`}>
         {opponentHasIntimidateActive
-          ? `✅ ${t(`abilities_desc_on.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOn })}`
-          : `💡 ${t(`abilities_desc_off.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.descOff })}`}
+          ? `✅ ${t(`abilities_desc_on.${key}`)}`
+          : `💡 ${t(`abilities_desc_off.${key}`)}`}
       </div>
     )
   }
@@ -248,7 +250,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
       <>
         <div className={`mt-1 px-1 py-1 rounded text-xs border ${attiva ? ACCESO : SPENTO}`}>
           {attiva ? '✅ ' : '💡 '}
-          {t(`abilities_desc.${key}`, { defaultValue: ABILITY_EFFECTS[key]?.desc })}
+          {t(`abilities_desc.${key}`)}
         </div>
         {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
       </>
@@ -256,8 +258,15 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   }
 
   // ── Box informativi statici ────────────────────────────────────────────────
-  const abilityEffect = ABILITY_EFFECTS[key]
-  if (abilityEffect?.desc) {
+  /* L'interruttore era la PRESENZA di `desc` in ABILITY_EFFECTS, cioè un campo
+     di testo dentro una tabella di meccaniche usato come flag. Ora è la
+     presenza della chiave nel file di traduzione, che è dove il testo vive.
+
+     `i18n.exists` ricade sull'inglese, quindi una descrizione presente solo lì
+     conta comunque — ed è il comportamento giusto: meglio in inglese che
+     assente. Verificato che i due insiemi coincidano prima di cambiare
+     criterio: 198 e 198, zero chiavi da una parte sola. */
+  if (i18n.exists(`abilities_desc.${key}`)) {
     /* Qui c'era una COLOR_MAP con dieci voci: dieci abilità colorate per «cosa
        fanno» — rosso chi moltiplica l'Attacco, blu e indaco chi riduce il danno
        — e le altre 188 grigie per esclusione.
@@ -271,7 +280,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     return (
       <>
         <div className={`mt-1 px-1 py-1 rounded text-xs border ${SPENTO}`}>
-          💡 {t(`abilities_desc.${key}`, { defaultValue: abilityEffect.desc })}
+          💡 {t(`abilities_desc.${key}`)}
         </div>
         {/* Il caso peggiore per la fiducia: una descrizione tradotta che
             promette un effetto, e un numero che non si muove. Il badge sta
@@ -282,7 +291,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
-  // Nessuna voce in ABILITY_EFFECTS: fino a F-2 qui l'interfaccia non diceva
+  // Nessuna descrizione per questa abilità: fino a F-2 qui l'interfaccia non diceva
   // niente. Per 228 abilità su 310 il silenzio era l'unica risposta — né una
   // descrizione, né un avviso. Adesso, se il riferimento la calcola, lo diciamo.
   if (abilitaNonCalcolata(ability)) {

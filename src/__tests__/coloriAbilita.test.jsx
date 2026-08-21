@@ -166,6 +166,25 @@ describe('nessuna stringa italiana scritta dentro il JSX', () => {
   })
 })
 
+describe('nessuna chiave di traduzione mostrata all\'utente', () => {
+  /**
+   * ─── IL RISCHIO INTRODOTTO DA T ──────────────────────────────────────────
+   *
+   * Togliendo `defaultValue: ABILITY_EFFECTS[key]?.desc` dal componente, una
+   * chiave mancante non ricade più su un testo: i18next restituisce la CHIAVE,
+   * e l'utente legge `abilities_desc_on.multiscale` dentro il riquadro.
+   *
+   * È il prezzo di avere una fonte sola, e va sorvegliato invece che sperato.
+   * Verificato prima di togliere il ripiego che i due insiemi coincidessero —
+   * 198 e 198 — ma un insieme che coincide oggi può divergere domani.
+   */
+  it.each(CASI)('%s (%o) non mostra una chiave grezza', (ability, extra) => {
+    const html = rendi(ability, extra)
+    const grezze = [...html.matchAll(/abilities_desc(_on|_off)?\.[a-z0-9-]+/g)].map((m) => m[0])
+    expect(grezze).toEqual([])
+  })
+})
+
 describe('la proprietà stabilita dalla sessione Q', () => {
   /**
    * Attivata in Q/2. Prima falliva su 19 casi su 30.

@@ -19,88 +19,114 @@ export const DEFAULT_ABILITY_FLAGS = {
   supremeOverlordKOs:    0,     // attaccante: numero alleati KO (0-5), boost ×(1 + n*0.1)
 }
 
-// ─── Effetti passivi delle abilità sul calcolo danno ─────────────────────────
-// Le abilità con stato (intimidate, flash-fire, multiscale…) hanno qui solo
-// metadati descrittivi. La logica vera è in calcEngine.js che legge abilityFlags.
+/**
+ * ─── SOLO MECCANICA, NIENTE TESTO ───────────────────────────────────────────
+ *
+ * Su cosa il motore ramifica: `atkMult`, `flashFireImmune`, `furCoat`,
+ * `multiscale`, `filter`, `paradosso`, `intimidate`, `showInSmogon`… La logica
+ * sta in `calcEngine.js` e `lib/preparazione.js`, che leggono questi flag
+ * insieme ad `abilityFlags`.
+ *
+ * ─── PERCHÉ NON CI SONO PIÙ LE DESCRIZIONI ─────────────────────────────────
+ *
+ * Fino alla sessione T ogni voce portava anche `desc`, `descOn` e `descOff`:
+ * 198 voci, di cui **153 senza un solo campo meccanico**. Una tabella di
+ * meccaniche in cui l'ottantacinque per cento delle righe non conteneva
+ * meccanica, e il cui testo era duplicato nei file di traduzione.
+ *
+ * Non era una ridondanza innocua. `AbilityFlags.jsx` leggeva la traduzione con
+ * `defaultValue: ABILITY_EFFECTS[key]?.desc`, e una chiave PRESENTE nel locale
+ * vince sul valore di ripiego: in R si è scoperto che 52 descrizioni inglesi
+ * erano troncate al primo apostrofo, e la copia rotta faceva ombra
+ * all'originale sano che stava proprio qui. Il difetto si è potuto correggere
+ * solo perché la seconda copia era intera — la volta dopo poteva andare al
+ * contrario.
+ *
+ * Ora il testo vive in un posto solo: `locales/*.json`. Qui restano 45 voci, e
+ * tutte hanno una ragione meccanica per esserci.
+ *
+ * Prima di togliere le descrizioni è stato verificato che i due insiemi
+ * coincidessero: quattro abilità esistevano SOLO qui — `ice-scales`,
+ * `prism-armor`, `protosynthesis`, `quark-drive` — e per quelle un utente
+ * italiano leggeva inglese, in silenzio. Sono state portate nei locali con la
+ * loro traduzione prima di procedere.
+ */
 export const ABILITY_EFFECTS = {
   // ── Attaccante: moltiplicatori stat ──────────────────────────────────────
-  'huge-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true, desc: 'Doubles the power of physical moves.' },
-  'pure-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true, desc: 'Doubles the power of physical moves.' },
+  'huge-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
+  'pure-power':  { atkMult: 2.0, statType: 'physical', showInSmogon: true },
 
   // ── Attaccante: STAB potenziato ──────────────────────────────────────────
-  'adaptability': { adaptability: true, showInSmogon: true, desc: 'Same-type attack bonus (STAB) is 2x instead of 1.5x.' },
+  'adaptability': { adaptability: true, showInSmogon: true },
 
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
-  'fire-mane':   { fireMane: true, showInSmogon: true, desc: 'Boosts the power of Fire-type moves by 50%.' },
+  'fire-mane':   { fireMane: true, showInSmogon: true },
 
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
-  'tough-claws': { toughClaws: true, showInSmogon: true, desc: 'Boosts the power of contact moves by 30%.' },
+  'tough-claws': { toughClaws: true, showInSmogon: true },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
-  'flash-fire':  { flashFireImmune: true, showInSmogon: true,
-    desc: 'Fire-type moves do not work. If hit by one, Fire-type moves get 1.5x power.',
-    descOn:  'Flash Fire active — Fire moves boosted 1.5x',
-    descOff: 'Immune to Fire — boost not yet activated' },
+  'flash-fire':  { flashFireImmune: true, showInSmogon: true
+    
+    
+    },
 
-  'supreme-overlord': { supremeOverlord: true, showInSmogon: true,
-    desc: 'Boosts move power by 10% for each fainted ally. Max 50%.' },
+  'supreme-overlord': { supremeOverlord: true, showInSmogon: true
+    },
 
-  'multiscale':     { multiscale: true,
-    desc: 'Halves damage taken when at full HP.',
-    descOn:  'Multiscale active — damage halved (full HP)',
-    descOff: 'Multiscale inactive — HP not full' },
+  'multiscale':     { multiscale: true
+    
+    
+    },
 
-  'shadow-shield':  { multiscale: true,
-    desc: 'Halves damage taken when at full HP.',
-    descOn:  'Shadow Shield active — damage halved (full HP)',
-    descOff: 'Shadow Shield inactive — HP not full' },
+  'shadow-shield':  { multiscale: true
+    
+    
+    },
 
-  'intimidate':  { intimidate: true,
-    desc: 'Lowers the Attack of all opponents by 1 stage on entry.',
-    descOn:  'Intimidate active — opponent -1 Atk applied',
-    descOff: 'Intimidate not yet activated' },
+  'intimidate':  { intimidate: true
+    
+    
+    },
 
-  'defiant':     { defiant: true,
-    desc: 'Raises Attack by 2 stages when any stat is lowered by an opponent.',
-    descOn:  'Intimidate active → Defiant: net +1 Atk',
-    descOff: 'Triggers automatically when opponent uses Intimidate' },
+  'defiant':     { defiant: true
+    
+    
+    },
 
-  'contrary':    { contrary: true, intimidateInverte: true,
-    desc: 'Stat changes are reversed. Intimidate becomes +1 Atk.',
-    descOn:  'Intimidate active → Contrary: drop reversed to +1 Atk',
-    descOff: 'Triggers automatically when opponent uses Intimidate' },
+  'contrary':    { contrary: true, intimidateInverte: true
+    
+    
+    },
 
-  'competitive': { competitive: true,
-    desc: 'Raises Sp. Atk by 2 stages when any stat is lowered by an opponent.',
-    descOn:  'Intimidate active → +2 Sp. Atk applied',
-    descOff: 'Triggers automatically when opponent uses Intimidate (+2 Sp. Atk)' },
+  'competitive': { competitive: true
+    
+    
+    },
 
   // ── Meteo: Modifica le statistiche ─────────────────────────
-  'sand-rush':     { sandRush: true,
-    desc: 'Doubles Speed in a sandstorm.',
-    descOn:  'Sand Rush active — Speed ×2',
-    descOff: 'Doubles Speed in a sandstorm' },
+  'sand-rush':     { sandRush: true
+    
+    
+    },
 
-  'chlorophyll':   { speedWeather: true,
-    desc: 'Doubles Speed in harsh sunlight.',
-    descOn:  'Chlorophyll active — Speed ×2',
-    descOff: 'Doubles Speed in harsh sunlight' },
+  'chlorophyll':   { speedWeather: true
+    
+    
+    },
 
-  'swift-swim':    { speedWeather: true,
-    desc: 'Doubles Speed in rain.',
-    descOn:  'Swift Swim active — Speed ×2',
-    descOff: 'Doubles Speed in rain' },
+  'swift-swim':    { speedWeather: true
+    
+    
+    },
 
-  'slush-rush':    { speedWeather: true,
-    desc: 'Doubles Speed in snow.',
-    descOn:  'Slush Rush active — Speed ×2',
-    descOff: 'Doubles Speed in snow' },
+  'slush-rush':    { speedWeather: true
+    
+    
+    },
 
   // ── Solo dropdown, nessun effetto sul calcolo danno ──────────────────────
-  'levitate':    { levitate: true, desc: 'Immune to Ground-type moves.' },
-  'hospitality': { desc: 'Restores 1/4 of ally\'s max HP on entry.' },
-  'eelevate':    { desc: 'Immune to Ground-type moves. Boosts highest stat by 1 when knocking out a target.' },
-
+  'levitate':    { levitate: true },
   // ── Lo strato di preparazione (sessione J) ────────────────────────────────
   //
   // Queste abilità non stanno in nessuna delle quattro catene di
@@ -121,12 +147,12 @@ export const ABILITY_EFFECTS = {
   // su Mirror Armor. Nel vendore c'è un commento che dice «for some reason»:
   // è una stranezza del gioco, non una regola con una logica dietro.
 
-  'guard-dog':        { intimidateInverte: true,
-    desc: 'Prevents the Pokémon from being forced out of battle. Intimidate raises its Attack by 1 stage instead of lowering it.' },
-  'full-metal-body':  { intimidateAnnulla: true,
-    desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
-  'simple':           { simple: true,
-    desc: 'Stat changes the Pokémon receives are doubled.' },
+  'guard-dog':        { intimidateInverte: true
+    },
+  'full-metal-body':  { intimidateAnnulla: true
+    },
+  'simple':           { simple: true
+    },
 
   // Intrepid Sword e Dauntless Shield: +1 alla statistica indicata entrando in
   // campo. `boostIngresso` contiene la chiave della statistica, non un
@@ -137,17 +163,17 @@ export const ABILITY_EFFECTS = {
   // flag dell'interfaccia non viene mai letto. Legare il comportamento a un
   // interruttore che il riferimento ignora produrrebbe due numeri diversi
   // dallo stesso stato di gioco.
-  'intrepid-sword':   { boostIngresso: 'at',
-    desc: 'Boosts the Pokémon\'s Attack stat by 1 stage when it enters a battle.' },
-  'dauntless-shield': { boostIngresso: 'df',
-    desc: 'Boosts the Pokémon\'s Defense stat by 1 stage when it enters a battle.' },
+  'intrepid-sword':   { boostIngresso: 'at'
+    },
+  'dauntless-shield': { boostIngresso: 'df'
+    },
 
   // Download: +1 Attacco o +1 Att. Speciale a seconda di quale difesa
   // avversaria è più bassa. Confronta le difese GIÀ modificate dai boost —
   // quindi anche da quelli che Intimidate e Dauntless Shield hanno appena
   // messo, perché nel vendore Download viene dopo.
-  'download':         { download: true,
-    desc: 'Compares an opposing Pokémon\'s Defense and Sp. Def stats before raising its own Attack or Sp. Atk — whichever will be more effective.' },
+  'download':         { download: true
+    },
 
   // Protosynthesis e Quark Drive: ×1.3 alla statistica più alta (×1.5 se è la
   // Velocità, che nel danno non si vede). Il valore del campo dice cosa le
@@ -159,14 +185,14 @@ export const ABILITY_EFFECTS = {
   // l'`indexOf("Sun")` che altrove fa passare anche il Sole Estremo di
   // Desolate Land. Trascritto com'è: se un giorno si scoprirà che il gioco
   // fa diversamente, il posto dove cambiarlo è uno solo.
-  'protosynthesis':   { paradosso: 'sun',
-    descOn:  'Protosynthesis active — highest stat boosted by 30%',
-    descOff: 'Protosynthesis inactive — needs harsh sunlight or Booster Energy',
-    desc: 'Boosts the Pokémon\'s most proficient stat in harsh sunlight or if the Pokémon is holding Booster Energy.' },
-  'quark-drive':      { paradosso: 'electric',
-    descOn:  'Quark Drive active — highest stat boosted by 30%',
-    descOff: 'Quark Drive inactive — needs Electric Terrain or Booster Energy',
-    desc: 'Boosts the Pokémon\'s most proficient stat on Electric Terrain or if the Pokémon is holding Booster Energy.' },
+  'protosynthesis':   { paradosso: 'sun'
+    
+    
+    },
+  'quark-drive':      { paradosso: 'electric'
+    
+    
+    },
 
   // ─── PERCHÉ RATTLED NON È QUI ─────────────────────────────────────────────
   // `checkIntimidate` le dà +1 Velocità, e la preparazione lo calcola davvero
@@ -178,178 +204,27 @@ export const ABILITY_EFFECTS = {
   // esattamente la bugia che la sessione F-2 è servita a eliminare.
 
   // ── Descrizioni informative (nessun effetto sul calcolo) ──────────────────
-  'aerilate': { desc: 'Normal-type moves become Flying-type moves and their power is boosted by 20%.' },
-  'analytic': { desc: 'Boosts the power of the Pokémon\'s moves by 30% when the Pokémon is the last to move that turn.' },
-  'anger-point': { desc: 'Boosts the Pokémon\'s Attack stat to its sixth stage when the Pokémon takes a critical hit.' },
-  'armor-tail': { desc: 'Opponents are unable to use priority moves against the Pokémon or its allies.' },
-  'aroma-veil': { desc: 'Prevents the holder and its allies from being Infatuated, Taunted, Disabled, Heal Blocked, or Encored.' },
-  'battle-armor': { desc: 'Attacks landed on the Pokémon will never be critical hits.' },
-  'berserk': { desc: 'Boosts the Pokémon\'s Sp. Atk stat by 1 stage when an attack causes its HP to drop to 1/2 or less of its max.' },
-  'blaze': { desc: 'Boosts the power of the Pokémon\'s Fire-type moves by 50% when its HP drops to 1/3 or less of its max.' },
-  'bulletproof': { desc: 'Immune to ball and bomb moves.' },
-  'cheek-pouch': { desc: 'Restores 1/3 of max HP when eating a Berry, in addition to the Berry\'s effect.' },
-  'clear-body': { intimidateAnnulla: true, desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
-  'cloud-nine': { desc: 'Eliminates the effects of weather.' },
-  'compound-eyes': { desc: 'Boosts the accuracy of the Pokémon\'s moves by 30%.' },
-  'corrosion': { desc: 'Can poison or badly poison targets even if they\'re Steel or Poison types.' },
-  'cud-chew': { desc: 'If the Pokémon eats a Berry, it will eat that same Berry once more at the end of the next turn.' },
-  'curious-medicine': { desc: 'When the Pokémon enters a battle, it removes all stat changes from its allies.' },
-  'cursed-body': { desc: 'When the Pokémon takes damage from a move, the attacker has a 30% chance of gaining the Move Disabled status for 4 turns.' },
-  'cute-charm': { desc: 'When the Pokémon is hit by a contact move, the attacker has a 30% chance of gaining the Infatuated status if of opposite gender.' },
-  'damp': { desc: 'All Pokémon become unable to use explosive moves. Explosive Abilities also fail to trigger.' },
-  'disguise': { desc: 'When the Pokémon is in its Disguised Form and would take damage from a move, it loses 1/8 of its max HP instead of taking the damage, then changes into its Busted Form.' },
-  'dragonize': { desc: 'Normal-type moves become Dragon-type moves and their power is boosted by 20%.' },
-  'drizzle': { desc: 'Summons rain for 5 turns when the Pokémon enters a battle.' },
-  'drought': { desc: 'Summons harsh sunlight for 5 turns when the Pokémon enters a battle.' },
-  'dry-skin': { desc: 'Water-type moves restore 1/4 of max HP. Fire-type moves deal 25% more damage. Restores 1/8 max HP in rain, loses 1/8 in harsh sunlight.' },
-  'early-bird': { desc: 'Awakens from sleep twice as fast as other Pokémon.' },
-  'earth-eater': { desc: 'Ground-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.' },
-  'effect-spore': { desc: 'When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned, paralyzed, or put to sleep.' },
-  'electric-surge': { desc: 'Turns the entire field into Electric Terrain for 5 turns when the Pokémon enters a battle.' },
-  'electromorphosis': { desc: 'When the Pokémon takes damage from a move, it gains the Electric Boost status.' },
-  'fairy-aura': { desc: 'Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%.' },
-  'filter': { filter: true, showInSmogon: true, desc: 'Reduces the damage the Pokémon takes from supereffective moves by 25%.' },
-  'flame-body': { desc: 'When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned.' },
-  'flower-veil': { desc: 'Grass-type allies are immune to status conditions and cannot have their stats lowered.' },
-  'fluffy': { fluffy: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from contact moves, but doubles the damage taken from Fire-type moves.' },
-  'forecast': { desc: 'Transforms with the weather to change its type to Water, Fire, or Ice.' },
-  'friend-guard': { desc: 'Reduces the damage allies take by 25%.' },
-  'frisk': { desc: 'When the Pokémon enters a battle, it identifies opponents\' held items.' },
-  'ice-scales': { iceScales: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from special moves.' },
-  'prism-armor': { filter: true, showInSmogon: true, desc: 'Reduces the damage the Pokémon takes from supereffective moves by 25%.' },
-  'fur-coat': { furCoat: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from physical moves.' },
-  'gale-wings': { desc: 'Increases the priority of the Pokémon\'s Flying-type moves by 1 stage while its HP is full.' },
-  'gluttony': { desc: 'If the Pokémon is holding a Berry to be eaten at 1/4 HP or less, it will instead eat the Berry at 1/2 HP or less.' },
-  'good-as-gold': { desc: 'Is immune to status moves used by other Pokémon.' },
-  'gooey': { desc: 'When the Pokémon is hit by a contact move, the attacker\'s Speed stat is lowered by 1 stage.' },
-  'guts': { desc: 'When the Pokémon has a status condition, its Attack stat is boosted by 50%. Being burned does not halve the damage of its physical moves.' },
-  'harvest': { desc: 'If the Pokémon has used a Berry, it has a 50% chance of creating another one at the end of every turn. Guaranteed in harsh sunlight.' },
-  'healer': { desc: 'Has a 50% chance of curing the status conditions of its allies at the end of every turn.' },
-  'heatproof': { heatproof: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from Fire-type moves and from being burned.' },
-  'heavy-metal': { desc: 'Doubles the Pokémon\'s weight.' },
-  'hunger-switch': { desc: 'Alternates between its Full Belly Mode and Hangry Mode at the end of every turn.' },
-  'hustle': { desc: 'When the Pokémon uses physical moves, its Attack stat is boosted by 50%, but its accuracy is lowered by 20%.' },
-  'hyper-cutter': { intimidateAnnulla: true, desc: 'Attack stat cannot be lowered by other Pokémon\'s moves or Abilities.' },
-  'ice-body': { desc: 'Has 1/16 of its max HP restored at the end of every turn in snow.' },
-  'illuminate': { desc: 'Ignores changes to targets\' evasiveness and its accuracy cannot be lowered.' },
-  'illusion': { desc: 'Enters battle disguised as the last Pokémon in its party. It reverts to its usual appearance when it takes damage from a move.' },
-  'immunity': { desc: 'Cannot be poisoned or badly poisoned.' },
-  'imposter': { desc: 'Transforms into the Pokémon in front of it. It also copies all of that Pokémon\'s stats apart from its HP.' },
+  'clear-body': { intimidateAnnulla: true },
+  'filter': { filter: true, showInSmogon: true },
+  'fluffy': { fluffy: true, showInSmogon: true },
+  'ice-scales': { iceScales: true, showInSmogon: true },
+  'prism-armor': { filter: true, showInSmogon: true },
+  'fur-coat': { furCoat: true, showInSmogon: true },
+  'heatproof': { heatproof: true, showInSmogon: true },
+  'hyper-cutter': { intimidateAnnulla: true },
   // Sessione G: attivata la parte che tocca il danno — ignora gli schermi.
   // Safeguard e substitute non sono modellati dal motore, quindi restano
   // soltanto descritti. Niente `showInSmogon`, per lo stesso motivo per cui
   // non ce l'ha `levitate`: cambia il numero solo in presenza di uno schermo.
-  'infiltrator': { infiltrator: true, desc: 'When using its moves, the Pokémon ignores the effects of targets\' Light Screen, Reflect, Aurora Veil, Safeguard, and substitutes.' },
-  'innards-out': { desc: 'When the Pokémon takes damage from a move that knocks it out, it deals the same amount of damage to the attacker.' },
-  'inner-focus': { intimidateAnnulla: true, desc: 'Never flinches when attacked and is unaffected by Intimidate.' },
-  'insomnia': { desc: 'Cannot become drowsy or be put to sleep.' },
-  'iron-fist': { desc: 'Boosts the power of the Pokémon\'s punching moves by 20%.' },
-  'justified': { desc: 'When the Pokémon takes damage from a Dark-type move, its Attack stat is boosted by 1 stage.' },
-  'keen-eye': { desc: 'Ignores changes to targets\' evasiveness and its accuracy cannot be lowered.' },
-  'leaf-guard': { desc: 'Is immune to status conditions in harsh sunlight.' },
-  'light-metal': { desc: 'Halves the Pokémon\'s weight.' },
-  'lightning-rod': { desc: 'Draws in all Electric-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage.' },
-  'limber': { desc: 'Cannot be paralyzed.' },
-  'liquid-voice': { desc: 'Sound-based moves become Water-type moves.' },
-  'long-reach': { desc: 'None of the moves used by the Pokémon are considered contact moves.' },
-  'magic-bounce': { desc: 'Instead of being affected by other Pokémon\'s status moves, the Pokémon bounces them back at the user.' },
-  'magic-guard': { desc: 'Takes damage only from attacks.' },
-  'magician': { desc: 'If the Pokémon is not already holding an item, it will steal the held item from targets it deals damage to with its moves.' },
-  'marvel-scale': { desc: 'When the Pokémon has a status condition, its Defense stat is boosted by 50%.' },
-  'mega-launcher': { desc: 'Boosts the power of the Pokémon\'s pulse moves by 50%.' },
-  'mega-sol': { desc: 'Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight.' },
-  'merciless': { desc: 'Attacks become critical hits if the target is poisoned or badly poisoned.' },
-  'mimicry': { desc: 'Type changes depending on the terrain.' },
-  'mirror-armor': { intimidateRimbalza: true, desc: 'Instead of being affected by stat-lowering effects, the Pokémon bounces them back at whichever Pokémon caused them.' },
-  'mold-breaker': { desc: 'Moves are unaffected by the Ability of the target (with certain exceptions).' },
-  'moody': { desc: 'At the end of every turn, one of the Pokémon\'s stats will be boosted by 2 stages, but another will be lowered by 1 stage.' },
-  'motor-drive': { desc: 'Electric-type moves do not work on the Pokémon. Instead, they boost its Speed stat by 1 stage.' },
-  'moxie': { desc: 'When the Pokémon knocks out a target with an attack, its Attack stat is boosted by 1 stage.' },
-  'mummy': { desc: 'When the Pokémon is hit by a contact move, the attacker has its Ability changed to Mummy.' },
-  'natural-cure': { desc: 'Status conditions are cured when it switches out of battle.' },
-  'no-guard': { desc: 'The accuracy of moves used both by and against the Pokémon becomes 100%.' },
-  'oblivious': { intimidateAnnulla: true, desc: 'Cannot gain the Infatuated or Taunted statuses and is unaffected by Intimidate.' },
-  'opportunist': { desc: 'When an opponent\'s stats are boosted, the Pokémon boosts its own stats in the exact same way.' },
-  'overcoat': { desc: 'Takes no damage from sandstorms and is immune to moves and Abilities involving powder.' },
-  'overgrow': { desc: 'Boosts the power of the Pokémon\'s Grass-type moves by 50% when its HP drops to 1/3 or less of its max.' },
-  'own-tempo': { intimidateAnnulla: true, desc: 'Cannot become confused and is unaffected by Intimidate.' },
-  'parental-bond': { desc: 'The parent and child attack one after the other. The power of the child\'s attacks is 1/4 of those of the parent.' },
-  'pickpocket': { desc: 'When the Pokémon is hit by a contact move, it will steal the held item of the attacker if it is not already holding an item.' },
-  'pickup': { desc: 'If the Pokémon is not already holding an item, at the end of the turn it will pick up an item that was consumed by another Pokémon.' },
-  'piercing-drill': { desc: 'When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage.' },
-  'pixilate': { desc: 'Normal-type moves become Fairy-type moves and their power is boosted by 20%.' },
-  'plus': { desc: 'Boosts the Pokémon\'s Sp. Atk stat by 50% if an ally with the Plus or Minus Ability is also in battle.' },
-  'poison-heal': { desc: 'If poisoned or badly poisoned, the Pokémon has 1/8 of its max HP restored at the end of every turn instead of losing HP.' },
-  'poison-point': { desc: 'When the Pokémon is hit by a contact move, the attacker has a 30% chance of being poisoned.' },
-  'poison-touch': { desc: 'When the Pokémon hits a target with a contact move, the target has a 30% chance of being poisoned.' },
-  'prankster': { desc: 'Increases the priority of the Pokémon\'s status moves by 1 stage.' },
-  'pressure': { desc: 'Causes opponents to expend 1 more PP when using moves against the Pokémon.' },
-  'protean': { desc: 'Changes the Pokémon\'s type to the type of the move it\'s about to use. This works only once per time the Pokémon enters battle.' },
-  'purifying-salt': { purifyingSalt: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from Ghost-type moves. The Pokémon is immune to status conditions.' },
-  'queenly-majesty': { desc: 'Opponents are unable to use priority moves against the Pokémon or its allies.' },
-  'quick-draw': { desc: 'Moves have a 30% chance of going first among moves of the same priority.' },
-  'quick-feet': { desc: 'When the Pokémon has a status condition, its Speed stat is boosted by 50%. Being paralyzed does not lower the Pokémon\'s Speed stat.' },
-  'rain-dish': { desc: 'Has 1/16 of its max HP restored at the end of every turn in rain.' },
-  'receiver': { desc: 'Changes its Ability to match that of a defeated ally.' },
-  'reckless': { desc: 'Boosts the power of the Pokémon\'s moves by 20% if they have recoil or crash damage.' },
-  'refrigerate': { desc: 'Normal-type moves become Ice-type moves and their power is boosted by 20%.' },
-  'regenerator': { desc: 'Has 1/3 of its max HP restored when it switches out of battle.' },
-  'ripen': { desc: 'Doubles the effects of Berries eaten by the Pokémon.' },
-  'rivalry': { desc: 'Boosts the power of the Pokémon\'s moves by 25% against targets of the same gender, and lowers it by 25% against targets of the opposite gender.' },
-  'rock-head': { desc: 'Will not lose HP due to recoil damage from its moves.' },
-  'rough-skin': { desc: 'When the Pokémon is hit by a contact move, the attacker takes damage equal to 1/8 of its max HP.' },
-  'sand-force': { desc: 'Boosts the power of the Pokémon\'s Rock-, Ground-, and Steel-type moves by 30% in a sandstorm.' },
-  'sand-stream': { desc: 'Summons a sandstorm for 5 turns when the Pokémon enters a battle.' },
-  'sand-veil': { desc: 'Boosts the Pokémon\'s evasiveness by 25% in a sandstorm.' },
-  'sap-sipper': { desc: 'Grass-type moves do not work on the Pokémon. Instead, they boost its Attack stat by 1 stage.' },
-  'scrappy': { intimidateAnnulla: true, desc: 'Can hit Ghost types with Normal- and Fighting-type moves. It is also unaffected by Intimidate.' },
-  'screen-cleaner': { desc: 'When the Pokémon enters a battle, it removes the Light Screen, Reflect, and Aurora Veil statuses.' },
-  'shadow-tag': { desc: 'Opponents cannot be switched out of battle.' },
-  'sharpness': { desc: 'Boosts the power of the Pokémon\'s slicing moves by 50%.' },
-  'shed-skin': { desc: 'Has a 30% chance of curing its own status conditions at the end of every turn.' },
-  'sheer-force': { desc: 'Moves lose their additional effects, but the power of those moves will be boosted by 30%.' },
-  'shell-armor': { desc: 'Attacks landed on the Pokémon will never be critical hits.' },
-  'shield-dust': { desc: 'Is immune to additional effects from attacks.' },
-  'skill-link': { desc: 'Multistrike moves always hit the maximum number of times.' },
-  'sniper': { desc: 'Boosts the power of the Pokémon\'s critical hits by 125% instead of 50%.' },
-  'snow-cloak': { desc: 'Boosts the Pokémon\'s evasiveness by 25% in snow.' },
-  'snow-warning': { desc: 'Summons snow for 5 turns when the Pokémon enters a battle.' },
-  'solar-power': { desc: 'In harsh sunlight, the Pokémon\'s Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn.' },
-  'solid-rock': { filter: true, showInSmogon: true, desc: 'Reduces the damage the Pokémon takes from supereffective moves by 25%.' },
-  'soundproof': { desc: 'Is immune to sound-based moves.' },
-  'speed-boost': { desc: 'Boosts the Pokémon\'s Speed stat by 1 stage at the end of every turn.' },
-  'spicy-spray': { desc: 'When the Pokémon takes damage from a move, it burns the attacker.' },
-  'stalwart': { desc: 'Ignores the effects of Abilities and moves that draw in moves.' },
-  'stamina': { desc: 'When the Pokémon takes damage from a move, its Defense stat is boosted by 1 stage.' },
-  'stance-change': { desc: 'Changes into its Blade Forme when it attacks and changes into its Shield Forme when it uses the move King\'s Shield.' },
-  'static': { desc: 'When the Pokémon is hit by a contact move, the attacker has a 30% chance of being paralyzed.' },
-  'steadfast': { desc: 'When the Pokémon flinches, its Speed stat is boosted by 1 stage.' },
-  'strong-jaw': { desc: 'Boosts the power of the Pokémon\'s biting moves by 50%.' },
-  'sturdy': { desc: 'If the Pokémon has full HP and takes damage from a move that would knock it out in one hit, it will endure the hit with 1 HP. The Pokémon is also immune to one-hit KO moves.' },
-  'super-luck': { desc: 'Has a 1-stage Critical-Hit Ratio Boost.' },
-  'supersweet-syrup': { desc: 'When the Pokémon enters a battle, opponents\' evasiveness is lowered by 1 stage. Triggered only once per battle.' },
-  'surge-surfer': { desc: 'Doubles the Pokémon\'s Speed stat on Electric Terrain.' },
-  'swarm': { desc: 'Boosts the power of the Pokémon\'s Bug-type moves by 50% when its HP drops to 1/3 or less of its max.' },
-  'sweet-veil': { desc: 'And its allies cannot become drowsy or be put to sleep.' },
-  'symbiosis': { desc: 'When an ally consumes an item, the Pokémon gives its own held item to that ally.' },
-  'synchronize': { desc: 'If the Pokémon is burned, paralyzed, poisoned, or badly poisoned by another Pokémon\'s move or Ability, that Pokémon will also be inflicted with the same status condition.' },
-  'tangled-feet': { desc: 'Doubles the Pokémon\'s evasiveness if it is confused.' },
-  'technician': { desc: 'Boosts the power of the Pokémon\'s moves by 50% if their power is 60 or less.' },
-  'telepathy': { desc: 'Dodges attacks from its allies.' },
-  'thick-fat': { thickFat: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from Fire- and Ice-type moves.' },
-  'torrent': { desc: 'Boosts the power of the Pokémon\'s Water-type moves by 50% when its HP drops to 1/3 or less of its max.' },
-  'toxic-debris': { desc: 'When the Pokémon takes damage from a physical move, it gives the opponent\'s side the Toxic Spikes status.' },
-  'trace': { desc: 'When the Pokémon enters a battle, it changes its Ability to match that of an opponent.' },
-  'unaware': { desc: 'Ignores the target\'s stat changes when attacking, and ignores the attacker\'s stat changes when being attacked.' },
-  'unburden': { desc: 'Doubles the Pokémon\'s Speed stat when its held item is consumed or lost.' },
-  'unnerve': { desc: 'Makes opponents unable to eat Berries.' },
-  'unseen-fist': { desc: 'When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal.' },
-  'vital-spirit': { desc: 'Cannot become drowsy or be put to sleep.' },
-  'volt-absorb': { desc: 'Electric-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.' },
-  'wandering-spirit': { desc: 'When the Pokémon is hit by a contact move, it swaps Abilities with the attacker.' },
-  'water-absorb': { desc: 'Water-type moves do not work on the Pokémon. Instead, they restore 1/4 of its max HP.' },
-  'water-bubble': { waterBubble: true, showInSmogon: true, desc: 'Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.' },
-  'weak-armor': { desc: 'When the Pokémon takes damage from a physical move, its Defense is lowered by 1 stage, but its Speed is boosted by 2 stages.' },
-  'white-smoke': { intimidateAnnulla: true, desc: 'Stats cannot be lowered by other Pokémon\'s moves or Abilities.' },
-  'zero-to-hero': { desc: 'Changes into its Hero Form when it switches out of battle.' },
+  'infiltrator': { infiltrator: true },
+  'inner-focus': { intimidateAnnulla: true },
+  'mirror-armor': { intimidateRimbalza: true },
+  'oblivious': { intimidateAnnulla: true },
+  'own-tempo': { intimidateAnnulla: true },
+  'purifying-salt': { purifyingSalt: true, showInSmogon: true },
+  'scrappy': { intimidateAnnulla: true },
+  'solid-rock': { filter: true, showInSmogon: true },
+  'thick-fat': { thickFat: true, showInSmogon: true },
+  'water-bubble': { waterBubble: true, showInSmogon: true },
+  'white-smoke': { intimidateAnnulla: true },
 }
