@@ -74,9 +74,12 @@ export default function Footer() {
 
         {/* ── DESTRA: disclaimer + GitHub ── */}
         <div className="text-right space-y-1">
+          {/* Era scritto in inglese dentro il JSX: l'ultima stringa
+              d'interfaccia che non passava da i18next, e un utente italiano la
+              leggeva così. `traduzioni.test.js` non poteva vederla — sorveglia
+              i file di traduzione, non il testo nei componenti. */}
           <p className="text-[9px] text-gray-500 leading-snug max-w-xs sm:max-w-none">
-            Fan-made project. Not affiliated with Nintendo, Game Freak or The Pokémon Company.
-            Pokémon and all related names are trademarks of their respective owners.
+            {t('ui.disclaimer')}
           </p>
           <a
             href="https://github.com/KrAros/vgc-overwhelm"

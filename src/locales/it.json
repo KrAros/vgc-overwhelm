@@ -3,6 +3,7 @@
     "skip_to_content": "Vai al contenuto principale",
     "options": "Opzioni",
     "field": "Campo",
+    "disclaimer": "Progetto amatoriale. Non affiliato a Nintendo, Game Freak o The Pokémon Company. Pokémon e tutti i nomi correlati sono marchi dei rispettivi proprietari.",
     "weather": "Meteo",
     "none": "Nessuno",
     "team1": "Team 1",
@@ -187,7 +188,13 @@
     "team_modifiers": "Modificatori e azioni del team",
     "switch_language": "Cambia lingua",
     "github_repo": "Repository GitHub",
-    "battle_conditions": "Condizioni di battaglia"
+    "battle_conditions": "Condizioni di battaglia",
+    "sp_slider": "SP {{stat}} — cursore",
+    "sp_value": "SP {{stat}} — valore esatto",
+    "stage": "{{stat}} — stadio della statistica",
+    "nature": "Natura",
+    "search_move": "Cerca mossa",
+    "ability": "Abilità"
   },
   "natures": {
     "adamant": "Decisa",

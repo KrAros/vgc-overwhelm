@@ -75,6 +75,7 @@ export function PokemonSearch({ value, onChange }) {
     <div className="relative flex items-center">
       <input
         className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
+        aria-label={t("ui.search_pokemon")}
         placeholder={t("ui.search_pokemon")}
         value={focused ? query : (value || '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
@@ -157,6 +158,7 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
           className={`w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none capitalize ${
             value && !focused ? 'text-white' : 'text-gray-300'
           }`}
+          aria-label={t('aria.search_move')}
           placeholder={focused ? placeholder : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : placeholder)}
           value={focused ? query : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : '')}
           onChange={e => { setQuery(e.target.value); setOpen(true) }}
@@ -227,6 +229,7 @@ export function ItemSearch({ value, onChange }) {
     <div className="relative flex items-center">
       <input
         className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
+        aria-label={t("ui.search_item")}
         placeholder={t("ui.search_item")}
         value={focused ? query : (value ? t(`items.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : '')}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
@@ -268,6 +271,7 @@ export function AbilitySelect({ value, abilities, onChange }) {
   return (
     <select
       className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none capitalize"
+      aria-label={t('aria.ability')}
       value={value || ''}
       onChange={e => onChange(e.target.value)}
     >

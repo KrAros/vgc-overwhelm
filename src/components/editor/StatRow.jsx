@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
+import { useTranslation } from 'react-i18next'
 import { calcStat } from '../../lib/stats.js'
 import { applyBoost, STAT_NAMES, MAX_SP_PER_STAT } from '../../lib/rules.js'
 import { NATURE_MODIFIERS } from '../../data/natures.js'
@@ -8,7 +9,15 @@ import { NATURE_MODIFIERS } from '../../data/natures.js'
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
 export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive, tailwindActive = false }) {
+  const { t } = useTranslation()
   const finalStat = calcStat(base, sp, level, nature, statIdx)
+
+  /* I tre controlli di questa riga avevano ZERO nome accessibile, e con sei
+     statistiche per due squadre fanno trentasei nodi su cinquanta. Il nome
+     porta dentro la sigla della statistica, altrimenti uno screen reader legge
+     dodici cursori identici. La sigla resta in inglese: è una decisione
+     dichiarata del progetto. */
+  const nome = (chiave) => t(`aria.${chiave}`, { stat: STAT_NAMES[statIdx] })
 
   // Abilità meteo-velocità: raddoppiano la Spe sotto il meteo corrispondente
   const speedMult = statIdx === 5 ? (speedWeatherActive ? 2 : 1) * (tailwindActive ? 2 : 1) : 1
@@ -50,6 +59,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
           — non solo questa riga. `flex-1` da solo non basta mai in questo caso. */}
       <input
         type="range" min="0" max={MAX_SP_PER_STAT} value={sp}
+        aria-label={nome('sp_slider')}
         onChange={e => onSpChange(parseInt(e.target.value))}
         className="flex-1 min-w-0 h-1 accent-teal-400"
       />
@@ -64,6 +74,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
       )}
       <input
         type="number" min="0" max={MAX_SP_PER_STAT} value={sp}
+        aria-label={nome('sp_value')}
         onChange={e => onSpChange(Math.min(MAX_SP_PER_STAT, Math.max(0, parseInt(e.target.value) || 0)))}
         className="w-11 bg-gray-700 text-white text-xs rounded px-1 py-0.5 outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
@@ -82,6 +93,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
         <div className="flex items-center gap-1 sm:gap-2">
           <select
             value={boostVal}
+            aria-label={nome('stage')}
             onChange={e => onBoostChange(parseInt(e.target.value))}
             className={`w-12 bg-gray-700 text-xs rounded px-0.5 py-0.5 outline-none text-center ${boostColor}`}
           >
