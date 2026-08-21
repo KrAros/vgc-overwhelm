@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { costruisciMatrice } from '../lib/matrice'
 import useFieldState from '../hooks/useFieldState'
+import useBordiScorrimento from '../hooks/useBordiScorrimento'
 
 const toTitleCase = s => s.replace(/(^|-)\w/g, c => c.replace('-', ' ').toUpperCase()).trim()
 
@@ -49,7 +50,7 @@ function immuneLabel(result) {
     const nome = result.weatherName === 'heavy rain' ? 'Heavy Rain' : 'Harsh Sunshine'
     return { text: `Fails (${nome})`, cls: 'text-sky-400' }
   }
-  return { text: 'Immune (tipo)', cls: 'text-gray-500' }
+  return { text: 'Immune (tipo)', cls: 'text-gray-400' }
 }
 
 // ── DamageCell ────────────────────────────────────────────────────────────────
@@ -87,7 +88,7 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
   if (!cella) {
     if (showKoOnly) return <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
     return (
-      <td className="p-1 text-center border-l border-gray-700 text-gray-600 text-xs">—</td>
+      <td className="p-1 text-center border-l border-gray-700 text-gray-400 text-xs">—</td>
     )
   }
 
@@ -200,7 +201,7 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
           </>
         ) : label ? (
           <>
-            <div className="text-gray-500 text-xs truncate">
+            <div className="text-gray-400 text-xs truncate">
               {prefix} {t(`moves.${immune.move}`, { defaultValue: toTitleCase(immune.move) })}
             </div>
             <div className={`text-[10px] font-medium ${label.cls}`}>
@@ -208,7 +209,7 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
             </div>
           </>
         ) : (
-          <div className="text-gray-600 text-xs">{prefix} —</div>
+          <div className="text-gray-400 text-xs">{prefix} —</div>
         )}
       </div>
     )
@@ -235,6 +236,9 @@ function dirSelezionata(voce, ri, ci) {
 // ── DamageTable ───────────────────────────────────────────────────────────────
 
 export default function DamageTable({ onCellSelect }) {
+  // Il riferimento al contenitore che scorre, e i due bordi che ne derivano.
+  const contenitore = useRef(null)
+  const bordi = useBordiScorrimento(contenitore)
   const { t } = useTranslation()
   const [selectionState, setSelectionState] = useState({ first: null, second: null })
   const showKoOnly = useCalcStore(s => s.showKoOnly)
@@ -342,11 +346,37 @@ export default function DamageTable({ onCellSelect }) {
       )}
 
       <div className="xl:flex xl:gap-3 xl:items-start">
-      <div className="overflow-x-auto rounded-xl border border-gray-700/40 xl:flex-1 xl:min-w-0">
+      {/* ─── LA MATRICE DICHIARA DI SCORRERE ─────────────────────────────
+          Difetto 3 delle foto: a 360 px si vedono tre colonne su sei e niente
+          segnala che ce ne siano altre. La barra di scorrimento su telefono
+          non c'è, e `justify-center` non aiuta.
+
+          Due sfumature, una per lato, ACCESE SOLO QUANDO si può ancora
+          scorrere in quella direzione — una sfumatura fissa direbbe «c'è
+          dell'altro» anche in fondo, cioè mentirebbe proprio quando l'utente
+          cerca conferma di aver visto tutto.
+
+          Il wrapper `relative` sta FUORI dal contenitore che scorre: dentro,
+          le sfumature scorrerebbero col contenuto invece di restare ai bordi.
+          `pointer-events-none` perché non devono intercettare il dito, e
+          `aria-hidden` perché non aggiungono informazione a chi non vede: per
+          quello c'è già `role="grid"`. */}
+      <div className="relative xl:flex-1 xl:min-w-0">
+      {bordi.inizio && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 w-8 z-30 rounded-l-xl
+                     bg-gradient-to-r from-gray-900 to-transparent" />
+      )}
+      {bordi.fine && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 z-30 rounded-r-xl
+                     bg-gradient-to-l from-gray-900 to-transparent" />
+      )}
+      <div ref={contenitore} className="overflow-x-auto rounded-xl border border-gray-700/40">
         <table className="w-full border-separate border-spacing-0 text-xs" role="grid" aria-label={t("ui.damage_matrix")}>
           <thead>
             <tr>
-              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-500 font-medium text-center w-20 min-w-20 max-w-20 border-r border-b border-gray-700/50">
+              <th className="sticky left-0 top-0 z-20 bg-gray-900 p-2 text-gray-400 font-medium text-center w-20 min-w-20 max-w-20 border-r border-b border-gray-700/50">
                 T1 \ T2
               </th>
               {team2.map((p, i) => (
@@ -393,7 +423,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-16 sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
                     </>
                   ) : (
-                    <div className="text-gray-600 text-[10px]">T2·{i+1}</div>
+                    <div className="text-gray-400 text-[10px]">T2·{i+1}</div>
                   )}
                 </th>
               ))}
@@ -445,7 +475,7 @@ export default function DamageTable({ onCellSelect }) {
                       <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-14 sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
                     </>
                   ) : (
-                    <div className="text-gray-600 text-[10px]">T1·{ri+1}</div>
+                    <div className="text-gray-400 text-[10px]">T1·{ri+1}</div>
                   )}
                 </td>
                 {team2.map((col, ci) => (
@@ -470,6 +500,7 @@ export default function DamageTable({ onCellSelect }) {
           </tbody>
         </table>
       </div>
+      </div>
 
       {/* ── Legend sidebar (desktop largo) ── */}
       <aside className="hidden xl:block w-47.5 shrink-0 bg-gray-900 rounded-xl border border-gray-700/40 px-4 py-4 self-stretch">
@@ -480,7 +511,7 @@ export default function DamageTable({ onCellSelect }) {
           <div className="flex items-center gap-2"><span className="text-yellow-400">⚡</span> {t("ui.moves_first")}</div>
           <div className="flex items-center gap-2"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</div>
         </div>
-        <div className="text-[11px] text-gray-500 mt-4 mb-2">{t("report.damage")}</div>
+        <div className="text-[11px] text-gray-400 mt-4 mb-2">{t("report.damage")}</div>
         <div className="space-y-1.5 text-xs">
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> <span className="text-green-400">0 – 25%</span></div>
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-teal-300 inline-block" /> <span className="text-teal-300">25 – 50%</span></div>
@@ -488,27 +519,27 @@ export default function DamageTable({ onCellSelect }) {
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> <span className="text-red-400">100%+</span></div>
         </div>
         <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">{t("report.quick_info")}</div>
-        <div className="space-y-1.5 text-[11px] text-gray-500 leading-relaxed">
-          <div className="flex items-start gap-1.5"><span className="text-gray-600 mt-0.5">›</span>{t("report.how_to_1")}</div>
-          <div className="flex items-start gap-1.5"><span className="text-gray-600 mt-0.5">›</span>{t("report.how_to_2")}</div>
+        <div className="space-y-1.5 text-[11px] text-gray-400 leading-relaxed">
+          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_1")}</div>
+          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_2")}</div>
           <div className="flex items-start gap-1.5"><span className="text-violet-500 mt-0.5">›</span>{t("report.how_to_3")}</div>
         </div>
       </aside>
       </div>
 
       {/* ── Legend riga compatta (schermi sotto xl) ── */}
-      <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-500">
-        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">{t("report.legend")}</span>
+      <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-400">
+        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-400">{t("report.legend")}</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> {t("report.attacks")}</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> {t("report.attacked_by")}</span>
         <span className="flex items-center gap-1"><span className="text-yellow-400">⚡</span> {t("ui.moves_first")}</span>
         <span className="flex items-center gap-1"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</span>
-        <span className="text-gray-600">|</span>
+        <span className="text-gray-400">|</span>
         <span className="text-green-400">0–25%</span>
         <span className="text-teal-300">25–50%</span>
         <span className="text-orange-400">50–100%</span>
         <span className="text-red-400">100%+ KO</span>
-        <span className="text-gray-600">|</span>
+        <span className="text-gray-400">|</span>
         <span className="text-violet-400">{t("ui.cumulative_short")}</span>
       </div>
     </div>

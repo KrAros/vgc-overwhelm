@@ -55,18 +55,22 @@ export default function Footer() {
               <span className="text-gray-400 font-normal">The Sixth </span>
               <span className="text-gray-300 font-medium">Ember</span>
             </div>
-            <div className="text-[10px] text-gray-500">Pokémon Champions Damage Calculator</div>
+            <div className="text-[10px] text-gray-400">Pokémon Champions Damage Calculator</div>
           </div>
         </div>
 
         {/* ── CENTRO: social placeholder ── */}
-        <div className="flex items-center gap-3 text-gray-600">
+        <div className="flex items-center gap-3 text-gray-400">
           <span className="text-[10px] uppercase tracking-wider">{t("report.social_coming_soon")}</span>
-          <span className="flex items-center gap-1.5 opacity-40 cursor-not-allowed">
+          {/* `opacity-40` abbassava il contrasto a 2,06 senza che nessuna classe di
+              colore lo dicesse: l'opacità è invisibile a chi legge il codice e
+              non a chi guarda lo schermo. Il «non ancora disponibile» lo dicono
+              già l'etichetta accanto e il cursore, che non costano contrasto. */}
+          <span className="flex items-center gap-1.5 cursor-not-allowed">
             <IconDiscord />
             <span className="text-[10px]">{t("report.share_discord")}</span>
           </span>
-          <span className="flex items-center gap-1.5 opacity-40 cursor-not-allowed">
+          <span className="flex items-center gap-1.5 cursor-not-allowed">
             <IconX />
             <span className="text-[10px]">{t("report.share_twitter")}</span>
           </span>
@@ -78,14 +82,14 @@ export default function Footer() {
               d'interfaccia che non passava da i18next, e un utente italiano la
               leggeva così. `traduzioni.test.js` non poteva vederla — sorveglia
               i file di traduzione, non il testo nei componenti. */}
-          <p className="text-[9px] text-gray-500 leading-snug max-w-xs sm:max-w-none">
+          <p className="text-[9px] text-gray-400 leading-snug max-w-xs sm:max-w-none">
             {t('ui.disclaimer')}
           </p>
           <a
             href="https://github.com/KrAros/vgc-overwhelm"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+            className="inline-flex items-center gap-1 text-[10px] text-gray-400 hover:text-gray-300 transition-colors"
           >
             <IconGitHub />
             GitHub

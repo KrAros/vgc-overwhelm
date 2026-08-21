@@ -131,7 +131,7 @@ export function DuplicateModal({ team, sourceIndex, onClose }) {
       </div>
       <button
         onClick={onClose}
-        className="mt-2 text-xs text-gray-500 hover:text-gray-300"
+        className="mt-2 text-xs text-gray-400 hover:text-gray-300"
       >
         {t('ui.cancel')}
       </button>
