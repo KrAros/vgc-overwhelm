@@ -69,5 +69,38 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.{js,jsx}'],
+
+    /**
+     * ─── QUATTRO WORKER, MISURATI ─────────────────────────────────────────
+     *
+     * Vitest ne apre uno per CPU meno una: qui dodici CPU, quindi undici. Ma
+     * ogni worker importa per conto suo `pokemon.json` (328 kB), `moves.json`,
+     * React e il motore — e la macchina ha 6,7 GB con circa 650 MB liberi.
+     * Undici worker la mandano in thrashing.
+     *
+     * Il sintomo non era la lentezza: erano `Hook timed out in 10000ms` su
+     * `accessibilitaEditor` e `prestazioni`, con interi file che non
+     * arrivavano a girare. La sessione S l'aveva registrato come «tre test
+     * sensibili al carico»; misurato, la suite falliva in QUATTRO corse su
+     * cinque a macchina scarica, e passava per caso.
+     *
+     * Alzare `hookTimeout` sarebbe stata la cura sbagliata: avrebbe reso più
+     * lenta una suite che stava annaspando, senza toglierle la causa.
+     *
+     * Misurato, tre corse per livello:
+     *
+     *    2 worker   3/3 verdi · 18,3 s
+     *    4 worker   3/3 verdi · 10,7 s   ← qui
+     *    6 worker   2/3 verdi · 11,8 s
+     *    8 worker   1/3 verdi · 23,1 s
+     *
+     * Sopra quattro diventa insieme inaffidabile e più lenta. I tempi assoluti
+     * ballano con la memoria libera del momento; l'ordine e la soglia no.
+     *
+     * Il numero è scelto su QUESTA macchina. Un runner con più memoria ne
+     * reggerebbe di più — ma quelli di GitHub hanno quattro CPU, quindi qui
+     * non lascia niente sul tavolo.
+     */
+    maxWorkers: 4,
   },
 })
