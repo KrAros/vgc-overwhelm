@@ -31,6 +31,7 @@ import { describe, it, expect } from 'vitest'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 import { TYPE_NAMES } from '../data/typeChart.js'
+import abilitiesData from '../data/abilities.json'
 
 /** Indici di `stats`: [PS, Att, Dif, Att.Sp, Dif.Sp, Vel]. */
 const STATS_CORRETTE = {
@@ -121,6 +122,27 @@ describe('guardie di forma su tutto pokemon.json', () => {
       fuori,
       'il trattino è l\'unico separatore ammesso: niente spazi, punti o apostrofi',
     ).toEqual([])
+  })
+
+  /**
+   * ─── I NOMI DELLE ABILITÀ FINISCONO NEL PASTE SHOWDOWN ────────────────────
+   *
+   * `showdownHelpers.js` costruisce la riga `Ability:` con
+   * `abilitiesData[slug]?.name`, e `receiver` aveva `name: 'receiver'` — una
+   * su 310, tutte le altre capitalizzate. Il paste esportato diceva
+   * `Ability: receiver`.
+   *
+   * Il difetto interessante non è la minuscola: è che il ripiego
+   * `|| slot.ability.replace(...)` avrebbe capitalizzato da solo. Un valore
+   * PRESENTE e sbagliato batte un ripiego giusto — la stessa forma delle 52
+   * descrizioni inglesi troncate in R, dove la copia rotta faceva ombra
+   * all'originale sano.
+   */
+  it('ogni nome di abilità comincia con la maiuscola', () => {
+    const minuscole = Object.entries(abilitiesData)
+      .filter(([, v]) => typeof v?.name === 'string' && v.name && v.name[0] !== v.name[0].toUpperCase())
+      .map(([slug, v]) => `${slug} → ${v.name}`)
+    expect(minuscole, 'finiscono nella riga `Ability:` del paste Showdown').toEqual([])
   })
 
   it('ogni indice di tipo sta fra 0 e 17', () => {
