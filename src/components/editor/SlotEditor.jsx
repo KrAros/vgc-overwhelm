@@ -117,7 +117,12 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   return (
     <div className="p-3">
       {/* Barra bottoni — sempre visibile. Duplica/Esporta/Elimina disabilitati se slot vuoto */}
-      <div className="flex justify-end gap-1.5 mb-2.5 text-xs">
+      {/* `gap-2.5` invece di `gap-1.5`: da 6 a 10 px fra i bottoni.
+          Segnalato guardando l'app — «Duplica ed Esporta si toccano». Non è
+          un difetto misurabile: passano WCAG 2.5.8, perché la norma chiede
+          se si riesce a colpirli e non se sembrano stretti. Le due domande
+          sono diverse, e per la seconda l'unico strumento è l'occhio. */}
+      <div className="flex justify-end gap-2.5 mb-2.5 text-xs">
 
             {/* Salva Custom Set — visibile solo se c'è un Pokémon nello slot */}
             {data && (
