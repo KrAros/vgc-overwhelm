@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-19T12:48:24.264Z",
+    "generatedAt": "2026-08-21T14:26:42.039Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -259,7 +259,7 @@
         "chiave": "eviolite",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 86,
+          "riga": 72,
           "testo": "'assault vest', 'eviolite',"
         }
       },
@@ -283,7 +283,7 @@
         "chiave": "chilan berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 90,
+          "riga": 76,
           "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
         }
       },
@@ -291,7 +291,7 @@
         "chiave": "tanga berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 89,
+          "riga": 75,
           "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
         }
       },
@@ -299,7 +299,7 @@
         "chiave": "colbur berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 89,
+          "riga": 75,
           "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
         }
       },
@@ -307,7 +307,7 @@
         "chiave": "haban berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 89,
+          "riga": 75,
           "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
         }
       },
@@ -315,7 +315,7 @@
         "chiave": "wacan berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 87,
+          "riga": 73,
           "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
         }
       },
@@ -323,7 +323,7 @@
         "chiave": "chople berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 88,
+          "riga": 74,
           "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
         }
       },
@@ -331,7 +331,7 @@
         "chiave": "occa berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 87,
+          "riga": 73,
           "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
         }
       },
@@ -339,7 +339,7 @@
         "chiave": "coba berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 88,
+          "riga": 74,
           "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
         }
       },
@@ -347,7 +347,7 @@
         "chiave": "kasib berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 89,
+          "riga": 75,
           "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
         }
       },
@@ -355,7 +355,7 @@
         "chiave": "rindo berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 87,
+          "riga": 73,
           "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
         }
       },
@@ -363,7 +363,7 @@
         "chiave": "shuca berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 88,
+          "riga": 74,
           "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
         }
       },
@@ -371,7 +371,7 @@
         "chiave": "yache berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 87,
+          "riga": 73,
           "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
         }
       },
@@ -379,7 +379,7 @@
         "chiave": "kebia berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 88,
+          "riga": 74,
           "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
         }
       },
@@ -387,7 +387,7 @@
         "chiave": "payapa berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 88,
+          "riga": 74,
           "testo": "'chople berry', 'kebia berry', 'shuca berry', 'coba berry', 'payapa berry',"
         }
       },
@@ -395,7 +395,7 @@
         "chiave": "charti berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 89,
+          "riga": 75,
           "testo": "'tanga berry', 'charti berry', 'kasib berry', 'haban berry', 'colbur berry',"
         }
       },
@@ -403,7 +403,7 @@
         "chiave": "babiri berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 90,
+          "riga": 76,
           "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
         }
       },
@@ -411,7 +411,7 @@
         "chiave": "passho berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 87,
+          "riga": 73,
           "testo": "'occa berry', 'passho berry', 'wacan berry', 'rindo berry', 'yache berry',"
         }
       },
@@ -419,7 +419,7 @@
         "chiave": "roseli berry",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 90,
+          "riga": 76,
           "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
         }
       },
@@ -451,7 +451,7 @@
         "chiave": "assault vest",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 86,
+          "riga": 72,
           "testo": "'assault vest', 'eviolite',"
         }
       },
@@ -459,7 +459,7 @@
         "chiave": "luminous moss",
         "prova": {
           "file": "src/utils/smogonString.js",
-          "riga": 90,
+          "riga": 76,
           "testo": "'babiri berry', 'chilan berry', 'roseli berry', 'luminous moss',"
         }
       },
