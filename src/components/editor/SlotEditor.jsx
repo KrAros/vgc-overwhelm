@@ -139,7 +139,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               onClick={data ? handleDuplicate : undefined}
               disabled={!data}
               className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
-                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-400 cursor-not-allowed'
                 : showDuplicate ? 'bg-teal-800 border-teal-600 text-teal-200'
                 : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
               }`}
@@ -156,7 +156,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               onClick={data ? handleExport : undefined}
               disabled={!data}
               className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
-                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-400 cursor-not-allowed'
                 : exportCopied ? 'bg-green-800 border-green-600 text-green-200'
                 : 'bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40'
               }`}
@@ -191,7 +191,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               onClick={data ? () => { setPokemon(team, index, ''); setAbility(team, index, '') } : undefined}
               disabled={!data}
               className={`flex items-center justify-center gap-1 w-20 py-1 rounded border transition ${
-                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-600 cursor-not-allowed'
+                !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-400 cursor-not-allowed'
                 : 'bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 border-red-900/30'
               }`}
               title={t("editor.delete_pokemon")}
@@ -330,7 +330,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
       {data && (
         <>
           <div className="mb-2">
-            <div className="flex items-center text-xs text-gray-500 mb-1 gap-2">
+            <div className="flex items-center text-xs text-gray-400 mb-1 gap-2">
               <span className="w-8 text-center">{t("report.stat")}</span>
               <span className="w-7 text-center">{t("report.base")}</span>
               <div className="flex-1 flex justify-center items-center gap-1.5">
@@ -403,7 +403,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                   </button>
                 ))}
               </div>
-              <span className={lastRespectsKOs > 0 ? 'text-purple-300' : 'text-gray-500'}>
+              <span className={lastRespectsKOs > 0 ? 'text-purple-300' : 'text-gray-400'}>
                 {50 + lastRespectsKOs * 50} BP
               </span>
             </div>

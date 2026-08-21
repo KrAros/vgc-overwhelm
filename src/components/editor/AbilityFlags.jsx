@@ -51,12 +51,12 @@ import { useTranslation } from 'react-i18next'
  * `BadgeNonCalcolata.jsx`: non descrive un effetto, avverte che non lo
  * calcoliamo.
  */
-const SPENTO = 'bg-gray-800/60 border-gray-700/40 text-gray-500'
+const SPENTO = 'bg-gray-800/60 border-gray-700/40 text-gray-400'
 const ACCESO = 'bg-green-950/40 border-green-700/40 text-green-300'
 
 /** Testo dentro un riquadro con la levetta, che ha il proprio fondo. */
 const TESTO_ACCESO = 'text-green-300'
-const TESTO_SPENTO = 'text-gray-500'
+const TESTO_SPENTO = 'text-gray-400'
 
 /** La levetta: verde accesa, grigia spenta. */
 const PERNO_ACCESO = 'bg-green-500'

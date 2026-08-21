@@ -41,9 +41,17 @@ export default function TeamEditor({ team }) {
               key={i}
               onClick={() => setActiveTab(i)}
               className="flex-1 flex flex-col items-center py-2 px-1 text-xs transition-colors border-b-2"
+              /* I colori erano esadecimali scritti a mano dentro uno `style`
+                 inline, fuori dal sistema delle classi. `#6b7280` è gray-500, a
+                 3,67 su questo fondo — sotto i 4,5 richiesti — ed è sopravvissuto
+                 alla sostituzione dei grigi in U proprio perché non era una
+                 classe: dodici nodi su dodici erano questo.
+
+                 Ora le variabili del tema, così una tonalità che cambia lì
+                 cambia anche qui. */
               style={{
-                borderColor: activeTab === i ? '#2dd4bf' : 'transparent',
-                color: activeTab === i ? '#2dd4bf' : '#6b7280'
+                borderColor: activeTab === i ? 'var(--color-teal-400)' : 'transparent',
+                color: activeTab === i ? 'var(--color-teal-400)' : 'var(--color-gray-400)'
               }}
             >
               {sprite ? (
@@ -57,7 +65,7 @@ export default function TeamEditor({ team }) {
                   }}
                 />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-gray-600 text-xs">
+                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 text-xs">
                   {i+1}
                 </div>
               )}

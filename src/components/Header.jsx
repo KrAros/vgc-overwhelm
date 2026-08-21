@@ -70,7 +70,7 @@ function LangToggle() {
       >
         <span>{current.flag}</span>
         <span>{current.code.toUpperCase()}</span>
-        <span className="text-gray-500">▾</span>
+        <span className="text-gray-400">▾</span>
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-1 bg-gray-800 border border-gray-700 rounded shadow-lg z-50 min-w-27.5">
@@ -103,7 +103,7 @@ export default function Header() {
           <span className="text-gray-400 font-normal">The Sixth </span>
           <span className="text-white font-medium">Ember</span>
         </span>
-        <span className="text-gray-600 hidden lg:inline">|</span>
+        <span className="text-gray-400 hidden lg:inline">|</span>
         <span className="text-gray-400 text-xs hidden lg:inline whitespace-nowrap">
           Champions Damage Calculator
         </span>

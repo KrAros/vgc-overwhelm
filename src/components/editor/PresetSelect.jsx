@@ -151,14 +151,14 @@ export function CustomSetModal({ slug, currentSlot, onClose, onChanged }) {
               </span>
             )}
           </span>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-200 text-lg leading-none">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-200 text-lg leading-none">✕</button>
         </div>
 
         <div className="overflow-y-auto flex-1 p-4 space-y-4">
 
           {/* ── SEZIONE SALVA ─────────────────────────────────────── */}
           <div className="space-y-2">
-            <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">
+            <p className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">
               {t('ui.custom_set_save_current')}
             </p>
 
@@ -202,7 +202,7 @@ export function CustomSetModal({ slug, currentSlot, onClose, onChanged }) {
             <>
               <div className="h-px bg-gray-700/60" />
               <div className="space-y-1.5">
-                <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">
+                <p className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">
                   {t('ui.custom_set_manage')}
                 </p>
                 {sets.map(preset => (
@@ -231,7 +231,7 @@ export function CustomSetModal({ slug, currentSlot, onClose, onChanged }) {
           )}
 
           {sets.length === 0 && (
-            <p className="text-xs text-gray-500 text-center py-2">{t('ui.team_library_empty')}</p>
+            <p className="text-xs text-gray-400 text-center py-2">{t('ui.team_library_empty')}</p>
           )}
         </div>
       </div>

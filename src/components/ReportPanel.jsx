@@ -101,7 +101,7 @@ function HpStep({ range, defKey }) {
   const { t } = useTranslation()
   return (
     <>
-      <span className="text-gray-600 shrink-0 mb-8">→</span>
+      <span className="text-gray-400 shrink-0 mb-8">→</span>
       <div className="flex flex-col items-center shrink-0 w-17">
         <div className="h-10 flex items-center justify-center mb-2">
           <div className="relative inline-block">
@@ -114,7 +114,7 @@ function HpStep({ range, defKey }) {
             <span className="absolute bottom-0 right-0 text-[10px] leading-none">❤️</span>
           </div>
         </div>
-        <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.hp")}</div>
+        <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight">{t("report.hp")}</div>
         <div className="text-xs font-bold text-gray-200 mt-1 whitespace-nowrap">
           {range[0] === range[1] ? range[0] : `${range[0]}–${range[1]}`}
         </div>
@@ -185,7 +185,7 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
       {steps.map((step, i) => (
         <span key={i} className="flex items-center gap-3">
           {step}
-          {i < steps.length - 1 && <span className="text-gray-600 text-base font-light">›</span>}
+          {i < steps.length - 1 && <span className="text-gray-400 text-base font-light">›</span>}
         </span>
       ))}
     </div>
@@ -201,7 +201,7 @@ function CopyCalcButton({ smogon }) {
     <button
       onClick={() => navigator.clipboard.writeText(smogon).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500) })}
       aria-label={t("report.copy_calc_aria")}
-      className={`text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border transition-colors flex items-center gap-1 ${
+      className={`text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded border transition-colors flex items-center gap-1 ${
         copied ? 'border-teal-600/50 text-teal-300' : 'border-gray-700/50 hover:border-gray-500'
       }`}
     >
@@ -338,11 +338,11 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
         {/* Label + Copy + Close — prima riga della card, ha accesso a smogon e onClose */}
         <div className="flex items-center justify-between px-4 pt-2.5 pb-2 border-b border-gray-700/20">
-          <span className="text-[9px] tracking-[0.2em] text-gray-600 uppercase font-bold">{t("report.selected_matchup")}</span>
+          <span className="text-[9px] tracking-[0.2em] text-gray-400 uppercase font-bold">{t("report.selected_matchup")}</span>
           <div className="flex items-center gap-1.5">
             <CopyCalcButton smogon={smogon} />
             <button onClick={onClose} aria-label={t("report.close_aria")}
-              className="text-gray-500 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
+              className="text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
               {t("ui.close")}
             </button>
           </div>
@@ -418,7 +418,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
           {/* Mossa selezionata */}
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] text-gray-500 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
+            <div className="text-[10px] text-gray-400 uppercase tracking-[0.12em] font-semibold mb-1">{t("report.selected_move")}</div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
               <div className="text-lg font-bold text-white uppercase tracking-wide leading-tight">
                 {t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}
@@ -429,7 +429,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               )}
             </div>
             <div className="text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight mt-1">{result.minPct} – {result.maxPct}%</div>
-            <div className="text-xs text-gray-500 mt-1">{result.minDmg} – {result.maxDmg} HP</div>
+            <div className="text-xs text-gray-400 mt-1">{result.minDmg} – {result.maxDmg} HP</div>
           </div>
 
           {/* Colonna destra: badge KO — dimensioni uniformi, centrato */}
@@ -459,8 +459,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               </div>
             ) : (
               <div className="border-2 border-gray-600/30 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-gray-800/30 w-28 lg:w-36">
-                <div className="text-2xl font-black text-gray-500 leading-tight">—</div>
-                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{t('report.no_ko_in_n', { turni: MAX_HITS })}</div>
+                <div className="text-2xl font-black text-gray-400 leading-tight">—</div>
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">{t('report.no_ko_in_n', { turni: MAX_HITS })}</div>
               </div>
             )}
           </div>
@@ -560,20 +560,20 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                 <div className="flex-1 flex items-center justify-center gap-3">
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <span className="text-3xl mb-2">❤️</span>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide">{t("report.start")}</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide">{t("report.start")}</div>
                     <div className="text-[10px] text-gray-400 capitalize truncate w-full text-center">{def.key.split('-')[0]}</div>
                     <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
                   </div>
-                  <span className="text-gray-600 mb-4">→</span>
+                  <span className="text-gray-400 mb-4">→</span>
                   <div className="flex flex-col items-center shrink-0 w-23">
                     <span className="text-3xl mb-2">⚔️</span>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
                     <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                   </div>
-                  <span className="text-gray-600 mb-4">→</span>
+                  <span className="text-gray-400 mb-4">→</span>
                   <div className="flex flex-col items-center shrink-0 w-20 text-center">
                     <span className="text-3xl mb-2">💀</span>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide">KO</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide">KO</div>
                     <div className="text-xs font-bold text-red-400 mt-1">0 HP</div>
                   </div>
                 </div>
@@ -612,18 +612,18 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">❤️</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.start")}</div>
+                  <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight">{t("report.start")}</div>
                   <div className="text-[10px] text-gray-400 capitalize leading-tight truncate w-full text-center">{def.key.split('-')[0]}</div>
                   <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
                 </div>
 
                 {/* 1. Mossa */}
-                <span className="text-gray-600 shrink-0 mb-8">→</span>
+                <span className="text-gray-400 shrink-0 mb-8">→</span>
                 <div className="flex flex-col items-center shrink-0 w-23">
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">⚔️</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
+                  <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center w-full">{t(`moves.${move}`, { defaultValue: move.replace(/-/g, ' ') })}</div>
                   <div className="text-xs font-bold text-red-300 mt-1 whitespace-nowrap">−{result.minDmg}–{result.maxDmg}</div>
                 </div>
 
@@ -633,12 +633,12 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
                 {/* 2. Sitrus Berry */}
                 {sitrus && <>
-                  <span className="text-gray-600 shrink-0 mb-8">→</span>
+                  <span className="text-gray-400 shrink-0 mb-8">→</span>
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <img src={itemIconUrl('sitrus berry')} alt="" className="w-8 h-8 object-contain" onError={e => { e.target.style.display = 'none' }} />
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.sitrus_berry")}</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{t("report.sitrus_berry")}</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{sitrusHeal} HP</div>
                   </div>
                   <HpStep range={hpAfterSitrus} defKey={def.key} />
@@ -646,12 +646,12 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
                 {/* 3. Sandstorm */}
                 {(isSand && !isSandImmune) && <>
-                  <span className="text-gray-600 shrink-0 mb-8">→</span>
+                  <span className="text-gray-400 shrink-0 mb-8">→</span>
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <span className="text-3xl text-[#C2a193]">🌪</span>
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.sandstorm")}</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{t("report.sandstorm")}</div>
                     <div className="text-xs font-bold text-red-400 mt-1">−{sandDmgHP} HP</div>
                   </div>
                   <HpStep range={hpAfterSand} defKey={def.key} />
@@ -659,24 +659,24 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
                 {/* 4. Leftovers */}
                 {leftoversHP > 0 && <>
-                  <span className="text-gray-600 shrink-0 mb-8">→</span>
+                  <span className="text-gray-400 shrink-0 mb-8">→</span>
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <div className="h-10 flex items-center justify-center mb-2">
                       <img src={itemIconUrl('leftovers')} alt="" className="w-8 h-8 object-contain" onError={e => { e.target.style.display = 'none' }} />
                     </div>
-                    <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight text-center">{t("report.leftovers")}</div>
+                    <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{t("report.leftovers")}</div>
                     <div className="text-xs font-bold text-green-400 mt-1">+{leftoversHP} HP</div>
                   </div>
                   <HpStep range={hpAfterLefto} defKey={def.key} />
                 </>}
 
                 {/* 5. Result */}
-                <span className="text-gray-600 shrink-0 mb-8">→</span>
+                <span className="text-gray-400 shrink-0 mb-8">→</span>
                 <div className="flex flex-col items-center justify-start shrink-0 w-22 text-center">
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">🎯</span>
                   </div>
-                  <div className="text-[9px] text-gray-500 uppercase tracking-wide leading-tight">{t("report.result")}</div>
+                  <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight">{t("report.result")}</div>
                   {(() => {
                     if (hasOHKOChance) return (
                       <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">{ohkoPct}%</div>
@@ -721,7 +721,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           {/* Barra segmentata MIN/MAX */}
           <div className="flex items-center gap-3">
             <div className="text-left shrink-0">
-              <div className="text-[10px] text-gray-500 uppercase">{t("report.min")}</div>
+              <div className="text-[10px] text-gray-400 uppercase">{t("report.min")}</div>
               <div className="text-sm font-bold text-gray-200">{result.minDmg}</div>
             </div>
             <div className="flex-1 flex gap-0.75">
@@ -733,7 +733,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
               ))}
             </div>
             <div className="text-right shrink-0">
-              <div className="text-[10px] text-gray-500 uppercase">{t("report.max")}</div>
+              <div className="text-[10px] text-gray-400 uppercase">{t("report.max")}</div>
               <div className="text-sm font-bold text-gray-200">{result.maxDmg}</div>
             </div>
           </div>
@@ -772,7 +772,7 @@ function SinglePanel({ entry, onClose }) {
   const activeMoveKey = selectedMove || defaultMove?.move
   const active = computedMoves.find(m => m.move === activeMoveKey) || defaultMove
 
-  if (computedMoves.length === 0) return <div className="text-gray-500 text-xs p-4">{t("ui.no_offensive_moves")}</div>
+  if (computedMoves.length === 0) return <div className="text-gray-400 text-xs p-4">{t("ui.no_offensive_moves")}</div>
 
   return active ? (
     <MoveCard
@@ -837,7 +837,7 @@ function CumulativePanel({ entries }) {
   const badge = !cumulative ? null :
     cumulative.minPct >= 100 ? { text: t('eot.guaranteed') + ' KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
     cumulative.koOf16 > 0    ? { text: `Likely KO (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
-                               { text: t('report.no_ko'), cls: 'bg-gray-800 border-gray-600 text-gray-500' }
+                               { text: t('report.no_ko'), cls: 'bg-gray-800 border-gray-600 text-gray-400' }
 
   return (
     <div>
@@ -893,7 +893,7 @@ function CumulativePanel({ entries }) {
                       due attaccanti; `lg:w-auto` lo rimette in linea sopra i
                       1024 px. */}
                   {idx === 0 && (
-                    <div className="w-full lg:w-auto flex items-center justify-center px-3 shrink-0 text-gray-500 text-3xl lg:text-xl font-light leading-none">+</div>
+                    <div className="w-full lg:w-auto flex items-center justify-center px-3 shrink-0 text-gray-400 text-3xl lg:text-xl font-light leading-none">+</div>
                   )}
                 </div>
               )
@@ -925,7 +925,7 @@ function CumulativePanel({ entries }) {
                     onError={e => { const fb = fallbackSpriteUrl(def.key); if (fb && e.target.src !== fb) e.target.src = fb; else e.target.style.display='none' }} />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">{t("report.defender")}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">{t("report.defender")}</div>
                   <div className="text-sm font-bold text-white uppercase tracking-wide leading-tight mb-1.5">
                     {def.key.replace(/-/g, ' ').toUpperCase()}
                   </div>
@@ -943,9 +943,9 @@ function CumulativePanel({ entries }) {
           {/* Badge danno cumulativo */}
           {cumulative && (
             <div className="shrink-0 w-full text-center lg:w-auto lg:text-right lg:ml-auto">
-              <div className="text-[9px] text-gray-600 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
+              <div className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
-              <div className="text-xs text-gray-500 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
+              <div className="text-xs text-gray-400 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
               <div className="mt-2">
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
                   {cumulative.minPct >= 100 ? '✓ ' + t('eot.guaranteed') + ' KO' : cumulative.koOf16 > 0 ? `⚡ ${t('report.likely_ko')} (${cumulative.koOf16}/16)` : '✗ ' + t('report.no_ko')}
@@ -1045,7 +1045,7 @@ function CumulativePanel({ entries }) {
               {/* Barra MIN/MAX */}
               <div className="flex items-center gap-3">
                 <div className="text-left shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">{t('report.min')}</div>
+                  <div className="text-[10px] text-gray-400 uppercase">{t('report.min')}</div>
                   <div className="text-sm font-bold text-gray-200">{minSum}</div>
                 </div>
                 <div className="flex-1 flex gap-0.75">
@@ -1054,7 +1054,7 @@ function CumulativePanel({ entries }) {
                   ))}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-[10px] text-gray-500 uppercase">{t('report.max')}</div>
+                  <div className="text-[10px] text-gray-400 uppercase">{t('report.max')}</div>
                   <div className="text-sm font-bold text-gray-200">{maxSum}</div>
                 </div>
               </div>
@@ -1075,7 +1075,7 @@ function CumulativePanel({ entries }) {
           const activeSel = idx === 0 ? active1 : active2
           if (!activeSel) return null
           return (
-            <div key={idx} className="text-[11px] font-mono text-gray-500 leading-relaxed">
+            <div key={idx} className="text-[11px] font-mono text-gray-400 leading-relaxed">
               {buildSmogonString(entry.atk, def, activeSel.move, activeSel.result)}
             </div>
           )

@@ -35,7 +35,7 @@ export default function BadgeNonCalcolata({ tipo = 'ability' }) {
 
   return (
     <div
-      className="flex items-start gap-1.5 text-[11px] leading-snug text-amber-300/90
+      className="flex items-start gap-1.5 text-[11px] leading-snug text-amber-200
                  bg-amber-500/10 border border-amber-500/25 rounded px-2 py-1.5"
       role="note"
     >

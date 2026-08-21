@@ -192,7 +192,7 @@ function TeamLibraryModal({ onClose, team1, team2, setTeam }) {
             {t('ui.team_library')}
           </span>
           {feedback && <span className="text-xs text-green-400">{feedback}</span>}
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-200 text-lg leading-none">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-200 text-lg leading-none">✕</button>
         </div>
 
         <div className="overflow-y-auto flex-1 p-4 space-y-4">
@@ -240,7 +240,7 @@ function TeamLibraryModal({ onClose, team1, team2, setTeam }) {
 
           {/* ── SEZIONE CARICA ─────────────────────────────────────── */}
           {savedTeams.length === 0 ? (
-            <p className="text-xs text-gray-500 text-center py-4">{t('ui.team_library_empty')}</p>
+            <p className="text-xs text-gray-400 text-center py-4">{t('ui.team_library_empty')}</p>
           ) : (
             <div className="space-y-2">
               {savedTeams.map(entry => (
@@ -252,7 +252,7 @@ function TeamLibraryModal({ onClose, team1, team2, setTeam }) {
                   <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
                     <div>
                       <span className="text-xs font-medium text-gray-200">{entry.name}</span>
-                      <span className="text-[10px] text-gray-500 ml-2">{formatDate(entry.savedAt)}</span>
+                      <span className="text-[10px] text-gray-400 ml-2">{formatDate(entry.savedAt)}</span>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
@@ -497,7 +497,7 @@ export default function ControlBar() {
               esattamente nella fascia che nessuna delle due guardava. */}
           <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold shrink-0">Team 1</span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 1</span>
               <div className="flex items-center gap-1">
                 {MODS_DESKTOP.map(m => (
                   <ModBtn key={m.mod} label={m.label}
@@ -516,7 +516,7 @@ export default function ControlBar() {
                     onClick={() => toggleModifier(m.mod, 't2')} />
                 ))}
               </div>
-              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
             </div>
           </div>
 
@@ -569,7 +569,7 @@ export default function ControlBar() {
         <div className="sm:hidden space-y-2.5">
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 1</span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">Team 1</span>
               {/* aria-label sui bottoni icona di questo ramo `sm:hidden`.
                   Il gemello desktop (righe ~518-549) rende le stesse azioni
                   con <IconImport /><span>{t('ui.import')}</span>: lì il testo
@@ -605,7 +605,7 @@ export default function ControlBar() {
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">Team 2</span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">Team 2</span>
               <div className="flex gap-1">
                 <button type="button" aria-label={t('ui.import')}
                   onClick={() => openImport('import2')}
@@ -655,10 +655,10 @@ export default function ControlBar() {
       {(mode === 'import1' || mode === 'import2') && (
         <div className="mt-2 p-3 bg-gray-900 rounded-xl border border-gray-700/40">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">
+            <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">
               {t('ui.import_panel_title', { n: mode === 'import1' ? 1 : 2 })}
             </span>
-            <button onClick={() => setMode(null)} className="text-xs text-gray-600 hover:text-gray-300">✕</button>
+            <button onClick={() => setMode(null)} className="text-xs text-gray-400 hover:text-gray-300">✕</button>
           </div>
 
           {/* Tab Showdown / Solo nomi */}

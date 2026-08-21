@@ -33,7 +33,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
   const isDrop  = mod && mod[0] !== 0 && mod[1] === statIdx
 
   const statColor  = isBoost ? 'text-red-400' : isDrop ? 'text-blue-400' : 'text-gray-200'
-  const boostColor = boostVal > 0 ? 'text-green-400' : boostVal < 0 ? 'text-red-400' : 'text-gray-500'
+  const boostColor = boostVal > 0 ? 'text-green-400' : boostVal < 0 ? 'text-red-400' : 'text-gray-400'
   const hasBoost = statIdx !== 0
 
   return (
@@ -49,7 +49,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
        e dal badge della natura, che su telefono mostra solo la freccia. Il
        desktop resta identico: `sm:gap-2` e il testo completo. */
     <div className="flex items-center gap-1 sm:gap-2 mb-1">
-      <span className="text-xs text-gray-500 w-8 text-center">{STAT_NAMES[statIdx]}</span>
+      <span className="text-xs text-gray-400 w-8 text-center">{STAT_NAMES[statIdx]}</span>
       <span className="text-xs text-gray-400 w-7 text-center">{base}</span>
       {/* `min-w-0` non è cosmesi: senza, la riga sborda di 62 px a 360 px.
           Un elemento flex non scende sotto la propria dimensione minima di
@@ -101,7 +101,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
               <option key={v} value={v}>{v > 0 ? `+${v}` : v}</option>
             ))}
           </select>
-          <span className={`text-xs w-8 text-center ${boostedStat ? (speedBase || boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-600'}`}>
+          <span className={`text-xs w-8 text-center ${boostedStat ? (speedBase || boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-400'}`}>
             {boostedStat ?? '—'}
           </span>
         </div>

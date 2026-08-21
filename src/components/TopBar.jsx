@@ -52,7 +52,7 @@ export default function TopBar() {
 
         {/* Options */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.options")}</span>
+          <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.options")}</span>
           <button
             onClick={toggleTrickRoom}
             aria-pressed={trickRoom}
@@ -86,7 +86,10 @@ export default function TopBar() {
                   key={String(due)}
                   onClick={() => { if (doubleTarget !== due) toggleDoubleTarget() }}
                   aria-pressed={doubleTarget === due}
-                  className={`text-xs px-2 py-1 transition-colors ${
+                  /* `min-w-6` = 24 px. I due bottoni misuravano 23,8 × 24:
+                     mancavano DUE DECIMI di pixel al minimo di WCAG 2.5.8, ed
+                     erano gli ultimi due nodi fra 96 e 100 sul desktop. */
+                  className={`text-xs px-2 py-1 min-w-6 transition-colors ${
                     doubleTarget === due
                       ? 'bg-yellow-500 text-gray-900'
                       : 'text-gray-400 hover:bg-gray-700'
@@ -103,7 +106,7 @@ export default function TopBar() {
 
         {/* Field */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.field")}</span>
+          <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.field")}</span>
           <div className="flex gap-1">
             <button
               onClick={() => setTerrain(null)}
@@ -124,7 +127,7 @@ export default function TopBar() {
 
         {/* Weather */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold">{t("ui.weather")}</span>
+          <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.weather")}</span>
           <div className="flex gap-1">
             <button
               onClick={() => setWeather(null)}
@@ -190,7 +193,7 @@ export default function TopBar() {
             la rotella di sistema — ma la copia mobile era l'unica senza nome,
             e valeva 10 punti su 100 di Accessibilità. */}
         <div className="flex items-center gap-2">
-          <span id="tb-mob-campo" className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.field")}</span>
+          <span id="tb-mob-campo" className="text-[10px] text-gray-400 uppercase tracking-wider shrink-0">{t("ui.field")}</span>
           <select
             aria-labelledby="tb-mob-campo"
             value={terrain ?? ''}
@@ -203,7 +206,7 @@ export default function TopBar() {
             ))}
           </select>
 
-          <span id="tb-mob-meteo" className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">{t("ui.weather")}</span>
+          <span id="tb-mob-meteo" className="text-[10px] text-gray-400 uppercase tracking-wider shrink-0">{t("ui.weather")}</span>
           <select
             aria-labelledby="tb-mob-meteo"
             value={weather ?? ''}
