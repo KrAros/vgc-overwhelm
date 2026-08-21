@@ -82,7 +82,7 @@ Numeri letti dall'esecuzione, non dichiarati a memoria:
 
 | | Copre | Entra da |
 |---|---|---|
-| **1752 test** su 27 file<br><small>1751 verdi · 1 saltato</small> | — | — |
+| **1876 test** su 30 file<br><small>1875 verdi · 1 saltato</small> | — | — |
 | **586 casi** di caratterizzazione formula | che il motore non cambi numeri per sbaglio | `calculateDamage` |
 | **180 celle** di caratterizzazione matrice<br><small>5 scenari</small> | la logica di `DamageTable` | il componente |
 | **509 golden** dal riferimento | la formula contro NCP | `GET_DAMAGE_SV` |
@@ -127,14 +127,25 @@ Bundle misurato sull'ultima build (`97 moduli`):
 
 | chunk | grezzo | gzip |
 |---|---|---|
-| `dati` | 396,32 kB | 95,02 kB |
+| `dati` | 387,86 kB | 95,36 kB |
 | `vendor` | 239,00 kB | 75,55 kB |
-| `index` | 149,05 kB | 40,23 kB |
-| `it` | 63,29 kB | 24,38 kB |
+| `index` | 150,44 kB | 40,59 kB |
+| `it` | 64,59 kB | 24,70 kB |
 | runtime | 0,56 kB | 0,36 kB |
 
-Un visitatore inglese scarica **211,16 kB** di JavaScript compresso — somma
+Un visitatore inglese scarica **211,86 kB** di JavaScript compresso — somma
 fatta a mano, `it` escluso perché lo prende solo chi passa all'italiano.
+
+<small>I gzip sono quelli riportati da Vite. `gzip -c` sugli stessi file dà
+**206,54 kB**: livelli di compressione diversi, non una misura sbagliata.
+
+La differenza non è accademica. Il criterio della sessione E era «JS gzip sotto
+210 kB», chiuso a 209,27 — ma **il piano non dice con quale strumento**, e le
+due misure differiscono di cinque kB: 206,54 sta sotto la soglia, 211,86 sta
+sopra. Un criterio numerico senza il metodo di misura non ha un verdetto.
+
+Da notare che il 211,16 scritto qui prima di oggi era **già** sopra i 210, e
+nessuno se n'era accorto.</small>
 
 ---
 
