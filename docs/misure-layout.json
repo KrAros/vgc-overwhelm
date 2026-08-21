@@ -1,7 +1,7 @@
 {
   "condizioni": {
-    "misurato": "2026-08-19",
-    "commit": "0e3cf1f",
+    "misurato": "2026-08-21",
+    "commit": "0eeed4d",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -78,7 +78,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 459
+      "nodi_totali": 461
     },
     {
       "scenario": "squadra",
@@ -150,7 +150,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1381
+      "nodi_totali": 1383
     },
     {
       "scenario": "rapporto",
@@ -195,12 +195,12 @@
             "h": 16
           },
           {
-            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "nodo": "button.text-gray-400 hover:text-white text-[11px] px-2.5 py-1 round",
             "w": 64,
             "h": 27
           },
           {
-            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "nodo": "button.text-gray-400 hover:text-white text-[11px] px-2.5 py-1 round",
             "w": 52,
             "h": 27
           },
@@ -222,7 +222,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1521
+      "nodi_totali": 1523
     },
     {
       "scenario": "vuoto",
@@ -294,7 +294,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 459
+      "nodi_totali": 461
     },
     {
       "scenario": "squadra",
@@ -366,7 +366,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1381
+      "nodi_totali": 1383
     },
     {
       "scenario": "rapporto",
@@ -411,12 +411,12 @@
             "h": 16
           },
           {
-            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "nodo": "button.text-gray-400 hover:text-white text-[11px] px-2.5 py-1 round",
             "w": 67,
             "h": 27
           },
           {
-            "nodo": "button.text-gray-500 hover:text-white text-[11px] px-2.5 py-1 round",
+            "nodo": "button.text-gray-400 hover:text-white text-[11px] px-2.5 py-1 round",
             "w": 55,
             "h": 27
           },
@@ -438,7 +438,7 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1521
+      "nodi_totali": 1523
     }
   ]
 }

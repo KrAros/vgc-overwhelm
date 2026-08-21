@@ -20,20 +20,6 @@ import movesData from '../data/moves.json'
 import { calcEOT, findBestNHKO } from '../lib/damage'
 
 // ── Stringhe end-of-turn e Sitrus Berry (usate da ReportPanel) ───────────────
-export const EOT_STRINGS = {
-  sandstormDamage:   'sandstorm damage',
-  leftoversRecovery: 'Leftovers recovery',
-  sitrusRecovery:    'Sitrus Berry recovery',
-  neutralize:        'si annullano',
-  noKoIn6:           'No KO in 6 turns after',
-  guaranteed:        'Guaranteed',
-  chanceTo:          'chance to',
-  after:             'after',
-  sitrusActivates:   (healed, hp, maxHp) => `La Sitrus Berry si attiva! +${healed} HP → ${hp}/${maxHp} HP`,
-  eotDelta:          (sign, delta, hp, maxHp) => `Fine turno: ${sign}${Math.abs(delta)} HP → ${hp}/${maxHp} HP`,
-  turno:             (t) => `Turno ${t}:`,
-  ko:                '→ KO',
-}
 import pokemonData from '../data/pokemon.json'
 import { NATURE_MODIFIERS } from '../data/natures'
 import { TYPE_NAMES, TYPES } from '../data/typeChart'
