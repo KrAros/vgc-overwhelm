@@ -716,7 +716,7 @@ export default function ControlBar() {
                   onClick={() => handleImport(targetTeam)}
                   className="text-xs px-3 py-1 rounded bg-teal-700 hover:bg-teal-600 text-white"
                 >
-                  ✔ Import
+                  ✔ {t('ui.import')}
                 </button>
                 <button
                   onClick={() => setMode(null)}

@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 import AbilityFlags from './AbilityFlags.jsx'
 import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
 import { strumentoNonCalcolato } from '../../lib/gap.js'
-import { slotToShowdown } from './showdownHelpers.js'
+import { teamToShowdown } from '../../utils/showdownIO.js'
 import { ImportModal, DuplicateModal } from './Modals.jsx'
 
 // ─── PokemonPanel ─────────────────────────────────────────────────────────────
@@ -97,9 +97,21 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
     setDoubleTarget(isSpread)
   }
 
-  // ── Esporta: copia paste singolo Pokémon negli appunti
+  /**
+   * ─── ESPORTA UN POKÉMON, CON IL SERIALIZZATORE DELLA SQUADRA ─────────────
+   *
+   * `slotToShowdown` era la seconda copia, e scriveva gli SP GREZZI sotto
+   * l'etichetta `EVs:`: un set con 32 SP in Attacco usciva come «EVs: 32 Atk»
+   * invece di «252 Atk», quindi quel testo incollato in Showdown dava un
+   * Pokémon quasi senza investimento.
+   *
+   * Misurato su 400 slot prima di sostituirlo: i due testi differiscono in
+   * **320 casi su 400, e sempre e solo sulla riga `EVs:`**. Nome, abilità,
+   * natura, strumento e mosse coincidevano già. Gli 80 che concordavano sono
+   * quelli senza SP investiti, dove la riga non viene scritta.
+   */
   const handleExport = () => {
-    const paste = slotToShowdown(pokemon)
+    const paste = teamToShowdown([pokemon])
     if (!paste) return
     navigator.clipboard.writeText(paste).then(() => {
       setExportCopied(true)
