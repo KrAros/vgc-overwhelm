@@ -82,6 +82,21 @@ const ALIAS_POKEMON = {
   'necrozma-dawn-wings': 'necrozma-dawn',
   'ultra-necrozma': 'necrozma-ultra',
   'basculegion': 'basculegion-m',
+  /**
+   * Floette Fiore Eterno e la sua Mega sono **la stessa creatura**, confermato
+   * da Simone. Showdown la chiama `Floette-Eternal`, gamecards.gg la elenca
+   * come `floette-eternal`, la nostra anagrafica come `floette-mega`.
+   *
+   * Non è un riordino di segmenti, quindi la regola generale della sessione W
+   * non può prenderla: «eternal» e «mega» sono parole diverse per la stessa
+   * cosa, ed è esattamente ciò per cui questa tabella esiste.
+   *
+   * Da notare che il Floette base in Champions non c'è: la fonte gli risponde
+   * 404 mentre alla Mega risponde 200.
+   */
+  'floette-eternal': 'floette-mega',
+  'eternal-flower-floette': 'floette-mega',
+  'floette-eternal-flower': 'floette-mega',
 }
 
 /**

@@ -425,3 +425,30 @@ describe('l’abilità: una regola sola per tutti gli ingressi', () => {
     expect(slotConAbilitaValida(undefined)).toBe(undefined)
   })
 })
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE HH — Floette Fiore Eterno ha due nomi
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Showdown la chiama `Floette-Eternal`, la nostra anagrafica `floette-mega`.
+ * Sono la stessa creatura — confermato da Simone — ma «eternal» e «mega» sono
+ * parole diverse, non un riordino: la regola generale di W non poteva
+ * prenderla, e chi incollava un paste da Showdown si vedeva «non trovato».
+ */
+describe('import Showdown — i sinonimi che non sono riordini', () => {
+  const chiave = (nome) =>
+    parseShowdownPaste(`${nome} @ Leftovers\nAbility: Fairy Aura\n- Protect`).pokemon[0]?.key ?? null
+
+  it('Floette Fiore Eterno si trova con entrambi i nomi', () => {
+    for (const n of ['Floette-Eternal', 'Floette Eternal', 'Eternal Flower Floette', 'Floette-Mega', 'Mega Floette'])
+      expect(chiave(n), n).toBe('floette-mega')
+  })
+
+  it('il controllo: un nome inventato resta non trovato', () => {
+    // Senza, il caso sopra passerebbe anche se la ricerca restituisse
+    // `floette-mega` per qualunque stringa contenente «floette».
+    expect(chiave('Floette-Inventata')).toBe(null)
+    expect(chiave('Zzzznonesiste')).toBe(null)
+  })
+})
