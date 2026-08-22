@@ -4,6 +4,7 @@
 import useCalcStore from '../../store/useCalcStore'
 import { useState } from 'react'
 import pokemonData from '../../data/pokemon.json'
+import { cercaSpecie, ordinaPerRoster } from '../../utils/nomiPokemon'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
@@ -58,8 +59,27 @@ export function PokemonSearch({ value, onChange }) {
   const [focused, setFocused] = useState(false)
   const [open, setOpen]     = useState(false)
 
+  /**
+   * ─── LA RICERCA IGNORA I SEGNI, E GUARDA ANCHE IL NOME ───────────────────
+   *
+   * Prima confrontava la query con lo SLUG e basta, con un `includes` secco.
+   * Le chiavi usano il trattino, quindi scrivere uno spazio dava **zero
+   * risultati**: «iron h» → 0, «flutter m» → 0, «chi y» → 0. Bisognava
+   * indovinare il trattino, e sono 241 le specie con la chiave composta.
+   *
+   * E il nome vero non lo guardava affatto: `Mr. Mime` e `Type: Null` si
+   * trovano solo scrivendo `mr-mime` e `type-null`.
+   *
+   * Ora si confrontano slug e nome dopo aver tolto tutto ciò che non è lettera
+   * o cifra, da entrambe le parti: una regola sola che copre spazi, trattini,
+   * punti e due punti insieme.
+   */
   const filtered = query.length >= 2
-    ? ALL_POKEMON.filter(p => p.includes(query.toLowerCase())).slice(0, 20)
+    // Le specie che Champions ha vengono prima: la lista si ferma a 20, e
+    // senza ordinamento quei venti erano i primi in alfabeto — spesso tutti di
+    // fuori. Ordina e basta: non nasconde e non etichetta, perché il registro
+    // ha falsi negativi noti (vedi `ordinaPerRoster`).
+    ? ordinaPerRoster(ALL_POKEMON.filter(p => cercaSpecie(p, query))).slice(0, 20)
     : []
 
   const hasValue = focused ? query.length > 0 : !!value
