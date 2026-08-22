@@ -1,14 +1,54 @@
 <!doctype html>
-<html lang="it">
+<!--
+  `lang` dichiarava `it` mentre l'app parte in inglese (`lng: 'en'` in
+  `i18n.js`). I crawler e gli screen reader leggono QUESTO, non l'app: chi
+  condivideva il link mostrava una pagina dichiarata italiana che si apre in
+  inglese. `main.jsx` lo aggiorna quando l'utente cambia lingua; qui sta il
+  valore di partenza, che dev'essere quello vero.
+-->
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" type="image/svg+xml" href="/vgc-overwhelm/favicon.svg" />
+    <link rel="apple-touch-icon" href="/vgc-overwhelm/apple-touch-icon.png" />
+    <link rel="canonical" href="https://kraros.github.io/vgc-overwhelm/" />
+
     <title>The Sixth Ember — Pokémon Champions Damage Calculator</title>
-    <meta name="description" content="Damage calculator per Pokémon Champions: calcoli doubles, sistema SP, Mega Evolution, KO cumulativi e preset dal meta competitivo." />
-    <meta property="og:title" content="The Sixth Ember — Pokémon Champions Damage Calculator" />
-    <meta property="og:description" content="Il damage calculator per Pokémon Champions." />
+    <meta name="description" content="Damage calculator for Pokémon Champions: VGC doubles, the SP stat system, Mega Evolution, cumulative KO chance and meta presets." />
     <meta name="theme-color" content="#F97316" />
+
+    <!--
+      I meta sono in INGLESE per scelta, non per dimenticanza: i crawler non
+      eseguono l'app, quindi non c'è modo di renderli sensibili alla lingua
+      scelta dall'utente. L'inglese è coerente con `lng: 'en'` e col pubblico
+      VGC, che è internazionale.
+
+      `og:image` DEVE essere un URL assoluto — un percorso relativo lo scarta
+      quasi ogni client. Va aggiornato il giorno del passaggio a sixthember.gg,
+      insieme a `og:url` e al canonical: sono le tre righe da toccare.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Sixth Ember" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:url" content="https://kraros.github.io/vgc-overwhelm/" />
+    <meta property="og:title" content="The Sixth Ember — Pokémon Champions Damage Calculator" />
+    <meta property="og:description" content="Damage calculator for Pokémon Champions: VGC doubles, the SP stat system, Mega Evolution and cumulative KO chance." />
+    <meta property="og:image" content="https://kraros.github.io/vgc-overwhelm/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The Sixth Ember — a damage matrix showing percentage rolls for a VGC doubles matchup." />
+
+    <!--
+      Senza `twitter:card` X mostra un'anteprima piccola e senza immagine anche
+      quando `og:image` c'è. Le altre righe ricadono su Open Graph da sole, ma
+      questa no.
+    -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Sixth Ember — Pokémon Champions Damage Calculator" />
+    <meta name="twitter:description" content="Damage calculator for Pokémon Champions: VGC doubles, the SP stat system, Mega Evolution and cumulative KO chance." />
+    <meta name="twitter:image" content="https://kraros.github.io/vgc-overwhelm/og-image.png" />
   </head>
   <body>
     <div id="root"></div>
