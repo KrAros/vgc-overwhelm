@@ -115,10 +115,17 @@ Jolly Nature
 
   it('1 SP vale 8 EV, come dichiara rules.js', () => {
     // [HP, Atk, Def, SpA, SpD, Spe]
+    //
+    // Il `252 HP` in testa non è decorativo: dalla sessione W la riga `EVs:`
+    // viene interpretata come EV solo se QUALCHE valore supera i limiti SP.
+    // Un `8 Def` da solo è ambiguo per costruzione — 8 EV e 8 SP sono due
+    // letture legittime degli stessi caratteri — e ora vince la seconda.
+    // Il compagno grande toglie l'ambiguità e lascia il test a provare quello
+    // per cui era stato scritto: l'aritmetica della conversione.
     expect(sps('252 HP')[0]).toBe(32)
-    expect(sps('100 Atk')[1]).toBe(13)   // 12,5 arrotondato
-    expect(sps('8 Def')[2]).toBe(1)
-    expect(sps('0 SpA')[3]).toBe(0)
+    expect(sps('252 HP / 100 Atk')[1]).toBe(13)   // 12,5 arrotondato
+    expect(sps('252 HP / 8 Def')[2]).toBe(1)
+    expect(sps('252 HP / 0 SpA')[3]).toBe(0)
   })
 
   it('il massimo di Showdown diventa il massimo di Champions', () => {
@@ -128,7 +135,8 @@ Jolly Nature
 
   it('i 4 EV di avanzo non valgono più di mezzo punto', () => {
     // Era il caso peggiore del troncamento: 4 EV diventavano 4 SP, cioè 32 EV.
-    expect(sps('4 Atk')[1]).toBe(1)
+    // Come sopra, il compagno grande dichiara che questi sono EV.
+    expect(sps('252 HP / 4 Atk')[1]).toBe(1)
   })
 
   it('nessuno spread legale in Showdown può sforare il tetto di 66', () => {
@@ -164,5 +172,152 @@ Jolly Nature
     const testo = teamToShowdown([p])
     const valori = [...testo.matchAll(/(\d+)\s+(HP|Atk|Def|SpA|SpD|Spe)/g)].map(m => Number(m[1]))
     expect(valori.every(v => v <= 252), testo).toBe(true)
+  })
+})
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE W — l'etichetta `EVs:` porta due unità diverse
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Chi scrive un set per Champions usa comunque l'intestazione `EVs:`, perché
+ * è quella che il formato prevede, ma i numeri sotto sono SP. Prima di W la
+ * riga passava sempre per la divisione: `32 HP / 6 Atk / 28 Spe` — una
+ * distribuzione SP massimale, somma esattamente 66 — diventava 4/1/4.
+ *
+ * Il discriminante sono i due tetti che `rules.js` già dichiara. Qui si
+ * provano i BORDI, perché è lì che una soglia sbaglia.
+ */
+describe('import Showdown — SP scritti sotto l’etichetta EVs', () => {
+  const conEV = (ev) => `Garchomp @ Life Orb\nAbility: Rough Skin\nEVs: ${ev}\n- Protect`
+  const sps = (ev) => parseShowdownPaste(conEV(ev)).pokemon[0]?.sps
+
+  it('il paste che ha aperto la sessione', () => {
+    expect(sps('32 HP / 6 Atk / 28 Spe')).toEqual([32, 6, 0, 0, 0, 28])
+  })
+
+  it('il bordo della somma: 66 è SP, 67 è EV', () => {
+    // 32+32+2 = 66 → SP.  32+32+3 = 67 → sfora il budget, quindi sono EV.
+    expect(sps('32 HP / 32 Atk / 2 Def').slice(0, 3)).toEqual([32, 32, 2])
+    expect(sps('32 HP / 32 Atk / 3 Def').slice(0, 3)).toEqual([4, 4, 0])
+  })
+
+  it('il bordo per statistica: 32 è SP, 33 è EV', () => {
+    expect(sps('32 HP')[0]).toBe(32)
+    expect(sps('33 HP')[0]).toBe(4)   // 33/8 = 4,125
+  })
+
+  it('uno spread Showdown vero resta EV', () => {
+    expect(sps('252 HP / 4 Atk / 252 SpD')).toEqual([32, 1, 0, 0, 32, 0])
+  })
+
+  /**
+   * IL CONTROLLO CHE SI MUOVE. Senza questa asserzione il blocco passerebbe
+   * anche se il discriminante fosse cablato su un ramo solo: gli stessi sei
+   * numeri devono produrre risultati DIVERSI a seconda dell'unità dedotta.
+   */
+  it('il discriminante distingue davvero i due rami', () => {
+    const comeSP = sps('30 HP')[0]
+    const comeEV = sps('300 HP')[0]
+    expect(comeSP).toBe(30)
+    expect(comeEV).toBe(32)
+    expect(comeSP).not.toBe(comeEV)
+  })
+
+  /**
+   * IL GIRO DI ANDATA E RITORNO. L'export scrive EV veri (SP×8), quindi non
+   * può ricadere nel ramo SP: 32 SP escono come 256, che supera il tetto.
+   * È la proprietà che rende la regola sicura per i team già salvati.
+   */
+  it('quello che l’app esporta si rilegge come EV', () => {
+    const uscita = teamToShowdown([{
+      key: 'garchomp', item: null, ability: null, nature: 'jolly',
+      sps: [0, 32, 0, 0, 0, 32], moves: ['protect', null, null, null],
+    }])
+    const rientro = parseShowdownPaste(uscita).pokemon[0]
+    expect(rientro.sps).toEqual([0, 32, 0, 0, 0, 32])
+  })
+})
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE W — le forme scritte come le scrive una persona
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Misurato prima di correggere: con le tre grafie naturali fallivano 270 casi
+ * su 270, ZERO funzionanti. `Rotom (Wash)` era il peggiore, perché la regex
+ * del nickname leggeva «Wash» come specie e buttava via «Rotom».
+ *
+ * I casi si GENERANO dall'anagrafica invece di elencarli: una lista scritta a
+ * mano invecchia alla prossima forma aggiunta, e il difetto tornerebbe muto.
+ * E si passa da `parseShowdownPaste`, cioè dalla funzione vera — un test che
+ * ridefinisce ciò che verifica non verifica niente (regola nata in F-3).
+ */
+describe('import Showdown — Mega, forme regionali e parentesi', () => {
+  const chiave = (nome) =>
+    parseShowdownPaste(`${nome} @ Leftovers\nAbility: Levitate\n- Protect`).pokemon[0]?.key ?? null
+
+  const specie = Object.keys(pokemonData)
+  const REGIONI = { alola: 'Alolan', galar: 'Galarian', hisui: 'Hisuian', paldea: 'Paldean' }
+
+  it('«Mega X» trova la Mega', () => {
+    const casi = specie.filter(k => k.endsWith('-mega'))
+    expect(casi.length).toBeGreaterThan(50)
+    const ko = casi.filter(k => chiave('Mega ' + k.replace('-mega', '')) !== k)
+    expect(ko).toEqual([])
+  })
+
+  it('«Base (Forma)» non perde la base', () => {
+    const casi = specie.filter(k => k.includes('-') && !k.includes('mega'))
+    expect(casi.length).toBeGreaterThan(100)
+    const ko = casi.filter(k => {
+      const [b, ...r] = k.split('-')
+      return chiave(`${b} (${r.join(' ')})`) !== k
+    })
+    expect(ko).toEqual([])
+  })
+
+  it('«Alolan X» e sorelle', () => {
+    const casi = specie.filter(k => /-(alola|galar|hisui|paldea)$/.test(k))
+    expect(casi.length).toBeGreaterThan(20)
+    const ko = casi.filter(k => {
+      const [b, f] = k.split('-')
+      return chiave(`${REGIONI[f]} ${b}`) !== k
+    })
+    expect(ko).toEqual([])
+  })
+
+  it('un nickname vero resta un nickname', () => {
+    // `pikachu-raichu` non esiste, quindi l'unione fallisce e vince la
+    // lettura nickname. È il caso che l'ordine dei tentativi deve preservare.
+    expect(chiave('Pikachu (Raichu)')).toBe('raichu')
+  })
+
+  it('le grafie che già funzionavano continuano a funzionare', () => {
+    for (const k of ['rotom-wash', 'charizard-mega-x', 'landorus-therian', 'garchomp'])
+      expect(chiave(k)).toBe(k)
+    expect(chiave('Ultra Necrozma')).toBe('necrozma-ultra')
+  })
+
+  /**
+   * LA PROPRIETÀ CHE RENDE SICURA LA REGOLA GENERALE. Il riordino dei
+   * segmenti potrebbe finire su una specie DIVERSA da quella voluta: qui si
+   * conta che non esista nessuna coppia di specie che sia il riordino
+   * dell'altra. Misurato zero su 241 il giorno di W — e se domani ne compare
+   * una, questo test diventa rosso PRIMA che l'import scelga quella sbagliata.
+   */
+  it('nessuna specie è il riordino dei segmenti di un’altra', () => {
+    const perm = (a) => a.length <= 1 ? [a]
+      : a.flatMap((x, i) => perm([...a.slice(0, i), ...a.slice(i + 1)]).map(p => [x, ...p]))
+    const collisioni = []
+    for (const k of specie) {
+      const parti = k.split('-')
+      if (parti.length < 2 || parti.length > 4) continue
+      for (const p of perm(parti)) {
+        const c = p.join('-')
+        if (c !== k && pokemonData[c]) collisioni.push(`${k} ⟷ ${c}`)
+      }
+    }
+    expect(collisioni).toEqual([])
   })
 })

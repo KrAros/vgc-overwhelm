@@ -16,7 +16,7 @@ import movesData     from '../data/moves.json'
 import itemsData     from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import { NATURES }   from '../data/natures.js'
-import { spToEv, EV_PER_SP, MAX_SP_PER_STAT } from '../lib/rules.js'
+import { spToEv, EV_PER_SP, MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 
 /**
  * ─── SP ⇄ EV ───────────────────────────────────────────────────────────────
@@ -101,12 +101,107 @@ const ALIAS_POKEMON = {
  * trovava niente, e 71 specie — cioè quasi tutto il meta di Reg M-B — non
  * erano importabili da una paste.
  */
-function findPokemonKey(name) {
-  const slug = name.trim().toLowerCase()
-  if (pokemonData[slug]) return slug
-  const norm = slug.replace(/[.'’:]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-')
+/**
+ * ─── I PREFISSI REGIONALI SCRITTI PER ESTESO ────────────────────────────────
+ *
+ * L'albero usa il suffisso corto (`raichu-alola`), il mondo scrive l'aggettivo
+ * davanti (`Alolan Raichu`). Sono quattro, si elencano.
+ */
+const PREFISSI_REGIONE = {
+  alolan: 'alola',
+  galarian: 'galar',
+  hisuian: 'hisui',
+  paldean: 'paldea',
+}
+
+/** Tutte le permutazioni dei segmenti. Con 2-4 segmenti sono al massimo 24. */
+function permutazioni(a) {
+  if (a.length <= 1) return [a]
+  return a.flatMap((x, i) =>
+    permutazioni([...a.slice(0, i), ...a.slice(i + 1)]).map(p => [x, ...p]))
+}
+
+const normalizzaNome = (s) =>
+  s.trim().toLowerCase().replace(/[.'’:]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-')
+
+/**
+ * ─── RISOLVE UNA CHIAVE GIÀ NORMALIZZATA ───────────────────────────────────
+ *
+ * Tre tentativi in ordine di specificità: chiave esatta, alias scritto a mano,
+ * poi le due regole generali.
+ *
+ * ─── PERCHÉ LE PERMUTAZIONI E NON UNA TABELLA ──────────────────────────────
+ *
+ * Misurato prima di scrivere questa funzione: con le tre grafie che una
+ * persona usa naturalmente — «Mega Scolipede», «Rotom (Wash)», «Alolan
+ * Raichu» — fallivano **270 casi su 270**, zero funzionanti. Una tabella di
+ * alias per 270 voci sarebbe una seconda copia dell'anagrafica, cioè il
+ * difetto che questo progetto insegue da sei sessioni.
+ *
+ * La regola vera è che l'albero scrive `base-forma` e il mondo scrive
+ * `Forma Base`: è un problema di ORDINE, non di vocabolario.
+ *
+ * ─── PERCHÉ È SICURO ───────────────────────────────────────────────────────
+ *
+ * Il rischio della regola generale è che una permutazione finisca su una
+ * specie DIVERSA da quella voluta. Contato su tutte le 241 specie con più di
+ * un segmento, provando ogni permutazione di ognuna: **zero collisioni**.
+ * Nessuna specie dell'albero è il riordino di un'altra.
+ *
+ * Il tetto a 4 segmenti non è prudenza generica: 5 segmenti sarebbero 120
+ * permutazioni, e nessuna chiave dell'albero ne ha più di 4.
+ */
+function risolviChiaveSpecie(norm) {
   if (pokemonData[norm]) return norm
-  return ALIAS_POKEMON[norm] ?? null
+  if (ALIAS_POKEMON[norm]) return ALIAS_POKEMON[norm]
+
+  const parti = norm.split('-')
+
+  const regione = PREFISSI_REGIONE[parti[0]]
+  if (regione) {
+    const c = [...parti.slice(1), regione].join('-')
+    if (pokemonData[c]) return c
+  }
+
+  if (parti.length >= 2 && parti.length <= 4) {
+    for (const p of permutazioni(parti)) {
+      const c = p.join('-')
+      if (pokemonData[c]) return c
+    }
+  }
+  return null
+}
+
+/**
+ * ─── LE PARENTESI VOGLIONO DIRE DUE COSE ───────────────────────────────────
+ *
+ * `Pikachu (Raichu)` in Showdown è un NICKNAME: la specie è quella dentro.
+ * `Rotom (Wash)` invece è una FORMA: la specie è l'unione delle due.
+ *
+ * Non si distinguono guardandole, si distinguono provandole. L'ordine conta:
+ * prima l'unione, perché è la lettura più specifica — se `rotom-wash` esiste
+ * nell'albero, l'intenzione non è ambigua. Solo se l'unione non esiste si
+ * ricade sul nickname.
+ *
+ * Prima di oggi vinceva sempre il nickname: `Rotom (Wash)` cercava «Wash» e
+ * buttava via «Rotom». Falliva peggio degli altri casi, perché scartava
+ * proprio la parte che identificava il Pokémon.
+ *
+ * Il marcatore di genere ricade qui da solo: `Basculegion (M)` si unisce in
+ * `basculegion-m`, che è una chiave vera.
+ */
+function findPokemonKey(name) {
+  const diretto = risolviChiaveSpecie(normalizzaNome(name))
+  if (diretto) return diretto
+
+  const m = name.match(/^(.+)\((.+)\)\s*$/)
+  if (m) {
+    const [, fuori, dentro] = m
+    return risolviChiaveSpecie(normalizzaNome(fuori + '-' + dentro))
+        ?? risolviChiaveSpecie(normalizzaNome(dentro))
+        ?? risolviChiaveSpecie(normalizzaNome(fuori))
+  }
+  return null
 }
 
 function findMoveKey(name) {
@@ -160,10 +255,10 @@ export function parseShowdownPaste(paste) {
       if (!itemKey) warnings.push(`Slot ${blockIdx + 1}: item "${itemPart.trim()}" not found.`)
     }
 
-    // Gestione nickname: "Nickname (NomePokémon) @ Item"
-    const nicknameMatch = pokeRawName.match(/^.+\((.+)\)$/)
-    if (nicknameMatch) pokeRawName = nicknameMatch[1].trim()
-
+    // Le parentesi le scioglie `findPokemonKey`: possono essere un nickname
+    // («Pikachu (Raichu)») o una forma («Rotom (Wash)»), e la differenza si
+    // decide provando l'albero, non guardando la stringa. Toglierle qui, come
+    // si faceva prima, impediva alla regola di vedere il caso.
     const pokemonKey = findPokemonKey(pokeRawName)
     if (!pokemonKey) {
       warnings.push(`Slot ${blockIdx + 1}: Pokémon "${pokeRawName}" not found, skipped.`)
@@ -185,13 +280,49 @@ export function parseShowdownPaste(paste) {
         if (!abilityKey) warnings.push(`Slot ${blockIdx + 1}: abilità "${raw}" non trovata.`)
 
       } else if (line.startsWith('EVs:')) {
+        /**
+         * ─── L'ETICHETTA DICE «EVs» E I NUMERI POSSONO ESSERE SP ───────────
+         *
+         * Champions investe in SP, Showdown in EV, ma chi scrive un set per
+         * Champions usa comunque l'intestazione `EVs:` perché è quella che il
+         * formato prevede. Prima di oggi la riga passava sempre da
+         * `EV_TO_SP`, che divide per otto: una distribuzione SP legale
+         * diventava un ottavo di sé stessa, e nessuno lo segnalava.
+         *
+         * ─── COME SI DISTINGUONO ───────────────────────────────────────────
+         *
+         * Non dall'etichetta, che è la stessa. Dai numeri, confrontati con i
+         * due tetti che `rules.js` già dichiara: una distribuzione SP sta per
+         * costruzione entro 32 per statistica e 66 in totale. Un set Showdown
+         * vero ne esce quasi sempre al primo valore — 252 supera 32 da solo.
+         *
+         * L'export di quest'app scrive EV veri (SP×8), quindi il giro di
+         * andata e ritorno non può cadere qui dentro: 32 SP escono come 256.
+         *
+         * ─── LA ZONA GRIGIA, DICHIARATA ────────────────────────────────────
+         *
+         * Un set Showdown genuino con pochissimi EV investiti — somma entro
+         * 66 e nessun valore oltre 32 — viene letto come SP. È raro ma
+         * possibile, e la lettura è ambigua per costruzione: gli stessi sei
+         * numeri sono validi in entrambe le unità.
+         *
+         * Avevo proposto di scriverlo nei warning. **Simone ha scelto di no**,
+         * dopo aver letto la ragione: l'ipotesi resta silenziosa. Registrato
+         * qui perché fra sei mesi si sappia che il silenzio è voluto.
+         */
+        const grezzi = [0, 0, 0, 0, 0, 0]
         line.replace('EVs:', '').trim().split('/').forEach(seg => {
           const m = seg.trim().match(/^(\d+)\s+(\w+)$/)
           if (m) {
             const idx = STAT_IDX[m[2]]
-            if (idx !== undefined) sps[idx] = EV_TO_SP(parseInt(m[1], 10))
+            if (idx !== undefined) grezzi[idx] = parseInt(m[1], 10)
           }
         })
+        const sonoGiaSP = grezzi.every(v => v <= MAX_SP_PER_STAT) &&
+                          grezzi.reduce((a, b) => a + b, 0) <= MAX_SP_TOTAL
+        for (let s = 0; s < 6; s++) {
+          sps[s] = sonoGiaSP ? grezzi[s] : EV_TO_SP(grezzi[s])
+        }
 
       } else if (line.endsWith(' Nature')) {
         const n = line.replace(' Nature', '').trim().toLowerCase()

@@ -1,7 +1,7 @@
 {
   "condizioni": {
-    "misurato": "2026-08-21",
-    "commit": "0eeed4d",
+    "misurato": "2026-08-22",
+    "commit": "235d63e",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -78,6 +78,11 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
+      "coleottero_a_schermo": false,
+      "tipi_a_schermo": [
+        "Electric",
+        "Psychic"
+      ],
       "nodi_totali": 461
     },
     {
@@ -105,7 +110,7 @@
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 130,
+        "quanti": 142,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -150,7 +155,22 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1383
+      "coleottero_a_schermo": false,
+      "tipi_a_schermo": [
+        "Electric",
+        "Psychic",
+        "Dark",
+        "Rock",
+        "Bug",
+        "Dragon",
+        "DRAGON",
+        "GROUND",
+        "FIRE",
+        "ROCK",
+        "STEEL",
+        "GHOST"
+      ],
+      "nodi_totali": 1285
     },
     {
       "scenario": "rapporto",
@@ -177,7 +197,7 @@
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 132,
+        "quanti": 144,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -222,7 +242,22 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1523
+      "coleottero_a_schermo": false,
+      "tipi_a_schermo": [
+        "DRAGON",
+        "GROUND",
+        "STEEL",
+        "GHOST",
+        "FIRE",
+        "Rock",
+        "ROCK",
+        "Dragon",
+        "Electric",
+        "Psychic",
+        "Dark",
+        "Bug"
+      ],
+      "nodi_totali": 1425
     },
     {
       "scenario": "vuoto",
@@ -294,6 +329,8 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
+      "coleottero_a_schermo": false,
+      "tipi_a_schermo": [],
       "nodi_totali": 461
     },
     {
@@ -321,7 +358,7 @@
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 120,
+        "quanti": 139,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -366,7 +403,19 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": false,
-      "nodi_totali": 1383
+      "coleottero_a_schermo": true,
+      "tipi_a_schermo": [
+        "DRAGO",
+        "TERRA",
+        "FUOCO",
+        "ROCCIA",
+        "ACCIAIO",
+        "SPETTRO",
+        "BUIO",
+        "COLEOTTERO",
+        "ELETTRO"
+      ],
+      "nodi_totali": 1285
     },
     {
       "scenario": "rapporto",
@@ -393,7 +442,7 @@
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 122,
+        "quanti": 141,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -438,7 +487,19 @@
         "htmlScrollWidth": 360
       },
       "pannello_rapporto": true,
-      "nodi_totali": 1523
+      "coleottero_a_schermo": true,
+      "tipi_a_schermo": [
+        "DRAGO",
+        "TERRA",
+        "ACCIAIO",
+        "SPETTRO",
+        "FUOCO",
+        "ROCCIA",
+        "BUIO",
+        "COLEOTTERO",
+        "ELETTRO"
+      ],
+      "nodi_totali": 1425
     }
   ]
 }
