@@ -15,6 +15,7 @@
  */
 
 import { create } from 'zustand'
+import { slotConAbilitaValida, abilitaPerSpecie } from '../lib/abilitaSpecie.js'
 import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 import { NATURE_MODIFIERS } from '../data/natures.js'
 import { MAX_SP_PER_STAT } from '../lib/rules.js'
@@ -127,9 +128,24 @@ function loadFromLocalStorage() {
     const raw = localStorage.getItem(LS_KEY)
     if (!raw) return null
     const { team1, team2 } = JSON.parse(raw)
+    /**
+     * ─── LE SQUADRE SALVATE VANNO GUARITE, NON SOLO CARICATE ───────────────
+     *
+     * Correggere l'import non basta: una squadra messa in `localStorage` PRIMA
+     * di quella correzione se la porta dietro per sempre, e l'utente non ha
+     * modo di accorgersene — la tendina mostra l'abilità giusta perché un
+     * `<select>` senza l'opzione corrispondente disegna la prima.
+     *
+     * È quello che Simone ha visto su Raichu-Mega-Y: misurato che ENTRAMBI i
+     * parser producono `no-guard`, quindi il valore sbagliato non poteva che
+     * venire da qui.
+     *
+     * La regola è quella di `lib/abilitaSpecie.js`, la stessa dei due parser:
+     * tre copie che non concordavano sono diventate una.
+     */
     const hydrate = (team) =>
       Array.isArray(team)
-        ? team.map(slot => ({
+        ? team.map(slot => slotConAbilitaValida({
             ...emptyPokemon(),
             ...slot,
             abilityFlags: { ...DEFAULT_ABILITY_FLAGS, ...(slot?.abilityFlags || {}) },
@@ -313,7 +329,10 @@ export function decodeTeamsFromURL(encoded) {
               moves:      mosseValide(grezzo.m),
               sps:        spsValidi(grezzo.sp),
               nature:     testoValido(grezzo.n, NATURE_MODIFIERS),
-              ability:    typeof grezzo.a === 'string' ? grezzo.a : null,
+              // Stessa guarigione del caricamento da localStorage: un link
+              // condiviso prima della correzione porta l'abilità sbagliata nel
+              // payload, e chi lo apre non ha modo di accorgersene.
+              ability:    abilitaPerSpecie(chiave, typeof grezzo.a === 'string' ? grezzo.a : null),
               item:       typeof grezzo.i === 'string' ? grezzo.i : null,
               atkBoost:   intero(grezzo.ab,  -6, 6),
               defBoost:   intero(grezzo.db,  -6, 6),

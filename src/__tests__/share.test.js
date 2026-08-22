@@ -34,12 +34,24 @@ const ITEM   = ['life orb', 'choice band', 'sitrus berry', 'assault vest', null]
 function teamCasuale(rnd) {
   return Array.from({ length: 6 }, () => {
     if (rnd() < 0.15) return slotVuoto()
+    const chiave = CHIAVI[Math.floor(rnd() * CHIAVI.length)]
     return {
-      key: CHIAVI[Math.floor(rnd() * CHIAVI.length)],
+      key: chiave,
       moves: Array.from({ length: 4 }, () => rnd() < 0.2 ? null : MOSSE[Math.floor(rnd() * MOSSE.length)]),
       sps: Array.from({ length: 6 }, () => Math.floor(rnd() * 33)),
       nature: NATURE[Math.floor(rnd() * NATURE.length)],
-      ability: rnd() < 0.5 ? 'intimidate' : null,
+      /**
+       * Dalla sessione Z l'abilità dev'essere una che la SPECIE può avere.
+       *
+       * Prima questa riga assegnava `intimidate` a caso su qualunque specie,
+       * cioè generava stati che l'app non è in grado di produrre — e da quando
+       * la decodifica guarisce le squadre, su quegli stati il giro codifica →
+       * decodifica non è più l'identità.
+       *
+       * Non è il criterio a essersi indebolito: era il generatore a provare
+       * una proprietà su input impossibili.
+       */
+      ability: pokemonData[chiave]?.abilities?.[0] ?? null,
       item: ITEM[Math.floor(rnd() * ITEM.length)],
       atkBoost:   Math.floor(rnd() * 13) - 6,
       defBoost:   Math.floor(rnd() * 13) - 6,
@@ -282,5 +294,40 @@ describe('share — un link malformato non entra nello store', () => {
     }))
     expect(d.team1[0].lastRespectsKOs).toBe(3)
     expect(d.team1[0].abilityFlags.supremeOverlordKOs).toBe(5)
+  })
+})
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Z — un link condiviso prima della correzione
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Stessa ragione del caricamento da `localStorage`: un link creato quando
+ * l'import accettava un'abilità impossibile la porta dentro il payload, e chi
+ * lo apre non ha modo di accorgersene — la tendina disegna comunque l'opzione
+ * giusta perché il valore non è fra le sue `<option>`.
+ *
+ * Il link non si può «rigenerare»: è già in giro. Quindi la guarigione deve
+ * stare in decodifica.
+ */
+describe('i link creati prima della correzione', () => {
+  const conAbilita = (key, ability) => {
+    const t = Array(6).fill(null).map(() => slotVuoto())
+    t[0] = { ...slotVuoto(), key, ability }
+    return t
+  }
+
+  it('l’abilità impossibile viene guarita in decodifica', () => {
+    const d = decodeTeamsFromURL(encodeTeamsToURL(conAbilita('raichu-mega-y', 'static'), conAbilita('charizard-mega-y', 'blaze')))
+    expect(d.team1[0].ability).toBe('no-guard')
+    expect(d.team2[0].ability).toBe('drought')
+  })
+
+  it('un’abilità legittima attraversa intatta', () => {
+    // IL CONTROLLO CHE SI MUOVE: `charizard` ha `blaze` come prima abilità e
+    // `solar-power` come seconda, quindi una guarigione che sovrascrivesse
+    // sempre con la prima farebbe fallire questo caso.
+    const d = decodeTeamsFromURL(encodeTeamsToURL(conAbilita('charizard', 'solar-power'), conAbilita('charizard', 'blaze')))
+    expect(d.team1[0].ability).toBe('solar-power')
+    expect(d.team2[0].ability).toBe('blaze')
   })
 })

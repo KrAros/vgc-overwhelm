@@ -17,7 +17,7 @@ import itemsData     from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import { NATURES }   from '../data/natures.js'
 import { spToEv, EV_PER_SP, MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
-import { normalizeAbilityKey } from '../data/abilityEffects.js'
+import { abilitaPerSpecie } from '../lib/abilitaSpecie.js'
 
 /**
  * ─── SP ⇄ EV ───────────────────────────────────────────────────────────────
@@ -377,11 +377,7 @@ export function parseShowdownPaste(paste) {
      * Avevo proposto un warning, come già esiste per le mosse non trovate.
      * **Simone ha scelto la correzione silenziosa** dopo aver letto la ragione.
      */
-    const consentite = pokemonData[pokemonKey]?.abilities ?? []
-    if (consentite.length > 0) {
-      const norm = abilityKey ? normalizeAbilityKey(abilityKey) : null
-      abilityKey = consentite.includes(norm) ? norm : consentite[0]
-    }
+    abilityKey = abilitaPerSpecie(pokemonKey, abilityKey)
 
     pokemon.push({
       key: pokemonKey, moves, sps, nature,

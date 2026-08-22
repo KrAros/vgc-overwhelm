@@ -24,6 +24,8 @@ import { describe, it, expect } from 'vitest'
 import { parseShowdownPaste, teamToShowdown } from '../utils/showdownIO.js'
 import { MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 import pokemonData from '../data/pokemon.json'
+import { showdownToSlot } from '../components/editor/showdownHelpers.js'
+import { slotConAbilitaValida } from '../lib/abilitaSpecie.js'
 
 /** Costruisce una paste minima con il solo nome. */
 const paste = (nome) => `${nome}\nAbility: Levitate\n- Protect`
@@ -369,5 +371,62 @@ describe('import Showdown — l’abilità impossibile', () => {
       return p && !pokemonData[p.key].abilities.includes(p.ability)
     })
     expect(fuori).toEqual([])
+  })
+})
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Z — una regola sola, e le squadre salvate si guariscono
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Simone ha visto il difetto dell'abilità su Raichu-Mega-Y dopo che Y lo
+ * aveva corretto. Misurato: ENTRAMBI i parser producono `no-guard` per quel
+ * paste, quindi il valore sbagliato non veniva dall'import — veniva dalla
+ * squadra salvata in `localStorage` PRIMA della correzione.
+ *
+ * Correggere l'ingresso non basta quando lo stato è persistente.
+ *
+ * E le regole erano TRE, tutte diverse: quella di Y nell'import del team,
+ * una più stretta nell'import del singolo slot (forzava solo se la specie
+ * aveva esattamente un'abilità), e nessuna al caricamento.
+ */
+describe('l’abilità: una regola sola per tutti gli ingressi', () => {
+  it('i due parser danno lo stesso risultato', () => {
+    // La proprietà che impedisce ai due percorsi di divergere di nuovo.
+    const casi = [
+      ['Charizard-Mega-Y @ Charizardite Y\nAbility: Blaze\n- Heat Wave', 'drought'],
+      ['Raichu-Mega-Y @ Leftovers\nAbility: Static\n- Thunderbolt', 'no-guard'],
+      ['Garchomp @ Life Orb\nAbility: Intimidate\n- Earthquake', 'sand-veil'],
+    ]
+    for (const [paste, atteso] of casi) {
+      expect(parseShowdownPaste(paste).pokemon[0].ability, `team: ${paste.split('\n')[0]}`).toBe(atteso)
+      expect(showdownToSlot(paste).slot.ability, `editor: ${paste.split('\n')[0]}`).toBe(atteso)
+    }
+  })
+
+  it('una scelta legittima sopravvive a entrambi', () => {
+    // IL CONTROLLO CHE SI MUOVE: senza, il test passerebbe anche se la regola
+    // scrivesse sempre la prima abilità della specie.
+    const p = 'Charizard @ Life Orb\nAbility: Solar Power\n- Heat Wave'
+    expect(parseShowdownPaste(p).pokemon[0].ability).toBe('solar-power')
+    expect(showdownToSlot(p).slot.ability).toBe('solar-power')
+  })
+
+  it('uno slot già salvato con un’abilità impossibile viene guarito', () => {
+    expect(slotConAbilitaValida({ key: 'raichu-mega-y', ability: 'static' }).ability).toBe('no-guard')
+    expect(slotConAbilitaValida({ key: 'charizard-mega-y', ability: 'blaze' }).ability).toBe('drought')
+  })
+
+  it('uno slot vuoto o inesistente non fa esplodere niente', () => {
+    // La prima versione di questo caso passava `{ key: null, ability: null }`
+    // ed era CIECA: togliendo la guardia dal sorgente restava verde, perché
+    // senza specie la regola restituisce comunque `null`. Trovato provando la
+    // perturbazione, non ragionandoci.
+    //
+    // Quello che la guardia protegge davvero è lo slot che NON C'È.
+    const vuoto = { key: null, ability: null }
+    expect(slotConAbilitaValida(vuoto)).toBe(vuoto)
+    expect(slotConAbilitaValida(null)).toBe(null)
+    expect(slotConAbilitaValida(undefined)).toBe(undefined)
   })
 })
