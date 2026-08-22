@@ -6,6 +6,7 @@ import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import abilitiesData from '../../data/abilities.json'
 import { NATURES } from '../../data/natures.js'
+import { abilitaPerSpecie } from '../../lib/abilitaSpecie.js'
 
 const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
 const SP_TO_EV = (sp) => sp
@@ -140,16 +141,13 @@ export function showdownToSlot(text) {
     // IVs, Level, Shiny, Tera Type → ignorati (Champions format)
   }
 
-  // Se il Pokémon ha abilità di default, usala come fallback
-  // Se il Pokémon ha una sola abilità possibile (es. forme Mega), forza quella
-  // indipendentemente da quanto scritto nel paste — il paste Showdown riporta
-  // l'abilità pre-mega che è sbagliata per il calcolo
-  const pokeAbilities = pokemonData[pokemonKey]?.abilities || []
-  if (pokeAbilities.length === 1) {
-    abilityKey = pokeAbilities[0]
-  } else if (!abilityKey) {
-    if (pokeAbilities[0]) abilityKey = pokeAbilities[0]
-  }
+  // La regola sta in `lib/abilitaSpecie.js`, una sola per tutta l'app.
+  //
+  // Qui ce n'era una PIÙ STRETTA: forzava la prima abilità solo quando la
+  // specie ne aveva esattamente una. Le Mega erano coperte, ma una specie con
+  // due abilità accettava anche una terza, impossibile. Funzionava dove serviva
+  // di più e taceva altrove.
+  abilityKey = abilitaPerSpecie(pokemonKey, abilityKey)
 
   return {
     slot: { key: pokemonKey, moves, sps, nature, ability: abilityKey, item: itemKey,
