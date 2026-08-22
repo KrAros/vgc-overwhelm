@@ -1,7 +1,7 @@
 {
   "condizioni": {
     "misurato": "2026-08-22",
-    "commit": "d671ba3",
+    "commit": "e9360f6",
     "larghezza": 360,
     "chrome": "Google Chrome 151.0.7922.137",
     "puppeteer": "25.8.0",
@@ -79,6 +79,7 @@
       },
       "pannello_rapporto": false,
       "coleottero_a_schermo": false,
+      "striscia_last_respects": false,
       "tipi_a_schermo": [
         "Electric",
         "Psychic"
@@ -106,11 +107,11 @@
       },
       "wcag_258": {
         "quanti": 0,
-        "sottodimensionati": 37,
+        "sottodimensionati": 41,
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 150,
+        "quanti": 154,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -156,21 +157,22 @@
       },
       "pannello_rapporto": false,
       "coleottero_a_schermo": false,
+      "striscia_last_respects": true,
       "tipi_a_schermo": [
         "Electric",
         "Psychic",
         "Dark",
         "Rock",
         "Bug",
-        "Dragon",
         "DRAGON",
         "GROUND",
         "FIRE",
         "ROCK",
+        "GHOST",
         "STEEL",
-        "GHOST"
+        "DARK"
       ],
-      "nodi_totali": 1293
+      "nodi_totali": 1317
     },
     {
       "scenario": "rapporto",
@@ -193,11 +195,11 @@
       },
       "wcag_258": {
         "quanti": 0,
-        "sottodimensionati": 37,
+        "sottodimensionati": 41,
         "nodi": []
       },
       "piccoli_fuori_scope": {
-        "quanti": 152,
+        "quanti": 156,
         "nodi": [
           {
             "nodo": "a.sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left",
@@ -243,6 +245,7 @@
       },
       "pannello_rapporto": true,
       "coleottero_a_schermo": false,
+      "striscia_last_respects": true,
       "tipi_a_schermo": [
         "DRAGON",
         "GROUND",
@@ -251,13 +254,13 @@
         "FIRE",
         "Rock",
         "ROCK",
-        "Dragon",
         "Electric",
         "Psychic",
         "Dark",
-        "Bug"
+        "Bug",
+        "DARK"
       ],
-      "nodi_totali": 1433
+      "nodi_totali": 1457
     },
     {
       "scenario": "vuoto",
@@ -330,6 +333,7 @@
       },
       "pannello_rapporto": false,
       "coleottero_a_schermo": false,
+      "striscia_last_respects": false,
       "tipi_a_schermo": [],
       "nodi_totali": 461
     },
@@ -354,7 +358,7 @@
       },
       "wcag_258": {
         "quanti": 0,
-        "sottodimensionati": 37,
+        "sottodimensionati": 41,
         "nodi": []
       },
       "piccoli_fuori_scope": {
@@ -404,18 +408,19 @@
       },
       "pannello_rapporto": false,
       "coleottero_a_schermo": true,
+      "striscia_last_respects": true,
       "tipi_a_schermo": [
         "DRAGO",
         "TERRA",
         "FUOCO",
         "ROCCIA",
-        "ACCIAIO",
         "SPETTRO",
+        "ACCIAIO",
         "BUIO",
         "COLEOTTERO",
         "ELETTRO"
       ],
-      "nodi_totali": 1293
+      "nodi_totali": 1317
     },
     {
       "scenario": "rapporto",
@@ -438,7 +443,7 @@
       },
       "wcag_258": {
         "quanti": 0,
-        "sottodimensionati": 37,
+        "sottodimensionati": 41,
         "nodi": []
       },
       "piccoli_fuori_scope": {
@@ -488,6 +493,7 @@
       },
       "pannello_rapporto": true,
       "coleottero_a_schermo": true,
+      "striscia_last_respects": true,
       "tipi_a_schermo": [
         "DRAGO",
         "TERRA",
@@ -499,7 +505,7 @@
         "COLEOTTERO",
         "ELETTRO"
       ],
-      "nodi_totali": 1433
+      "nodi_totali": 1457
     }
   ]
 }
