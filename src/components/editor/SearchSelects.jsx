@@ -87,6 +87,7 @@ export function PokemonSearch({ value, onChange }) {
       {hasValue && (
         <button
           type="button"
+          aria-label={t('aria.clear_pokemon')}
           onMouseDown={handleClear}
           /* 24×24 è il minimo di WCAG 2.5.8: il bersaglio misurava 10×16 e
              stava a distanza ZERO dal campo di testo, quindi col pollice si
@@ -155,9 +156,9 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
     <div className="bg-gray-700/40 p-1.5 rounded border border-gray-700/60 flex items-center justify-between gap-2 h-9">
       <div className="flex-1 relative">
         <input
-          className={`w-full bg-gray-700 text-xs rounded px-2 py-1 outline-none capitalize ${
-            value && !focused ? 'text-white' : 'text-gray-300'
-          }`}
+          className={`w-full bg-gray-700 text-xs rounded pl-2 py-1 outline-none capitalize ${
+            value ? 'pr-7' : 'pr-2'
+          } ${value && !focused ? 'text-white' : 'text-gray-300'}`}
           aria-label={t('aria.search_move')}
           placeholder={focused ? placeholder : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : placeholder)}
           value={focused ? query : (value ? t(`moves.${value}`, { defaultValue: value.replace(/-/g, ' ') }) : '')}
@@ -165,6 +166,29 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
           onFocus={() => { setFocused(true); setQuery(''); setOpen(true) }}
           onBlur={() => { setTimeout(() => { setFocused(false); setOpen(false); setQuery('') }, 150) }}
         />
+        {/* ─── SVUOTA LA MOSSA ───────────────────────────────────────────
+            Stessa affordance delle altre due copie in questo file, stessa
+            geometria: 24×24, il minimo di WCAG 2.5.8.
+
+            `onMouseDown` e non `onClick`: l'input chiude la tendina con un
+            `onBlur` ritardato di 150 ms, e un `onClick` arriverebbe dopo. È
+            la ragione per cui le altre due fanno lo stesso.
+
+            Svuota con `null`, non con stringa vuota: `null` è il valore
+            canonico di «nessuna mossa» — lo scrivono lo stato iniziale e
+            l'import Showdown. Una stringa vuota sarebbe un secondo modo di
+            dire la stessa cosa, e il tipo di doppione che questo progetto
+            paga da sei sessioni. */}
+        {value && (
+          <button
+            type="button"
+            aria-label={t('aria.clear_move')}
+            onMouseDown={(e) => { e.preventDefault(); setQuery(''); onChange(null); setOpen(false) }}
+            className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
+          >
+            ✕
+          </button>
+        )}
         {open && filtered.length > 0 && (
           <div className="absolute z-50 w-full bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto shadow-xl">
             {filtered.map(m => (
@@ -239,6 +263,7 @@ export function ItemSearch({ value, onChange }) {
       {hasValue && (
         <button
           type="button"
+          aria-label={t('aria.clear_item')}
           onMouseDown={handleClear}
           /* Stessa correzione della copia sopra: 24×24, minimo di WCAG 2.5.8. */
           className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white text-xs font-bold focus:outline-none"
