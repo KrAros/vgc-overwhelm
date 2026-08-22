@@ -82,10 +82,23 @@ const IconLibrary = () => (
 
 // ── ModBtn ─────────────────────────────────────────────────────────────────
 
-function ModBtn({ label, active, activeClass, onClick }) {
+/**
+ * `nome` è il nome accessibile quando il testo visibile è una sigla.
+ *
+ * Sul telefono queste levette si chiamano «Alt», «Velo», «SL», «Rif», «CV»:
+ * ci stanno, ma «CV» per Ventoincoda non lo indovina nessuno, e quelle stesse
+ * due lettere erano anche il nome letto da uno screen reader. È la regola di P
+ * — markup diverso sì, contenuto informativo no — e la stessa forma del
+ * difetto trovato in X, dove le X che svuotano un campo si chiamavano «✕»:
+ * un nome c'era, e non diceva niente.
+ *
+ * Il testo visibile resta la sigla, perché lo spazio è quello. Cambia il nome.
+ */
+function ModBtn({ label, nome, active, activeClass, onClick }) {
   return (
     <button
       onClick={onClick}
+      aria-label={nome && nome !== label ? nome : undefined}
       aria-pressed={active}
       className={`text-xs px-2 py-1 rounded border transition-colors ${
         active ? activeClass : 'text-gray-400 border-gray-600/40 hover:bg-gray-800/60'
@@ -439,13 +452,15 @@ export default function ControlBar() {
     setImportTab('showdown')
   }
 
+  // Le sigle sono per lo spazio; il nome per esteso viene dalla STESSA fonte da
+  // cui lo prende il desktop, così le due affordance non possono divergere.
   const MODS = [
-    { label: t('ui.hhShort'),   mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
-    { label: t('ui.veilShort'), mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
-    { label: t('ui.lsShort'),   mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
-    { label: t('ui.refShort'),  mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
-    { label: t('ui.critShort'), mod: 'crit',        active: 'bg-red-400    text-gray-900' },
-    { label: t('ui.twShort'),   mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
+    { label: t('ui.hhShort'),   nome: t('moves.helping hand'), mod: 'helpingHand', active: 'bg-green-400  text-gray-900' },
+    { label: t('ui.veilShort'), nome: t('moves.aurora veil'),  mod: 'auroraVeil',  active: 'bg-blue-400   text-gray-900' },
+    { label: t('ui.lsShort'),   nome: t('moves.light screen'), mod: 'lightScreen', active: 'bg-yellow-400 text-gray-900' },
+    { label: t('ui.refShort'),  nome: t('moves.reflect'),      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
+    { label: t('ui.critShort'), nome: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
+    { label: t('ui.twShort'),   nome: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
   ]
 
   // Cinque di queste sei levette SONO mosse, quindi l'etichetta la prendono da
@@ -508,7 +523,16 @@ export default function ControlBar() {
             </div>
             <ModBtn label={t('ui.ko_only')} active={showKoOnly}
               activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
+            {/* L'etichetta PRECEDE i suoi bottoni, come per Team 1.
+                Prima stava dopo: le due file erano speculari, e fra loro
+                c'erano dodici etichette identiche. L'unica cosa che diceva a
+                chi appartenesse un bottone era la posizione — e appena la riga
+                va a capo, verso gli 834 px, si perde anche quella: «Team 2»
+                finiva in fondo alla seconda riga, dopo i bottoni che nomina.
+                È lo stesso difetto che Simone aveva segnalato per le tendine
+                dei boost sul telefono: non si capisce a chi appartengono. */}
             <div className="flex items-center gap-2">
+              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
               <div className="flex items-center gap-1">
                 {MODS_DESKTOP.map(m => (
                   <ModBtn key={m.mod} label={m.label}
@@ -516,7 +540,6 @@ export default function ControlBar() {
                     onClick={() => toggleModifier(m.mod, 't2')} />
                 ))}
               </div>
-              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
             </div>
           </div>
 
@@ -594,7 +617,7 @@ export default function ControlBar() {
             </div>
             <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
-                <ModBtn key={m.mod} label={m.label}
+                <ModBtn key={m.mod} label={m.label} nome={m.nome}
                   active={modVals[m.mod].t1} activeClass={m.active}
                   onClick={() => toggleModifier(m.mod, 't1')} />
               ))}
@@ -624,7 +647,7 @@ export default function ControlBar() {
             </div>
             <div className="flex flex-wrap gap-1">
               {MODS.map(m => (
-                <ModBtn key={m.mod} label={m.label}
+                <ModBtn key={m.mod} label={m.label} nome={m.nome}
                   active={modVals[m.mod].t2} activeClass={m.active}
                   onClick={() => toggleModifier(m.mod, 't2')} />
               ))}
