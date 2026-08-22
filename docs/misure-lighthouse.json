@@ -1,7 +1,7 @@
 {
   "condizioni": {
-    "misurato": "2026-08-21",
-    "commit": "0eeed4d",
+    "misurato": "2026-08-22",
+    "commit": "e9360f6",
     "lighthouse": "13.4.1",
     "chrome": "Google Chrome 151.0.7922.137",
     "nota": "Punteggi Lighthouse NON confrontabili fra versioni maggiori: le curve cambiano."
@@ -9,9 +9,9 @@
   "controllo": {
     "descrizione": "LCP mobile / LCP desktop sullo stesso bersaglio: se ~1 lo strumento non vede il throttling",
     "bersaglio": "deploy",
-    "lcp_mobile_ms": 2206.367,
-    "lcp_desktop_ms": 547.866,
-    "rapporto": 4.03,
+    "lcp_mobile_ms": 2227.291,
+    "lcp_desktop_ms": 490,
+    "rapporto": 4.55,
     "esito": "si muove"
   },
   "misure": [
@@ -22,9 +22,9 @@
       "ripetizioni": 5,
       "categorie": {
         "performance": {
-          "mediana": 95,
-          "min": 92,
-          "max": 98
+          "mediana": 96,
+          "min": 93,
+          "max": 97
         },
         "accessibility": {
           "mediana": 100,
@@ -49,14 +49,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2206.367,
-          "min": 1953.432,
-          "max": 2441.854
+          "mediana": 2152.291,
+          "min": 2010.146,
+          "max": 2388.695
         },
         "largest-contentful-paint": {
-          "mediana": 2206.367,
-          "min": 1953.432,
-          "max": 2441.854
+          "mediana": 2227.291,
+          "min": 2085.146,
+          "max": 2388.695
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -69,9 +69,9 @@
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2283.249,
-          "min": 1953.432,
-          "max": 4441.974
+          "mediana": 2152.291,
+          "min": 2010.146,
+          "max": 4303.453
         }
       },
       "falliti": {
@@ -119,9 +119,9 @@
         ]
       },
       "falliti_stabili": {
-        "performance": false
+        "performance": true
       },
-      "trasferito_kB": 268.2,
+      "trasferito_kB": 268.8,
       "richieste": 8
     },
     {
@@ -132,7 +132,7 @@
       "categorie": {
         "performance": {
           "mediana": 100,
-          "min": 97,
+          "min": 100,
           "max": 100
         },
         "accessibility": {
@@ -158,19 +158,19 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 547.866,
-          "min": 418.899,
-          "max": 620.205
+          "mediana": 470,
+          "min": 441.175,
+          "max": 599.192
         },
         "largest-contentful-paint": {
-          "mediana": 547.866,
-          "min": 418.899,
-          "max": 640.205
+          "mediana": 490,
+          "min": 461.175,
+          "max": 619.192
         },
         "total-blocking-time": {
           "mediana": 0,
           "min": 0,
-          "max": 0
+          "max": 10
         },
         "cumulative-layout-shift": {
           "mediana": 0.011,
@@ -178,28 +178,13 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 702.79,
-          "min": 632.705,
-          "max": 1885.634
+          "mediana": 470,
+          "min": 455.882,
+          "max": 673.652
         }
       },
       "falliti": {
         "performance": [
-          {
-            "audit": "largest-contentful-paint",
-            "peso": 25,
-            "nodi": 0
-          },
-          {
-            "audit": "first-contentful-paint",
-            "peso": 10,
-            "nodi": 0
-          },
-          {
-            "audit": "speed-index",
-            "peso": 10,
-            "nodi": 0
-          },
           {
             "audit": "cache-insight",
             "peso": 0,
@@ -225,7 +210,7 @@
       "falliti_stabili": {
         "performance": false
       },
-      "trasferito_kB": 268.2,
+      "trasferito_kB": 268.8,
       "richieste": 8
     },
     {
@@ -262,19 +247,19 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 2480.534,
-          "min": 2461.877,
-          "max": 2495.605
+          "mediana": 2460.95,
+          "min": 2455.113,
+          "max": 2472.498
         },
         "largest-contentful-paint": {
-          "mediana": 2480.534,
-          "min": 2461.877,
-          "max": 2495.605
+          "mediana": 2460.95,
+          "min": 2455.113,
+          "max": 2472.498
         },
         "total-blocking-time": {
-          "mediana": 15,
-          "min": 0,
-          "max": 19
+          "mediana": 10.5,
+          "min": 1,
+          "max": 79
         },
         "cumulative-layout-shift": {
           "mediana": 0.012,
@@ -282,9 +267,9 @@
           "max": 0.012
         },
         "speed-index": {
-          "mediana": 2480.534,
-          "min": 2461.877,
-          "max": 2495.605
+          "mediana": 2460.95,
+          "min": 2455.113,
+          "max": 2472.498
         }
       },
       "falliti": {
@@ -332,9 +317,9 @@
         ]
       },
       "falliti_stabili": {
-        "performance": true
+        "performance": false
       },
-      "trasferito_kB": 267,
+      "trasferito_kB": 267.5,
       "richieste": 8
     },
     {
@@ -371,14 +356,14 @@
       },
       "metriche": {
         "first-contentful-paint": {
-          "mediana": 509.351,
-          "min": 502.557,
-          "max": 511.291
+          "mediana": 507.629,
+          "min": 501.708,
+          "max": 513.539
         },
         "largest-contentful-paint": {
-          "mediana": 509.351,
-          "min": 502.557,
-          "max": 511.291
+          "mediana": 547.629,
+          "min": 541.708,
+          "max": 553.539
         },
         "total-blocking-time": {
           "mediana": 0,
@@ -391,9 +376,9 @@
           "max": 0.011
         },
         "speed-index": {
-          "mediana": 509.351,
-          "min": 502.557,
-          "max": 511.291
+          "mediana": 507.629,
+          "min": 501.708,
+          "max": 513.539
         }
       },
       "falliti": {
@@ -418,7 +403,7 @@
       "falliti_stabili": {
         "performance": true
       },
-      "trasferito_kB": 267,
+      "trasferito_kB": 267.5,
       "richieste": 8
     }
   ]

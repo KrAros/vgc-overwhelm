@@ -100,7 +100,18 @@ const slot = (key, moves) => ({
   atkBoost: 0, defBoost: 0, spAtkBoost: 0, spDefBoost: 0, speBoost: 0,
   abilityFlags: {}, lastRespectsKOs: 0,
 })
-const MOSSE_1 = ['flamethrower', 'earthquake', 'rock slide', 'dragon claw']
+// ─── PERCHÉ `last respects` FRA LE MOSSE ───────────────────────────────────
+//
+// Con questa mossa in squadra l'editor mostra la striscia viola del contatore
+// di alleati caduti (`SlotEditor.jsx:399`), che è l'unico punto dell'interfaccia
+// dove compare quell'etichetta. Senza, il riquadro non viene mai renderizzato e
+// il banco non può vederlo.
+//
+// Se ne è accorto in AA: la sessione Y aveva ALLUNGATO quell'etichetta in
+// italiano — «Omaggio ai KO — Alleati caduti:» contro «Last Respects — Alleati
+// KO:» — e la misura successiva aveva dato zero senza poter vedere niente.
+// Stessa forma della cecità su Coleottero, trovata in W.
+const MOSSE_1 = ['flamethrower', 'earthquake', 'rock slide', 'last respects']
 // ─── PERCHÉ VOLCARONA E `bug buzz` ─────────────────────────────────────────
 //
 // In italiano il tipo Coleottero si scrive con la parola più lunga delle due
@@ -314,6 +325,11 @@ function misuraNellaPagina() {
     // NOME della mossa Bug Buzz invece del badge del tipo: un controllo che si
     // accende per la ragione sbagliata è peggio di nessun controllo.
     coleottero_a_schermo: /\b(COLEOTTERO|Coleottero)\b/.test(document.body.innerText),
+    // Stessa ragione: registra che la striscia di Last Respects sia davvero a
+    // schermo, invece di lasciarlo credere. Si cerca la CLASSE e non il testo,
+    // perché l'etichetta cambia con la lingua ed è proprio quella sotto esame.
+    striscia_last_respects: [...document.querySelectorAll('*')]
+      .some((e) => String(e.className || '').includes('bg-purple-950/30')),
     // Diagnostico: QUALI nomi di tipo sono a schermo. Serve a distinguere
     // «il badge del tipo non c'è in questo scenario» da «c'è ma non è
     // Coleottero» — due cecità diverse che uno `false` da solo confonde.
