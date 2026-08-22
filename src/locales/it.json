@@ -194,7 +194,10 @@
     "stage": "{{stat}} — stadio della statistica",
     "nature": "Natura",
     "search_move": "Cerca mossa",
-    "ability": "Abilità"
+    "ability": "Abilità",
+    "clear_pokemon": "Svuota il Pokémon",
+    "clear_item": "Svuota lo strumento",
+    "clear_move": "Svuota la mossa"
   },
   "natures": {
     "adamant": "Decisa",

@@ -88,6 +88,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
 
   const handleMoveChange = (mi, m) => {
     setMove(team, index, mi, m)
+    // Svuotare una mossa NON tocca il numero di nemici in campo. Scegliere una
+    // mossa singola lo fa apposta — dice «questa colpisce uno solo» — ma
+    // toglierla non dice niente sull'area, e cambiare una condizione di campo
+    // premendo una X sarebbe un effetto invisibile a chi la preme.
+    if (!m) return
     const isSpread = movesData[m]?.spread === true
     setDoubleTarget(isSpread)
   }

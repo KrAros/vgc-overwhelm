@@ -194,7 +194,10 @@
     "stage": "{{stat}} — stat stage",
     "nature": "Nature",
     "search_move": "Search move",
-    "ability": "Ability"
+    "ability": "Ability",
+    "clear_pokemon": "Clear Pokémon",
+    "clear_item": "Clear item",
+    "clear_move": "Clear move"
   },
   "natures": {
     "adamant": "Adamant",
