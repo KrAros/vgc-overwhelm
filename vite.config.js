@@ -1,8 +1,21 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
+/**
+ * ─── LA VERSIONE HA UNA FONTE SOLA ───────────────────────────────────────────
+ *
+ * Si legge da `package.json` e si inietta come costante. Scriverla anche nel
+ * JSX vorrebbe dire due numeri da tenere allineati a mano — cioè la forma di
+ * difetto che questo repository ha già incontrato con le etichette delle mosse,
+ * con la conversione SP⇄EV e con le regole sulle abilità. `marca.test.js`
+ * verifica che i due non divergano.
+ */
+const VERSIONE = JSON.parse(readFileSync('./package.json', 'utf8')).version
+
 export default defineConfig({
+  define: { __APP_VERSION__: JSON.stringify(VERSIONE) },
   /**
    * ─── IL PERCORSO BASE ──────────────────────────────────────────────────────
    * Su GitHub Pages un repository di progetto non vive alla radice del dominio

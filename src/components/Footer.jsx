@@ -55,7 +55,16 @@ export default function Footer() {
               <span className="text-gray-400 font-normal">The Sixth </span>
               <span className="text-gray-300 font-medium">Ember</span>
             </div>
-            <div className="text-[10px] text-gray-400">Pokémon Champions Damage Calculator</div>
+            <div className="text-[10px] text-gray-400">
+              Pokémon Champions Damage Calculator
+              {/* La versione viene da `package.json` tramite `__APP_VERSION__`,
+                  non è scritta qui: due numeri da allineare a mano sarebbero
+                  diventati due numeri diversi. «beta» è una parola per chi
+                  legge — per la semantica delle versioni qualunque 0.x è già
+                  pre-1.0. Diventerà 1.0.0 il giorno del lancio. */}
+              <span className="ml-1.5 text-gray-500">v{__APP_VERSION__}</span>
+              <span className="ml-1 text-amber-300/80 uppercase tracking-wider text-[9px]">beta</span>
+            </div>
           </div>
         </div>
 

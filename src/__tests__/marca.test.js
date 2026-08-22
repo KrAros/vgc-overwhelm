@@ -83,6 +83,37 @@ describe('i meta tag della condivisione', () => {
     expect([meta('og:image:width'), meta('og:image:height')]).toEqual(['1200', '630'])
   })
 
+  it('la versione mostrata viene da package.json', () => {
+    /**
+     * Il footer non scrive il numero: lo legge da `__APP_VERSION__`, che
+     * `vite.config.js` inietta da `package.json`. Qui si verifica la catena —
+     * che la costante sia iniettata da quella fonte e non da un'altra, e che
+     * il componente la usi invece di stampare un numero proprio.
+     *
+     * Senza, i due numeri divergerebbero in silenzio: è la forma di difetto
+     * che questo repository ha incontrato con le etichette delle mosse, con la
+     * conversione SP⇄EV e con le regole sull'abilità.
+     */
+    const pkg = JSON.parse(fs.readFileSync(path.join(RADICE, 'package.json'), 'utf8'))
+    const vite = fs.readFileSync(path.join(RADICE, 'vite.config.js'), 'utf8')
+    /**
+     * I commenti si tolgono prima di cercare. La prima versione di questo caso
+     * era CIECA: `__APP_VERSION__` compariva anche nel commento che spiega la
+     * scelta, quindi togliendo la costante dal JSX il test restava verde.
+     *
+     * È la regola nata in CC, violata nella sessione dopo averla scritta.
+     */
+    const senzaCommenti = (s) =>
+      s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    const footer = senzaCommenti(fs.readFileSync(path.join(RADICE, 'src/components/Footer.jsx'), 'utf8'))
+
+    expect(pkg.version, 'package.json ha una versione').toMatch(/^\d+\.\d+\.\d+/)
+    expect(vite, 'vite legge la versione da package.json').toMatch(/package\.json[\s\S]{0,40}\.version/)
+    expect(footer, 'il footer usa la costante iniettata').toContain('__APP_VERSION__')
+    // E non scrive il numero a mano da nessuna parte.
+    expect(footer, 'nessun numero di versione scritto nel JSX').not.toMatch(/v\d+\.\d+\.\d+/)
+  })
+
   it('il controllo: il test legge davvero i file', () => {
     // La sonda cieca della sessione L: con un `index.html` vuoto tutte le
     // ricerche tornerebbero `null` e i casi sopra fallirebbero — ma questo
