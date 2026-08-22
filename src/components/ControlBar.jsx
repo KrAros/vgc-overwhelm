@@ -498,93 +498,90 @@ export default function ControlBar() {
     <div className="mb-3">
       <div role="group" aria-label={t('aria.team_modifiers')} className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 pt-2 pb-1.5 space-y-1.5">
 
-        {/* ── DESKTOP ── */}
-        <div className="hidden sm:block space-y-2">
-          {/* `flex-wrap` fino a 1280 px. Questa riga tiene l'etichetta Team 1,
-              i modificatori, il filtro KO, gli altri modificatori e Team 2:
-              senza andare a capo non ci sta, e a sbordare non era la riga ma la
-              PAGINA INTERA. Misurato: 414 px di scorrimento a 700, 314 a 800,
-              214 a 900, 90 a 1024, zero a 1280.
+        {/* ── DESKTOP ──────────────────────────────────────────────────────
+            ─── DUE COLONNE, NON DUE FILE A SPECCHIO ───────────────────────
 
-              Nessuno l'aveva visto perché le sessioni sul telefono misuravano a
-              360 px, dove il ramo `sm:hidden` prende il posto di questo, e
-              quelle sul desktop a 1280, dove ci sta. Il difetto viveva
-              esattamente nella fascia che nessuna delle due guardava. */}
-          <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 1</span>
-              <div className="flex items-center gap-1">
-                {MODS_DESKTOP.map(m => (
-                  <ModBtn key={m.mod} label={m.label}
-                    active={modVals[m.mod].t1} activeClass={m.active}
-                    onClick={() => toggleModifier(m.mod, 't1')} />
-                ))}
+            Prima erano due righe: una con le levette e l'etichetta della
+            squadra, una con Importa/Esporta/Cancella **senza nessuna
+            etichetta**. A chi appartenesse un bottone lo diceva soltanto la
+            posizione orizzontale.
+
+            Misurato: sotto i 1280 px l'attribuzione si rompeva del tutto. A
+            1100 le due etichette TEAM finivano su righe diverse (y=407 e 441)
+            perché la fila andava a capo, mentre i due gruppi di azioni
+            restavano affiancati sulla stessa riga (y=479 entrambi). «Team 2»
+            in alto a sinistra e i suoi pulsanti a destra, sotto l'altra
+            etichetta.
+
+            E c'era una terza cosa, concettuale: in quella striscia convivevano
+            due famiglie diverse. Le levette sono CONDIZIONI DI BATTAGLIA e
+            cambiano i numeri della matrice; Importa/Esporta/Cancella sono
+            GESTIONE DELLA SQUADRA. Stavano insieme solo per ragioni di spazio.
+
+            Ora ogni squadra ha il suo riquadro con l'etichetta in testa:
+            l'attribuzione è STRUTTURALE invece che posizionale, e regge anche
+            quando le due colonne si impilano. Le azioni che valgono per
+            entrambe stanno in una riga a parte.
+
+            La forma è UNA e si ripete sulle due squadre con un `map`: due
+            blocchi di markup gemelli sarebbero potuti divergere, ed è successo
+            in questo stesso file — l'etichetta di Team 2 stava dopo i bottoni
+            mentre quella di Team 1 stava prima. */}
+        <div className="hidden sm:block space-y-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            {[
+              { lato: 't1', squadra: 'team1', nome: 'Team 1', modo: 'import1' },
+              { lato: 't2', squadra: 'team2', nome: 'Team 2', modo: 'import2' },
+            ].map(({ lato, squadra, nome, modo }) => (
+              <div key={lato} role="group" aria-label={nome}
+                   className="rounded-lg border border-gray-700/40 bg-gray-800/30 px-2.5 py-2 space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">{nome}</span>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {MODS_DESKTOP.map(m => (
+                      <ModBtn key={m.mod} label={m.label}
+                        active={modVals[m.mod][lato]} activeClass={m.active}
+                        onClick={() => toggleModifier(m.mod, lato)} />
+                    ))}
+                  </div>
+                </div>
+                <div className="h-px bg-gray-700/40" />
+                {/* Il nome accessibile dice ANCHE la squadra: in pagina ci sono
+                    quattro «Importa» — due qui e due negli editor sotto, a 127
+                    px di distanza — e senza la squadra nel nome chi naviga per
+                    controlli sente quattro volte la stessa parola. */}
+                <div className="flex items-center gap-1 flex-wrap">
+                  <button type="button" aria-label={`${t('ui.import')} — ${nome}`}
+                    onClick={() => openImport(modo)}
+                    className={mode === modo ? btnActive : btnNormal}>
+                    <IconImport /><span>{t('ui.import')}</span>
+                  </button>
+                  <button type="button" aria-label={`${t('ui.export')} — ${nome}`}
+                    onClick={() => handleExport(squadra)} className={btnNormal}>
+                    <IconExport /><span>{t('ui.export')}</span>
+                  </button>
+                  <button type="button" aria-label={`${t('ui.clear')} — ${nome}`}
+                    onClick={() => handleReset(squadra)} className={btnReset}>
+                    <IconReset /><span>{t('ui.clear')}</span>
+                  </button>
+                </div>
               </div>
-            </div>
-            <ModBtn label={t('ui.ko_only')} active={showKoOnly}
-              activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
-            {/* L'etichetta PRECEDE i suoi bottoni, come per Team 1.
-                Prima stava dopo: le due file erano speculari, e fra loro
-                c'erano dodici etichette identiche. L'unica cosa che diceva a
-                chi appartenesse un bottone era la posizione — e appena la riga
-                va a capo, verso gli 834 px, si perde anche quella: «Team 2»
-                finiva in fondo alla seconda riga, dopo i bottoni che nomina.
-                È lo stesso difetto che Simone aveva segnalato per le tendine
-                dei boost sul telefono: non si capisce a chi appartengono. */}
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">Team 2</span>
-              <div className="flex items-center gap-1">
-                {MODS_DESKTOP.map(m => (
-                  <ModBtn key={m.mod} label={m.label}
-                    active={modVals[m.mod].t2} activeClass={m.active}
-                    onClick={() => toggleModifier(m.mod, 't2')} />
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
 
-          <div className="h-px bg-gray-700/60" />
-
-          {/* Stessa correzione della riga qui sopra: senza `flex-wrap` i sei
-              bottoni delle due squadre non ci stanno fra 640 e 800 px, e a
-              sbordare è la pagina. Misurato: 149 px a 640, 89 a 700. */}
-          <div className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-2">
-            <div className="flex items-center gap-1">
-              <button type="button"
-                onClick={() => openImport('import1')}
-                className={mode === 'import1' ? btnActive : btnNormal}>
-                <IconImport /><span>{t('ui.import')}</span>
-              </button>
-              <button type="button" onClick={() => handleExport('team1')} className={btnNormal}>
-                <IconExport /><span>{t('ui.export')}</span>
-              </button>
-              <button type="button" onClick={() => handleReset('team1')} className={btnReset}>
-                <IconReset /><span>{t('ui.clear')}</span>
-              </button>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              {feedback && <span className="text-xs text-green-400">{feedback}</span>}
-              {/* Bottone Team Library — centrale, visibile da entrambi i team */}
-              <button type="button" onClick={() => setShowLibrary(true)} className={btnLib}>
-                <IconLibrary /><span>{t('ui.team_library')}</span>
-              </button>
-              <button type="button" onClick={handleShare} className={btnNormal}>
-                <IconShare /><span>{t('ui.share')}</span>
-              </button>
-            </div>
-            <div className="flex items-center gap-1">
-              <button type="button"
-                onClick={() => openImport('import2')}
-                className={mode === 'import2' ? btnActive : btnNormal}>
-                <IconImport /><span>{t('ui.import')}</span>
-              </button>
-              <button type="button" onClick={() => handleExport('team2')} className={btnNormal}>
-                <IconExport /><span>{t('ui.export')}</span>
-              </button>
-              <button type="button" onClick={() => handleReset('team2')} className={btnReset}>
-                <IconReset /><span>{t('ui.clear')}</span>
-              </button>
-            </div>
+          {/* Le azioni che NON appartengono a una squadra sola. Stare in una
+              riga propria è quello che le distingue: prima erano in mezzo alle
+              altre, separate solo dall'essere centrate. */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <ModBtn label={t('ui.ko_only')} active={showKoOnly}
+              activeClass="bg-red-500 text-white" onClick={toggleShowKoOnly} />
+            <button type="button" onClick={() => setShowLibrary(true)} className={btnLib}>
+              <IconLibrary /><span>{t('ui.team_library')}</span>
+            </button>
+            <button type="button" onClick={handleShare} className={btnNormal}>
+              <IconShare /><span>{t('ui.share')}</span>
+            </button>
+            {feedback && <span className="text-xs text-green-400">{feedback}</span>}
           </div>
         </div>
 

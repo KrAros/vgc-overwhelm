@@ -9,7 +9,7 @@ import { TYPES } from '../../data/typeChart.js'
 import movesData from '../../data/moves.json'
 import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
 import { abilitaNonCalcolata } from '../../lib/gap.js'
-import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
+import BadgeNonCalcolata, { SegnalinoNonCalcolata } from './BadgeNonCalcolata.jsx'
 import { useTranslation } from 'react-i18next'
 
 // ─── La tavolozza ─────────────────────────────────────────────────────────────
@@ -248,11 +248,16 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     })
     return (
       <>
-        <div className={`mt-1 px-1 py-1 rounded text-xs border ${attiva ? ACCESO : SPENTO}`}>
-          {attiva ? '✅ ' : '💡 '}
-          {t(`abilities_desc.${key}`)}
+        {/* Il segnalino sta DENTRO il riquadro, all'estremità destra: prima era
+            un secondo blocco sotto, e aggiungeva 40 px che facevano scendere
+            cursori e mosse a ogni cambio di abilità. */}
+        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start ${attiva ? ACCESO : SPENTO}`}>
+          <span className="min-w-0 flex-1">
+            {attiva ? '✅ ' : '💡 '}
+            {t(`abilities_desc.${key}`)}
+          </span>
+          {abilitaNonCalcolata(ability) && <SegnalinoNonCalcolata tipo="ability" />}
         </div>
-        {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
       </>
     )
   }
@@ -279,14 +284,15 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
        da usare. */
     return (
       <>
-        <div className={`mt-1 px-1 py-1 rounded text-xs border ${SPENTO}`}>
-          💡 {t(`abilities_desc.${key}`)}
-        </div>
         {/* Il caso peggiore per la fiducia: una descrizione tradotta che
-            promette un effetto, e un numero che non si muove. Il badge sta
-            sotto la descrizione, non al suo posto — la descrizione dice cosa
-            fa nel gioco, il badge dice che noi non la calcoliamo. */}
-        {abilitaNonCalcolata(ability) && <div className="mt-1"><BadgeNonCalcolata tipo="ability" /></div>}
+            promette un effetto, e un numero che non si muove. Il segnalino sta
+            NELLA stessa riga della descrizione, non al suo posto — la
+            descrizione dice cosa fa nel gioco, il segnalino dice che noi non
+            la calcoliamo. */}
+        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start ${SPENTO}`}>
+          <span className="min-w-0 flex-1">💡 {t(`abilities_desc.${key}`)}</span>
+          {abilitaNonCalcolata(ability) && <SegnalinoNonCalcolata tipo="ability" />}
+        </div>
       </>
     )
   }

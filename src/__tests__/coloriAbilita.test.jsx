@@ -200,3 +200,44 @@ describe('la proprietà stabilita dalla sessione Q', () => {
     expect(fuori).toEqual([])
   })
 })
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE EE — l'avviso «non calcolata» non deve spostare il layout
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Era un secondo blocco sotto la descrizione, e aggiungeva 40 px: cambiando
+ * Pokémon la riga «Stat», i cursori e le mosse saltavano. Ora è un segnalino
+ * inline nella stessa riga della descrizione — misurato, y(Stat) resta 917 px
+ * in tutti e tre i casi, dove col blocco scendeva a 957.
+ *
+ * Il colore lo sorvegliava già il blocco qui sopra. La FORMA no: rimettendo il
+ * riquadro dentro la descrizione, i test dei colori restavano tutti verdi.
+ * Trovato provando la perturbazione, non ragionandoci.
+ */
+describe('l’avviso «non calcolata» resta inline', () => {
+  // Guscioscudo ha descrizione E badge: è il caso in cui prima comparivano due
+  // riquadri uno sotto l'altro.
+  const CON_ENTRAMBI = 'shell armor'
+
+  it('il caso di prova ha davvero sia descrizione sia avviso', () => {
+    // Senza questo controllo il blocco passerebbe su un'abilità che il badge
+    // non ce l'ha: cercherebbe un `<div role="note">` che non c'è mai stato.
+    const html = rendi(CON_ENTRAMBI)
+    expect(html).toMatch(/role="note"/)
+    expect(html.replace(/<[^>]*>/g, '').trim().length, 'testo della descrizione').toBeGreaterThan(30)
+  })
+
+  it('l’avviso è inline, non un blocco a sé', () => {
+    const html = rendi(CON_ENTRAMBI)
+    expect(html, 'un <div role="note"> è il riquadro a blocco').not.toMatch(/<div[^>]*role="note"/)
+    expect(html, 'atteso un <span role="note"> dentro la descrizione').toMatch(/<span[^>]*role="note"/)
+  })
+
+  it('l’avviso porta con sé la frase intera', () => {
+    // Il simbolo da solo non direbbe niente — è il difetto delle X trovato in
+    // X, dove un nome c'era e non diceva niente.
+    const aria = rendi(CON_ENTRAMBI).match(/<span[^>]*role="note"[^>]*aria-label="([^"]*)"/)
+    expect(aria?.[1]?.length ?? 0).toBeGreaterThan(25)
+  })
+})
