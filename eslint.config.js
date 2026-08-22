@@ -25,7 +25,9 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      globals: globals.browser,
+      // `__APP_VERSION__` la inietta Vite da package.json: a eslint va
+      // dichiarata, altrimenti la legge come variabile non definita.
+      globals: { ...globals.browser, __APP_VERSION__: 'readonly' },
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
