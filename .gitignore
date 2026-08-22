@@ -40,3 +40,7 @@ dist-ssr
 CLAUDE.md
 docs/piano-risanamento.md
 docs/analisi-critica.md
+
+# Anche le skill: descrivono il metodo di lavoro, cioe' la stessa materia
+# dei tre file qui sopra. Restano sul disco e continuano a funzionare.
+.claude/
