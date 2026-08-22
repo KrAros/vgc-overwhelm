@@ -5,6 +5,7 @@ import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from '../store/useCalcStore'
 import movesData from '../data/moves.json'
+import { formatPokeName, nomeCompleto } from '../utils/nomiPokemon'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { costruisciMatrice } from '../lib/matrice'
 import useFieldState from '../hooks/useFieldState'
@@ -55,15 +56,6 @@ function immuneLabel(result) {
 
 // ── DamageCell ────────────────────────────────────────────────────────────────
 
-function formatPokeName(key) {
-  if (!key) return ''
-  if (key.endsWith('-mega') || key.endsWith('-mega-x') || key.endsWith('-mega-y')) {
-    const base = key.replace(/-mega-[xy]$/, '').replace(/-mega$/, '')
-    const suffix = key.includes('-mega-x') ? ' M·X' : key.includes('-mega-y') ? ' M·Y' : ' Mega'
-    return base.charAt(0).toUpperCase() + base.slice(1) + suffix
-  }
-  return key.split('-')[0]
-}
 
 /**
  * ─── LA CELLA NON CALCOLA PIÙ NIENTE ───────────────────────────────────────
@@ -420,7 +412,7 @@ export default function DamageTable({ onCellSelect }) {
                           />
                         )}
                       </div>
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-16 sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
+                      <div title={nomeCompleto(p.key)} className="text-gray-300 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-tight line-clamp-2 sm:line-clamp-none sm:truncate max-w-16 sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-400 text-[10px]">T2·{i+1}</div>
@@ -472,7 +464,7 @@ export default function DamageTable({ onCellSelect }) {
                           />
                         )}
                       </div>
-                      <div className="text-gray-300 text-[10px] sm:text-xs capitalize mt-0.5 sm:mt-1 truncate max-w-14 sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
+                      <div title={nomeCompleto(row.key)} className="text-gray-300 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-tight line-clamp-2 sm:line-clamp-none sm:truncate max-w-14 sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
                     </>
                   ) : (
                     <div className="text-gray-400 text-[10px]">T1·{ri+1}</div>

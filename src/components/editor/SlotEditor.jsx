@@ -350,7 +350,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                     ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
                     : 'bg-gray-700 text-gray-400'
                 }`}>
-                  ({remaining}/{MAX_SP_TOTAL})
+                  {/* Mostrava `remaining`: «(0/66)» voleva dire set COMPLETO,
+                      non set vuoto. È l'unico numero dell'app che andava letto
+                      al contrario, e nessuno legge «57/66» come «57 rimasti».
+                      Ora dice gli SP USATI, che è la lettura naturale. */}
+                  ({total}/{MAX_SP_TOTAL})
                 </span>
               </div>
               <span className="w-8 text-center">{t("report.tot")}</span>

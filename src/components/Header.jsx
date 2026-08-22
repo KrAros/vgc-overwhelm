@@ -109,8 +109,17 @@ export default function Header() {
         </span>
       </div>
 
-      {/* ── CENTRO: nav tab — solo Damage Calc, le voci future rimosse ── */}
-      <nav className="flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+      {/* ── CENTRO: nav tab — solo Damage Calc, le voci future rimosse ──
+          `absolute left-1/2` la centrava rispetto alla FINESTRA, ignorando che
+          il titolo a sinistra occupasse già quello spazio. Misurato: la pill
+          copriva il titolo di 40 px a 320, **20 a 360**, 5 a 390, e i due si
+          separavano solo a 414.
+          360 è la larghezza che il banco misura, e il criterio del testo
+          tagliato dava zero — perché una sovrapposizione non è un troncamento
+          e `scrollWidth` non la vede.
+          Da 414 in su resta centrata come prima; sotto, sparisce invece di
+          coprire il nome del sito. */}
+      <nav className="hidden min-[414px]:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
         <span className="text-xs px-3 py-1 rounded-full bg-teal-800 border border-teal-600 text-teal-200 font-medium">
           Damage Calc
         </span>

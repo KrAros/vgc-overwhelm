@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
+import { useRef } from 'react'
 import useCalcStore from '../store/useCalcStore'
+import useBordiScorrimento from '../hooks/useBordiScorrimento'
 import { useTranslation } from 'react-i18next'
 
 const FIELDS = [
@@ -34,6 +36,27 @@ function Btn({ label, active, activeClass, onClick }) {
 
 export default function TopBar() {
   const { t } = useTranslation()
+  /**
+   * ─── LA STRISCIA SCORRE, E FINO A OGGI NON LO DICEVA ─────────────────────
+   *
+   * Misurato su dodici larghezze: il bottone «Sole» sta FUORI dal bordo destro
+   * del contenitore da 640 px fino a poco oltre i 1000 — 323 px fuori a 640,
+   * 129 a 834, 63 a 900 — e rientra solo a 1024. La barra di scorrimento
+   * occupa **zero** pixel di altezza, cioè è nascosta: niente dice che ci sia
+   * dell'altro. Su un tablet metà delle condizioni di campo non esiste.
+   *
+   * Il banco non poteva vederlo per due ragioni insieme: misura a 360, dove al
+   * suo posto va il ramo `sm:hidden`, ed **esclude di proposito** i contenitori
+   * `overflow-x: auto` come «scorrimento voluto». È la regola di P-2 — le
+   * esclusioni di un criterio sono dove si nasconde il difetto.
+   *
+   * La soluzione è quella già scritta e collaudata in U per la matrice: due
+   * sfumature accese solo finché si può ancora scorrere in quella direzione.
+   * Una sfumatura fissa costerebbe due righe, ma mentirebbe quando sei in
+   * fondo — cioè proprio quando cerchi conferma di aver visto tutto.
+   */
+  const striscia = useRef(null)
+  const bordi = useBordiScorrimento(striscia)
   const trickRoom    = useCalcStore(s => s.trickRoom)
   const doubleTarget = useCalcStore(s => s.doubleTarget)
   const weather      = useCalcStore(s => s.weather)
@@ -48,7 +71,30 @@ export default function TopBar() {
     <div role="group" aria-label={t("aria.battle_conditions")} className="bg-gray-900 rounded-xl border border-gray-700/40 px-3 py-2 mb-4">
 
       {/* ── DESKTOP: layout orizzontale originale ── */}
-      <div className="hidden sm:flex flex-nowrap gap-3 items-center justify-between overflow-x-auto">
+      {/* Le sfumature sono `aria-hidden`: non aggiungono informazione a chi non
+          vede, che raggiunge i bottoni con la tastiera comunque. */}
+      <div className="relative hidden sm:block">
+      {bordi.inizio && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 w-8 z-30
+                     bg-gradient-to-r from-gray-900 to-transparent" />
+      )}
+      {bordi.fine && (
+        <div aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 z-30
+                     bg-gradient-to-l from-gray-900 to-transparent" />
+      )}
+      {/* ─── VA A CAPO INVECE DI SCORRERE ──────────────────────────────────
+          Le sfumature qui sopra dichiarano lo scorrimento, ma dichiararlo non
+          basta per dei CONTROLLI: la matrice è una griglia di dati e scorrerla
+          è normale, mentre un bottone che non si vede è un bottone che non
+          esiste. Misurato prima: «Sole» stava 323 px fuori a 640 e 129 a 834.
+
+          `flex-wrap` sotto `xl` è la stessa scelta che la sessione S ha fatto
+          per le due file di levette, ed è il motivo per cui esiste già quel
+          precedente qui accanto. Le sfumature restano come rete: se un giorno
+          il contenuto crescesse ancora, tornerebbero ad accendersi da sole. */}
+      <div ref={striscia} className="flex flex-wrap xl:flex-nowrap gap-x-3 gap-y-2 items-center xl:justify-between overflow-x-auto">
 
         {/* Options */}
         <div className="flex items-center gap-2">
@@ -102,7 +148,10 @@ export default function TopBar() {
           </div>
         </div>
 
-        <div className="w-px h-6 bg-gray-700" />
+        {/* Il divisore separa due gruppi sulla STESSA riga. Quando la striscia
+            va a capo sotto `xl` non separa più niente: resta una stanghetta
+            orfana a inizio riga. Visto guardando lo scatto, non misurando. */}
+        <div className="hidden xl:block w-px h-6 bg-gray-700" />
 
         {/* Field */}
         <div className="flex items-center gap-2">
@@ -123,7 +172,10 @@ export default function TopBar() {
           </div>
         </div>
 
-        <div className="w-px h-6 bg-gray-700" />
+        {/* Il divisore separa due gruppi sulla STESSA riga. Quando la striscia
+            va a capo sotto `xl` non separa più niente: resta una stanghetta
+            orfana a inizio riga. Visto guardando lo scatto, non misurando. */}
+        <div className="hidden xl:block w-px h-6 bg-gray-700" />
 
         {/* Weather */}
         <div className="flex items-center gap-2">
@@ -144,6 +196,7 @@ export default function TopBar() {
           </div>
         </div>
 
+      </div>
       </div>
 
       {/* ── MOBILE: layout a griglia compatta ── */}
