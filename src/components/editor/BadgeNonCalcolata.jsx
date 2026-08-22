@@ -63,7 +63,14 @@ export function SegnalinoNonCalcolata({ tipo = 'ability' }) {
       role="note"
       aria-label={testo}
       title={testo}
-      className="shrink-0 ml-2 text-amber-300 text-[13px] leading-none cursor-help"
+      /* `h-4` è l'altezza di riga di `text-xs`, che è il testo della
+         descrizione: con `flex items-center` il simbolo si centra sulla PRIMA
+         riga anche quando la descrizione ne occupa due.
+
+         `text-base` e non `text-xs`: il glifo ⚠ disegna molto più piccolo del
+         suo corpo, quindi alla stessa misura del testo sembrerebbe minuscolo.
+         Qui conta la parità OTTICA, non quella nominale. */
+      className="shrink-0 ml-2 h-4 flex items-center text-amber-300 text-base leading-none cursor-help"
     >
       ⚠
     </span>
@@ -88,7 +95,7 @@ export default function BadgeNonCalcolata({ tipo = 'ability' }) {
       title={testo}
     >
       {/* aria-hidden: il simbolo è decorativo, il testo accanto dice già tutto. */}
-      <span aria-hidden="true" className="shrink-0">⚠</span>
+      <span aria-hidden="true" className="shrink-0 text-sm leading-none">⚠</span>
       {/* La frase INTERA, tagliata solo se non ci sta: dove c'è spazio si legge
           tutta, dove non ce n'è resta nel `title`. Un riquadro che dice solo
           «Non calcolata» perderebbe la ragione proprio dove è l'unico segnale
