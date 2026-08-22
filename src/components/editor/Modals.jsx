@@ -3,7 +3,7 @@
 
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
 import { useTranslation } from 'react-i18next'
-import { showdownToSlot } from './showdownHelpers.js'
+import { parseShowdownPaste } from '../../utils/showdownIO.js'
 import { useState } from 'react'
 import useCalcStore from '../../store/useCalcStore'
 
@@ -24,8 +24,29 @@ export function ImportModal({ team, index, onClose, alwaysOpen = false }) {
   const setItem        = useCalcStore(s => s.setItem)
   const setMove        = useCalcStore(s => s.setMove)
 
+  /**
+   * ─── UN SOLO POKÉMON È UNA SQUADRA DA UNO ─────────────────────────────────
+   *
+   * Fino alla sessione CC questo pulsante passava da `showdownToSlot`, che era
+   * una SECONDA implementazione completa dell'import — con la sua conversione
+   * dei numeri, la sua ricerca dei nomi, le sue regole. Nata sei giorni dopo
+   * l'altra e aggiornata un terzo delle volte (3 commit contro 8).
+   *
+   * Il prezzo, misurato prima di toglierla: «Mega Scolipede», «Rotom (Wash)» e
+   * «Alolan Raichu» non li trovava — è la correzione della sessione W che non
+   * ha mai ricevuto — e su `EVs: 252/4/252` scriveva 4 SP invece di 1, che è il
+   * difetto che la sessione L aveva chiuso nell'altro parser.
+   *
+   * `parseShowdownPaste` restituisce una lista: qui se ne prende il primo.
+   *
+   * I warning cambiano forma: quelli della squadra portano il prefisso
+   * «Slot N:», che per un Pokémon solo non dice niente. Si toglie qui, dove si
+   * sa che il blocco è uno solo, invece di far conoscere il caso al parser.
+   */
   function handleImport() {
-    const { slot, warnings: w } = showdownToSlot(text)
+    const { pokemon, warnings } = parseShowdownPaste(text)
+    const slot = pokemon[0] ?? null
+    const w = warnings.map(x => x.replace(/^Slot \d+:\s*/, ''))
     setWarnings(w)
     if (!slot) return
 
@@ -53,7 +74,7 @@ export function ImportModal({ team, index, onClose, alwaysOpen = false }) {
           onClick={handleImport}
           className="text-xs px-3 py-1 rounded bg-teal-700 hover:bg-teal-600 text-white transition-colors"
         >
-          ✔ Import
+          ✔ {t('ui.import')}
         </button>
         {!alwaysOpen && (
           <button

@@ -24,7 +24,6 @@ import { describe, it, expect } from 'vitest'
 import { parseShowdownPaste, teamToShowdown } from '../utils/showdownIO.js'
 import { MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 import pokemonData from '../data/pokemon.json'
-import { showdownToSlot } from '../components/editor/showdownHelpers.js'
 import { slotConAbilitaValida } from '../lib/abilitaSpecie.js'
 
 /** Costruisce una paste minima con il solo nome. */
@@ -391,25 +390,21 @@ describe('import Showdown — l’abilità impossibile', () => {
  * aveva esattamente un'abilità), e nessuna al caricamento.
  */
 describe('l’abilità: una regola sola per tutti gli ingressi', () => {
-  it('i due parser danno lo stesso risultato', () => {
-    // La proprietà che impedisce ai due percorsi di divergere di nuovo.
+  it('l’abilità impossibile viene sostituita', () => {
     const casi = [
       ['Charizard-Mega-Y @ Charizardite Y\nAbility: Blaze\n- Heat Wave', 'drought'],
       ['Raichu-Mega-Y @ Leftovers\nAbility: Static\n- Thunderbolt', 'no-guard'],
       ['Garchomp @ Life Orb\nAbility: Intimidate\n- Earthquake', 'sand-veil'],
     ]
-    for (const [paste, atteso] of casi) {
-      expect(parseShowdownPaste(paste).pokemon[0].ability, `team: ${paste.split('\n')[0]}`).toBe(atteso)
-      expect(showdownToSlot(paste).slot.ability, `editor: ${paste.split('\n')[0]}`).toBe(atteso)
-    }
+    for (const [paste, atteso] of casi)
+      expect(parseShowdownPaste(paste).pokemon[0].ability, paste.split('\n')[0]).toBe(atteso)
   })
 
-  it('una scelta legittima sopravvive a entrambi', () => {
+  it('una scelta legittima sopravvive', () => {
     // IL CONTROLLO CHE SI MUOVE: senza, il test passerebbe anche se la regola
     // scrivesse sempre la prima abilità della specie.
     const p = 'Charizard @ Life Orb\nAbility: Solar Power\n- Heat Wave'
     expect(parseShowdownPaste(p).pokemon[0].ability).toBe('solar-power')
-    expect(showdownToSlot(p).slot.ability).toBe('solar-power')
   })
 
   it('uno slot già salvato con un’abilità impossibile viene guarito', () => {
