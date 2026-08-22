@@ -310,9 +310,17 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
       const maxRecoilHP = Math.floor(maxRoll * rNum / rDen)
       const minPct = Math.round(minRecoilHP * 1000 / atkHP) / 10
       const maxPct = Math.round(maxRecoilHP * 1000 / atkHP) / 10
-      recoilInfo = `${minPct} - ${maxPct}% recoil damage`
+      // Era scritto in inglese dentro il JSX. Non e' un difetto nuovo: sono
+      // 13 le mosse con contraccolpo, 10 di tipo `damage` — Flare Blitz, Brave
+      // Bird, Volt Tackle e le altre lo mostravano gia' cosi' a un utente
+      // italiano. L'ho trovato solo perche' Light of Ruin, aggiunta oggi, e'
+      // l'undicesima.
+      //
+      // (La prima versione di questo commento diceva «nessuna mossa lo aveva»:
+      //  asserzione scritta senza contarla, e falsa.)
+      recoilInfo = t('report.recoil', { valore: `${minPct} - ${maxPct}` })
     } else {
-      recoilInfo = `${Math.floor(rNum / rDen * 1000) / 10}% recoil damage`
+      recoilInfo = t('report.recoil', { valore: Math.floor(rNum / rDen * 1000) / 10 })
     }
   }
 

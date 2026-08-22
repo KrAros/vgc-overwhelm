@@ -121,8 +121,14 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
 
   it('le Mega di Champions ora hanno un\'icona, dalla seconda fonte', () => {
     // La ragione per cui R esiste: Mega Staraptor mostrava Staraptor base.
+    //
+    // 32 in R, **33 dalla sessione Y**: Floette-Mega si era fermata su HOME
+    // perche' quel server risponde 200 al suo indice — ma quell'indice e' un
+    // Floette di un altro colore, non la Mega. Il numero sale di uno per una
+    // ragione nota, e va letto cosi': non e' il generatore ad aver trovato una
+    // forma in piu', e' una forma che stava dalla parte sbagliata.
     const daZone = Object.entries(formeSprite.fonte).filter(([, f]) => f === 'zone')
-    expect(daZone.length, 'forme recuperate dal ripiego').toBe(32)
+    expect(daZone.length, 'forme recuperate dal ripiego').toBe(33)
     expect(formeSprite.forme['staraptor-mega']).toBe('f01')
     expect(formeSprite.fonte['staraptor-mega']).toBe('zone')
     expect(spriteUrl('staraptor-mega')).toContain('_0398_01_0.webp')
@@ -178,5 +184,36 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
     expect(formeSprite.meta.fonti.zone).toContain('pokemon-zone')
     expect(formeSprite.meta.metodo).toBeTruthy()
     expect(formeSprite.meta.specieConForma).toBe(Object.keys(formeSprite.forme).length)
+  })
+})
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Y — Floette-Mega mostrava un Floette di un altro colore
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Il registro diceva `f01` da Pokémon HOME. Ma Floette ha CINQUE forme di
+ * colore del fiore, quindi l'indice 01 su HOME è un Floette giallo: l'URL
+ * risponde 200 e il contenuto è un altro Pokémon.
+ *
+ * Il generatore aveva assunto che l'indice del server seguisse l'ordine dei
+ * NOSTRI dati, dove `floette-mega` è la seconda voce. È il limite dichiarato
+ * in R — l'automatismo copre l'esistenza, l'identità no — e qui si è visto.
+ *
+ * Sondato con `fetch`: HOME ha `f00`–`f05`, pokemon-zone ha solo `f05` e `f06`.
+ * La scelta fra i due candidati l'ha fatta **Simone guardando le immagini**,
+ * perché nessun oracolo automatico distingue una Mega da un Fiore Eterno.
+ */
+describe('Floette-Mega — la forma scelta con l’occhio', () => {
+  it('punta all’indice 05 di pokemon-zone', () => {
+    const u = spriteUrl('floette-mega')
+    expect(u).toContain('pokemon-zone')
+    expect(u).toContain('_0670_05_')
+  })
+
+  it('non è più l’icona del Floette base', () => {
+    // IL CONTROLLO CHE SI MUOVE: senza questo caso il test passerebbe anche se
+    // le due chiavi finissero sullo stesso URL, che è esattamente il difetto.
+    expect(spriteUrl('floette-mega')).not.toBe(spriteUrl('floette'))
   })
 })

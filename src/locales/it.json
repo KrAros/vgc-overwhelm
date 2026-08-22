@@ -22,8 +22,6 @@
     "open_in_team_editor": "Apri nel Team Editor",
     "ko_only": "Solo KO",
     "double_target": "Doppio Bersaglio",
-    "helping_hand": "Aiuto",
-    "light_screen": "Schermo Luce",
     "crit": "Critico",
     "grassy": "Erboso",
     "electric": "Elettrico",
@@ -149,7 +147,8 @@
     "how_to_3": "Clicca 2 celle, stessa colonna → danno cumulativo",
     "attacks_short": "▶ Attacca",
     "attacked_by_short": "◀ Attaccato da",
-    "turn_breakdown": "Analisi del turno"
+    "turn_breakdown": "Analisi del turno",
+    "recoil": "{{valore}}% di contraccolpo"
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",
@@ -157,7 +156,7 @@
     "export_showdown": "Esporta su Showdown",
     "import_showdown": "Importa da Showdown",
     "all_slots_full": "Tutti gli slot sono occupati. Scegli dove sovrascrivere:",
-    "last_respects_allies": "Last Respects — Alleati KO:",
+    "last_respects_allies": "$t(moves.last respects) — Alleati caduti:",
     "allies_ko": "Alleati KO:",
     "no_boost": "nessun boost",
     "duplicate": "Duplica",
@@ -1686,7 +1685,8 @@
     "victory dance": "Danzavittoria",
     "wave crash": "Ondaschianto",
     "wicked blow": "Pugnotenebra",
-    "wildbolt storm": "Tempesta Tonante"
+    "wildbolt storm": "Tempesta Tonante",
+    "light of ruin": "Luce Rovinosa"
   },
   "abilities_desc": {
     "adaptability": "Il bonus STAB diventa ×2 invece di ×1,5.",

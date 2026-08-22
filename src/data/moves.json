@@ -6991,5 +6991,19 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true
+	},
+	"light of ruin": {
+		"name": "Light of Ruin",
+		"type": 17,
+		"category": 1,
+		"power": 140,
+		"priority": 0,
+		"recoil": {
+			"type": "damage",
+			"fraction": [
+				1,
+				2
+			]
+		}
 	}
 }

@@ -17,6 +17,7 @@ import itemsData     from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import { NATURES }   from '../data/natures.js'
 import { spToEv, EV_PER_SP, MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
+import { normalizeAbilityKey } from '../data/abilityEffects.js'
 
 /**
  * ─── SP ⇄ EV ───────────────────────────────────────────────────────────────
@@ -342,6 +343,44 @@ export function parseShowdownPaste(paste) {
     // Fallback abilità di default se non trovata nella paste
     if (!abilityKey) {
       abilityKey = pokemonData[pokemonKey]?.abilities?.[0] || null
+    }
+
+    /**
+     * ─── L'ABILITÀ DEVE ESSERE UNA CHE LA SPECIE PUÒ AVERE ──────────────────
+     *
+     * Un paste può portare un'abilità impossibile: `Charizard-Mega-Y` con
+     * `Ability: Blaze`, che è quella del Charizard base. Prima di oggi finiva
+     * nello store così com'era.
+     *
+     * Il difetto NON era visibile dove sembrava. La tendina disegna le opzioni
+     * della specie — per una Mega spesso una sola — e un `<select>` il cui
+     * `value` non corrisponde a nessuna `<option>` mostra la PRIMA: si leggeva
+     * «Siccità» mentre lo store diceva ancora `blaze`. L'unico componente che
+     * diceva il vero era il riquadro della descrizione, che sembrava quindi
+     * l'unico sbagliato.
+     *
+     * E non era cosmetico: il danno si calcola sull'abilità dello store.
+     *
+     * ─── LE DUE CONVENZIONI DI CHIAVE ──────────────────────────────────────
+     *
+     * `abilities.json` scrive con lo spazio (`flower veil`, 196 su 196),
+     * `pokemon.json` col trattino (`flower-veil`). L'import passava dal primo e
+     * la tendina dal secondo, quindi lo store conteneva l'una o l'altra grafia
+     * a seconda di come ci si era arrivati. Il motore tollera entrambe perché
+     * normalizza, ma erano due modi di scrivere la stessa cosa.
+     *
+     * Qui si scrive la forma col trattino, riusando `normalizeAbilityKey`
+     * invece di ricopiarne la regola.
+     *
+     * ─── SILENZIOSA, PER SCELTA ────────────────────────────────────────────
+     *
+     * Avevo proposto un warning, come già esiste per le mosse non trovate.
+     * **Simone ha scelto la correzione silenziosa** dopo aver letto la ragione.
+     */
+    const consentite = pokemonData[pokemonKey]?.abilities ?? []
+    if (consentite.length > 0) {
+      const norm = abilityKey ? normalizeAbilityKey(abilityKey) : null
+      abilityKey = consentite.includes(norm) ? norm : consentite[0]
     }
 
     pokemon.push({

@@ -257,3 +257,59 @@ describe('i nomi che derivano da un tipo', () => {
     expect(sporche).toEqual([])
   })
 })
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Y — le etichette che contengono un nome di mossa
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * `editor.last_respects_allies` diceva «Last Respects — Alleati KO:» anche in
+ * italiano: metà tradotta, con il nome della mossa ricopiato a mano dentro una
+ * stringa di interfaccia. Intanto `moves.last respects` diceva già «Omaggio ai
+ * KO» — la fonte c'era, e nessuno la leggeva.
+ *
+ * È il difetto della sessione M, che allora tolse sette chiavi `ui.*`
+ * duplicate. Questa era sfuggita perché non è una copia INTERA di un nome: lo
+ * contiene dentro una frase più lunga, quindi il test di M — che cerca stringhe
+ * identiche fra le due lingue — non poteva vederla.
+ *
+ * La correzione usa il nesting di i18next, come la sessione Q per i nomi delle
+ * abilità dentro le descrizioni.
+ */
+describe('le etichette non ricopiano i nomi delle mosse', () => {
+  const NOMI_LUNGHI = Object.entries(inglese.moves)
+    .filter(([, n]) => n.length >= 8)
+
+  for (const [sigla, dizionario] of Object.entries({ it: italiano, en: inglese })) {
+    it(`${sigla}: nessuna stringa di interfaccia contiene un nome di mossa scritto a mano`, () => {
+      const sporche = []
+      for (const sezione of ['ui', 'editor', 'report']) {
+        for (const [k, v] of Object.entries(dizionario[sezione] ?? {})) {
+          if (typeof v !== 'string') continue
+          // Il testo di esempio dell'incolla è Showdown vero, quindi in inglese
+          // per costruzione: è l'unica esclusione, ed è nominata.
+          // ── LE ESCLUSIONI, NOMINATE E CONTATE ──────────────────────────
+          //  import_paste_*   il testo di esempio è Showdown vero, quindi in
+          //                   inglese per costruzione
+          //  report.sandstorm è il METEO, non la mossa: in italiano il meteo è
+          //                   «Tempesta di sabbia» e la mossa «Terrempesta».
+          //                   Stessa parola in inglese, due concetti — leggerlo
+          //                   da `moves` mostrerebbe il nome sbagliato
+          const ESCLUSE = ['ui.import_paste_single', 'ui.import_paste_team', 'report.sandstorm']
+          if (ESCLUSE.includes(`${sezione}.${k}`)) continue
+          // `$t(...)` è la lettura dalla fonte, cioè la correzione: non è una copia.
+          const senzaNesting = v.replace(/\$t\([^)]*\)/g, '')
+          for (const [chiave, nome] of NOMI_LUNGHI) {
+            if (senzaNesting.toLowerCase().includes(nome.toLowerCase()))
+              sporche.push(`${sezione}.${k} contiene "${nome}" — si legge da moves.${chiave}`)
+          }
+        }
+      }
+      expect(sporche).toEqual([])
+    })
+  }
+
+  it('il controllo: la proprietà ha dei nomi da cercare', () => {
+    expect(NOMI_LUNGHI.length).toBeGreaterThan(200)
+  })
+})

@@ -321,3 +321,53 @@ describe('import Showdown — Mega, forme regionali e parentesi', () => {
     expect(collisioni).toEqual([])
   })
 })
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Y — l'abilità dev'essere una che la specie può avere
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * `Charizard-Mega-Y` con `Ability: Blaze` finiva nello store con `blaze`, che
+ * quella specie non può avere. E il difetto non si vedeva dove sembrava: la
+ * tendina disegna le opzioni della specie — per una Mega spesso una sola — e
+ * un `<select>` il cui `value` non è fra le `<option>` mostra la PRIMA. Si
+ * leggeva «Siccità» con lo store che diceva `blaze`.
+ *
+ * Il danno si calcola sull'abilità dello store, quindi non era cosmetico.
+ */
+describe('import Showdown — l’abilità impossibile', () => {
+  const conAbilita = (specie, ab) =>
+    parseShowdownPaste(`${specie} @ Leftovers\nAbility: ${ab}\n- Protect`).pokemon[0]
+
+  it('un’abilità che la specie non ha diventa la sua', () => {
+    expect(conAbilita('Charizard-Mega-Y', 'Blaze').ability).toBe('drought')
+    expect(conAbilita('Floette-Mega', 'Flower Veil').ability).toBe('fairy-aura')
+  })
+
+  it('un’abilità legittima resta quella scelta', () => {
+    // IL CONTROLLO CHE SI MUOVE: senza questo caso il blocco passerebbe anche
+    // se la coercizione scrivesse SEMPRE la prima abilità della specie,
+    // buttando via la scelta di chi incolla.
+    expect(conAbilita('Charizard', 'Solar Power').ability).toBe('solar-power')
+    expect(conAbilita('Charizard', 'Blaze').ability).toBe('blaze')
+  })
+
+  it('la grafia salvata è quella con il trattino', () => {
+    // `abilities.json` scrive con lo spazio, `pokemon.json` col trattino:
+    // l'import passava dal primo e la tendina dal secondo, quindi lo store
+    // conteneva l'una o l'altra a seconda della provenienza.
+    expect(conAbilita('Floette', 'Flower Veil').ability).toBe('flower-veil')
+  })
+
+  it('ogni abilità importata è fra quelle della specie', () => {
+    // La proprietà generale, su un campione ampio invece che su due casi.
+    const campioni = Object.keys(pokemonData)
+      .filter(k => (pokemonData[k].abilities ?? []).length > 0)
+      .slice(0, 250)
+    const fuori = campioni.filter(k => {
+      const p = conAbilita(pokemonData[k].name ?? k, 'Blaze')
+      return p && !pokemonData[p.key].abilities.includes(p.ability)
+    })
+    expect(fuori).toEqual([])
+  })
+})
