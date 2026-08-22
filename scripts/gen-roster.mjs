@@ -59,10 +59,42 @@ const CHIAVI = Object.keys(pokemon)
  */
 const CONTROLLO = { dentro: ['garchomp', 'charizard-mega-y'], fuori: ['flutter-mane', 'iron-hands'] }
 
+/**
+ * ─── DOVE LA FONTE CHIAMA LA STESSA SPECIE IN UN ALTRO MODO ────────────────
+ *
+ * La prima corsa dava `basculegion-f` DENTRO e `basculegion-m` FUORI, che è
+ * assurdo. La ragione non era il gioco: la fonte chiama quella specie
+ * `basculegion` e basta, quindi sondando la NOSTRA chiave si prendeva un 404
+ * che non voleva dire «non c'è».
+ *
+ * Simone ha confermato dal gioco che Basculegion M c'è. Da lì ho cercato gli
+ * altri disallineamenti e li ho verificati uno per uno: sei su sette provati
+ * erano falsi negativi dello stesso tipo.
+ *
+ * L'alias corregge la CAUSA — l'URL da chiedere — invece di rattoppare il
+ * risultato. Una pezza sul risultato sarebbe sparita alla rigenerazione
+ * successiva: è la regola nata in K sui generatori non idempotenti.
+ *
+ * `tauros-paldea-blaze` NON è qui: provato `tauros-paldea-blaze-breed` e dà
+ * 404 come la nostra chiave. Le altre due razze di Tauros ci sono, questa no —
+ * lasciato fuori perché è quello che la fonte dice, non perché non l'ho
+ * cercato.
+ */
+const ALIAS_FONTE = {
+  'basculegion-m':        'basculegion',
+  'arcanine-hisui':       'arcanine-hisuian',
+  'typhlosion-hisui':     'typhlosion-hisuian',
+  'tauros-paldea-aqua':   'tauros-paldea-aqua-breed',
+  'tauros-paldea-combat': 'tauros-paldea-combat-breed',
+  'lycanroc-midday':      'lycanroc',
+  'lycanroc-dusk':        'lycanroc',
+}
+
 async function stato(slug) {
+  const chiesto = ALIAS_FONTE[slug] ?? slug
   for (let tent = 0; tent < 3; tent++) {
     try {
-      const r = await fetch(BASE + slug, { method: 'HEAD', headers: UA })
+      const r = await fetch(BASE + chiesto, { method: 'HEAD', headers: UA })
       if (r.status === 200 || r.status === 404) return r.status
       await new Promise(r => setTimeout(r, 800 * (tent + 1)))
     } catch { await new Promise(r => setTimeout(r, 800 * (tent + 1))) }
@@ -115,6 +147,9 @@ if (SCRIVI) {
       controllo: CONTROLLO,
       specie_sondate: CHIAVI.length,
     },
+    // Scritto nel registro perché chi lo legge sappia quali voci sono entrate
+    // con un nome diverso da quello che la fonte espone.
+    alias_fonte: ALIAS_FONTE,
     nel_roster: dentro,
     non_decise: ignoti,
   }, null, 1) + '\n')
