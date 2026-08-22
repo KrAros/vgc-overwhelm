@@ -101,10 +101,21 @@ const slot = (key, moves) => ({
   abilityFlags: {}, lastRespectsKOs: 0,
 })
 const MOSSE_1 = ['flamethrower', 'earthquake', 'rock slide', 'dragon claw']
-const MOSSE_2 = ['shadow ball', 'dark pulse', 'icy wind', 'thunderbolt']
+// ─── PERCHÉ VOLCARONA E `bug buzz` ─────────────────────────────────────────
+//
+// In italiano il tipo Coleottero si scrive con la parola più lunga delle due
+// lingue: dieci caratteri contro gli otto di «Ghiaccio» e «Folletto», dentro
+// badge stretti e in maiuscolo. È il caso peggiore per il testo tagliato.
+//
+// Prima della sessione W nessuna delle dodici specie e nessuna delle otto mosse
+// era di tipo Coleottero: la misura non poteva vedere il caso peggiore, e i suoi
+// zeri erano una sonda cieca. Il campo `coleottero_a_schermo`, più sotto, ora lo
+// registra invece di darlo per scontato — ed è `false` nello scenario vuoto e in
+// inglese, cioè distingue davvero.
+const MOSSE_2 = ['shadow ball', 'dark pulse', 'bug buzz', 'thunderbolt']
 const SQUADRE = {
   team1: ['garchomp', 'incineroar', 'rillaboom', 'amoonguss', 'dragonite', 'flutter-mane'].map((k) => slot(k, MOSSE_1)),
-  team2: ['gholdengo', 'chi-yu', 'kingambit', 'iron-hands', 'ogerpon', 'urshifu'].map((k) => slot(k, MOSSE_2)),
+  team2: ['gholdengo', 'chi-yu', 'kingambit', 'volcarona', 'ogerpon', 'urshifu'].map((k) => slot(k, MOSSE_2)),
 }
 
 // ─── Gli scenari ─────────────────────────────────────────────────────────────
@@ -290,6 +301,23 @@ function misuraNellaPagina() {
     // decidere a mente quale avesse ragione.
     viewport: { innerWidth, htmlClientWidth: doc.clientWidth, htmlScrollWidth: doc.scrollWidth },
     pannello_rapporto: Boolean(document.querySelector('section')),
+    // Stessa ragione di `pannello_rapporto`: senza questo campo uno zero in
+    // «testo tagliato» non distingue «non taglia» da «non c'è». Il tipo
+    // Coleottero è il nome di tipo più lungo delle due lingue (10 caratteri
+    // contro 8), ed è entrato negli scenari con `volcarona` in squadra proprio
+    // per essere misurato. Vale solo in italiano, quindi in inglese resta
+    // `false` per costruzione — non è un difetto, è che quella parola lì non
+    // esiste. Se un giorno Volcarona esce dalla squadra seminata, il campo va
+    // a `false` anche in italiano e si vede che la misura è tornata cieca.
+    //
+    // Il primo tentativo cercava anche «Bug», e in inglese lo soddisfaceva il
+    // NOME della mossa Bug Buzz invece del badge del tipo: un controllo che si
+    // accende per la ragione sbagliata è peggio di nessun controllo.
+    coleottero_a_schermo: /\b(COLEOTTERO|Coleottero)\b/.test(document.body.innerText),
+    // Diagnostico: QUALI nomi di tipo sono a schermo. Serve a distinguere
+    // «il badge del tipo non c'è in questo scenario» da «c'è ma non è
+    // Coleottero» — due cecità diverse che uno `false` da solo confonde.
+    tipi_a_schermo: [...new Set((document.body.innerText.match(/\b(NORMALE|FUOCO|ACQUA|ELETTRO|ERBA|GHIACCIO|LOTTA|VELENO|TERRA|VOLANTE|PSICO|COLEOTTERO|ROCCIA|SPETTRO|DRAGO|BUIO|ACCIAIO|FOLLETTO|NORMAL|FIRE|WATER|ELECTRIC|GRASS|ICE|FIGHTING|POISON|GROUND|FLYING|PSYCHIC|BUG|ROCK|GHOST|DRAGON|DARK|STEEL|FAIRY)\b/gi) || []))].slice(0, 12),
     nodi_totali: document.querySelectorAll('*').length,
   }
 }

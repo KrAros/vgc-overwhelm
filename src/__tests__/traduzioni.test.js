@@ -194,3 +194,66 @@ describe('traduzioni — l\'interfaccia italiana è in italiano', () => {
     expect(sporche, 'stringhe italiane con una parola inglese dentro').toEqual([])
   })
 })
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE W — i nomi derivati da un tipo dicono il nome di quel tipo
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Il tipo Bug era tradotto «Insetto» invece di «Coleottero». Ma la parola non
+ * stava in un punto solo: `bug gem` diceva «Gemma Insetto», `bug memory`
+ * «Memoria Insetto», e la descrizione di Swarm «mosse Insetto». Correggere
+ * solo `types.Bug` avrebbe lasciato l'interfaccia a dire due nomi per la
+ * stessa cosa — la famiglia di difetti della sessione M.
+ *
+ * La proprietà è quella che il file già rispettava per gli altri diciassette
+ * tipi, e che nessuno sorvegliava: `Gemma X` e `Memoria X` scrivono ESATTAMENTE
+ * il nome del tipo. Non è un nome ufficiale dedotto a mente, è la convenzione
+ * misurata sulle 34 voci esistenti.
+ *
+ * Falsificabile per costruzione: rimettere «Insetto» in uno qualsiasi dei tre
+ * punti fa diventare rosso questo blocco.
+ */
+describe('i nomi che derivano da un tipo', () => {
+  const LINGUE = { it: italiano, en: inglese }
+
+  for (const [sigla, dizionario] of Object.entries(LINGUE)) {
+    const tipi = dizionario.types ?? {}
+    const oggetti = dizionario.items ?? {}
+
+    it(`${sigla}: ogni «gem» e ogni «memory» nomina il proprio tipo`, () => {
+      const sbagliati = []
+      for (const [chiave, valore] of Object.entries(oggetti)) {
+        const m = chiave.match(/^(\w+) (gem|memory)$/)
+        if (!m) continue
+        // La chiave è minuscola («bug»), `types` è capitalizzato («Bug»).
+        const nomeTipo = Object.entries(tipi)
+          .find(([k]) => k.toLowerCase() === m[1])?.[1]
+        if (!nomeTipo) continue
+        if (!valore.includes(nomeTipo)) sbagliati.push(`${chiave} = "${valore}" ma types.${m[1]} = "${nomeTipo}"`)
+      }
+      expect(sbagliati).toEqual([])
+    })
+  }
+
+  it('il controllo: la proprietà ha davvero dei casi da guardare', () => {
+    // Senza questa riga il blocco passerebbe con zero coppie trovate, che è la
+    // sonda cieca vista otto volte nella sessione L.
+    const coppie = Object.keys(italiano.items ?? {}).filter(k => /^(\w+) (gem|memory)$/.test(k))
+    expect(coppie.length).toBeGreaterThan(30)
+  })
+
+  it('nessuna descrizione italiana chiama ancora «Insetto» il tipo', () => {
+    // «Insettocchi» è il nome dell'abilità Compound Eyes e resta: la regex
+    // cerca la parola intera, non il prefisso.
+    const sporche = []
+    const visita = (o, via = '') => {
+      for (const [k, v] of Object.entries(o)) {
+        if (typeof v === 'string') { if (/\bInsetto\b/.test(v)) sporche.push(`${via}${k} = ${v}`) }
+        else if (v && typeof v === 'object') visita(v, `${via}${k}.`)
+      }
+    }
+    visita(italiano)
+    expect(sporche).toEqual([])
+  })
+})
