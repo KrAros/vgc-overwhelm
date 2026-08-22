@@ -33,6 +33,9 @@ import movesData from '../data/moves.json'
 import { TYPE_NAMES } from '../data/typeChart.js'
 import abilitiesData from '../data/abilities.json'
 import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
+import { parseShowdownPaste } from '../utils/showdownIO.js'
+import inglese from '../locales/en.json' with { type: 'json' }
+import italiano from '../locales/it.json' with { type: 'json' }
 
 /** Indici di `stats`: [PS, Att, Dif, Att.Sp, Dif.Sp, Vel]. */
 const STATS_CORRETTE = {
@@ -232,5 +235,46 @@ describe('flag delle mosse importati dal vendor', () => {
     // Controllo negativo: una mossa che non è nessuna delle cinque cose.
     expect(movesData['earthquake'].sound).toBeUndefined()
     expect(movesData['earthquake'].bite).toBeUndefined()
+  })
+})
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ * SESSIONE Y — Light of Ruin
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Mancava del tutto: l'import di un team con Floette-Mega dava «mossa non
+ * trovata». Non è nemmeno nel riferimento vendorizzato, quindi non c'era una
+ * fonte da cui trascriverla — **i valori li ha dati Simone leggendoli dal
+ * gioco**, ed è l'unico modo che rispetta «trascrivere, non dedurre»: le altre
+ * versioni della serie potrebbero averla bilanciata diversamente.
+ *
+ * `num` è assente di proposito: non lo legge nessuno per le mosse, e 57 voci
+ * su 810 ne erano già senza. Inventarne uno sarebbe stato un dato non
+ * verificato messo lì per simmetria.
+ */
+describe('Light of Ruin', () => {
+  it('esiste con i valori dati dal gioco', () => {
+    const m = movesData['light of ruin']
+    expect(m).toBeDefined()
+    expect(m.type).toBe(17)        // Folletto
+    expect(m.category).toBe(1)     // speciale
+    expect(m.power).toBe(140)
+    expect(m.recoil).toEqual({ type: 'damage', fraction: [1, 2] })
+  })
+
+  it('si importa da un paste Showdown', () => {
+    const r = parseShowdownPaste('Floette-Mega @ Leftovers\nAbility: Fairy Aura\n- Light of Ruin')
+    expect(r.warnings).toEqual([])
+    expect(r.pokemon[0].moves[0]).toBe('light of ruin')
+  })
+
+  it('ha un nome in entrambe le lingue', () => {
+    // Senza questo, l'interfaccia mostrerebbe la chiave grezza «light of ruin»
+    // in minuscolo: il `defaultValue` protegge dall'assenza, e questo test
+    // controlla che l'assenza non ci sia.
+    expect(inglese.moves['light of ruin']).toBe('Light of Ruin')
+    expect(italiano.moves['light of ruin']).toBeTruthy()
+    expect(italiano.moves['light of ruin']).not.toBe(inglese.moves['light of ruin'])
   })
 })

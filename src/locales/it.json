@@ -147,7 +147,8 @@
     "how_to_3": "Clicca 2 celle, stessa colonna → danno cumulativo",
     "attacks_short": "▶ Attacca",
     "attacked_by_short": "◀ Attaccato da",
-    "turn_breakdown": "Analisi del turno"
+    "turn_breakdown": "Analisi del turno",
+    "recoil": "{{valore}}% di contraccolpo"
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",
@@ -1684,7 +1685,8 @@
     "victory dance": "Danzavittoria",
     "wave crash": "Ondaschianto",
     "wicked blow": "Pugnotenebra",
-    "wildbolt storm": "Tempesta Tonante"
+    "wildbolt storm": "Tempesta Tonante",
+    "light of ruin": "Luce Rovinosa"
   },
   "abilities_desc": {
     "adaptability": "Il bonus STAB diventa ×2 invece di ×1,5.",

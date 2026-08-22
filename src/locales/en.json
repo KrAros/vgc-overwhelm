@@ -147,7 +147,8 @@
     "how_to_3": "Click 2 cells, same column → cumulative damage",
     "attacks_short": "▶ attacks",
     "attacked_by_short": "◀ attacked by",
-    "turn_breakdown": "Turn breakdown"
+    "turn_breakdown": "Turn breakdown",
+    "recoil": "{{valore}}% recoil damage"
   },
   "editor": {
     "delete_pokemon": "Delete Pokémon",
@@ -1684,7 +1685,8 @@
     "victory dance": "Victory Dance",
     "wave crash": "Wave Crash",
     "wicked blow": "Wicked Blow",
-    "wildbolt storm": "Wildbolt Storm"
+    "wildbolt storm": "Wildbolt Storm",
+    "light of ruin": "Light of Ruin"
   },
   "abilities_desc": {
     "adaptability": "Same-type attack bonus (STAB) is 2x instead of 1.5x.",
