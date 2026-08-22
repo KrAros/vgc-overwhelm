@@ -535,22 +535,25 @@ export default function ControlBar() {
             ].map(({ lato, squadra, nome, modo }) => (
               <div key={lato} role="group" aria-label={nome}
                    className="rounded-lg border border-gray-700/40 bg-gray-800/30 px-2.5 py-2 space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold shrink-0">{nome}</span>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {MODS_DESKTOP.map(m => (
-                      <ModBtn key={m.mod} label={m.label}
-                        active={modVals[m.mod][lato]} activeClass={m.active}
-                        onClick={() => toggleModifier(m.mod, lato)} />
-                    ))}
-                  </div>
+                {/* L'etichetta fa da INTESTAZIONE del riquadro, centrata e su
+                    una riga sua: in linea coi bottoni si leggeva come il primo
+                    di essi, e quando la fila andava a capo finiva staccata dal
+                    gruppo che nomina. Centrata dice «questo riquadro è di
+                    Team n» invece di «il primo bottone si chiama Team n». */}
+                <div className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold text-center">{nome}</div>
+                <div className="flex items-center justify-center gap-1 flex-wrap">
+                  {MODS_DESKTOP.map(m => (
+                    <ModBtn key={m.mod} label={m.label}
+                      active={modVals[m.mod][lato]} activeClass={m.active}
+                      onClick={() => toggleModifier(m.mod, lato)} />
+                  ))}
                 </div>
                 <div className="h-px bg-gray-700/40" />
                 {/* Il nome accessibile dice ANCHE la squadra: in pagina ci sono
                     quattro «Importa» — due qui e due negli editor sotto, a 127
                     px di distanza — e senza la squadra nel nome chi naviga per
                     controlli sente quattro volte la stessa parola. */}
-                <div className="flex items-center gap-1 flex-wrap">
+                <div className="flex items-center justify-center gap-1 flex-wrap">
                   <button type="button" aria-label={`${t('ui.import')} — ${nome}`}
                     onClick={() => openImport(modo)}
                     className={mode === modo ? btnActive : btnNormal}>
