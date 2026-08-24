@@ -59,6 +59,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Il peso di ciò che scarica un visitatore. Sta DOPO il build perché è
+      # l'unico controllo del progetto che misura `dist/` invece di `src/`:
+      # prima del build non esisterebbe niente da pesare.
+      #
+      # Era l'unico criterio senza una rete sotto, ed è esattamente quello che
+      # è stato sforato — il README arrivò a dichiarare 211,86 kB contro una
+      # soglia di 210 senza che niente diventasse rosso.
+      - name: Peso del bundle sotto la soglia
+        run: npm run bundle:check
+
       # L'artefatto lo carica solo il ramo che pubblica, ma il build gira
       # comunque su tutti: un errore di build su un branch di sessione va visto
       # lì, non al momento del merge.
