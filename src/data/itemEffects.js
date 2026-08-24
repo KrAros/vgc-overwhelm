@@ -177,7 +177,11 @@ export const ITEM_EFFECTS = {
   'abomasite':          { megaStone: 'abomasnow-mega'   },
   'beedrillite':        { megaStone: 'beedrill-mega'    },
   'pidgeotite':         { megaStone: 'pidgeot-mega'     },
-  'slowbro-mega':       { megaStone: 'slowbro-mega'     },
+  // Qui c'era anche una riga `'slowbro-mega': { megaStone: 'slowbro-mega' }`:
+  // lo slug di una SPECIE usato come chiave di uno strumento. Non poteva
+  // servire a niente — `isStrumentoInamovibile` cerca in questa tabella la
+  // chiave dello strumento tenuto, e nessuno strumento si chiama così — e
+  // duplicava la riga sotto, che porta già la stessa mappatura.
   'slobronite':         { megaStone: 'slowbro-mega'     },
   'steelixite':         { megaStone: 'steelix-mega'     },
   'sceptilite':         { megaStone: 'sceptile-mega'    },

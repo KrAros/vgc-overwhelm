@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs'
+import { basename } from 'node:path'
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { CAMPI_POTATI, pota } from './scripts/potatura-dati.mjs'
 
 /**
  * ─── LA VERSIONE HA UNA FONTE SOLA ───────────────────────────────────────────
@@ -13,6 +15,38 @@ import tailwindcss from '@tailwindcss/vite'
  * verifica che i due non divergano.
  */
 const VERSIONE = JSON.parse(readFileSync('./package.json', 'utf8')).version
+
+/**
+ * ─── LA POTATURA DEI DATI ────────────────────────────────────────────────────
+ *
+ * Toglie dal bundle i campi che nessuna riga di `src/` legge. L'elenco — e il
+ * perché di ogni voce — sta in `scripts/potatura-dati.mjs`, che è anche quello
+ * che rilegge `potaturaDati.test.js`: una fonte sola, letta dal build e dalla
+ * rete che lo sorveglia.
+ *
+ * `apply: 'build'` di proposito. In sviluppo e nei test i file restano interi,
+ * così `gen-flag-dati.mjs` e chiunque apra il JSON vedono il dato vero; è il
+ * bundle a viaggiare magro. Il prezzo di questa scelta è che la potatura non
+ * si vede finché non si pubblica — ed è per questo che la rete è un test
+ * statico su `src/`, non un test di comportamento.
+ *
+ * `enforce: 'pre'` perché deve arrivare prima del plugin JSON di Vite: qui si
+ * restituisce ancora testo JSON, che poi Vite trasforma in modulo.
+ */
+function potaturaDati() {
+  return {
+    name: 'sixth-ember:potatura-dati',
+    enforce: 'pre',
+    apply: 'build',
+    load(id) {
+      const percorso = id.split('?')[0]
+      if (!percorso.includes('/src/data/')) return null
+      const nome = basename(percorso)
+      if (!CAMPI_POTATI[nome]) return null
+      return JSON.stringify(pota(nome, JSON.parse(readFileSync(percorso, 'utf8'))))
+    },
+  }
+}
 
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(VERSIONE) },
@@ -34,6 +68,7 @@ export default defineConfig({
   base: '/vgc-overwhelm/',
 
   plugins: [
+    potaturaDati(),
     react(),
     tailwindcss(),
   ],

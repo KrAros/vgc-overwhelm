@@ -14,6 +14,21 @@ Il progetto segue il [versionamento semantico](https://semver.org/lang/it/).
 Fino alla **1.0.0** l'app è in beta: i numeri che produce sono verificati
 contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
+## Non ancora rilasciato
+
+### Più leggera da aprire
+- Il JavaScript scaricato alla prima apertura passa da **212,56 a 205,21 kB**
+  gzip: dal bundle escono i campi dei dati di gioco che l'applicazione non
+  legge mai — il peso dei Pokémon, il genere, il numero delle mosse
+- Nessun numero calcolato cambia: la potatura tocca il bundle, non il motore
+
+### Sotto il cofano
+- `npm run bundle:check` pesa ciò che il browser scarica davvero e fallisce
+  sopra i 210 kB. Era l'unico criterio del progetto senza una rete sotto, ed
+  era stato sforato senza che nessuno se ne accorgesse
+- I registri dicevano 1945 test, 114 abilità e 41 strumenti col badge, 1879
+  chiavi di traduzione: erano 1961, 109, 40 e 1891
+
 ## 0.9.0 — 22 agosto 2026
 
 Prima versione numerata. Il calcolatore è completo e verificato; quello che
@@ -43,7 +58,7 @@ manca alla 1.0 è il lancio, non il motore.
 - Italiano e inglese
 
 ### Sotto il cofano
-- 1945 test, caratterizzazione della formula su 586 casi, della matrice su 180
+- 1961 test, caratterizzazione della formula su 586 casi, della matrice su 180
 - Pubblicazione automatica solo se lint, suite e `snapshot:diff` passano
 
 ## Prima della 1.0

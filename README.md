@@ -123,29 +123,40 @@ L'aritmetica sta in `src/lib/` e in `calcEngine.js`, ed è pura: nessun
 componente calcola danno. `vendor/ncp/` non viene importato da una sola riga di
 `src/`, quindi non entra mai nel bundle — c'è un test che lo verifica.
 
-Bundle misurato sull'ultima build (`97 moduli`):
+Bundle misurato sull'ultima build (`100 moduli`):
 
 | chunk | grezzo | gzip |
 |---|---|---|
-| `dati` | 387,86 kB | 95,36 kB |
-| `vendor` | 239,00 kB | 75,55 kB |
-| `index` | 150,44 kB | 40,59 kB |
-| `it` | 64,59 kB | 24,70 kB |
-| runtime | 0,56 kB | 0,36 kB |
+| `dati` | 344,03 kB | 89,78 kB |
+| `vendor` | 239,01 kB | 74,69 kB |
+| `index` | 150,76 kB | 40,38 kB |
+| `it` | 64,73 kB | 24,54 kB |
+| runtime | 0,57 kB | 0,36 kB |
 
-Un visitatore inglese scarica **211,86 kB** di JavaScript compresso — somma
-fatta a mano, `it` escluso perché lo prende solo chi passa all'italiano.
+Un visitatore inglese scarica **205,21 kB** di JavaScript compresso, `it`
+escluso perché lo prende solo chi passa all'italiano. La somma non è più fatta
+a mano: la stampa `npm run bundle:report`, e `npm run bundle:check` fallisce
+sopra i 210 kB.
 
-<small>I gzip sono quelli riportati da Vite. `gzip -c` sugli stessi file dà
-**206,54 kB**: livelli di compressione diversi, non una misura sbagliata.
+<small>**Il metodo, che prima mancava.** Questa tabella ha dichiarato a lungo
+211,86 kB — cioè un numero già sopra la soglia della sessione E — e il README
+si difendeva osservando che `gzip -c` dava 206,54 sugli stessi file, quindi che
+«un criterio numerico senza il metodo di misura non ha un verdetto».
 
-La differenza non è accademica. Il criterio della sessione E era «JS gzip sotto
-210 kB», chiuso a 209,27 — ma **il piano non dice con quale strumento**, e le
-due misure differiscono di cinque kB: 206,54 sta sotto la soglia, 211,86 sta
-sopra. Un criterio numerico senza il metodo di misura non ha un verdetto.
+L'osservazione era giusta e la difesa no. Rimisurato: sforavano **tutti** i
+metodi — 212,56 kB con gzip predefinito, 213,79 secondo la riga che stampa
+Vite. Il verdetto era lo stesso da qualunque parte lo si guardasse; mancava
+solo qualcuno che lo pronunciasse.
 
-Da notare che il 211,16 scritto qui prima di oggi era **già** sopra i 210, e
-nessuno se n'era accorto.</small>
+Adesso il metodo è scritto in `scripts/misura-bundle.mjs`: si pesano i file JS
+che `dist/index.html` fa scaricare subito — modulo d'ingresso più i
+`modulepreload` — con `zlib.gzipSync` a livello predefinito, sommati, kB da
+1000 byte. Gli altri strumenti restano entro un kB da questo numero, e il
+margine sotto la soglia è quasi cinque: il verdetto non cambia con lo
+strumento.
+
+Il calo da 212,56 a 205,21 viene dalla potatura dei campi che `src/` non legge
+(`scripts/potatura-dati.mjs`), non da codice tolto.</small>
 
 ---
 
