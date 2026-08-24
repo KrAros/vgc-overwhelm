@@ -23,10 +23,10 @@ nella PR da dove viene il set**: il file dichiara la propria fonte in testa, e
 quella riga deve restare vera.
 
 **Traduzioni.** [`src/locales/en.json`](src/locales/en.json) e
-[`it.json`](src/locales/it.json), 1879 chiavi foglia ciascuno — oggi allineati.
+[`it.json`](src/locales/it.json), 1891 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
-**Le abilità col badge.** 114 abilità e 41 strumenti che il riferimento calcola
+**Le abilità col badge.** 109 abilità e 40 strumenti che il riferimento calcola
 e noi no; l'elenco generato è in
 [`src/data/gapNoti.json`](src/data/gapNoti.json). Ognuna è una PR piccola e
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
@@ -41,7 +41,13 @@ npm run test:run        # deve essere verde
 npm run lint            # deve essere pulito
 npm run snapshot:diff   # deve dire ZERO divergenze
 npm run build           # deve completare
+npm run bundle:check    # deve stare sotto i 210 kB gzip
 ```
+
+`bundle:check` va **dopo** `build`: è l'unico controllo che pesa `dist/`
+invece di leggere `src/`, e prima del build non c'è niente da pesare. Se
+sfora, la soglia non si alza per far tornare verde — alzarla è una decisione,
+e va scritta come tale.
 
 `snapshot:diff` a zero **non è una formalità**. Se si muove, il tuo cambiamento
 ha spostato numeri del motore: può essere giusto, ma allora ogni caso mosso va
