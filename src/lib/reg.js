@@ -92,18 +92,46 @@ export function stagionePredefinita(quando = new Date()) {
   return stagioneCorrente(quando) ?? STAGIONE_PIU_RECENTE
 }
 
+/**
+ * La stagione da cui partire quando si propongono i set: la corrente, e se
+ * quella non ha set si scende all'indietro finché una non ne ha.
+ *
+ * Serve perché le due cose non vanno di pari passo. Oggi la stagione in corso
+ * è M-5 e i venti set che abbiamo sono di M-4: partire dalla corrente
+ * mostrerebbe una tendina vuota a chi apre l'app, cioè una regressione
+ * rispetto a prima che le stagioni esistessero.
+ *
+ * Il ripiego è all'indietro e mai in avanti: un set di una stagione futura non
+ * esiste, uno di una passata è solo più vecchio.
+ *
+ * @param {Set<string>|string[]} conSet  gli id delle stagioni che hanno set
+ * @returns {string|null} l'id, oppure `null` se nessuna stagione ha set
+ */
+export function stagioneConSetPiuRecente(conSet, quando = new Date()) {
+  const ha = conSet instanceof Set ? conSet : new Set(conSet)
+  const partenza = stagionePredefinita(quando)
+  const da = STAGIONI.findIndex(s => s.id === partenza.id)
+  for (let i = da; i >= 0; i--) if (ha.has(STAGIONI[i].id)) return STAGIONI[i].id
+  return null
+}
+
 /** La reg a cui appartiene una stagione. */
 export function regDiStagione(idStagione) {
   return STAGIONI.find(s => s.id === idStagione)?.reg ?? null
 }
 
-/** Le specie utilizzabili in una reg. */
-export function specieDiReg(idReg) {
-  return REG.find(r => r.id === idReg)?.specie ?? []
-}
-
-/** Le specie utilizzabili in una stagione, passando dalla sua reg. */
-export function specieDiStagione(idStagione) {
-  const reg = regDiStagione(idStagione)
-  return reg ? specieDiReg(reg) : []
-}
+/**
+ * ─── GLI ELENCHI DI SPECIE STANNO ALTROVE ──────────────────────────────────
+ *
+ * `specieDiReg` e `specieDiStagione` vivono in `regSpecie.js`, che importa un
+ * secondo file di dati. Non e' una separazione estetica: e' una misura.
+ *
+ * I 582 slug delle due reg costano 1490 byte gzip, e oggi NESSUN componente
+ * li legge — la stagione filtra i set, non le specie. Tenendoli qui finivano
+ * nel bundle d'ingresso e li pagava ogni visitatore per niente: il margine
+ * sotto la soglia dei 210 kB era sceso a 0,85 kB.
+ *
+ * Il giorno in cui l'interfaccia filtrera' o segnalera' anche le specie,
+ * bastera' importare `regSpecie.js` da un componente e quel peso tornera' nel
+ * bundle — misurato da `bundle:check`, come tutto il resto.
+ */

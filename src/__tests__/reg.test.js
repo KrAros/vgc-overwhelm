@@ -19,21 +19,25 @@
 
 import { describe, it, expect } from 'vitest'
 import registro from '../data/regChampions.json' with { type: 'json' }
+import registroSpecie from '../data/regChampionsSpecie.json' with { type: 'json' }
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import {
   REG, STAGIONI, stagioneCorrente, stagionePredefinita,
-  regDiStagione, specieDiReg, specieDiStagione, STAGIONE_PIU_RECENTE,
+  regDiStagione, STAGIONE_PIU_RECENTE,
 } from '../lib/reg.js'
+import { specieDiReg, specieDiStagione } from '../lib/regSpecie.js'
 
 describe('registro delle reg — coerenza interna', () => {
   it('ogni specie elencata esiste nell\'anagrafica', () => {
-    const ignote = [...new Set(REG.flatMap(r => r.specie))].filter(s => !pokemonData[s])
+    const tutte = [...new Set([...specieDiReg('M-A'), ...specieDiReg('M-B')])]
+    const ignote = tutte.filter(s => !pokemonData[s])
     expect(ignote, 'slug che pokemon.json non conosce').toEqual([])
   })
 
   it('nessuna reg elenca due volte la stessa specie', () => {
     for (const r of REG) {
-      const doppie = r.specie.filter((s, i) => r.specie.indexOf(s) !== i)
+      const specie = specieDiReg(r.id)
+      const doppie = specie.filter((s, i) => specie.indexOf(s) !== i)
       expect(doppie, `${r.id} ha doppioni`).toEqual([])
     }
   })
@@ -58,7 +62,7 @@ describe('registro delle reg — coerenza interna', () => {
   it('i controlli dichiarati nel file sono veri', () => {
     // IL CONTROLLO NEGATIVO DEL REGISTRO. Senza, ogni test qui sopra
     // passerebbe anche con due elenchi identici o vuoti.
-    const c = registro.condizioni.controllo
+    const c = registroSpecie.condizioni.controllo
     const ma = new Set(specieDiReg('M-A'))
     const mb = new Set(specieDiReg('M-B'))
 

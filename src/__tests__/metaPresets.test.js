@@ -26,7 +26,8 @@
 
 import { describe, it, expect } from 'vitest'
 import { META_PRESETS, PRESETS_BY_SLUG } from '../data/metaPresets.js'
-import { STAGIONI, specieDiStagione, regDiStagione } from '../lib/reg.js'
+import { STAGIONI, regDiStagione } from '../lib/reg.js'
+import { specieDiStagione } from '../lib/regSpecie.js'
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 
 const idStagioni = new Set(STAGIONI.map(s => s.id))

@@ -26,6 +26,7 @@ import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from '../../store/useCalcStore'
 import { PRESETS_BY_SLUG } from '../../data/metaPresets'
+import useStagione, { TUTTE } from '../../store/useStagione.js'
 import pokemonData from '../../data/pokemon.json'
 
 // ── Costante localStorage ──────────────────────────────────────────────────
@@ -262,8 +263,28 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
 
   const normalizeMove = m => m ? m.replace(/-/g, ' ') : null
 
-  // Meta preset per questo slug
-  const metaPresets = (currentSlug && PRESETS_BY_SLUG[currentSlug]) || []
+  /**
+   * ─── LA CHIAVE DI UN SET META ────────────────────────────────────────────
+   *
+   * Era l'ETICHETTA, e ci finiva dentro il `value` dell'`<option>`. Reggeva
+   * finche' i set venivano da una stagione sola; con piu' stagioni lo stesso
+   * Incineroar avra' plausibilmente un «Sitrus Support» in M-4 e uno in M-6,
+   * e `find` avrebbe preso il primo lasciando il secondo IRRAGGIUNGIBILE —
+   * senza errori, senza avvisi, semplicemente non selezionabile.
+   *
+   * `stagione|etichetta` basta perche' la tendina e' gia' filtrata per
+   * specie: lo slug e' implicito. `metaPresets.test.js` presidia la chiave
+   * completa `slug + stagione + etichetta`.
+   */
+  const chiaveMeta = (p) => `${p.stagione}|${p.label}`
+
+  const stagioneScelta = useStagione(s => s.stagione)
+
+  // Meta preset per questo slug, filtrati per la stagione scelta.
+  const metaPresets = useMemo(() => {
+    const tutti = (currentSlug && PRESETS_BY_SLUG[currentSlug]) || []
+    return stagioneScelta === TUTTE ? tutti : tutti.filter(p => p.stagione === stagioneScelta)
+  }, [currentSlug, stagioneScelta])
 
   // useMemo rilega customPresets ogni volta che slug o externalRev cambia.
   // externalRev è incrementato da SlotEditor dopo ogni apertura/chiusura del
@@ -286,7 +307,7 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
       p.ability === currentSlot.ability &&
       p.nature?.toLowerCase() === currentSlot.nature?.toLowerCase()
     )
-    if (metaMatch) return metaMatch.label
+    if (metaMatch) return chiaveMeta(metaMatch)
     // 3. Controlla custom preset
     const customMatch = customPresets.find(p =>
       p.item === currentSlot.item &&
@@ -346,7 +367,7 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
     }
 
     // Meta preset
-    const preset = metaPresets.find(p => p.label === value)
+    const preset = metaPresets.find(p => chiaveMeta(p) === value)
     if (preset) applyPreset(preset, false)
   }
 
@@ -362,7 +383,11 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
       <option value="__blank__">{t('ui.blank_set')}</option>
 
       {metaPresets.length > 0 && metaPresets.map(p => (
-        <option key={p.label} value={p.label}>{p.label}</option>
+        <option key={chiaveMeta(p)} value={chiaveMeta(p)}>
+          {/* La stagione si mostra solo quando non si sta filtrando su una
+              sola: altrimenti sarebbe la stessa sigla ripetuta su ogni riga. */}
+          {stagioneScelta === TUTTE ? `${p.label} · ${p.stagione}` : p.label}
+        </option>
       ))}
 
       {customPresets.length > 0 && (
