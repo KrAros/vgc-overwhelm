@@ -251,7 +251,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         {/* Il segnalino sta DENTRO il riquadro, all'estremità destra: prima era
             un secondo blocco sotto, e aggiungeva 40 px che facevano scendere
             cursori e mosse a ogni cambio di abilità. */}
-        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start ${attiva ? ACCESO : SPENTO}`}>
+        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start min-h-[3.625rem] min-[480px]:min-h-[2.625rem] ${attiva ? ACCESO : SPENTO}`}>
           <span className="min-w-0 flex-1">
             {attiva ? '✅ ' : '💡 '}
             {t(`abilities_desc.${key}`)}
@@ -262,6 +262,38 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
+  /* ─── L'ALTEZZA E' RISERVATA, COSI' IL RESTO NON BALLA ────────────────────
+   *
+   * Le descrizioni vanno da 20 a 173 caratteri, e il riquadro cresceva con
+   * loro: cambiando abilita', cursori e mosse scendevano di colpo. E' lo
+   * stesso difetto che il segnalino aveva gia' causato una volta, spostato
+   * dal segnalino al testo.
+   *
+   * Ridurre il font non lo risolve, ed e' stato misurato prima di scartarlo:
+   * per far stare la descrizione piu' lunga nell'altezza della piu' corta
+   * servirebbe un terzo del corpo, da 12 px a 4. Anche solo passare da tre
+   * righe a due chiede ~9,6 px e lascerebbe comunque uno scarto di una riga.
+   * Il font attenua, non chiude.
+   *
+   * Quello che chiude e' riservare lo spazio. Le due soglie vengono da una
+   * misura su tutte e 396 le descrizioni (198 per lingua), nel riquadro vero
+   * dell'editor:
+   *
+   *   riquadro 270 px (viewport 320)   1r 12% · 2r 55% · 3r 28% · 4r 4% · 5r 0,5%
+   *   riquadro 310 px (viewport 360)   1r 19% · 2r 63% · 3r 17% · 4r 1%
+   *   riquadro 462 px (viewport 1024)  1r 54% · 2r 45% · 3r 1%
+   *
+   * Tre righe sotto i 480 px coprono il 95,5%; due sopra coprono il 99%.
+   * Riservare il massimo assoluto — cinque righe — costerebbe 48 px di vuoto
+   * su un telefono, dove la mediana e' due: il vuoto darebbe fastidio piu'
+   * dello scostamento residuo, che riguarda 18 descrizioni su 396 e vale una
+   * riga sola.
+   *
+   * La soglia e' 480 px e non un breakpoint di Tailwind perche' la larghezza
+   * del riquadro NON cresce col viewport: misurata di 40 in 40 px, a 1040 il
+   * layout passa a due colonne e il riquadro crolla da 942 a 470. Sotto i 400
+   * px il riquadro sta solo fino a 440 di viewport, quindi 480 separa i due
+   * regimi da entrambe le parti. */
   // ── Box informativi statici ────────────────────────────────────────────────
   /* L'interruttore era la PRESENZA di `desc` in ABILITY_EFFECTS, cioè un campo
      di testo dentro una tabella di meccaniche usato come flag. Ora è la
@@ -289,7 +321,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
             NELLA stessa riga della descrizione, non al suo posto — la
             descrizione dice cosa fa nel gioco, il segnalino dice che noi non
             la calcoliamo. */}
-        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start ${SPENTO}`}>
+        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start min-h-[3.625rem] min-[480px]:min-h-[2.625rem] ${SPENTO}`}>
           <span className="min-w-0 flex-1">💡 {t(`abilities_desc.${key}`)}</span>
           {abilitaNonCalcolata(ability) && <SegnalinoNonCalcolata tipo="ability" />}
         </div>
