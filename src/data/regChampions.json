@@ -1,0 +1,46 @@
+{
+  "condizioni": {
+    "trascritto": "2026-08-25",
+    "fonte": "Elenchi delle regolazioni forniti da KrAros, che li ha letti sulla fonte pubblica e li ha incollati integralmente.",
+    "metodo": "Trascrizione, non sondaggio: questo file non interroga niente. I nomi arrivano come li scrive la fonte — «Mega Charizard X», «Rotom», un nome ripetuto per la variante regionale — e la riduzione a slug e stata fatta a macchina contro pokemon.json, con i casi ambigui decisi a mano uno per uno.",
+    "finestre": "Le finestre sono [dal, al): il primo giorno appartiene alla stagione, l ultimo no. Non e una convenzione scelta a tavolino — e l unica compatibile con le date della fonte, dove ogni stagione finisce il giorno in cui comincia la successiva. M-4 e data 8 luglio - 5 agosto e M-5 5 agosto - 9 settembre: il 5 agosto e uno solo, e con gli estremi inclusi apparterrebbe a due stagioni insieme.",
+    "nota_specie": "Gli elenchi delle specie stanno in regChampionsSpecie.json, che l applicazione NON importa: oggi la stagione filtra i set, non le specie, e 1490 byte gzip di elenchi inutilizzati sarebbero stati pagati da ogni visitatore. Il giorno in cui l interfaccia filtrera anche le specie, quel file entra nel bundle e il peso torna misurato."
+  },
+  "reg": [
+    {
+      "id": "M-A",
+      "stagioni": [
+        {
+          "id": "M-1",
+          "dal": "2026-04-08",
+          "al": "2026-05-13"
+        },
+        {
+          "id": "M-2",
+          "dal": "2026-05-13",
+          "al": "2026-06-17"
+        }
+      ]
+    },
+    {
+      "id": "M-B",
+      "stagioni": [
+        {
+          "id": "M-3",
+          "dal": "2026-06-17",
+          "al": "2026-07-08"
+        },
+        {
+          "id": "M-4",
+          "dal": "2026-07-08",
+          "al": "2026-08-05"
+        },
+        {
+          "id": "M-5",
+          "dal": "2026-08-05",
+          "al": "2026-09-09"
+        }
+      ]
+    }
+  ]
+}

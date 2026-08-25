@@ -83,20 +83,31 @@ const ALIAS_POKEMON = {
   'ultra-necrozma': 'necrozma-ultra',
   'basculegion': 'basculegion-m',
   /**
-   * Floette Fiore Eterno e la sua Mega sono **la stessa creatura**, confermato
-   * da Simone. Showdown la chiama `Floette-Eternal`, gamecards.gg la elenca
-   * come `floette-eternal`, la nostra anagrafica come `floette-mega`.
+   * ─── LA FLOETTE ETERNA NON È LA SUA MEGA ─────────────────────────────────
    *
-   * Non è un riordino di segmenti, quindi la regola generale della sessione W
-   * non può prenderla: «eternal» e «mega» sono parole diverse per la stessa
-   * cosa, ed è esattamente ciò per cui questa tabella esiste.
+   * Qui c'erano tre righe che mandavano `floette-eternal` su `floette-mega`,
+   * scritte in HH sulla premessa che fossero «la stessa creatura». La premessa
+   * era sbagliata, e l'errore non era innocuo: sono due forme distinte, ed è
+   * il Fiore Eterno a megaevolvere nella Mega.
    *
-   * Da notare che il Floette base in Champions non c'è: la fonte gli risponde
-   * 404 mentre alla Mega risponde 200.
+   * `vendor/ncp/pokedex.js` le tiene separate, con statistiche diverse:
+   *
+   *     Floette-Eternal   74/65/67/125/128/92
+   *     Mega Floette      74/85/87/155/148/102
+   *
+   * Chi incollava un paste con `Floette-Eternal` si ritrovava quindi trenta
+   * punti di Attacco Speciale e venti di Difesa Speciale in più di quelli
+   * veri, e il calcolatore rispondeva con numeri sbagliati senza dirlo.
+   *
+   * La premessa nacque da un vincolo reale — `floette-eternal` non esisteva
+   * nella nostra anagrafica, quindi mandarla sulla Mega era l'unico modo di
+   * non rispondere «non trovato». Adesso la forma c'è, e l'alias sparisce:
+   * ogni nome va sulla propria forma. `floette-eternal` e le sue scritture
+   * lunghe le prende la regola generale della sessione W, che riordina i
+   * segmenti; `Mega Floette` continua a risolversi da sé.
    */
-  'floette-eternal': 'floette-mega',
-  'eternal-flower-floette': 'floette-mega',
-  'floette-eternal-flower': 'floette-mega',
+  'eternal-flower-floette': 'floette-eternal',
+  'floette-eternal-flower': 'floette-eternal',
 }
 
 /**

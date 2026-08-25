@@ -13,7 +13,7 @@
  *
  * ─── PERCHÉ LA SINGOLA PAGINA E NON L'ELENCO ───────────────────────────────
  *
- * L'indice di gamecards.gg elenca 244 slug, ma è PARZIALE: `charizard-mega-y`,
+ * L'indice della fonte elenca 244 slug, ma è PARZIALE: `charizard-mega-y`,
  * `garchomp-mega` e `venusaur-mega` rispondono 200 con decine di build pur non
  * comparendo nell'elenco. Misurato prima di scegliere l'oracolo.
  *
@@ -46,7 +46,22 @@ import { fileURLToPath } from 'node:url'
 const RADICE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SCRIVI = !process.argv.includes('--report')
 const USCITA = path.join(RADICE, 'src/data/rosterChampions.json')
-const BASE = 'https://www.gamecards.gg/pokemon-champions/'
+/**
+ * L'indirizzo della fonte non sta nel repository pubblico: e' una scelta, non
+ * una dimenticanza. Chi rigenera lo mette qui, oppure lo passa come variabile
+ * d'ambiente; senza, il generatore si ferma invece di sondare un indirizzo
+ * inventato.
+ *
+ * Il registro prodotto continua a dichiarare METODO e DATA — cioe' quello che
+ * serve per giudicare quanto vale un 404 — e da oggi la legalita' non dipende
+ * piu' da questa sonda: la stabilisce `regChampions.json`, trascritto dagli
+ * elenchi ufficiali delle reg. Questa resta una seconda opinione utile.
+ */
+const BASE = process.env.ROSTER_FONTE ?? ''
+if (!BASE) {
+  console.error('Manca l\'indirizzo della fonte: passalo in ROSTER_FONTE.')
+  process.exit(1)
+}
 const UA = { 'User-Agent': 'Mozilla/5.0 (the-sixth-ember roster probe)' }
 
 const pokemon = JSON.parse(fs.readFileSync(path.join(RADICE, 'src/data/pokemon.json'), 'utf8'))
@@ -141,7 +156,7 @@ if (SCRIVI) {
   fs.writeFileSync(USCITA, JSON.stringify({
     condizioni: {
       sondato: new Date().toISOString().slice(0, 10),
-      fonte: BASE,
+      fonte: 'registro pubblico di build competitive di Champions, una pagina per specie',
       metodo: 'HEAD per specie; 200 = la fonte ha una pagina, 404 = non ce l\'ha',
       nota: 'UNA FONTE SOLA: un 404 e\' un indizio forte, non una prova di illegalita\' nel gioco. Il registro marca, non nasconde.',
       controllo: CONTROLLO,

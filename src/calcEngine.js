@@ -75,8 +75,29 @@ function validateSPs(sps, debug) {
  * @returns {boolean} true se lo strumento NON può essere rimosso
  */
 function isStrumentoInamovibile(itemKey, pokeKey) {
-  const formaMega = ITEM_EFFECTS[itemKey]?.megaStone
+  const eff = ITEM_EFFECTS[itemKey]
+  const formaMega = eff?.megaStone
   if (!formaMega || !pokeKey) return false
+
+  // ─── QUANDO IL PREFISSO NON BASTA ────────────────────────────────────────
+  //
+  // La regola per prefisso vale per ottantuno Megapietre su ottantadue,
+  // perché di norma la forma Mega si chiama come la base più `-mega`. Floette
+  // è l'eccezione: la Mega si raggiunge dal **Fiore Eterno**, che nel nostro
+  // schema è `floette-eternal`, mentre `floette-mega` comincia per `floette`.
+  //
+  // Senza questa riga il prefisso sbaglia in ENTRAMBI i versi: dava la Mega
+  // alla Floette base (che non può) e la negava all'Eterna (che può). Non è
+  // una deduzione nostra — `vendor/ncp/pokedex.js` lo scrive:
+  //
+  //     "Floette-Eternal": { … "formes": ["Floette-Eternal", "Mega Floette"] }
+  //     "Floette":         { … "canEvolve": true }        ← nessun `formes`
+  //
+  // `daForma` dichiara la base quando non si deduce dal nome. Il giorno in
+  // cui arriva un'altra forma così, si aggiunge una riga in ITEM_EFFECTS e
+  // nient'altro.
+  if (eff.daForma) return eff.daForma === pokeKey || formaMega === pokeKey
+
   return formaMega === pokeKey || formaMega.startsWith(`${pokeKey}-mega`)
 }
 

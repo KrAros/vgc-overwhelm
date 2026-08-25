@@ -91,7 +91,11 @@
     "share_error": "This shared link could not be read — it may be damaged or incomplete. Your teams have been left empty.",
     "dismiss": "Dismiss",
     "enemies_on_field": "Enemies on field",
-    "enemies_short": "Enemies"
+    "enemies_short": "Enemies",
+    "season_filter": "Sets from season",
+    "season_all": "All seasons",
+    "season_current": "{{id}} · current",
+    "season_no_sets": "(no sets)"
   },
   "gap": {
     "badge": "Not calculated",

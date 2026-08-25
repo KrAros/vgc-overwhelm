@@ -221,7 +221,13 @@ export const ITEM_EFFECTS = {
   'scovillainite':      { megaStone: 'scovillain-mega'  },
   'glimmorite':         { megaStone: 'glimmora-mega'    },
   'chandelurite':       { megaStone: 'chandelure-mega'  },
-  'floettite':          { megaStone: 'floette-mega'     },
+  // `daForma`: la Mega si raggiunge dal Fiore Eterno, non dalla Floette base.
+  // Il nome della forma Mega non lo dice — `floette-mega` comincia per
+  // `floette` — quindi la regola per prefisso di calcEngine sbaglierebbe in
+  // entrambi i versi. Trascritto da vendor/ncp/pokedex.js, che elenca
+  // `"formes": ["Floette-Eternal", "Mega Floette"]` sull'Eterna e niente
+  // sulla base.
+  'floettite':          { megaStone: 'floette-mega', daForma: 'floette-eternal' },
   'meowstite':          { megaStone: 'meowstic-mega'    },
   // M-B (Champions-exclusive)
   'barbaraclite':       { megaStone: 'barbaracle-mega'  },

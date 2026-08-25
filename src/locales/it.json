@@ -91,7 +91,11 @@
     "share_error": "Il link condiviso non è leggibile: potrebbe essere danneggiato o incompleto. I team sono stati lasciati vuoti.",
     "dismiss": "Chiudi",
     "enemies_on_field": "Nemici in campo",
-    "enemies_short": "Nemici"
+    "enemies_short": "Nemici",
+    "season_filter": "Set dalla stagione",
+    "season_all": "Tutte le stagioni",
+    "season_current": "{{id}} · in corso",
+    "season_no_sets": "(nessun set)"
   },
   "gap": {
     "badge": "Non calcolata",
