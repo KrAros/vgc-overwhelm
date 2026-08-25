@@ -44,7 +44,20 @@ export default function StagioneSelect() {
       onChange={(e) => setStagione(e.target.value)}
       aria-label={t('ui.season_filter')}
       title={t('ui.season_filter')}
-      className="text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300 hover:text-white transition-colors cursor-pointer"
+      /* ─── LA LARGHEZZA E' VINCOLATA SOTTO I 480 px ────────────────────────
+         Un <select> nativo si dimensiona sull'opzione PIU' LUNGA, non su
+         quella scelta: qui «M-5 · in corso (nessun set)» lo portava a 175 px.
+         Su un'intestazione da 360 px erano quasi la meta' della riga, e il
+         blocco di sinistra ha `min-w-0` mentre questo ha `shrink-0`: il
+         marchio si schiacciava da 133 px a 61, cioe' «The Sixt».
+
+         Misurato a 320, 360 e 412 px prima e dopo. Il marchio intero chiede
+         117 px; con 72 li ottiene a tutte e tre le larghezze.
+
+         Il testo che avanza si vede aprendo la tendina, che sul telefono e'
+         il selettore di sistema a tutto schermo — quindi non si perde niente,
+         si sposta soltanto dove c'e' spazio. */
+      className="w-18 min-[480px]:w-auto text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300 hover:text-white transition-colors cursor-pointer"
     >
       <option value={TUTTE}>{t('ui.season_all')}</option>
       {REG.map(r => (

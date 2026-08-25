@@ -78,7 +78,14 @@ const RADICE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SCRIVI = !process.argv.includes('--report')
 const PORTA = 4173
 const URL = `http://localhost:${PORTA}/vgc-overwhelm/`
-const CHROME = '/usr/bin/google-chrome'
+/**
+ * Il percorso di Chrome era fisso su `/usr/bin/google-chrome`, e questo
+ * rendeva lo strumento ineseguibile ovunque il browser stia altrove — dove
+ * non c'e' quel file, `layout:report` muore prima di misurare qualsiasi cosa,
+ * cioe' proprio quando servirebbe. Con la variabile il valore di prima resta
+ * il predefinito e non cambia niente per chi lo lanciava gia'.
+ */
+const CHROME = process.env.CHROME_PATH ?? '/usr/bin/google-chrome'
 
 /** 360 px: la larghezza Android più diffusa.
  *
@@ -185,6 +192,20 @@ function misuraNellaPagina() {
    *
    *  Senza questa distinzione il numero è grande e non vuol dire niente. */
   const esclusioni = { contenitori_scorrevoli: 0, nascosti_1px: 0, sbordano_ma_visibili: 0 }
+  /* I nodi della terza categoria, non solo il loro numero.
+   *
+   * «Sborda ma si legge» li scartava perche' al massimo fanno scorrere la
+   * pagina, che e' la misura 2. Non e' sempre vero: un contenitore con
+   * `min-w-0` accanto a un fratello `shrink-0` sborda, NON fa scorrere la
+   * pagina, e finisce sotto il fratello. E' successo davvero — il selettore
+   * della stagione ha schiacciato il marchio da 133 px a 61, cioe' «The
+   * Sixt», e il conteggio e' passato da 0 a 1 mentre tutte le altre misure
+   * restavano identiche.
+   *
+   * Il numero bastava a vederlo, il posto in cui era stampato no: usciva in
+   * fondo alla riga «esclusi», che si legge come rumore. Elencare i nodi
+   * costa poco e trasforma un conteggio in un indizio utilizzabile. */
+  const sbordanti = []
   const tagliati = []
   for (const e of document.querySelectorAll('*')) {
     if (!visibile(e)) continue
@@ -192,7 +213,14 @@ function misuraNellaPagina() {
     const s = getComputedStyle(e)
     if (s.overflowX === 'auto' || s.overflowX === 'scroll') { esclusioni.contenitori_scorrevoli++; continue }
     if (e.clientWidth <= 1 || e.clientHeight <= 1) { esclusioni.nascosti_1px++; continue }
-    if (s.overflowX !== 'hidden' && s.overflowX !== 'clip') { esclusioni.sbordano_ma_visibili++; continue }
+    if (s.overflowX !== 'hidden' && s.overflowX !== 'clip') {
+      esclusioni.sbordano_ma_visibili++
+      sbordanti.push({
+        nodo: scheda(e), scroll: e.scrollWidth, visibile: e.clientWidth,
+        testo: (e.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 40),
+      })
+      continue
+    }
     tagliati.push({
       nodo: scheda(e), scroll: e.scrollWidth, visibile: e.clientWidth,
       ellissi: s.textOverflow === 'ellipsis',
@@ -303,6 +331,7 @@ function misuraNellaPagina() {
 
   return {
     tagliati: { quanti: tagliati.length, nodi: tagliati.slice(0, 12) },
+    sbordanti: { quanti: sbordanti.length, nodi: sbordanti.slice(0, 12) },
     scorrimento_pagina_px: scorrimento,
     tendine_strette: { quanti: tendineStrette.length, nodi: tendineStrette.slice(0, 8) },
     wcag_258: { quanti: violazioni.length, sottodimensionati: sottodim.length, nodi: violazioni.slice(0, 8) },
@@ -428,6 +457,10 @@ for (const m of misure) {
   console.log(`   esclusi: ${m.esclusioni.contenitori_scorrevoli} scorrevoli, ${m.esclusioni.nascosti_1px} nascosti, ${m.esclusioni.sbordano_ma_visibili} sbordano-ma-visibili`)
   console.log(`   ${m.nodi_totali} nodi · pannello ${m.pannello_rapporto ? 'sì' : 'no'} · viewport ${JSON.stringify(m.viewport)}`)
   for (const t of m.tagliati.nodi.slice(0, 3)) console.log(`      tagliato: ${t.scroll}>${t.visibile}  «${t.testo}»`)
+  if (m.sbordanti?.quanti) {
+    console.log(`   sborda senza tagliare  ${String(m.sbordanti.quanti).padStart(3)}   ← puo' finire SOTTO un fratello`)
+    for (const t of m.sbordanti.nodi.slice(0, 3)) console.log(`      sborda: ${t.scroll}>${t.visibile}  «${t.testo}»`)
+  }
   for (const s of m.tendine_strette.nodi.slice(0, 4)) console.log(`      tendina: ${s.serve}>${s.spazio}  «${s.testo}»`)
   for (const v of m.wcag_258.nodi.slice(0, 4)) console.log(`      2.5.8 ${v.w}×${v.h} a ${v.distanza}px da ${v.confligge.slice(0, 50)}`)
 }
