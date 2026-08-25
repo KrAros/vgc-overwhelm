@@ -3,7 +3,34 @@
 
 /**
  * src/data/metaPresets.js
- * Set meta verificati da MetaVGC (Tenki's Cart Weekly #109 Reg MB, top 10).
+ *
+ * Set osservati nel meta competitivo di Champions.
+ *
+ * ─── LA PROVENIENZA STA SU OGNI SET, NON IN TESTA AL FILE ──────────────────
+ *
+ * Qui c'era una riga sola che dichiarava la fonte di tutti e venti, e
+ * CONTRIBUTING.md ne fa una promessa: «il file dichiara la propria fonte in
+ * testa, e quella riga deve restare vera». Restava vera finché i set venivano
+ * tutti dallo stesso posto e dallo stesso periodo — cioè fino al primo set di
+ * un'altra stagione, che l'avrebbe resa falsa senza che niente diventasse
+ * rosso.
+ *
+ * Ogni set porta quindi il campo `stagione`, che dice **quando** è stato
+ * osservato. La reg non si scrive: la determina la stagione, e scriverle
+ * entrambe permetterebbe di dichiarare `M-A` accanto a `M-5`.
+ *
+ * ─── PERCHE' LA STAGIONE E NON LA LEGALITA' ────────────────────────────────
+ *
+ * Un set non è «valido in M-4» come una specie è legale in una reg: è stato
+ * **visto** nel meta di quel periodo. È un'osservazione, e le osservazioni non
+ * scadono — un set di M-4 resta un fatto vero su M-4 anche a M-9. Per questo
+ * i set vecchi non si cancellano: si etichettano e si filtrano.
+ *
+ * Questi venti vengono da una raccolta settimanale pubblica delle squadre
+ * meglio piazzate, letta durante la **stagione M-4** (8 luglio – 5 agosto
+ * 2026, sotto la reg M-B). Chi ne aggiunge uno scriva da dove viene e con
+ * quale stagione l'ha visto: `regChampions.json` elenca quelle valide, e
+ * `metaPresets.test.js` rifiuta una stagione che non esiste.
  */
 
 export const META_PRESETS = [
@@ -16,6 +43,7 @@ export const META_PRESETS = [
     ability: 'hospitality',
     sps: [32, 0, 14, 0, 20, 0],
     moves: ['matcha-gotcha', 'rage-powder', 'trick-room', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'incineroar',
@@ -25,6 +53,7 @@ export const META_PRESETS = [
     ability: 'intimidate',
     sps: [32, 0, 24, 0, 8, 2],
     moves: ['fake-out', 'flare-blitz', 'parting-shot', 'throat-chop'],
+    stagione: 'M-4',
   },
   {
     slug: 'grimmsnarl',
@@ -34,6 +63,7 @@ export const META_PRESETS = [
     ability: 'prankster',
     sps: [32, 0, 19, 0, 15, 0],
     moves: ['reflect', 'light-screen', 'parting-shot', 'spirit-break'],
+    stagione: 'M-4',
   },
 
   // ── Rain ───────────────────────────────────────────────────────────────────
@@ -45,6 +75,7 @@ export const META_PRESETS = [
     ability: 'drizzle',
     sps: [2, 0, 0, 32, 0, 32],
     moves: ['weather-ball', 'hurricane', 'tailwind', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'swampert-mega',
@@ -54,6 +85,7 @@ export const META_PRESETS = [
     ability: 'swift-swim',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['wave-crash', 'earthquake', 'ice-punch', 'protect'],
+    stagione: 'M-4',
   },
 
   // ── Rain / Screen ──────────────────────────────────────────────────────────
@@ -65,6 +97,7 @@ export const META_PRESETS = [
     ability: 'stamina',
     sps: [32, 0, 0, 5, 15, 14],
     moves: ['electro-shot', 'flash-cannon', 'dragon-pulse', 'protect'],
+    stagione: 'M-4',
   },
 
   // ── Attaccanti ─────────────────────────────────────────────────────────────
@@ -76,6 +109,7 @@ export const META_PRESETS = [
     ability: 'rough-skin',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['dragon-claw', 'rock-slide', 'earthquake', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'charizard-mega-y',
@@ -85,6 +119,7 @@ export const META_PRESETS = [
     ability: 'drought',
     sps: [30, 0, 30, 1, 0, 5],
     moves: ['heat-wave', 'weather-ball', 'solar-beam', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'kingambit',
@@ -94,6 +129,7 @@ export const META_PRESETS = [
     ability: 'defiant',
     sps: [32, 32, 0, 0, 2, 0],
     moves: ['kowtow-cleave', 'sucker-punch', 'swords-dance', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'sneasler',
@@ -103,6 +139,7 @@ export const META_PRESETS = [
     ability: 'unburden',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['fake-out', 'close-combat', 'dire-claw', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'annihilape',
@@ -112,6 +149,7 @@ export const META_PRESETS = [
     ability: 'defiant',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['fake-out', 'close-combat', 'phantom-force', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'excadrill',
@@ -121,6 +159,7 @@ export const META_PRESETS = [
     ability: 'sand rush',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['earthquake', 'iron-head', 'rock-slide', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'basculegion-m',
@@ -130,6 +169,7 @@ export const META_PRESETS = [
     ability: 'adaptability',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['wave-crash', 'last-respects', 'aqua-jet', 'flip-turn'],
+    stagione: 'M-4',
   },
   {
     slug: 'venusaur',
@@ -139,6 +179,7 @@ export const META_PRESETS = [
     ability: 'chlorophyll',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['sludge-bomb', 'earth-power', 'sleep-powder', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'archaludon',
@@ -148,6 +189,7 @@ export const META_PRESETS = [
     ability: 'stamina',
     sps: [32, 0, 0, 1, 29, 4],
     moves: ['electro-shot', 'flash-cannon', 'dragon-pulse', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'sylveon',
@@ -157,6 +199,7 @@ export const META_PRESETS = [
     ability: 'pixilate',
     sps: [18, 0, 10, 21, 0, 17],
     moves: ['hyper-beam', 'hyper-voice', 'quick-attack', 'detect'],
+    stagione: 'M-4',
   },
   {
     slug: 'gholdengo',
@@ -166,6 +209,7 @@ export const META_PRESETS = [
     ability: 'good-as-gold',
     sps: [1, 0, 2, 32, 0, 31],
     moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
+    stagione: 'M-4',
   },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
@@ -177,6 +221,7 @@ export const META_PRESETS = [
     ability: 'tough-claws',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['iron-head', 'psychic-fangs', 'body-press', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'staraptor-mega',
@@ -186,6 +231,7 @@ export const META_PRESETS = [
     ability: 'contrary',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['close-combat', 'brave-bird', 'quick-attack', 'protect'],
+    stagione: 'M-4',
   },
   {
     slug: 'garchomp-mega',
@@ -195,6 +241,7 @@ export const META_PRESETS = [
     ability: 'sand-force',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['dragon-claw', 'earthquake', 'rock-slide', 'protect'],
+    stagione: 'M-4',
   },
 ]
 

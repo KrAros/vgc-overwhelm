@@ -118,10 +118,10 @@ describe('registro delle reg — la stagione in corso', () => {
     // dell'inizio dà null. Se `stagioneCorrente` leggesse un flag,
     // risponderebbe lo stesso in tutti e tre i casi.
     expect(stagioneCorrente(new Date('2026-08-25T12:00:00')).id).toBe('M-5')
-    expect(stagioneCorrente(new Date('2026-08-05T12:00:00')).id, 'estremo iniziale incluso').toBe('M-5')
-    expect(stagioneCorrente(new Date('2026-09-09T12:00:00')).id, 'estremo finale incluso').toBe('M-5')
-    expect(stagioneCorrente(new Date('2026-08-04T12:00:00')), 'il giorno prima').toBeNull()
-    expect(stagioneCorrente(new Date('2026-09-10T12:00:00')), 'il giorno dopo').toBeNull()
+    expect(stagioneCorrente(new Date('2026-08-04T12:00:00')).id, 'ultimo giorno di M-4').toBe('M-4')
+    expect(stagioneCorrente(new Date('2026-04-08T12:00:00')).id, 'primo giorno assoluto').toBe('M-1')
+    expect(stagioneCorrente(new Date('2026-04-07T12:00:00')), 'prima di tutto').toBeNull()
+    expect(stagioneCorrente(new Date('2026-09-09T12:00:00')), 'M-5 finisce il 9, escluso').toBeNull()
     expect(stagioneCorrente(new Date('2020-01-01T12:00:00'))).toBeNull()
 
     // E nessuna riga del registro dichiara di essere corrente.
@@ -134,6 +134,30 @@ describe('registro delle reg — la stagione in corso', () => {
     // all'utente: il test sopra diventa rosso, l'interfaccia no.
     expect(stagionePredefinita(new Date('2030-01-01T12:00:00')).id).toBe(STAGIONE_PIU_RECENTE.id)
     expect(stagionePredefinita(new Date('2026-08-25T12:00:00')).id).toBe('M-5')
+  })
+
+  it('il giorno di passaggio appartiene a una stagione sola', () => {
+    // IL CASO CHE ROMPE GLI ESTREMI INCLUSI. Ogni stagione finisce il giorno
+    // in cui comincia la successiva, quindi quel giorno è condiviso sul
+    // foglio ma non nella realtà: appartiene a quella che comincia.
+    const passaggi = [
+      ['2026-05-13', 'M-2'], ['2026-06-17', 'M-3'],
+      ['2026-07-08', 'M-4'], ['2026-08-05', 'M-5'],
+    ]
+    for (const [giorno, atteso] of passaggi) {
+      expect(stagioneCorrente(new Date(`${giorno}T12:00:00`)).id, giorno).toBe(atteso)
+    }
+  })
+
+  it('nessun giorno cade in due stagioni, e non ci sono buchi fra loro', () => {
+    const conDate = STAGIONI.filter(s => s.dal && s.al)
+    for (const s of conDate) expect(s.dal < s.al, `${s.id}: finestra vuota o invertita`).toBe(true)
+    for (let i = 1; i < conDate.length; i++) {
+      expect(
+        conDate[i].dal,
+        `fra ${conDate[i - 1].id} e ${conDate[i].id} c'è un buco o una sovrapposizione`,
+      ).toBe(conDate[i - 1].al)
+    }
   })
 
   it('M-5 sta sotto M-B, e le sue specie sono quelle di M-B', () => {

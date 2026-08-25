@@ -1,7 +1,7 @@
 {
  "condizioni": {
   "sondato": "2026-08-22",
-  "fonte": "https://www.gamecards.gg/pokemon-champions/",
+  "fonte": "registro pubblico di build competitive di Champions, una pagina per specie",
   "metodo": "HEAD per specie; 200 = la fonte ha una pagina, 404 = non ce l'ha",
   "nota": "UNA FONTE SOLA: un 404 e' un indizio forte, non una prova di illegalita' nel gioco. Il registro marca, non nasconde.",
   "controllo": {

@@ -52,8 +52,22 @@ function oggiIso(quando = new Date()) {
 }
 
 /**
- * La stagione la cui finestra contiene la data, estremi inclusi.
- * `null` se nessuna la contiene — cioè se il registro è indietro.
+ * La stagione la cui finestra contiene la data. `null` se nessuna la
+ * contiene — cioè se il registro è indietro.
+ *
+ * ─── LA FINESTRA È `[dal, al)` ─────────────────────────────────────────────
+ *
+ * Primo giorno dentro, ultimo fuori. Non è una convenzione scelta a tavolino:
+ * è l'unica compatibile con le date della fonte, dove ogni stagione finisce
+ * il giorno in cui comincia la successiva.
+ *
+ *     M-4   8 luglio  →  5 agosto
+ *     M-5   5 agosto  →  9 settembre
+ *
+ * Il 5 agosto è un giorno solo. Con gli estremi inclusi apparterrebbe a
+ * entrambe, e `find` avrebbe risposto M-4 perché viene prima nell'elenco —
+ * cioè la stagione sbagliata, in silenzio, per un giorno ogni cinque
+ * settimane.
  *
  * Il confronto è fra stringhe `AAAA-MM-GG`, che per questo formato è
  * equivalente all'ordine cronologico e non passa dai fusi orari: `new Date()`
@@ -62,7 +76,7 @@ function oggiIso(quando = new Date()) {
  */
 export function stagioneCorrente(quando = new Date()) {
   const oggi = oggiIso(quando)
-  return STAGIONI.find(s => s.dal && s.al && s.dal <= oggi && oggi <= s.al) ?? null
+  return STAGIONI.find(s => s.dal && s.al && s.dal <= oggi && oggi < s.al) ?? null
 }
 
 /** L'ultima stagione dichiarata, che è il ripiego quando il registro è indietro. */

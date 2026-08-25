@@ -18,7 +18,8 @@
         "dondozo",
         "flutter-mane"
       ]
-    }
+    },
+    "finestre": "Le finestre sono [dal, al): il primo giorno appartiene alla stagione, l ultimo no. Non e una convenzione scelta a tavolino — e l unica compatibile con le date della fonte, dove ogni stagione finisce il giorno in cui comincia la successiva. M-4 e data 8 luglio - 5 agosto e M-5 5 agosto - 9 settembre: il 5 agosto e uno solo, e con gli estremi inclusi apparterrebbe a due stagioni insieme."
   },
   "divergenze_con_la_sonda": {
     "nota": "rosterChampions.json e stato sondato il 22 agosto su una fonte sola, che dichiara essa stessa: «un 404 e un indizio forte, non una prova di illegalita nel gioco». Queste sono le divergenze misurate contro gli elenchi delle reg.",
@@ -56,13 +57,13 @@
       "stagioni": [
         {
           "id": "M-1",
-          "dal": null,
-          "al": null
+          "dal": "2026-04-08",
+          "al": "2026-05-13"
         },
         {
           "id": "M-2",
-          "dal": null,
-          "al": null
+          "dal": "2026-05-13",
+          "al": "2026-06-17"
         }
       ],
       "specie": [
@@ -345,13 +346,13 @@
       "stagioni": [
         {
           "id": "M-3",
-          "dal": null,
-          "al": null
+          "dal": "2026-06-17",
+          "al": "2026-07-08"
         },
         {
           "id": "M-4",
-          "dal": null,
-          "al": null
+          "dal": "2026-07-08",
+          "al": "2026-08-05"
         },
         {
           "id": "M-5",
