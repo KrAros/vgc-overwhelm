@@ -109,6 +109,7 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
       .map(([k]) => k)
       .sort()
     expect(senzaIcona).toEqual([
+      // ── Sondate: nessuna delle due fonti ce l'ha ──────────────────────────
       'minior-core',
       'silvally-bug', 'silvally-dark', 'silvally-dragon', 'silvally-electric',
       'silvally-fairy', 'silvally-fighting', 'silvally-fire', 'silvally-flying',
@@ -116,7 +117,42 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
       'silvally-poison', 'silvally-psychic', 'silvally-rock', 'silvally-steel',
       'silvally-water',
       'terapagos-terastal',
+      // ── NON sondate: aggiunte a mano, in attesa di `forme:gen` ────────────
+      // Portano la stessa fonte `nessuna` ma per una ragione diversa, ed è
+      // una differenza che va tenuta visibile: sopra è «il server non ce
+      // l'ha», qui è «non abbiamo ancora chiesto». La scelta è la stessa
+      // perché la prudenza è la stessa — meglio nessuna icona che l'icona di
+      // un altro Pokémon — ma queste sei devono sparire da questo elenco
+      // appena qualcuno lancia il generatore con la rete.
+      //
+      // `meta.daSondare` le elenca, e il test sotto tiene i due insiemi
+      // allineati: se una viene sondata e resta qui senza uscire da
+      // `daSondare`, o viceversa, diventa rosso.
+      'floette-eternal',
+      'slowbro-galar',
+      'slowking', 'slowking-galar',
+      'stunfisk', 'stunfisk-galar',
+    ].sort())
+  })
+
+  it('le voci non sondate sono dichiarate come tali', () => {
+    // Il rischio di un segnaposto è che smetta di sembrare tale. Qui si
+    // controlla che `meta.daSondare` sia esattamente l'insieme delle voci
+    // aggiunte a mano, e che ognuna porti davvero fonte `nessuna`.
+    const daSondare = [...(formeSprite.meta.daSondare ?? [])].sort()
+    expect(daSondare, 'meta.daSondare non elenca le voci aggiunte a mano').toEqual([
+      'floette-eternal',
+      'slowbro-galar',
+      'slowking', 'slowking-galar',
+      'stunfisk', 'stunfisk-galar',
     ])
+    for (const k of daSondare) {
+      expect(formeSprite.forme[k], `${k} non ha una posizione`).toBeTruthy()
+      expect(formeSprite.fonte[k], `${k} deve restare senza icona finché non è sondata`)
+        .toBe('nessuna')
+    }
+    expect(formeSprite.meta.notaDaSondare, 'manca la nota che dice come chiuderle')
+      .toMatch(/forme:gen/)
   })
 
   it('le Mega di Champions ora hanno un\'icona, dalla seconda fonte', () => {

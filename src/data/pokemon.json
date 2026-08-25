@@ -2264,6 +2264,31 @@
 		],
 		"canEvolve": false
 	},
+	"slowbro-galar": {
+		"num": "#080",
+		"name": "Slowbro-Galar",
+		"type": [
+			7,
+			10
+		],
+		"mega": null,
+		"weight": 70.5,
+		"gender": null,
+		"stats": [
+			95,
+			100,
+			95,
+			100,
+			70,
+			30
+		],
+		"abilities": [
+			"quick-draw",
+			"own-tempo",
+			"regenerator"
+		],
+		"canEvolve": false
+	},
 	"magnemite": {
 		"num": "#081",
 		"name": "Magnemite",
@@ -5225,6 +5250,31 @@
 		],
 		"abilities": [
 			"oblivious",
+			"own-tempo",
+			"regenerator"
+		],
+		"canEvolve": false
+	},
+	"slowking-galar": {
+		"num": "#199",
+		"name": "Slowking-Galar",
+		"type": [
+			7,
+			10
+		],
+		"mega": null,
+		"weight": 79.5,
+		"gender": null,
+		"stats": [
+			95,
+			65,
+			80,
+			110,
+			110,
+			30
+		],
+		"abilities": [
+			"curious-medicine",
 			"own-tempo",
 			"regenerator"
 		],
@@ -15563,6 +15613,29 @@
 		],
 		"canEvolve": false
 	},
+	"stunfisk-galar": {
+		"num": "#618",
+		"name": "Stunfisk-Galar",
+		"type": [
+			8,
+			16
+		],
+		"mega": null,
+		"weight": 20.5,
+		"gender": null,
+		"stats": [
+			109,
+			81,
+			99,
+			66,
+			84,
+			32
+		],
+		"abilities": [
+			"mimicry"
+		],
+		"canEvolve": false
+	},
 	"mienfoo": {
 		"num": "#619",
 		"name": "Mienfoo",
@@ -16938,6 +17011,29 @@
 			"symbiosis"
 		],
 		"canEvolve": true
+	},
+	"floette-eternal": {
+		"num": "#670",
+		"name": "Floette-Eternal",
+		"type": [
+			17
+		],
+		"mega": null,
+		"weight": 0.9,
+		"gender": 1,
+		"stats": [
+			74,
+			65,
+			67,
+			125,
+			128,
+			92
+		],
+		"abilities": [
+			"flower-veil",
+			"symbiosis"
+		],
+		"canEvolve": false
 	},
 	"florges": {
 		"num": "#671",

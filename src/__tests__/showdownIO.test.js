@@ -428,26 +428,47 @@ describe('l’abilità: una regola sola per tutti gli ingressi', () => {
 
 /**
  * ─────────────────────────────────────────────────────────────────────────
- * SESSIONE HH — Floette Fiore Eterno ha due nomi
+ * FLOETTE — TRE FORME, TRE SLUG
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Showdown la chiama `Floette-Eternal`, la nostra anagrafica `floette-mega`.
- * Sono la stessa creatura — confermato da Simone — ma «eternal» e «mega» sono
- * parole diverse, non un riordino: la regola generale di W non poteva
- * prenderla, e chi incollava un paste da Showdown si vedeva «non trovato».
+ * HH aveva mandato `Floette-Eternal` su `floette-mega`, sulla premessa che
+ * fossero «la stessa creatura». La premessa era sbagliata: sono due forme, e
+ * il Fiore Eterno è quella che megaevolve nell'altra. Il riferimento le tiene
+ * separate con statistiche diverse — 125/128 di Attacco e Difesa Speciali
+ * contro 155/148 — quindi chi importava un Fiore Eterno calcolava con i
+ * numeri della Mega, più alti, senza che niente lo segnalasse.
+ *
+ * La premessa però nacque da un vincolo vero: `floette-eternal` non esisteva
+ * nell'anagrafica, e mandarla sulla Mega era l'unico modo di non rispondere
+ * «non trovato». Adesso la forma c'è e ogni nome va sul proprio slug.
  */
-describe('import Showdown — i sinonimi che non sono riordini', () => {
+describe('import Showdown — le tre forme di Floette', () => {
   const chiave = (nome) =>
     parseShowdownPaste(`${nome} @ Leftovers\nAbility: Fairy Aura\n- Protect`).pokemon[0]?.key ?? null
 
-  it('Floette Fiore Eterno si trova con entrambi i nomi', () => {
-    for (const n of ['Floette-Eternal', 'Floette Eternal', 'Eternal Flower Floette', 'Floette-Mega', 'Mega Floette'])
-      expect(chiave(n), n).toBe('floette-mega')
+  it('il Fiore Eterno si trova, comunque lo si scriva', () => {
+    for (const n of ['Floette-Eternal', 'Floette Eternal', 'Eternal Flower Floette', 'Floette-Eternal-Flower'])
+      expect(chiave(n), n).toBe('floette-eternal')
+  })
+
+  it('la Mega resta la Mega, e la base resta la base', () => {
+    for (const n of ['Floette-Mega', 'Mega Floette']) expect(chiave(n), n).toBe('floette-mega')
+    expect(chiave('Floette')).toBe('floette')
+  })
+
+  it('le tre forme non sono la stessa cosa', () => {
+    // IL CONTROLLO CHE MANCAVA A HH, ed è quello che avrebbe fermato
+    // l'errore: se i tre slug fossero intercambiabili, l'alias sbagliato non
+    // avrebbe fatto danno. Hanno statistiche diverse, quindi ne faceva.
+    const s = (k) => pokemonData[k].stats
+    expect(s('floette-eternal')).not.toEqual(s('floette-mega'))
+    expect(s('floette-eternal')).not.toEqual(s('floette'))
+    expect(s('floette')).not.toEqual(s('floette-mega'))
   })
 
   it('il controllo: un nome inventato resta non trovato', () => {
-    // Senza, il caso sopra passerebbe anche se la ricerca restituisse
-    // `floette-mega` per qualunque stringa contenente «floette».
+    // Senza, i casi sopra passerebbero anche se la ricerca restituisse
+    // qualcosa per qualunque stringa contenente «floette».
     expect(chiave('Floette-Inventata')).toBe(null)
     expect(chiave('Zzzznonesiste')).toBe(null)
   })
