@@ -104,6 +104,16 @@ const ORDINE_CORRETTO = {
   // gruppo nei nostri dati e' [floette, floette-eternal, floette-mega].
   'floette-eternal': 'f05',
   'floette-mega':    'f06',
+
+  // Slowbro di Galar — su pokemon-zone e' f02, non f01: la Mega occupa gia'
+  // f01, quindi la forma regionale slitta di uno. La posizione nei nostri
+  // dati direbbe f01, perche' il gruppo e' [slowbro, slowbro-galar,
+  // slowbro-mega]. Verificata a occhio da KrAros.
+  //
+  // Le altre quattro forme aggiunte insieme a questa — slowking, slowking di
+  // Galar, stunfisk e stunfisk di Galar — cadono giuste sulla posizione e non
+  // hanno bisogno di una riga qui.
+  'slowbro-galar':   'f02',
 }
 
 /** Lo stesso `resolveNum` di `src/utils/sprite.js`, che qui non si può importare. */
