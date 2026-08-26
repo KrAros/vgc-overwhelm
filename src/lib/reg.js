@@ -16,13 +16,25 @@
  * Cambiare stagione dentro la stessa reg di norma non cambia le specie: e' un
  * azzeramento delle classifiche.
  *
- * ─── PERCHE' UN PRESET PORTA LA STAGIONE E NON LA REG ──────────────────────
+ * ─── PERCHE' UN PRESET PORTA LA REG E NON LA STAGIONE ──────────────────────
  *
- * Perche' la stagione determina la reg, ma non il contrario. Scrivere
- * entrambe renderebbe rappresentabile `reg: 'M-A', stagione: 'M-5'`, una
- * contraddizione che nessun test coglie finche' qualcuno non la legge. Un
- * campo solo la rende impossibile da scrivere — la stessa disciplina della
- * versione, letta da `package.json` e non ricopiata nel JSX.
+ * Un campo solo, perche' scriverne due renderebbe rappresentabile
+ * `reg: 'M-A', stagione: 'M-5'`, una contraddizione che nessun test coglie
+ * finche' qualcuno non la legge.
+ *
+ * Quel campo e' stato per un po' la STAGIONE, che determina la reg. Sembrava
+ * la scelta piu' ricca: un set e' un'osservazione, e l'osservazione ha una
+ * data. Ma il filtro dell'interfaccia usava quella data per rispondere a
+ * un'altra domanda — «quali set posso usare adesso?» — e le due divergono,
+ * perche' le specie cambiano solo fra REG.
+ *
+ * Misurato: con M-5 come stagione di partenza la tendina mostrava set per 2
+ * specie su 20; gli altri venti erano legali e invisibili. Da li' la scelta di
+ * etichettare per reg.
+ *
+ * Le stagioni restano qui sotto, ma come MECCANISMO e non come etichetta:
+ * servono a sapere quale reg e' in corso oggi, perche' e' la finestra di una
+ * stagione a contenere la data. Nessun set le nomina piu'.
  *
  * ─── «CORRENTE» NON E' UN CAMPO ────────────────────────────────────────────
  *
@@ -93,25 +105,46 @@ export function stagionePredefinita(quando = new Date()) {
 }
 
 /**
- * La stagione da cui partire quando si propongono i set: la corrente, e se
- * quella non ha set si scende all'indietro finché una non ne ha.
- *
- * Serve perché le due cose non vanno di pari passo. Oggi la stagione in corso
- * è M-5 e i venti set che abbiamo sono di M-4: partire dalla corrente
- * mostrerebbe una tendina vuota a chi apre l'app, cioè una regressione
- * rispetto a prima che le stagioni esistessero.
- *
- * Il ripiego è all'indietro e mai in avanti: un set di una stagione futura non
- * esiste, uno di una passata è solo più vecchio.
- *
- * @param {Set<string>|string[]} conSet  gli id delle stagioni che hanno set
- * @returns {string|null} l'id, oppure `null` se nessuna stagione ha set
+ * La reg in corso: quella della stagione la cui finestra contiene oggi.
+ * `null` se il registro e' indietro.
  */
-export function stagioneConSetPiuRecente(conSet, quando = new Date()) {
+export function regCorrente(quando = new Date()) {
+  return stagioneCorrente(quando)?.reg ?? null
+}
+
+/** L'ultima reg dichiarata, ripiego quando il registro e' indietro. */
+export const REG_PIU_RECENTE = REG[REG.length - 1].id
+
+/**
+ * La reg da mostrare per prima. Non restituisce mai `null`: se il registro e'
+ * indietro si ripiega sull'ultima conosciuta, perche' un calcolatore senza set
+ * proposti e' peggio di un calcolatore con set di ieri. Che il registro sia
+ * indietro lo dice il test, non l'interfaccia.
+ */
+export function regPredefinita(quando = new Date()) {
+  return regCorrente(quando) ?? REG_PIU_RECENTE
+}
+
+/**
+ * La reg da cui partire quando si propongono i set: la corrente, e se quella
+ * non ha set si scende all'indietro finche' una non ne ha.
+ *
+ * Il ripiego e' all'indietro e mai in avanti: un set di una reg futura non
+ * esiste, uno di una passata e' solo piu' vecchio.
+ *
+ * Serve meno di quando la chiave era la stagione — le reg sono due e non
+ * cinque — ma la ragione per cui esiste non e' cambiata: il giorno che arriva
+ * M-C, per un po' non avra' set, e chi apre l'app deve vedere quelli di M-B
+ * invece di una tendina vuota.
+ *
+ * @param {Set<string>|string[]} conSet  gli id delle reg che hanno set
+ * @returns {string|null} l'id, oppure `null` se nessuna reg ha set
+ */
+export function regConSetPiuRecente(conSet, quando = new Date()) {
   const ha = conSet instanceof Set ? conSet : new Set(conSet)
-  const partenza = stagionePredefinita(quando)
-  const da = STAGIONI.findIndex(s => s.id === partenza.id)
-  for (let i = da; i >= 0; i--) if (ha.has(STAGIONI[i].id)) return STAGIONI[i].id
+  const partenza = regPredefinita(quando)
+  const da = REG.findIndex(r => r.id === partenza)
+  for (let i = da; i >= 0; i--) if (ha.has(REG[i].id)) return REG[i].id
   return null
 }
 

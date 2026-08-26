@@ -12,25 +12,33 @@
  * CONTRIBUTING.md ne fa una promessa: «il file dichiara la propria fonte in
  * testa, e quella riga deve restare vera». Restava vera finché i set venivano
  * tutti dallo stesso posto e dallo stesso periodo — cioè fino al primo set di
- * un'altra stagione, che l'avrebbe resa falsa senza che niente diventasse
+ * un altro periodo, che l'avrebbe resa falsa senza che niente diventasse
  * rosso.
  *
- * Ogni set porta quindi il campo `stagione`, che dice **quando** è stato
- * osservato. La reg non si scrive: la determina la stagione, e scriverle
- * entrambe permetterebbe di dichiarare `M-A` accanto a `M-5`.
+ * Ogni set porta quindi il campo `reg`, che dice sotto quali REGOLE è stato
+ * osservato: M-A, M-B. `regChampions.json` elenca quelle valide, e
+ * `metaPresets.test.js` rifiuta una reg che non esiste.
  *
- * ─── PERCHE' LA STAGIONE E NON LA LEGALITA' ────────────────────────────────
+ * ─── PERCHE' LA REG E NON LA STAGIONE ──────────────────────────────────────
  *
- * Un set non è «valido in M-4» come una specie è legale in una reg: è stato
- * **visto** nel meta di quel periodo. È un'osservazione, e le osservazioni non
- * scadono — un set di M-4 resta un fatto vero su M-4 anche a M-9. Per questo
- * i set vecchi non si cancellano: si etichettano e si filtrano.
+ * Il campo è stato per un po' la STAGIONE — M-1…M-5, il periodo di classifica
+ * — e il cambio merita di essere scritto, perché è costato un difetto vero.
  *
- * Questi venti vengono da una raccolta settimanale pubblica delle squadre
- * meglio piazzate, letta durante la **stagione M-4** (8 luglio – 5 agosto
- * 2026, sotto la reg M-B). Chi ne aggiunge uno scriva da dove viene e con
- * quale stagione l'ha visto: `regChampions.json` elenca quelle valide, e
- * `metaPresets.test.js` rifiuta una stagione che non esiste.
+ * L'idea era che un set fosse un'osservazione datata, e che la data valesse la
+ * pena di conservarla. Vero in astratto. Ma il filtro dell'interfaccia usava
+ * quella data per rispondere a una domanda diversa — «quali set posso usare
+ * adesso?» — e le due cose divergono: le specie utilizzabili cambiano solo fra
+ * REG, mai fra stagioni della stessa reg.
+ *
+ * Misurato quando M-5 è diventata la stagione di partenza: la tendina mostrava
+ * set per 2 specie su 20. Gli altri venti set erano perfettamente legali e
+ * invisibili, nascosti dalla loro data di osservazione.
+ *
+ * Scelta di Simone: la reg è l'unica cosa che cambia davvero cosa si può
+ * giocare, quindi è l'unica che etichetta un set. Il prezzo, dichiarato: due
+ * osservazioni della stessa specie con la stessa etichetta nella stessa reg
+ * non possono coesistere. Quando è successo — Incineroar «Sitrus Support» in
+ * M-4 con SP 24/8 e in M-5 con 21/11 — si è tenuta la più recente.
  */
 
 export const META_PRESETS = [
@@ -43,17 +51,7 @@ export const META_PRESETS = [
     ability: 'hospitality',
     sps: [32, 0, 14, 0, 20, 0],
     moves: ['matcha-gotcha', 'rage-powder', 'trick-room', 'protect'],
-    stagione: 'M-4',
-  },
-  {
-    slug: 'incineroar',
-    label: 'Sitrus Support',
-    nature: 'Impish',
-    item: 'sitrus berry',
-    ability: 'intimidate',
-    sps: [32, 0, 24, 0, 8, 2],
-    moves: ['fake-out', 'flare-blitz', 'parting-shot', 'throat-chop'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'grimmsnarl',
@@ -63,7 +61,7 @@ export const META_PRESETS = [
     ability: 'prankster',
     sps: [32, 0, 19, 0, 15, 0],
     moves: ['reflect', 'light-screen', 'parting-shot', 'spirit-break'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
 
   // ── Rain ───────────────────────────────────────────────────────────────────
@@ -75,7 +73,7 @@ export const META_PRESETS = [
     ability: 'drizzle',
     sps: [2, 0, 0, 32, 0, 32],
     moves: ['weather-ball', 'hurricane', 'tailwind', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'swampert-mega',
@@ -85,7 +83,7 @@ export const META_PRESETS = [
     ability: 'swift-swim',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['wave-crash', 'earthquake', 'ice-punch', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
 
   // ── Rain / Screen ──────────────────────────────────────────────────────────
@@ -97,7 +95,7 @@ export const META_PRESETS = [
     ability: 'stamina',
     sps: [32, 0, 0, 5, 15, 14],
     moves: ['electro-shot', 'flash-cannon', 'dragon-pulse', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
 
   // ── Attaccanti ─────────────────────────────────────────────────────────────
@@ -109,7 +107,7 @@ export const META_PRESETS = [
     ability: 'rough-skin',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['dragon-claw', 'rock-slide', 'earthquake', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'charizard-mega-y',
@@ -119,7 +117,7 @@ export const META_PRESETS = [
     ability: 'drought',
     sps: [30, 0, 30, 1, 0, 5],
     moves: ['heat-wave', 'weather-ball', 'solar-beam', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'kingambit',
@@ -129,7 +127,7 @@ export const META_PRESETS = [
     ability: 'defiant',
     sps: [32, 32, 0, 0, 2, 0],
     moves: ['kowtow-cleave', 'sucker-punch', 'swords-dance', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'sneasler',
@@ -139,7 +137,7 @@ export const META_PRESETS = [
     ability: 'unburden',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['fake-out', 'close-combat', 'dire-claw', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'annihilape',
@@ -149,7 +147,7 @@ export const META_PRESETS = [
     ability: 'defiant',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['fake-out', 'close-combat', 'phantom-force', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'excadrill',
@@ -159,7 +157,7 @@ export const META_PRESETS = [
     ability: 'sand-rush',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['earthquake', 'iron-head', 'rock-slide', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'basculegion-m',
@@ -169,7 +167,7 @@ export const META_PRESETS = [
     ability: 'adaptability',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['wave-crash', 'last-respects', 'aqua-jet', 'flip-turn'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'venusaur',
@@ -179,7 +177,7 @@ export const META_PRESETS = [
     ability: 'chlorophyll',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['sludge-bomb', 'earth-power', 'sleep-powder', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'archaludon',
@@ -189,7 +187,7 @@ export const META_PRESETS = [
     ability: 'stamina',
     sps: [32, 0, 0, 1, 29, 4],
     moves: ['electro-shot', 'flash-cannon', 'dragon-pulse', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'sylveon',
@@ -199,7 +197,7 @@ export const META_PRESETS = [
     ability: 'pixilate',
     sps: [18, 0, 10, 21, 0, 17],
     moves: ['hyper-beam', 'hyper-voice', 'quick-attack', 'detect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'gholdengo',
@@ -209,7 +207,7 @@ export const META_PRESETS = [
     ability: 'good as gold',
     sps: [1, 0, 2, 32, 0, 31],
     moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
@@ -221,7 +219,7 @@ export const META_PRESETS = [
     ability: 'tough-claws',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['iron-head', 'psychic-fangs', 'body-press', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'staraptor-mega',
@@ -231,7 +229,7 @@ export const META_PRESETS = [
     ability: 'contrary',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['close-combat', 'brave-bird', 'quick-attack', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
   {
     slug: 'garchomp-mega',
@@ -241,12 +239,8 @@ export const META_PRESETS = [
     ability: 'sand-force',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['dragon-claw', 'earthquake', 'rock-slide', 'protect'],
-    stagione: 'M-4',
+    reg: 'M-B',
   },
-  // ── M-5 ──────────────────────────────────────────────────────────────────
-  //
-  // Stagione in corso (5 agosto – 9 settembre 2026, reg M-B). I set di M-4
-  // restano: sono osservazioni di quel periodo, e un'osservazione non scade.
   {
     slug: 'incineroar',
     label: 'Sitrus Support',
@@ -255,7 +249,7 @@ export const META_PRESETS = [
     ability: 'intimidate',
     sps: [32, 0, 21, 0, 11, 2],
     moves: ['fake-out', 'flare-blitz', 'throat-chop', 'parting-shot'],
-    stagione: 'M-5',
+    reg: 'M-B',
   },
   {
     slug: 'aerodactyl',
@@ -265,7 +259,7 @@ export const META_PRESETS = [
     ability: 'unnerve',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['rock-slide', 'dual-wingbeat', 'wide-guard', 'tailwind'],
-    stagione: 'M-5',
+    reg: 'M-B',
   },
 ]
 

@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next'
 import useCalcStore from '../../store/useCalcStore'
 import { PRESETS_BY_SLUG } from '../../data/metaPresets'
 import { scegliCorrispondente } from '../../lib/scegliPreset.js'
-import useStagione, { TUTTE } from '../../store/useStagione.js'
+import useReg, { TUTTE } from '../../store/useReg.js'
 import pokemonData from '../../data/pokemon.json'
 
 // ── Costante localStorage ──────────────────────────────────────────────────
@@ -268,25 +268,25 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
    * ─── LA CHIAVE DI UN SET META ────────────────────────────────────────────
    *
    * Era l'ETICHETTA, e ci finiva dentro il `value` dell'`<option>`. Reggeva
-   * finche' i set venivano da una stagione sola; con piu' stagioni lo stesso
-   * Incineroar avra' plausibilmente un «Sitrus Support» in M-4 e uno in M-6,
-   * e `find` avrebbe preso il primo lasciando il secondo IRRAGGIUNGIBILE —
-   * senza errori, senza avvisi, semplicemente non selezionabile.
+   * finche' i set venivano da un periodo solo; con due lo stesso Incineroar
+   * ha avuto un «Sitrus Support» per parte, e `find` avrebbe preso il primo
+   * lasciando il secondo IRRAGGIUNGIBILE — senza errori, senza avvisi,
+   * semplicemente non selezionabile.
    *
-   * `stagione|etichetta` basta perche' la tendina e' gia' filtrata per
-   * specie: lo slug e' implicito. `metaPresets.test.js` presidia la chiave
-   * completa `slug + stagione + etichetta`.
+   * `reg|etichetta` basta perche' la tendina e' gia' filtrata per specie: lo
+   * slug e' implicito. `metaPresets.test.js` presidia la chiave completa
+   * `slug + reg + etichetta`.
    */
-  const chiaveMeta = (p) => `${p.stagione}|${p.label}`
+  const chiaveMeta = (p) => `${p.reg}|${p.label}`
 
 
-  const stagioneScelta = useStagione(s => s.stagione)
+  const regScelta = useReg(s => s.reg)
 
-  // Meta preset per questo slug, filtrati per la stagione scelta.
+  // Meta preset per questo slug, filtrati per la reg scelta.
   const metaPresets = useMemo(() => {
     const tutti = (currentSlug && PRESETS_BY_SLUG[currentSlug]) || []
-    return stagioneScelta === TUTTE ? tutti : tutti.filter(p => p.stagione === stagioneScelta)
-  }, [currentSlug, stagioneScelta])
+    return regScelta === TUTTE ? tutti : tutti.filter(p => p.reg === regScelta)
+  }, [currentSlug, regScelta])
 
   // useMemo rilega customPresets ogni volta che slug o externalRev cambia.
   // externalRev è incrementato da SlotEditor dopo ogni apertura/chiusura del
@@ -379,9 +379,9 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
 
       {metaPresets.length > 0 && metaPresets.map(p => (
         <option key={chiaveMeta(p)} value={chiaveMeta(p)}>
-          {/* La stagione si mostra solo quando non si sta filtrando su una
-              sola: altrimenti sarebbe la stessa sigla ripetuta su ogni riga. */}
-          {stagioneScelta === TUTTE ? `${p.label} · ${p.stagione}` : p.label}
+          {/* La reg si mostra solo quando non si sta filtrando su una sola:
+              altrimenti sarebbe la stessa sigla ripetuta su ogni riga. */}
+          {regScelta === TUTTE ? `${p.label} · ${p.reg}` : p.label}
         </option>
       ))}
 
