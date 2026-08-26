@@ -203,7 +203,7 @@ export const META_PRESETS = [
   },
   {
     slug: 'gholdengo',
-    label: 'Choice Scarf ',
+    label: 'Choice Scarf',
     nature: 'Modest',
     item: 'choice scarf',
     ability: 'good as gold',
@@ -255,6 +255,16 @@ export const META_PRESETS = [
     ability: 'intimidate',
     sps: [32, 0, 21, 0, 11, 2],
     moves: ['fake-out', 'flare-blitz', 'throat-chop', 'parting-shot'],
+    stagione: 'M-5',
+  },
+  {
+    slug: 'aerodactyl',
+    label: 'Sash Tailwind Lead',
+    nature: 'Jolly',
+    item: 'focus sash',
+    ability: 'unnerve',
+    sps: [2, 32, 0, 0, 0, 32],
+    moves: ['rock-slide', 'dual-wingbeat', 'wide-guard', 'tailwind'],
     stagione: 'M-5',
   },
 ]
