@@ -129,10 +129,10 @@ describe('quale forma può tenere la Megapietra', () => {
   })
 
   it('Slowbro di Galar non megaevolve, Slowbro normale sì', () => {
-    expect(chiPuoTenere('slobronite', 'slowbro')).toBe(true)
-    expect(chiPuoTenere('slobronite', 'slowbro-mega')).toBe(true)
+    expect(chiPuoTenere('slowbronite', 'slowbro')).toBe(true)
+    expect(chiPuoTenere('slowbronite', 'slowbro-mega')).toBe(true)
     expect(
-      chiPuoTenere('slobronite', 'slowbro-galar'),
+      chiPuoTenere('slowbronite', 'slowbro-galar'),
       'la forma di Galar non ha una Mega',
     ).toBe(false)
   })

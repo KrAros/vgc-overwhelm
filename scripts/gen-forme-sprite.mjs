@@ -49,6 +49,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { ORDINE_CORRETTO } from './ordine-forme.mjs'
 
 const RADICE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SCRIVI = !process.argv.includes('--report')
@@ -56,55 +57,6 @@ const BASE = 'https://resource.pokemon-home.com/battledata/img/pokei128/'
 
 const pokemon = JSON.parse(fs.readFileSync(path.join(RADICE, 'src/data/pokemon.json'), 'utf8'))
 
-/**
- * ═══ DOVE L'ORDINE DI `pokemon.json` NON È QUELLO DI HOME ══════════════════
- *
- * L'ipotesi «indice di forma = posizione in pokemon.json» regge per 151 gruppi
- * su 154, e NON è verificabile chiedendo al server: l'URL esiste comunque, è
- * solo la forma sbagliata. L'ha trovata l'occhio sul foglio di contatto.
- *
- * Ogni riga qui sotto dice come è stata verificata. Senza quella frase la
- * correzione sarebbe indistinguibile da un'altra ipotesi.
- */
-const ORDINE_CORRETTO = {
-  // Ogerpon — `pokemon.json` li elenca in ordine alfabetico, HOME in ordine di
-  // gioco (Teal, Wellspring, Hearthflame, Cornerstone).
-  // Visto a 56px: f01 è la maschera BLU (acqua = Wellspring), f03 la GRIGIA
-  // (roccia = Cornerstone). Hearthflame, rossa, cadeva già giusta su f02.
-  'ogerpon-wellspring':  'f01',
-  'ogerpon-cornerstone': 'f03',
-
-  // Tauros di Paldea — stesso schema: alfabetico da noi, ordine di gioco su
-  // HOME (Combat, Blaze, Aqua). Visto a 128px: f01 è il toro nero SENZA segni
-  // (Combat), f02 ha la criniera ROSSA (Blaze), f03 i segni BLU sulle zampe
-  // (Aqua). Blaze cadeva già giusto.
-  'tauros-paldea-combat': 'f01',
-  'tauros-paldea-aqua':   'f03',
-
-  // Pumpkaboo e Gourgeist — HOME ordina Average, Small, Large, Super, mentre
-  // da noi la taglia Small viene prima della base. Visto a 128px: f01 è
-  // nettamente il più piccolo dei quattro, quindi è Small, e f00 è Average.
-  'pumpkaboo':       'f00',
-  'pumpkaboo-small': 'f01',
-  'gourgeist':       'f00',
-  'gourgeist-small': 'f01',
-
-  // Floette — il caso che ha battuto due volte la regola posizionale, e la
-  // seconda volta ha battuto anche l'occhio.
-  //
-  // Su HOME esistono f00-f05: sono i CINQUE colori del fiore piu' l'Eterno,
-  // e nessuno di quegli indici e' la Mega, che HOME non ha. Su pokemon-zone
-  // esistono due sole posizioni, f05 e f06.
-  //
-  // La sessione Y le guardo' e le assegno' al contrario: f05 ando' a
-  // floette-mega, che da allora ha mostrato l'icona del Fiore Eterno sul sito
-  // pubblicato. Riguardate da KrAros: f05 e' il Fiore Eterno, f06 la Mega.
-  //
-  // Entrambe vanno fissate qui perche' la posizione darebbe f01 e f02 — il
-  // gruppo nei nostri dati e' [floette, floette-eternal, floette-mega].
-  'floette-eternal': 'f05',
-  'floette-mega':    'f06',
-}
 
 /** Lo stesso `resolveNum` di `src/utils/sprite.js`, che qui non si può importare. */
 function numeroDi(chiave) {

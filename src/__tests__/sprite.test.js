@@ -109,7 +109,6 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
       .map(([k]) => k)
       .sort()
     expect(senzaIcona).toEqual([
-      // ── Sondate: nessuna delle due fonti ce l'ha ──────────────────────────
       'minior-core',
       'silvally-bug', 'silvally-dark', 'silvally-dragon', 'silvally-electric',
       'silvally-fairy', 'silvally-fighting', 'silvally-fire', 'silvally-flying',
@@ -117,42 +116,32 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
       'silvally-poison', 'silvally-psychic', 'silvally-rock', 'silvally-steel',
       'silvally-water',
       'terapagos-terastal',
-      // ── NON sondate: aggiunte a mano, in attesa di `forme:gen` ────────────
-      // Portano la stessa fonte `nessuna` ma per una ragione diversa, ed è
-      // una differenza che va tenuta visibile: sopra è «il server non ce
-      // l'ha», qui è «non abbiamo ancora chiesto». La scelta è la stessa
-      // perché la prudenza è la stessa — meglio nessuna icona che l'icona di
-      // un altro Pokémon — ma queste cinque devono sparire da questo elenco
-      // appena qualcuno lancia il generatore con la rete. Erano sei: il Fiore
-      // Eterno e' uscito quando KrAros ha guardato le due posizioni di
-      // pokemon-zone e le ha aggiudicate.
-      //
-      // `meta.daSondare` le elenca, e il test sotto tiene i due insiemi
-      // allineati: se una viene sondata e resta qui senza uscire da
-      // `daSondare`, o viceversa, diventa rosso.
-      'slowbro-galar',
-      'slowking', 'slowking-galar',
-      'stunfisk', 'stunfisk-galar',
-    ].sort())
+    ])
   })
 
-  it('le voci non sondate sono dichiarate come tali', () => {
-    // Il rischio di un segnaposto è che smetta di sembrare tale. Qui si
-    // controlla che `meta.daSondare` sia esattamente l'insieme delle voci
-    // aggiunte a mano, e che ognuna porti davvero fonte `nessuna`.
-    const daSondare = [...(formeSprite.meta.daSondare ?? [])].sort()
-    expect(daSondare, 'meta.daSondare non elenca le voci aggiunte a mano').toEqual([
-      'slowbro-galar',
-      'slowking', 'slowking-galar',
-      'stunfisk', 'stunfisk-galar',
-    ])
+  it('la coda dei segnaposto e le regole che la governano', () => {
+    // ─── COS'ERA, E PERCHE' IL CONTROLLO RESTA ────────────────────────────
+    //
+    // Quando una forma nuova entra nell'anagrafica da un ambiente senza rete,
+    // la sua icona non si puo' sondare. Invece di lasciarla fuori tabella —
+    // dove `sprite.js` ripiegherebbe su `f00`, cioe' sull'icona della forma
+    // base — entra con fonte `nessuna` e viene elencata in `meta.daSondare`.
+    //
+    // Oggi la coda e' VUOTA: le sei che c'erano sono state guardate a occhio e
+    // aggiudicate. Il controllo resta perche' il meccanismo resta, e la
+    // proprieta' che deve valere non e' «la coda e' vuota» ma «finche' una
+    // voce e' in coda, non mostra un'icona sbagliata».
+    const daSondare = formeSprite.meta.daSondare ?? []
     for (const k of daSondare) {
       expect(formeSprite.forme[k], `${k} non ha una posizione`).toBeTruthy()
-      expect(formeSprite.fonte[k], `${k} deve restare senza icona finché non è sondata`)
+      expect(formeSprite.fonte[k], `${k} deve restare senza icona finche' non e' sondata`)
         .toBe('nessuna')
     }
-    expect(formeSprite.meta.notaDaSondare, 'manca la nota che dice come chiuderle')
-      .toMatch(/forme:gen/)
+    // E se la coda esiste, deve esistere anche la nota che dice come chiuderla.
+    if (daSondare.length) {
+      expect(formeSprite.meta.notaDaSondare, 'manca la nota che dice come chiuderle')
+        .toMatch(/forme:sonda|forme:gen/)
+    }
   })
 
   it('le Mega di Champions ora hanno un\'icona, dalla seconda fonte', () => {
@@ -165,14 +154,18 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
     //              un Floette di un altro colore. Non una forma in piu'
     //              trovata dal generatore: una forma che stava dalla parte
     //              sbagliata.
-    //   34 oggi    il Fiore Eterno entra dalla seconda fonte. Nella stessa
+    //   34 in Z    il Fiore Eterno entra dalla seconda fonte. Nella stessa
     //              occasione la Mega si e' spostata da f05 a f06, perche' in Y
     //              le due posizioni di pokemon-zone erano state aggiudicate al
     //              contrario — vedi il blocco in fondo al file.
+    //   39 oggi    le cinque forme di Galar aggiunte al listino (Slowbro,
+    //              Slowking piu' la sua base, Stunfisk piu' la sua base) non
+    //              esistono su HOME. Gli indici sono stati guardati a occhio su
+    //              pokemon-zone, uno per uno: quattro coincidono con la regola
+    //              posizionale, `slowbro-galar` no — sta a f02 e non a f01, ed
+    //              e' per questo fissata in ORDINE_CORRETTO.
     const daZone = Object.entries(formeSprite.fonte).filter(([, f]) => f === 'zone')
-    // 32 in R, 33 in Y, **34 da oggi**: il Fiore Eterno entra dalla seconda
-    // fonte insieme alla Mega, che nel frattempo si e' spostata da f05 a f06.
-    expect(daZone.length, 'forme recuperate dal ripiego').toBe(34)
+    expect(daZone.length, 'forme recuperate dal ripiego').toBe(39)
     expect(formeSprite.forme['staraptor-mega']).toBe('f01')
     expect(formeSprite.fonte['staraptor-mega']).toBe('zone')
     expect(spriteUrl('staraptor-mega')).toContain('_0398_01_0.webp')

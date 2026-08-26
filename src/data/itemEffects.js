@@ -182,7 +182,7 @@ export const ITEM_EFFECTS = {
   // servire a niente — `isStrumentoInamovibile` cerca in questa tabella la
   // chiave dello strumento tenuto, e nessuno strumento si chiama così — e
   // duplicava la riga sotto, che porta già la stessa mappatura.
-  'slobronite':         { megaStone: 'slowbro-mega'     },
+  'slowbronite':        { megaStone: 'slowbro-mega'     },
   'steelixite':         { megaStone: 'steelix-mega'     },
   'sceptilite':         { megaStone: 'sceptile-mega'    },
   'swampertite':        { megaStone: 'swampert-mega'    },
@@ -201,25 +201,25 @@ export const ITEM_EFFECTS = {
   'diancite':           { megaStone: 'diancie-mega'     },
   // Nuove da Pokémon Legends Z-A (v1.0.2)
   'meganiumite':        { megaStone: 'meganium-mega'    },
-  'feraligatrite':      { megaStone: 'feraligatr-mega'  },
+  'feraligite':         { megaStone: 'feraligatr-mega'  },
   'emboarite':          { megaStone: 'emboar-mega'      },
-  'dragonitite':        { megaStone: 'dragonite-mega'   },
+  'dragoninite':        { megaStone: 'dragonite-mega'   },
   'chesnaughtite':      { megaStone: 'chesnaught-mega'  },
   'delphoxite':         { megaStone: 'delphox-mega'     },
-  'greninjaite':        { megaStone: 'greninja-mega'    },
-  'excadrillite':       { megaStone: 'excadrill-mega'   },
-  'golurknite':         { megaStone: 'golurk-mega'      },
+  'greninjite':         { megaStone: 'greninja-mega'    },
+  'excadrite':          { megaStone: 'excadrill-mega'   },
+  'golurkite':          { megaStone: 'golurk-mega'      },
   'clefablite':         { megaStone: 'clefable-mega'    },
   'victreebelite':      { megaStone: 'victreebel-mega'  },
-  'drampite':           { megaStone: 'drampa-mega'      },
-  'froslasite':         { megaStone: 'froslass-mega'    },
-  'hawluchite':         { megaStone: 'hawlucha-mega'    },
+  'drampanite':         { megaStone: 'drampa-mega'      },
+  'froslassite':        { megaStone: 'froslass-mega'    },
+  'hawluchanite':       { megaStone: 'hawlucha-mega'    },
   'crabominite':        { megaStone: 'crabominable-mega'},
-  'starmieite':         { megaStone: 'starmie-mega'     },
+  'starminite':         { megaStone: 'starmie-mega'     },
   'chimechite':         { megaStone: 'chimecho-mega'    },
   'skarmorite':         { megaStone: 'skarmory-mega'    },
   'scovillainite':      { megaStone: 'scovillain-mega'  },
-  'glimmorite':         { megaStone: 'glimmora-mega'    },
+  'glimmoranite':       { megaStone: 'glimmora-mega'    },
   'chandelurite':       { megaStone: 'chandelure-mega'  },
   // `daForma`: la Mega si raggiunge dal Fiore Eterno, non dalla Floette base.
   // Il nome della forma Mega non lo dice — `floette-mega` comincia per
@@ -228,17 +228,17 @@ export const ITEM_EFFECTS = {
   // `"formes": ["Floette-Eternal", "Mega Floette"]` sull'Eterna e niente
   // sulla base.
   'floettite':          { megaStone: 'floette-mega', daForma: 'floette-eternal' },
-  'meowstite':          { megaStone: 'meowstic-mega'    },
+  'meowsticite':        { megaStone: 'meowstic-mega'    },
   // M-B (Champions-exclusive)
-  'barbaraclite':       { megaStone: 'barbaracle-mega'  },
+  'barbaracite':        { megaStone: 'barbaracle-mega'  },
   'pyroarite':          { megaStone: 'pyroar-mega'      },
   'eelektrossite':      { megaStone: 'eelektross-mega'  },
   'staraptite':         { megaStone: 'staraptor-mega'   },
   'raichunite x':       { megaStone: 'raichu-mega-x'    },
   'raichunite y':       { megaStone: 'raichu-mega-y'    },
   'malamarite':         { megaStone: 'malamar-mega'     },
-  'scraftite':          { megaStone: 'scrafty-mega'     },
-  'scolipedonite':      { megaStone: 'scolipede-mega'   },
+  'scraftinite':        { megaStone: 'scrafty-mega'     },
+  'scolipite':          { megaStone: 'scolipede-mega'   },
   'dragalgite':         { megaStone: 'dragalge-mega'    },
   'falinksite':         { megaStone: 'falinks-mega'     },
 
