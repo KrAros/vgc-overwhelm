@@ -29,8 +29,15 @@ import { META_PRESETS, PRESETS_BY_SLUG } from '../data/metaPresets.js'
 import { STAGIONI, regDiStagione } from '../lib/reg.js'
 import { specieDiStagione } from '../lib/regSpecie.js'
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
+import itemsData from '../data/items.json' with { type: 'json' }
+import movesData from '../data/moves.json' with { type: 'json' }
+import { NATURES } from '../data/natures.js'
+import { MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 
 const idStagioni = new Set(STAGIONI.map(s => s.id))
+
+/** La stessa normalizzazione di `PresetSelect.jsx:264`, non una più debole. */
+const normalizzaMossa = (m) => (m ? m.replace(/-/g, ' ') : null)
 
 describe('set del meta', () => {
   it('ce ne sono, e ognuno ha i campi che servono', () => {
@@ -97,6 +104,88 @@ describe('set del meta', () => {
       }
     }
     expect(collisioni).toEqual([])
+  })
+
+  /**
+   * ─── I CAMPI CHE NESSUNO GUARDAVA ────────────────────────────────────────
+   *
+   * Fino a qui il file controllava specie, stagione ed etichette. Natura,
+   * strumento, abilità e mosse no: erano quattro stringhe che nessuno
+   * confrontava con niente.
+   *
+   * Misurato invece che supposto: messi quattro refusi in un solo set —
+   * `matcha-gotchaXX`, `hospitalityXX`, `kasib berryXX`, `BoldXX` — la suite
+   * passava, 2034 test verdi. Il difetto sarebbe arrivato all'utente come un
+   * set che si sceglie e non fa niente.
+   *
+   * Conta adesso più di prima: i set di M-5 si scrivono a mano, uno per uno,
+   * e ogni campo è un'occasione di refuso.
+   *
+   * Ogni controllo qui sotto confronta con il listino che l'APP legge davvero,
+   * che non è sempre quello che sembra — le abilità stanno in `pokemon.json`
+   * per specie, non in `abilities.json`, e le due usano perfino grafie diverse
+   * (`swift-swim` contro `swift swim`).
+   */
+  it('ogni natura esiste', () => {
+    const ignote = META_PRESETS
+      .filter(p => !NATURES.includes(String(p.nature).toLowerCase()))
+      .map(p => `${p.slug}/${p.label} → «${p.nature}»`)
+    expect(ignote, 'natura inesistente: applicando il set non verrebbe impostata').toEqual([])
+  })
+
+  it('ogni strumento è scelto fra quelli del listino', () => {
+    // `applyPreset` passa `preset.item` così com'è, senza normalizzarlo:
+    // deve combaciare con una chiave di items.json alla lettera.
+    const ignoti = META_PRESETS
+      .filter(p => p.item && !itemsData[p.item])
+      .map(p => `${p.slug}/${p.label} → «${p.item}»`)
+    expect(ignoti, 'strumento che il listino non ha: nessuna icona e nessun effetto').toEqual([])
+  })
+
+  it('ogni abilità è una di quelle della SUA specie', () => {
+    // Non «esiste un'abilità con questo nome», ma «questo Pokémon ce l'ha»:
+    // è la tendina che l'utente vede, e viene da pokemon.json.
+    const sbagliate = []
+    for (const p of META_PRESETS) {
+      if (!p.ability) continue
+      const proprie = pokemonData[p.slug]?.abilities ?? []
+      if (!proprie.includes(p.ability)) {
+        sbagliate.push(`${p.slug}/${p.label} → «${p.ability}» (ha: ${proprie.join(', ') || 'nessuna'})`)
+      }
+    }
+    expect(sbagliate, 'abilità che questa specie non può avere').toEqual([])
+  })
+
+  it('ogni mossa esiste, una volta normalizzata come fa l\'app', () => {
+    const ignote = []
+    for (const p of META_PRESETS) {
+      for (const m of p.moves) {
+        if (!movesData[normalizzaMossa(m)]) ignote.push(`${p.slug}/${p.label} → «${m}»`)
+      }
+    }
+    expect(ignote, 'mossa che il listino non ha: lo slot resterebbe vuoto').toEqual([])
+  })
+
+  it('gli SP stanno dentro le regole del gioco', () => {
+    const fuori = []
+    for (const p of META_PRESETS) {
+      const somma = p.sps.reduce((a, b) => a + (b || 0), 0)
+      if (somma > MAX_SP_TOTAL) fuori.push(`${p.slug}/${p.label}: ${somma} SP su ${MAX_SP_TOTAL}`)
+      p.sps.forEach((v, i) => {
+        if (v < 0 || v > MAX_SP_PER_STAT) fuori.push(`${p.slug}/${p.label}: SP[${i}] = ${v}`)
+      })
+    }
+    expect(fuori, 'set impossibile da costruire nel gioco').toEqual([])
+  })
+
+  it('controllo negativo: i listini sono stati caricati davvero', () => {
+    // Senza, i cinque controlli sopra passerebbero su elenchi vuoti — cioè
+    // rifiuterebbero tutto o accetterebbero tutto, a seconda del verso.
+    expect(NATURES).toContain('adamant')
+    expect(itemsData['sitrus berry']).toBeTruthy()
+    expect(movesData[normalizzaMossa('fake-out')]).toBeTruthy()
+    expect(pokemonData['incineroar'].abilities).toContain('intimidate')
+    expect(MAX_SP_TOTAL).toBe(66)
   })
 
   it('l\'indice per slug contiene tutti i set, senza perderne', () => {
