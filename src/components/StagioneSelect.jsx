@@ -60,7 +60,19 @@ export default function StagioneSelect() {
       className="w-18 min-[480px]:w-auto text-[11px] font-bold px-2 py-1 rounded border border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300 hover:text-white transition-colors cursor-pointer"
     >
       <option value={TUTTE}>{t('ui.season_all')}</option>
-      {REG.map(r => (
+      {/* ─── DALLA PIU' RECENTE ALLA PIU' VECCHIA, SU ENTRAMBI I LIVELLI ────
+          Il registro elenca in ordine cronologico — M-A prima di M-B, M-1
+          prima di M-5 — perche' e' l'ordine in cui le cose sono successe.
+          Qui serve l'ordine opposto: chi apre la tendina cerca quasi sempre
+          la stagione in corso, che e' l'ultima, ed e' anche quella scelta di
+          default. Elencandole in avanti la voce piu' probabile finiva in
+          fondo, dopo un'intera reg che non interessa.
+
+          `reverse()` va su ENTRAMBI i livelli. Le stagioni erano gia'
+          invertite dentro ogni gruppo, ma i gruppi no: si vedeva M-2, M-1 e
+          poi M-5, cioe' un ordine che non e' ne' crescente ne' decrescente.
+          `[...REG]` perche' `reverse()` muta l'array, e REG e' il modulo. */}
+      {[...REG].reverse().map(r => (
         <optgroup key={r.id} label={r.id}>
           {[...r.stagioni].reverse().map(s => (
             <option key={s.id} value={s.id}>
