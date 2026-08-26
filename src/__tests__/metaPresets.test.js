@@ -188,6 +188,17 @@ describe('set del meta', () => {
     expect(MAX_SP_TOTAL).toBe(66)
   })
 
+  it('le etichette sono pulite', () => {
+    // Trovata mentre si aggiungeva un set: Gholdengo portava «Choice Scarf »
+    // con uno spazio in coda. Innocua a vedersi — la tendina la mostra uguale —
+    // ma l'etichetta e' meta' della chiave di un set, quindi uno spazio
+    // invisibile puo' diventare due voci che sembrano la stessa.
+    const sporche = META_PRESETS
+      .filter(p => p.label !== p.label.trim() || /\s{2,}/.test(p.label))
+      .map(p => `${p.slug} → «${p.label}»`)
+    expect(sporche, 'spazi in coda o doppi in un\'etichetta').toEqual([])
+  })
+
   it('l\'indice per slug contiene tutti i set, senza perderne', () => {
     const totale = Object.values(PRESETS_BY_SLUG).reduce((n, v) => n + v.length, 0)
     expect(totale).toBe(META_PRESETS.length)
