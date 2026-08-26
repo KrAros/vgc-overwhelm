@@ -7,18 +7,18 @@
     },
     "metodo": "HEAD 200 su ENTRAMBE le fonti, indice = ordine in pokemon.json",
     "specieConForma": 357,
-    "soloSecondaFonte": 32,
-    "posizioniAssentiOvunque": 25,
+    "soloSecondaFonte": 34,
+    "posizioniAssentiOvunque": 24,
     "note": "Suffisso di forma delle icone. `fonte` dice quale server ce l'ha: `home`, `zone` (solo il ripiego), o `nessuna` — e in quel caso sprite.js non mostra icona, invece di ripiegare sulla forma base che è un Pokémon diverso. Rigenerare con `npm run forme:gen`, e RIGUARDARE il foglio di contatto: l'esistenza dell'URL non prova che l'icona sia la forma giusta.",
     "daSondare": [
-      "floette-eternal",
       "slowbro-galar",
       "slowking",
       "slowking-galar",
       "stunfisk",
       "stunfisk-galar"
     ],
-    "notaDaSondare": "Voci NON sondate: aggiunte a mano insieme alle forme di Galar e al Fiore Eterno, da un ambiente senza accesso alla rete. La fonte \"nessuna\" e la scelta prudente: sprite.js non mostra icona, invece di ripiegare sulla forma base che e un Pokemon diverso. Il suffisso e la sola ipotesi posizionale e NON e verificato.  Da fare: lanciare \"npm run forme:gen\" da una macchina con rete, poi RIGUARDARE il foglio di contatto — l esistenza dell URL non prova che l icona sia la forma giusta.  Due avvertenze per quella rigenerazione. Primo: i gruppi 0080, 0199, 0618 e 0670 hanno guadagnato una forma, quindi l indice posizionale delle voci successive si sposta (slowbro-mega oggi e f01, diventerebbe f02). Secondo: floette-mega in tabella e f05 mentre la regola posizionale darebbe f01 — e una correzione fatta a occhio che una rigenerazione cieca perderebbe. Vanno rimesse in ORDINE_CORRETTO se confermate."
+    "notaDaSondare": "Voci NON sondate: aggiunte a mano insieme alle forme di Galar e al Fiore Eterno, da un ambiente senza accesso alla rete. La fonte \"nessuna\" e la scelta prudente: sprite.js non mostra icona, invece di ripiegare sulla forma base che e un Pokemon diverso. Il suffisso e la sola ipotesi posizionale e NON e verificato.  Da fare: lanciare \"npm run forme:gen\" da una macchina con rete, poi RIGUARDARE il foglio di contatto — l esistenza dell URL non prova che l icona sia la forma giusta.  Due avvertenze per quella rigenerazione. Primo: i gruppi 0080, 0199, 0618 e 0670 hanno guadagnato una forma, quindi l indice posizionale delle voci successive si sposta (slowbro-mega oggi e f01, diventerebbe f02). Secondo: floette-mega in tabella e f05 mentre la regola posizionale darebbe f01 — e una correzione fatta a occhio che una rigenerazione cieca perderebbe. Vanno rimesse in ORDINE_CORRETTO se confermate.",
+    "notaFloette": "Floette #0670: su pokemon-zone esistono due sole posizioni, f05 e f06, e nessun oracolo automatico distingue una Mega da un Fiore Eterno. In Y furono guardate a occhio e assegnate al contrario: f05 ando a floette-mega. Riguardate, f05 e il Fiore Eterno e f06 la Mega. Fissate entrambe in ORDINE_CORRETTO dentro gen-forme-sprite.mjs, perche la regola posizionale darebbe f01 e f02."
   },
   "forme": {
     "abomasnow": "f00",
@@ -120,7 +120,7 @@
     "feraligatr": "f00",
     "feraligatr-mega": "f01",
     "floette": "f00",
-    "floette-mega": "f05",
+    "floette-mega": "f06",
     "froslass": "f00",
     "froslass-mega": "f01",
     "gallade": "f00",
@@ -377,7 +377,7 @@
     "slowking-galar": "f01",
     "stunfisk": "f00",
     "stunfisk-galar": "f01",
-    "floette-eternal": "f01"
+    "floette-eternal": "f05"
   },
   "fonte": {
     "abomasnow": "home",
@@ -736,6 +736,6 @@
     "slowking-galar": "nessuna",
     "stunfisk": "nessuna",
     "stunfisk-galar": "nessuna",
-    "floette-eternal": "nessuna"
+    "floette-eternal": "zone"
   }
 }
