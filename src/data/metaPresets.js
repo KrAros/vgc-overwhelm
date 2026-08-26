@@ -243,6 +243,20 @@ export const META_PRESETS = [
     moves: ['dragon-claw', 'earthquake', 'rock-slide', 'protect'],
     stagione: 'M-4',
   },
+  // ── M-5 ──────────────────────────────────────────────────────────────────
+  //
+  // Stagione in corso (5 agosto – 9 settembre 2026, reg M-B). I set di M-4
+  // restano: sono osservazioni di quel periodo, e un'osservazione non scade.
+  {
+    slug: 'incineroar',
+    label: 'Sitrus Support',
+    nature: 'Impish',
+    item: 'sitrus berry',
+    ability: 'intimidate',
+    sps: [32, 0, 21, 0, 11, 2],
+    moves: ['fake-out', 'flare-blitz', 'throat-chop', 'parting-shot'],
+    stagione: 'M-5',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {

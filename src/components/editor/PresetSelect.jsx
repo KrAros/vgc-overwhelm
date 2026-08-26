@@ -26,6 +26,7 @@ import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from '../../store/useCalcStore'
 import { PRESETS_BY_SLUG } from '../../data/metaPresets'
+import { scegliCorrispondente } from '../../lib/scegliPreset.js'
 import useStagione, { TUTTE } from '../../store/useStagione.js'
 import pokemonData from '../../data/pokemon.json'
 
@@ -278,6 +279,7 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
    */
   const chiaveMeta = (p) => `${p.stagione}|${p.label}`
 
+
   const stagioneScelta = useStagione(s => s.stagione)
 
   // Meta preset per questo slug, filtrati per la stagione scelta.
@@ -302,22 +304,15 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
     if (manualSelected[currentSlug] !== undefined) return manualSelected[currentSlug]
     if (!currentSlot || !currentSlug) return '__blank__'
     // 2. Controlla meta preset
-    const metaMatch = metaPresets.find(p =>
-      p.item === currentSlot.item &&
-      p.ability === currentSlot.ability &&
-      p.nature?.toLowerCase() === currentSlot.nature?.toLowerCase()
-    )
+    const metaMatch = scegliCorrispondente(metaPresets, currentSlot)
     if (metaMatch) return chiaveMeta(metaMatch)
     // 3. Controlla custom preset
-    const customMatch = customPresets.find(p =>
-      p.item === currentSlot.item &&
-      p.ability === currentSlot.ability &&
-      p.nature?.toLowerCase() === currentSlot.nature?.toLowerCase()
-    )
+    const customMatch = scegliCorrispondente(customPresets, currentSlot)
     if (customMatch) return `custom:${customMatch.id}`
     return '__blank__'
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSlug, currentSlot?.item, currentSlot?.ability, currentSlot?.nature,
+      currentSlot?.sps, currentSlot?.moves,
       metaPresets, customPresets, manualSelected])
 
   // Quando l'utente sceglie esplicitamente dal select, registriamo la scelta

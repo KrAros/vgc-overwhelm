@@ -50,11 +50,18 @@ describe('da quale stagione si parte', () => {
     expect(stagioneConSetPiuRecente(new Set())).toBeNull()
   })
 
-  it('con i set veri di oggi la partenza è M-4', () => {
+  it('con i set veri di oggi la partenza è la stagione in corso', () => {
     // Il caso reale, non un'ipotesi: legge i preset committati.
+    //
+    // Questo test diceva «la partenza è M-4», ed era vero finché i venti set
+    // erano tutti di M-4 mentre la stagione in corso era già M-5. Al primo set
+    // di M-5 è diventato rosso — che è esattamente il suo mestiere: un
+    // cambiamento di comportamento visibile all'utente non deve passare zitto.
+    // La partenza si è spostata su M-5, ed è ciò che si vuole.
     const conSet = new Set(META_PRESETS.map(p => p.stagione))
-    expect(conSet.has('M-4')).toBe(true)
-    expect(stagioneConSetPiuRecente(conSet, new Date('2026-08-25T12:00:00'))).toBe('M-4')
+    expect(conSet.has('M-4'), 'i set di M-4 non si cancellano').toBe(true)
+    expect(conSet.has('M-5')).toBe(true)
+    expect(stagioneConSetPiuRecente(conSet, new Date('2026-08-25T12:00:00'))).toBe('M-5')
   })
 })
 
