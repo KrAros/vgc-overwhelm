@@ -122,13 +122,14 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
       // una differenza che va tenuta visibile: sopra è «il server non ce
       // l'ha», qui è «non abbiamo ancora chiesto». La scelta è la stessa
       // perché la prudenza è la stessa — meglio nessuna icona che l'icona di
-      // un altro Pokémon — ma queste sei devono sparire da questo elenco
-      // appena qualcuno lancia il generatore con la rete.
+      // un altro Pokémon — ma queste cinque devono sparire da questo elenco
+      // appena qualcuno lancia il generatore con la rete. Erano sei: il Fiore
+      // Eterno e' uscito quando KrAros ha guardato le due posizioni di
+      // pokemon-zone e le ha aggiudicate.
       //
       // `meta.daSondare` le elenca, e il test sotto tiene i due insiemi
       // allineati: se una viene sondata e resta qui senza uscire da
       // `daSondare`, o viceversa, diventa rosso.
-      'floette-eternal',
       'slowbro-galar',
       'slowking', 'slowking-galar',
       'stunfisk', 'stunfisk-galar',
@@ -141,7 +142,6 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
     // aggiunte a mano, e che ognuna porti davvero fonte `nessuna`.
     const daSondare = [...(formeSprite.meta.daSondare ?? [])].sort()
     expect(daSondare, 'meta.daSondare non elenca le voci aggiunte a mano').toEqual([
-      'floette-eternal',
       'slowbro-galar',
       'slowking', 'slowking-galar',
       'stunfisk', 'stunfisk-galar',
@@ -158,13 +158,21 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
   it('le Mega di Champions ora hanno un\'icona, dalla seconda fonte', () => {
     // La ragione per cui R esiste: Mega Staraptor mostrava Staraptor base.
     //
-    // 32 in R, **33 dalla sessione Y**: Floette-Mega si era fermata su HOME
-    // perche' quel server risponde 200 al suo indice — ma quell'indice e' un
-    // Floette di un altro colore, non la Mega. Il numero sale di uno per una
-    // ragione nota, e va letto cosi': non e' il generatore ad aver trovato una
-    // forma in piu', e' una forma che stava dalla parte sbagliata.
+    // Il numero si e' mosso due volte, e ogni volta per una ragione scritta:
+    //
+    //   32 in R    la misura di partenza
+    //   33 in Y    Floette-Mega si era fermata su HOME, dove quell'indice e'
+    //              un Floette di un altro colore. Non una forma in piu'
+    //              trovata dal generatore: una forma che stava dalla parte
+    //              sbagliata.
+    //   34 oggi    il Fiore Eterno entra dalla seconda fonte. Nella stessa
+    //              occasione la Mega si e' spostata da f05 a f06, perche' in Y
+    //              le due posizioni di pokemon-zone erano state aggiudicate al
+    //              contrario — vedi il blocco in fondo al file.
     const daZone = Object.entries(formeSprite.fonte).filter(([, f]) => f === 'zone')
-    expect(daZone.length, 'forme recuperate dal ripiego').toBe(33)
+    // 32 in R, 33 in Y, **34 da oggi**: il Fiore Eterno entra dalla seconda
+    // fonte insieme alla Mega, che nel frattempo si e' spostata da f05 a f06.
+    expect(daZone.length, 'forme recuperate dal ripiego').toBe(34)
     expect(formeSprite.forme['staraptor-mega']).toBe('f01')
     expect(formeSprite.fonte['staraptor-mega']).toBe('zone')
     expect(spriteUrl('staraptor-mega')).toContain('_0398_01_0.webp')
@@ -225,31 +233,55 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
 
 /**
  * ─────────────────────────────────────────────────────────────────────────
- * SESSIONE Y — Floette-Mega mostrava un Floette di un altro colore
+ * FLOETTE — DUE VOLTE L'INDICE SBAGLIATO, E LA SECONDA HA INGANNATO L'OCCHIO
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Il registro diceva `f01` da Pokémon HOME. Ma Floette ha CINQUE forme di
- * colore del fiore, quindi l'indice 01 su HOME è un Floette giallo: l'URL
- * risponde 200 e il contenuto è un altro Pokémon.
+ * Il gruppo #0670 ha battuto ogni automatismo che il progetto ha provato, e
+ * vale la pena tenere la storia intera perché ognuno dei due errori è di una
+ * specie diversa.
  *
- * Il generatore aveva assunto che l'indice del server seguisse l'ordine dei
- * NOSTRI dati, dove `floette-mega` è la seconda voce. È il limite dichiarato
- * in R — l'automatismo copre l'esistenza, l'identità no — e qui si è visto.
+ * PRIMO. Il registro diceva `f01` da Pokémon HOME, perché il generatore
+ * assumeva che l'indice del server seguisse l'ordine dei NOSTRI dati. Ma
+ * Floette ha CINQUE colori del fiore: `f01` su HOME è un Floette giallo, l'URL
+ * risponde 200 e il contenuto è un altro Pokémon. È il limite dichiarato in R
+ * — l'automatismo copre l'esistenza, non l'identità.
  *
- * Sondato con `fetch`: HOME ha `f00`–`f05`, pokemon-zone ha solo `f05` e `f06`.
- * La scelta fra i due candidati l'ha fatta **Simone guardando le immagini**,
- * perché nessun oracolo automatico distingue una Mega da un Fiore Eterno.
+ * SECONDO, ed è quello nuovo. Sondando si trovò che pokemon-zone ha due sole
+ * posizioni, `f05` e `f06`, e la scelta fra le due fu fatta a occhio, perché
+ * nessun oracolo distingue una Mega da un Fiore Eterno. **L'occhio scelse al
+ * contrario**: `f05` andò a `floette-mega`, e da allora la Mega ha mostrato
+ * l'icona del Fiore Eterno sul sito pubblicato.
+ *
+ * Non se ne accorse nessuno per una ragione che conta: fino a oggi il Fiore
+ * Eterno non esisteva nemmeno nell'anagrafica, quindi non c'era un secondo
+ * Pokémon con cui l'immagine potesse collidere. È stato aggiungendolo che la
+ * contraddizione è diventata visibile — e il test «due specie diverse non
+ * chiedono lo stesso file» l'ha presa, con entrambi gli slug nel messaggio.
+ *
+ * La morale non è «guardare meglio»: è che una scelta fatta a occhio fra due
+ * candidati indistinguibili resta un'ipotesi finché qualcosa non la incrocia.
+ * Adesso le due voci sono fissate in `ORDINE_CORRETTO`, quindi una
+ * rigenerazione non le riperde né le riscambia.
  */
-describe('Floette-Mega — la forma scelta con l’occhio', () => {
-  it('punta all’indice 05 di pokemon-zone', () => {
-    const u = spriteUrl('floette-mega')
+describe('Floette — le tre forme, tre icone diverse', () => {
+  it('il Fiore Eterno è l’indice 05 di pokemon-zone', () => {
+    const u = spriteUrl('floette-eternal')
     expect(u).toContain('pokemon-zone')
     expect(u).toContain('_0670_05_')
   })
 
-  it('non è più l’icona del Floette base', () => {
-    // IL CONTROLLO CHE SI MUOVE: senza questo caso il test passerebbe anche se
-    // le due chiavi finissero sullo stesso URL, che è esattamente il difetto.
-    expect(spriteUrl('floette-mega')).not.toBe(spriteUrl('floette'))
+  it('la Mega è l’indice 06, non il 05 come diceva Y', () => {
+    const u = spriteUrl('floette-mega')
+    expect(u).toContain('pokemon-zone')
+    expect(u).toContain('_0670_06_')
+  })
+
+  it('le tre forme chiedono tre file diversi', () => {
+    // IL CONTROLLO CHE SI MUOVE, e che ha scoperto lo scambio: senza, i casi
+    // sopra passerebbero anche con due chiavi sullo stesso URL — che è
+    // esattamente il difetto, ed era esattamente lo stato di ieri.
+    const url = ['floette', 'floette-eternal', 'floette-mega'].map(spriteUrl)
+    expect(new Set(url).size, `due forme sullo stesso file: ${url.join(' / ')}`).toBe(3)
+    for (const u of url) expect(u).toBeTruthy()
   })
 })

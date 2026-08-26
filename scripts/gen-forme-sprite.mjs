@@ -88,6 +88,22 @@ const ORDINE_CORRETTO = {
   'pumpkaboo-small': 'f01',
   'gourgeist':       'f00',
   'gourgeist-small': 'f01',
+
+  // Floette — il caso che ha battuto due volte la regola posizionale, e la
+  // seconda volta ha battuto anche l'occhio.
+  //
+  // Su HOME esistono f00-f05: sono i CINQUE colori del fiore piu' l'Eterno,
+  // e nessuno di quegli indici e' la Mega, che HOME non ha. Su pokemon-zone
+  // esistono due sole posizioni, f05 e f06.
+  //
+  // La sessione Y le guardo' e le assegno' al contrario: f05 ando' a
+  // floette-mega, che da allora ha mostrato l'icona del Fiore Eterno sul sito
+  // pubblicato. Riguardate da KrAros: f05 e' il Fiore Eterno, f06 la Mega.
+  //
+  // Entrambe vanno fissate qui perche' la posizione darebbe f01 e f02 — il
+  // gruppo nei nostri dati e' [floette, floette-eternal, floette-mega].
+  'floette-eternal': 'f05',
+  'floette-mega':    'f06',
 }
 
 /** Lo stesso `resolveNum` di `src/utils/sprite.js`, che qui non si può importare. */

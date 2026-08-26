@@ -44,3 +44,11 @@ docs/analisi-critica.md
 # Anche le skill: descrivono il metodo di lavoro, cioe' la stessa materia
 # dei tre file qui sopra. Restano sul disco e continuano a funzionare.
 .claude/
+
+# Il foglio di contatto della sonda: si rigenera a ogni `npm run forme:sonda`,
+# e il suo contenuto dipende dall'accesso alla rete di chi lo lancia. Da un
+# ambiente che non raggiunge gli host delle icone esce con tutte le voci a
+# «nessuna candidata», e committarlo cosi' sarebbe un registro che mente.
+# Diverso da scripts/forme-contatto.html, che e' tracciato di proposito perche'
+# e' la prova di una verifica gia' fatta.
+scripts/forme-sonda.html

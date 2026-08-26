@@ -47,7 +47,8 @@
     "roster:gen": "node scripts/gen-roster.mjs",
     "roster:report": "node scripts/gen-roster.mjs --report",
     "bundle:check": "node scripts/misura-bundle.mjs --check",
-    "bundle:report": "node scripts/misura-bundle.mjs --report"
+    "bundle:report": "node scripts/misura-bundle.mjs --report",
+    "forme:sonda": "node scripts/gen-forme-sonda.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
