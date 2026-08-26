@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-21T14:23:55.975Z",
+    "generatedAt": "2026-08-26T12:01:48.015Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -9,7 +9,7 @@
     "abilitaSenzaEffetto": 266,
     "abilitaNelGap": 109,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 190,
+    "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
     "badgeToltiDallaSecondaFonte": 5,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -1557,23 +1557,7 @@
     "strumentiConVoceNonSelezionabili": [
       "punching glove",
       "throat spray",
-      "legend plate",
-      "slowbro-mega",
-      "slobronite",
-      "feraligatrite",
-      "dragonitite",
-      "greninjaite",
-      "excadrillite",
-      "golurknite",
-      "drampite",
-      "froslasite",
-      "hawluchite",
-      "starmieite",
-      "glimmorite",
-      "meowstite",
-      "barbaraclite",
-      "scraftite",
-      "scolipedonite"
+      "legend plate"
     ],
     "nomiNonCapitalizzati": []
   }
