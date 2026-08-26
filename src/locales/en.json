@@ -92,10 +92,10 @@
     "dismiss": "Dismiss",
     "enemies_on_field": "Enemies on field",
     "enemies_short": "Enemies",
-    "season_filter": "Sets from season",
-    "season_all": "All seasons",
-    "season_current": "{{id}} · current",
-    "season_no_sets": "(no sets)"
+    "reg_filter": "Sets from reg",
+    "reg_all": "All regs",
+    "reg_current": "{{id}} · current",
+    "reg_no_sets": "(no sets)"
   },
   "gap": {
     "badge": "Not calculated",

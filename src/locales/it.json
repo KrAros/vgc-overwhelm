@@ -92,10 +92,10 @@
     "dismiss": "Chiudi",
     "enemies_on_field": "Nemici in campo",
     "enemies_short": "Nemici",
-    "season_filter": "Set dalla stagione",
-    "season_all": "Tutte le stagioni",
-    "season_current": "{{id}} · in corso",
-    "season_no_sets": "(nessun set)"
+    "reg_filter": "Set dalla reg",
+    "reg_all": "Tutte le reg",
+    "reg_current": "{{id}} · in corso",
+    "reg_no_sets": "(nessun set)"
   },
   "gap": {
     "badge": "Non calcolata",

@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import FiammaLogo from './FiammaLogo'
 import { useTranslation } from 'react-i18next'
-import StagioneSelect from './StagioneSelect.jsx'
+import RegSelect from './RegSelect.jsx'
 import { caricaLingua } from '../i18n.js'
 
 const IconGitHub = () => (
@@ -126,12 +126,12 @@ export default function Header() {
         </span>
       </nav>
 
-      {/* ── DESTRA: stagione + toggle lingua + link GitHub ── */}
+      {/* ── DESTRA: reg + toggle lingua + link GitHub ── */}
       <div className="flex items-center gap-2 shrink-0">
-        {/* La stagione sta con la lingua perché è della stessa specie: una
+        {/* La reg sta con la lingua perché è della stessa specie: una
             preferenza di chi usa l'app, non una condizione della battaglia.
             Le condizioni stanno in TopBar, e cambiano i numeri. */}
-        <StagioneSelect />
+        <RegSelect />
         <LangToggle />
         <a
           href="https://github.com/KrAros/vgc-overwhelm"

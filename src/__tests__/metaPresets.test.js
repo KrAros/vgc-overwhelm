@@ -7,34 +7,45 @@
  *
  * `metaPresets.js` è scritto a mano; `regChampions.json` è trascritto dagli
  * elenchi ufficiali. Niente li tiene allineati, quindi qui si guarda che ogni
- * set dichiari una stagione che esiste davvero e una specie che in quella
- * stagione si poteva usare. È lo stesso schema di `gapNoti` e dell'inventario
- * del motore: due elenchi nati in posti diversi, e un test che li confronta.
+ * set dichiari una reg che esiste davvero e una specie che in quella reg si
+ * poteva usare. È lo stesso schema di `gapNoti` e dell'inventario del motore:
+ * due elenchi nati in posti diversi, e un test che li confronta.
  *
  * ─── LA CHIAVE DI UN SET ───────────────────────────────────────────────────
  *
  * `PresetSelect.jsx` identifica un set meta per **etichetta**, e ci mette il
- * valore dentro l'`<option>`. Finché i set vengono tutti da una stagione la
- * cosa regge; con più stagioni lo stesso Incineroar avrà plausibilmente un
- * «Sitrus Support» in M-4 e uno in M-6, e `find` prenderebbe il primo
- * lasciando il secondo irraggiungibile — in silenzio, che è il modo peggiore.
+ * valore dentro l'`<option>`. Finché i set vengono tutti da un periodo solo la
+ * cosa regge; con due, lo stesso Incineroar ha avuto un «Sitrus Support» per
+ * parte, e `find` prenderebbe il primo lasciando il secondo irraggiungibile —
+ * in silenzio, che è il modo peggiore.
  *
- * La chiave vera è `slug + stagione + etichetta`, e il test qui sotto la
- * presidia adesso, prima che il secondo set esista. Aggiungere il presidio
- * dopo la collisione avrebbe voluto dire scoprirla da un utente.
+ * La chiave vera è `slug + reg + etichetta`.
+ *
+ * ─── QUESTO FILE HA GIA' CAMBIATO IDEA UNA VOLTA ───────────────────────────
+ *
+ * Il campo era la STAGIONE, e la chiave `slug + stagione + etichetta`. Andava
+ * bene per distinguere i set; andava male per l'unica cosa che l'utente vede,
+ * cioè il filtro. Le specie cambiano solo fra REG, quindi filtrare per
+ * stagione nascondeva set perfettamente giocabili: misurato, 2 specie su 20
+ * con M-5 selezionata.
+ *
+ * Il prezzo del cambio, dichiarato perché è reale: due osservazioni della
+ * stessa specie con la stessa etichetta nella stessa reg non possono più
+ * coesistere. È successo subito, con Incineroar, e si è tenuta la più
+ * recente.
  */
 
 import { describe, it, expect } from 'vitest'
 import { META_PRESETS, PRESETS_BY_SLUG } from '../data/metaPresets.js'
-import { STAGIONI, regDiStagione } from '../lib/reg.js'
-import { specieDiStagione } from '../lib/regSpecie.js'
+import { REG } from '../lib/reg.js'
+import { specieDiReg } from '../lib/regSpecie.js'
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import itemsData from '../data/items.json' with { type: 'json' }
 import movesData from '../data/moves.json' with { type: 'json' }
 import { NATURES } from '../data/natures.js'
 import { MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 
-const idStagioni = new Set(STAGIONI.map(s => s.id))
+const idReg = new Set(REG.map(r => r.id))
 
 /** La stessa normalizzazione di `PresetSelect.jsx:264`, non una più debole. */
 const normalizzaMossa = (m) => (m ? m.replace(/-/g, ' ') : null)
@@ -51,25 +62,37 @@ describe('set del meta', () => {
     }
   })
 
-  it('ogni set dichiara una stagione che esiste nel registro', () => {
+  it('ogni set dichiara una reg che esiste nel registro', () => {
     const ignote = META_PRESETS
-      .filter(p => !idStagioni.has(p.stagione))
-      .map(p => `${p.slug}/${p.label} → «${p.stagione}»`)
+      .filter(p => !idReg.has(p.reg))
+      .map(p => `${p.slug}/${p.label} → «${p.reg}»`)
     expect(
       ignote,
-      'stagione non dichiarata in regChampions.json: o è un refuso, o il registro va aggiornato',
+      'reg non dichiarata in regChampions.json: o è un refuso, o il registro va aggiornato',
     ).toEqual([])
   })
 
-  it('ogni set è di una specie utilizzabile nella sua stagione', () => {
+  it('nessun set porta ancora il campo `stagione`', () => {
+    // La conversione da stagione a reg e' stata fatta con una sostituzione di
+    // testo su ventidue voci. Un residuo non farebbe fallire niente — verrebbe
+    // semplicemente ignorato — e il set sparirebbe da ogni filtro, perche'
+    // `p.reg` sarebbe `undefined`.
+    const residui = META_PRESETS.filter(p => 'stagione' in p).map(p => `${p.slug}/${p.label}`)
+    expect(residui, 'campo `stagione` rimasto: il set non passerebbe nessun filtro').toEqual([])
+    for (const p of META_PRESETS) {
+      expect(p.reg, `${p.slug}/${p.label} senza reg`).toBeTruthy()
+    }
+  })
+
+  it('ogni set è di una specie utilizzabile nella sua reg', () => {
     // Il controllo che lega davvero le due fonti: un set di un Pokémon che in
     // quella reg non si poteva usare è un set che nessuno ha mai giocato.
     const fuori = []
     for (const p of META_PRESETS) {
-      const legali = new Set(specieDiStagione(p.stagione))
-      if (!legali.has(p.slug)) fuori.push(`${p.slug} (${p.label}) non è in ${regDiStagione(p.stagione)}`)
+      const legali = new Set(specieDiReg(p.reg))
+      if (!legali.has(p.slug)) fuori.push(`${p.slug} (${p.label}) non è in ${p.reg}`)
     }
-    expect(fuori, 'set di specie non utilizzabili nella reg della loro stagione').toEqual([])
+    expect(fuori, 'set di specie non utilizzabili nella loro reg').toEqual([])
   })
 
   it('ogni specie citata esiste nell\'anagrafica', () => {
@@ -77,29 +100,29 @@ describe('set del meta', () => {
     expect(ignote).toEqual([])
   })
 
-  it('la chiave slug+stagione+etichetta è unica', () => {
+  it('la chiave slug+reg+etichetta è unica', () => {
     // Non l'etichetta da sola, che è ciò che oggi legge PresetSelect: due set
-    // omonimi della stessa specie in stagioni diverse sono legittimi, due
-    // nella STESSA stagione no — il secondo sarebbe irraggiungibile.
+    // omonimi della stessa specie in reg diverse sono legittimi, due
+    // nella STESSA reg no — il secondo sarebbe irraggiungibile.
     const viste = new Map()
     const collisioni = []
     for (const p of META_PRESETS) {
-      const k = `${p.slug}|${p.stagione}|${p.label}`
+      const k = `${p.slug}|${p.reg}|${p.label}`
       if (viste.has(k)) collisioni.push(k)
       viste.set(k, true)
     }
     expect(collisioni, 'due set con la stessa chiave: il secondo non si può scegliere').toEqual([])
   })
 
-  it('dentro una stessa specie e stagione le etichette non si ripetono', () => {
+  it('dentro una stessa specie e reg le etichette non si ripetono', () => {
     // La forma che il difetto prenderebbe nella tendina, dove i set sono
     // già filtrati per specie.
     const collisioni = []
     for (const [slug, set] of Object.entries(PRESETS_BY_SLUG)) {
       const perStagione = {}
       for (const p of set) {
-        const k = `${p.stagione}|${p.label}`
-        if (perStagione[k]) collisioni.push(`${slug}: «${p.label}» due volte in ${p.stagione}`)
+        const k = `${p.reg}|${p.label}`
+        if (perStagione[k]) collisioni.push(`${slug}: «${p.label}» due volte in ${p.reg}`)
         perStagione[k] = true
       }
     }
