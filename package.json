@@ -40,6 +40,7 @@
     "inventario:gen": "node scripts/gen-inventario-motore.mjs",
     "inventario:report": "node scripts/gen-inventario-motore.mjs --report",
     "gap:report": "node scripts/gen-gap-noti.mjs --report",
+    "gap:funzioni": "node scripts/gap-per-funzione.mjs",
     "ncp:report": "node scripts/gen-ncp-golden.mjs --report",
     "dati:flag": "node scripts/gen-flag-dati.mjs",
     "dati:flag:report": "node scripts/gen-flag-dati.mjs --report",
