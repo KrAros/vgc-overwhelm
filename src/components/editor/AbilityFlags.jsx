@@ -80,21 +80,39 @@ const TESTO_SPENTO = 'text-gray-400'
  *
  * ─── DA DOVE VENGONO I DUE NUMERI ──────────────────────────────────────────
  *
- * Misurati, non scelti: sono l'altezza che il riquadro PIU' ALTO raggiunge da
- * solo alle due larghezze, prendendo le descrizioni piu' lunghe del file di
- * traduzione (Pellearsa, 146 caratteri; Download, 134; Fantasmanto, 131).
+ * Misurati, non scelti. Provate TUTTE E 198 le descrizioni del file di
+ * traduzione dentro un riquadro della larghezza vera, a tre larghezze di
+ * telefono:
  *
- *     sopra i 480 px   42 px = 2.625rem   copre il caso peggiore misurato
- *     sotto i 480 px   58 px = 3.625rem   NON lo copre: le tre piu' lunghe
- *                                         arrivano a 74 px
+ *     viewport 412 px   riquadro 360 px   massimo 58 px   0 sforano
+ *     viewport 360 px   riquadro 308 px   massimo 58 px   0 sforano
+ *     viewport 320 px   riquadro 268 px   massimo 74 px   4 sforano
  *
- * Il residuo e' dichiarato invece che nascosto: sotto i 480 px restano DUE
- * altezze, 58 px e 74 px, invece delle quattro di prima. Portarlo a 4.625rem
- * lo chiuderebbe del tutto, al prezzo di 74 px di riquadro anche per una
- * descrizione di una riga — su un telefono e' un pezzo di schermo speso per un
- * caso raro. Finche' quella scelta non e' presa, il valore resta questo.
+ * Da cui i due valori: 2.625rem (42 px) copre il caso peggiore sopra i 480 px,
+ * 3.625rem (58 px) lo copre su un telefono normale.
+ *
+ * Il residuo, dichiarato invece che nascosto: a 320 px quattro descrizioni su
+ * centonovantotto — Malcelato, Download, Pellearsa, Raccolta — arrivano a
+ * 74 px e spostano ancora. Alzare il minimo a 4.625rem lo chiuderebbe, ma
+ * renderebbe alto 74 px OGNI riquadro su OGNI telefono per sistemare quattro
+ * casi su una sola larghezza: si pagherebbe ovunque un difetto che quasi
+ * nessuno vede. Il valore resta questo, e il conto sta scritto qui perche' la
+ * prossima persona non debba rifarlo per decidere.
+ *
+ * ─── PERCHE' `items-center` ────────────────────────────────────────────────
+ *
+ * Chiesto da Simone: i riquadri con la levetta centravano il testo, quelli
+ * semplici lo lasciavano in alto. Con un minimo d'altezza addosso, un testo di
+ * una riga in un riquadro da 58 px si appoggiava al bordo superiore lasciando
+ * sotto uno spazio vuoto — sembrava un riquadro sbagliato, non un riquadro
+ * uniforme.
+ *
+ * Vale anche per i due che portano il segnalino «non calcolata»: prima
+ * allineavano in alto perche' il segnalino restasse in cima. Guardato a 320 px
+ * su una descrizione di quattro righe, centrato si legge meglio — il segnalino
+ * riguarda tutto il riquadro, non la prima riga.
  */
-const RIQUADRO = 'mt-1 px-1 py-1 rounded text-xs border min-h-[3.625rem] min-[480px]:min-h-[2.625rem]'
+const RIQUADRO = 'mt-1 px-1 py-1 rounded text-xs border flex items-center min-h-[3.625rem] min-[480px]:min-h-[2.625rem]'
 
 /** La levetta: verde accesa, grigia spenta. */
 const PERNO_ACCESO = 'bg-green-500'
@@ -127,7 +145,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'flash-fire') {
     return (
-      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.flashFireActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} gap-2 ${flags.flashFireActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('flashFireActive', !flags.flashFireActive)}
@@ -150,7 +168,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'multiscale' || key === 'shadow-shield') {
     return (
-      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} gap-2 ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('multiscaleActive', !flags.multiscaleActive)}
@@ -175,7 +193,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     const kos  = flags.supremeOverlordKOs || 0
     const mult = (1 + kos * 0.1).toFixed(1)
     return (
-      <div className={`${RIQUADRO} flex items-center gap-2 ${kos > 0 ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} gap-2 ${kos > 0 ? ACCESO : SPENTO}`}>
         <span className="text-gray-400 shrink-0">{t('editor.allies_ko')}</span>
         <div className="flex gap-1">
           {[0,1,2,3,4,5].map(n => (
@@ -208,7 +226,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'intimidate') {
     return (
-      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.intimidateActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} gap-2 ${flags.intimidateActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('intimidateActive', !flags.intimidateActive)}
@@ -289,7 +307,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         {/* Il segnalino sta DENTRO il riquadro, all'estremità destra: prima era
             un secondo blocco sotto, e aggiungeva 40 px che facevano scendere
             cursori e mosse a ogni cambio di abilità. */}
-        <div className={`${RIQUADRO} flex items-start ${attiva ? ACCESO : SPENTO}`}>
+        <div className={`${RIQUADRO} ${attiva ? ACCESO : SPENTO}`}>
           <span className="min-w-0 flex-1">
             {attiva ? '✅ ' : '💡 '}
             {t(`abilities_desc.${key}`)}
@@ -359,7 +377,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
             NELLA stessa riga della descrizione, non al suo posto — la
             descrizione dice cosa fa nel gioco, il segnalino dice che noi non
             la calcoliamo. */}
-        <div className={`${RIQUADRO} flex items-start ${SPENTO}`}>
+        <div className={`${RIQUADRO} ${SPENTO}`}>
           <span className="min-w-0 flex-1">💡 {t(`abilities_desc.${key}`)}</span>
           {abilitaNonCalcolata(ability) && <SegnalinoNonCalcolata tipo="ability" />}
         </div>
