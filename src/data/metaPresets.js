@@ -271,6 +271,20 @@ export const META_PRESETS = [
     moves: ['rock-slide', 'ice-fang', 'tailwind', 'wide-guard'],
     reg: 'M-B',
   },
+  {
+    slug: 'arcanine-hisui',
+    label: 'Rock Head Attacker',
+    nature: 'Jolly',
+    item: 'focus sash',
+    // Con lo SPAZIO, non col trattino: e' la grafia che pokemon.json da a
+    // questa specie. L'Arcanine normale, due righe piu' su nel listino, ha
+    // `flash-fire` col trattino — le due grafie convivono in `pokemon.json` su
+    // 63 abilita', e il test le confronta specie per specie.
+    ability: 'rock head',
+    sps: [1, 32, 1, 0, 0, 32],
+    moves: ['flare-blitz', 'head-smash', 'rock-slide', 'protect'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
