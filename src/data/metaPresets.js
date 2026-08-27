@@ -261,6 +261,16 @@ export const META_PRESETS = [
     moves: ['rock-slide', 'dual-wingbeat', 'wide-guard', 'tailwind'],
     reg: 'M-B',
   },
+  {
+    slug: 'aerodactyl-mega',
+    label: 'Bulky Speed Control',
+    nature: 'Jolly',
+    item: 'aerodactylite',
+    ability: 'tough-claws',
+    sps: [28, 11, 9, 0, 1, 17],
+    moves: ['rock-slide', 'ice-fang', 'tailwind', 'wide-guard'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
