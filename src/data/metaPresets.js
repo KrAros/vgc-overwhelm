@@ -311,6 +311,18 @@ export const META_PRESETS = [
     moves: ['wave-crash', 'aqua-jet', 'last-respects', 'protect'],
     reg: 'M-B',
   },
+  {
+    slug: 'basculegion-m',
+    label: 'Rain Sweeper',
+    nature: 'Adamant',
+    // `swift swim` CON LO SPAZIO, come lo scrive pokemon.json per questa
+    // specie. Stessa trappola di `rock head` su Arcanine di Hisui.
+    ability: 'swift swim',
+    item: 'life orb',
+    sps: [4, 18, 11, 0, 1, 32],
+    moves: ['last-respects', 'wave-crash', 'aqua-jet', 'protect'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
