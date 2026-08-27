@@ -285,6 +285,19 @@ export const META_PRESETS = [
     moves: ['flare-blitz', 'head-smash', 'rock-slide', 'protect'],
     reg: 'M-B',
   },
+  {
+    slug: 'arcanine-hisui',
+    label: 'Intimidate Support',
+    nature: 'Adamant',
+    item: 'lum berry',
+    ability: 'intimidate',
+    sps: [0, 32, 2, 0, 0, 32],
+    // `will-o-wisp` col trattino, che e' la chiave vera di moves.json. Fino a
+    // ieri una mossa cosi' non si poteva scrivere in un set: la risoluzione
+    // sostituiva ogni trattino con uno spazio e lo slot restava vuoto.
+    moves: ['flare-blitz', 'protect', 'will-o-wisp', 'rock-slide'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {

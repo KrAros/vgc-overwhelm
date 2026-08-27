@@ -44,11 +44,23 @@ import itemsData from '../data/items.json' with { type: 'json' }
 import movesData from '../data/moves.json' with { type: 'json' }
 import { NATURES } from '../data/natures.js'
 import { MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
+import { findMoveKey } from '../utils/showdownIO.js'
 
 const idReg = new Set(REG.map(r => r.id))
 
-/** La stessa normalizzazione di `PresetSelect.jsx:264`, non una più debole. */
-const normalizzaMossa = (m) => (m ? m.replace(/-/g, ' ') : null)
+/**
+ * La STESSA funzione che l'app usa per risolvere una mossa, non una copia.
+ *
+ * Qui c'era una copia — `m.replace(/-/g, ' ')` — trascritta da
+ * `PresetSelect.jsx`. Riproduceva fedelmente il difetto che doveva scoprire:
+ * sedici mosse hanno il trattino nella chiave vera (`u-turn`, `will-o-wisp`,
+ * `x-scissor`…) e quella sostituzione le rende introvabili. Test e app
+ * sbagliavano insieme, quindi il test era verde.
+ *
+ * Importarla è la sola forma che regge: se domani la risoluzione cambia, non
+ * può cambiare in un posto solo.
+ */
+const normalizzaMossa = findMoveKey
 
 describe('set del meta', () => {
   it('ce ne sono, e ognuno ha i campi che servono', () => {
@@ -206,7 +218,11 @@ describe('set del meta', () => {
     // rifiuterebbero tutto o accetterebbero tutto, a seconda del verso.
     expect(NATURES).toContain('adamant')
     expect(itemsData['sitrus berry']).toBeTruthy()
-    expect(movesData[normalizzaMossa('fake-out')]).toBeTruthy()
+    expect(movesData[normalizzaMossa('fake-out')], 'mossa con la chiave a spazi').toBeTruthy()
+    // E una delle sedici la cui chiave vera PORTA il trattino: se la
+    // risoluzione tornasse a sostituire alla cieca, questa diventerebbe null.
+    expect(normalizzaMossa('will-o-wisp'), 'mossa con la chiave a trattini').toBe('will-o-wisp')
+    expect(normalizzaMossa('u-turn')).toBe('u-turn')
     expect(pokemonData['incineroar'].abilities).toContain('intimidate')
     expect(MAX_SP_TOTAL).toBe(66)
   })

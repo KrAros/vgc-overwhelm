@@ -231,8 +231,27 @@ function findPokemonKey(name) {
   return null
 }
 
-function findMoveKey(name) {
-  const slug = name.trim().toLowerCase()
+/**
+ * Risolve un nome di mossa in una chiave di `moves.json`.
+ *
+ * ─── PERCHE' SI PROVA LA CHIAVE GREZZA PER PRIMA ───────────────────────────
+ *
+ * Perche' sedici mosse hanno il TRATTINO dentro la chiave vera: `u-turn`,
+ * `double-edge`, `x-scissor`, `v-create`, `freeze-dry`, `will-o-wisp`,
+ * `self-destruct`, `power-up punch`… Sostituire ogni trattino con uno spazio
+ * le rende TUTTE introvabili, perche' `u turn` non e' una chiave.
+ *
+ * Qui l'ordine e' sempre stato giusto, e l'import da Showdown ha sempre
+ * funzionato. Il percorso dei preset invece normalizzava alla cieca, e quelle
+ * sedici mosse non si potevano scrivere in un set: `metaPresets.test.js` lo
+ * ha reso rosso la prima volta che e' servito Will-O-Wisp.
+ *
+ * Esportata proprio per quello: una funzione sola, cosi' i due percorsi non
+ * possono divergere di nuovo.
+ */
+export function findMoveKey(name) {
+  if (!name) return null
+  const slug = String(name).trim().toLowerCase()
   if (movesData[slug]) return slug
   const spaced = slug.replace(/-/g, ' ')
   if (movesData[spaced]) return spaced
