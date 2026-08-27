@@ -323,6 +323,19 @@ export const META_PRESETS = [
     moves: ['last-respects', 'wave-crash', 'aqua-jet', 'protect'],
     reg: 'M-B',
   },
+  {
+    slug: 'blastoise',
+    label: 'Bulky Pivot',
+    nature: 'Impish',
+    // `rain-dish` COL TRATTINO. Basculegion, poche righe piu' su, ha
+    // `swift swim` con lo spazio: sono le 63 abilita' che pokemon.json porta
+    // in entrambe le grafie. Si copia da li', non si deduce.
+    ability: 'rain-dish',
+    item: 'leftovers',
+    sps: [32, 0, 30, 0, 4, 0],
+    moves: ['flip-turn', 'fake-out', 'yawn', 'protect'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
