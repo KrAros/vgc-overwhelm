@@ -181,6 +181,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Glove, Protective Pads e Long Reach lo tolgono.
   const isContactBase = moveData.contact === true
   const isPunch = moveData.punch === true
+  const isPulse = moveData.pulse === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -507,6 +508,19 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
   // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.
   if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+
+  // g — Megalancio sulle mosse-impulso: ×1.5.
+  //
+  // Il riferimento lo mette nel ramo delle «1.5x Abilities»
+  // (`damage_MASTER.js:1672`) e spinge `0x1800`, che è 1,5 in virgola fissa —
+  // cioè `MOD.X1_5`. Sta nella catena della POTENZA, non della statistica
+  // d'attacco: la differenza conta quando si incatena con altri modificatori.
+  //
+  // `isPulse` viene dal flag `pulse` di moves.json, trascritto dal vendor:
+  // Water Pulse, Aura Sphere, Dark Pulse, Dragon Pulse, Heal Pulse, Origin
+  // Pulse, Terrain Pulse. Heal Pulse è di stato e non arriva mai qui, ma resta
+  // nell'elenco perché l'elenco è trascritto e non filtrato da noi.
+  if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
 
   // j / k — strumenti che modificano la potenza.
   // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.

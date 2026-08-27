@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-26T12:01:48.015Z",
+    "generatedAt": "2026-08-27T19:46:44.922Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 109,
+    "abilitaNelGap": 108,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -53,7 +53,6 @@
     "lightning rod",
     "liquid voice",
     "marvel scale",
-    "mega launcher",
     "mega sol",
     "mimicry",
     "minds eye",
