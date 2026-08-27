@@ -327,6 +327,20 @@ export const META_PRESETS = [
     moves: ['flip-turn', 'fake-out', 'yawn', 'protect'],
     reg: 'M-B',
   },
+  {
+    slug: 'blastoise-mega',
+    label: 'Setup Sweeper',
+    nature: 'Modest',
+    item: 'blastoisinite',
+    // `mega-launcher`, non `rain-dish`. Il set ricevuto dichiarava Pellepioggia
+    // perche' in formato Showdown si scrive l'abilita della forma BASE: la
+    // megaevoluzione avviene in partita. Nel nostro modello la Mega e una
+    // specie a se, e ha Megalancio come unica abilita.
+    ability: 'mega-launcher',
+    sps: [1, 0, 1, 32, 0, 32],
+    moves: ['dark-pulse', 'water-spout', 'shell-smash', 'protect'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
