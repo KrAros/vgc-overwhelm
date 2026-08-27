@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next'
 import useCalcStore from '../../store/useCalcStore'
 import { PRESETS_BY_SLUG } from '../../data/metaPresets'
 import { scegliCorrispondente } from '../../lib/scegliPreset.js'
+import { findMoveKey } from '../../utils/showdownIO.js'
 import useReg, { TUTTE } from '../../store/useReg.js'
 import pokemonData from '../../data/pokemon.json'
 
@@ -262,7 +263,7 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
   // per distinguere i preset meta comuni).
   const [manualSelected, setManualSelected] = useState({})
 
-  const normalizeMove = m => m ? m.replace(/-/g, ' ') : null
+
 
   /**
    * ─── LA CHIAVE DI UN SET META ────────────────────────────────────────────
@@ -335,7 +336,7 @@ export default function PresetSelect({ team, index, currentSlug, currentSlot, ex
     if (preset.ability) setAbility(team, index, preset.ability)
     setSPs(team, index, preset.sps || [0,0,0,0,0,0])
     ;(preset.moves || [null,null,null,null]).forEach((m, mi) =>
-      setMove(team, index, mi, normalizeMove(m))
+      setMove(team, index, mi, findMoveKey(m))
     )
   }
 

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore, { encodeTeamsToURL } from '../store/useCalcStore'
 import useFieldState from '../hooks/useFieldState'
-import { parseShowdownPaste, teamToShowdown } from '../utils/showdownIO'
+import { parseShowdownPaste, teamToShowdown, findMoveKey } from '../utils/showdownIO'
 import { spriteUrl, fallbackSpriteUrl } from '../utils/sprite'
 import pokemonData from '../data/pokemon.json'
 import { PRESETS_BY_SLUG } from '../data/metaPresets'
@@ -380,7 +380,7 @@ export default function ControlBar() {
     }
   }
 
-  function normalizeMove(m) { return m ? m.replace(/-/g, ' ') : null }
+
 
   function handleImportNames(targetTeam) {
     // Separa per newline, virgola, slash
@@ -409,7 +409,7 @@ export default function ControlBar() {
           item: p.item,
           ability: p.ability,
           sps: p.sps,
-          moves: p.moves.map(normalizeMove),
+          moves: p.moves.map(findMoveKey),
         }
         results.push({ name, status: 'preset', label: p.label, total: presets.length })
       } else {
