@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-26T12:01:48.015Z",
+    "generatedAt": "2026-08-27T19:46:44.922Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 310,
-    "abilitaSenzaEffetto": 266,
-    "abilitaNelGap": 109,
+    "abilitaSenzaEffetto": 265,
+    "abilitaNelGap": 108,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -464,16 +464,6 @@
           "funzione": "calcDefMods",
           "file": "damage_MASTER.js",
           "riga": 2103
-        }
-      },
-      {
-        "chiave": "mega launcher",
-        "nome": "Mega Launcher",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1672
         }
       },
       {

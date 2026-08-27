@@ -65,6 +65,20 @@ export const ABILITY_EFFECTS = {
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
   'tough-claws': { toughClaws: true, showInSmogon: true },
 
+  // ── Attaccante: boost per famiglia di mossa ──────────────────────────────
+  //
+  // Megalancio: x1.5 sulle mosse-impulso. Nel riferimento e' una delle sei
+  // abilita' raccolte in un solo ramo — `damage_MASTER.js:1668`, «1.5x
+  // Abilities» — insieme a Technician, Flare Boost, Toxic Boost, Strong Jaw e
+  // Steely Spirit. Delle sei questa e' la prima che implementiamo, e non per
+  // completezza: e' la prima che tocca un set del meta, il Mega Blastoise con
+  // Dark Pulse.
+  //
+  // Quali mosse siano «impulso» NON e' scritto qui: e' il flag `pulse` di
+  // moves.json, che `gen-flag-dati.mjs` trascrive da `isPulse` del vendor.
+  // Una lista a mano in questo file sarebbe la tabella che marcisce.
+  'mega-launcher': { megaLauncher: true, showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     

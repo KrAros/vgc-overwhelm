@@ -350,6 +350,11 @@ const FLAG_MOSSE = {
   bite: 'isBite',
   slicing: 'isSlice',
   bullet: 'isBullet',
+  // `pulse` entra per Megalancio, che da' x1.5 alle mosse-impulso. Sette
+  // mosse su 810, quindi il costo e' nullo — ma soprattutto: la lista viene
+  // di qui e non scritta a mano nel motore, cosi' se NCP la cambia il flag
+  // cambia con lei invece di restare una tabella che marcisce.
+  pulse: 'isPulse',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

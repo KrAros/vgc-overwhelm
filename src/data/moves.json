@@ -3013,7 +3013,8 @@
 		"type": 2,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"pulse": true
 	},
 	"doom desire": {
 		"num": "353",
@@ -3390,7 +3391,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"pulse": true
 	},
 	"rock polish": {
 		"num": "397",
@@ -3415,7 +3417,8 @@
 		"type": 15,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"pulse": true
 	},
 	"night slash": {
 		"num": "400",
@@ -3479,7 +3482,8 @@
 		"type": 14,
 		"category": 1,
 		"power": 85,
-		"priority": 0
+		"priority": 0,
+		"pulse": true
 	},
 	"dragon rush": {
 		"num": "407",
@@ -4339,7 +4343,8 @@
 		"type": 10,
 		"category": 2,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"pulse": true
 	},
 	"hex": {
 		"num": "506",
@@ -5245,7 +5250,8 @@
 		"category": 1,
 		"power": 110,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"pulse": true
 	},
 	"dragon ascent": {
 		"num": "",
@@ -6853,7 +6859,8 @@
 		"type": 0,
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"pulse": true
 	},
 	"thunder cage": {
 		"num": "819",
