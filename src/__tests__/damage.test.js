@@ -124,6 +124,45 @@ describe('calcEOT — effetti di fine turno', () => {
     expect(isSandImmune([], '', 'safety goggles')).toBe(true)
   })
 
+  /**
+   * ─── LA VIA CHE NESSUNO PROVAVA ──────────────────────────────────────────
+   *
+   * `isSandImmune` ha tre vie — tipo, abilità, strumento — e i test coprivano
+   * la prima e la terza. La seconda no, e ci si era nascosto dentro un difetto:
+   * le chiavi erano scritte con lo SPAZIO e confrontate con `toLowerCase()`,
+   * mentre `pokemon.json` scriveva la maggior parte delle abilità col
+   * trattino. Quattro delle cinque rispondevano solo a una grafia su due;
+   * `overcoat` funzionava per caso, essendo una parola sola.
+   *
+   * Restava invisibile perché i tipi Roccia, Acciaio e Terra sono immuni
+   * comunque, e coprono i casi a cui uno pensa per primi.
+   *
+   * Il tipo si passa VUOTO di proposito: è l'unico modo di provare la via
+   * dell'abilità e basta.
+   */
+  it('le abilità che danno immunità alla sabbia la danno davvero', () => {
+    for (const a of ['sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat']) {
+      expect(isSandImmune([], a, ''), `${a} non dà immunità`).toBe(true)
+    }
+  })
+
+  it('e la danno da qualunque grafia arrivi l\'abilità', () => {
+    // Una squadra salvata prima della normalizzazione porta ancora lo spazio,
+    // e un paste di Showdown scrive «Sand Veil»: il confronto normalizza, così
+    // nessuna delle tre forme si perde.
+    for (const a of ['sand veil', 'Sand Veil', 'sand-veil']) {
+      expect(isSandImmune([], a, ''), `«${a}» non riconosciuta`).toBe(true)
+    }
+  })
+
+  it('un\'abilità qualunque NON dà immunità', () => {
+    // Controllo negativo: senza, i due test sopra passerebbero anche se la
+    // funzione rispondesse sempre `true`.
+    for (const a of ['intimidate', 'levitate', '', 'sand-storm-inventata']) {
+      expect(isSandImmune([], a, ''), `«${a}» non dovrebbe dare immunità`).toBe(false)
+    }
+  })
+
   it('la Sitrus Berry cura 1/4 degli HP massimi', () => {
     const eot = calcEOT({ item: 'sitrus berry' }, 200, 'none', [])
     expect(eot.sitrusBerryHP).toBe(50)

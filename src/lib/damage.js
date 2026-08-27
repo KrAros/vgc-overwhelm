@@ -12,6 +12,7 @@
 
 import { TYPES } from '../data/typeChart'
 import { MAX_HITS, normalizzaMeteo } from './rules.js'
+import { normalizeAbilityKey } from '../data/abilityEffects.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
 
@@ -43,8 +44,26 @@ const SOGLIA_GARANTITO = 0.9999
 // ── Immunità sabbia ───────────────────────────────────────────────────────────
 
 const SAND_IMMUNE_TYPES = new Set([TYPES.ROCK, TYPES.STEEL, TYPES.GROUND])
+
+/**
+ * ─── CHIAVI COL TRATTINO, CONFRONTO NORMALIZZATO ───────────────────────────
+ *
+ * Erano scritte con lo SPAZIO e confrontate con un semplice `toLowerCase()`.
+ * Sembrava funzionare perche' `pokemon.json` scriveva alcune abilita' con lo
+ * spazio — ma solo alcune: 300 riferimenti su 1389. Per tutte le altre specie
+ * l'immunita' alla sabbia non scattava, e nessuno lo notava perche' i tipi
+ * Roccia, Acciaio e Terra sono immuni comunque e coprivano i casi piu' ovvi.
+ *
+ * Misurato: delle cinque abilita' qui sotto, quattro rispondevano solo nella
+ * grafia con lo spazio. `overcoat` funzionava per caso, essendo una parola
+ * sola.
+ *
+ * Normalizzando `pokemon.json` a una grafia sola questa tabella sarebbe
+ * passata da meta' rotta a rotta del tutto. Ora usa la stessa normalizzazione
+ * del resto del progetto, come gia' fa `speedOrder.js`.
+ */
 const SAND_IMMUNE_ABILITIES = new Set([
-  'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',
+  'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',
 ])
 
 /**
@@ -56,7 +75,7 @@ const SAND_IMMUNE_ABILITIES = new Set([
 export function isSandImmune(defTypes = [], ability = '', item = '') {
   return (
     defTypes.some(t => SAND_IMMUNE_TYPES.has(t)) ||
-    SAND_IMMUNE_ABILITIES.has(ability.toLowerCase()) ||
+    SAND_IMMUNE_ABILITIES.has(normalizeAbilityKey(ability)) ||
     item.toLowerCase() === 'safety goggles'
   )
 }
