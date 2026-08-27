@@ -298,6 +298,19 @@ export const META_PRESETS = [
     moves: ['flare-blitz', 'protect', 'will-o-wisp', 'rock-slide'],
     reg: 'M-B',
   },
+  {
+    // `-m`, il maschio: le due forme divergono nelle stat — 112 Att / 80 AttSp
+    // contro 92 / 100 — e questo e' un set fisico. Anche l'altro Basculegion
+    // in questo file e' il maschio.
+    slug: 'basculegion-m',
+    label: 'Life Orb Attacker',
+    nature: 'Jolly',
+    item: 'life orb',
+    ability: 'adaptability',
+    sps: [4, 30, 0, 0, 0, 32],
+    moves: ['wave-crash', 'aqua-jet', 'last-respects', 'protect'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
