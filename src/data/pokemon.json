@@ -22223,7 +22223,7 @@
 			34
 		],
 		"abilities": [
-			"magnet pull"
+			"magnet-pull"
 		],
 		"canEvolve": false
 	},
@@ -22245,7 +22245,7 @@
 			34
 		],
 		"abilities": [
-			"iron fist"
+			"iron-fist"
 		],
 		"canEvolve": false
 	},
@@ -22268,7 +22268,7 @@
 		],
 		"abilities": [
 			"overgrow",
-			"grassy surge"
+			"grassy-surge"
 		],
 		"canEvolve": true
 	},
@@ -22291,7 +22291,7 @@
 		],
 		"abilities": [
 			"overgrow",
-			"grassy surge"
+			"grassy-surge"
 		],
 		"canEvolve": true
 	},
@@ -22314,7 +22314,7 @@
 		],
 		"abilities": [
 			"overgrow",
-			"grassy surge"
+			"grassy-surge"
 		],
 		"canEvolve": false
 	},
@@ -22474,7 +22474,7 @@
 			25
 		],
 		"abilities": [
-			"cheek pouch",
+			"cheek-pouch",
 			"gluttony"
 		],
 		"canEvolve": true
@@ -22497,7 +22497,7 @@
 			20
 		],
 		"abilities": [
-			"cheek pouch",
+			"cheek-pouch",
 			"gluttony"
 		],
 		"canEvolve": false
@@ -22520,9 +22520,9 @@
 			57
 		],
 		"abilities": [
-			"keen eye",
+			"keen-eye",
 			"unnerve",
-			"big pecks"
+			"big-pecks"
 		],
 		"canEvolve": true
 	},
@@ -22544,9 +22544,9 @@
 			77
 		],
 		"abilities": [
-			"keen eye",
+			"keen-eye",
 			"unnerve",
-			"big pecks"
+			"big-pecks"
 		],
 		"canEvolve": true
 	},
@@ -22571,7 +22571,7 @@
 		"abilities": [
 			"pressure",
 			"unnerve",
-			"mirror armor"
+			"mirror-armor"
 		],
 		"canEvolve": false
 	},
@@ -22594,7 +22594,7 @@
 		],
 		"abilities": [
 			"swarm",
-			"compound eyes",
+			"compound-eyes",
 			"telepathy"
 		],
 		"canEvolve": true
@@ -22619,7 +22619,7 @@
 		],
 		"abilities": [
 			"swarm",
-			"compound eyes",
+			"compound-eyes",
 			"telepathy"
 		],
 		"canEvolve": true
@@ -22667,7 +22667,7 @@
 			50
 		],
 		"abilities": [
-			"run away",
+			"run-away",
 			"unburden",
 			"stakeout"
 		],
@@ -22691,7 +22691,7 @@
 			90
 		],
 		"abilities": [
-			"run away",
+			"run-away",
 			"unburden",
 			"stakeout"
 		],
@@ -22715,9 +22715,9 @@
 			10
 		],
 		"abilities": [
-			"cotton down",
+			"cotton-down",
 			"regenerator",
-			"effect spore"
+			"effect-spore"
 		],
 		"canEvolve": true
 	},
@@ -22739,9 +22739,9 @@
 			60
 		],
 		"abilities": [
-			"cotton down",
+			"cotton-down",
 			"regenerator",
-			"effect spore"
+			"effect-spore"
 		],
 		"canEvolve": false
 	},
@@ -22764,7 +22764,7 @@
 		],
 		"abilities": [
 			"fluffy",
-			"run away",
+			"run-away",
 			"bulletproof"
 		],
 		"canEvolve": true
@@ -22811,9 +22811,9 @@
 			44
 		],
 		"abilities": [
-			"strong jaw",
-			"shell armor",
-			"swift swim"
+			"strong-jaw",
+			"shell-armor",
+			"swift-swim"
 		],
 		"canEvolve": true
 	},
@@ -22836,9 +22836,9 @@
 			74
 		],
 		"abilities": [
-			"strong jaw",
-			"shell armor",
-			"swift swim"
+			"strong-jaw",
+			"shell-armor",
+			"swift-swim"
 		],
 		"canEvolve": false
 	},
@@ -22860,7 +22860,7 @@
 			26
 		],
 		"abilities": [
-			"ball fetch",
+			"ball-fetch",
 			"rattled"
 		],
 		"canEvolve": true
@@ -22883,7 +22883,7 @@
 			121
 		],
 		"abilities": [
-			"strong jaw",
+			"strong-jaw",
 			"competitive"
 		],
 		"canEvolve": false
@@ -22906,9 +22906,9 @@
 			30
 		],
 		"abilities": [
-			"steam engine",
+			"steam-engine",
 			"heatproof",
-			"flash fire"
+			"flash-fire"
 		],
 		"canEvolve": true
 	},
@@ -22931,9 +22931,9 @@
 			50
 		],
 		"abilities": [
-			"steam engine",
-			"flame body",
-			"flash fire"
+			"steam-engine",
+			"flame-body",
+			"flash-fire"
 		],
 		"canEvolve": true
 	},
@@ -22956,9 +22956,9 @@
 			30
 		],
 		"abilities": [
-			"steam engine",
-			"flame body",
-			"flash fire"
+			"steam-engine",
+			"flame-body",
+			"flash-fire"
 		],
 		"canEvolve": false
 	},
@@ -23033,7 +23033,7 @@
 		"abilities": [
 			"ripen",
 			"gluttony",
-			"thick fat"
+			"thick-fat"
 		],
 		"canEvolve": false
 	},
@@ -23055,9 +23055,9 @@
 			46
 		],
 		"abilities": [
-			"sand spit",
-			"shed skin",
-			"sand veil"
+			"sand-spit",
+			"shed-skin",
+			"sand-veil"
 		],
 		"canEvolve": true
 	},
@@ -23079,9 +23079,9 @@
 			71
 		],
 		"abilities": [
-			"sand spit",
-			"shed skin",
-			"sand veil"
+			"sand-spit",
+			"shed-skin",
+			"sand-veil"
 		],
 		"canEvolve": false
 	},
@@ -23104,7 +23104,7 @@
 			85
 		],
 		"abilities": [
-			"gulp missile"
+			"gulp-missile"
 		],
 		"canEvolve": false
 	},
@@ -23126,8 +23126,8 @@
 			66
 		],
 		"abilities": [
-			"swift swim",
-			"propeller tail"
+			"swift-swim",
+			"propeller-tail"
 		],
 		"canEvolve": true
 	},
@@ -23149,8 +23149,8 @@
 			136
 		],
 		"abilities": [
-			"swift swim",
-			"propeller tail"
+			"swift-swim",
+			"propeller-tail"
 		],
 		"canEvolve": false
 	},
@@ -23198,7 +23198,7 @@
 			75
 		],
 		"abilities": [
-			"punk rock",
+			"punk-rock",
 			"plus",
 			"technician"
 		],
@@ -23223,7 +23223,7 @@
 			75
 		],
 		"abilities": [
-			"punk rock",
+			"punk-rock",
 			"minus",
 			"technician"
 		]
@@ -23247,9 +23247,9 @@
 			45
 		],
 		"abilities": [
-			"flash fire",
-			"white smoke",
-			"flame body"
+			"flash-fire",
+			"white-smoke",
+			"flame-body"
 		],
 		"canEvolve": true
 	},
@@ -23272,9 +23272,9 @@
 			65
 		],
 		"abilities": [
-			"flash fire",
-			"white smoke",
-			"flame body"
+			"flash-fire",
+			"white-smoke",
+			"flame-body"
 		],
 		"canEvolve": false
 	},
@@ -23342,8 +23342,8 @@
 			50
 		],
 		"abilities": [
-			"weak armor",
-			"cursed body"
+			"weak-armor",
+			"cursed-body"
 		],
 		"canEvolve": true
 	},
@@ -23365,8 +23365,8 @@
 			70
 		],
 		"abilities": [
-			"weak armor",
-			"cursed body"
+			"weak-armor",
+			"cursed-body"
 		],
 		"canEvolve": false
 	},
@@ -23390,7 +23390,7 @@
 		"abilities": [
 			"healer",
 			"anticipation",
-			"magic bounce"
+			"magic-bounce"
 		],
 		"canEvolve": true
 	},
@@ -23414,7 +23414,7 @@
 		"abilities": [
 			"healer",
 			"anticipation",
-			"magic bounce"
+			"magic-bounce"
 		],
 		"canEvolve": true
 	},
@@ -23439,7 +23439,7 @@
 		"abilities": [
 			"healer",
 			"anticipation",
-			"magic bounce"
+			"magic-bounce"
 		],
 		"canEvolve": false
 	},
@@ -23561,9 +23561,9 @@
 			50
 		],
 		"abilities": [
-			"battle armor",
-			"tough claws",
-			"steely spirit"
+			"battle-armor",
+			"tough-claws",
+			"steely-spirit"
 		],
 		"canEvolve": false
 	},
@@ -23585,8 +23585,8 @@
 			30
 		],
 		"abilities": [
-			"weak armor",
-			"perish body"
+			"weak-armor",
+			"perish-body"
 		],
 		"canEvolve": false
 	},
@@ -23632,9 +23632,9 @@
 			70
 		],
 		"abilities": [
-			"tangled feet",
-			"screen cleaner",
-			"ice body"
+			"tangled-feet",
+			"screen-cleaner",
+			"ice-body"
 		],
 		"canEvolve": false
 	},
@@ -23657,7 +23657,7 @@
 			30
 		],
 		"abilities": [
-			"wandering spirit"
+			"wandering-spirit"
 		],
 		"canEvolve": false
 	},
@@ -23679,8 +23679,8 @@
 			34
 		],
 		"abilities": [
-			"sweet veil",
-			"aroma veil"
+			"sweet-veil",
+			"aroma-veil"
 		],
 		"canEvolve": true
 	},
@@ -23702,8 +23702,8 @@
 			64
 		],
 		"abilities": [
-			"sweet veil",
-			"aroma veil"
+			"sweet-veil",
+			"aroma-veil"
 		],
 		"canEvolve": false
 	},
@@ -23725,7 +23725,7 @@
 			75
 		],
 		"abilities": [
-			"battle armor",
+			"battle-armor",
 			"defiant"
 		],
 		"canEvolve": false
@@ -23748,8 +23748,8 @@
 			15
 		],
 		"abilities": [
-			"lightning rod",
-			"electric surge"
+			"lightning-rod",
+			"electric-surge"
 		],
 		"canEvolve": false
 	},
@@ -23772,8 +23772,8 @@
 			20
 		],
 		"abilities": [
-			"shield dust",
-			"ice scales"
+			"shield-dust",
+			"ice-scales"
 		],
 		"canEvolve": true
 	},
@@ -23796,8 +23796,8 @@
 			65
 		],
 		"abilities": [
-			"shield dust",
-			"ice scales"
+			"shield-dust",
+			"ice-scales"
 		],
 		"canEvolve": false
 	},
@@ -23819,7 +23819,7 @@
 			70
 		],
 		"abilities": [
-			"power spot"
+			"power-spot"
 		],
 		"canEvolve": false
 	},
@@ -23841,7 +23841,7 @@
 			50
 		],
 		"abilities": [
-			"ice face"
+			"ice-face"
 		],
 		"canEvolve": false
 	},
@@ -23863,7 +23863,7 @@
 			130
 		],
 		"abilities": [
-			"ice face"
+			"ice-face"
 		],
 		"canEvolve": false
 	},
@@ -23886,9 +23886,9 @@
 			95
 		],
 		"abilities": [
-			"inner focus",
+			"inner-focus",
 			"synchronize",
-			"psychic surge"
+			"psychic-surge"
 		],
 		"canEvolve": false
 	},
@@ -23911,9 +23911,9 @@
 			85
 		],
 		"abilities": [
-			"own tempo",
+			"own-tempo",
 			"synchronize",
-			"psychic surge"
+			"psychic-surge"
 		],
 		"canEvolve": false
 	},
@@ -23936,7 +23936,7 @@
 			97
 		],
 		"abilities": [
-			"hunger switch"
+			"hunger-switch"
 		],
 		"canEvolve": false
 	},
@@ -23959,7 +23959,7 @@
 			97
 		],
 		"abilities": [
-			"hunger switch"
+			"hunger-switch"
 		],
 		"canEvolve": false
 	},
@@ -23981,8 +23981,8 @@
 			40
 		],
 		"abilities": [
-			"sheer force",
-			"heavy metal"
+			"sheer-force",
+			"heavy-metal"
 		],
 		"canEvolve": true
 	},
@@ -24004,8 +24004,8 @@
 			30
 		],
 		"abilities": [
-			"sheer force",
-			"heavy metal"
+			"sheer-force",
+			"heavy-metal"
 		],
 		"canEvolve": false
 	},
@@ -24028,9 +24028,9 @@
 			75
 		],
 		"abilities": [
-			"volt absorb",
+			"volt-absorb",
 			"hustle",
-			"sand rush"
+			"sand-rush"
 		],
 		"canEvolve": false
 	},
@@ -24053,9 +24053,9 @@
 			55
 		],
 		"abilities": [
-			"volt absorb",
+			"volt-absorb",
 			"static",
-			"slush rush"
+			"slush-rush"
 		],
 		"canEvolve": false
 	},
@@ -24078,9 +24078,9 @@
 			75
 		],
 		"abilities": [
-			"water absorb",
-			"strong jaw",
-			"sand rush"
+			"water-absorb",
+			"strong-jaw",
+			"sand-rush"
 		],
 		"canEvolve": false
 	},
@@ -24103,9 +24103,9 @@
 			55
 		],
 		"abilities": [
-			"water absorb",
-			"ice body",
-			"slush rush"
+			"water-absorb",
+			"ice-body",
+			"slush-rush"
 		],
 		"canEvolve": false
 	},
@@ -24128,8 +24128,8 @@
 			85
 		],
 		"abilities": [
-			"light metal",
-			"heavy metal",
+			"light-metal",
+			"heavy-metal",
 			"stalwart"
 		],
 		"canEvolve": true
@@ -24153,9 +24153,9 @@
 			82
 		],
 		"abilities": [
-			"clear body",
+			"clear-body",
 			"infiltrator",
-			"cursed body"
+			"cursed-body"
 		],
 		"canEvolve": true
 	},
@@ -24178,9 +24178,9 @@
 			102
 		],
 		"abilities": [
-			"clear body",
+			"clear-body",
 			"infiltrator",
-			"cursed body"
+			"cursed-body"
 		],
 		"canEvolve": true
 	},
@@ -24203,9 +24203,9 @@
 			142
 		],
 		"abilities": [
-			"clear body",
+			"clear-body",
 			"infiltrator",
-			"cursed body"
+			"cursed-body"
 		],
 		"canEvolve": false
 	},
@@ -24227,7 +24227,7 @@
 			138
 		],
 		"abilities": [
-			"intrepid sword"
+			"intrepid-sword"
 		],
 		"canEvolve": false
 	},
@@ -24250,7 +24250,7 @@
 			148
 		],
 		"abilities": [
-			"intrepid sword"
+			"intrepid-sword"
 		],
 		"canEvolve": false
 	},
@@ -24272,7 +24272,7 @@
 			138
 		],
 		"abilities": [
-			"dauntless shield"
+			"dauntless-shield"
 		],
 		"canEvolve": false
 	},
@@ -24295,7 +24295,7 @@
 			128
 		],
 		"abilities": [
-			"dauntless shield"
+			"dauntless-shield"
 		],
 		"canEvolve": false
 	},
@@ -24340,7 +24340,7 @@
 			72
 		],
 		"abilities": [
-			"inner focus"
+			"inner-focus"
 		],
 		"canEvolve": true
 	},
@@ -24363,7 +24363,7 @@
 			97
 		],
 		"abilities": [
-			"unseen fist"
+			"unseen-fist"
 		],
 		"canEvolve": false
 	},
@@ -24386,7 +24386,7 @@
 			97
 		],
 		"abilities": [
-			"unseen fist"
+			"unseen-fist"
 		],
 		"canEvolve": false
 	},
@@ -24409,7 +24409,7 @@
 			105
 		],
 		"abilities": [
-			"leaf guard"
+			"leaf-guard"
 		],
 		"canEvolve": false
 	},
@@ -24453,7 +24453,7 @@
 			80
 		],
 		"abilities": [
-			"dragons maw"
+			"dragons-maw"
 		],
 		"canEvolve": false
 	},
@@ -24475,7 +24475,7 @@
 			30
 		],
 		"abilities": [
-			"chilling neigh"
+			"chilling-neigh"
 		],
 		"canEvolve": false
 	},
@@ -24497,7 +24497,7 @@
 			130
 		],
 		"abilities": [
-			"grim neigh"
+			"grim-neigh"
 		],
 		"canEvolve": false
 	},
@@ -24543,7 +24543,7 @@
 			50
 		],
 		"abilities": [
-			"as one"
+			"as-one"
 		],
 		"canEvolve": false
 	},
@@ -24566,7 +24566,7 @@
 			150
 		],
 		"abilities": [
-			"as one"
+			"as-one"
 		],
 		"canEvolve": false
 	},
@@ -24591,7 +24591,7 @@
 		"abilities": [
 			"intimidate",
 			"frisk",
-			"sap sipper"
+			"sap-sipper"
 		],
 		"canEvolve": false
 	},
@@ -24615,7 +24615,7 @@
 		],
 		"abilities": [
 			"swarm",
-			"sheer force",
+			"sheer-force",
 			"steadfast"
 		],
 		"canEvolve": false
@@ -24639,7 +24639,7 @@
 			50
 		],
 		"abilities": [
-			"thick fat",
+			"thick-fat",
 			"unburden",
 			"guts"
 		],
@@ -24664,7 +24664,7 @@
 			52
 		],
 		"abilities": [
-			"minds eye"
+			"minds-eye"
 		],
 		"canEvolve": false
 	},
@@ -24687,9 +24687,9 @@
 			78
 		],
 		"abilities": [
-			"swift swim",
+			"swift-swim",
 			"adaptability",
-			"mold breaker"
+			"mold-breaker"
 		],
 		"canEvolve": false
 	},
@@ -24712,9 +24712,9 @@
 			78
 		],
 		"abilities": [
-			"swift swim",
+			"swift-swim",
 			"adaptability",
-			"mold breaker"
+			"mold-breaker"
 		],
 		"canEvolve": false
 	},
@@ -24739,7 +24739,7 @@
 		"abilities": [
 			"pressure",
 			"unburden",
-			"poison touch"
+			"poison-touch"
 		],
 		"canEvolve": false
 	},
@@ -24762,8 +24762,8 @@
 			85
 		],
 		"abilities": [
-			"poison point",
-			"swift swim",
+			"poison-point",
+			"swift-swim",
 			"intimidate"
 		],
 		"canEvolve": false
@@ -24787,7 +24787,7 @@
 			106
 		],
 		"abilities": [
-			"cute charm",
+			"cute-charm",
 			"contrary"
 		],
 		"canEvolve": false
@@ -25020,9 +25020,9 @@
 			35
 		],
 		"abilities": [
-			"aroma veil",
+			"aroma-veil",
 			"gluttony",
-			"thick fat"
+			"thick-fat"
 		],
 		"canEvolve": true
 	},
@@ -25044,9 +25044,9 @@
 			65
 		],
 		"abilities": [
-			"lingering aroma",
+			"lingering-aroma",
 			"gluttony",
-			"thick fat"
+			"thick-fat"
 		],
 		"canEvolve": false
 	},
@@ -25115,7 +25115,7 @@
 		],
 		"abilities": [
 			"swarm",
-			"tinted lens"
+			"tinted-lens"
 		],
 		"canEvolve": true
 	},
@@ -25139,7 +25139,7 @@
 		],
 		"abilities": [
 			"swarm",
-			"tinted lens"
+			"tinted-lens"
 		],
 		"canEvolve": false
 	},
@@ -25162,8 +25162,8 @@
 		],
 		"abilities": [
 			"static",
-			"natural cure",
-			"iron fist"
+			"natural-cure",
+			"iron-fist"
 		],
 		"canEvolve": true
 	},
@@ -25186,9 +25186,9 @@
 			85
 		],
 		"abilities": [
-			"volt absorb",
-			"natural cure",
-			"iron fist"
+			"volt-absorb",
+			"natural-cure",
+			"iron-fist"
 		],
 		"canEvolve": true
 	},
@@ -25211,9 +25211,9 @@
 			105
 		],
 		"abilities": [
-			"volt absorb",
-			"natural cure",
-			"iron fist"
+			"volt-absorb",
+			"natural-cure",
+			"iron-fist"
 		],
 		"canEvolve": false
 	},
@@ -25235,9 +25235,9 @@
 			75
 		],
 		"abilities": [
-			"run away",
+			"run-away",
 			"pickup",
-			"own tempo"
+			"own-tempo"
 		],
 		"canEvolve": true
 	},
@@ -25259,8 +25259,8 @@
 			111
 		],
 		"abilities": [
-			"friend guard",
-			"cheek pouch",
+			"friend-guard",
+			"cheek-pouch",
 			"technician"
 		],
 		"canEvolve": false
@@ -25283,7 +25283,7 @@
 			65
 		],
 		"abilities": [
-			"own tempo",
+			"own-tempo",
 			"klutz"
 		],
 		"canEvolve": true
@@ -25306,8 +25306,8 @@
 			95
 		],
 		"abilities": [
-			"well-baked body",
-			"aroma veil"
+			"well-baked-body",
+			"aroma-veil"
 		],
 		"canEvolve": false
 	},
@@ -25330,7 +25330,7 @@
 			30
 		],
 		"abilities": [
-			"early bird",
+			"early-bird",
 			"harvest"
 		],
 		"canEvolve": true
@@ -25354,7 +25354,7 @@
 			33
 		],
 		"abilities": [
-			"early bird",
+			"early-bird",
 			"harvest"
 		],
 		"canEvolve": true
@@ -25378,7 +25378,7 @@
 			39
 		],
 		"abilities": [
-			"seed sower",
+			"seed-sower",
 			"harvest"
 		],
 		"canEvolve": false
@@ -25426,9 +25426,9 @@
 			25
 		],
 		"abilities": [
-			"purifying salt",
+			"purifying-salt",
 			"sturdy",
-			"clear body"
+			"clear-body"
 		],
 		"canEvolve": true
 	},
@@ -25450,9 +25450,9 @@
 			35
 		],
 		"abilities": [
-			"purifying salt",
+			"purifying-salt",
 			"sturdy",
-			"clear body"
+			"clear-body"
 		],
 		"canEvolve": true
 	},
@@ -25474,9 +25474,9 @@
 			35
 		],
 		"abilities": [
-			"purifying salt",
+			"purifying-salt",
 			"sturdy",
-			"clear body"
+			"clear-body"
 		],
 		"canEvolve": false
 	},
@@ -25498,8 +25498,8 @@
 			35
 		],
 		"abilities": [
-			"flash fire",
-			"flame body"
+			"flash-fire",
+			"flame-body"
 		],
 		"canEvolve": true
 	},
@@ -25522,8 +25522,8 @@
 			75
 		],
 		"abilities": [
-			"flash fire",
-			"weak armor"
+			"flash-fire",
+			"weak-armor"
 		],
 		"canEvolve": false
 	},
@@ -25546,8 +25546,8 @@
 			85
 		],
 		"abilities": [
-			"flash fire",
-			"weak armor"
+			"flash-fire",
+			"weak-armor"
 		],
 		"canEvolve": false
 	},
@@ -25569,7 +25569,7 @@
 			45
 		],
 		"abilities": [
-			"own tempo",
+			"own-tempo",
 			"static",
 			"damp"
 		],
@@ -25618,8 +25618,8 @@
 			70
 		],
 		"abilities": [
-			"wind power",
-			"volt absorb",
+			"wind-power",
+			"volt-absorb",
 			"competitive"
 		],
 		"canEvolve": true
@@ -25643,8 +25643,8 @@
 			125
 		],
 		"abilities": [
-			"wind power",
-			"volt absorb",
+			"wind-power",
+			"volt-absorb",
 			"competitive"
 		],
 		"canEvolve": false
@@ -25668,7 +25668,7 @@
 		],
 		"abilities": [
 			"intimidate",
-			"run away",
+			"run-away",
 			"stakeout"
 		],
 		"canEvolve": true
@@ -25692,7 +25692,7 @@
 		],
 		"abilities": [
 			"intimidate",
-			"guard dog",
+			"guard-dog",
 			"stakeout"
 		],
 		"canEvolve": false
@@ -25742,7 +25742,7 @@
 		],
 		"abilities": [
 			"unburden",
-			"poison touch",
+			"poison-touch",
 			"prankster"
 		],
 		"canEvolve": false
@@ -25766,7 +25766,7 @@
 			60
 		],
 		"abilities": [
-			"wind rider",
+			"wind-rider",
 			"infiltrator"
 		],
 		"canEvolve": true
@@ -25790,7 +25790,7 @@
 			90
 		],
 		"abilities": [
-			"wind rider",
+			"wind-rider",
 			"infiltrator"
 		],
 		"canEvolve": false
@@ -25814,7 +25814,7 @@
 			70
 		],
 		"abilities": [
-			"mycelium might"
+			"mycelium-might"
 		],
 		"canEvolve": true
 	},
@@ -25837,7 +25837,7 @@
 			100
 		],
 		"abilities": [
-			"mycelium might"
+			"mycelium-might"
 		],
 		"canEvolve": false
 	},
@@ -25859,8 +25859,8 @@
 			75
 		],
 		"abilities": [
-			"anger shell",
-			"shell armor",
+			"anger-shell",
+			"shell-armor",
 			"regenerator"
 		],
 		"canEvolve": false
@@ -25932,8 +25932,8 @@
 			30
 		],
 		"abilities": [
-			"compound eyes",
-			"shed skin"
+			"compound-eyes",
+			"shed-skin"
 		],
 		"canEvolve": true
 	},
@@ -25981,7 +25981,7 @@
 		"abilities": [
 			"anticipation",
 			"frisk",
-			"speed boost"
+			"speed-boost"
 		],
 		"canEvolve": true
 	},
@@ -26005,7 +26005,7 @@
 		"abilities": [
 			"opportunist",
 			"frisk",
-			"speed boost"
+			"speed-boost"
 		],
 		"canEvolve": false
 	},
@@ -26028,8 +26028,8 @@
 			58
 		],
 		"abilities": [
-			"mold breaker",
-			"own tempo",
+			"mold-breaker",
+			"own-tempo",
 			"pickpocket"
 		],
 		"canEvolve": true
@@ -26053,8 +26053,8 @@
 			78
 		],
 		"abilities": [
-			"mold breaker",
-			"own tempo",
+			"mold-breaker",
+			"own-tempo",
 			"pickpocket"
 		],
 		"canEvolve": true
@@ -26078,8 +26078,8 @@
 			94
 		],
 		"abilities": [
-			"mold breaker",
-			"own tempo",
+			"mold-breaker",
+			"own-tempo",
 			"pickpocket"
 		],
 		"canEvolve": false
@@ -26104,7 +26104,7 @@
 		"abilities": [
 			"gooey",
 			"rattled",
-			"sand veil"
+			"sand-veil"
 		],
 		"canEvolve": true
 	},
@@ -26128,7 +26128,7 @@
 		"abilities": [
 			"gooey",
 			"rattled",
-			"sand veil"
+			"sand-veil"
 		],
 		"canEvolve": false
 	},
@@ -26151,9 +26151,9 @@
 			82
 		],
 		"abilities": [
-			"big pecks",
-			"keen eye",
-			"rocky payload"
+			"big-pecks",
+			"keen-eye",
+			"rocky-payload"
 		],
 		"canEvolve": false
 	},
@@ -26175,7 +26175,7 @@
 			75
 		],
 		"abilities": [
-			"water veil"
+			"water-veil"
 		],
 		"canEvolve": true
 	},
@@ -26197,7 +26197,7 @@
 			100
 		],
 		"abilities": [
-			"zero to hero"
+			"zero-to-hero"
 		],
 		"canEvolve": false
 	},
@@ -26219,7 +26219,7 @@
 			100
 		],
 		"abilities": [
-			"zero to hero"
+			"zero-to-hero"
 		],
 		"canEvolve": false
 	},
@@ -26243,7 +26243,7 @@
 		],
 		"abilities": [
 			"overcoat",
-			"slow start"
+			"slow-start"
 		],
 		"canEvolve": true
 	},
@@ -26290,7 +26290,7 @@
 			121
 		],
 		"abilities": [
-			"shed skin",
+			"shed-skin",
 			"regenerator"
 		],
 		"canEvolve": false
@@ -26313,8 +26313,8 @@
 			65
 		],
 		"abilities": [
-			"earth eater",
-			"sand veil"
+			"earth-eater",
+			"sand-veil"
 		],
 		"canEvolve": false
 	},
@@ -26337,7 +26337,7 @@
 			60
 		],
 		"abilities": [
-			"toxic debris",
+			"toxic-debris",
 			"corrosion"
 		],
 		"canEvolve": true
@@ -26361,7 +26361,7 @@
 			86
 		],
 		"abilities": [
-			"toxic debris",
+			"toxic-debris",
 			"corrosion"
 		],
 		"canEvolve": false
@@ -26407,7 +26407,7 @@
 			68
 		],
 		"abilities": [
-			"sand rush",
+			"sand-rush",
 			"fluffy"
 		],
 		"canEvolve": false
@@ -26432,7 +26432,7 @@
 		],
 		"abilities": [
 			"scrappy",
-			"tangled feet",
+			"tangled-feet",
 			"costar"
 		],
 		"canEvolve": false
@@ -26455,9 +26455,9 @@
 			43
 		],
 		"abilities": [
-			"thick fat",
-			"snow cloak",
-			"sheer force"
+			"thick-fat",
+			"snow-cloak",
+			"sheer-force"
 		],
 		"canEvolve": true
 	},
@@ -26479,9 +26479,9 @@
 			73
 		],
 		"abilities": [
-			"thick fat",
-			"slush rush",
-			"sheer force"
+			"thick-fat",
+			"slush-rush",
+			"sheer-force"
 		],
 		"canEvolve": false
 	},
@@ -26504,7 +26504,7 @@
 			70
 		],
 		"abilities": [
-			"mold breaker",
+			"mold-breaker",
 			"sharpness"
 		],
 		"canEvolve": false
@@ -26529,7 +26529,7 @@
 		"abilities": [
 			"unaware",
 			"oblivious",
-			"water veil"
+			"water-veil"
 		],
 		"canEvolve": false
 	},
@@ -26553,7 +26553,7 @@
 		],
 		"abilities": [
 			"commander",
-			"storm drain"
+			"storm-drain"
 		],
 		"canEvolve": false
 	},
@@ -26576,8 +26576,8 @@
 			90
 		],
 		"abilities": [
-			"vital spirit",
-			"inner focus",
+			"vital-spirit",
+			"inner-focus",
 			"defiant"
 		],
 		"canEvolve": false
@@ -26601,8 +26601,8 @@
 			20
 		],
 		"abilities": [
-			"poison point",
-			"water absorb",
+			"poison-point",
+			"water-absorb",
 			"unaware"
 		],
 		"canEvolve": false
@@ -26626,9 +26626,9 @@
 			60
 		],
 		"abilities": [
-			"cud chew",
-			"armor tail",
-			"sap sipper"
+			"cud-chew",
+			"armor-tail",
+			"sap-sipper"
 		],
 		"canEvolve": false
 	},
@@ -26650,8 +26650,8 @@
 			55
 		],
 		"abilities": [
-			"serene grace",
-			"run away",
+			"serene-grace",
+			"run-away",
 			"rattled"
 		],
 		"canEvolve": false
@@ -26674,8 +26674,8 @@
 			55
 		],
 		"abilities": [
-			"serene grace",
-			"run away",
+			"serene-grace",
+			"run-away",
 			"rattled"
 		],
 		"canEvolve": false
@@ -26700,7 +26700,7 @@
 		],
 		"abilities": [
 			"defiant",
-			"supreme overlord",
+			"supreme-overlord",
 			"pressure"
 		],
 		"canEvolve": false
@@ -26862,7 +26862,7 @@
 			106
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -26885,7 +26885,7 @@
 			136
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -26908,7 +26908,7 @@
 			50
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -26931,7 +26931,7 @@
 			108
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -26954,7 +26954,7 @@
 			110
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -26977,7 +26977,7 @@
 			72
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -27000,8 +27000,8 @@
 			55
 		],
 		"abilities": [
-			"thermal exchange",
-			"ice body"
+			"thermal-exchange",
+			"ice-body"
 		],
 		"canEvolve": true
 	},
@@ -27024,8 +27024,8 @@
 			62
 		],
 		"abilities": [
-			"thermal exchange",
-			"ice body"
+			"thermal-exchange",
+			"ice-body"
 		],
 		"canEvolve": true
 	},
@@ -27048,8 +27048,8 @@
 			87
 		],
 		"abilities": [
-			"thermal exchange",
-			"ice body"
+			"thermal-exchange",
+			"ice-body"
 		],
 		"canEvolve": false
 	},
@@ -27094,7 +27094,7 @@
 			84
 		],
 		"abilities": [
-			"good as gold"
+			"good-as-gold"
 		],
 		"canEvolve": false
 	},
@@ -27117,7 +27117,7 @@
 			70
 		],
 		"abilities": [
-			"tablets of ruin"
+			"tablets-of-ruin"
 		],
 		"canEvolve": false
 	},
@@ -27140,7 +27140,7 @@
 			135
 		],
 		"abilities": [
-			"sword of ruin"
+			"sword-of-ruin"
 		],
 		"canEvolve": false
 	},
@@ -27163,7 +27163,7 @@
 			45
 		],
 		"abilities": [
-			"vessel of ruin"
+			"vessel-of-ruin"
 		],
 		"canEvolve": false
 	},
@@ -27186,7 +27186,7 @@
 			100
 		],
 		"abilities": [
-			"beads of ruin"
+			"beads-of-ruin"
 		],
 		"canEvolve": false
 	},
@@ -27232,7 +27232,7 @@
 			116
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -27255,7 +27255,7 @@
 			135
 		],
 		"abilities": [
-			"orichalcum pulse"
+			"orichalcum-pulse"
 		],
 		"canEvolve": false
 	},
@@ -27278,7 +27278,7 @@
 			135
 		],
 		"abilities": [
-			"hadron engine"
+			"hadron-engine"
 		],
 		"canEvolve": false
 	},
@@ -27324,7 +27324,7 @@
 			104
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -27347,9 +27347,9 @@
 			40
 		],
 		"abilities": [
-			"supersweet syrup",
+			"supersweet-syrup",
 			"gluttony",
-			"sticky hold"
+			"sticky-hold"
 		],
 		"canEvolve": true
 	},
@@ -27420,8 +27420,8 @@
 			80
 		],
 		"abilities": [
-			"toxic chain",
-			"guard dog"
+			"toxic-chain",
+			"guard-dog"
 		],
 		"canEvolve": false
 	},
@@ -27444,7 +27444,7 @@
 			106
 		],
 		"abilities": [
-			"toxic chain",
+			"toxic-chain",
 			"frisk"
 		],
 		"canEvolve": false
@@ -27468,7 +27468,7 @@
 			99
 		],
 		"abilities": [
-			"toxic chain",
+			"toxic-chain",
 			"technician"
 		],
 		"canEvolve": false
@@ -27537,7 +27537,7 @@
 			110
 		],
 		"abilities": [
-			"mold breaker"
+			"mold-breaker"
 		],
 		"canEvolve": false
 	},
@@ -27560,7 +27560,7 @@
 			110
 		],
 		"abilities": [
-			"water absorb"
+			"water-absorb"
 		],
 		"canEvolve": false
 	},
@@ -27608,9 +27608,9 @@
 			44
 		],
 		"abilities": [
-			"supersweet syrup",
+			"supersweet-syrup",
 			"regenerator",
-			"sticky hold"
+			"sticky-hold"
 		],
 		"canEvolve": false
 	},
@@ -27679,7 +27679,7 @@
 			124
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -27702,7 +27702,7 @@
 			98
 		],
 		"abilities": [
-			"quark drive"
+			"quark-drive"
 		],
 		"canEvolve": false
 	},
@@ -27724,7 +27724,7 @@
 			60
 		],
 		"abilities": [
-			"tera shift"
+			"tera-shift"
 		],
 		"canEvolve": false
 	},
@@ -27746,7 +27746,7 @@
 			85
 		],
 		"abilities": [
-			"tera shell"
+			"tera-shell"
 		],
 		"canEvolve": false
 	},
@@ -27769,7 +27769,7 @@
 			88
 		],
 		"abilities": [
-			"poison puppeteer"
+			"poison-puppeteer"
 		],
 		"canEvolve": false
 	},
@@ -27793,8 +27793,8 @@
 		],
 		"abilities": [
 			"intimidate",
-			"flash fire",
-			"rock head"
+			"flash-fire",
+			"rock-head"
 		],
 		"canEvolve": true
 	},
@@ -27818,8 +27818,8 @@
 		],
 		"abilities": [
 			"intimidate",
-			"flash fire",
-			"rock head"
+			"flash-fire",
+			"rock-head"
 		],
 		"canEvolve": false
 	},
@@ -27916,8 +27916,8 @@
 			85
 		],
 		"abilities": [
-			"swift swim",
-			"poison point",
+			"swift-swim",
+			"poison-point",
 			"intimidate"
 		],
 		"canEvolve": true
@@ -27941,9 +27941,9 @@
 			115
 		],
 		"abilities": [
-			"inner focus",
-			"keen eye",
-			"poison touch"
+			"inner-focus",
+			"keen-eye",
+			"poison-touch"
 		],
 		"canEvolve": true
 	},
@@ -28040,7 +28040,7 @@
 		"abilities": [
 			"chlorophyll",
 			"hustle",
-			"leaf guard"
+			"leaf-guard"
 		],
 		"canEvolve": false
 	},
@@ -28109,9 +28109,9 @@
 			65
 		],
 		"abilities": [
-			"keen eye",
-			"sheer force",
-			"tinted lens"
+			"keen-eye",
+			"sheer-force",
+			"tinted-lens"
 		],
 		"canEvolve": false
 	},
@@ -28134,8 +28134,8 @@
 			40
 		],
 		"abilities": [
-			"sap sipper",
-			"shell armor",
+			"sap-sipper",
+			"shell-armor",
 			"gooey"
 		],
 		"canEvolve": true
@@ -28159,8 +28159,8 @@
 			60
 		],
 		"abilities": [
-			"sap sipper",
-			"shell armor",
+			"sap-sipper",
+			"shell-armor",
 			"gooey"
 		],
 		"canEvolve": false
@@ -28184,8 +28184,8 @@
 			38
 		],
 		"abilities": [
-			"strong jaw",
-			"ice body",
+			"strong-jaw",
+			"ice-body",
 			"sturdy"
 		],
 		"canEvolve": false
@@ -28234,8 +28234,8 @@
 		],
 		"abilities": [
 			"intimidate",
-			"anger point",
-			"cud chew"
+			"anger-point",
+			"cud-chew"
 		],
 		"canEvolve": false
 	},
@@ -28259,8 +28259,8 @@
 		],
 		"abilities": [
 			"intimidate",
-			"anger point",
-			"cud chew"
+			"anger-point",
+			"cud-chew"
 		],
 		"canEvolve": false
 	},
@@ -28283,8 +28283,8 @@
 		],
 		"abilities": [
 			"intimidate",
-			"anger point",
-			"cud chew"
+			"anger-point",
+			"cud-chew"
 		],
 		"canEvolve": false
 	},
@@ -28307,8 +28307,8 @@
 			15
 		],
 		"abilities": [
-			"poison point",
-			"water absorb",
+			"poison-point",
+			"water-absorb",
 			"unaware"
 		],
 		"canEvolve": true

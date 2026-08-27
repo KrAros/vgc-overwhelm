@@ -204,7 +204,7 @@ export const META_PRESETS = [
     label: 'Choice Scarf',
     nature: 'Modest',
     item: 'choice scarf',
-    ability: 'good as gold',
+    ability: 'good-as-gold',
     sps: [1, 0, 2, 32, 0, 31],
     moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
     reg: 'M-B',
@@ -276,11 +276,7 @@ export const META_PRESETS = [
     label: 'Rock Head Attacker',
     nature: 'Jolly',
     item: 'focus sash',
-    // Con lo SPAZIO, non col trattino: e' la grafia che pokemon.json da a
-    // questa specie. L'Arcanine normale, due righe piu' su nel listino, ha
-    // `flash-fire` col trattino — le due grafie convivono in `pokemon.json` su
-    // 63 abilita', e il test le confronta specie per specie.
-    ability: 'rock head',
+    ability: 'rock-head',
     sps: [1, 32, 1, 0, 0, 32],
     moves: ['flare-blitz', 'head-smash', 'rock-slide', 'protect'],
     reg: 'M-B',
@@ -315,9 +311,7 @@ export const META_PRESETS = [
     slug: 'basculegion-m',
     label: 'Rain Sweeper',
     nature: 'Adamant',
-    // `swift swim` CON LO SPAZIO, come lo scrive pokemon.json per questa
-    // specie. Stessa trappola di `rock head` su Arcanine di Hisui.
-    ability: 'swift swim',
+    ability: 'swift-swim',
     item: 'life orb',
     sps: [4, 18, 11, 0, 1, 32],
     moves: ['last-respects', 'wave-crash', 'aqua-jet', 'protect'],
@@ -327,9 +321,6 @@ export const META_PRESETS = [
     slug: 'blastoise',
     label: 'Bulky Pivot',
     nature: 'Impish',
-    // `rain-dish` COL TRATTINO. Basculegion, poche righe piu' su, ha
-    // `swift swim` con lo spazio: sono le 63 abilita' che pokemon.json porta
-    // in entrambe le grafie. Si copia da li', non si deduce.
     ability: 'rain-dish',
     item: 'leftovers',
     sps: [32, 0, 30, 0, 4, 0],

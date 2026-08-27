@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generatedAt": "2026-08-25T08:00:49.618Z",
+    "generatedAt": "2026-08-27T14:13:21.186Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
-    "fileEsaminati": 17,
+    "fileEsaminati": 20,
     "abilitaNelMotore": 17,
     "strumentiNelMotore": 27,
     "classificate": 9,
@@ -88,8 +88,8 @@
       "nota": "damage.js:47 la rende immune al danno da sabbia. NCP la calcola per il +30% di potenza in calcBPMods:1633, che noi non facciamo",
       "prova": {
         "file": "src/lib/damage.js",
-        "riga": 47,
-        "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+        "riga": 66,
+        "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
       }
     },
     {
@@ -169,16 +169,16 @@
         "chiave": "magic guard",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 47,
-          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+          "riga": 66,
+          "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
       {
         "chiave": "overcoat",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 47,
-          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+          "riga": 66,
+          "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
       {
@@ -209,24 +209,24 @@
         "chiave": "sand force",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 47,
-          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+          "riga": 66,
+          "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
       {
         "chiave": "sand rush",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 47,
-          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+          "riga": 66,
+          "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
       {
         "chiave": "sand veil",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 47,
-          "testo": "'sand force', 'sand rush', 'sand veil', 'magic guard', 'overcoat',"
+          "riga": 66,
+          "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
       {
@@ -267,7 +267,7 @@
         "chiave": "leftovers",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 89,
+          "riga": 108,
           "testo": "const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'"
         }
       },
@@ -443,7 +443,7 @@
         "chiave": "sitrus berry",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 92,
+          "riga": 111,
           "testo": "const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'"
         }
       },
@@ -467,7 +467,7 @@
         "chiave": "safety goggles",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 60,
+          "riga": 79,
           "testo": "item.toLowerCase() === 'safety goggles'"
         }
       }
