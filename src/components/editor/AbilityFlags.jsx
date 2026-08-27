@@ -58,6 +58,44 @@ const ACCESO = 'bg-green-950/40 border-green-700/40 text-green-300'
 const TESTO_ACCESO = 'text-green-300'
 const TESTO_SPENTO = 'text-gray-400'
 
+/**
+ * ─── IL RIQUADRO: UNA CLASSE SOLA PER TUTTI E NOVE ─────────────────────────
+ *
+ * `mt-1 px-1 py-1 rounded text-xs border` era ricopiato in nove rami di questo
+ * file, e l'altezza minima solo in DUE. Il risultato, misurato con Chromium a
+ * 320 px su otto abilita' scelte una per ramo:
+ *
+ *     26 px  prepotenza, un ramo con la levetta
+ *     42 px  fuocardore, squame-multiple, conta-KO, antagonismo
+ *     58 px  i due che avevano gia' il minimo
+ *
+ * Cioe' cambiare abilita' spostava il resto della colonna fino a 32 px. La
+ * sessione che introdusse il minimo lo mise sui due riquadri che aveva sotto
+ * mano, e nessuno tenne insieme gli altri sette: una classe ricopiata non ha
+ * un posto dove diventare vera.
+ *
+ * Qui diventa una costante sola. Aggiungere un ramo nuovo eredita l'altezza
+ * senza doverci pensare, ed e' il punto: la disciplina non regge se ogni ramo
+ * deve ricordarsela.
+ *
+ * ─── DA DOVE VENGONO I DUE NUMERI ──────────────────────────────────────────
+ *
+ * Misurati, non scelti: sono l'altezza che il riquadro PIU' ALTO raggiunge da
+ * solo alle due larghezze, prendendo le descrizioni piu' lunghe del file di
+ * traduzione (Pellearsa, 146 caratteri; Download, 134; Fantasmanto, 131).
+ *
+ *     sopra i 480 px   42 px = 2.625rem   copre il caso peggiore misurato
+ *     sotto i 480 px   58 px = 3.625rem   NON lo copre: le tre piu' lunghe
+ *                                         arrivano a 74 px
+ *
+ * Il residuo e' dichiarato invece che nascosto: sotto i 480 px restano DUE
+ * altezze, 58 px e 74 px, invece delle quattro di prima. Portarlo a 4.625rem
+ * lo chiuderebbe del tutto, al prezzo di 74 px di riquadro anche per una
+ * descrizione di una riga — su un telefono e' un pezzo di schermo speso per un
+ * caso raro. Finche' quella scelta non e' presa, il valore resta questo.
+ */
+const RIQUADRO = 'mt-1 px-1 py-1 rounded text-xs border min-h-[3.625rem] min-[480px]:min-h-[2.625rem]'
+
 /** La levetta: verde accesa, grigia spenta. */
 const PERNO_ACCESO = 'bg-green-500'
 const PERNO_SPENTO = 'bg-gray-600'
@@ -75,7 +113,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (SPEED_WEATHER_ABILITIES[key]) {
     return (
-      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+      <div className={`${RIQUADRO} ${
         speedWeatherActive
           ? ACCESO
           : SPENTO
@@ -89,7 +127,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'flash-fire') {
     return (
-      <div className={`flex items-center gap-2 mt-1 px-1 py-1 rounded text-xs border ${flags.flashFireActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.flashFireActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('flashFireActive', !flags.flashFireActive)}
@@ -112,7 +150,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'multiscale' || key === 'shadow-shield') {
     return (
-      <div className={`flex items-center gap-2 mt-1 px-1 py-1 rounded text-xs border ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('multiscaleActive', !flags.multiscaleActive)}
@@ -137,7 +175,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     const kos  = flags.supremeOverlordKOs || 0
     const mult = (1 + kos * 0.1).toFixed(1)
     return (
-      <div className={`flex items-center gap-2 mt-1 px-1 py-1 rounded text-xs border ${kos > 0 ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} flex items-center gap-2 ${kos > 0 ? ACCESO : SPENTO}`}>
         <span className="text-gray-400 shrink-0">{t('editor.allies_ko')}</span>
         <div className="flex gap-1">
           {[0,1,2,3,4,5].map(n => (
@@ -170,7 +208,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'intimidate') {
     return (
-      <div className={`flex items-center gap-2 mt-1 px-1 py-1 rounded text-xs border ${flags.intimidateActive ? ACCESO : SPENTO}`}>
+      <div className={`${RIQUADRO} flex items-center gap-2 ${flags.intimidateActive ? ACCESO : SPENTO}`}>
         <button
           type="button"
           onClick={() => onFlagChange('intimidateActive', !flags.intimidateActive)}
@@ -193,7 +231,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'defiant' || key === 'contrary') {
     return (
-      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+      <div className={`${RIQUADRO} ${
         opponentHasIntimidateActive
           ? ACCESO
           : SPENTO
@@ -207,7 +245,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
 
   if (key === 'competitive') {
     return (
-      <div className={`mt-1 px-1 py-1 rounded text-xs border ${
+      <div className={`${RIQUADRO} ${
         opponentHasIntimidateActive
           ? ACCESO
           : SPENTO
@@ -251,7 +289,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         {/* Il segnalino sta DENTRO il riquadro, all'estremità destra: prima era
             un secondo blocco sotto, e aggiungeva 40 px che facevano scendere
             cursori e mosse a ogni cambio di abilità. */}
-        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start min-h-[3.625rem] min-[480px]:min-h-[2.625rem] ${attiva ? ACCESO : SPENTO}`}>
+        <div className={`${RIQUADRO} flex items-start ${attiva ? ACCESO : SPENTO}`}>
           <span className="min-w-0 flex-1">
             {attiva ? '✅ ' : '💡 '}
             {t(`abilities_desc.${key}`)}
@@ -321,7 +359,7 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
             NELLA stessa riga della descrizione, non al suo posto — la
             descrizione dice cosa fa nel gioco, il segnalino dice che noi non
             la calcoliamo. */}
-        <div className={`mt-1 px-1 py-1 rounded text-xs border flex items-start min-h-[3.625rem] min-[480px]:min-h-[2.625rem] ${SPENTO}`}>
+        <div className={`${RIQUADRO} flex items-start ${SPENTO}`}>
           <span className="min-w-0 flex-1">💡 {t(`abilities_desc.${key}`)}</span>
           {abilitaNonCalcolata(ability) && <SegnalinoNonCalcolata tipo="ability" />}
         </div>
