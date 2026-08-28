@@ -113,6 +113,21 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'froslass-mega',
+    label: 'Aurora Veil Setter',
+    nature: 'Modest',
+    item: 'froslassite',
+    // Showdown dichiara Malaugurio, della base. `froslass-mega` ha solo
+    // `snow-warning`, ed e' il caso in cui l'abilita giusta conta di piu: Manto
+    // Neve e' la PRECONDIZIONE di Velaurora, che si puo' usare solo con la
+    // neve attiva. Con `cursed-body` non sarebbe uscito un numero sbagliato ma
+    // un set incoerente, con la mossa che gli da il nome inutilizzabile.
+    ability: 'snow-warning',
+    sps: [10, 0, 10, 30, 1, 15],
+    moves: ['blizzard', 'shadow-ball', 'aurora-veil', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'clefable',
     label: 'Redirector Support',
     nature: 'Bold',
