@@ -98,6 +98,21 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'floette-mega',
+    label: 'Calm Mind Attacker',
+    nature: 'Modest',
+    item: 'floettite',
+    ability: 'fairy-aura',
+    sps: [32, 0, 19, 15, 0, 0],
+    // «Attacker» e non «Sweeper»: Calm Mind alza Attacco Speciale e Difesa
+    // Speciale, non la Velocita, e questo set di Velocita non ne ha. Dopo il
+    // potenziamento e' piu forte e piu duro, ed esattamente altrettanto lento.
+    // Stessa forma di Ceruledge, stessa conclusione — mentre Corviknight, con
+    // la stessa mossa ma 22 SP in Velocita, e' Sweeper.
+    moves: ['light-of-ruin', 'dazzling-gleam', 'calm-mind', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'clefable',
     label: 'Redirector Support',
     nature: 'Bold',
