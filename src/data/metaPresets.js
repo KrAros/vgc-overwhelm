@@ -351,6 +351,36 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'dragalge-mega',
+    label: 'Special Attacker',
+    nature: 'Modest',
+    item: 'dragalgite',
+    // ─── LA STESSA TRAPPOLA DI DELPHOX, NELLA DIREZIONE PEGGIORE ───────────
+    //
+    // Showdown dichiara Adattabilita, che e' della forma base. `dragalge-mega`
+    // ha solo `regenerator`.
+    //
+    // Qui sbagliare avrebbe gonfiato i numeri invece di sgonfiarli. La specie
+    // e' Veleno/Drago, quindi Fiammadraco E Fangobomba sono entrambe STAB, e
+    // Adattabilita porta lo STAB da x1.5 a x2: un +33% su tutte e due le mosse
+    // principali. Non un campo ignorato — `adaptability` non e' fra le
+    // abilita del divario, quindi il motore l'avrebbe applicata davvero.
+    //
+    // E' il rovescio di Blastoise Mega. Li' copiare alla cieca faceva
+    // SOTTOstimare, e si sbaglia in cauto; qui fa SOVRAstimare, che per un
+    // calcolatore di danno e' il modo peggiore: si pianifica un KO che non
+    // passa.
+    //
+    // La trappola dentro la trappola: Rigenerazione non incide sul danno,
+    // cura al cambio. Chi si chiedesse «quale delle due conta per il calcolo?»
+    // terrebbe Adattabilita perche' almeno fa qualcosa. La domanda giusta non
+    // e' quale valore muove il calcolo, e' quale valore e' vero.
+    ability: 'regenerator',
+    sps: [32, 0, 11, 23, 0, 0],
+    moves: ['draco-meteor', 'sludge-bomb', 'thunderbolt', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'blaziken-mega',
     label: 'Physical Sweeper',
     nature: 'Jolly',
