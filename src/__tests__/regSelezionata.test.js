@@ -82,24 +82,40 @@ describe('da quale reg si parte', () => {
       'la reg di partenza mostra una minoranza dei set',
     ).toBeGreaterThan(0.5)
 
-    // ─── IL RESIDUO, SCRITTO PERCHE' NON SI DIMENTICHI ───────────────────
+    // ─── IL RESIDUO: LA DECISIONE E' STATA PRESA IL 28 AGOSTO 2026 ───────
     //
-    // M-B ha solo AGGIUNTO specie rispetto a M-A, quindi ogni set osservato
-    // in M-A resta giocabile in M-B — e il filtro M-B lo nasconderebbe. È lo
-    // stesso difetto di prima, un piano più su.
+    // Qui c'era un controllo che pretendeva zero set di una reg precedente, e
+    // il commento diceva: «il giorno che qualcuno ne aggiunge uno deve
+    // diventare una decisione presa, non una sorpresa; se allora la risposta
+    // sarà va bene così, si toglie questa riga di proposito».
     //
-    // Oggi è vuoto: nessun set è di M-A. Il controllo resta qui perché il
-    // giorno che qualcuno ne aggiunge uno deve diventare una decisione presa,
-    // non una sorpresa. Se allora la risposta sarà «va bene così», si toglie
-    // questa riga di proposito.
+    // Quel giorno è arrivato. Il primo set di M-A è Corviknight «Bulk Up
+    // Sweeper», il controllo è diventato rosso come doveva, e la riga è stata
+    // tolta DI PROPOSITO. Questo commento resta al suo posto perché la
+    // decisione non sparisca insieme all'assert.
+    //
+    // Cosa si è accettato, detto per intero: M-B ha solo AGGIUNTO specie
+    // rispetto a M-A, quindi ogni set osservato in M-A resta giocabile in M-B,
+    // e il filtro per reg lo nasconde lo stesso. Non è il caso singolo di
+    // Corviknight: è la classe intera dei set di M-A, presenti e futuri. Chi
+    // apre l'app senza toccare la tendina parte da M-B e non li vede.
+    //
+    // Perché va bene: la reg dice dove il set è stato OSSERVATO, e chi cerca
+    // un set di M-A ha la tendina — M-A o «tutte» — per chiederlo. Il difetto
+    // grave era un altro, ed è ancora sorvegliato dal controllo qui sopra: che
+    // la reg di partenza mostri la maggioranza dei set invece di una minoranza.
+    //
+    // Cosa NON è stato deciso, e resta aperto: se un giorno i set di M-A
+    // diventassero tanti, nasconderne la maggioranza tornerebbe a essere il
+    // difetto di prima sotto un altro nome. Le due cure valutate e scartate
+    // oggi, con i loro prezzi: filtrare su «reg scelta e precedenti» (costo
+    // zero, ma dà per buono che le reg aggiungano soltanto), oppure filtrare
+    // sulla legalità vera della specie importando `regSpecie` in
+    // `PresetSelect` (giusto per ogni futuro, ma ~1,49 kB gzip nel bundle
+    // d'ingresso, su un margine che quel giorno era di 2,54 kB).
     //
     // Non varrà per M-C: una reg che TOGLIE specie invaliderebbe davvero i
     // set precedenti, ed è il caso per cui la reg è la chiave giusta.
-    const nascostiMaGiocabili = META_PRESETS.filter(p => p.reg !== partenza)
-    expect(
-      nascostiMaGiocabili.map(p => `${p.slug}/${p.label} (${p.reg})`),
-      'set di una reg precedente: il filtro li nasconde anche se giocabili',
-    ).toEqual([])
   })
 })
 
