@@ -146,6 +146,23 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'dragonite',
+    label: 'Physical Attacker',
+    nature: 'Adamant',
+    item: 'dragon fang',
+    // Nessuna Mega, quindi si trascrive. `multiscale` NON e' fra le abilita
+    // del divario: il motore la applica, e il dimezzamento a PS pieni finisce
+    // davvero nei numeri. Campo portante, non decorativo.
+    ability: 'multiscale',
+    sps: [2, 32, 0, 0, 0, 32],
+    // «Physical» descrive la maggioranza e non l'eccezione: nove Attacker su
+    // dodici sono gia fisici, e il file finora marcava solo gli speciali.
+    // Sollevato e deciso da Simone in favore di questa forma, come per
+    // «Special Attacker» di dragalge-mega.
+    moves: ['dragon-claw', 'extreme-speed', 'low-kick', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'charizard-mega-y',
     label: 'Sun Setter',
     nature: 'Modest',
