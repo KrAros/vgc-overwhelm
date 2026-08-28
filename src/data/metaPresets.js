@@ -64,6 +64,22 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'farigiraf',
+    label: 'Trick Room Setter',
+    // Quiet toglie Velocita, e la Velocita non ha SP: coerente, non e' una
+    // svista. Chi mette Distortozona vuole essere lento.
+    nature: 'Quiet',
+    item: 'sitrus berry',
+    // `armor-tail` E' fra le 108 abilita del divario, e l'app lo segnala —
+    // verificato. E' il rovescio del caso `eelevate`: Codarmatura esiste anche
+    // fuori da Champions, quindi il riferimento la conosce, la divergenza si
+    // misura e l'utente vede l'avviso.
+    ability: 'armor-tail',
+    sps: [29, 0, 16, 10, 11, 0],
+    moves: ['psychic', 'thunderbolt', 'trick-room', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'clefable',
     label: 'Redirector Support',
     nature: 'Bold',
