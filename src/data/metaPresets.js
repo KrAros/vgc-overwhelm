@@ -163,6 +163,27 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'dragonite',
+    // Secondo Dragonite nella STESSA reg, quindi l'etichetta non e' una
+    // scelta libera: doveva differire da «Physical Attacker», o la chiave
+    // slug+reg+etichetta collideva e questo set spariva dalla tendina.
+    label: 'White Herb Attacker',
+    nature: 'Adamant',
+    // L'Erbabianca e' il meccanismo, non un accessorio: Squamacolpo abbassa la
+    // Difesa e Wattforza abbassa Attacco e Difesa: due mosse che si
+    // autopenalizzano, e lo strumento ripristina una volta sola.
+    item: 'white herb',
+    ability: 'multiscale',
+    sps: [15, 32, 1, 0, 0, 18],
+    // «Attacker» e non «Sweeper», e la tensione va detta: Squamacolpo alza la
+    // Velocita, quindi il criterio fissato con Ceruledge e Corviknight
+    // suggerirebbe Sweeper. Deciso da Simone per Attacker, leggendo
+    // Squamacolpo come una mossa d'attacco che per caso potenzia e non come
+    // un setup. I due Dragonite restano cosi entrambi Attacker.
+    moves: ['scale-shot', 'superpower', 'extreme-speed', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'charizard-mega-y',
     label: 'Sun Setter',
     nature: 'Modest',
