@@ -282,7 +282,13 @@ export const META_PRESETS = [
   {
     slug: 'excadrill',
     label: 'Sash Sand Abuser',
-    nature: 'Jolly',
+    // Jolly fino al 28 agosto 2026, poi osservato Adamant sullo STESSO set:
+    // stesso strumento, stessa abilita, stessi SP, stesse quattro mosse. Si
+    // tiene la piu recente, che e' la regola gia usata per il doppio «Sitrus
+    // Support» di Incineroar e dichiarata in testa al file. Non e' un refuso
+    // corretto: sotto sabbia Sand Rush raddoppia gia la Velocita, quindi
+    // Adamant compra Attacco su una statistica che la sabbia rende abbondante.
+    nature: 'Adamant',
     item: 'focus sash',
     ability: 'sand-rush',
     sps: [2, 32, 0, 0, 0, 32],
