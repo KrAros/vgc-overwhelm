@@ -225,6 +225,23 @@ export const META_PRESETS = [
     moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
     reg: 'M-B',
   },
+  {
+    slug: 'ceruledge',
+    label: 'Bulk Up Attacker',
+    nature: 'Adamant',
+    item: 'colbur berry',
+    ability: 'flash-fire',
+    // Il primo spread di oggi che non massimizza una coppia: 7 punti tolti
+    // all'Attacco per comprarne 9 di Difesa, Velocita' a zero. Fa 66 esatti,
+    // quindi e' una scelta e non un residuo — trascritto senza arrotondare.
+    sps: [32, 25, 9, 0, 0, 0],
+    // «Attacker» e non «Sweeper», contro il precedente meccanico del file
+    // (Kingambit con Danzaspada e Blastoise Mega con Gusciarmata sono Sweeper
+    // perche' hanno una mossa di potenziamento). Qui Granforza alza anche la
+    // Difesa e la Velocita' resta a zero: questo non spazza, macina.
+    moves: ['bitter-blade', 'shadow-sneak', 'protect', 'bulk-up'],
+    reg: 'M-B',
+  },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
   {
