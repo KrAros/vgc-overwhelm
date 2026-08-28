@@ -80,6 +80,24 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'floette-mega',
+    label: 'Bulky Special Attacker',
+    nature: 'Modest',
+    item: 'floettite',
+    // Showdown dichiara Fiorvelo, della base: `floette-mega` ha solo
+    // `fairy-aura`. Quinta Mega che SOSTITUISCE, e qui pesa piu che altrove —
+    // tutte e tre le mosse offensive sono Folletto, quindi Aura Fatata le
+    // tocca tutte. `showdownIO.test.js` pretende gia questa risoluzione.
+    ability: 'fairy-aura',
+    // Cinque SP in Attacco Speciale su un attaccante speciale sembrano pochi,
+    // ed e' stato chiesto: confermato. AttSp base 155 e Luce Rovinosa a 140 di
+    // potenza fanno il lavoro, quindi il set compra velocita e un po' di massa
+    // invece di potenza che ha gia dalla specie.
+    sps: [10, 0, 19, 5, 0, 32],
+    moves: ['dazzling-gleam', 'moonblast', 'light-of-ruin', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'clefable',
     label: 'Redirector Support',
     nature: 'Bold',
