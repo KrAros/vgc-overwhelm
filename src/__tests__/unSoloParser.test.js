@@ -74,13 +74,25 @@ describe('un solo parser Showdown', () => {
     expect(parser).toEqual(['src/utils/showdownIO.js'])
   })
 
-  it('un solo file scrive la riga EVs di un paste', () => {
-    // `PresetSelect.jsx` costruisce righe simili ma scrive `SP:`, non `EVs:`:
-    // è l'ANTEPRIMA a schermo, e mostra gli SP per una decisione dichiarata del
-    // progetto. Non è un serializzatore di paste e non deve comparire qui.
-    const scrittori = FILE.filter(f => /`EVs: \$\{/.test(CORPO.get(f)))
+  it('un solo file scrive la riga dei punti di un paste', () => {
+    // L'etichetta era `EVs:` ed è diventata `SPs:`: l'export converte va e
+    // scrive gli SP veri, perché è a chi usa questo calcolatore che serve
+    // leggerli. Il presidio non cambia scopo — impedire una seconda copia del
+    // serializzatore — cambia solo la stringa che lo identifica.
+    //
+    // `PresetSelect.jsx` costruisce righe simili ma scrive `SP:` al singolare:
+    // è l'ANTEPRIMA a schermo, non un paste. Che le due etichette si
+    // somiglino ora più di prima è il motivo per cui il confronto è sulla
+    // stringa esatta e non su una espressione larga.
+    const scrittori = FILE.filter(f => /`SPs: \$\{/.test(CORPO.get(f)))
       .map(f => path.relative(path.join(RADICE, '..'), f))
     expect(scrittori).toEqual(['src/utils/showdownIO.js'])
+
+    // E nessuno deve essere tornato a scrivere la vecchia riga in EV: sarebbe
+    // il difetto di prima, riaperto in un secondo posto.
+    const inEv = FILE.filter(f => /`EVs: \$\{/.test(CORPO.get(f)))
+      .map(f => path.relative(path.join(RADICE, '..'), f))
+    expect(inEv, 'qualcuno scrive di nuovo un paste in EV').toEqual([])
   })
 
   it('il controllo: la ricerca guarda davvero dei file', () => {
