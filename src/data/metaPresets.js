@@ -64,6 +64,26 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'clefable',
+    label: 'Redirector Support',
+    nature: 'Bold',
+    item: 'sitrus berry',
+    // Tre abilita' — cute-charm, magic-guard, unaware — e nessuna Mega di
+    // mezzo, quindi si trascrive quella dichiarata.
+    ability: 'unaware',
+    // Lo spread piu' fine del file: quattro statistiche, e quei 5 in Velocita'
+    // sono un numero da speed creep, misurato per superare qualcosa di
+    // preciso. Trascritti dove stanno, senza spostarli altrove.
+    sps: [32, 0, 17, 0, 12, 5],
+    // «Redirector» e' l'unico qualificatore del file che sia a sua volta un
+    // nome di RUOLO — ha la forma di Lead, Pivot, Control. Sollevato come
+    // obiezione e deciso da Simone in favore di questa forma. Resta scoperto
+    // Sinistcha: porta Nubevelen, redirige uguale, e si chiama «Trick Room
+    // Support». Se un giorno le due voci vanno uniformate, si parte da qui.
+    moves: ['moonblast', 'helping-hand', 'follow-me', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'blaziken',
     label: 'Coaching Support',
     nature: 'Modest',
