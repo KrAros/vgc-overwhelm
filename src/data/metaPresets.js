@@ -640,6 +640,115 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'incineroar',
+    label: 'Helping Hand Support',
+    nature: 'Careful',
+    item: 'sitrus berry',
+    ability: 'intimidate',
+    sps: [32, 0, 1, 0, 10, 23],
+    // Terzo dei quattro Incineroar del file e il secondo con Sitrus: la
+    // distinzione la fanno le mosse, non lo strumento. Qui Assistenza e
+    // Cambiodifesa, zero SP in Attacco: sostiene, non attacca.
+    moves: ['flare-blitz', 'helping-hand', 'parting-shot', 'fake-out'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'incineroar',
+    label: 'Trick Room Abuser',
+    nature: 'Brave',
+    item: 'life orb',
+    ability: 'intimidate',
+    sps: [32, 32, 0, 0, 0, 2],
+    // Brave con due soli SP in Velocita: non porta Distortozona, la sfrutta.
+    // Terza voce «Abuser» dopo Blastoise Mega e Golurk Mega, con lo stesso
+    // criterio: chi la porta e' Setter o Support, chi la subisce e' Abuser.
+    moves: ['flare-blitz', 'darkest-lariat', 'close-combat', 'fake-out'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'kangaskhan-mega',
+    label: 'Physical Attacker',
+    nature: 'Adamant',
+    item: 'kangaskhanite',
+    // UNDICESIMA sostituzione, e la prima con DUE conseguenze insieme. Il set
+    // dichiarava `scrappy`, seconda abilita della base; `kangaskhan-mega` ha
+    // solo `parental-bond`. Legame di Famiglia fa colpire ogni mossa due
+    // volte, la seconda al 25%: circa x1,25 di danno, che con questo valore
+    // sbagliato si perderebbe. E insieme Spavalderia avrebbe fatto passare
+    // Sdoppiatore (Normale) e Colpobasso (Lotta) sugli Spettro: un'immunita'
+    // che qui invece resta in piedi. Valore sbagliato = moltiplicatore perso
+    // E immunita' cancellata.
+    ability: 'parental-bond',
+    sps: [32, 32, 1, 0, 1, 0],
+    moves: ['fake-out', 'double-edge', 'low-kick', 'ice-punch'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'kingambit',
+    label: 'Chople Attacker',
+    nature: 'Adamant',
+    item: 'chople berry',
+    ability: 'defiant',
+    sps: [26, 25, 0, 0, 0, 15],
+    moves: ['iron-head', 'sucker-punch', 'low-kick', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'kingambit',
+    label: 'Blackglasses Attacker',
+    nature: 'Adamant',
+    // `blackglasses`, tutto attaccato: «black glasses» non esiste in
+    // items.json. Lo stesso strumento del «Defiant Sweeper» gia' presente, e
+    // da li' viene la chiave giusta.
+    item: 'blackglasses',
+    ability: 'defiant',
+    sps: [19, 32, 0, 0, 0, 15],
+    // Senza Danzaspada, a differenza del «Defiant Sweeper»: attacca coi numeri
+    // che ha invece di costruirseli. Da qui i due ruoli diversi sulla stessa
+    // specie, con lo stesso strumento.
+    moves: ['kowtow-cleave', 'protect', 'sucker-punch', 'iron-head'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'kommo-o',
+    label: 'Clangorous Soul Sweeper',
+    nature: 'Modest',
+    item: 'sitrus berry',
+    ability: 'soundproof',
+    sps: [12, 0, 0, 32, 0, 22],
+    // Anima Fragorosa alza cinque statistiche, Velocita' compresa, e i 22 SP
+    // che ha gia' la rendono utile: dopo il boost sorpassa. «Sweeper», come
+    // Corviknight e non come Ceruledge.
+    moves: ['clanging-scales', 'aura-sphere', 'clangorous-soul', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'maushold',
+    label: 'Redirection Support',
+    nature: 'Timid',
+    item: 'focus sash',
+    // `friend-guard`, non `technician`: sono due delle tre abilita' di
+    // maushold e la scelta cambia il set. Qui protegge il compagno del 25%,
+    // che e' il senso di una voce che gioca Seguimi.
+    ability: 'friend-guard',
+    sps: [32, 0, 2, 0, 0, 32],
+    moves: ['super-fang', 'taunt', 'follow-me', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'maushold',
+    label: 'Population Bomb Attacker',
+    nature: 'Jolly',
+    item: 'wide lens',
+    // `technician` sull'altro maushold: Bombardamento colpisce dieci volte a
+    // 20 di potenza, quindi ogni colpo sta sotto la soglia di 60 e prende il
+    // +50%. Lente Ampia ne copre la precisione.
+    ability: 'technician',
+    sps: [2, 32, 0, 0, 0, 32],
+    moves: ['population-bomb', 'follow-me', 'protect', 'feint'],
+    reg: 'M-B',
+  },
+  {
     slug: 'delphox-mega',
     label: 'Setup Sweeper',
     nature: 'Modest',
