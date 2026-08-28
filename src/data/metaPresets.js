@@ -63,6 +63,42 @@ export const META_PRESETS = [
     moves: ['reflect', 'light-screen', 'parting-shot', 'spirit-break'],
     reg: 'M-B',
   },
+  {
+    slug: 'clefable',
+    label: 'Redirector Support',
+    nature: 'Bold',
+    item: 'sitrus berry',
+    // Tre abilita' — cute-charm, magic-guard, unaware — e nessuna Mega di
+    // mezzo, quindi si trascrive quella dichiarata.
+    ability: 'unaware',
+    // Lo spread piu' fine del file: quattro statistiche, e quei 5 in Velocita'
+    // sono un numero da speed creep, misurato per superare qualcosa di
+    // preciso. Trascritti dove stanno, senza spostarli altrove.
+    sps: [32, 0, 17, 0, 12, 5],
+    // «Redirector» e' l'unico qualificatore del file che sia a sua volta un
+    // nome di RUOLO — ha la forma di Lead, Pivot, Control. Sollevato come
+    // obiezione e deciso da Simone in favore di questa forma. Resta scoperto
+    // Sinistcha: porta Nubevelen, redirige uguale, e si chiama «Trick Room
+    // Support». Se un giorno le due voci vanno uniformate, si parte da qui.
+    moves: ['moonblast', 'helping-hand', 'follow-me', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'blaziken',
+    label: 'Coaching Support',
+    nature: 'Modest',
+    item: 'focus sash',
+    // La forma BASE, e qui `speed-boost` e' davvero la sua: la trappola della
+    // Mega scatta solo quando il set tiene la Megapietra. Questo tiene Focus
+    // Sash, quindi Blaziken resta Blaziken per tutta la partita.
+    ability: 'speed-boost',
+    // Modest su chi ha Attacco 120 e Attacco Speciale 110 sembra un refuso.
+    // Non lo e': Ondacalda e Auraconflusso sono entrambe speciali, quindi la
+    // natura toglie da una statistica che il set non usa.
+    sps: [2, 0, 0, 32, 0, 32],
+    moves: ['heat-wave', 'aura-sphere', 'coaching', 'protect'],
+    reg: 'M-B',
+  },
 
   // ── Rain ───────────────────────────────────────────────────────────────────
   {
@@ -209,6 +245,55 @@ export const META_PRESETS = [
     moves: ['make-it-rain', 'shadow-ball', 'power-gem', 'focus-blast'],
     reg: 'M-B',
   },
+  {
+    slug: 'ceruledge',
+    label: 'Bulk Up Attacker',
+    nature: 'Adamant',
+    item: 'colbur berry',
+    ability: 'flash-fire',
+    // Il primo spread di oggi che non massimizza una coppia: 7 punti tolti
+    // all'Attacco per comprarne 9 di Difesa, Velocita' a zero. Fa 66 esatti,
+    // quindi e' una scelta e non un residuo — trascritto senza arrotondare.
+    sps: [32, 25, 9, 0, 0, 0],
+    // «Attacker» e non «Sweeper», contro il precedente meccanico del file
+    // (Kingambit con Danzaspada e Blastoise Mega con Gusciarmata sono Sweeper
+    // perche' hanno una mossa di potenziamento). Qui Granforza alza anche la
+    // Difesa e la Velocita' resta a zero: questo non spazza, macina.
+    moves: ['bitter-blade', 'shadow-sneak', 'protect', 'bulk-up'],
+    reg: 'M-B',
+  },
+  {
+    // ─── IL PRIMO SET DI M-A ────────────────────────────────────────────────
+    //
+    // Fino a qui i trentatre set erano tutti M-B, e il campo `reg` non aveva
+    // mai filtrato niente. Da adesso filtra: questa voce NON compare con M-B
+    // selezionata — cioe' per chi apre l'app senza toccare la tendina — anche
+    // se Corviknight in M-B si puo' usare eccome. Si vede scegliendo M-A o
+    // «tutte». E' il comportamento voluto (la reg dice dove il set e' stato
+    // OSSERVATO), ma e' la prima volta che costa la visibilita' a un set.
+    //
+    // Non sposta invece la reg iniziale: `regConSetPiuRecente` parte dalla reg
+    // corrente e scende all'indietro, quindi trova M-B subito e i set di M-B
+    // restano quelli predefiniti. Misurato prima di scrivere, non supposto.
+    slug: 'corviknight',
+    label: 'Bulk Up Sweeper',
+    nature: 'Careful',
+    item: 'leftovers',
+    ability: 'mirror-armor',
+    // Cinque statistiche toccate, il piu' frammentato del file. Quell'1 in
+    // Difesa e' il resto della divisione, non una scelta.
+    sps: [27, 11, 1, 0, 5, 22],
+    // Stessa mossa di Ceruledge, ruolo opposto, e la coppia e' il motivo per
+    // cui il criterio regge: non decide la presenza del potenziamento, decide
+    // cosa fa il set dopo. Ceruledge ha 0 SP in Velocita' ed e' Attacker,
+    // questo ne ha 22 ed e' Sweeper.
+    //
+    // Da notare anche il perche' basti 1 SP in Difesa: Granforza alza Attacco
+    // E Difesa, e Corpodurezza usa la Difesa. Un solo potenziamento spinge
+    // entrambe le mosse offensive, quindi la Difesa non si compra con gli SP.
+    moves: ['brave-bird', 'body-press', 'bulk-up', 'roost'],
+    reg: 'M-A',
+  },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
   {
@@ -239,6 +324,76 @@ export const META_PRESETS = [
     ability: 'sand-force',
     sps: [2, 32, 0, 0, 0, 32],
     moves: ['dragon-claw', 'earthquake', 'rock-slide', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'delphox-mega',
+    label: 'Setup Sweeper',
+    nature: 'Modest',
+    item: 'delphoxite',
+    // ─── LA TRAPPOLA MEGA NELLA SUA FORMA PEGGIORE ─────────────────────────
+    //
+    // Showdown dichiara Fiammata, che e' della forma BASE. `delphox-mega` ha
+    // una sola abilita ed e' `levitate`: la Mega non aggiunge, sostituisce.
+    //
+    // Qui l'errore non sarebbe stato di grado ma di natura. Con Blastoise
+    // Mega, `rain-dish` al posto di `mega-launcher` toglieva un x1.5 a due
+    // mosse: un numero sbagliato. Levitate non e' un moltiplicatore, e'
+    // un'IMMUNITA a Terra — trascrivendo `blaze` il calcolatore avrebbe
+    // applicato danno di Terra a chi ne prende zero, cioe' avrebbe risposto
+    // il contrario alla domanda «questo KO passa?».
+    ability: 'levitate',
+    // Un solo SP in Attacco Speciale su un set Modest con due mosse speciali:
+    // sembra un refuso, e' stato chiesto, ed e' confermato. Il set compra
+    // massa e velocita' e lascia l'offesa a Nedodoppio.
+    sps: [23, 0, 11, 1, 0, 31],
+    moves: ['heat-wave', 'nasty-plot', 'psyshock', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'dragalge-mega',
+    label: 'Special Attacker',
+    nature: 'Modest',
+    item: 'dragalgite',
+    // ─── LA STESSA TRAPPOLA DI DELPHOX, NELLA DIREZIONE PEGGIORE ───────────
+    //
+    // Showdown dichiara Adattabilita, che e' della forma base. `dragalge-mega`
+    // ha solo `regenerator`.
+    //
+    // Qui sbagliare avrebbe gonfiato i numeri invece di sgonfiarli. La specie
+    // e' Veleno/Drago, quindi Fiammadraco E Fangobomba sono entrambe STAB, e
+    // Adattabilita porta lo STAB da x1.5 a x2: un +33% su tutte e due le mosse
+    // principali. Non un campo ignorato — `adaptability` non e' fra le
+    // abilita del divario, quindi il motore l'avrebbe applicata davvero.
+    //
+    // E' il rovescio di Blastoise Mega. Li' copiare alla cieca faceva
+    // SOTTOstimare, e si sbaglia in cauto; qui fa SOVRAstimare, che per un
+    // calcolatore di danno e' il modo peggiore: si pianifica un KO che non
+    // passa.
+    //
+    // La trappola dentro la trappola: Rigenerazione non incide sul danno,
+    // cura al cambio. Chi si chiedesse «quale delle due conta per il calcolo?»
+    // terrebbe Adattabilita perche' almeno fa qualcosa. La domanda giusta non
+    // e' quale valore muove il calcolo, e' quale valore e' vero.
+    ability: 'regenerator',
+    sps: [32, 0, 11, 23, 0, 0],
+    moves: ['draco-meteor', 'sludge-bomb', 'thunderbolt', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'blaziken-mega',
+    label: 'Physical Sweeper',
+    nature: 'Jolly',
+    item: 'blazikenite',
+    // La trappola della Mega qui NON morde, e per caso: `blaziken-mega` ha
+    // `speed-boost` come unica abilita, cioe' la stessa stringa che Showdown
+    // dichiara per la forma base. Chi avesse copiato alla cieca avrebbe
+    // indovinato — ed e' esattamente cio' che rende la trappola pericolosa,
+    // perche' un set come questo insegna l'abitudine sbagliata. La regola e'
+    // stata applicata lo stesso: la coincidenza sta nel dato, non nel metodo.
+    ability: 'speed-boost',
+    sps: [2, 32, 0, 0, 0, 32],
+    moves: ['flare-blitz', 'close-combat', 'rock-slide', 'detect'],
     reg: 'M-B',
   },
   {
@@ -339,6 +494,22 @@ export const META_PRESETS = [
     ability: 'mega-launcher',
     sps: [1, 0, 1, 32, 0, 32],
     moves: ['dark-pulse', 'water-spout', 'shell-smash', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'blastoise-mega',
+    label: 'Trick Room Abuser',
+    nature: 'Quiet',
+    item: 'blastoisinite',
+    // Anche qui `mega-launcher` contro il Pellepioggia dichiarato in Showdown,
+    // e qui la differenza si vede nei numeri: Megalancio porta Auraconflusso e
+    // Buiosfera al 150%. Con `rain-dish` resterebbe un set che ha scelto due
+    // mosse per un'abilita' che non ha.
+    ability: 'mega-launcher',
+    // Non porta Distortozona: gliela mette il compagno. Da qui «Abuser», come
+    // Excadrill con la sabbia e Venusaur col sole, e non «Sweeper».
+    sps: [31, 0, 3, 32, 0, 0],
+    moves: ['water-spout', 'dark-pulse', 'aura-sphere', 'fake-out'],
     reg: 'M-B',
   },
 ]
