@@ -327,6 +327,30 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'delphox-mega',
+    label: 'Setup Sweeper',
+    nature: 'Modest',
+    item: 'delphoxite',
+    // ─── LA TRAPPOLA MEGA NELLA SUA FORMA PEGGIORE ─────────────────────────
+    //
+    // Showdown dichiara Fiammata, che e' della forma BASE. `delphox-mega` ha
+    // una sola abilita ed e' `levitate`: la Mega non aggiunge, sostituisce.
+    //
+    // Qui l'errore non sarebbe stato di grado ma di natura. Con Blastoise
+    // Mega, `rain-dish` al posto di `mega-launcher` toglieva un x1.5 a due
+    // mosse: un numero sbagliato. Levitate non e' un moltiplicatore, e'
+    // un'IMMUNITA a Terra — trascrivendo `blaze` il calcolatore avrebbe
+    // applicato danno di Terra a chi ne prende zero, cioe' avrebbe risposto
+    // il contrario alla domanda «questo KO passa?».
+    ability: 'levitate',
+    // Un solo SP in Attacco Speciale su un set Modest con due mosse speciali:
+    // sembra un refuso, e' stato chiesto, ed e' confermato. Il set compra
+    // massa e velocita' e lascia l'offesa a Nedodoppio.
+    sps: [23, 0, 11, 1, 0, 31],
+    moves: ['heat-wave', 'nasty-plot', 'psyshock', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'blaziken-mega',
     label: 'Physical Sweeper',
     nature: 'Jolly',
