@@ -536,6 +536,22 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'gardevoir-mega',
+    label: 'Special Attacker',
+    nature: 'Modest',
+    item: 'gardevoirite',
+    // Showdown dichiara Traccia, della base. `gardevoir-mega` ha solo
+    // `pixilate`, e qui l'errore sarebbe stato di un genere nuovo: Ipervoce e'
+    // di tipo NORMALE, e Pixilate non la potenzia soltanto — le cambia il tipo
+    // in Folletto. Con `trace` non usciva un numero piu basso ma una tabella
+    // di efficacia diversa: contro Acciaio sovrastima, contro Drago
+    // sottostima, contro Spettro trasforma un'immunita in un colpo neutro.
+    ability: 'pixilate',
+    sps: [2, 0, 0, 32, 0, 32],
+    moves: ['hyper-voice', 'psyshock', 'vacuum-wave', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'delphox-mega',
     label: 'Setup Sweeper',
     nature: 'Modest',
