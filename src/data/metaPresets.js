@@ -441,6 +441,37 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'gholdengo',
+    label: 'Nasty Plot Attacker',
+    nature: 'Modest',
+    item: 'spell tag',
+    ability: 'good-as-gold',
+    sps: [29, 0, 1, 27, 0, 9],
+    // «Attacker» e non «Sweeper»: Nedodoppio alza l'Attacco Speciale, non la
+    // Velocita, e qui di Velocita ce ne sono 9. Stessa forma di Floette Mega
+    // «Calm Mind Attacker» e di Ceruledge — il criterio guarda cosa fa il set
+    // DOPO il potenziamento.
+    moves: ['make-it-rain', 'shadow-ball', 'nasty-plot', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'gholdengo',
+    label: 'Life Orb Attacker',
+    nature: 'Modest',
+    item: 'life orb',
+    ability: 'good-as-gold',
+    // ZERO SP in Attacco Speciale: 56 su 66 vanno in PS, Difesa e Difesa
+    // Speciale, su un set con tre mosse speciali, Nedodoppio e un'Assorbisfera
+    // che converte PS in danno. Piu estremo dell'1 di Delphox Mega e dei 5 di
+    // Floette Mega, e con lo strumento che tira in direzione opposta allo
+    // spread. Chiesto prima di scrivere, e confermato.
+    sps: [27, 0, 13, 0, 16, 10],
+    // Le stesse quattro mosse del set qui sopra: i due si distinguono solo per
+    // strumento e spread, quindi nella tendina li separa il nome e basta.
+    moves: ['make-it-rain', 'shadow-ball', 'nasty-plot', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'ceruledge',
     label: 'Bulk Up Attacker',
     nature: 'Adamant',
