@@ -205,6 +205,21 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'dragonite-mega',
+    label: 'Special Attacker',
+    nature: 'Modest',
+    item: 'dragoninite',
+    ability: 'multiscale',
+    sps: [25, 0, 0, 32, 0, 9],
+    // Extremvelocita e' FISICA (potenza 80) su un set Modest con zero SP in
+    // Attacco. Non e' un refuso: Attacco base 124 regge ancora qualcosa, ma la
+    // mossa e' li per la PRIORITA e non per il danno — chiude un bersaglio gia
+    // logoro. Guardato prima di scrivere, perche' a occhio sembra uno slot
+    // sprecato e non lo e'.
+    moves: ['dragon-pulse', 'heat-wave', 'extreme-speed', 'tailwind'],
+    reg: 'M-B',
+  },
+  {
     slug: 'charizard-mega-y',
     label: 'Sun Setter',
     nature: 'Modest',
