@@ -1731,6 +1731,7 @@
     "electric-surge": "Turns the entire field into Electric Terrain for 5 turns when the Pokémon enters a battle.",
     "electromorphosis": "When the Pokémon takes damage from a move, it gains the Electric Boost status.",
     "fairy-aura": "Boosts the power of the Fairy-type moves of all Pokémon on the field by 33%.",
+    "dark-aura": "Boosts the power of the Dark-type moves of all Pokémon on the field by 33%.",
     "filter": "Reduces the damage the Pokémon takes from supereffective moves by 25%.",
     "fire-mane": "Boosts the power of Fire-type moves by 50%.",
     "flame-body": "When the Pokémon is hit by a contact move, the attacker has a 30% chance of being burned.",

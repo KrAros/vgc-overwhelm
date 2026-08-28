@@ -171,23 +171,13 @@ const REGISTRO = {
   'merciless':  { verdetto: 'interruttore-critico' },
   'super-luck': { verdetto: 'interruttore-critico' },
 
-  // ── I difetti ───────────────────────────────────────────────────────────
+  // ── Il difetto che resta aperto ─────────────────────────────────────────
   //
-  // Il caso per cui il presidio è stato scritto. La descrizione promette il
-  // 33% sulle mosse Folletto, il motore non lo applica, e il segnalino non lo
-  // dichiara perché il registro del divario non può vedere quest'abilità: NCP
-  // ne costruisce il nome a runtime (`damage_MASTER.js:1568`) e le due
-  // stringhe esistono solo dentro un commento.
-  //
-  // Il costo è pubblicato: `floette-mega` ha `fairy-aura` e il set del meta
-  // «Bulky Special Attacker» porta tre mosse Folletto su quattro.
-  'fairy-aura': {
-    verdetto: 'silenziosa',
-    prova: 'locales/it.json abilities_desc.fairy-aura promette il 33%; '
-         + 'calcEngine.js non ha nessun ramo per le aure; gapNoti.abilita non '
-         + 'la elenca.',
-  },
-
+  // (`fairy-aura` stava qui, con verdetto `silenziosa`: è il caso per cui
+  //  questo presidio è stato scritto. È uscita nel commit che ha implementato
+  //  le due aure — adesso ha una voce in ABILITY_EFFECTS e non è più un
+  //  candidato — e toglierla è stata parte di quel commit, non una pulizia
+  //  successiva.)
   //
   // Trovato da questo presidio la prima volta che è stato eseguito, e NON è
   // il caso per cui era stato scritto. Vale la pena scriverlo per intero,
@@ -271,7 +261,7 @@ describe('descrizioni che promettono un numero', () => {
     // rosso, e quando una viene sistemata va tolta di qui nello stesso commit.
     const silenziose = Object.entries(REGISTRO)
       .filter(([, v]) => v.verdetto === 'silenziosa').map(([k]) => k).sort()
-    expect(silenziose).toEqual(['fairy-aura', 'rock-head'])
+    expect(silenziose).toEqual(['rock-head'])
   })
 })
 

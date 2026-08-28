@@ -104,6 +104,18 @@ export function caricaNCP() {
   cache = {
     /** Valuta un'espressione dentro il contesto NCP. Utile per ispezionare. */
     leggi,
+    /**
+     * Accende le caselle di spunta dell'interfaccia che NCP legge con jQuery,
+     * spegnendo tutte le altre.
+     *
+     * Serve per le due aure: `calcBPMods` non le legge dall'abilità, le legge
+     * da `#fairy-aura` / `#dark-aura`. Il perché per esteso sta in
+     * `prelude.js`, sezione 2-bis.
+     *
+     * L'elenco vuoto è lo stato normale, ed è quello in cui il contesto nasce:
+     * ogni chiamata dell'harness lo rimette a posto quando ha finito.
+     */
+    spuntaCaselle: leggi('__spunta'),
     /** La funzione di calcolo danni per Champions. */
     GET_DAMAGE_SV: leggi('GET_DAMAGE_SV'),
     /**

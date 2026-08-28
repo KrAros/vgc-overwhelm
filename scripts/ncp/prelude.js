@@ -83,19 +83,85 @@ var __extend = function () {
 // Tutto il resto restituisce il nodo stesso, così le catene tipo
 // `$("#x").find(".y").hide()` non esplodono.
 
-var __node = new Proxy({}, {
-  get: function (_target, prop) {
-    if (prop === 'val') return function () { return undefined }
-    if (prop === 'prop') return function () { return false }
-    if (prop === 'is') return function () { return false }
-    if (prop === 'text') return function () { return '' }
-    if (prop === 'attr') return function () { return '' }
-    if (prop === 'length') return 0
-    return function () { return __node }
-  },
-})
+var __nodo = function (spuntata) {
+  var self = new Proxy({}, {
+    get: function (_target, prop) {
+      if (prop === 'val') return function () { return spuntata ? 'on' : undefined }
+      if (prop === 'prop') return function () { return !!spuntata }
+      if (prop === 'is') return function () { return !!spuntata }
+      if (prop === 'text') return function () { return '' }
+      if (prop === 'attr') return function () { return '' }
+      if (prop === 'length') return spuntata ? 1 : 0
+      return function () { return self }
+    },
+  })
+  return self
+}
 
-var $ = function () { return __node }
+var __node = __nodo(false)
+var __nodeAcceso = __nodo(true)
+
+// ───────────────────────────────────────────────────────────────────────────
+// 2-bis. Le caselle che si possono ACCENDERE
+// ───────────────────────────────────────────────────────────────────────────
+// Fino alla sessione delle aure la risposta era "spento" a tutte e quattordici
+// le chiamate, e andava bene perché nessuna delle meccaniche dietro quelle
+// caselle era implementata da noi.
+//
+// Aura Fatata e Aura Oscura hanno rotto quella comodità. In NCP non si leggono
+// dall'abilità: `calcBPMods` guarda una casella dell'interfaccia,
+//
+//     var auraActive = ($("input:checkbox[id='" + move.type.toLowerCase() +
+//                        "-aura']:checked").val() != undefined);
+//
+// e col nodo sempre spento il ramo non si accendeva mai. Non era un oracolo
+// che diceva "zero": era un oracolo che non si poteva interrogare.
+//
+// ─── PERCHÉ ACCENDERE LA CASELLA NON È "AIUTARE" NCP ───────────────────────
+// Perché è NCP stessa a legare la casella all'abilità, dieci righe più sotto:
+//
+//     if (isAttackerAura) description.attackerAbility = attacker.ability;
+//
+// dove `isAttackerAura` è `attacker.ability === (move.type + " Aura")`. Se la
+// casella non volesse dire "c'è un'aura di quel tipo in campo", attribuire il
+// bonus all'abilità sarebbe un errore del riferimento. La traduzione è quindi
+// la stessa che l'harness fa già per `doubleTarget` → formato e per
+// `multiscaleActive` → `curHP`: il nostro modello dice la cosa con l'abilità,
+// il loro con la casella.
+//
+// E resta verificabile: i test delle aure controllano che NCP scriva il nome
+// dell'abilità nella descrizione. Se la traduzione fosse arbitraria, non lo
+// farebbe.
+//
+// ─── PERCHÉ LE CHIAVI SONO LE CASELLE E NON I TIPI ─────────────────────────
+// Perché `move.type` che NCP usa qui è quello DOPO le abilità che cambiano
+// tipo: con Pixilate sull'attaccante e Aura Fatata sul difensore, una mossa
+// Normale arriva a questa riga come Folletto. Tenendo qui l'elenco delle aure
+// accese — e non un tipo deciso da noi prima — è NCP a fare l'abbinamento con
+// la sua nozione di tipo, che è l'unica giusta.
+
+var __caselleSpuntate = Object.create(null)
+
+/** Accende esattamente le caselle elencate, spegnendo tutte le altre. */
+function __spunta(elenco) {
+  __caselleSpuntate = Object.create(null)
+  for (var i = 0; i < (elenco || []).length; i++) __caselleSpuntate[elenco[i]] = true
+}
+
+/** L'id della casella dentro un selettore, se il selettore ne nomina una. */
+function __idSelettore(sel) {
+  if (typeof sel !== 'string') return null
+  var m = /\[id=['"]([^'"]+)['"]\]/.exec(sel)
+  if (m) return m[1]
+  m = /^#([A-Za-z0-9_-]+)$/.exec(sel)
+  if (m) return m[1]
+  return null
+}
+
+var $ = function (sel) {
+  var id = __idSelettore(sel)
+  return (id && __caselleSpuntate[id]) ? __nodeAcceso : __node
+}
 $.extend = __extend
 $.isEmptyObject = function (o) { return !o || Object.keys(o).length === 0 }
 var jQuery = $

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
+import { TYPES } from './typeChart.js'
+
 // ─── Normalizzazione chiave abilità ──────────────────────────────────────────
 // Converte un nome abilità in qualsiasi formato (es. "Flash Fire", "flash fire")
 // nella chiave usata in ABILITY_EFFECTS (es. "flash-fire").
@@ -78,6 +80,28 @@ export const ABILITY_EFFECTS = {
   // moves.json, che `gen-flag-dati.mjs` trascrive da `isPulse` del vendor.
   // Una lista a mano in questo file sarebbe la tabella che marcisce.
   'mega-launcher': { megaLauncher: true, showInSmogon: true },
+
+  // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
+  //
+  // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno
+  // solo per tutt'e due: cambia il tipo che deve combaciare con quello della
+  // mossa. Il riferimento fa lo stesso — `damage_MASTER.js:1654` non nomina
+  // ne' l'una ne' l'altra, guarda `move.type`.
+  //
+  // Perche' il registro del divario non le vedeva: in NCP il nome dell'abilita'
+  // e' COSTRUITO a runtime (`attacker.ability === (move.type + " Aura")`,
+  // riga 1568), quindi le stringhe "Fairy Aura" e "Dark Aura" non compaiono
+  // mai nel codice che il generatore legge. Esistono solo dentro un commento,
+  // e `gen-gap-noti.mjs` i commenti li scarta di proposito — con ragione, e la
+  // ragione e' scritta a riga 61 di quel file. Due difese corrette, e queste
+  // due abilita' cadevano nel varco fra loro. L'ha trovate
+  // `descrizioniSilenziose.test.js`, guardando da un terzo lato: non cosa fa
+  // il riferimento, ma cosa l'app dice di se'.
+  //
+  // Nota sul lato: l'aura vale per CHIUNQUE sia in campo, non solo per chi
+  // attacca. Il motore guarda percio' l'abilita' di tutti e due.
+  'fairy-aura': { aura: TYPES.FAIRY, showInSmogon: true },
+  'dark-aura':  { aura: TYPES.DARK,  showInSmogon: true },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true

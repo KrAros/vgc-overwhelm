@@ -487,6 +487,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   //   c.i → abilità "ate" (Pixilate, Aerilate, …)      ×1.2   0x1333
   //   e.iv→ Tough Claws                                 ×1.3   0x14CD
+  //   f   → Aura Fatata, Aura Oscura                    ×1.33  0x1548
+  //   g   → Megalancio                                  ×1.5   0x1800
   //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
   //   k   → item type-boost                             ×1.2   0x1333
   //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
@@ -508,6 +510,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
   // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.
   if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+
+  // f — Aura Fatata e Aura Oscura: ×1,33 sulle mosse del tipo dell'aura.
+  //
+  // Trascritto da `calcBPMods` punto f (`damage_MASTER.js:1654`), che spinge
+  // `0x1548`. NON è `MOD.X1_3`: 0x1548 è 1,33007… e 0x14CD è 1,29980…, e la
+  // differenza arriva fino al roll. Sta nella catena della POTENZA.
+  //
+  // Il posto in questa catena è quello del riferimento, fra Tough Claws (e.iv)
+  // e le abilità ×1.5 (g). Oggi la posizione non è osservabile — con due soli
+  // modificatori `chainMods` è commutativo — ma NCP calcola `tempBP` fra f e g
+  // per decidere se Technician si applica: il giorno in cui Technician entra,
+  // l'ordine diventa osservabile e dev'essere già giusto.
+  //
+  // ─── PERCHÉ GUARDA TUTTE E DUE LE ABILITÀ ─────────────────────────────────
+  // Perché l'aura potenzia le mosse di quel tipo di CHIUNQUE sia in campo, non
+  // solo di chi la possiede. NCP lo esprime chiedendo una casella per tipo di
+  // mossa, senza guardare il lato, e attribuisce poi il bonus indifferentemente
+  // a `attacker.ability` o a `defAbility`.
+  //
+  // ─── COSA NON FA, E CHE RESTA DICHIARATO ──────────────────────────────────
+  // Frangiaura (`aura-break`) rovescia l'aura in ×0,75 — nel riferimento è il
+  // punto a della stessa funzione. Non è implementata, e resta nelle 108: il
+  // segnalino «non calcolata» lo dice all'utente che la sceglie.
+  const aureInCampo = [atkAbilEffect?.aura, defAbilEffect?.aura]
+  if (aureInCampo.some(tipo => tipo !== undefined && tipo === moveType)) {
+    bpMods.push(MOD.X1_33)
+  }
 
   // g — Megalancio sulle mosse-impulso: ×1.5.
   //

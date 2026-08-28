@@ -118,6 +118,13 @@ export const MOD = {
   X1_2:      0x1333,  // 4915 — abilità "ate", item type-boost
   X1_3_ORB:  0x14CC,  // 5324 — Life Orb
   X1_3:      0x14CD,  // 5325 — terreni, Tough Claws
+  // 5448 — Aura Fatata e Aura Oscura. NON è uno dei ×1.3 qui sopra: il
+  // riferimento spinge `0x1548` in `calcBPMods` punto f, e 5448/4096 fa
+  // 1,33007…, mentre 0x14CD fa 1,29980…. Sono 118 punti in virgola fissa di
+  // differenza, che sul danno valgono qualche punto per roll — abbastanza da
+  // spostare un 2HKO. Il nome dice 1_33 e non 1_3 proprio per non farsi
+  // scegliere per sbaglio al posto dell'altro.
+  X1_33:     0x1548,
   X1_5:      0x1800,  // 6144
   X2:        0x2000,  // 8192
 }
