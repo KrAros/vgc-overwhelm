@@ -184,6 +184,27 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'dragonite-mega',
+    label: 'Haze Support',
+    nature: 'Modest',
+    item: 'dragoninite',
+    // Secondo caso in cui la trappola Mega non morde: `dragonite-mega` ha solo
+    // `multiscale`, che e' anche quella dichiarata da Showdown — la Mega
+    // CONSERVA l'abilita nascosta della base invece di sostituirla.
+    //
+    // Con cinque Mega viste, il conto e' tre che sostituiscono (Blastoise,
+    // Delphox, Dragalge) e due che conservano (Blaziken, questa). Non c'e' una
+    // regola da dedurre: si guarda ogni volta.
+    ability: 'multiscale',
+    sps: [32, 0, 0, 25, 5, 4],
+    // Terzo Dragonite del file ma su slug diverso, quindi nessuna collisione:
+    // la chiave separa le forme prima ancora dell'etichetta.
+    //
+    // Primo set senza Protect: quattro mosse tutte operative.
+    moves: ['draco-meteor', 'thunderbolt', 'haze', 'tailwind'],
+    reg: 'M-B',
+  },
+  {
     slug: 'charizard-mega-y',
     label: 'Sun Setter',
     nature: 'Modest',
