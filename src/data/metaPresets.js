@@ -341,6 +341,22 @@ export const META_PRESETS = [
     moves: ['dark-pulse', 'water-spout', 'shell-smash', 'protect'],
     reg: 'M-B',
   },
+  {
+    slug: 'blastoise-mega',
+    label: 'Trick Room Abuser',
+    nature: 'Quiet',
+    item: 'blastoisinite',
+    // Anche qui `mega-launcher` contro il Pellepioggia dichiarato in Showdown,
+    // e qui la differenza si vede nei numeri: Megalancio porta Auraconflusso e
+    // Buiosfera al 150%. Con `rain-dish` resterebbe un set che ha scelto due
+    // mosse per un'abilita' che non ha.
+    ability: 'mega-launcher',
+    // Non porta Distortozona: gliela mette il compagno. Da qui «Abuser», come
+    // Excadrill con la sabbia e Venusaur col sole, e non «Sweeper».
+    sps: [31, 0, 3, 32, 0, 0],
+    moves: ['water-spout', 'dark-pulse', 'aura-sphere', 'fake-out'],
+    reg: 'M-B',
+  },
 ]
 
 export const PRESETS_BY_SLUG = META_PRESETS.reduce((acc, p) => {
