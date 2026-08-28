@@ -552,6 +552,23 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'gengar-mega',
+    label: 'Perish Trapper',
+    nature: 'Modest',
+    item: 'gengarite',
+    // `gengar-mega` SOSTITUISCE (la base ha `cursed-body`), ma Showdown ha
+    // dichiarato gia `shadow-tag`, cioe' il valore giusto. Secondo caso dopo
+    // Eelektross: la fonte a volte scrive l'abilita della Mega invece di
+    // quella base, e non e' prevedibile quando.
+    ability: 'shadow-tag',
+    sps: [32, 0, 14, 1, 14, 5],
+    // «Trapper» e' il decimo ruolo del file, e serviva: Passombra impedisce il
+    // cambio, Ultimocanto conta alla rovescia. Non attacca, non supporta, non
+    // spazza — nessuno dei nove ruoli esistenti lo descrive.
+    moves: ['shadow-ball', 'disable', 'perish-song', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'delphox-mega',
     label: 'Setup Sweeper',
     nature: 'Modest',
