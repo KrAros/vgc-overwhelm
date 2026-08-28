@@ -205,8 +205,39 @@ export const META_PRESETS = [
     nature: 'Jolly',
     item: 'life orb',
     ability: 'rough-skin',
-    sps: [2, 32, 0, 0, 0, 32],
-    moves: ['dragon-claw', 'rock-slide', 'earthquake', 'protect'],
+    // Aggiornato il 28 agosto 2026, e il cambio NON e' solo negli SP: Fossa e'
+    // diventata Zampata. In doppie Fossa colpisce entrambi i nemici e anche il
+    // compagno, Zampata un bersaglio solo — cambia il comportamento, non il
+    // numero. Chiesto e confermato prima di sostituire.
+    sps: [6, 28, 0, 0, 0, 32],
+    moves: ['stomping-tantrum', 'dragon-claw', 'rock-slide', 'protect'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'garchomp',
+    label: 'Choice Scarf Attacker',
+    nature: 'Adamant',
+    item: 'choice scarf',
+    ability: 'rough-skin',
+    sps: [14, 20, 0, 0, 0, 32],
+    // Nessun Protect, ed e' corretto: con uno strumento Scelta ci si blocca
+    // sulla prima mossa usata, e bloccarsi su Protect finisce la partita.
+    // Stessa ragione per cui non ce l'ha lo «Scarf Wallbreaker» di Basculegion.
+    moves: ['earthquake', 'rock-slide', 'dragon-claw', 'stomping-tantrum'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'garchomp',
+    label: 'Bulky Attacker',
+    nature: 'Adamant',
+    item: 'sitrus berry',
+    ability: 'rough-skin',
+    // Terzo set di garchomp nella stessa reg, primo caso nel file. Le tre
+    // etichette devono restare distinte o la tendina ne perde una: qui
+    // «Bulky» nomina cio' che davvero separa questo dagli altri due — 31 PS e
+    // 14 in Velocita contro i loro 32 — invece dello strumento.
+    sps: [31, 14, 4, 0, 3, 14],
+    moves: ['earthquake', 'rock-slide', 'dragon-claw', 'protect'],
     reg: 'M-B',
   },
   {
