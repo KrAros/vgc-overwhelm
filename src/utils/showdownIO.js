@@ -16,7 +16,7 @@ import movesData     from '../data/moves.json'
 import itemsData     from '../data/items.json'
 import abilitiesData from '../data/abilities.json'
 import { NATURES }   from '../data/natures.js'
-import { spToEv, EV_PER_SP, MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
+import { EV_PER_SP, MAX_SP_PER_STAT, MAX_SP_TOTAL } from '../lib/rules.js'
 import { abilitaPerSpecie } from '../lib/abilitaSpecie.js'
 
 /**
@@ -40,13 +40,15 @@ import { abilitaPerSpecie } from '../lib/abilitaSpecie.js'
  * aggiunge al più mezzo punto per statistica, cioè 3 in tutto. Il peggior caso
  * è 66,5, che su interi è **66**. Esattamente il tetto, mai oltre.
  *
- * Le due funzioni vanno cambiate INSIEME: correggere solo la lettura
- * romperebbe l'andata e ritorno, perché l'export scriverebbe ancora gli SP
- * grezzi e la rilettura li dividerebbe per otto.
+ * ─── OGGI L'EXPORT NON CONVERTE PIU' ───────────────────────────────────────
  *
- * Il tetto a 252 nell'export è quello di Showdown: 32 SP varrebbero 256 EV,
- * che lì è illegale. Il giro resta stabile lo stesso — 32 → 252 → 32 —
- * perché 252/8 arrotonda a 32.
+ * Restava una sola direzione da convertire. L'export scriveva `EVs: SP×8` —
+ * corretto per Showdown, illeggibile per chi gioca a Champions: un 32/11/23
+ * usciva 252/88/184. Ora scrive `SPs:` con i numeri veri, e il ramo che li
+ * rilegge non deve indovinare niente.
+ *
+ * `EV_TO_SP` resta e serve: i paste che arrivano da Showdown portano EV veri
+ * sotto l'etichetta `EVs:`, e vanno divisi per otto.
  *
  * CONFINE DICHIARATO. L'SP è un'unità più grossa dell'EV, quindi il giro
  * EV → SP → EV non conserva il TOTALE: 252/4/252 fa 508 in entrata e
@@ -58,7 +60,6 @@ import { abilitaPerSpecie } from '../lib/abilitaSpecie.js'
  * Il per-statistica resta sempre legale; è solo la somma che può eccedere i
  * 508 di Showdown.
  */
-const SP_TO_EV = (sp) => Math.min(252, spToEv(sp))
 const EV_TO_SP = (ev) => Math.min(MAX_SP_PER_STAT, Math.round((ev || 0) / EV_PER_SP))
 const STAT_NAMES_SHOWDOWN = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']
 const STAT_IDX = { HP: 0, Atk: 1, Def: 2, SpA: 3, SpD: 4, Spe: 5 }
@@ -325,6 +326,26 @@ export function parseShowdownPaste(paste) {
         abilityKey = findAbilityKey(raw)
         if (!abilityKey) warnings.push(`Slot ${blockIdx + 1}: abilità "${raw}" non trovata.`)
 
+      } else if (line.startsWith('SPs:')) {
+        /**
+         * ─── QUI NON SI INDOVINA: L'ETICHETTA LO DICE ──────────────────────
+         *
+         * E' il formato che questo calcolatore ESPORTA. `SPs:` significa SP,
+         * senza ambiguita' e senza euristica: i numeri si prendono come sono.
+         *
+         * Va insieme all'export, e non e' una gentilezza — e' la condizione
+         * perche' l'andata e ritorno esista. Senza questo ramo la riga non
+         * corrisponderebbe a nessun caso, verrebbe ignorata in silenzio, e
+         * riportare dentro un set esportato darebbe SP tutti a zero.
+         */
+        line.replace('SPs:', '').trim().split('/').forEach(seg => {
+          const m = seg.trim().match(/^(\d+)\s+(\w+)$/)
+          if (m) {
+            const idx = STAT_IDX[m[2]]
+            if (idx !== undefined) sps[idx] = Math.min(MAX_SP_PER_STAT, parseInt(m[1], 10))
+          }
+        })
+
       } else if (line.startsWith('EVs:')) {
         /**
          * ─── L'ETICHETTA DICE «EVs» E I NUMERI POSSONO ESSERE SP ───────────
@@ -342,8 +363,10 @@ export function parseShowdownPaste(paste) {
          * costruzione entro 32 per statistica e 66 in totale. Un set Showdown
          * vero ne esce quasi sempre al primo valore — 252 supera 32 da solo.
          *
-         * L'export di quest'app scrive EV veri (SP×8), quindi il giro di
-         * andata e ritorno non può cadere qui dentro: 32 SP escono come 256.
+         * L'export di quest'app non passa più di qui: scrive `SPs:`, che ha
+         * un ramo suo e non ha bisogno di indovinare niente. Questo resta il
+         * percorso dei paste veri di Showdown, dove l'etichetta è `EVs:` e i
+         * numeri possono essere l'una o l'altra unità.
          *
          * ─── LA ZONA GRIGIA, DICHIARATA ────────────────────────────────────
          *
@@ -452,8 +475,29 @@ function slotToShowdown(slot) {
     ? (abilitiesData[slot.ability]?.name || slot.ability.replace(/\b\w/g, c => c.toUpperCase()))
     : 'None'
 
-  const evParts = (slot.sps || [])
-    .map((sp, i) => sp > 0 ? `${SP_TO_EV(sp)} ${STAT_NAMES_SHOWDOWN[i]}` : null)
+  /**
+   * ─── SI ESPORTANO SP, NON EV ─────────────────────────────────────────────
+   *
+   * Fino a oggi qui si scriveva `EVs: ${SP_TO_EV(sp)}`, cioe' SP x 8 con il
+   * tetto di Showdown: un set da 32/11/23 usciva come 252/88/184. Numeri
+   * corretti nel loro sistema, ma illeggibili per chi gioca a Champions —
+   * l'utente aveva scritto 32 e ne rileggeva 252.
+   *
+   * Scelta di Simone: l'export e' per chi usa questo calcolatore, e in
+   * Champions l'unita' e' l'SP. L'etichetta lo dichiara, cosi' il numero non
+   * puo' essere scambiato per un EV.
+   *
+   * Il prezzo, dichiarato: un paste `SPs:` **Showdown non lo legge**. Chi
+   * vuole portare la squadra li' deve convertire. Prima valeva l'opposto —
+   * il paste era buono per Showdown e sbagliato per l'utente — e fra i due
+   * l'utente viene prima.
+   *
+   * `SP_TO_EV` sparisce con questa riga: era il suo unico chiamante. Il
+   * gemello `EV_TO_SP` resta, perche' serve ancora a leggere i paste veri di
+   * Showdown, dove gli EV sono EV.
+   */
+  const spParts = (slot.sps || [])
+    .map((sp, i) => sp > 0 ? `${sp} ${STAT_NAMES_SHOWDOWN[i]}` : null)
     .filter(Boolean)
 
   const natureLine = slot.nature
@@ -471,7 +515,7 @@ function slotToShowdown(slot) {
   return [
     line1,
     `Ability: ${abilityDisplay}`,
-    evParts.length ? `EVs: ${evParts.join(' / ')}` : null,
+    spParts.length ? `SPs: ${spParts.join(' / ')}` : null,
     natureLine,
     ...moveLines,
   ].filter(Boolean).join('\n')
