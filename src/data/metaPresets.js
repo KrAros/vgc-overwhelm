@@ -600,6 +600,46 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'golurk-mega',
+    label: 'Trick Room Abuser',
+    nature: 'Brave',
+    item: 'golurkite',
+    // Showdown dichiarava `no-guard`, che e' la TERZA abilita della base:
+    // `golurk-mega` ha solo `unseen-fist`. Caso particolare, perche' nessuna
+    // delle due e' un moltiplicatore di danno — Pugnoceleste fa passare le
+    // mosse di contatto attraverso Protect, Nullodifesa porta la precisione a
+    // 100 — quindi trascrivere male forse non avrebbe cambiato nessun numero.
+    // Resta sbagliato lo stesso: l'app mostra l'abilita e la sua descrizione.
+    ability: 'unseen-fist',
+    // Brave con zero Velocita e nessuna Distortozona nel set: la sfrutta,
+    // gliela mette il compagno. «Abuser» come Blastoise Mega, non «Attacker».
+    sps: [31, 21, 13, 0, 1, 0],
+    moves: ['headlong-rush', 'protect', 'ice-punch', 'poltergeist'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'hydreigon',
+    label: 'Choice Scarf Attacker',
+    nature: 'Modest',
+    item: 'choice scarf',
+    ability: 'levitate',
+    sps: [1, 0, 0, 32, 1, 32],
+    // Nessun Protect: con uno strumento Scelta ci si blocca sulla prima mossa
+    // usata. Stessa ragione del set Scarf di Garchomp e di Basculegion.
+    moves: ['draco-meteor', 'dark-pulse', 'snarl', 'earth-power'],
+    reg: 'M-B',
+  },
+  {
+    slug: 'hydreigon',
+    label: 'Special Attacker',
+    nature: 'Modest',
+    item: 'haban berry',
+    ability: 'levitate',
+    sps: [8, 0, 1, 25, 0, 32],
+    moves: ['draco-meteor', 'dark-pulse', 'earth-power', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'delphox-mega',
     label: 'Setup Sweeper',
     nature: 'Modest',
