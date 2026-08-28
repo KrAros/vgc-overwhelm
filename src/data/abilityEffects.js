@@ -81,6 +81,14 @@ export const ABILITY_EFFECTS = {
   // Una lista a mano in questo file sarebbe la tabella che marcisce.
   'mega-launcher': { megaLauncher: true, showInSmogon: true },
 
+  // Ferromascella: x1.5 sulle mosse di morso. Nel riferimento e' nello STESSO
+  // `if` di Megalancio — `damage_MASTER.js:1668`, le sei «1.5x Abilities» — e
+  // spinge lo stesso `0x1800` nella stessa catena. Cambia solo la condizione.
+  //
+  // Le nove mosse di morso NON sono scritte qui: e' il flag `bite` di
+  // moves.json, che `gen-flag-dati.mjs` trascrive da `isBite` del vendor.
+  'strong-jaw':  { strongJaw: true, showInSmogon: true },
+
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
   // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno

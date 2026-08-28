@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-28T14:47:12.010Z",
+    "generatedAt": "2026-08-28T14:49:41.846Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 263,
-    "abilitaNelGap": 108,
+    "abilitaSenzaEffetto": 262,
+    "abilitaNelGap": 107,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -844,16 +844,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1110
-        }
-      },
-      {
-        "chiave": "strong jaw",
-        "nome": "Strong Jaw",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1673
         }
       },
       {

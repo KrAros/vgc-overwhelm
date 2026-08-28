@@ -42,16 +42,20 @@
  * ─── COME SI DECIDE CHE UNA DESCRIZIONE PROMETTE UN NUMERO ─────────────────
  *
  * Con un vocabolario, che è un'euristica e va misurata invece che creduta.
- * La misura è il test «il vocabolario vede le abilità del divario»: delle 57
- * abilità che NCP calcola e che hanno una descrizione da noi, il vocabolario
- * ne riconosce 46. Quel numero è asserito qui sotto: chi indebolisce una
- * regola lo fa scendere e il file diventa rosso.
+ * Il banco di prova sono le abilità che NCP calcola e che hanno una
+ * descrizione da noi: il vocabolario deve riconoscerne almeno otto su dieci,
+ * ed è asserito qui sotto. Misurato quando è stato scritto: 46 su 57. La
+ * prima versione ne aveva cinque di regole e faceva 33 su 57 — le altre sei
+ * sono nate da quella misura, non dall'immaginazione.
  *
- * Le undici che sfuggono sono elencate nel test, una per una. Non sono un
- * difetto del vocabolario: sono descrizioni che parlano di priorità, di
- * bacche, di copia dell'abilità — cose vere che però non nominano nessun
- * numero. Allargare il vocabolario fino a prenderle vorrebbe dire prendere
- * anche mezzo listino.
+ * È una SOGLIA e non i due numeri esatti, di proposito: i numeri esatti
+ * scendono ogni volta che un'abilità viene implementata, perché esce dal
+ * divario e si porta via la sua descrizione. Un test che diventa rosso a ogni
+ * sessione che fa il suo lavoro verrebbe aggiornato senza guardarlo.
+ *
+ * Quelle che sfuggono sono elencate nel test, una per una, e per sottrazione:
+ * parlano di priorità, di bacche, di copia dell'abilità — cose vere che però
+ * non nominano nessun numero. Una NUOVA che sfugge fa fallire il file.
  *
  * ─── IL REGISTRO MARCA, NON NASCONDE ───────────────────────────────────────
  *
@@ -334,20 +338,47 @@ describe('il vocabolario è misurato, non creduto', () => {
   const conDescrizione = [...nelGap].filter(k => it_.abilities_desc[k])
   const viste = conDescrizione.filter(k => prometteUnNumero(it_.abilities_desc[k]))
 
-  it('vede 46 delle 57 abilità del divario che hanno una descrizione', () => {
-    // Numeri misurati, non scelti. Servono a rendere visibile un
-    // indebolimento: togliere una regola dal vocabolario li fa scendere.
-    expect(conDescrizione.length).toBe(57)
-    expect(viste.length).toBe(46)
+  it('ne riconosce almeno otto su dieci', () => {
+    // Una SOGLIA e non i due numeri esatti, e la ragione è che i numeri esatti
+    // scendono ogni volta che un'abilità viene implementata — esce dal divario
+    // e si porta via la sua descrizione. Un test che diventa rosso a ogni
+    // sessione che fa il suo lavoro verrebbe aggiornato senza guardarlo, cioè
+    // smetterebbe di essere un controllo.
+    //
+    // La soglia invece scende solo se il vocabolario si indebolisce, che è
+    // quello che deve sorvegliare. Misurata quando è stata scritta: 46 su 57,
+    // cioè 0,807.
+    expect(conDescrizione.length, 'il banco di prova si è svuotato').toBeGreaterThan(40)
+    expect(viste.length / conDescrizione.length).toBeGreaterThanOrEqual(0.8)
   })
 
-  it('le undici che sfuggono sono queste, e non nominano un numero', () => {
-    const sfuggite = conDescrizione.filter(k => !prometteUnNumero(it_.abilities_desc[k])).sort()
-    expect(sfuggite).toEqual([
-      'armor-tail', 'cloud-nine', 'damp', 'imposter', 'mega-sol',
-      'queenly-majesty', 'receiver', 'ripen', 'supersweet-syrup', 'trace',
-      'unnerve',
+  it('ogni descrizione che sfugge è una che non nomina un numero', () => {
+    // Elenco per sottrazione, non per uguaglianza: una che esce dal divario
+    // perché l'abbiamo implementata sparisce di qui da sola, mentre una NUOVA
+    // che sfugge va guardata e aggiunta a mano — o è il segno che al
+    // vocabolario manca una regola.
+    const NOTE = new Set([
+      'armor-tail',        // priorità delle mosse avversarie
+      'cloud-nine',        // «annulla gli effetti del meteo»
+      'damp',              // impedisce le mosse esplosive
+      'imposter',          // si trasforma
+      'mega-sol',          // «usa le mosse come se ci fosse sole»
+      'queenly-majesty',   // priorità, come armor-tail
+      'receiver',          // copia l'abilità di un alleato
+      'ripen',             // raddoppia gli effetti delle bacche
+      'supersweet-syrup',  // abbassa la schivata
+      'trace',             // copia l'abilità di un avversario
+      'unnerve',           // impedisce di mangiare le bacche
     ])
+    const nuove = conDescrizione
+      .filter(k => !prometteUnNumero(it_.abilities_desc[k]) && !NOTE.has(k))
+      .map(k => `${k} :: ${it_.abilities_desc[k]}`)
+    expect(
+      nuove,
+      'questa descrizione parla di un\'abilità che il riferimento CALCOLA, e il '
+      + 'vocabolario non ci vede niente: o è giusto così (aggiungila all\'elenco) '
+      + 'o al vocabolario manca una regola.',
+    ).toEqual([])
   })
 
   it('controllo negativo: il vocabolario non risponde di sì a tutto', () => {

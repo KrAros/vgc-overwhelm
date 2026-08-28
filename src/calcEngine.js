@@ -203,6 +203,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isContactBase = moveData.contact === true
   const isPunch = moveData.punch === true
   const isPulse = moveData.pulse === true
+  const isBite  = moveData.bite === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -573,7 +574,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Water Pulse, Aura Sphere, Dark Pulse, Dragon Pulse, Heal Pulse, Origin
   // Pulse, Terrain Pulse. Heal Pulse è di stato e non arriva mai qui, ma resta
   // nell'elenco perché l'elenco è trascritto e non filtrato da noi.
+  //
+  // Ferromascella sta nello STESSO `if` di Megalancio nel riferimento, con lo
+  // stesso `0x1800`: qui sono due righe perché due condizioni diverse leggono
+  // due flag diversi, ma il moltiplicatore e la catena sono gli stessi. Le due
+  // abilità non possono convivere su un Pokémon, quindi non si sommano mai.
+  //
+  // `isBite` viene dal flag `bite` di moves.json — nove mosse: Bite, Hyper
+  // Fang, Crunch, Poison Fang, Thunder Fang, Ice Fang, Fire Fang, Psychic
+  // Fangs, Jaw Lock.
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
+  if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
 
   // j / k — strumenti che modificano la potenza.
   // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.
