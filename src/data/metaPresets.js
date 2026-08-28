@@ -258,6 +258,22 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'blaziken-mega',
+    label: 'Physical Sweeper',
+    nature: 'Jolly',
+    item: 'blazikenite',
+    // La trappola della Mega qui NON morde, e per caso: `blaziken-mega` ha
+    // `speed-boost` come unica abilita, cioe' la stessa stringa che Showdown
+    // dichiara per la forma base. Chi avesse copiato alla cieca avrebbe
+    // indovinato — ed e' esattamente cio' che rende la trappola pericolosa,
+    // perche' un set come questo insegna l'abitudine sbagliata. La regola e'
+    // stata applicata lo stesso: la coincidenza sta nel dato, non nel metodo.
+    ability: 'speed-boost',
+    sps: [2, 32, 0, 0, 0, 32],
+    moves: ['flare-blitz', 'close-combat', 'rock-slide', 'detect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'incineroar',
     label: 'Sitrus Support',
     nature: 'Impish',
