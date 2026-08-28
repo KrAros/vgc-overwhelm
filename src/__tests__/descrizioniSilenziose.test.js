@@ -62,6 +62,12 @@
  * `silenziosa` è l'unico verdetto che è un difetto. Alla chiusura di questa
  * sessione ne resta uno, `rock-head`, e resta scritto invece che sistemato o
  * tolto: vedi il test in fondo.
+ *
+ * ─── E IL PUNTO CIECO DI QUESTO PRESIDIO ───────────────────────────────────
+ *
+ * Ce n'è uno, e sta scritto invece che taciuto: la ricerca scarta un'abilità
+ * appena ha UN campo meccanico, quindi una descrizione applicata a metà le
+ * sfugge. Il registro `PARZIALI` le dichiara a mano — oggi una, `eelevate`.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -203,6 +209,36 @@ const REGISTRO = {
 }
 
 // ───────────────────────────────────────────────────────────────────────────
+// Le parziali: il punto cieco di QUESTO presidio
+// ───────────────────────────────────────────────────────────────────────────
+//
+// La ricerca qui sotto scarta un'abilità appena `ABILITY_EFFECTS` le dà UN
+// campo meccanico. Basta un campo: quindi una descrizione che promette due
+// cose e ne vede applicata una sola esce dal setaccio ed è di nuovo silenziosa
+// a metà — che è il difetto di partenza, in piccolo.
+//
+// Non è automatizzabile senza leggere le descrizioni molto meglio di come le
+// legge un vocabolario di undici espressioni: «Immunizza alle mosse Terra.
+// Aumenta la statistica più alta di 1 grado quando mette KO un avversario.»
+// sono due frasi, e sapere che la seconda non è implementata vuol dire capire
+// la seconda frase, non trovarci una parola.
+//
+// Quindi si dichiara a mano. Le due cose che il test può ancora controllare, e
+// controlla, sono che la voce esista davvero e che sia davvero parziale
+// rispetto a ciò che il registro qui sotto le riconosce.
+
+const PARZIALI = {
+  'eelevate': {
+    applicato: 'l\'immunità alle mosse Terra (`levitate: true`), verificata '
+             + 'contro NCP in rapidascesa.test.js.',
+    mancante: '«Aumenta la statistica più alta di 1 grado quando mette KO un '
+            + 'avversario»: è uno stato che l\'utente imposta a mano, come per '
+            + 'Aegislash, Morpeko e Palafin, e l\'interruttore non esiste. '
+            + 'Nemmeno NCP calcola quella metà.',
+  },
+}
+
+// ───────────────────────────────────────────────────────────────────────────
 // La ricerca
 // ───────────────────────────────────────────────────────────────────────────
 
@@ -262,6 +298,33 @@ describe('descrizioni che promettono un numero', () => {
     const silenziose = Object.entries(REGISTRO)
       .filter(([, v]) => v.verdetto === 'silenziosa').map(([k]) => k).sort()
     expect(silenziose).toEqual(['rock-head'])
+  })
+})
+
+describe('le parziali sono dichiarate a mano, e restano vere', () => {
+  it('ogni parziale è un\'abilità che si può scegliere e che è descritta', () => {
+    for (const chiave of Object.keys(PARZIALI)) {
+      expect(selezionabili, `${chiave} non è nel listino`).toContain(chiave)
+      expect(it_.abilities_desc[chiave], `${chiave} non ha descrizione`).toBeTruthy()
+    }
+  })
+
+  it('ogni parziale ha davvero un effetto — se no non sarebbe parziale, sarebbe muta', () => {
+    // Il verso che rende la dichiarazione falsificabile: se qualcuno togliesse
+    // la voce da ABILITY_EFFECTS, l'abilità tornerebbe candidata e andrebbe
+    // classificata di là, non di qua.
+    for (const chiave of Object.keys(PARZIALI)) {
+      expect(conEffetto.has(chiave), `${chiave} non ha nessun effetto`).toBe(true)
+      expect(candidati, `${chiave} è candidato: va nel REGISTRO, non nelle PARZIALI`)
+        .not.toContain(chiave)
+    }
+  })
+
+  it('ogni parziale dice cosa c\'è e cosa manca', () => {
+    for (const [chiave, v] of Object.entries(PARZIALI)) {
+      expect(v.applicato, `${chiave}: manca cosa è stato applicato`).toBeTruthy()
+      expect(v.mancante, `${chiave}: manca cosa non è stato applicato`).toBeTruthy()
+    }
   })
 })
 

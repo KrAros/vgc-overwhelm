@@ -101,9 +101,30 @@ function isStrumentoInamovibile(itemKey, pokeKey) {
   return formaMega === pokeKey || formaMega.startsWith(`${pokeKey}-mega`)
 }
 
-function isGrounded(pokeData, ability) {
+/**
+ * Il nome da mostrare per un'abilità, ricavato dalla chiave.
+ *
+ * Serve all'immunità alle mosse Terra, che lo restituisce a `DamageTable` per
+ * scrivere «Immune (Levitate)». Prima era una stringa scritta a mano: con una
+ * sola abilità nel ramo funzionava, con Rapidascesa che entra accanto a
+ * Levitate no — avrebbe detto «Levitate» a chi ha scelto Rapidascesa. Sul
+ * nome di prima il risultato è identico.
+ */
+const nomeAbilita = (chiave) =>
+  String(chiave || '').split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
+
+/**
+ * `levitate` NON è più confrontato per nome.
+ *
+ * Il flag `levitate` di ABILITY_EFFECTS ce l'hanno due abilità: Levitate e
+ * Rapidascesa (`eelevate`), che in Champions immunizza alle mosse Terra
+ * esattamente allo stesso modo. Con il confronto per chiave, la seconda non
+ * sarebbe stata immune — e il numero mostrato sarebbe stato un danno pieno
+ * invece di zero, cioè l'errore nella direzione peggiore.
+ */
+function isGrounded(pokeData, abilEffect) {
   if (pokeData.type.includes(TYPES.FLYING)) return false
-  if (ability === 'levitate') return false
+  if (abilEffect?.levitate) return false
   return true
 }
 
@@ -238,14 +259,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // ── Immunità ─────────────────────────────────────────────────────────────
   // Levitate: immune a mosse Ground
-  const isLevitating = defAbilKey === 'levitate' && moveType === TYPES.GROUND
+  const isLevitating = defAbilEffect?.levitate === true && moveType === TYPES.GROUND
   // Flash Fire: sempre immune a Fire in difesa (indipendentemente dal toggle offensivo)
   const isFlashFire  = defAbilEffect?.flashFireImmune && moveType === TYPES.FIRE
 
   if (isLevitating) {
-    return { immune: true, reason: 'ability', abilityName: 'Levitate', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (isFlashFire) {
+    // Qui il nome resta scritto: `flashFireImmune` ce l'ha una sola abilità, e
+    // l'inventario del motore usa questa riga come prova che il motore la
+    // nomina. Toglierla non guadagnava niente e faceva sparire un segnale.
     return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (effectiveness === 0) {
@@ -500,8 +524,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // NOTA su j e k: in NCP sono un `else if`, ma la mutua esclusione è già
   // garantita dal fatto che un Pokémon tiene un solo strumento.
-  const defGrounded = isGrounded(defPokeData, defAbility)
-  const atkGrounded = isGrounded(atkPokeData, atkAbility)
+  const defGrounded = isGrounded(defPokeData, defAbilEffect)
+  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect)
   const bpMods = []
 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
