@@ -262,6 +262,38 @@ export const META_PRESETS = [
     moves: ['bitter-blade', 'shadow-sneak', 'protect', 'bulk-up'],
     reg: 'M-B',
   },
+  {
+    // ─── IL PRIMO SET DI M-A ────────────────────────────────────────────────
+    //
+    // Fino a qui i trentatre set erano tutti M-B, e il campo `reg` non aveva
+    // mai filtrato niente. Da adesso filtra: questa voce NON compare con M-B
+    // selezionata — cioe' per chi apre l'app senza toccare la tendina — anche
+    // se Corviknight in M-B si puo' usare eccome. Si vede scegliendo M-A o
+    // «tutte». E' il comportamento voluto (la reg dice dove il set e' stato
+    // OSSERVATO), ma e' la prima volta che costa la visibilita' a un set.
+    //
+    // Non sposta invece la reg iniziale: `regConSetPiuRecente` parte dalla reg
+    // corrente e scende all'indietro, quindi trova M-B subito e i set di M-B
+    // restano quelli predefiniti. Misurato prima di scrivere, non supposto.
+    slug: 'corviknight',
+    label: 'Bulk Up Sweeper',
+    nature: 'Careful',
+    item: 'leftovers',
+    ability: 'mirror-armor',
+    // Cinque statistiche toccate, il piu' frammentato del file. Quell'1 in
+    // Difesa e' il resto della divisione, non una scelta.
+    sps: [27, 11, 1, 0, 5, 22],
+    // Stessa mossa di Ceruledge, ruolo opposto, e la coppia e' il motivo per
+    // cui il criterio regge: non decide la presenza del potenziamento, decide
+    // cosa fa il set dopo. Ceruledge ha 0 SP in Velocita' ed e' Attacker,
+    // questo ne ha 22 ed e' Sweeper.
+    //
+    // Da notare anche il perche' basti 1 SP in Difesa: Granforza alza Attacco
+    // E Difesa, e Corpodurezza usa la Difesa. Un solo potenziamento spinge
+    // entrambe le mosse offensive, quindi la Difesa non si compra con gli SP.
+    moves: ['brave-bird', 'body-press', 'bulk-up', 'roost'],
+    reg: 'M-A',
+  },
 
   // ── Mega ───────────────────────────────────────────────────────────────────
   {
