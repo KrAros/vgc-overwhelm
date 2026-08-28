@@ -220,6 +220,16 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'eelektross-mega',
+    label: 'Setup Sweeper',
+    nature: 'Adamant',
+    item: 'eelektrossite',
+    ability: 'eelevate',
+    sps: [31, 15, 0, 0, 11, 9],
+    moves: ['wild-charge', 'drain-punch', 'coil', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'charizard-mega-y',
     label: 'Sun Setter',
     nature: 'Modest',
