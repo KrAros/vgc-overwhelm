@@ -522,6 +522,20 @@ export const META_PRESETS = [
     reg: 'M-B',
   },
   {
+    slug: 'garchomp-mega',
+    label: 'Bulky Attacker',
+    nature: 'Adamant',
+    item: 'garchompite',
+    ability: 'sand-force',
+    sps: [22, 20, 0, 0, 0, 24],
+    // «Bulky» e non «Physical», e la ragione e' che su questa specie nessuna
+    // delle due etichette ovvie distingue: `sand-force` e' l'UNICA abilita di
+    // garchomp-mega, quindi l'altro set la ha uguale, e sono entrambi fisici.
+    // A separarli e' lo spread — 22 PS e 24 Vel contro 2 e 32.
+    moves: ['dragon-claw', 'earthquake', 'stomping-tantrum', 'protect'],
+    reg: 'M-B',
+  },
+  {
     slug: 'delphox-mega',
     label: 'Setup Sweeper',
     nature: 'Modest',
