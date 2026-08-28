@@ -63,6 +63,22 @@ export const META_PRESETS = [
     moves: ['reflect', 'light-screen', 'parting-shot', 'spirit-break'],
     reg: 'M-B',
   },
+  {
+    slug: 'blaziken',
+    label: 'Coaching Support',
+    nature: 'Modest',
+    item: 'focus sash',
+    // La forma BASE, e qui `speed-boost` e' davvero la sua: la trappola della
+    // Mega scatta solo quando il set tiene la Megapietra. Questo tiene Focus
+    // Sash, quindi Blaziken resta Blaziken per tutta la partita.
+    ability: 'speed-boost',
+    // Modest su chi ha Attacco 120 e Attacco Speciale 110 sembra un refuso.
+    // Non lo e': Ondacalda e Auraconflusso sono entrambe speciali, quindi la
+    // natura toglie da una statistica che il set non usa.
+    sps: [2, 0, 0, 32, 0, 32],
+    moves: ['heat-wave', 'aura-sphere', 'coaching', 'protect'],
+    reg: 'M-B',
+  },
 
   // ── Rain ───────────────────────────────────────────────────────────────────
   {
