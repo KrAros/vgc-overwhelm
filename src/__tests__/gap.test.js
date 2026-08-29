@@ -32,6 +32,7 @@ import { ITEM_EFFECTS } from '../data/itemEffects.js'
 import { abilitaNonCalcolata, strumentoNonCalcolato, metaGap, elencoGap } from '../lib/gap.js'
 import abilities from '../data/abilities.json' with { type: 'json' }
 import items from '../data/items.json' with { type: 'json' }
+import pokemonData from '../data/pokemon.json' with { type: 'json' }
 // `haEffetto` arriva da qui e non è più ridefinito nel file: prima ne esisteva
 // una copia identica a quella del generatore, quindi il test controllava il
 // generatore con la definizione del generatore — ed è il motivo per cui non ha
@@ -134,6 +135,51 @@ describe('gap noti — la lista che alimenta il badge', () => {
     expect(abilitaNonCalcolata(campione.replace(/ /g, '-'))).toBe(true)
     expect(abilitaNonCalcolata(campione.toUpperCase())).toBe(true)
     expect(abilitaNonCalcolata(normalizeAbilityKey(campione))).toBe(true)
+  })
+
+  it('il registro vede tutte le abilità che un utente può scegliere', () => {
+    // ─── IL BUCO CHE QUESTO TEST CHIUDE ──────────────────────────────────
+    //
+    // Il generatore enumera `abilities.json`. La tendina dell'app invece
+    // disegna le abilità di `pokemon.json` (`abilitaPerSpecie`). Sono due
+    // elenchi diversi, e niente li teneva allineati: `eelevate` (Eelektross
+    // Mega) e `fire mane` (Pyroar Mega) stavano nel secondo e non nel primo.
+    //
+    // Non era cosmetico. Rapidascesa NCP la calcola — `damage_MASTER.js:1112`
+    // e `:1298` — quindi sarebbe dovuta entrare nelle 108 col segnalino «non
+    // calcolata». Invece era invisibile al registro: l'utente poteva
+    // sceglierla, il numero usciva sbagliato, e nessuno lo dichiarava. Un
+    // silenzio a monte di tutti gli altri, perché nemmeno il contatore sapeva
+    // di doverlo contare.
+    //
+    // Il verso opposto NON si controlla: `abilities.json` è anche il catalogo
+    // per l'import da Showdown, e può legittimamente contenere nomi che
+    // nessuna specie del roster porta.
+    const nelListino = new Set(Object.keys(abilities).map(normalizeAbilityKey))
+    const assegnate = new Map()
+    for (const [specie, dati] of Object.entries(pokemonData)) {
+      for (const a of dati.abilities ?? []) {
+        const chiave = normalizeAbilityKey(a)
+        if (!nelListino.has(chiave) && !assegnate.has(chiave)) assegnate.set(chiave, specie)
+      }
+    }
+    expect(
+      [...assegnate].map(([a, specie]) => `${a} (${specie})`),
+      'questa abilità è addosso a una specie ma non è in abilities.json: il '
+      + 'registro del divario non la enumera nemmeno, quindi non può dichiararla '
+      + 'non calcolata — qualunque cosa faccia il riferimento.',
+    ).toEqual([])
+  })
+
+  it('controllo negativo: la ricerca sopra sa distinguere presente da assente', () => {
+    // Senza, il test qui sopra passerebbe con una normalizzazione che risponde
+    // sempre di sì, o con `pokemon.json` letto vuoto.
+    const nelListino = new Set(Object.keys(abilities).map(normalizeAbilityKey))
+    expect(nelListino.has('eelevate')).toBe(true)
+    expect(nelListino.has('fire-mane')).toBe(true)
+    expect(nelListino.has('abilita-che-non-esiste')).toBe(false)
+    const conAbilita = Object.values(pokemonData).filter(d => (d.abilities ?? []).length)
+    expect(conAbilita.length).toBeGreaterThan(1000)
   })
 
   it('una voce inventata non porta il badge', () => {

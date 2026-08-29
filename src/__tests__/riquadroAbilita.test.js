@@ -67,15 +67,19 @@ describe('i riquadri delle abilità', () => {
     ).toBe(true)
   })
 
-  it('tutti e nove i rami usano la costante', () => {
+  it('tutti e dieci i rami usano la costante', () => {
     // Il conteggio è esplicito perché un ramo NUOVO che se la dimentica non
     // farebbe fallire il test sopra: non ricopierebbe la firma, semplicemente
     // non avrebbe nessun minimo.
+    //
+    // Da nove a dieci con la levetta di Rapidascesa — «ha messo KO» — e il
+    // numero è stato alzato dopo aver visto il test rosso, che è il modo in
+    // cui doveva funzionare.
     expect(
       conCostante.length,
-      'i rami che rendono un riquadro non sono nove: se ne hai aggiunto uno, '
+      'i rami che rendono un riquadro non sono dieci: se ne hai aggiunto uno, '
       + 'deve usare RIQUADRO e questo numero va alzato di proposito',
-    ).toBe(9)
+    ).toBe(10)
   })
 
   it('la costante porta un minimo per entrambe le larghezze', () => {

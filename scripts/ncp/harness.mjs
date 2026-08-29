@@ -178,6 +178,34 @@ export function creaHarness() {
   }
 
   /**
+   * Le caselle dell'interfaccia di NCP che il nostro modello tiene accese.
+   *
+   * Tre meccaniche in NCP non si leggono dall'abilità del Pokémon ma da una
+   * casella di spunta della pagina, e `calcBPMods` le interroga così:
+   *
+   *     $("input:checkbox[id='" + move.type.toLowerCase() + "-aura']:checked")
+   *     $("input:checkbox[id='aura-break']:checked")
+   *
+   * Il nostro modello non ha caselle di campo: dice la stessa cosa mettendo
+   * l'abilità addosso a un Pokémon. Questa è la traduzione fra i due, ed è
+   * dello stesso genere di quelle che l'harness fa già — `doubleTarget` →
+   * formato, `multiscaleActive` → `curHP`. La ragione per cui è lecita, e come
+   * si verifica che non stia aiutando NCP, sta in `prelude.js` §2-bis.
+   *
+   * L'aura vale per CHIUNQUE sia in campo, non solo per chi attacca: NCP la
+   * chiede per tipo di mossa e non per lato, e la descrizione la attribuisce
+   * indifferentemente a `attacker.ability` o a `defAbility`. Perciò si guardano
+   * tutte e due le abilità.
+   */
+  const CASELLE_DA_ABILITA = {
+    'Fairy Aura': 'fairy-aura',
+    'Dark Aura': 'dark-aura',
+    'Aura Break': 'aura-break',
+  }
+  const caselleDa = (...abilitaNCP) =>
+    [...new Set(abilitaNCP.map(x => CASELLE_DA_ABILITA[x]).filter(Boolean))]
+
+  /**
    * @returns {{ok: true, rolls: number[], format: string, entita: object}}
    *        | {{ok: false, motivo: string}}
    */
@@ -276,9 +304,15 @@ export function creaHarness() {
     // ── 5. Esecuzione ──────────────────────────────────────────────────────
     let risultato
     try {
+      ncp.spuntaCaselle(caselleDa(att.pokemon.ability, dif.pokemon.ability))
       risultato = ncp.GET_DAMAGE_SV(att.pokemon, dif.pokemon, att.mossa, costruisciLato(field, format))
     } catch (e) {
       return { ok: false, motivo: `errore dentro il motore NCP: ${e.message}` }
+    } finally {
+      // Il contesto NCP è uno solo e viene riusato da tutti i casi: una casella
+      // lasciata accesa si porterebbe dietro un moltiplicatore nel caso dopo,
+      // che uscirebbe plausibile e sbagliato.
+      ncp.spuntaCaselle([])
     }
 
     // Quando NCP prevede un secondo calcolo (bacca che si consuma, Weak Armor…)
@@ -456,10 +490,13 @@ export function creaHarness() {
 
     let risultati
     try {
+      ncp.spuntaCaselle(caselleDa(att.pokemon.ability, dif.pokemon.ability))
       // p1 = difensore (porta l'abilità di supporto), p2 = attaccante.
       risultati = ncp.CALCULATE_ALL_MOVES_SV(dif.pokemon, att.pokemon, costruisciCampo(field, format))
     } catch (e) {
       return { ok: false, motivo: `errore dentro il motore NCP: ${e.message}` }
+    } finally {
+      ncp.spuntaCaselle([])
     }
 
     const esito = risultati?.[1]?.[0]

@@ -189,6 +189,33 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
+  if (key === 'eelevate') {
+    // Rapidascesa fa due cose. L'immunità alle mosse Terra è sempre attiva e
+    // non ha bisogno di un interruttore; il +1 alla statistica più alta è un
+    // fatto del turno prima, e lo dichiara chi usa l'app — come il conta-KO
+    // di Prepotenza qui sotto.
+    return (
+      <div className={`${RIQUADRO} gap-2 ${flags.eelevateKOActive ? ACCESO : SPENTO}`}>
+        <button
+          type="button"
+          onClick={() => onFlagChange('eelevateKOActive', !flags.eelevateKOActive)}
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
+            flags.eelevateKOActive ? PERNO_ACCESO : PERNO_SPENTO
+          }`}
+        >
+          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
+            flags.eelevateKOActive ? 'left-4' : 'left-0.5'
+          }`} />
+        </button>
+        <span className={flags.eelevateKOActive ? TESTO_ACCESO : TESTO_SPENTO}>
+          {flags.eelevateKOActive
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
+        </span>
+      </div>
+    )
+  }
+
   if (key === 'supreme-overlord') {
     const kos  = flags.supremeOverlordKOs || 0
     const mult = (1 + kos * 0.1).toFixed(1)

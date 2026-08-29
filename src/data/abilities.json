@@ -179,6 +179,9 @@
   "earth eater": {
     "name": "Earth Eater"
   },
+  "eelevate": {
+    "name": "Eelevate"
+  },
   "effect spore": {
     "name": "Effect Spore"
   },
@@ -199,6 +202,9 @@
   },
   "filter": {
     "name": "Filter"
+  },
+  "fire mane": {
+    "name": "Fire Mane"
   },
   "flame body": {
     "name": "Flame Body"

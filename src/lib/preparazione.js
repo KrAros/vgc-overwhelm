@@ -122,6 +122,9 @@ function costruisciLato(entrata) {
     // `abilityFlags.intimidateActive`. Serve solo a Intimidate: Intrepid
     // Sword e le abilità paradosso non lo guardano (vedi sotto).
     abilitaAccesa: entrata.abilitaAccesa === true,
+    // Rapidascesa: «ha messo KO un avversario». Un interruttore a parte da
+    // `abilitaAccesa`, che significa già un'altra cosa (Intimidate).
+    koFatto: entrata.koFatto === true,
     // Lo strumento può SPARIRE durante la preparazione. È l'unico campo che
     // esce da qui modificato oltre ai boost, ed è quello che rende visibile
     // nel danno la Booster Energy: Knock Off non trova più niente.
@@ -338,6 +341,47 @@ function setHighestStat(lato) {
 }
 
 // ───────────────────────────────────────────────────────────────────────────
+// 6 · La seconda metà di Rapidascesa               nessuna riga del riferimento
+// ───────────────────────────────────────────────────────────────────────────
+//
+// «Aumenta la statistica più alta di 1 grado quando mette KO un avversario.»
+//
+// ─── QUESTA NON VIENE DA NCP, E VA DETTO ───────────────────────────────────
+//
+// Tutte le altre cinque funzioni di questo file portano il numero di riga del
+// riferimento perché sono trascritte. Questa no: NCP conosce Rapidascesa e ne
+// implementa l'immunità alle mosse Terra (`damage_MASTER.js:1112` e `:1298`),
+// ma di questa metà non c'è traccia — e non è una svista sua. È la stessa metà
+// di Beast Boost, che il registro del divario ha già misurato come NON
+// calcolata dal riferimento: `beast boost` è selezionabile, senza effetto da
+// noi, e non compare fra le abilità del divario.
+//
+// Quindi l'unica fonte è la descrizione nel gioco, e la verifica è per
+// conseguenza: lo stadio sale di uno, sulla statistica giusta, e il danno si
+// muove di conseguenza. Non c'è un oracolo da interrogare e non si finge che
+// ci sia.
+//
+// ─── PERCHÉ DOPO `setHighestStat`, E NON DENTRO ────────────────────────────
+//
+// Perché la statistica da potenziare è quella più alta PRIMA del +1. Metterlo
+// dentro vorrebbe dire scegliere in base a un potenziamento che si sta ancora
+// applicando. È anche il motivo per cui `statPiuAlta` resta quella di prima
+// nel risultato: le abilità paradosso la leggono, e per loro il +1 di
+// Rapidascesa non è mai esistito (nessun Pokémon ha tutt'e due le abilità).
+//
+// ─── PERCHÉ UN INTERRUTTORE E NON UN CALCOLO ───────────────────────────────
+//
+// Perché «ha messo KO un avversario» è un fatto del turno precedente, e l'app
+// calcola un colpo solo. Stessa forma di `supremeOverlordKOs`, che conta gli
+// alleati caduti: lo stato lo dichiara chi usa l'app, non lo deduce il motore.
+
+function checkBoostSuKO(lato) {
+  if (!lato.effettoAbilita?.boostStatPiuAltaSuKO) return
+  if (!lato.koFatto) return
+  lato.boosts[lato.statPiuAlta] = limita(lato.boosts[lato.statPiuAlta] + 1)
+}
+
+// ───────────────────────────────────────────────────────────────────────────
 // L'ingresso pubblico
 // ───────────────────────────────────────────────────────────────────────────
 
@@ -378,6 +422,9 @@ export function preparaCoppia({ attaccante, difensore, meteo = null, terreno = n
 
   setHighestStat(p1)
   setHighestStat(p2)
+
+  checkBoostSuKO(p1)
+  checkBoostSuKO(p2)
 
   return {
     attaccante: risultato(p2),
@@ -430,6 +477,18 @@ export function preparaSingolo(slot, meteo = null, terreno = null) {
 
   checkParadoxAbilities(lato, terreno ? String(terreno).toLowerCase() : null, normalizzaMeteo(meteo))
   setHighestStat(lato)
+  // `checkBoostSuKO` NON viene chiamata qui, ed è una scelta.
+  //
+  // Se la statistica più alta fosse la Velocità, il +1 di Rapidascesa la
+  // alzerebbe e l'ordine di velocità dovrebbe cambiare. Ma `calcEffectiveSpe`
+  // legge `pokemon.speBoost` — lo stadio messo a mano nell'editor — e non i
+  // boost che escono da qui: applicarlo produrrebbe un numero che nessuno
+  // legge. È esattamente il caso di `rattled`, che `classificazione-badge.mjs`
+  // marca `effetto-non-osservabile` per la stessa ragione.
+  //
+  // Il giorno in cui `calcEffectiveSpe` leggerà i boost preparati, questa
+  // riga va aggiunta e diventa verificabile. Oggi sarebbe codice che nessun
+  // test può dimostrare.
 
   return { paradosso: lato.paradosso, statPiuAlta: lato.statPiuAlta }
 }

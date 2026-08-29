@@ -79,14 +79,21 @@ const norm = (s) => String(s).toLowerCase().replace(/[.'’:]/g, '').replace(/[\
  *                       non c'è una fonte, non si decide.
  */
 const CLASSIFICAZIONE = {
-  abilita: {
-    'fire-mane': {
-      verdetto: 'da-aggiudicare',
-      nota: 'calcEngine:392 la ramifica sulle mosse di Fuoco. Il roster in '
-          + 'rosterChampions.json elenca specie, non abilità, quindi qui dentro '
-          + 'non c\'è niente che dica se esista.',
-    },
-  },
+  // `fire-mane` stava qui, `da-aggiudicare`, con questa nota:
+  //
+  //     «Il roster in rosterChampions.json elenca specie, non abilità, quindi
+  //      qui dentro non c'è niente che dica se esista.»
+  //
+  // Era falsa, e in un modo che questo file conosce bene: l'assenza era stata
+  // cercata da un lato solo. `pokemon.json` la assegna a `pyroar-mega` — e una
+  // specie che la porta è esattamente la fonte che si diceva di non avere.
+  // Come per le quindici Megapietre: un'assenza non dice da quale lato sta
+  // l'errore.
+  //
+  // Aggiunta a `abilities.json`, non è più un'anomalia. Il presidio che
+  // impedisce al buco di riaprirsi sta in `gap.test.js` («il registro vede
+  // tutte le abilità che un utente può scegliere»).
+  abilita: {},
   strumenti: {
     'punching glove': {
       verdetto: 'da-aggiudicare',
@@ -211,6 +218,22 @@ describe('anomalie di listino', () => {
       'questa chiave è lo slug di una FORMA, non il nome di uno strumento: '
       + 'nessun Pokémon può tenerla, e il ramo che la nomina è morto.',
     ).toEqual([])
+  })
+
+  it('nessuna classificazione è scaduta', () => {
+    // Il verso opposto, che mancava: una voce sistemata resta classificata per
+    // sempre e il file diventa una lapide. È così che la nota su `fire-mane`
+    // è sopravvissuta a una fonte che la smentiva.
+    const anomale = { abilita: new Set(abilitaAnomale), strumenti: new Set(strumentiAnomali) }
+    const scadute = [
+      ...Object.keys(CLASSIFICAZIONE.abilita)
+        .filter(k => !anomale.abilita.has(normalizeAbilityKey(k)))
+        .map(k => `abilità: ${k}`),
+      ...Object.keys(CLASSIFICAZIONE.strumenti)
+        .filter(k => !anomale.strumenti.has(norm(k)))
+        .map(k => `strumento: ${k}`),
+    ]
+    expect(scadute, 'questa voce non è più un\'anomalia: togli la riga').toEqual([])
   })
 
   it('controllo negativo: la ricerca vede le voci selezionabili', () => {

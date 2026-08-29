@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-27T19:46:44.922Z",
+    "generatedAt": "2026-08-29T07:32:25.816Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
-    "abilitaSelezionabili": 310,
-    "abilitaSenzaEffetto": 265,
-    "abilitaNelGap": 108,
+    "abilitaSelezionabili": 312,
+    "abilitaSenzaEffetto": 261,
+    "abilitaNelGap": 106,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -827,16 +827,6 @@
         }
       },
       {
-        "chiave": "steely spirit",
-        "nome": "Steely Spirit",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1674
-        }
-      },
-      {
         "chiave": "storm drain",
         "nome": "Storm Drain",
         "canale": "STR",
@@ -844,16 +834,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1110
-        }
-      },
-      {
-        "chiave": "strong jaw",
-        "nome": "Strong Jaw",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1673
         }
       },
       {
@@ -1541,9 +1521,7 @@
     ]
   },
   "anomalie": {
-    "abilitaConEffettoNonSelezionabili": [
-      "fire-mane"
-    ],
+    "abilitaConEffettoNonSelezionabili": [],
     "strumentiConVoceNonSelezionabili": [
       "punching glove",
       "throat spray",

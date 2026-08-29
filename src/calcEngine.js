@@ -101,9 +101,30 @@ function isStrumentoInamovibile(itemKey, pokeKey) {
   return formaMega === pokeKey || formaMega.startsWith(`${pokeKey}-mega`)
 }
 
-function isGrounded(pokeData, ability) {
+/**
+ * Il nome da mostrare per un'abilità, ricavato dalla chiave.
+ *
+ * Serve all'immunità alle mosse Terra, che lo restituisce a `DamageTable` per
+ * scrivere «Immune (Levitate)». Prima era una stringa scritta a mano: con una
+ * sola abilità nel ramo funzionava, con Rapidascesa che entra accanto a
+ * Levitate no — avrebbe detto «Levitate» a chi ha scelto Rapidascesa. Sul
+ * nome di prima il risultato è identico.
+ */
+const nomeAbilita = (chiave) =>
+  String(chiave || '').split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
+
+/**
+ * `levitate` NON è più confrontato per nome.
+ *
+ * Il flag `levitate` di ABILITY_EFFECTS ce l'hanno due abilità: Levitate e
+ * Rapidascesa (`eelevate`), che in Champions immunizza alle mosse Terra
+ * esattamente allo stesso modo. Con il confronto per chiave, la seconda non
+ * sarebbe stata immune — e il numero mostrato sarebbe stato un danno pieno
+ * invece di zero, cioè l'errore nella direzione peggiore.
+ */
+function isGrounded(pokeData, abilEffect) {
   if (pokeData.type.includes(TYPES.FLYING)) return false
-  if (ability === 'levitate') return false
+  if (abilEffect?.levitate) return false
   return true
 }
 
@@ -182,6 +203,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isContactBase = moveData.contact === true
   const isPunch = moveData.punch === true
   const isPulse = moveData.pulse === true
+  const isBite  = moveData.bite === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -238,14 +260,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // ── Immunità ─────────────────────────────────────────────────────────────
   // Levitate: immune a mosse Ground
-  const isLevitating = defAbilKey === 'levitate' && moveType === TYPES.GROUND
+  const isLevitating = defAbilEffect?.levitate === true && moveType === TYPES.GROUND
   // Flash Fire: sempre immune a Fire in difesa (indipendentemente dal toggle offensivo)
   const isFlashFire  = defAbilEffect?.flashFireImmune && moveType === TYPES.FIRE
 
   if (isLevitating) {
-    return { immune: true, reason: 'ability', abilityName: 'Levitate', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (isFlashFire) {
+    // Qui il nome resta scritto: `flashFireImmune` ce l'ha una sola abilità, e
+    // l'inventario del motore usa questa riga come prova che il motore la
+    // nomina. Toglierla non guadagnava niente e faceva sparire un segnale.
     return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (effectiveness === 0) {
@@ -280,12 +305,14 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       pokemon: atkPokemon, sps: atkSPs, natura: atkNature, livello: level,
       abilita: atkAbility, strumento: atkItem,
       abilitaAccesa: atkAbilityFlags.intimidateActive === true,
+      koFatto: atkAbilityFlags.eelevateKOActive === true,
       boosts: { at: atkBoost, df: atkDefBoost, sa: spAtkBoost, sd: atkSpDefBoost, sp: atkSpeBoost },
     },
     difensore: {
       pokemon: defPokemon, sps: defSPs, natura: defNature,
       abilita: defAbility, strumento: defItem,
       abilitaAccesa: defAbilityFlags.intimidateActive === true,
+      koFatto: defAbilityFlags.eelevateKOActive === true,
       boosts: { at: defAtkBoost, df: defBoost, sa: defSpAtkBoost, sd: spDefBoost, sp: defSpeBoost },
     },
     meteo: field.weather,
@@ -487,6 +514,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   //   c.i → abilità "ate" (Pixilate, Aerilate, …)      ×1.2   0x1333
   //   e.iv→ Tough Claws                                 ×1.3   0x14CD
+  //   f   → Aura Fatata, Aura Oscura                    ×1.33  0x1548
+  //   g   → Megalancio                                  ×1.5   0x1800
   //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
   //   k   → item type-boost                             ×1.2   0x1333
   //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
@@ -498,8 +527,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // NOTA su j e k: in NCP sono un `else if`, ma la mutua esclusione è già
   // garantita dal fatto che un Pokémon tiene un solo strumento.
-  const defGrounded = isGrounded(defPokeData, defAbility)
-  const atkGrounded = isGrounded(atkPokeData, atkAbility)
+  const defGrounded = isGrounded(defPokeData, defAbilEffect)
+  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect)
   const bpMods = []
 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
@@ -508,6 +537,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
   // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.
   if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+
+  // f — Aura Fatata e Aura Oscura: ×1,33 sulle mosse del tipo dell'aura.
+  //
+  // Trascritto da `calcBPMods` punto f (`damage_MASTER.js:1654`), che spinge
+  // `0x1548`. NON è `MOD.X1_3`: 0x1548 è 1,33007… e 0x14CD è 1,29980…, e la
+  // differenza arriva fino al roll. Sta nella catena della POTENZA.
+  //
+  // Il posto in questa catena è quello del riferimento, fra Tough Claws (e.iv)
+  // e le abilità ×1.5 (g). Oggi la posizione non è osservabile — con due soli
+  // modificatori `chainMods` è commutativo — ma NCP calcola `tempBP` fra f e g
+  // per decidere se Technician si applica: il giorno in cui Technician entra,
+  // l'ordine diventa osservabile e dev'essere già giusto.
+  //
+  // ─── PERCHÉ GUARDA TUTTE E DUE LE ABILITÀ ─────────────────────────────────
+  // Perché l'aura potenzia le mosse di quel tipo di CHIUNQUE sia in campo, non
+  // solo di chi la possiede. NCP lo esprime chiedendo una casella per tipo di
+  // mossa, senza guardare il lato, e attribuisce poi il bonus indifferentemente
+  // a `attacker.ability` o a `defAbility`.
+  //
+  // ─── COSA NON FA, E CHE RESTA DICHIARATO ──────────────────────────────────
+  // Frangiaura (`aura-break`) rovescia l'aura in ×0,75 — nel riferimento è il
+  // punto a della stessa funzione. Non è implementata, e resta nelle 108: il
+  // segnalino «non calcolata» lo dice all'utente che la sceglie.
+  const aureInCampo = [atkAbilEffect?.aura, defAbilEffect?.aura]
+  if (aureInCampo.some(tipo => tipo !== undefined && tipo === moveType)) {
+    bpMods.push(MOD.X1_33)
+  }
 
   // g — Megalancio sulle mosse-impulso: ×1.5.
   //
@@ -520,7 +576,21 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Water Pulse, Aura Sphere, Dark Pulse, Dragon Pulse, Heal Pulse, Origin
   // Pulse, Terrain Pulse. Heal Pulse è di stato e non arriva mai qui, ma resta
   // nell'elenco perché l'elenco è trascritto e non filtrato da noi.
+  //
+  // Ferromascella sta nello STESSO `if` di Megalancio nel riferimento, con lo
+  // stesso `0x1800`: qui sono due righe perché due condizioni diverse leggono
+  // due flag diversi, ma il moltiplicatore e la catena sono gli stessi. Le due
+  // abilità non possono convivere su un Pokémon, quindi non si sommano mai.
+  //
+  // `isBite` viene dal flag `bite` di moves.json — nove mosse: Bite, Hyper
+  // Fang, Crunch, Poison Fang, Thunder Fang, Ice Fang, Fire Fang, Psychic
+  // Fangs, Jaw Lock.
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
+  if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
+  // Ingegno Acciaio, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
+  // `field.isSteelySpirit` al punto d.iii del riferimento: una casella di campo
+  // che non abbiamo, come per Battery e Power Spot.
+  if (atkAbilEffect?.steelySpirit && moveType === TYPES.STEEL) bpMods.push(MOD.X1_5)
 
   // j / k — strumenti che modificano la potenza.
   // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.
