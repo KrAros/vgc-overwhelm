@@ -90,7 +90,7 @@ export const META_PRESETS = [
     // tocca tutte. `showdownIO.test.js` pretende gia questa risoluzione.
     ability: 'fairy-aura',
     // Cinque SP in Attacco Speciale su un attaccante speciale sembrano pochi,
-    // ed e' stato chiesto: confermato. AttSp base 155 e Luce Rovinosa a 140 di
+    // ed e' stato chiesto: confermato. AttSp base 155 e Luce Nefasta a 140 di
     // potenza fanno il lavoro, quindi il set compra velocita e un po' di massa
     // invece di potenza che ha gia dalla specie.
     sps: [10, 0, 19, 5, 0, 32],
