@@ -160,6 +160,8 @@
     "export_showdown": "Esporta su Showdown",
     "import_showdown": "Importa da Showdown",
     "all_slots_full": "Tutti gli slot sono occupati. Scegli dove sovrascrivere:",
+    "colpi": "Colpi",
+    "colpi_skill_link": "Abilità Multipla: sempre il massimo",
     "last_respects_allies": "$t(moves.last respects) — Alleati caduti:",
     "allies_ko": "Alleati KO:",
     "no_boost": "nessun boost",

@@ -27,7 +27,13 @@ const METEO_VALIDI   = ['sun', 'rain', 'sand', 'snow', 'harsh sunshine', 'heavy 
 const TERRENI_VALIDI = ['electric', 'grassy', 'psychic', 'misty']
 
 // ─── Struttura base di uno slot vuoto ────────────────────────────────────────
-const emptyPokemon = () => ({
+//
+// Esportata perché `share.test.js` ne teneva una copia scritta a mano, e la
+// copia si è scoperta vecchia due volte nella stessa sessione: prima le
+// mancava `eelevateKOActive`, poi `colpiScelti`. Ogni volta i test diventavano
+// rossi dicendo «c'è un campo in più del previsto» invece di «il campo nuovo
+// non sopravvive al viaggio» — cioè segnalavano la copia, non il difetto.
+export const emptyPokemon = () => ({
   key: null,
   moves: [null, null, null, null],
   sps: [0, 0, 0, 0, 0, 0],
@@ -41,6 +47,10 @@ const emptyPokemon = () => ({
   speBoost: 0,
   abilityFlags: { ...DEFAULT_ABILITY_FLAGS },
   lastRespectsKOs: 0,
+  // Quante volte colpisce una mossa multi-colpo. `null` = «non l'ho scelto»,
+  // e allora vale il massimo della mossa. Stessa forma di `lastRespectsKOs`:
+  // uno stato dello slot, non dell'abilità, perché dipende dalla MOSSA.
+  colpiScelti: null,
 })
 
 const emptyTeam = () => Array(6).fill(null).map(emptyPokemon)
@@ -267,6 +277,10 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     if (slot.spDefBoost) s.sdb = slot.spDefBoost
     if (slot.speBoost)   s.spb = slot.speBoost
     if (slot.lastRespectsKOs) s.lr = slot.lastRespectsKOs
+    // `!= null` e non `if (slot.colpiScelti)`: zero non è un valore legale, ma
+    // se un giorno lo diventasse un `if` semplice lo butterebbe via in
+    // silenzio. È lo stesso errore che `multiscaleActive` evita qui sopra.
+    if (slot.colpiScelti != null) s.cs = slot.colpiScelti
 
     // I flag abilità: si scrive solo ciò che differisce dal default. Nota che
     // `multiscaleActive` è `true` di default, quindi qui si registra quando è
@@ -341,6 +355,11 @@ export function decodeTeamsFromURL(encoded) {
               spDefBoost: intero(grezzo.sdb, -6, 6),
               speBoost:   intero(grezzo.spb, -6, 6),
               lastRespectsKOs: intero(grezzo.lr, 0, 3),
+              // Il limite superiore è quello della mossa più generosa
+              // (Bombardamento, dieci): il motore poi taglia sull'intervallo
+              // della mossa vera, quindi un valore fuori posto non produce un
+              // numero sbagliato.
+              colpiScelti: typeof grezzo.cs === 'number' ? intero(grezzo.cs, 1, 10) : null,
               abilityFlags: {
                 ...DEFAULT_ABILITY_FLAGS,
                 intimidateActive:   af.i  === 1,
@@ -540,6 +559,11 @@ const useCalcStore = create((set) => ({
 
   setLastRespectsKOs: (team, index, kos) =>
     set((s) => updateSlot(s, team, index, { lastRespectsKOs: Math.min(3, Math.max(0, kos)) })),
+
+  setColpiScelti: (team, index, colpi) =>
+    set((s) => updateSlot(s, team, index, {
+      colpiScelti: colpi == null ? null : Math.min(10, Math.max(1, colpi)),
+    })),
 
   // ── Utility: carica un team intero (usato dall'import Showdown) ──
   // Questo è già gestito slot per slot tramite setPokemon/setMove/ecc.,

@@ -119,6 +119,16 @@ export const ABILITY_EFFECTS = {
   // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
   'technician':  { technician: true, showInSmogon: true },
 
+  // Abilita' Multipla: le mosse multi-colpo colpiscono sempre il massimo.
+  //
+  // NON e' un moltiplicatore e non tocca la catena della potenza: agisce sul
+  // numero di colpi, che e' un concetto nuovo del motore da questa sessione.
+  // Prima di averlo non c'era niente su cui potesse agire — ed e' il motivo
+  // per cui non era nelle abilita' del divario: nemmeno il riferimento la
+  // calcola nel danno, perche' anche li' il numero di colpi lo sceglie
+  // l'utente nell'interfaccia.
+  'skill-link':  { skillLink: true },
+
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
   // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno

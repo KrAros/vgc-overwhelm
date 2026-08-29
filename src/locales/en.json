@@ -160,6 +160,8 @@
     "export_showdown": "Export to Showdown",
     "import_showdown": "Import from Showdown",
     "all_slots_full": "All slots are full. Choose where to overwrite:",
+    "colpi": "Hits",
+    "colpi_skill_link": "Skill Link: always the maximum",
     "last_respects_allies": "$t(moves.last respects) — Allies KO:",
     "allies_ko": "Allies KO:",
     "no_boost": "no boost",

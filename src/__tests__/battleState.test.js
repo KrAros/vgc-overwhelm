@@ -101,8 +101,12 @@ describe('battleState — costruzione di attaccante e difensore', () => {
     // 2024 non esisteva proprio — `atkDefBoost`, il boost di Difesa che serve
     // a Body Press — quindi lo dichiariamo qui, esplicitamente, invece di
     // riscrivere la copia storica.
+    //
+    // Stessa cosa per `colpiScelti`, aggiunto con le mosse multi-colpo: si
+    // dichiara qui, e l'elenco che cresce sotto gli occhi è il punto — dice
+    // quanto la costruzione si è allontanata dalla fotografia del 2024.
     expect(buildAttackerInput(houndstone, LEVEL))
-      .toEqual({ ...attaccanteTabellaStorico(houndstone, 50), atkDefBoost: 0 })
+      .toEqual({ ...attaccanteTabellaStorico(houndstone, 50), atkDefBoost: 0, colpiScelti: null })
   })
 
   it('l\'attaccante porta lastRespectsKOs — è il campo che il pannello perdeva', () => {

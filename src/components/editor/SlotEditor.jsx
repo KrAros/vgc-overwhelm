@@ -10,6 +10,7 @@ import { NATURES, NATURE_MODIFIERS } from '../../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
 import { speedWeatherAttiva } from '../../utils/speedOrder.js'
+import { normalizeAbilityKey } from '../../data/abilityEffects.js'
 import { MAX_SP_TOTAL, MAX_SP_PER_STAT } from '../../lib/rules.js'
 
 
@@ -40,6 +41,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const setAbility     = useCalcStore(s => s.setAbility)
   const setAbilityFlag       = useCalcStore(s => s.setAbilityFlag)
   const setLastRespectsKOs   = useCalcStore(s => s.setLastRespectsKOs)
+  const setColpiScelti       = useCalcStore(s => s.setColpiScelti)
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
   const weather        = useCalcStore(s => s.weather)
 
@@ -57,6 +59,30 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const abilityFlags     = pokemon?.abilityFlags || {}
   const lastRespectsKOs  = pokemon?.lastRespectsKOs ?? 0
   const hasLastRespects  = pokemon?.moves?.some(m => m === 'last respects')
+
+  // ─── COLPI MULTIPLI ────────────────────────────────────────────────────────
+  //
+  // L'intervallo è quello della mossa, non un numero deciso qui: viene da
+  // `colpi` in moves.json, che `gen-flag-dati.mjs` trascrive da `hitRange` del
+  // vendor.
+  //
+  // Quando lo slot porta DUE mosse multi-colpo con intervalli diversi — per
+  // dire Bombardamento (1-10) e Semintamitraglia (2-5) — il selettore è uno
+  // solo e copre l'unione, e il motore taglia poi sull'intervallo della mossa
+  // che sta calcolando. È un confine dichiarato, non un caso dimenticato: un
+  // selettore per mossa vorrebbe dire quattro contatori nell'editor, e i set
+  // con due mosse multi-colpo di intervallo diverso sono rari (chi ha Abilità
+  // Multipla le porta tutte a 2-5).
+  const intervalliColpi = (pokemon?.moves || [])
+    .map(m => (m && !movesData[m]?.potenzaCrescente) ? movesData[m]?.colpi : null)
+    .filter(Boolean)
+  const haColpiMultipli = intervalliColpi.length > 0
+  const colpiMin = haColpiMultipli ? Math.min(...intervalliColpi.map(c => c[0])) : 1
+  const colpiMax = haColpiMultipli ? Math.max(...intervalliColpi.map(c => c[1])) : 1
+  // Abilità Multipla inchioda al massimo: il selettore lo mostra invece di
+  // lasciar credere che si possa scegliere.
+  const abilitaMultipla = normalizeAbilityKey(ability) === 'skill-link'
+  const colpiScelti = abilitaMultipla ? colpiMax : (pokemon?.colpiScelti ?? colpiMax)
   const total        = sps.reduce((a,b) => a+b, 0)
   const remaining    = MAX_SP_TOTAL - total
 
@@ -432,6 +458,33 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               <span className={lastRespectsKOs > 0 ? 'text-purple-300' : 'text-gray-400'}>
                 {50 + lastRespectsKOs * 50} BP
               </span>
+            </div>
+          )}
+
+          {/* Colpi multipli: stessa forma del contatore di Ultimo Rispetto,
+              perché è la stessa cosa — uno stato del turno che dichiara chi
+              usa l'app, legato alla MOSSA e non all'abilità. */}
+          {haColpiMultipli && (
+            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
+              <span className="text-gray-400 shrink-0">{t('editor.colpi')}</span>
+              <div className="flex gap-1 flex-wrap">
+                {Array.from({ length: colpiMax - colpiMin + 1 }, (_, i) => colpiMin + i).map(n => (
+                  <button
+                    key={n}
+                    type="button"
+                    disabled={abilitaMultipla}
+                    onClick={() => setColpiScelti(team, index, n)}
+                    className={`w-5 h-5 rounded text-[10px] font-bold transition-colors ${
+                      colpiScelti === n ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                    } ${abilitaMultipla ? 'opacity-60 cursor-not-allowed' : ''}`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              {abilitaMultipla && (
+                <span className="text-purple-300">{t('editor.colpi_skill_link')}</span>
+              )}
             </div>
           )}
         </>
