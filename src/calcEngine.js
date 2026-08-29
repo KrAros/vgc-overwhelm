@@ -585,6 +585,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Fangs, Jaw Lock.
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
+  // Ingegno Acciaio, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
+  // `field.isSteelySpirit` al punto d.iii del riferimento: una casella di campo
+  // che non abbiamo, come per Battery e Power Spot.
+  if (atkAbilEffect?.steelySpirit && moveType === TYPES.STEEL) bpMods.push(MOD.X1_5)
 
   // j / k — strumenti che modificano la potenza.
   // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.

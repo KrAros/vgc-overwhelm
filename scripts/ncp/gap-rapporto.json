@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-28T14:49:41.846Z",
+    "generatedAt": "2026-08-29T07:15:42.217Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 262,
-    "abilitaNelGap": 107,
+    "abilitaSenzaEffetto": 261,
+    "abilitaNelGap": 106,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -824,16 +824,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1949
-        }
-      },
-      {
-        "chiave": "steely spirit",
-        "nome": "Steely Spirit",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1674
         }
       },
       {

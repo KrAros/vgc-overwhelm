@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-28T14:49:41.846Z",
+    "generatedAt": "2026-08-29T07:15:42.217Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 107,
+    "abilitaNelGap": 106,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -89,7 +89,6 @@
     "soundproof",
     "stakeout",
     "steelworker",
-    "steely spirit",
     "storm drain",
     "sturdy",
     "supersweet syrup",

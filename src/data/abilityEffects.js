@@ -89,6 +89,17 @@ export const ABILITY_EFFECTS = {
   // moves.json, che `gen-flag-dati.mjs` trascrive da `isBite` del vendor.
   'strong-jaw':  { strongJaw: true, showInSmogon: true },
 
+  // Ingegno Acciaio: x1.5 sulle mosse Acciaio. Terza delle sei dello stesso
+  // ramo, e ultima raggiungibile per ora — delle altre due, Flare Boost vuole
+  // lo stato «bruciato» e Toxic Boost «avvelenato», che non modelliamo.
+  //
+  // Nel riferimento compare DUE volte con lo stesso 0x1800: al punto g quando
+  // ce l'ha chi attacca, e al punto d.iii come `field.isSteelySpirit` quando
+  // ce l'ha un ALLEATO. Qui c'e' solo la prima: la seconda e' una casella di
+  // campo che non abbiamo, come Battery e Power Spot — e infatti tutt'e tre
+  // restano nelle 108 per quella meta'.
+  'steely-spirit': { steelySpirit: true, showInSmogon: true },
+
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
   // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno
