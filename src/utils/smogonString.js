@@ -225,6 +225,12 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   const defTypes2 = defPokeData2?.type || []
   const defHP2 = result.defHP
   const rolls2 = result.rolls
+  // I roll sono di UN colpo. Per una mossa multi-colpo la probabilità di KO va
+  // calcolata sui colpi veri, altrimenti questa stringa direbbe un HKO diverso
+  // da quello che il pannello mostra due centimetri più in su — e sarebbe la
+  // seconda implementazione libera di divergere che questo file ha già evitato
+  // una volta (vedi la nota qui sotto sui due cicli).
+  const colpi2 = result.colpi ?? 1
   const { sandDmgHP: sandDmg2, leftoversHP: leftHP2, eotNet } = calcEOT(def, defHP2, field.weather, defTypes2)
 
   // Prima qui c'erano due cicli quasi identici che rifacevano a mano il lavoro
@@ -244,7 +250,7 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
     // EOT e la condizione non viene nominata: era già così prima.
     const afterStr = eotNet !== 0 && condStr2 ? ` after ${condStr2}` : ''
 
-    const best = findBestNHKO(rolls2, defHP2, eotNet, { minHits: 2 })
+    const best = findBestNHKO(rolls2, defHP2, eotNet, { minHits: 2, colpiPerTurno: colpi2 })
     if (best) {
       eotSuffix = best.guaranteed
         ? ` -- guaranteed ${best.hits}HKO${afterStr}`

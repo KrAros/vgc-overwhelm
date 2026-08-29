@@ -77,6 +77,10 @@ export function buildAttackerInput(slot, level = LEVEL) {
     atkAbility:      s.ability || null,
     atkAbilityFlags: s.abilityFlags || {},
     lastRespectsKOs: s.lastRespectsKOs || 0,
+    // Stessa ragione di `lastRespectsKOs`: sta nella costruzione e non fra i
+    // parametri opzionali, così nessun chiamante può ometterlo per distrazione.
+    // È il difetto che il ReportPanel aveva già fatto una volta.
+    colpiScelti: s.colpiScelti ?? null,
     level,
   }
 }

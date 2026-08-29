@@ -146,6 +146,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkSpeBoost = 0,
     atkAbilityFlags = {},
     lastRespectsKOs = 0,
+    // Quante volte colpisce una mossa multi-colpo. Come `lastRespectsKOs`:
+    // uno stato che dichiara chi usa l'app, non un numero che il motore possa
+    // dedurre. `null` significa «non l'ha scelto», e allora si usa il massimo.
+    colpiScelti = null,
     level = LEVEL,
   } = attacker
 
@@ -231,6 +235,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defAbilKey = normalizeAbilityKey(defAbility)
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
+
+  // ── QUANTE VOLTE COLPISCE ────────────────────────────────────────────────
+  //
+  // `colpi` in moves.json è `[min, max]`, trascritto da `hitRange` del vendor
+  // da `gen-flag-dati.mjs`. Trentuno mosse su 810.
+  //
+  // ─── QUESTO NUMERO NON VIENE DAL RIFERIMENTO ──────────────────────────────
+  // `GET_DAMAGE_SV` calcola il danno di UN colpo e basta: `move.hits` gli
+  // serve solo per la stringa descrittiva. Quante volte colpisca lo decide
+  // l'utente nell'interfaccia di NCP, che non abbiamo. Quindi il `[min, max]`
+  // è trascritto, il numero dentro quell'intervallo è una scelta di modello —
+  // e la scelta è: la dichiara chi usa l'app, con il massimo come riposo.
+  //
+  // ─── TRICALCIO E TRIPLO AXEL RESTANO A UNO ────────────────────────────────
+  // Hanno `potenzaCrescente` (l'`isTripleHit` del vendor): la potenza sale a
+  // ogni colpo — 10/20/30 e 20/40/60 — quindi il totale NON è un colpo per
+  // tre, ed è una meccanica diversa che non abbiamo. Restano a un colpo, e il
+  // pannello lo dichiara invece di moltiplicare un numero sbagliato.
+  const intervalloColpi = (!moveData.potenzaCrescente && moveData.colpi) || null
+  const colpi = intervalloColpi
+    // Abilità Multipla inchioda al massimo: è la sua unica meccanica, e qui
+    // costa una riga perché il numero di colpi esiste già come concetto.
+    ? (atkAbilEffect?.skillLink
+        ? intervalloColpi[1]
+        : Math.min(intervalloColpi[1], Math.max(intervalloColpi[0], colpiScelti ?? intervalloColpi[1])))
+    : 1
+
 
   // Ate abilities: Normal -> altro tipo + x1.2 BP
   // La tabella sta in `data/typeChart.js` dalla sessione Q. Qui c'erano quattro
@@ -505,17 +536,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Rinominata da `terrainBP` a `modifiedBP`: il vecchio nome mentiva da
   // tempo, perché la variabile non ha mai contenuto solo il terreno.
   //
-  // L'ordine dei push è copiato da NCP, non scelto. Con `chainMods` l'ordine
-  // conta solo da TRE modificatori in su (vedi modifiers.test.js): quello che
-  // ha spostato i numeri qui non è il riordino, è la concatenazione. Il
-  // riordino serve per quando la catena si allargherà. Le lettere sono i
-  // punti di `calcBPMods` nel sorgente di riferimento, lasciate apposta per
-  // rendere il confronto meccanico.
+  // L'ordine dei push è copiato da NCP, non scelto. Le lettere sono i punti di
+  // `calcBPMods` nel sorgente di riferimento, lasciate apposta per rendere il
+  // confronto meccanico.
+  //
+  // ─── FINO A TECNICO L'ORDINE NON SI VEDEVA. ADESSO SÌ. ───────────────────
+  // Qui c'era scritto che con `chainMods` l'ordine conta solo da tre
+  // modificatori in su, e che «il riordino serve per quando la catena si
+  // allargherà». Si è allargata: Tecnico legge `tempBP`, cioè la potenza a
+  // METÀ catena, e la confronta con 60. Da qui in poi un push messo prima di
+  // quella riga può spegnere Tecnico e uno messo dopo no — quindi la
+  // posizione di ciascuno è parte della trascrizione.
+  //
+  // Il caso che lo dimostra vive in `tecnico.test.js`: Bacio Vampiro (50) con
+  // Tecnico, contro un difensore con l'Aura Fatata. L'aura è il punto f,
+  // prima di `tempBP`: porta la potenza a 67 e Tecnico si spegne. Aiutone è
+  // il punto s, dopo: non lo spegne.
   //
   //   c.i → abilità "ate" (Pixilate, Aerilate, …)      ×1.2   0x1333
   //   e.iv→ Tough Claws                                 ×1.3   0x14CD
   //   f   → Aura Fatata, Aura Oscura                    ×1.33  0x1548
-  //   g   → Megalancio                                  ×1.5   0x1800
+  //   ——— qui il riferimento calcola `tempBP`, che serve a Tecnico ———
+  //   g   → Tecnico, Megalancio, Ferromascella,
+  //         Ingegno Acciaio                             ×1.5   0x1800
   //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
   //   k   → item type-boost                             ×1.2   0x1333
   //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
@@ -585,6 +628,36 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `isBite` viene dal flag `bite` di moves.json — nove mosse: Bite, Hyper
   // Fang, Crunch, Poison Fang, Thunder Fang, Ice Fang, Fire Fang, Psychic
   // Fangs, Jaw Lock.
+  // La potenza a metà catena, che serve solo a Tecnico.
+  //
+  // Il riferimento la calcola ESATTAMENTE qui, fra il punto f e il punto g, e
+  // lo dice con un commento (`damage_MASTER.js:1665`):
+  //
+  //     //If the BP before this point would trigger Technician, don't apply it
+  //     var tempBP = pokeRound(basePower * chainMods(bpMods) / 0x1000);
+  //
+  // «Qui» non è un dettaglio di stile: decide su quale numero cade la soglia
+  // dei 60. I modificatori spinti PRIMA — le abilità «ate», Tough Claws, le
+  // aure — la alzano e possono spegnere Tecnico; quelli spinti DOPO — gli
+  // strumenti, Knock Off, Aiutone, i terreni, Prepotenza — no.
+  //
+  // Trascritta com'è, `Math.max(1, …)` compreso: che qui NON c'è, mentre c'è
+  // sul `modifiedBP` finale. Cambierebbe solo il caso di una mossa a potenza
+  // zero, che non arriva fin qui — ma la regola è trascrivere, non migliorare.
+  //
+  // ─── È IL PRIMO CASO IN CUI L'ORDINE DELLA CATENA SI VEDE ─────────────────
+  // Il commento in cima a questa catena diceva che l'ordine dei push non
+  // sposta nessun numero, e che il riordino serviva «per quando la catena si
+  // allargherà». Si è allargata: da oggi una mossa da 60 con un ×1.2 spinto
+  // prima di questa riga arriva a 72 e Tecnico non si accende, spinto dopo sì.
+  // La posizione di ogni push è diventata parte della trascrizione.
+  const tempBP = pokeRound(effectiveBP * chainMods(bpMods) / FIXED_POINT)
+
+  // g — le abilità ×1.5. Nel riferimento sono un solo `if` con sei condizioni
+  // in `||`, e un solo `bpMods.push(0x1800)`: qui sono righe separate perché
+  // leggono flag diversi, ma non possono accendersi in due (un Pokémon ha
+  // un'abilità sola).
+  if (atkAbilEffect?.technician && tempBP <= 60) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
   // Ingegno Acciaio, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
@@ -805,8 +878,27 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     rolls.push(damage)
   }
 
-  const minDmg = rolls[0]
-  const maxDmg = rolls[rolls.length - 1]
+  // ── IL CONTRATTO DEL RISULTATO, CHE DA OGGI HA DUE LIVELLI ───────────────
+  //
+  //   `rolls`   i sedici roll di UN colpo. Restano per-colpo di proposito:
+  //             sono ciò che il riferimento calcola, quindi sono la cosa che
+  //             `ncpGolden` e gli altri confronti possono paragonare. Se qui
+  //             ci mettessimo il totale, l'oracolo non avrebbe più niente
+  //             contro cui misurarsi.
+  //
+  //   `minDmg`  il TOTALE del colpo intero, cioè per-colpo × `colpi`. È il
+  //   `maxDmg`  numero che l'utente legge e su cui decide, ed è per questo
+  //             che sono questi a portare il totale e non i roll.
+  //
+  //   `colpi`   quante volte. Vale 1 per tutte le mosse normali, quindi per
+  //             loro non cambia niente.
+  //
+  // La probabilità di KO NON si calcola da `minDmg`/`maxDmg`: dieci colpi da
+  // 10-13 non sono un colpo da 100-130, perché la somma di dieci tiri è molto
+  // più stretta della somma degli estremi. Chi la calcola prende `rolls` e
+  // `colpi` separati — vedi `koChanceCumulative`, parametro `colpiPerTurno`.
+  const minDmg = rolls[0] * colpi
+  const maxDmg = rolls[rolls.length - 1] * colpi
   const minPct = Math.floor(minDmg / defHP * 1000) / 10
   const maxPct = Math.floor(maxDmg / defHP * 1000) / 10
 
@@ -848,5 +940,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     publishDebugLog(log)
   }
 
-  return { rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log, atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType }
+  return {
+    rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log,
+    atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType,
+    // Quante volte ha colpito: 1 per tutte le mosse normali.
+    //
+    // È l'unico campo nuovo del risultato, e ci sta perché è CALCOLATO — il
+    // massimo della mossa, oppure la scelta dell'utente limitata all'intervallo,
+    // oppure il massimo imposto da Abilità Multipla. L'intervallo `[min, max]`
+    // e il flag `potenzaCrescente` invece sono dati della mossa: chi disegna
+    // il selettore li legge da `moves.json`, che ha già in mano, invece di
+    // farseli ripetere da qui.
+    colpi,
+  }
 }

@@ -24,7 +24,11 @@
 		"category": 0,
 		"power": 15,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"comet punch": {
 		"num": "4",
@@ -34,7 +38,11 @@
 		"power": 18,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"mega punch": {
 		"num": "5",
@@ -215,7 +223,11 @@
 		"category": 0,
 		"power": 30,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"mega kick": {
 		"num": "25",
@@ -277,7 +289,11 @@
 		"category": 0,
 		"power": 15,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"horn drill": {
 		"num": "32",
@@ -379,7 +395,11 @@
 		"type": 11,
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"pin missile": {
 		"num": "42",
@@ -387,7 +407,11 @@
 		"type": 11,
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"leer": {
 		"num": "43",
@@ -1136,7 +1160,11 @@
 		"type": 0,
 		"category": 0,
 		"power": 20,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"constrict": {
 		"num": "132",
@@ -1212,7 +1240,11 @@
 		"category": 0,
 		"power": 15,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"leech life": {
 		"num": "141",
@@ -1331,7 +1363,11 @@
 		"category": 0,
 		"power": 18,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"bonemerang": {
 		"num": "155",
@@ -1339,7 +1375,11 @@
 		"type": 8,
 		"category": 0,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"rest": {
 		"num": "156",
@@ -1443,7 +1483,12 @@
 		"category": 0,
 		"power": 10,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			1,
+			3
+		],
+		"potenzaCrescente": true
 	},
 	"thief": {
 		"num": "168",
@@ -1704,7 +1749,11 @@
 		"type": 8,
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"lock-on": {
 		"num": "199",
@@ -2147,7 +2196,11 @@
 		"type": 15,
 		"category": 0,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			1,
+			6
+		]
 	},
 	"fake out": {
 		"num": "252",
@@ -2490,7 +2543,11 @@
 		"category": 0,
 		"power": 15,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"camouflage": {
 		"num": "293",
@@ -2827,7 +2884,11 @@
 		"category": 0,
 		"power": 25,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"aerial ace": {
 		"num": "332",
@@ -2845,7 +2906,11 @@
 		"type": 5,
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"iron defense": {
 		"num": "334",
@@ -2997,7 +3062,11 @@
 		"category": 0,
 		"power": 25,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"shock wave": {
 		"num": "351",
@@ -3952,7 +4021,11 @@
 		"category": 0,
 		"power": 35,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"roar of time": {
 		"num": "459",
@@ -4563,7 +4636,11 @@
 		"category": 0,
 		"power": 40,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"heart stamp": {
 		"num": "531",
@@ -4660,7 +4737,11 @@
 		"category": 0,
 		"power": 25,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"hurricane": {
 		"num": "542",
@@ -4686,7 +4767,11 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"searing shot": {
 		"num": "545",
@@ -5082,7 +5167,11 @@
 		"type": 2,
 		"category": 1,
 		"power": 15,
-		"priority": 1
+		"priority": 1,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"mystical fire": {
 		"num": "595",
@@ -6045,7 +6134,11 @@
 		"type": 14,
 		"category": 0,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			1,
+			2
+		]
 	},
 	"dragon energy": {
 		"num": "820",
@@ -6071,7 +6164,11 @@
 		"category": 0,
 		"power": 40,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"dynamax cannon": {
 		"num": "744",
@@ -6493,7 +6590,11 @@
 		"power": 20,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"colpi": [
+			1,
+			10
+		]
 	},
 	"pounce": {
 		"num": "884",
@@ -6615,7 +6716,11 @@
 		"type": 14,
 		"category": 0,
 		"power": 25,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			5
+		]
 	},
 	"scorching sands": {
 		"num": "815",
@@ -6784,7 +6889,11 @@
 		"power": 25,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"colpi": [
+			3,
+			3
+		]
 	},
 	"syrup bomb": {
 		"num": "903",
@@ -6802,7 +6911,11 @@
 		"category": 1,
 		"power": 50,
 		"priority": 0,
-		"slicing": true
+		"slicing": true,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"take heart": {
 		"num": "850",
@@ -6928,7 +7041,12 @@
 		"category": 0,
 		"power": 20,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			1,
+			3
+		],
+		"potenzaCrescente": true
 	},
 	"triple dive": {
 		"num": "865",
@@ -6937,7 +7055,11 @@
 		"category": 0,
 		"power": 30,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"colpi": [
+			3,
+			3
+		]
 	},
 	"twin beam": {
 		"num": "888",
@@ -6945,7 +7067,11 @@
 		"type": 10,
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"colpi": [
+			2,
+			2
+		]
 	},
 	"upper hand": {
 		"num": "918",

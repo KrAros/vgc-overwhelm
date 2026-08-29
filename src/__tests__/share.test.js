@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { encodeTeamsToURL, decodeTeamsFromURL } from '../store/useCalcStore.js'
+import { encodeTeamsToURL, decodeTeamsFromURL, emptyPokemon } from '../store/useCalcStore.js'
 import pokemonData from '../data/pokemon.json'
 import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 
@@ -37,6 +37,10 @@ function teamCasuale(rnd) {
     if (rnd() < 0.15) return slotVuoto()
     const chiave = CHIAVI[Math.floor(rnd() * CHIAVI.length)]
     return {
+      // Si parte dallo slot vuoto vero: ogni campo che il generatore non
+      // randomizza resta al valore di riposo invece di sparire, e un campo
+      // NUOVO entra nel giro senza che nessuno debba ricordarsene.
+      ...slotVuoto(),
       key: chiave,
       moves: Array.from({ length: 4 }, () => rnd() < 0.2 ? null : MOSSE[Math.floor(rnd() * MOSSE.length)]),
       sps: Array.from({ length: 6 }, () => Math.floor(rnd() * 33)),
@@ -68,24 +72,17 @@ function teamCasuale(rnd) {
         eelevateKOActive:   rnd() < 0.3,
       },
       lastRespectsKOs: Math.floor(rnd() * 4),
+      // `null` compreso: è il valore di riposo, e deve sopravvivere al viaggio
+      // come gli altri — un `if` sbagliato nella codifica lo trasformerebbe in
+      // un numero.
+      colpiScelti: rnd() < 0.4 ? null : 1 + Math.floor(rnd() * 10),
     }
   })
 }
 
-function slotVuoto() {
-  return {
-    key: null, moves: [null, null, null, null], sps: [0,0,0,0,0,0],
-    nature: null, ability: null, item: null,
-    atkBoost: 0, defBoost: 0, spAtkBoost: 0, spDefBoost: 0, speBoost: 0,
-    // Dai valori di riposo veri, non da una copia scritta a mano: una copia
-    // che invecchia da sola è come questa suite ha scoperto `eelevateKOActive`
-    // — con tre test rossi che dicevano «c'è un campo in più», non «il campo
-    // nuovo non sopravvive al viaggio». Il secondo è il difetto che conta, e
-    // lo controlla il test in fondo.
-    abilityFlags: { ...DEFAULT_ABILITY_FLAGS },
-    lastRespectsKOs: 0,
-  }
-}
+// Lo slot vuoto viene dallo STORE, non da una copia qui. Vedi la nota accanto
+// a `emptyPokemon`: la copia che stava qui è invecchiata due volte.
+const slotVuoto = emptyPokemon
 
 // ─── 1. Round-trip ─────────────────────────────────────────────────────────
 

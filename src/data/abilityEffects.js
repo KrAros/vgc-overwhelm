@@ -101,6 +101,34 @@ export const ABILITY_EFFECTS = {
   // restano nelle 108 per quella meta'.
   'steely-spirit': { steelySpirit: true, showInSmogon: true },
 
+  // Tecnico: x1.5 sulle mosse con potenza base fino a 60. Quarta e ultima
+  // FATTIBILE delle sei del ramo — Flare Boost e Toxic Boost vogliono gli
+  // stati, che non modelliamo.
+  //
+  // E' l'unica delle sei la cui condizione non guarda la mossa ma il NUMERO:
+  // «60 o meno» si misura sulla potenza GIA' passata per i modificatori
+  // precedenti, non su quella scritta nei dati. Il riferimento lo dice con un
+  // commento e con una riga (`damage_MASTER.js:1665`):
+  //
+  //     //If the BP before this point would trigger Technician, don't apply it
+  //     var tempBP = pokeRound(basePower * chainMods(bpMods) / 0x1000);
+  //
+  // Da qui una conseguenza che vale la pena scrivere: fino a oggi l'ORDINE
+  // dei push nella catena della potenza non era osservabile — con pochi
+  // modificatori `chainMods` e' commutativo. Adesso lo e'. Un'aura messa dopo
+  // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
+  'technician':  { technician: true, showInSmogon: true },
+
+  // Abilita' Multipla: le mosse multi-colpo colpiscono sempre il massimo.
+  //
+  // NON e' un moltiplicatore e non tocca la catena della potenza: agisce sul
+  // numero di colpi, che e' un concetto nuovo del motore da questa sessione.
+  // Prima di averlo non c'era niente su cui potesse agire — ed e' il motivo
+  // per cui non era nelle abilita' del divario: nemmeno il riferimento la
+  // calcola nel danno, perche' anche li' il numero di colpi lo sceglie
+  // l'utente nell'interfaccia.
+  'skill-link':  { skillLink: true },
+
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
   // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno

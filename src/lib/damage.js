@@ -154,19 +154,37 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
  * in mezzo o solo alla fine è la stessa cosa. I numeri cambiano solo quando i
  * Leftovers superano l'eventuale danno da sabbia.
  *
- * @param {number[]} rolls   — array dei 16 roll di danno
+ * ─── UN TURNO PUÒ CONTENERE PIÙ COLPI ─────────────────────────────────────
+ * `colpiPerTurno` esiste per le mosse multi-colpo: Bombardamento ne tira fino
+ * a dieci in UN turno. La differenza con dieci turni non è un dettaglio, ed è
+ * doppia:
+ *
+ *   · l'EOT si applica una volta per TURNO, non per colpo. Passare dieci
+ *     colpi come dieci turni farebbe mangiare al difensore dieci volte gli
+ *     Avanzi.
+ *   · la domanda «fa KO?» riguarda il turno, non il singolo colpo.
+ *
+ * E soprattutto NON si può approssimare moltiplicando i roll: dieci tiri da
+ * 10-13 danno un totale fra 100 e 130, ma quasi mai agli estremi — la somma
+ * di dieci tiri indipendenti è molto più stretta di dieci volte un tiro solo.
+ * La DP qui sotto la calcola esatta, perché convolve colpo per colpo.
+ *
+ * @param {number[]} rolls   — array dei 16 roll di danno di UN colpo
  * @param {number}   defHP   — HP del difensore all'inizio del calcolo
  * @param {number}   eotNet  — delta EOT per turno (+cura, -danno)
- * @param {number}   maxHits — quanti colpi calcolare
+ * @param {number}   maxHits — quanti TURNI calcolare
+ * @param {number}   colpiPerTurno — colpi della mossa in un turno (1 per quasi
+ *                   tutte). L'EOT scatta dopo l'ultimo, non fra l'uno e l'altro.
  * @returns {number[]} array lungo `maxHits`: l'elemento in posizione `h - 1`
- *                     è la probabilità di aver fatto KO **entro** `h` colpi.
+ *                     è la probabilità di aver fatto KO **entro** `h` turni.
  */
-export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS) {
+export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS, colpiPerTurno = 1) {
   const cumulativa = new Array(Math.max(maxHits, 0)).fill(0)
   if (!rolls || rolls.length === 0 || maxHits < 1) return cumulativa
 
   const n = rolls.length
   const quotaRoll = 1 / n
+  const colpi = Math.max(1, Math.floor(colpiPerTurno))
 
   // stati: HP rimasti → probabilità di trovarsi con quegli HP.
   // All'inizio siamo con certezza agli HP pieni.
@@ -174,23 +192,30 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS)
   let koTotale = 0
 
   for (let h = 0; h < maxHits; h++) {
-    const prossimi = new Map()
-
-    for (const [hp, prob] of stati) {
-      // Ogni roll è equiprobabile: la probabilità dello stato si divide in 16.
-      const quota = prob * quotaRoll
-
-      for (const roll of rolls) {
-        let nuoviHP = hp - roll
-        if (nuoviHP <= 0) { koTotale += quota; continue }   // KO dal colpo
-
-        nuoviHP += eotNet
-        if (nuoviHP <= 0) { koTotale += quota; continue }   // KO dall'EOT
-
-        if (nuoviHP > defHP) nuoviHP = defHP                // la cura non supera il massimo
-
-        prossimi.set(nuoviHP, (prossimi.get(nuoviHP) || 0) + quota)
+    // ── I colpi del turno ──────────────────────────────────────────────────
+    // Con `colpi === 1` questo ciclo gira una volta e il comportamento è
+    // identico a prima, riga per riga.
+    for (let c = 0; c < colpi; c++) {
+      const dopoIlColpo = new Map()
+      for (const [hp, prob] of stati) {
+        const quota = prob * quotaRoll
+        for (const roll of rolls) {
+          const nuoviHP = hp - roll
+          if (nuoviHP <= 0) { koTotale += quota; continue }  // KO dal colpo
+          dopoIlColpo.set(nuoviHP, (dopoIlColpo.get(nuoviHP) || 0) + quota)
+        }
       }
+      stati = dopoIlColpo
+      if (stati.size === 0) break
+    }
+
+    // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const prossimi = new Map()
+    for (const [hp, prob] of stati) {
+      let nuoviHP = hp + eotNet
+      if (nuoviHP <= 0) { koTotale += prob; continue }       // KO dall'EOT
+      if (nuoviHP > defHP) nuoviHP = defHP                   // la cura non supera il massimo
+      prossimi.set(nuoviHP, (prossimi.get(nuoviHP) || 0) + prob)
     }
 
     cumulativa[h] = koTotale
@@ -221,9 +246,9 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS)
  * @param {number}   hits
  * @returns {number} probabilità in [0, 1]
  */
-export function calcKOChance(rolls, defHP, eotNet, hits) {
+export function calcKOChance(rolls, defHP, eotNet, hits, colpiPerTurno = 1) {
   if (hits < 1) return 0
-  return koChanceCumulative(rolls, defHP, eotNet, hits)[hits - 1]
+  return koChanceCumulative(rolls, defHP, eotNet, hits, colpiPerTurno)[hits - 1]
 }
 
 // ── Best NHKO ─────────────────────────────────────────────────────────────────
@@ -250,8 +275,8 @@ export function calcKOChance(rolls, defHP, eotNet, hits) {
  *   guaranteed: boolean,
  * } | null}
  */
-export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_HITS } = {}) {
-  return primoKO(koChanceCumulative(rolls, defHP, eotNet, maxHits), { minHits, maxHits })
+export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
+  return primoKO(koChanceCumulative(rolls, defHP, eotNet, maxHits, colpiPerTurno), { minHits, maxHits })
 }
 
 /**
@@ -321,43 +346,60 @@ function primoKO(cumulativa, { minHits = 1, maxHits = MAX_HITS } = {}) {
  * @param {number}   [opzioni.maxHits=MAX_HITS]
  * @returns {number[]} probabilità di aver fatto KO **entro** h colpi
  */
-export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, maxHits = MAX_HITS } = {}) {
+export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
   const cumulativa = new Array(Math.max(maxHits, 0)).fill(0)
   if (!rolls || rolls.length === 0 || maxHits < 1) return cumulativa
 
   const quotaRoll = 1 / rolls.length
   const cura   = Math.floor(defHP / 4)
   const soglia = Math.floor(defHP / 2)
+  const colpi  = Math.max(1, Math.floor(colpiPerTurno))
 
   // chiave = hp * 2 + (bacca usata ? 1 : 0)
   let stati = new Map([[defHP * 2, 1]])
   let koTotale = 0
 
   for (let h = 0; h < maxHits; h++) {
-    const prossimi = new Map()
+    // ── I colpi del turno ──────────────────────────────────────────────────
+    // La bacca si controlla DENTRO questo ciclo, non fuori: con una mossa
+    // multi-colpo può attivarsi a metà mossa — è il terzo colpo di
+    // Bombardamento a portare sotto metà, e i sette dopo trovano già la cura
+    // fatta. Metterla fuori vorrebbe dire farla scattare a mossa finita, cioè
+    // dopo che il KO è già successo.
+    for (let c = 0; c < colpi; c++) {
+      const dopoIlColpo = new Map()
+      for (const [stato, prob] of stati) {
+        const hp    = stato >> 1
+        const usata = (stato & 1) === 1
+        const quota = prob * quotaRoll
 
-    for (const [stato, prob] of stati) {
-      const hp    = stato >> 1
-      const usata = (stato & 1) === 1
-      const quota = prob * quotaRoll
+        for (const roll of rolls) {
+          let nuoviHP = hp - roll
+          if (nuoviHP <= 0) { koTotale += quota; continue }
 
-      for (const roll of rolls) {
-        let nuoviHP = hp - roll
-        if (nuoviHP <= 0) { koTotale += quota; continue }
+          let oraUsata = usata
+          if (conSitrus && !usata && nuoviHP <= soglia) {
+            nuoviHP = Math.min(nuoviHP + cura, defHP)
+            oraUsata = true
+          }
 
-        let oraUsata = usata
-        if (conSitrus && !usata && nuoviHP <= soglia) {
-          nuoviHP = Math.min(nuoviHP + cura, defHP)
-          oraUsata = true
+          const chiave = nuoviHP * 2 + (oraUsata ? 1 : 0)
+          dopoIlColpo.set(chiave, (dopoIlColpo.get(chiave) || 0) + quota)
         }
-
-        nuoviHP += eotNet
-        if (nuoviHP <= 0) { koTotale += quota; continue }
-        if (nuoviHP > defHP) nuoviHP = defHP
-
-        const chiave = nuoviHP * 2 + (oraUsata ? 1 : 0)
-        prossimi.set(chiave, (prossimi.get(chiave) || 0) + quota)
       }
+      stati = dopoIlColpo
+      if (stati.size === 0) break
+    }
+
+    // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const prossimi = new Map()
+    for (const [stato, prob] of stati) {
+      const usata = (stato & 1) === 1
+      let nuoviHP = (stato >> 1) + eotNet
+      if (nuoviHP <= 0) { koTotale += prob; continue }
+      if (nuoviHP > defHP) nuoviHP = defHP
+      const chiave = nuoviHP * 2 + (usata ? 1 : 0)
+      prossimi.set(chiave, (prossimi.get(chiave) || 0) + prob)
     }
 
     cumulativa[h] = koTotale
@@ -391,6 +433,6 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
  * @param {object}   [opzioni] — come `koChanceSitrus`, più `minHits`
  * @returns {{hits:number, chance:number, pct:number, guaranteed:boolean}|null}
  */
-export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS } = {}) {
-  return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits }), { minHits, maxHits })
+export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
+  return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits, colpiPerTurno }), { minHits, maxHits })
 }

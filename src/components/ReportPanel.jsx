@@ -46,8 +46,8 @@ import { TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
  * un tetto di 6 turni scritto a mano contro i 9 di `findBestNHKO`, e una
  * narrativa turno per turno che nessun componente renderizzava.
  */
-function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true) {
-  const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus })
+function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true, colpiPerTurno = 1) {
+  const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus, colpiPerTurno })
   const parti = conSitrus ? [...condParts, 'sitrus'] : [...condParts]
 
   if (!best) return { summary: { type: 'noKo', condParts: parti } }
@@ -240,7 +240,15 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   }, [atk, def, move, field])
 
   const smogon = buildSmogonString(atk, def, move, result, field)
+  // I roll sono di UN colpo (vedi il contratto in cima a `calculateDamage`).
+  // `colpi` dice quante volte, e va passato a chi calcola la probabilità di
+  // KO: dieci colpi da 10-13 non sono un colpo da 100-130, e moltiplicare i
+  // roll darebbe una probabilità sbagliata in un modo che sembra plausibile.
+  //
+  // `?? 1` perché un risultato di immunità esce da un `return` anticipato e
+  // non porta il campo: lì il danno è zero e il numero di colpi non conta.
   const rolls  = result.rolls
+  const colpi  = result.colpi ?? 1
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
 
   const defHP = result.defHP
@@ -249,7 +257,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const eotParts = []
   if (isSand && !isSandImmune) eotParts.push('sand')
   if (leftoversHP > 0)         eotParts.push('left')
-  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts) : null
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts, true, colpi) : null
 
 
 
@@ -270,7 +278,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    const best = findBestNHKO(rolls, defHP, eot)
+    const best = findBestNHKO(rolls, defHP, eot, { colpiPerTurno: colpi })
     if (!best || best.hits === 1) return null
 
     const label = `${best.hits}HKO`

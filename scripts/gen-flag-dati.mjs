@@ -342,7 +342,11 @@ const RINOMINA_SLUG = {
  *
  * NON prendiamo `isSpread`: `spread` da noi esiste già come booleano, e
  * sovrascriverlo cambierebbe una semantica invece di aggiungerne una. Quello è
- * §1.11, insieme a `target`, `accuracy` e `hitRange`.
+ * §1.11, insieme a `target` e `accuracy`.
+ *
+ * `hitRange` era in quella lista e ne è uscito: lo trascrive il passaggio
+ * 4-bis, qui sotto, perché senza di lui il set del meta con Bombardamento
+ * mostrava il danno di UN colpo su dieci.
  */
 const FLAG_MOSSE = {
   punch: 'isPunch',
@@ -546,6 +550,45 @@ for (const [slug, voce] of Object.entries(mosse)) {
   }
 }
 
+// ─── 4-bis. Colpi multipli ──────────────────────────────────────────────────
+//
+// `hitRange` del vendor, normalizzato a una coppia `[min, max]`.
+//
+// ─── PERCHE' NORMALIZZARE ──────────────────────────────────────────────────
+// In NCP il campo ha DUE forme: un numero quando i colpi sono fissi
+// (`'Double Kick': { hitRange: 2 }`) e una coppia quando variano
+// (`'Bullet Seed': { hitRange: [2,5] }`). Chi legge dovrebbe distinguerle a
+// ogni uso, e il giorno che qualcuno se ne dimentica `voce.colpi[0]` su un
+// numero da' `undefined` senza errore. Qui `2` diventa `[2, 2]`: una forma
+// sola, e la distinzione «fissi o variabili» si legge da `min === max`.
+//
+// ─── `potenzaCrescente` E' UN AVVISO, NON UNA MECCANICA ────────────────────
+// Tricalcio e Triplo Axel hanno `isTripleHit`: la potenza SALE a ogni colpo
+// (10/20/30 e 20/40/60), quindi il totale non e' «un colpo per N». Il flag e'
+// trascritto perche' il motore possa rifiutarsi di moltiplicare invece di
+// dare un numero sbagliato in silenzio — non perche' la meccanica sia
+// implementata. Non lo e'.
+
+let conColpi = 0
+let conPotenzaCrescente = 0
+for (const [slug, voce] of Object.entries(mosse)) {
+  const nome = iMosse.get(normalizza(slug))
+  if (!nome) continue
+  const range = ncp.mosse[nome].hitRange
+  if (range) {
+    voce.colpi = Array.isArray(range) ? [range[0], range[1]] : [range, range]
+    conColpi++
+  } else if ('colpi' in voce) {
+    delete voce.colpi
+  }
+  if (ncp.mosse[nome].isTripleHit) {
+    voce.potenzaCrescente = true
+    conPotenzaCrescente++
+  } else if ('potenzaCrescente' in voce) {
+    delete voce.potenzaCrescente
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // REPORT
 // ═══════════════════════════════════════════════════════════════════════════
@@ -587,6 +630,8 @@ console.log(`  mosse totali:         ${Object.keys(mosse).length}`)
 for (const [nostro, n] of Object.entries(conteggioFlag)) {
   console.log(`  ${(nostro + ':').padEnd(22)}${n}`)
 }
+console.log(`  ${'colpi (hitRange):'.padEnd(22)}${conColpi}`)
+console.log(`  ${'di cui a potenza crescente:'.padEnd(22)}${conPotenzaCrescente}   ← non modellate`)
 console.log(`  non mappabili su NCP: ${mosseNonMappate}`)
 
 // ─── Pesi: elencati, mai scritti ────────────────────────────────────────────

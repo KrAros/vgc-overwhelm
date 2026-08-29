@@ -120,7 +120,7 @@ describe('le aure, contro il riferimento', () => {
   })
 
   const casi = [
-    ['Aura Fatata, Luce Rovinosa',   FLOETTE('fairy-aura'), 'light of ruin',  INCINEROAR],
+    ['Aura Fatata, Luce Nefasta',    FLOETTE('fairy-aura'), 'light of ruin',  INCINEROAR],
     ['Aura Fatata, Forza Lunare',    FLOETTE('fairy-aura'), 'moonblast',      INCINEROAR],
     ['Aura Fatata, Scintillio',      FLOETTE('fairy-aura'), 'dazzling gleam', INCINEROAR],
     ['Aura Oscura, Pulsar Notturna', YVELTAL('dark-aura'),  'dark pulse',     INCINEROAR],
@@ -199,7 +199,7 @@ describe('le aure muovono davvero il numero', () => {
   // Senza questi, i confronti col riferimento passerebbero anche se l'abilità
   // non facesse niente né da noi né da lui — cioè se avessimo sbagliato a
   // guidare l'harness.
-  it('Luce Rovinosa cresce di circa un terzo', () => {
+  it('Luce Nefasta cresce di circa un terzo', () => {
     const con = nostro(FLOETTE('fairy-aura'), 'light of ruin')
     const senza = nostro(FLOETTE(null), 'light of ruin')
     expect(con.maxDmg).toBeGreaterThan(senza.maxDmg)

@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-29T07:32:25.816Z",
+    "generatedAt": "2026-08-29T08:05:40.518Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 261,
-    "abilitaNelGap": 106,
+    "abilitaSenzaEffetto": 259,
+    "abilitaNelGap": 105,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -884,16 +884,6 @@
           "funzione": "abilityIgnore",
           "file": "damage_MASTER.js",
           "riga": 1000
-        }
-      },
-      {
-        "chiave": "technician",
-        "nome": "Technician",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1669
         }
       },
       {
