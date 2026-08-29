@@ -505,17 +505,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Rinominata da `terrainBP` a `modifiedBP`: il vecchio nome mentiva da
   // tempo, perché la variabile non ha mai contenuto solo il terreno.
   //
-  // L'ordine dei push è copiato da NCP, non scelto. Con `chainMods` l'ordine
-  // conta solo da TRE modificatori in su (vedi modifiers.test.js): quello che
-  // ha spostato i numeri qui non è il riordino, è la concatenazione. Il
-  // riordino serve per quando la catena si allargherà. Le lettere sono i
-  // punti di `calcBPMods` nel sorgente di riferimento, lasciate apposta per
-  // rendere il confronto meccanico.
+  // L'ordine dei push è copiato da NCP, non scelto. Le lettere sono i punti di
+  // `calcBPMods` nel sorgente di riferimento, lasciate apposta per rendere il
+  // confronto meccanico.
+  //
+  // ─── FINO A TECNICO L'ORDINE NON SI VEDEVA. ADESSO SÌ. ───────────────────
+  // Qui c'era scritto che con `chainMods` l'ordine conta solo da tre
+  // modificatori in su, e che «il riordino serve per quando la catena si
+  // allargherà». Si è allargata: Tecnico legge `tempBP`, cioè la potenza a
+  // METÀ catena, e la confronta con 60. Da qui in poi un push messo prima di
+  // quella riga può spegnere Tecnico e uno messo dopo no — quindi la
+  // posizione di ciascuno è parte della trascrizione.
+  //
+  // Il caso che lo dimostra vive in `tecnico.test.js`: Bacio Vampiro (50) con
+  // Tecnico, contro un difensore con l'Aura Fatata. L'aura è il punto f,
+  // prima di `tempBP`: porta la potenza a 67 e Tecnico si spegne. Aiutone è
+  // il punto s, dopo: non lo spegne.
   //
   //   c.i → abilità "ate" (Pixilate, Aerilate, …)      ×1.2   0x1333
   //   e.iv→ Tough Claws                                 ×1.3   0x14CD
   //   f   → Aura Fatata, Aura Oscura                    ×1.33  0x1548
-  //   g   → Megalancio                                  ×1.5   0x1800
+  //   ——— qui il riferimento calcola `tempBP`, che serve a Tecnico ———
+  //   g   → Tecnico, Megalancio, Ferromascella,
+  //         Ingegno Acciaio                             ×1.5   0x1800
   //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
   //   k   → item type-boost                             ×1.2   0x1333
   //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
@@ -585,6 +597,36 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `isBite` viene dal flag `bite` di moves.json — nove mosse: Bite, Hyper
   // Fang, Crunch, Poison Fang, Thunder Fang, Ice Fang, Fire Fang, Psychic
   // Fangs, Jaw Lock.
+  // La potenza a metà catena, che serve solo a Tecnico.
+  //
+  // Il riferimento la calcola ESATTAMENTE qui, fra il punto f e il punto g, e
+  // lo dice con un commento (`damage_MASTER.js:1665`):
+  //
+  //     //If the BP before this point would trigger Technician, don't apply it
+  //     var tempBP = pokeRound(basePower * chainMods(bpMods) / 0x1000);
+  //
+  // «Qui» non è un dettaglio di stile: decide su quale numero cade la soglia
+  // dei 60. I modificatori spinti PRIMA — le abilità «ate», Tough Claws, le
+  // aure — la alzano e possono spegnere Tecnico; quelli spinti DOPO — gli
+  // strumenti, Knock Off, Aiutone, i terreni, Prepotenza — no.
+  //
+  // Trascritta com'è, `Math.max(1, …)` compreso: che qui NON c'è, mentre c'è
+  // sul `modifiedBP` finale. Cambierebbe solo il caso di una mossa a potenza
+  // zero, che non arriva fin qui — ma la regola è trascrivere, non migliorare.
+  //
+  // ─── È IL PRIMO CASO IN CUI L'ORDINE DELLA CATENA SI VEDE ─────────────────
+  // Il commento in cima a questa catena diceva che l'ordine dei push non
+  // sposta nessun numero, e che il riordino serviva «per quando la catena si
+  // allargherà». Si è allargata: da oggi una mossa da 60 con un ×1.2 spinto
+  // prima di questa riga arriva a 72 e Tecnico non si accende, spinto dopo sì.
+  // La posizione di ogni push è diventata parte della trascrizione.
+  const tempBP = pokeRound(effectiveBP * chainMods(bpMods) / FIXED_POINT)
+
+  // g — le abilità ×1.5. Nel riferimento sono un solo `if` con sei condizioni
+  // in `||`, e un solo `bpMods.push(0x1800)`: qui sono righe separate perché
+  // leggono flag diversi, ma non possono accendersi in due (un Pokémon ha
+  // un'abilità sola).
+  if (atkAbilEffect?.technician && tempBP <= 60) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
   // Ingegno Acciaio, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
