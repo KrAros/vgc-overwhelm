@@ -277,6 +277,7 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     if (f.flashFireActive)    af.ff = 1
     if (f.multiscaleActive === false) af.ms = 0
     if (f.supremeOverlordKOs) af.so = f.supremeOverlordKOs
+    if (f.eelevateKOActive)   af.ee = 1
     if (Object.keys(af).length) s.af = af
 
     return s
@@ -346,6 +347,7 @@ export function decodeTeamsFromURL(encoded) {
                 flashFireActive:    af.ff === 1,
                 multiscaleActive:   af.ms !== 0,
                 supremeOverlordKOs: intero(af.so, 0, 5),
+                eelevateKOActive:   af.ee === 1,
               },
             }
           })

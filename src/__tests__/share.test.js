@@ -14,6 +14,7 @@
 import { describe, it, expect } from 'vitest'
 import { encodeTeamsToURL, decodeTeamsFromURL } from '../store/useCalcStore.js'
 import pokemonData from '../data/pokemon.json'
+import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 
 // ─── Generatore deterministico ─────────────────────────────────────────────
 // Niente Math.random: un test che fallisce dev'essere ripetibile.
@@ -59,10 +60,12 @@ function teamCasuale(rnd) {
       spDefBoost: Math.floor(rnd() * 13) - 6,
       speBoost:   Math.floor(rnd() * 13) - 6,
       abilityFlags: {
+        ...DEFAULT_ABILITY_FLAGS,
         intimidateActive:   rnd() < 0.3,
         flashFireActive:    rnd() < 0.3,
         multiscaleActive:   rnd() < 0.7,
         supremeOverlordKOs: Math.floor(rnd() * 6),
+        eelevateKOActive:   rnd() < 0.3,
       },
       lastRespectsKOs: Math.floor(rnd() * 4),
     }
@@ -74,10 +77,12 @@ function slotVuoto() {
     key: null, moves: [null, null, null, null], sps: [0,0,0,0,0,0],
     nature: null, ability: null, item: null,
     atkBoost: 0, defBoost: 0, spAtkBoost: 0, spDefBoost: 0, speBoost: 0,
-    abilityFlags: {
-      intimidateActive: false, flashFireActive: false,
-      multiscaleActive: true, supremeOverlordKOs: 0,
-    },
+    // Dai valori di riposo veri, non da una copia scritta a mano: una copia
+    // che invecchia da sola è come questa suite ha scoperto `eelevateKOActive`
+    // — con tre test rossi che dicevano «c'è un campo in più», non «il campo
+    // nuovo non sopravvive al viaggio». Il secondo è il difetto che conta, e
+    // lo controlla il test in fondo.
+    abilityFlags: { ...DEFAULT_ABILITY_FLAGS },
     lastRespectsKOs: 0,
   }
 }
@@ -104,10 +109,44 @@ describe('share — round-trip dei team', () => {
     expect(d.team2).toEqual(vuoto)
   })
 
+  it('OGNI flag di abilità sopravvive al viaggio, uno per uno', () => {
+    // ─── PERCHÉ GENERICO E NON UN ELENCO ────────────────────────────────────
+    //
+    // Perché un elenco scritto a mano non copre il flag che verrà aggiunto
+    // domani, ed è precisamente quello che è successo: `eelevateKOActive` è
+    // entrato in `DEFAULT_ABILITY_FLAGS` e la codifica non lo conosceva. Chi
+    // avesse condiviso un link con Rapidascesa accesa l'avrebbe visto tornare
+    // spenta dall'altra parte — un numero diverso, in silenzio.
+    //
+    // I tre test qui intorno erano diventati rossi, ma dicevano un'altra cosa:
+    // «c'è un campo in più del previsto», perché confrontavano con una copia
+    // dei valori di riposo scritta a mano. Sarebbe bastato aggiornare la copia
+    // per farli tornare verdi lasciando il difetto dentro.
+    //
+    // Questo invece falsifica proprio il difetto: ogni flag messo a un valore
+    // DIVERSO dal suo riposo deve tornare com'era.
+    const diverso = (valore) => (typeof valore === 'number' ? (valore === 0 ? 3 : 0) : !valore)
+
+    for (const [flag, riposo] of Object.entries(DEFAULT_ABILITY_FLAGS)) {
+      const slot = {
+        ...slotVuoto(), key: 'houndstone',
+        abilityFlags: { ...DEFAULT_ABILITY_FLAGS, [flag]: diverso(riposo) },
+      }
+      const team = [slot, ...Array.from({ length: 5 }, slotVuoto)]
+      const d = decodeTeamsFromURL(encodeTeamsToURL(team, team))
+      expect(
+        d.team1[0].abilityFlags[flag],
+        `${flag} non sopravvive alla codifica del link: manca in encodeTeamsToURL `
+        + 'o in decodeTeamsFromURL',
+      ).toEqual(diverso(riposo))
+    }
+  })
+
   it('abilityFlags e lastRespectsKOs sopravvivono — prima venivano scartati', () => {
     const slot = {
       ...slotVuoto(), key: 'houndstone', lastRespectsKOs: 3,
       abilityFlags: {
+        ...DEFAULT_ABILITY_FLAGS,
         intimidateActive: true, flashFireActive: true,
         multiscaleActive: false, supremeOverlordKOs: 4,
       },

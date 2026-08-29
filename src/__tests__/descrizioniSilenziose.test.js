@@ -71,7 +71,9 @@
  *
  * Ce n'è uno, e sta scritto invece che taciuto: la ricerca scarta un'abilità
  * appena ha UN campo meccanico, quindi una descrizione applicata a metà le
- * sfugge. Il registro `PARZIALI` le dichiara a mano — oggi una, `eelevate`.
+ * sfugge. Il registro `PARZIALI` le dichiara a mano. Oggi è vuoto: la sua
+ * prima voce, `eelevate`, è stata completata nella stessa sessione che l'aveva
+ * scritta.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -231,16 +233,11 @@ const REGISTRO = {
 // controlla, sono che la voce esista davvero e che sia davvero parziale
 // rispetto a ciò che il registro qui sotto le riconosce.
 
-const PARZIALI = {
-  'eelevate': {
-    applicato: 'l\'immunità alle mosse Terra (`levitate: true`), verificata '
-             + 'contro NCP in rapidascesa.test.js.',
-    mancante: '«Aumenta la statistica più alta di 1 grado quando mette KO un '
-            + 'avversario»: è uno stato che l\'utente imposta a mano, come per '
-            + 'Aegislash, Morpeko e Palafin, e l\'interruttore non esiste. '
-            + 'Nemmeno NCP calcola quella metà.',
-  },
-}
+// `eelevate` è stata la prima voce di questo registro e ne è uscita nella
+// stessa sessione: le mancava «+1 alla statistica più alta quando mette KO»,
+// e adesso c'è, con il suo interruttore nell'editor. Il registro resta —
+// vuoto, e pronto — perché il punto cieco che dichiara non è sparito con lei.
+const PARZIALI = {}
 
 // ───────────────────────────────────────────────────────────────────────────
 // La ricerca

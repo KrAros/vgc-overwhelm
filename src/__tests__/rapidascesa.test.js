@@ -57,7 +57,7 @@ import { describe, it, expect, beforeAll } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
 import { calculateDamage } from '../calcEngine.js'
-import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
+import { ABILITY_EFFECTS, DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 import abilities from '../data/abilities.json' with { type: 'json' }
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import it_ from '../locales/it.json' with { type: 'json' }
@@ -223,16 +223,144 @@ describe('contro il riferimento', () => {
   })
 })
 
-describe('la seconda metà della descrizione non è implementata', () => {
-  it('la voce porta solo `levitate`', () => {
-    // Se qualcuno aggiungesse il boost da KO, questo test è il punto in cui
-    // deve passare — e togliere la riga dalle PARZIALI del presidio.
-    expect(ABILITY_EFFECTS['eelevate']).toEqual({ levitate: true })
+describe('la seconda metà: +1 alla statistica più alta quando mette KO', () => {
+  // ─── QUESTA METÀ NON HA UN ORACOLO, E STAVOLTA DAVVERO ────────────────────
+  //
+  // L'immunità alle mosse Terra NCP la implementa, e sopra è verificata roll
+  // per roll. Di questa metà nel riferimento non c'è traccia — e non è una sua
+  // svista: è la stessa metà di Beast Boost, che il registro del divario ha
+  // già misurato come non calcolata nemmeno da lui (`beast boost` è
+  // selezionabile, senza effetto da noi, e NON è fra le abilità del divario).
+  //
+  // Quindi qui si verifica la conseguenza, non l'accordo con qualcuno: lo
+  // stadio sale di uno, sulla statistica giusta, e il danno si muove.
+
+  const conKO = (attivo, move, extra = {}) => calculateDamage({
+    attacker: {
+      atkPokemon: 'eelektross-mega', atkSPs: [0, 32, 0, 32, 0, 0],
+      atkNature: 'adamant', atkAbility: 'eelevate', atkItem: null, level: 50,
+      atkAbilityFlags: { eelevateKOActive: attivo }, ...extra,
+    },
+    defender: {
+      defPokemon: 'incineroar', defSPs: [32, 0, 24, 0, 8, 2], defNature: 'impish',
+      defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {},
+    },
+    move, field: {}, debug: false,
   })
 
-  it('la descrizione però promette anche l\'altra metà', () => {
-    // Il fatto che rende la voce «parziale» invece che completa. Sta scritto
-    // qui perché non resti solo in un commento.
-    expect(it_.abilities_desc['eelevate']).toContain('quando mette KO')
+  it('la voce porta tutt\'e due le metà', () => {
+    expect(ABILITY_EFFECTS['eelevate'])
+      .toEqual({ levitate: true, boostStatPiuAltaSuKO: true })
+  })
+
+  it('l\'interruttore esiste nei valori di riposo, spento', () => {
+    // Se sparisse, `emptyPokemon()` smetterebbe di crearlo e la levetta
+    // dell'editor scriverebbe su un campo che nessuno legge.
+    expect(DEFAULT_ABILITY_FLAGS).toHaveProperty('eelevateKOActive', false)
+  })
+
+  it('spento non cambia niente', () => {
+    // Il valore di riposo non deve regalare un boost a chi non l\'ha chiesto.
+    expect(conKO(false, 'wild charge').rolls)
+      .toEqual(calculateDamage({
+        attacker: {
+          atkPokemon: 'eelektross-mega', atkSPs: [0, 32, 0, 32, 0, 0],
+          atkNature: 'adamant', atkAbility: 'eelevate', atkItem: null, level: 50,
+        },
+        defender: {
+          defPokemon: 'incineroar', defSPs: [32, 0, 24, 0, 8, 2], defNature: 'impish',
+          defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {},
+        },
+        move: 'wild charge', field: {}, debug: false,
+      }).rolls)
+  })
+
+  it('acceso alza l\'ATTACCO, che è la statistica più alta di Eelektross Mega', () => {
+    // I numeri, perché a occhio si sbaglia: base 145 contro 135 di Att.
+    // Speciale, 32 SP in tutt'e due, natura Adamant. Attacco 216, Att.
+    // Speciale 168. La prima versione di questo test usava Quiet, che alza
+    // l'Att. Speciale: 205 contro 197, cioè la statistica più alta era
+    // l'ALTRA e il test è uscito rosso al primo colpo. Quindi una mossa
+    // fisica cresce…
+    expect(conKO(true, 'wild charge').maxDmg)
+      .toBeGreaterThan(conKO(false, 'wild charge').maxDmg)
+  })
+
+  it('…e una speciale no, perché il boost va a UNA statistica sola', () => {
+    // Il test che distingue «+1 alla più alta» da «+1 a tutto». Senza, un
+    // ramo che alzasse entrambe passerebbe quello sopra.
+    expect(conKO(true, 'thunderbolt').rolls).toEqual(conKO(false, 'thunderbolt').rolls)
+  })
+
+  it('la statistica più alta è quella PRIMA del +1, e gli stadi la spostano', () => {
+    // Con l'Attacco a −6 e l'Att. Speciale a 0, la più alta diventa quella
+    // speciale e il boost cambia bersaglio. È la prova che non c'è nessuna
+    // statistica scritta a mano nel ramo.
+    const conStadi = (attivo) => calculateDamage({
+      attacker: {
+        atkPokemon: 'eelektross-mega', atkSPs: [0, 32, 0, 32, 0, 0],
+        atkNature: 'adamant', atkAbility: 'eelevate', atkItem: null, level: 50,
+        atkBoost: -6,
+        atkAbilityFlags: { eelevateKOActive: attivo },
+      },
+      defender: {
+        defPokemon: 'incineroar', defSPs: [32, 0, 24, 0, 8, 2], defNature: 'impish',
+        defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {},
+      },
+      move: 'thunderbolt', field: {}, debug: false,
+    })
+    expect(conStadi(true).maxDmg).toBeGreaterThan(conStadi(false).maxDmg)
+  })
+
+  it('vale anche quando ce l\'ha il DIFENSORE', () => {
+    // Se il ramo guardasse solo l'attaccante, questo caso non si muoverebbe.
+    //
+    // Serve però una configurazione in cui la statistica più alta sia una
+    // DIFESA, e non è quella di riposo: Eelektross Mega ha l'Attacco a 145 e
+    // resta davanti a tutto. Con Attacco e Att. Speciale a −6 la più alta
+    // diventa la Dif. Speciale, e lì va il +1 — quindi una mossa speciale
+    // cala.
+    const contro = (attivo) => calculateDamage({
+      attacker: {
+        atkPokemon: 'incineroar', atkSPs: [0, 0, 0, 32, 0, 0], atkNature: 'modest',
+        atkAbility: null, atkItem: null, level: 50,
+      },
+      defender: {
+        defPokemon: 'eelektross-mega', defSPs: [32, 0, 16, 0, 16, 0], defNature: 'careful',
+        defAbility: 'eelevate', defItem: null, defBoost: 0, spDefBoost: 0,
+        defAtkBoost: -6, defSpAtkBoost: -6,
+        defAbilityFlags: { eelevateKOActive: attivo },
+      },
+      move: 'flamethrower', field: {}, debug: false,
+    })
+    expect(contro(true).maxDmg, 'il +1 in difesa non riduce il colpo')
+      .toBeLessThan(contro(false).maxDmg)
+  })
+
+  it('e sull\'attaccante non tocca la difesa, né viceversa', () => {
+    // Il controllo negativo del caso sopra: nella configurazione di riposo la
+    // più alta di Eelektross Mega è l'Attacco, quindi in DIFESA il +1 non
+    // sposta il colpo che subisce.
+    const contro = (attivo) => calculateDamage({
+      attacker: {
+        atkPokemon: 'incineroar', atkSPs: [0, 32, 0, 0, 0, 0], atkNature: 'adamant',
+        atkAbility: null, atkItem: null, level: 50,
+      },
+      defender: {
+        defPokemon: 'eelektross-mega', defSPs: [32, 0, 16, 0, 16, 0], defNature: 'careful',
+        defAbility: 'eelevate', defItem: null, defBoost: 0, spDefBoost: 0,
+        defAbilityFlags: { eelevateKOActive: attivo },
+      },
+      move: 'knock off', field: {}, debug: false,
+    })
+    expect(contro(true).rolls).toEqual(contro(false).rolls)
+  })
+
+  it('il link condiviso se la porta dietro', () => {
+    // Il difetto che questa aggiunta ha quasi introdotto: un flag nuovo che la
+    // codifica del link non conosce torna spento dall'altra parte, e chi apre
+    // il link vede un numero diverso senza sapere perché. Il presidio generico
+    // sta in `share.test.js`; qui c'è il caso concreto.
+    expect(Object.keys(DEFAULT_ABILITY_FLAGS)).toContain('eelevateKOActive')
   })
 })

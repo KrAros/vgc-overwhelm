@@ -19,6 +19,7 @@ export const DEFAULT_ABILITY_FLAGS = {
   flashFireActive:       false, // attaccante: boost ×1.5 Fire (dopo aver ricevuto mossa Fire)
   multiscaleActive:      true,  // difensore: ×0.5 danno ricevuto se HP pieni (default true)
   supremeOverlordKOs:    0,     // attaccante: numero alleati KO (0-5), boost ×(1 + n*0.1)
+  eelevateKOActive:      false, // Rapidascesa: ha messo KO — +1 alla stat più alta
 }
 
 /**
@@ -219,12 +220,14 @@ export const ABILITY_EFFECTS = {
   // e' selezionabile da noi, senza effetto, e NON e' fra le 108 — cioe' il
   // registro ha misurato che nemmeno il riferimento la calcola nel danno.
   //
-  // Non sparisce pero': sta nel registro delle PARZIALI in
-  // `descrizioniSilenziose.test.js`, perche' il presidio da solo non
-  // l'avrebbe vista — gli basta che l'abilita' abbia UN effetto per non
-  // considerarla muta.
+  // Non e' un ramo del motore: e' uno STATO, e vive nello strato di
+  // preparazione insieme a Intrepid Sword e Download, con l'interruttore
+  // `eelevateKOActive` che l'utente accende nell'editor. Il boost va alla
+  // statistica piu' alta, che `setHighestStat` calcola gia' per le abilita'
+  // paradosso — e la calcola PRIMA del +1, come dev'essere: non si sceglie la
+  // statistica in base a un potenziamento che si sta per applicare.
   'levitate':    { levitate: true },
-  'eelevate':    { levitate: true },
+  'eelevate':    { levitate: true, boostStatPiuAltaSuKO: true },
   // ── Lo strato di preparazione (sessione J) ────────────────────────────────
   //
   // Queste abilità non stanno in nessuna delle quattro catene di
