@@ -434,3 +434,38 @@ export const MOSSE_SENZA_PARENTAL_BOND = new Set([
   'rollout',
   'ice ball',
 ])
+/**
+ * ─── LE QUATTRO MOSSE CHE DAMP SPEGNE ───────────────────────────────────────
+ *
+ * Trascritte da `damage_MASTER.js:1138`, che le elenca per nome:
+ *
+ *     if ((defAbility === "Damp" || attacker.ability === "Damp") &&
+ *         ["Self-Destruct", "Explosion", "Mind Blown", "Misty Explosion"]
+ *           .indexOf(move.name) !== -1) { ... return { damage: [0] } }
+ *
+ * ─── PERCHÉ QUESTA LISTA STA QUI E NON IN `FLAG_MOSSE` ─────────────────────
+ *
+ * Perché nel vendor non c'è un flag da trascrivere: è un elenco di nomi
+ * scritto dentro la condizione. `FLAG_MOSSE` serve quando NCP classifica le
+ * mosse e noi copiamo la classificazione; qui non classifica niente, nomina
+ * quattro mosse. Inventare un flag `esplosiva` che il vendor non ha vorrebbe
+ * dire dedurre una categoria dove il riferimento fa un elenco.
+ *
+ * È la seconda lista di nomi nel motore dopo `MOSSE_SENZA_PARENTAL_BOND`, e
+ * con una differenza che conta: quella lì registra dove DIVERGIAMO dal
+ * riferimento e la fonte è una wiki, questa è trascritta dall'oracolo
+ * eseguibile e ci fa combaciare con lui.
+ *
+ * ─── DUE LATI, NON UNO ─────────────────────────────────────────────────────
+ *
+ * La condizione guarda `defAbility === "Damp" || attacker.ability === "Damp"`.
+ * Non è una difesa: chi ha Damp spegne queste mosse anche a sé stesso. Un
+ * motore che controllasse solo il difensore sarebbe metà abilità con l'aria
+ * di essere intera — lo stesso errore che Unaware invitava a fare.
+ */
+export const MOSSE_ANNULLATE_DA_DAMP = new Set([
+  'self-destruct',
+  'explosion',
+  'mind blown',
+  'misty explosion',
+])

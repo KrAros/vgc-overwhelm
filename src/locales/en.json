@@ -1893,7 +1893,9 @@
     "water-bubble": "Halves the damage the Pokémon takes from Fire-type moves and doubles the power of its Water-type moves. The Pokémon cannot be burned.",
     "weak-armor": "When the Pokémon takes damage from a physical move, its Defense is lowered by 1 stage, but its Speed is boosted by 2 stages.",
     "white-smoke": "Stats cannot be lowered by other Pokémon's moves or Abilities.",
-    "zero-to-hero": "Changes into its Hero Form when it switches out of battle."
+    "zero-to-hero": "Changes into its Hero Form when it switches out of battle.",
+    "storm-drain": "Draws in all Water-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage.",
+    "well-baked-body": "Fire-type moves do not work on the Pokémon. Instead, they boost its Defense stat by 2 stages."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) active — Speed ×2",
@@ -1909,7 +1911,12 @@
     "sand-rush": "$t(abilities.sand-rush) active — Speed ×2",
     "shadow-shield": "$t(abilities.shadow-shield) active — damage halved (full HP)",
     "slush-rush": "$t(abilities.slush-rush) active — Speed ×2",
-    "swift-swim": "$t(abilities.swift-swim) active — Speed ×2"
+    "swift-swim": "$t(abilities.swift-swim) active — Speed ×2",
+    "sap-sipper": "$t(abilities.sap-sipper) — Grass move absorbed: +1 Attack",
+    "lightning-rod": "$t(abilities.lightning-rod) — Electric move absorbed: +1 Sp. Atk",
+    "storm-drain": "$t(abilities.storm-drain) — Water move absorbed: +1 Sp. Atk",
+    "motor-drive": "$t(abilities.motor-drive) — Electric move absorbed: +1 Speed",
+    "well-baked-body": "$t(abilities.well-baked-body) — Fire move absorbed: +2 Defense"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1925,6 +1932,11 @@
     "sand-rush": "Doubles Speed in a sandstorm",
     "shadow-shield": "$t(abilities.shadow-shield) inactive — HP not full",
     "slush-rush": "Doubles Speed in snow",
-    "swift-swim": "Doubles Speed in rain"
+    "swift-swim": "Doubles Speed in rain",
+    "sap-sipper": "Immune to Grass moves — none absorbed yet",
+    "lightning-rod": "Immune to Electric moves — none absorbed yet",
+    "storm-drain": "Immune to Water moves — none absorbed yet",
+    "motor-drive": "Immune to Electric moves — none absorbed yet",
+    "well-baked-body": "Immune to Fire moves — none absorbed yet"
   }
 }

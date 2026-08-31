@@ -1893,7 +1893,9 @@
     "water-bubble": "Dimezza il danno subito dalle mosse Fuoco, raddoppia la potenza delle mosse Acqua. Non può essere bruciato.",
     "weak-armor": "Quando subisce danno fisico, la Difesa scende di 1 grado ma la Velocità sale di 2 gradi.",
     "white-smoke": "Le statistiche non possono essere abbassate da altri Pokémon.",
-    "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe."
+    "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe.",
+    "storm-drain": "Attira le mosse Acqua. Non ne subisce i danni; invece, l'Attacco Speciale sale di 1 grado.",
+    "well-baked-body": "Le mosse Fuoco non hanno effetto. Se colpito da una, la Difesa sale di 2 gradi."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) attiva — Velocità ×2",
@@ -1909,7 +1911,12 @@
     "sand-rush": "$t(abilities.sand-rush) attiva — Velocità ×2",
     "shadow-shield": "$t(abilities.shadow-shield) attivo — danno dimezzato (HP pieni)",
     "slush-rush": "$t(abilities.slush-rush) attiva — Velocità ×2",
-    "swift-swim": "$t(abilities.swift-swim) attivo — Velocità ×2"
+    "swift-swim": "$t(abilities.swift-swim) attivo — Velocità ×2",
+    "sap-sipper": "$t(abilities.sap-sipper) — mossa Erba assorbita: +1 Attacco",
+    "lightning-rod": "$t(abilities.lightning-rod) — mossa Elettro assorbita: +1 Att. Speciale",
+    "storm-drain": "$t(abilities.storm-drain) — mossa Acqua assorbita: +1 Att. Speciale",
+    "motor-drive": "$t(abilities.motor-drive) — mossa Elettro assorbita: +1 Velocità",
+    "well-baked-body": "$t(abilities.well-baked-body) — mossa Fuoco assorbita: +2 Difesa"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1925,6 +1932,11 @@
     "sand-rush": "Raddoppia la Velocità durante una tempesta di sabbia",
     "shadow-shield": "$t(abilities.shadow-shield) inattivo — HP non pieni",
     "slush-rush": "Raddoppia la Velocità durante una nevicata",
-    "swift-swim": "Raddoppia la Velocità sotto la pioggia"
+    "swift-swim": "Raddoppia la Velocità sotto la pioggia",
+    "sap-sipper": "Immune alle mosse Erba — nessuna ancora assorbita",
+    "lightning-rod": "Immune alle mosse Elettro — nessuna ancora assorbita",
+    "storm-drain": "Immune alle mosse Acqua — nessuna ancora assorbita",
+    "motor-drive": "Immune alle mosse Elettro — nessuna ancora assorbita",
+    "well-baked-body": "Immune alle mosse Fuoco — nessuna ancora assorbita"
   }
 }

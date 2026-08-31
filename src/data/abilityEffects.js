@@ -20,6 +20,7 @@ export const DEFAULT_ABILITY_FLAGS = {
   multiscaleActive:      true,  // difensore: ×0.5 danno ricevuto se HP pieni (default true)
   supremeOverlordKOs:    0,     // attaccante: numero alleati KO (0-5), boost ×(1 + n*0.1)
   eelevateKOActive:      false, // Rapidascesa: ha messo KO — +1 alla stat più alta
+  assorbimentoAttivo:    false, // Parafulmine e le altre quattro: ha gia' assorbito una mossa
 }
 
 /**
@@ -63,7 +64,52 @@ export const ABILITY_EFFECTS = {
   'adaptability': { adaptability: true, showInSmogon: true },
 
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
-  'fire-mane':   { fireMane: true, showInSmogon: true },
+  //
+  // Nel riferimento sono clausole in `or` dentro un solo `if` — `calcAtkMods`
+  // punto d, «1.5x Offensive Abilities», `damage_MASTER.js:1941-1955` — che
+  // spinge un solo `0x1800`. Cambia solo il tipo, quindi qui cambia solo il
+  // valore del campo: nessuna delle sei ha una riga di motore sua.
+  //
+  // Fino alla sessione W Criniera Ardente aveva un flag col suo nome,
+  // `fireMane`. Era il nome di UNA abilita' scritto nel motore per una regola
+  // che ne governa sei: adesso e' il tipo, come le altre cinque.
+  'fire-mane':     { boostTipoAtk: TYPES.FIRE,     showInSmogon: true },
+  'dragons-maw':   { boostTipoAtk: TYPES.DRAGON,   showInSmogon: true },
+  'steelworker':   { boostTipoAtk: TYPES.STEEL,    showInSmogon: true },
+  'rocky-payload': { boostTipoAtk: TYPES.ROCK,     showInSmogon: true },
+
+  // Sharpness e Gorilla Tactics stanno nello STESSO `if` delle quattro sopra e
+  // spingono lo stesso `0x1800`, ma non guardano il tipo: la prima il flag
+  // `isSlice` della mossa (`:1952`), la seconda la sua categoria (`:1953`).
+  //
+  // Le trenta mosse taglienti NON sono scritte qui: e' il flag `slicing` di
+  // moves.json, che `gen-flag-dati.mjs` trascrive da `isSlice` del vendor.
+  //
+  // Su Gorilla Tactics il riferimento scrive `&& !attacker.isDynamax`: il
+  // Dynamax non esiste in Champions e il motore non lo modella, quindi la
+  // condizione qui non compare. E' l'unico pezzo dei sei che non trascriviamo,
+  // e non perche' non torni: perche' non ha nulla su cui essere falso.
+  'sharpness':       { sharpness: true,      showInSmogon: true },
+  'gorilla-tactics': { gorillaTactics: true, showInSmogon: true },
+
+  // Transistor NON e' nell'`if` delle sei: sta nell'`else if` successivo, e
+  // vale meno.
+  //
+  // ─── IL PUNTO DOVE UNA LETTURA DISTRATTA SBAGLIA ─────────────────────────
+  // Nel riferimento l'abilita' compare DUE volte, con due numeri diversi:
+  //
+  //     :1946   attacker.ability === "Transistor" && ... && gen == 8    0x1800
+  //     :1965   attacker.ability === "Transistor" && ... && gen >= 9    0x14CD
+  //
+  // Il primo e' il ramo x1.5, il secondo quello x1.3. Il nostro contesto gira
+  // a `gen = 10` (Champions, `scripts/ncp/contesto.mjs:83`), quindi vale il
+  // SECONDO: x1.3. Chi cercasse «Transistor» e si fermasse alla prima riga
+  // trovata darebbe un numero plausibile e sbagliato del quindici per cento.
+  //
+  // Ha un flag suo e non `boostTipoAtk` proprio per questo: sta in un ramo
+  // diverso con un moltiplicatore diverso, e confonderlo con gli altri sei
+  // sarebbe stato il modo piu' comodo per riprodurre l'errore.
+  'transistor':  { transistor: true, showInSmogon: true },
 
   // Impeto Sabbia: x1.3 sulle mosse Roccia, Terra e Acciaio, ma SOLO con la
   // tempesta di sabbia in campo.
@@ -75,6 +121,31 @@ export const ABILITY_EFFECTS = {
   // riferimento calcola e' un'ALTRA. Adesso ci sono tutt'e due.
   'sand-force':  { sandForce: true, showInSmogon: true },
 
+  // Sheer Force: x1.3 sulle mosse con un effetto secondario. Nel riferimento e'
+  // il punto e.i (`damage_MASTER.js:1628`), cioe' il PRIMO anello della catena
+  // `else if` di cui Impeto Sabbia e' il secondo — quindi i due non si sommano
+  // mai, e nell'ordine dei push Sheer Force viene prima.
+  //
+  // ─── LE 193 MOSSE NON SONO SCRITTE QUI, E NON SI POTEVANO DEDURRE ───────
+  //
+  // E' il flag piu' grosso che abbiamo trascritto: `secondario` in moves.json,
+  // da `hasSecondaryEffect` del vendor. Duecentosette voci la' dentro, 193
+  // delle quali esistono anche da noi.
+  //
+  // «Ha un effetto secondario» sembra una cosa che si possa decidere leggendo
+  // la mossa, e non lo e': il vendor marca anche mosse dove l'effetto e' certo
+  // invece che probabilistico, e ne lascia fuori altre che un lettore ci
+  // metterebbe. Scriverne 193 a mano sarebbe stato 193 occasioni di sbagliare
+  // in silenzio.
+  //
+  // ─── COSA NON FA ────────────────────────────────────────────────────────
+  //
+  // Nel gioco Sheer Force TOGLIE l'effetto secondario e disattiva il
+  // contraccolpo del Life Orb. Il riferimento non modella ne' l'una ne'
+  // l'altra cosa nel danno, e nemmeno noi: qui c'e' il x1.3 e basta, che e'
+  // tutto quello che il calcolo del danno vede.
+  'sheer-force': { sheerForce: true, showInSmogon: true },
+
   // ── Difensore: immunita' per famiglia di mossa ───────────────────────────
   //
   // Antisuono: le mosse sonore non hanno effetto. Nel riferimento sta in
@@ -85,6 +156,107 @@ export const ABILITY_EFFECTS = {
   // Le diciotto mosse sonore NON sono scritte nel motore: e' il flag `sound`
   // di moves.json, che `gen-flag-dati.mjs` trascrive da `isSound` del vendor.
   'soundproof':  { soundproof: true },
+
+  // ── Le undici immunita' dello stesso `||` ────────────────────────────────
+  //
+  // Nel riferimento sono UNA condizione sola con un solo `return damage: [0]`
+  // (`damage_MASTER.js:1107-1116`). Non sono riduzioni: la funzione esce, e
+  // quello che l'utente deve leggere e' «non ha effetto», non un numero.
+  //
+  // Otto guardano il TIPO della mossa, quindi qui portano il tipo e non un
+  // flag col loro nome: la regola e' una, cambia il valore.
+  //
+  //   Grass       Sap Sipper
+  //   Fire        Well-Baked Body            (Flash Fire e' gia' scritta a parte)
+  //   Water       Dry Skin, Water Absorb, Storm Drain
+  //   Electric    Motor Drive, Volt Absorb, Lightning Rod
+  //   Ground      Earth Eater                (Levitate ed Eelevate stanno sotto)
+  //
+  // Le altre tre guardano una famiglia di mosse, e la famiglia viene sempre da
+  // un flag di moves.json trascritto dal vendor: mai da una lista scritta qui.
+  //
+  //   Bulletproof   flag `bullet`  (26 mosse, da `isBullet`)
+  //   Wind Rider    flag `vento`   (14 mosse, da `isWind`)
+  //   Soundproof    flag `sound`   (18 mosse, da `isSound`) — gia' sopra
+  //
+  // ─── QUATTRO NON SONO RAGGIUNGIBILI, E CI SONO LO STESSO ─────────────────
+  // Well-Baked Body, Storm Drain, Wind Rider e Wonder Guard: nessuna specie
+  // legale in M-B le porta. Ma sono clausole dello STESSO `||`, e sceglierne
+  // otto su dodici dentro una condizione unica sarebbe stato decidere a mano
+  // quale meta' del riferimento vale. Il giorno che la specie entra,
+  // l'abilita' funziona senza toccare il motore.
+  //
+  // ─── CINQUE DI LORO FANNO ANCHE UN'ALTRA COSA ───────────────────────────
+  //
+  // Non si limitano ad annullare il colpo: alzano una statistica. La seconda
+  // meta' e' in `boostAssorbimento`, che dice quale statistica e di quanti
+  // gradi, e si applica quando l'interruttore `assorbimentoAttivo` e' acceso.
+  //
+  //   Sap Sipper        +1 Attacco          assorbendo una mossa Erba
+  //   Lightning Rod     +1 Att. Speciale    assorbendo una mossa Elettro
+  //   Storm Drain       +1 Att. Speciale    assorbendo una mossa Acqua
+  //   Motor Drive       +1 Velocita'        assorbendo una mossa Elettro
+  //   Well-Baked Body   +2 Difesa           assorbendo una mossa Fuoco
+  //
+  // Le altre tre (Water Absorb, Volt Absorb, Earth Eater) curano invece di
+  // potenziare, e la cura non e' una cosa che il calcolo del danno modelli:
+  // per loro c'e' l'immunita' e basta.
+  //
+  // ─── LA FONTE, CHE NON E' L'ORACOLO ─────────────────────────────────────
+  //
+  // Il riferimento NON conosce questa meta'. NCP implementa l'immunita'
+  // (`damage_MASTER.js:1110-1112`) e nient'altro: cerca «Lightning Rod» in
+  // tutto il vendor e trovi una riga sola, quella. Non e' una sua svista — e'
+  // lo stesso confine di Beast Boost e della seconda meta' di Rapidascesa,
+  // che il registro del divario ha gia' misurato come non calcolate.
+  //
+  // Quindi qui non c'e' un confronto roll per roll: i valori sono stati
+  // CHIESTI a Simone e confermati da lui. E' la stessa procedura di Parental
+  // Bond e di Skill Link, e come la' resta scritto che la fonte e' una persona
+  // e non un programma da eseguire.
+  //
+  // ─── PERCHE' UN INTERRUTTORE ────────────────────────────────────────────
+  //
+  // Perche' «ha gia' assorbito una mossa» e' un fatto del turno precedente, e
+  // l'app calcola un colpo solo. Stessa forma di Flash Fire, che dichiara la
+  // stessa cosa per il Fuoco.
+  'sap-sipper':      { immuneTipo: TYPES.GRASS,    boostAssorbimento: { stat: 'at', gradi: 1 } },
+  'well-baked-body': { immuneTipo: TYPES.FIRE,     boostAssorbimento: { stat: 'df', gradi: 2 } },
+  'water-absorb':    { immuneTipo: TYPES.WATER },
+  'storm-drain':     { immuneTipo: TYPES.WATER,    boostAssorbimento: { stat: 'sa', gradi: 1 } },
+  'motor-drive':     { immuneTipo: TYPES.ELECTRIC, boostAssorbimento: { stat: 'sp', gradi: 1 } },
+  'volt-absorb':     { immuneTipo: TYPES.ELECTRIC },
+  'lightning-rod':   { immuneTipo: TYPES.ELECTRIC, boostAssorbimento: { stat: 'sa', gradi: 1 } },
+  'earth-eater':     { immuneTipo: TYPES.GROUND },
+  'bulletproof':     { immuneProiettili: true },
+  'wind-rider':      { immuneVento: true },
+
+  // Dry Skin ha due meta' che vanno in due punti diversi:
+  //
+  //   immunityChecks   (:1110)  immune all'Acqua, come Water Absorb
+  //   calcBPMods i     (:1686)  x1.25 (0x1400) sulle mosse FUOCO
+  //
+  // La seconda e' un `else if` del punto h, che e' Heatproof prima della nona
+  // generazione: a gen 10 h non scatta mai, quindi i si valuta sempre. La
+  // catena e' trascritta com'e' lo stesso, perche' l'`else` e' la specifica.
+  'dry-skin':        { immuneTipo: TYPES.WATER, debolePerIlFuoco: true },
+
+  // Wonder Guard: passa SOLO il super efficace. Il riferimento scrive
+  // `typeEffectiveness <= 1`, cioe' anche l'efficacia neutra e' annullata —
+  // non e' una resistenza forte, e' un filtro.
+  //
+  // La clausola porta anche `move.type !== 'Typeless'` e un'eccezione di
+  // quarta generazione su Fire Fang. Il primo non lo trascriviamo perche' non
+  // abbiamo mosse senza tipo; la seconda perche' e' `gen !== 4` e noi siamo a
+  // 10. Sono le uniche due parti di questo `||` che restano fuori, e restano
+  // fuori perche' non hanno nulla su cui essere vere.
+  'wonder-guard':    { wonderGuard: true },
+
+  // Damp: quattro mosse non partono proprio (`damage_MASTER.js:1138`). Vale da
+  // TUTT'E DUE i lati — chi ce l'ha le spegne anche a se' stesso — e i quattro
+  // nomi stanno in `MOSSE_ANNULLATE_DA_DAMP` dentro `lib/rules.js`, perche' nel
+  // vendor non c'e' un flag da trascrivere ma un elenco.
+  'damp':            { damp: true },
 
   // Le tre che azzerano le mosse con priorita'. Nel riferimento sono un solo
   // ramo di `immunityChecks` (`damage_MASTER.js:1155`) e un solo
@@ -178,6 +350,55 @@ export const ABILITY_EFFECTS = {
   // modificatori `chainMods` e' commutativo. Adesso lo e'. Un'aura messa dopo
   // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
   'technician':  { technician: true, showInSmogon: true },
+
+  // ── Attaccante: catena della POTENZA, non della statistica ───────────────
+  //
+  // Iron Fist e Reckless stanno nella stessa riga del riferimento — un solo
+  // `else if` con un solo `bpMods.push(0x1333)`, `damage_MASTER.js:1604` — e
+  // quel ramo e' l'ALTERNATIVA di Galvanize e compagnia (punto c.i): se la
+  // mossa e' stata convertita di tipo, il x1.2 del pugno non si somma.
+  //
+  // Il moltiplicatore e' 0x1333, cioe' x1.2. Non 0x14CD: quello e' il x1.3 del
+  // punto e, e i due si somigliano abbastanza da scambiarsi senza far rumore.
+  //
+  // Le ventidue mosse-pugno e le sedici col contraccolpo NON sono scritte qui:
+  // sono i flag `punch` e `rinculo` di moves.json, trascritti da `isPunch` e
+  // da `hasRecoil || recoilHP || hasCrash`.
+  'iron-fist':   { ironFist: true, showInSmogon: true },
+  'reckless':    { reckless: true, showInSmogon: true },
+
+  // ── Punk Rock, che compare due volte con due segni opposti ───────────────
+  //
+  //   calcBPMods punto e.v    (:1649)  chi ATTACCA: mosse sonore x1.3
+  //   calcFinalMods punto i   (:2370)  chi DIFENDE: mosse sonore x0.5
+  //
+  // Sono due punti diversi di due funzioni diverse. Un flag solo con due letture
+  // nel motore, come Unaware: farne meta' sarebbe stata un'abilita' che
+  // funziona solo quando conviene.
+  //
+  // Il ramo offensivo e' l'ultimo degli `else if` del punto e, quindi non si
+  // somma a Sheer Force, Sand Force, Analytic e Tough Claws. Quello difensivo
+  // e' un `if` a se' e si somma a tutto.
+  'punk-rock':   { punkRock: true, showInSmogon: true },
+
+  // ── Attaccante: modificatori FINALI ──────────────────────────────────────
+  //
+  // Tre abilita' che agiscono sull'ultimo anello, dopo la potenza e dopo le
+  // statistiche. Nel riferimento sono tre `if` separati e indipendenti
+  // (`calcFinalMods` punti b, d, e) — quindi si sommano fra loro: un critico
+  // poco efficace di chi ha Tinted Lens e Sniper prende tutt'e due.
+  //
+  //   Neuroforce    (:2336)  x1.25 (0x1400) se l'efficacia e' maggiore di 1
+  //   Sniper        (:2346)  x1.5  (0x1800) sul colpo critico
+  //   Tinted Lens   (:2351)  x2    (0x2000) se l'efficacia e' minore di 1
+  //
+  // Le soglie sono scritte sull'efficacia GREZZA, non sul suo logaritmo: il
+  // riferimento confronta `typeEffectiveness` con 1. Su una mossa immune
+  // l'efficacia e' 0, quindi minore di 1 — ma li' non si arriva, perche'
+  // l'immunita' esce prima con `damage: [0]`.
+  'neuroforce':  { neuroforce: true, showInSmogon: true },
+  'sniper':      { sniper: true, showInSmogon: true },
+  'tinted-lens': { tintedLens: true, showInSmogon: true },
 
   // Skill Link: le mosse multi-colpo colpiscono sempre il massimo.
   //

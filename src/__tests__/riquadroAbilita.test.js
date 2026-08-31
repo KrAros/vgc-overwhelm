@@ -67,19 +67,24 @@ describe('i riquadri delle abilità', () => {
     ).toBe(true)
   })
 
-  it('tutti e dieci i rami usano la costante', () => {
+  it('tutti e undici i rami usano la costante', () => {
     // Il conteggio è esplicito perché un ramo NUOVO che se la dimentica non
     // farebbe fallire il test sopra: non ricopierebbe la firma, semplicemente
     // non avrebbe nessun minimo.
     //
-    // Da nove a dieci con la levetta di Rapidascesa — «ha messo KO» — e il
-    // numero è stato alzato dopo aver visto il test rosso, che è il modo in
-    // cui doveva funzionare.
+    // Da nove a dieci con la levetta di Rapidascesa — «ha messo KO».
+    // Da dieci a undici con quella delle cinque abilità che assorbono — Sap
+    // Sipper, Lightning Rod, Storm Drain, Motor Drive, Well-Baked Body: un
+    // ramo solo per tutte e cinque, perché la forma è identica e la differenza
+    // sta nella tabella delle abilità, non nel riquadro.
+    //
+    // Tutt'e due le volte il numero è stato alzato DOPO aver visto il test
+    // rosso, che è il modo in cui questo presidio deve funzionare.
     expect(
       conCostante.length,
-      'i rami che rendono un riquadro non sono dieci: se ne hai aggiunto uno, '
+      'i rami che rendono un riquadro non sono undici: se ne hai aggiunto uno, '
       + 'deve usare RIQUADRO e questo numero va alzato di proposito',
-    ).toBe(10)
+    ).toBe(11)
   })
 
   it('la costante porta un minimo per entrambe le larghezze', () => {

@@ -374,6 +374,56 @@ const FLAG_MOSSE = {
   // una mossa che fa danno senza che NCP la marchi, e i due insiemi si
   // separano in silenzio. Il flag si trascrive, come gli altri sei.
   prioritaria: 'isPriority',
+  // `rinculo` entra per Reckless, che da' x1.2 alle mosse che si ritorcono
+  // contro chi le usa.
+  //
+  // ─── PERCHE' TRE CHIAVI E NON UNA ──────────────────────────────────────
+  // Perche' il riferimento ne guarda tre in `or` (damage_MASTER.js:1604):
+  //
+  //   attacker.ability === "Reckless" &&
+  //     (move.hasRecoil || move.recoilHP || move.hasCrash)
+  //
+  // Sono cose diverse: `recoilHP` e' il contraccolpo in frazione dei danni
+  // inflitti (Double-Edge, Flare Blitz — tredici mosse), `hasCrash` e' il
+  // danno che si prende chi manca il bersaglio (High Jump Kick, Jump Kick,
+  // Axe Kick, Supercell Slam — quattro), `hasRecoil` oggi non ce l'ha
+  // nessuna mossa ma il vendor lo controlla lo stesso, e allora lo
+  // controlliamo anche noi: se un giorno comparisse, comparirebbe da sola.
+  //
+  // Noi avevamo gia' `recoil` in moves.json, ma e' un'altra cosa ancora: e'
+  // la FRAZIONE, serve al pannello per scrivere «contraccolpo 33.3%», e non
+  // copre le quattro mosse con `hasCrash`. Usarlo per Reckless avrebbe dato
+  // il numero giusto su tredici mosse e quello sbagliato su quattro.
+  rinculo: ['hasRecoil', 'recoilHP', 'hasCrash'],
+  // `vento` entra per Wind Rider, che rende immuni alle mosse di vento.
+  //
+  // Quattordici mosse, e non sono quelle che il nome farebbe indovinare: ci
+  // sono Blizzard e Petal Blizzard, che vento nel nome non ce l'hanno, e
+  // Aeroblast, che nemmeno in italiano lo suggerisce. Scriverle a mano avrebbe
+  // significato dedurle da un'intuizione invece di leggerle.
+  //
+  // Wind Rider oggi non e' raggiungibile — nessuna specie legale in M-B ce
+  // l'ha — ma nel riferimento e' una clausola dello STESSO `||` di Sap Sipper
+  // e Bulletproof. Saltarla sarebbe stato scegliere a mano dentro una
+  // condizione unica.
+  vento: 'isWind',
+  // `secondario` entra per Sheer Force, che da' x1.3 alle mosse con un effetto
+  // secondario.
+  //
+  // ─── E' IL FLAG PIU' GROSSO CHE ABBIAMO TRASCRITTO ──────────────────────
+  // Duecentosette mosse nel vendor, contro le ventidue dei pugni e le
+  // diciotto delle sonore. Costa in bundle piu' di tutti gli altri sette messi
+  // insieme, e il costo va misurato e dichiarato invece che scoperto: il
+  // numero sta nel messaggio del commit.
+  //
+  // ─── E SOPRATTUTTO: NON E' DEDUCIBILE ───────────────────────────────────
+  // «Ha un effetto secondario» sembra una cosa che si possa decidere leggendo
+  // la mossa, e non lo e'. Non basta guardare `secondaries` di un'altra fonte
+  // ne' la percentuale: il vendor marca anche mosse dove l'effetto e' certo e
+  // non probabilistico, e ne lascia fuori altre che un lettore ci metterebbe.
+  // Duecentosette righe da indovinare sono duecentosette occasioni di
+  // sbagliare in silenzio, e questo flag esiste per non provarci.
+  secondario: 'hasSecondaryEffect',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -555,7 +605,10 @@ for (const [slug, voce] of Object.entries(mosse)) {
   const nome = iMosse.get(normalizza(slug))
   if (!nome) { mosseNonMappate++; continue }
   for (const [nostro, loro] of Object.entries(FLAG_MOSSE)) {
-    if (ncp.mosse[nome][loro]) {
+    // Una voce di FLAG_MOSSE e' una chiave del vendor o un elenco di chiavi
+    // in `or`: Reckless ne guarda tre, gli altri sette una sola.
+    const chiavi = Array.isArray(loro) ? loro : [loro]
+    if (chiavi.some(chiave => ncp.mosse[nome][chiave])) {
       voce[nostro] = true
       conteggioFlag[nostro]++
     } else if (nostro in voce) {

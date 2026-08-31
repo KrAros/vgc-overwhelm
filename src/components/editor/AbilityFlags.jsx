@@ -3,7 +3,7 @@
 
 // Solo `normalizeAbilityKey`: da T il componente NON legge più testo dal file
 // di meccaniche. Le descrizioni vivono nei file di traduzione, e basta.
-import { normalizeAbilityKey } from '../../data/abilityEffects.js'
+import { normalizeAbilityKey, ABILITY_EFFECTS } from '../../data/abilityEffects.js'
 import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
 import { TYPES } from '../../data/typeChart.js'
 import movesData from '../../data/moves.json'
@@ -209,6 +209,32 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
         </button>
         <span className={flags.eelevateKOActive ? TESTO_ACCESO : TESTO_SPENTO}>
           {flags.eelevateKOActive
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
+        </span>
+      </div>
+    )
+  }
+
+  // Le cinque che assorbono e potenziano. Un solo ramo per tutte, perche' la
+  // forma e' identica e la differenza — quale statistica, di quanti gradi —
+  // sta nella tabella delle abilita', non qui. Le stringhe le distinguono.
+  if (ABILITY_EFFECTS[key]?.boostAssorbimento) {
+    return (
+      <div className={`${RIQUADRO} gap-2 ${flags.assorbimentoAttivo ? ACCESO : SPENTO}`}>
+        <button
+          type="button"
+          onClick={() => onFlagChange('assorbimentoAttivo', !flags.assorbimentoAttivo)}
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
+            flags.assorbimentoAttivo ? PERNO_ACCESO : PERNO_SPENTO
+          }`}
+        >
+          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
+            flags.assorbimentoAttivo ? 'left-4' : 'left-0.5'
+          }`} />
+        </button>
+        <span className={flags.assorbimentoAttivo ? TESTO_ACCESO : TESTO_SPENTO}>
+          {flags.assorbimentoAttivo
             ? t(`abilities_desc_on.${key}`)
             : t(`abilities_desc_off.${key}`)}
         </span>

@@ -125,6 +125,11 @@ function costruisciLato(entrata) {
     // Rapidascesa: «ha messo KO un avversario». Un interruttore a parte da
     // `abilitaAccesa`, che significa già un'altra cosa (Intimidate).
     koFatto: entrata.koFatto === true,
+    // «Ha gia' assorbito una mossa del suo tipo»: Parafulmine e le altre
+    // quattro. Un interruttore a parte dagli altri due, perche' e' un fatto
+    // diverso — e perche' un Pokemon ha un'abilita' sola, quindi non possono
+    // mai accendersi insieme.
+    assorbimentoFatto: entrata.assorbimentoFatto === true,
     // Lo strumento può SPARIRE durante la preparazione. È l'unico campo che
     // esce da qui modificato oltre ai boost, ed è quello che rende visibile
     // nel danno la Booster Energy: Knock Off non trova più niente.
@@ -382,6 +387,43 @@ function checkBoostSuKO(lato) {
 }
 
 // ───────────────────────────────────────────────────────────────────────────
+// 7 · Il boost delle cinque che assorbono        nessuna riga del riferimento
+// ───────────────────────────────────────────────────────────────────────────
+//
+//   Sap Sipper        +1 Attacco          assorbendo una mossa Erba
+//   Lightning Rod     +1 Att. Speciale    assorbendo una mossa Elettro
+//   Storm Drain       +1 Att. Speciale    assorbendo una mossa Acqua
+//   Motor Drive       +1 Velocita'        assorbendo una mossa Elettro
+//   Well-Baked Body   +2 Difesa           assorbendo una mossa Fuoco
+//
+// ─── COME LA SESTA, QUESTA NON VIENE DA NCP ────────────────────────────────
+//
+// Il riferimento implementa l'immunita' di queste abilita' e nient'altro:
+// «Lightning Rod» compare in una riga sola di tutto il vendor,
+// `damage_MASTER.js:1112`. Non e' una svista — e' lo stesso confine di Beast
+// Boost e della seconda meta' di Rapidascesa.
+//
+// La fonte e' Simone, che ha confermato valori e condizioni su richiesta. Come
+// per Parental Bond e Skill Link resta scritto che la fonte e' una persona e
+// non un programma da eseguire: qui sotto non c'e' niente da confrontare roll
+// per roll, e la verifica e' per conseguenza — lo stadio sale di quanto deve,
+// sulla statistica giusta, e il danno si muove con lui.
+//
+// ─── PERCHE' DOPO `setHighestStat` ─────────────────────────────────────────
+//
+// Perche' alzando una statistica potrebbe cambiare quale sia la piu' alta, e
+// le abilita' paradosso leggono quel campo. Nessun Pokemon ha tutt'e due le
+// abilita', quindi oggi non e' osservabile — ma l'ordine e' quello giusto, e
+// non per caso.
+
+function checkBoostAssorbimento(lato) {
+  const boost = lato.effettoAbilita?.boostAssorbimento
+  if (!boost) return
+  if (!lato.assorbimentoFatto) return
+  lato.boosts[boost.stat] = limita(lato.boosts[boost.stat] + boost.gradi)
+}
+
+// ───────────────────────────────────────────────────────────────────────────
 // L'ingresso pubblico
 // ───────────────────────────────────────────────────────────────────────────
 
@@ -425,6 +467,9 @@ export function preparaCoppia({ attaccante, difensore, meteo = null, terreno = n
 
   checkBoostSuKO(p1)
   checkBoostSuKO(p2)
+
+  checkBoostAssorbimento(p1)
+  checkBoostAssorbimento(p2)
 
   return {
     attaccante: risultato(p2),

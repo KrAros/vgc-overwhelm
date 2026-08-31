@@ -3,12 +3,13 @@
 
 import { useTranslation } from 'react-i18next'
 import { calcStat } from '../../lib/stats.js'
-import { applyBoost, STAT_NAMES, MAX_SP_PER_STAT } from '../../lib/rules.js'
+import { STAT_NAMES, MAX_SP_PER_STAT } from '../../lib/rules.js'
+import { statMostrata } from '../../lib/statMostrata.js'
 import { NATURE_MODIFIERS } from '../../data/natures.js'
 
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
-export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, speedWeatherActive, tailwindActive = false }) {
+export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, slot, weather, terrain, tailwindActive = false }) {
   const { t } = useTranslation()
   const finalStat = calcStat(base, sp, level, nature, statIdx)
 
@@ -19,14 +20,28 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
      dichiarata del progetto. */
   const nome = (chiave) => t(`aria.${chiave}`, { stat: STAT_NAMES[statIdx] })
 
-  // Abilità meteo-velocità: raddoppiano la Spe sotto il meteo corrispondente
-  const speedMult = statIdx === 5 ? (speedWeatherActive ? 2 : 1) * (tailwindActive ? 2 : 1) : 1
-  const speedBase = speedMult > 1 ? finalStat * speedMult : null
-  const effectiveStat = speedBase ?? finalStat
+  /* ─── LA COLONNA «MOD» NON SI CALCOLA PIÙ QUI ────────────────────────────
 
-  const boostedStat = boostVal !== 0
-    ? applyBoost(effectiveStat, boostVal)
-    : speedBase  // se nessun boost ma abilità meteo attiva, mostra il valore ×2
+     Qui c'erano tre righe che applicavano il ×2 delle abilità meteo e quello
+     di Tailwind, e basta. Sapevano meno di quanto sapesse l'app: a due
+     centimetri di distanza `calcEffectiveSpe` conosceva anche lo Choice
+     Scarf, l'Iron Ball, il Macho Brace, Surge Surfer e il ×1.5 del paradosso,
+     e sullo stesso Pokémon nella stessa schermata i due numeri divergevano.
+
+     E non mostravano NESSUNO dei potenziamenti che non riguardano la
+     Velocità: Huge Power, Fur Coat, Gorilla Tactics, il ×1.3 delle abilità
+     paradosso, il +1 di Rapidascesa quando ha messo KO, l'Intrepid Sword.
+     Tutta roba che il motore applica al danno senza che il numero comparisse
+     da nessuna parte.
+
+     Adesso la risposta la dà `statMostrata`, che è una sola e vale per tutte
+     e sei le righe. La regola è di Simone: di un'abilità che potenzia una
+     statistica si deve SEMPRE poter leggere il nuovo valore. */
+  const { effettiva, modificata } = statMostrata(slot, statIdx, {
+    meteo: weather, terreno: terrain, tailwind: tailwindActive, livello: level,
+  })
+  const boostedStat = modificata ? effettiva : null
+  const alzata = modificata && effettiva > finalStat
 
   const mod = nature && NATURE_MODIFIERS[nature]
   const isBoost = mod && mod[0] !== 0 && mod[0] === statIdx
@@ -101,7 +116,7 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
               <option key={v} value={v}>{v > 0 ? `+${v}` : v}</option>
             ))}
           </select>
-          <span className={`text-xs w-8 text-center ${boostedStat ? (speedBase || boostVal > 0 ? 'text-green-400' : 'text-red-400') : 'text-gray-400'}`}>
+          <span className={`text-xs w-8 text-center ${boostedStat ? (alzata ? 'text-green-400' : 'text-red-400') : 'text-gray-400'}`}>
             {boostedStat ?? '—'}
           </span>
         </div>

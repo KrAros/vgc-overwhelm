@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T13:02:05.165Z",
+    "generatedAt": "2026-08-31T14:35:55.581Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
-    "fileEsaminati": 20,
+    "fileEsaminati": 21,
     "abilitaNelMotore": 16,
     "strumentiNelMotore": 27,
     "classificate": 8,
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 469,
+        "riga": 518,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -77,7 +77,7 @@
       "nota": "preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461",
       "prova": {
         "file": "src/lib/preparazione.js",
-        "riga": 278,
+        "riga": 283,
         "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
       }
     },
@@ -134,7 +134,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 341,
+          "riga": 388,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -142,7 +142,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 469,
+          "riga": 518,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -174,7 +174,7 @@
         "chiave": "rattled",
         "prova": {
           "file": "src/lib/preparazione.js",
-          "riga": 278,
+          "riga": 283,
           "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
         }
       },
