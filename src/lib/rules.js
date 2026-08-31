@@ -372,3 +372,65 @@ export function normalizzaMeteo(meteo) {
  * "nessun KO in N turni".
  */
 export const MAX_HITS = 9
+
+/**
+ * ─── LE MOSSE SU CUI PARENTAL BOND NON SI ATTIVA ────────────────────────────
+ *
+ * Questo elenco NON viene dal riferimento, ed è l'unico punto del motore in
+ * cui ci discostiamo da lui di proposito. Va quindi letto sapendo cos'è.
+ *
+ * Il riferimento applica Parental Bond a ogni mossa che non sia già
+ * multi-colpo e che non colpisca più bersagli insieme. Nel gioco non è così:
+ * ci sono mosse su cui il secondo colpo non arriva, e il riferimento non le
+ * modella perché il suo scopo è il numero di un colpo, non la sequenza del
+ * turno.
+ *
+ * ─── LA FONTE, E LA CATENA DI CORREZIONI CHE HA RICHIESTO ──────────────────
+ *
+ * `wiki.pokemoncentral.it/Amorefiliale`, sezione Effetti, **corretta da
+ * Simone su tre punti**. La wiki elenca una decina di famiglie escluse; delle
+ * sue esclusioni queste quattro sono le uniche che ci riguardano, e due voci
+ * della wiki sono state tolte perché sbagliate:
+ *
+ *   MOSSE A CARICAMENTO — la wiki le esclude, e sbaglia. Con Parental Bond
+ *   la mossa carica al primo turno e al secondo colpisce DUE volte. Il
+ *   riferimento fa già così, quindi non c'è niente da aggiungere.
+ *
+ *   UPROAR — la wiki la esclude, e sbaglia. Sceglie un bersaglio singolo fra
+ *   gli avversari adiacenti, quindi non è come Terremoto che li colpisce
+ *   tutti insieme: l'abilità si attiva e colpisce due volte. Anche qui il
+ *   riferimento ha ragione.
+ *
+ * Le mosse a danno fisso e le OHKO che la wiki elenca non compaiono qui
+ * perché da noi hanno potenza 0: al calcolo del danno non arrivano.
+ *
+ * ─── PERCHÉ IL SECONDO COLPO NON C'È ───────────────────────────────────────
+ *
+ * Due ragioni diverse, e vale la pena distinguerle perché una delle due non è
+ * una regola dell'abilità:
+ *
+ *   explosion, self-destruct   il primo colpo manda KO CHI ATTACCA, quindi un
+ *                              secondo colpo non può esistere. Non è
+ *                              un'esclusione, è una conseguenza — ma il numero
+ *                              che l'app deve mostrare è lo stesso.
+ *
+ *   rollout, ice ball          l'abilità viene ignorata del tutto: la mossa
+ *                              colpisce una volta per turno come farebbe con
+ *                              qualunque altro Pokémon.
+ *
+ * ─── DOVE SI VEDE LA DIVERGENZA ────────────────────────────────────────────
+ *
+ * `parentalBond.test.js` la elenca caso per caso: su queste quattro il
+ * confronto col riferimento è DIVERSO di proposito, ed è scritto lì come
+ * fatto rosso-o-verde invece che come nota.
+ *
+ * Explosion e Self-Destruct sono mosse ad area: in doppi il riferimento le
+ * esclude già da sé, e la divergenza resta solo quando in campo è rimasto un
+ * bersaglio solo.
+ */
+export const MOSSE_SENZA_PARENTAL_BOND = new Set([
+  'explosion',
+  'self-destruct',
+  'rollout',
+  'ice ball',
+])

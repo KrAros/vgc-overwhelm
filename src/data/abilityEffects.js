@@ -211,6 +211,25 @@ export const ABILITY_EFFECTS = {
   // che conta per il meta.
   'skill-link':  { skillLink: true },
 
+  // Parental Bond: la mossa colpisce due volte, la seconda a un quarto.
+  //
+  // Non e' un moltiplicatore: e' un secondo COLPO, con un danno suo. La
+  // meccanica dei colpi multipli che il motore ha gia' non basta, perche'
+  // quella assume colpi identici — Infestazione tira dieci volte lo stesso
+  // tiro. Qui i due colpi sono diversi, e il secondo si calcola a parte.
+  //
+  // Fonte del meccanismo: `damage_MASTER.js`, tre punti —
+  //   :2456  la condizione (non gia' multi-colpo, e un bersaglio solo)
+  //   :2493  il secondo colpo, con l'abilita' dell'attaccante azzerata
+  //   :2160  `childMod = 0x0400`, applicato al danno base
+  //
+  // Confermato dalla wiki, che per la settima generazione in poi dice «un
+  // quarto del danno». Le due fonti coincidono sul numero.
+  //
+  // Le quattro mosse su cui il gioco NON la attiva e il riferimento si' stanno
+  // in `MOSSE_SENZA_PARENTAL_BOND`, in lib/rules.js, con la fonte accanto.
+  'parental-bond': { parentalBond: true, showInSmogon: true },
+
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
   // `aura` porta il TIPO, non un booleano, perche' il ramo del motore e' uno

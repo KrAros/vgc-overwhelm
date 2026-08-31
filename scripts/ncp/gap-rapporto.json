@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T12:33:28.519Z",
+    "generatedAt": "2026-08-31T13:02:04.835Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 250,
-    "abilitaNelGap": 96,
+    "abilitaSenzaEffetto": 249,
+    "abilitaNelGap": 95,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -544,16 +544,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1942
-        }
-      },
-      {
-        "chiave": "parental bond",
-        "nome": "Parental Bond",
-        "canale": "STR",
-        "prova": {
-          "funzione": "setDamage",
-          "file": "damage_MASTER.js",
-          "riga": 1172
         }
       },
       {

@@ -178,13 +178,20 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
  * @returns {number[]} array lungo `maxHits`: l'elemento in posizione `h - 1`
  *                     è la probabilità di aver fatto KO **entro** `h` turni.
  */
-export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS, colpiPerTurno = 1) {
+export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS, colpiPerTurno = 1, rollsFiglio = null) {
   const cumulativa = new Array(Math.max(maxHits, 0)).fill(0)
   if (!rolls || rolls.length === 0 || maxHits < 1) return cumulativa
 
-  const n = rolls.length
-  const quotaRoll = 1 / n
-  const colpi = Math.max(1, Math.floor(colpiPerTurno))
+  // I colpi del turno, uno per uno.
+  //
+  // Per una mossa multi-colpo sono N volte lo stesso tiro: Infestazione tira
+  // dieci volte la stessa distribuzione. Per Parental Bond sono DUE tiri
+  // DIVERSI — il secondo è a un quarto — e la differenza non si può
+  // approssimare, perché la somma di due distribuzioni diverse non è due volte
+  // una di loro.
+  const tiriDelTurno = rollsFiglio
+    ? [rolls, rollsFiglio]
+    : new Array(Math.max(1, Math.floor(colpiPerTurno))).fill(rolls)
 
   // stati: HP rimasti → probabilità di trovarsi con quegli HP.
   // All'inizio siamo con certezza agli HP pieni.
@@ -193,13 +200,14 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS,
 
   for (let h = 0; h < maxHits; h++) {
     // ── I colpi del turno ──────────────────────────────────────────────────
-    // Con `colpi === 1` questo ciclo gira una volta e il comportamento è
+    // Con un colpo solo questo ciclo gira una volta e il comportamento è
     // identico a prima, riga per riga.
-    for (let c = 0; c < colpi; c++) {
+    for (const tiri of tiriDelTurno) {
+      const quotaRoll = 1 / tiri.length
       const dopoIlColpo = new Map()
       for (const [hp, prob] of stati) {
         const quota = prob * quotaRoll
-        for (const roll of rolls) {
+        for (const roll of tiri) {
           const nuoviHP = hp - roll
           if (nuoviHP <= 0) { koTotale += quota; continue }  // KO dal colpo
           dopoIlColpo.set(nuoviHP, (dopoIlColpo.get(nuoviHP) || 0) + quota)
@@ -246,9 +254,9 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS,
  * @param {number}   hits
  * @returns {number} probabilità in [0, 1]
  */
-export function calcKOChance(rolls, defHP, eotNet, hits, colpiPerTurno = 1) {
+export function calcKOChance(rolls, defHP, eotNet, hits, colpiPerTurno = 1, rollsFiglio = null) {
   if (hits < 1) return 0
-  return koChanceCumulative(rolls, defHP, eotNet, hits, colpiPerTurno)[hits - 1]
+  return koChanceCumulative(rolls, defHP, eotNet, hits, colpiPerTurno, rollsFiglio)[hits - 1]
 }
 
 // ── Best NHKO ─────────────────────────────────────────────────────────────────
@@ -275,8 +283,8 @@ export function calcKOChance(rolls, defHP, eotNet, hits, colpiPerTurno = 1) {
  *   guaranteed: boolean,
  * } | null}
  */
-export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
-  return primoKO(koChanceCumulative(rolls, defHP, eotNet, maxHits, colpiPerTurno), { minHits, maxHits })
+export function findBestNHKO(rolls, defHP, eotNet, { minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1, rollsFiglio = null } = {}) {
+  return primoKO(koChanceCumulative(rolls, defHP, eotNet, maxHits, colpiPerTurno, rollsFiglio), { minHits, maxHits })
 }
 
 /**
@@ -346,14 +354,17 @@ function primoKO(cumulativa, { minHits = 1, maxHits = MAX_HITS } = {}) {
  * @param {number}   [opzioni.maxHits=MAX_HITS]
  * @returns {number[]} probabilità di aver fatto KO **entro** h colpi
  */
-export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
+export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, maxHits = MAX_HITS, colpiPerTurno = 1, rollsFiglio = null } = {}) {
   const cumulativa = new Array(Math.max(maxHits, 0)).fill(0)
   if (!rolls || rolls.length === 0 || maxHits < 1) return cumulativa
 
-  const quotaRoll = 1 / rolls.length
   const cura   = Math.floor(defHP / 4)
   const soglia = Math.floor(defHP / 2)
-  const colpi  = Math.max(1, Math.floor(colpiPerTurno))
+  // Stessa costruzione di `koChanceCumulative`: N volte lo stesso tiro per una
+  // mossa multi-colpo, due tiri diversi per Parental Bond.
+  const tiriDelTurno = rollsFiglio
+    ? [rolls, rollsFiglio]
+    : new Array(Math.max(1, Math.floor(colpiPerTurno))).fill(rolls)
 
   // chiave = hp * 2 + (bacca usata ? 1 : 0)
   let stati = new Map([[defHP * 2, 1]])
@@ -366,14 +377,15 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
     // Infestazione a portare sotto metà, e i sette dopo trovano già la cura
     // fatta. Metterla fuori vorrebbe dire farla scattare a mossa finita, cioè
     // dopo che il KO è già successo.
-    for (let c = 0; c < colpi; c++) {
+    for (const tiri of tiriDelTurno) {
+      const quotaRoll = 1 / tiri.length
       const dopoIlColpo = new Map()
       for (const [stato, prob] of stati) {
         const hp    = stato >> 1
         const usata = (stato & 1) === 1
         const quota = prob * quotaRoll
 
-        for (const roll of rolls) {
+        for (const roll of tiri) {
           let nuoviHP = hp - roll
           if (nuoviHP <= 0) { koTotale += quota; continue }
 
@@ -433,6 +445,6 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
  * @param {object}   [opzioni] — come `koChanceSitrus`, più `minHits`
  * @returns {{hits:number, chance:number, pct:number, guaranteed:boolean}|null}
  */
-export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1 } = {}) {
-  return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits, colpiPerTurno }), { minHits, maxHits })
+export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1, rollsFiglio = null } = {}) {
+  return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits, colpiPerTurno, rollsFiglio }), { minHits, maxHits })
 }

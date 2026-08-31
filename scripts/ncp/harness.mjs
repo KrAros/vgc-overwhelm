@@ -318,7 +318,21 @@ export function creaHarness() {
     // Quando NCP prevede un secondo calcolo (bacca che si consuma, Weak Armor…)
     // restituisce un array di array: il primo elemento è il colpo che ci
     // interessa, gli altri sono i colpi successivi in quello scenario.
-    const danno = Array.isArray(risultato.damage[0]) ? risultato.damage[0] : risultato.damage
+    const multiplo = Array.isArray(risultato.damage[0])
+    const danno = multiplo ? risultato.damage[0] : risultato.damage
+
+    // ─── I COLPI SUCCESSIVI, CHE PRIMA SI BUTTAVANO VIA ──────────────────────
+    //
+    // Fino a Parental Bond bastava il primo: gli altri elementi descrivono
+    // scenari — la bacca consumata, Weak Armor che ha già abbassato la Difesa —
+    // che il nostro modello non esprime, quindi non c'era niente da
+    // confrontare.
+    //
+    // Parental Bond li rende necessari: il SECONDO colpo è il suo, ed è dove
+    // vive il quarto di danno. Senza esporlo, l'unica cosa verificabile
+    // sarebbe il primo colpo — che con l'abilità è identico a quello senza, e
+    // quindi non proverebbe niente.
+    const rollsAggiuntivi = multiplo ? risultato.damage.slice(1) : []
 
     // Sedici roll è l'esito normale. Qualunque altra cosa significa che NCP
     // considera il colpo nullo: immunità di tipo, immunità da abilità, oppure
@@ -344,6 +358,7 @@ export function creaHarness() {
       ok: true,
       nullo: false,
       rolls: danno,
+      rollsAggiuntivi,
       format,
       defHP: dif.pokemon.maxHP,
       descrizione: risultato.description,
