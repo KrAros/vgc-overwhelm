@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T14:35:55.581Z",
+    "generatedAt": "2026-08-31T14:50:40.053Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
     "fileEsaminati": 21,
-    "abilitaNelMotore": 16,
+    "abilitaNelMotore": 26,
     "strumentiNelMotore": 27,
-    "classificate": 8,
+    "classificate": 12,
     "badgeDaTogliere": 5,
-    "collisioniResidue": 3,
+    "collisioniResidue": 7,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 518,
+        "riga": 568,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -79,6 +79,50 @@
         "file": "src/lib/preparazione.js",
         "riga": 283,
         "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
+      }
+    },
+    {
+      "chiave": "tablets of ruin",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js:511 la nomina fra le dieci che Mold Breaker non ignora (trascritte da damage_MASTER.js:999). Il suo effetto — -25% Attacco a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 511,
+        "testo": "'tablets-of-ruin',"
+      }
+    },
+    {
+      "chiave": "vessel of ruin",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js:512 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Att. Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 512,
+        "testo": "'vessel-of-ruin',"
+      }
+    },
+    {
+      "chiave": "sword of ruin",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js:513 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 513,
+        "testo": "'sword-of-ruin',"
+      }
+    },
+    {
+      "chiave": "beads of ruin",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js:514 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 514,
+        "testo": "'beads-of-ruin',"
       }
     },
     {
@@ -115,6 +159,22 @@
         }
       },
       {
+        "chiave": "as one",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 508,
+          "testo": "'as-one',"
+        }
+      },
+      {
+        "chiave": "beads of ruin",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 514,
+          "testo": "'beads-of-ruin',"
+        }
+      },
+      {
         "chiave": "chlorophyll",
         "prova": {
           "file": "src/utils/speedOrder.js",
@@ -134,15 +194,23 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 388,
+          "riga": 438,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
+        }
+      },
+      {
+        "chiave": "full metal body",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 506,
+          "testo": "'full-metal-body',"
         }
       },
       {
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 518,
+          "riga": 568,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -168,6 +236,30 @@
           "file": "src/lib/rules.js",
           "riga": 126,
           "testo": "'pixilate':    TYPES.FAIRY,"
+        }
+      },
+      {
+        "chiave": "prism armor",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 507,
+          "testo": "'prism-armor',"
+        }
+      },
+      {
+        "chiave": "protosynthesis",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 509,
+          "testo": "'protosynthesis',"
+        }
+      },
+      {
+        "chiave": "quark drive",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 510,
+          "testo": "'quark-drive',"
         }
       },
       {
@@ -211,6 +303,14 @@
         }
       },
       {
+        "chiave": "shadow shield",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 505,
+          "testo": "'shadow-shield',"
+        }
+      },
+      {
         "chiave": "slush rush",
         "prova": {
           "file": "src/utils/speedOrder.js",
@@ -232,6 +332,30 @@
           "file": "src/utils/speedOrder.js",
           "riga": 65,
           "testo": "'swift-swim':  ['rain', 'heavy rain'],"
+        }
+      },
+      {
+        "chiave": "sword of ruin",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 513,
+          "testo": "'sword-of-ruin',"
+        }
+      },
+      {
+        "chiave": "tablets of ruin",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 511,
+          "testo": "'tablets-of-ruin',"
+        }
+      },
+      {
+        "chiave": "vessel of ruin",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 512,
+          "testo": "'vessel-of-ruin',"
         }
       }
     ],

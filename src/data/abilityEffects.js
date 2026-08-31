@@ -297,6 +297,42 @@ export const ABILITY_EFFECTS = {
   // Farne uno solo sarebbe stato meta' abilita' con l'aria di essere intera.
   'unaware':     { unaware: true, showInSmogon: true },
 
+  // ── Mold Breaker, Teravolt, Turboblaze ──────────────────────────────────
+  //
+  // Ignorano l'abilità del bersaglio. Nel riferimento sono tre nomi nella
+  // stessa riga (`damage_MASTER.js:1001`) dentro `abilityIgnore`, che gira UNA
+  // volta sola all'inizio del calcolo (`damage_SV.js:125`) e rimpiazza
+  // `defAbility` con la sentinella `"[ignored]"`. Tutto il resto del motore
+  // legge quella e non sa niente di Mold Breaker.
+  //
+  // Da noi la sostituzione e' nello stesso posto e ha la stessa forma: una
+  // riga, e i ventitre campi che il motore legge dal difensore si spengono
+  // insieme.
+  //
+  // ─── LE TRE COSE CHE NON SI SPENGONO, E CHE UN'IMPLEMENTAZIONE
+  //     «SPEGNI TUTTO» SBAGLIEREBBE IN SILENZIO ──────────────────────────
+  //
+  //   1. L'AUREA. Contro ogni intuizione il riferimento scrive, alla riga
+  //      1655, `(gen > 7 || defAbility !== '[ignored]')`: a gen 10 la prima
+  //      meta' e' gia' vera, quindi il x1,33 di Fairy Aura e Dark Aura resta
+  //      anche contro Mold Breaker.
+  //
+  //   2. LA PREPARAZIONE. Intimidate, Download, Intrepid Sword, le abilita'
+  //      paradosso e i boost da assorbimento girano PRIMA di `abilityIgnore`.
+  //      Mold Breaker non annulla l'Intimidate gia' subito.
+  //
+  //   3. LE DIECI NON IGNORABILI, in `ABILITA_NON_IGNORABILI` dentro
+  //      `lib/rules.js`. La lista sta la' e non qui perche' quattro di loro
+  //      non le calcoliamo ancora, e un campo in questa tabella le farebbe
+  //      sparire dal registro del divario senza motivo.
+  //
+  // Teravolt e Turboblaze non sono portate da nessuna specie legale in M-B,
+  // ma sono nella stessa riga del riferimento: sceglierne una su tre dentro
+  // una condizione unica sarebbe stato decidere a mano.
+  'mold-breaker': { ignoraAbilita: true, showInSmogon: true },
+  'teravolt':     { ignoraAbilita: true, showInSmogon: true },
+  'turboblaze':   { ignoraAbilita: true, showInSmogon: true },
+
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
   'tough-claws': { toughClaws: true, showInSmogon: true },
 

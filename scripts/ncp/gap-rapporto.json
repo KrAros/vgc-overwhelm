@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T14:35:55.199Z",
+    "generatedAt": "2026-08-31T14:49:37.914Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 223,
-    "abilitaNelGap": 69,
+    "abilitaSenzaEffetto": 220,
+    "abilitaNelGap": 66,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -397,16 +397,6 @@
         }
       },
       {
-        "chiave": "mold breaker",
-        "nome": "Mold Breaker",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1001
-        }
-      },
-      {
         "chiave": "neutralizing gas",
         "nome": "Neutralizing Gas",
         "canale": "ID",
@@ -627,16 +617,6 @@
         }
       },
       {
-        "chiave": "teravolt",
-        "nome": "Teravolt",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1001
-        }
-      },
-      {
         "chiave": "torrent",
         "nome": "Torrent",
         "canale": "STR",
@@ -664,16 +644,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 389
-        }
-      },
-      {
-        "chiave": "turboblaze",
-        "nome": "Turboblaze",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1001
         }
       },
       {

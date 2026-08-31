@@ -19,6 +19,8 @@ import {
   ABILITA_ATE,
   MOSSE_SENZA_PARENTAL_BOND,
   MOSSE_ANNULLATE_DA_DAMP,
+  MOSSE_CHE_IGNORANO_ABILITA,
+  ABILITA_NON_IGNORABILI,
   tipoPallaClima,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
@@ -243,7 +245,55 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const atkAbilKey = normalizeAbilityKey(atkAbility)
   const defAbilKey = normalizeAbilityKey(defAbility)
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
-  const defAbilEffect = ABILITY_EFFECTS[defAbilKey] || null
+  const defAbilEffettiva = ABILITY_EFFECTS[defAbilKey] || null
+
+  // ── Mold Breaker, Teravolt, Turboblaze ───────────────────────────────────
+  //
+  // Nel riferimento `abilityIgnore` (`damage_MASTER.js:998`) gira UNA volta
+  // sola, all'inizio del calcolo (`damage_SV.js:125`), e rimpiazza `defAbility`
+  // con la sentinella `"[ignored]"`. Nessuna delle funzioni a valle sa che
+  // Mold Breaker esiste: leggono una stringa che non combacia con niente.
+  //
+  // Qui la sostituzione ha la stessa forma e sta nello stesso posto. Spegnere
+  // `defAbilEffect` una volta spegne i ventitré campi che il motore legge dal
+  // difensore — `multiscale`, `filter`, `fluffy`, `iceScales`, `thickFat`,
+  // `heatproof`, `furCoat`, `unaware`, `soundproof`, `levitate`, le otto
+  // `immuneTipo`, `bloccaPriorita`, `wonderGuard` e le altre — senza che
+  // nessuna di quelle righe debba nominare Mold Breaker.
+  //
+  // ─── L'AUREA NON SI SPEGNE, E QUESTA È LA TRAPPOLA ───────────────────────
+  //
+  // Contro ogni intuizione. Il ×1,33 di Fairy Aura e Dark Aura è al punto f
+  // (`:1655`), e la sua condizione è:
+  //
+  //     if (auraActive && !auraBreak && !field.isNeutralizingGas
+  //         && (gen > 7 || defAbility !== '[ignored]')) {
+  //
+  // A gen 10 `gen > 7` è già vero, quindi il secondo controllo non viene
+  // nemmeno valutato: l'aura resta. E nel riferimento `auraActive` viene da
+  // una CASELLA di campo, non dall'abilità — da noi la casella la deduciamo
+  // dalle abilità presenti, quindi spegnendo `defAbilEffect` in blocco
+  // spegneremmo un'aura che il riferimento tiene accesa.
+  //
+  // Per questo di ignorato resta `aura` e nient'altro.
+  //
+  // ─── COSA NON PASSA DI QUI ───────────────────────────────────────────────
+  //
+  // La PREPARAZIONE. Intimidate, Download, Intrepid Sword, le abilità paradosso
+  // e i boost da assorbimento girano prima di `abilityIgnore` nel riferimento,
+  // e prima di questa riga da noi: Mold Breaker non annulla un Intimidate già
+  // subito. Un'implementazione che spegnesse l'abilità del difensore «ovunque»
+  // sbaglierebbe qui, e senza far rumore.
+  //
+  // `move.ignoresFriendGuard`, che il riferimento accende nello stesso punto,
+  // non ha niente da spegnere: Friend Guard è ancora nel divario.
+  const ignoraAbilitaBersaglio =
+    (atkAbilEffect?.ignoraAbilita === true || MOSSE_CHE_IGNORANO_ABILITA.has(move))
+    && !ABILITA_NON_IGNORABILI.has(defAbilKey)
+
+  const defAbilEffect = ignoraAbilitaBersaglio
+    ? (defAbilEffettiva?.aura !== undefined ? { aura: defAbilEffettiva.aura } : null)
+    : defAbilEffettiva
 
   // ── QUANTE VOLTE COLPISCE ────────────────────────────────────────────────
   //
