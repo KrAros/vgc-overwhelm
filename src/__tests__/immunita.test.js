@@ -43,6 +43,10 @@ import { calculateDamage } from '../calcEngine.js'
 import { MOSSE_ANNULLATE_DA_DAMP } from '../lib/rules.js'
 import movesData from '../data/moves.json' with { type: 'json' }
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
+import it_ from '../locales/it.json' with { type: 'json' }
+import { statMostrata } from '../lib/statMostrata.js'
+import { emptyPokemon } from '../store/useCalcStore.js'
+import { applyBoost, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE } from '../lib/rules.js'
 
 const RADICE = path.resolve(import.meta.dirname, '..', '..')
 const vendorPresente = fs.existsSync(path.join(RADICE, 'vendor', 'ncp', 'damage_SV.js'))
@@ -272,4 +276,135 @@ describe('roll per roll contro NCP', () => {
         .toEqual(rif.rolls)
     })
   }
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 7. La seconda metà di cinque di loro: il boost
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── QUESTA PARTE NON HA UN ORACOLO, E VA DETTO ────────────────────────────
+ *
+ * Il riferimento implementa l'immunità di queste abilità e nient'altro:
+ * «Lightning Rod» compare in una riga sola di tutto il vendor,
+ * `damage_MASTER.js:1112`. Non è una sua svista — è lo stesso confine di Beast
+ * Boost e della seconda metà di Rapidascesa, che il registro del divario ha
+ * già misurato come non calcolate.
+ *
+ * Quindi qui non c'è nessun confronto roll per roll: i valori sono stati
+ * CHIESTI a Simone e confermati da lui, come per Parental Bond e Skill Link.
+ *
+ * ─── UNA CONFERMA CHE NON MI ASPETTAVO ─────────────────────────────────────
+ *
+ * Le descrizioni nei locali dell'app dicevano già gli stessi numeri — «se
+ * colpito da una, l'Attacco sale di 1 grado» su Mangiaerba, «l'Attacco
+ * Speciale sale di 1 grado» su Parafulmine. Erano lì da prima, e l'app le
+ * mostrava senza applicarle: è esattamente il difetto che il presidio
+ * `descrizioniSilenziose` esiste per registrare.
+ *
+ * Il test qui sotto le usa come SECONDA FONTE: se un giorno la tabella delle
+ * abilità e il testo mostrato all'utente divergessero, diventa rosso.
+ */
+describe('cinque di loro alzano anche una statistica', () => {
+  const CINQUE = [
+    ['Sap Sipper',      'azumarill', 'sap-sipper',      STAT_ATT, 1],
+    ['Lightning Rod',   'manectric', 'lightning-rod',   STAT_SPA, 1],
+    ['Storm Drain',     'gastrodon', 'storm-drain',     STAT_SPA, 1],
+    ['Motor Drive',     'emolga',    'motor-drive',     STAT_SPE, 1],
+    ['Well-Baked Body', 'dachsbun',  'well-baked-body', STAT_DEF, 2],
+  ]
+
+  for (const [nome, specie, chiave, statIdx, gradi] of CINQUE) {
+    it(`${nome}: l'interruttore alza la statistica giusta di ${gradi}`, () => {
+      const base = { ...emptyPokemon(), key: specie, ability: chiave }
+      const acceso = {
+        ...base,
+        abilityFlags: { ...emptyPokemon().abilityFlags, assorbimentoAttivo: true },
+      }
+
+      // Spento: niente si muove, su nessuna delle cinque statistiche.
+      for (const i of [STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE]) {
+        expect(statMostrata(base, i).modificata, `${nome}: si muove da spento`).toBe(false)
+      }
+
+      // Acceso: si muove SOLO quella, e del numero di gradi giusto.
+      for (const i of [STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE]) {
+        const r = statMostrata(acceso, i)
+        if (i === statIdx) {
+          expect(r.modificata, `${nome}: la statistica non si muove`).toBe(true)
+          expect(r.effettiva, `${nome}: gradi sbagliati`)
+            .toBe(applyBoost(r.grezza, gradi))
+        } else {
+          expect(r.modificata, `${nome}: muove anche un'altra statistica`).toBe(false)
+        }
+      }
+    })
+  }
+
+  it('le tre che curano invece non alzano niente', () => {
+    // Water Absorb, Volt Absorb ed Earth Eater recuperano PS, e il recupero
+    // non è una cosa che il calcolo del danno modelli. Per loro c'è
+    // l'immunità e basta: se un giorno qualcuno gli attaccasse un boost per
+    // simmetria, questo test lo direbbe.
+    for (const [specie, chiave] of [
+      ['vaporeon', 'water-absorb'], ['jolteon', 'volt-absorb'], ['orthworm', 'earth-eater'],
+    ]) {
+      const acceso = {
+        ...emptyPokemon(), key: specie, ability: chiave,
+        abilityFlags: { ...emptyPokemon().abilityFlags, assorbimentoAttivo: true },
+      }
+      for (const i of [STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE]) {
+        expect(statMostrata(acceso, i).modificata, `${chiave} alza qualcosa`).toBe(false)
+      }
+    }
+  })
+
+  it('il boost arriva anche al DANNO, non solo alla colonna', () => {
+    // Manectric con Parafulmine che ha già assorbito: +1 Att. Speciale, quindi
+    // le sue mosse speciali fanno più male. Se il flag si fermasse
+    // all'interfaccia, questi due numeri sarebbero uguali.
+    const conBoost = calculateDamage({
+      attacker: {
+        atkPokemon: 'manectric', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null,
+        atkAbility: 'lightning-rod', atkItem: null, level: 50,
+        atkAbilityFlags: { assorbimentoAttivo: true },
+      },
+      defender: {
+        defPokemon: 'incineroar', defSPs: [0, 0, 0, 0, 0, 0], defNature: null,
+        defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {},
+      },
+      move: 'thunderbolt', field: {}, debug: false,
+    })
+    const senza = calculateDamage({
+      attacker: {
+        atkPokemon: 'manectric', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null,
+        atkAbility: 'lightning-rod', atkItem: null, level: 50,
+        atkAbilityFlags: {},
+      },
+      defender: {
+        defPokemon: 'incineroar', defSPs: [0, 0, 0, 0, 0, 0], defNature: null,
+        defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {},
+      },
+      move: 'thunderbolt', field: {}, debug: false,
+    })
+    expect(conBoost.maxDmg, 'il flag non arriva al motore').toBeGreaterThan(senza.maxDmg)
+  })
+
+  it('i numeri combaciano con le descrizioni che l\'app mostra già', () => {
+    // La seconda fonte. Le descrizioni erano nei locali da prima che il boost
+    // fosse implementato: se tabella e testo divergono, uno dei due mente.
+    const cifre = { 1: /\b1 grado\b/, 2: /\b2 gradi\b/ }
+    const statNelTesto = {
+      [STAT_ATT]: /Attacco(?! Speciale)/,
+      [STAT_DEF]: /Difesa/,
+      [STAT_SPA]: /Attacco Speciale/,
+      [STAT_SPE]: /Velocità/,
+    }
+    for (const [nome, , chiave, statIdx, gradi] of CINQUE) {
+      const testo = it_.abilities_desc[chiave]
+      expect(testo, `${nome}: manca la descrizione`).toBeTruthy()
+      expect(cifre[gradi].test(testo), `${nome}: la descrizione non dice ${gradi} gradi`).toBe(true)
+      expect(statNelTesto[statIdx].test(testo), `${nome}: la descrizione nomina un'altra statistica`).toBe(true)
+    }
+  })
 })

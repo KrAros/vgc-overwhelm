@@ -419,6 +419,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       abilita: atkAbility, strumento: atkItem,
       abilitaAccesa: atkAbilityFlags.intimidateActive === true,
       koFatto: atkAbilityFlags.eelevateKOActive === true,
+      assorbimentoFatto: atkAbilityFlags.assorbimentoAttivo === true,
       boosts: { at: atkBoost, df: atkDefBoost, sa: spAtkBoost, sd: atkSpDefBoost, sp: atkSpeBoost },
     },
     difensore: {
@@ -426,6 +427,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       abilita: defAbility, strumento: defItem,
       abilitaAccesa: defAbilityFlags.intimidateActive === true,
       koFatto: defAbilityFlags.eelevateKOActive === true,
+      assorbimentoFatto: defAbilityFlags.assorbimentoAttivo === true,
       boosts: { at: defAtkBoost, df: defBoost, sa: defSpAtkBoost, sd: spDefBoost, sp: defSpeBoost },
     },
     meteo: field.weather,

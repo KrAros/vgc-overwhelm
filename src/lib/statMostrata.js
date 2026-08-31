@@ -96,6 +96,11 @@ function stadioEffettivo(slot, statIdx, statPiuAlta) {
       && statPiuAlta === chiave) {
     stadio += 1
   }
+  // Le cinque che assorbono: il grado arriva solo quando chi usa l'app
+  // dichiara che l'assorbimento c'e' gia' stato. Well-Baked Body ne dà due.
+  if (eff?.boostAssorbimento?.stat === chiave && slot?.abilityFlags?.assorbimentoAttivo) {
+    stadio += eff.boostAssorbimento.gradi
+  }
 
   return Math.max(-6, Math.min(6, stadio))
 }

@@ -20,6 +20,7 @@ export const DEFAULT_ABILITY_FLAGS = {
   multiscaleActive:      true,  // difensore: ×0.5 danno ricevuto se HP pieni (default true)
   supremeOverlordKOs:    0,     // attaccante: numero alleati KO (0-5), boost ×(1 + n*0.1)
   eelevateKOActive:      false, // Rapidascesa: ha messo KO — +1 alla stat più alta
+  assorbimentoAttivo:    false, // Parafulmine e le altre quattro: ha gia' assorbito una mossa
 }
 
 /**
@@ -159,13 +160,48 @@ export const ABILITY_EFFECTS = {
   // otto su dodici dentro una condizione unica sarebbe stato decidere a mano
   // quale meta' del riferimento vale. Il giorno che la specie entra,
   // l'abilita' funziona senza toccare il motore.
-  'sap-sipper':      { immuneTipo: TYPES.GRASS },
-  'well-baked-body': { immuneTipo: TYPES.FIRE },
+  //
+  // ─── CINQUE DI LORO FANNO ANCHE UN'ALTRA COSA ───────────────────────────
+  //
+  // Non si limitano ad annullare il colpo: alzano una statistica. La seconda
+  // meta' e' in `boostAssorbimento`, che dice quale statistica e di quanti
+  // gradi, e si applica quando l'interruttore `assorbimentoAttivo` e' acceso.
+  //
+  //   Sap Sipper        +1 Attacco          assorbendo una mossa Erba
+  //   Lightning Rod     +1 Att. Speciale    assorbendo una mossa Elettro
+  //   Storm Drain       +1 Att. Speciale    assorbendo una mossa Acqua
+  //   Motor Drive       +1 Velocita'        assorbendo una mossa Elettro
+  //   Well-Baked Body   +2 Difesa           assorbendo una mossa Fuoco
+  //
+  // Le altre tre (Water Absorb, Volt Absorb, Earth Eater) curano invece di
+  // potenziare, e la cura non e' una cosa che il calcolo del danno modelli:
+  // per loro c'e' l'immunita' e basta.
+  //
+  // ─── LA FONTE, CHE NON E' L'ORACOLO ─────────────────────────────────────
+  //
+  // Il riferimento NON conosce questa meta'. NCP implementa l'immunita'
+  // (`damage_MASTER.js:1110-1112`) e nient'altro: cerca «Lightning Rod» in
+  // tutto il vendor e trovi una riga sola, quella. Non e' una sua svista — e'
+  // lo stesso confine di Beast Boost e della seconda meta' di Rapidascesa,
+  // che il registro del divario ha gia' misurato come non calcolate.
+  //
+  // Quindi qui non c'e' un confronto roll per roll: i valori sono stati
+  // CHIESTI a Simone e confermati da lui. E' la stessa procedura di Parental
+  // Bond e di Skill Link, e come la' resta scritto che la fonte e' una persona
+  // e non un programma da eseguire.
+  //
+  // ─── PERCHE' UN INTERRUTTORE ────────────────────────────────────────────
+  //
+  // Perche' «ha gia' assorbito una mossa» e' un fatto del turno precedente, e
+  // l'app calcola un colpo solo. Stessa forma di Flash Fire, che dichiara la
+  // stessa cosa per il Fuoco.
+  'sap-sipper':      { immuneTipo: TYPES.GRASS,    boostAssorbimento: { stat: 'at', gradi: 1 } },
+  'well-baked-body': { immuneTipo: TYPES.FIRE,     boostAssorbimento: { stat: 'df', gradi: 2 } },
   'water-absorb':    { immuneTipo: TYPES.WATER },
-  'storm-drain':     { immuneTipo: TYPES.WATER },
-  'motor-drive':     { immuneTipo: TYPES.ELECTRIC },
+  'storm-drain':     { immuneTipo: TYPES.WATER,    boostAssorbimento: { stat: 'sa', gradi: 1 } },
+  'motor-drive':     { immuneTipo: TYPES.ELECTRIC, boostAssorbimento: { stat: 'sp', gradi: 1 } },
   'volt-absorb':     { immuneTipo: TYPES.ELECTRIC },
-  'lightning-rod':   { immuneTipo: TYPES.ELECTRIC },
+  'lightning-rod':   { immuneTipo: TYPES.ELECTRIC, boostAssorbimento: { stat: 'sa', gradi: 1 } },
   'earth-eater':     { immuneTipo: TYPES.GROUND },
   'bulletproof':     { immuneProiettili: true },
   'wind-rider':      { immuneVento: true },
