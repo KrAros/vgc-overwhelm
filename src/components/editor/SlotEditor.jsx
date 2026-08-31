@@ -67,7 +67,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   // vendor.
   //
   // Quando lo slot porta DUE mosse multi-colpo con intervalli diversi — per
-  // dire Bombardamento (1-10) e Semintamitraglia (2-5) — il selettore è uno
+  // dire Infestazione (1-10) e Semitraglia (2-5) — il selettore è uno
   // solo e copre l'unione, e il motore taglia poi sull'intervallo della mossa
   // che sta calcolando. È un confine dichiarato, non un caso dimenticato: un
   // selettore per mossa vorrebbe dire quattro contatori nell'editor, e i set

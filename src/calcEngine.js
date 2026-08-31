@@ -582,7 +582,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // quella riga può spegnere Tecnico e uno messo dopo no — quindi la
   // posizione di ciascuno è parte della trascrizione.
   //
-  // Il caso che lo dimostra vive in `tecnico.test.js`: Bacio Vampiro (50) con
+  // Il caso che lo dimostra vive in `tecnico.test.js`: Assorbibacio (50) con
   // Tecnico, contro un difensore con l'Aura Fatata. L'aura è il punto f,
   // prima di `tempBP`: porta la potenza a 67 e Tecnico si spegne. Aiutone è
   // il punto s, dopo: non lo spegne.

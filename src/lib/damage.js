@@ -155,7 +155,7 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
  * Leftovers superano l'eventuale danno da sabbia.
  *
  * ─── UN TURNO PUÒ CONTENERE PIÙ COLPI ─────────────────────────────────────
- * `colpiPerTurno` esiste per le mosse multi-colpo: Bombardamento ne tira fino
+ * `colpiPerTurno` esiste per le mosse multi-colpo: Infestazione ne tira fino
  * a dieci in UN turno. La differenza con dieci turni non è un dettaglio, ed è
  * doppia:
  *
@@ -363,7 +363,7 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
     // ── I colpi del turno ──────────────────────────────────────────────────
     // La bacca si controlla DENTRO questo ciclo, non fuori: con una mossa
     // multi-colpo può attivarsi a metà mossa — è il terzo colpo di
-    // Bombardamento a portare sotto metà, e i sette dopo trovano già la cura
+    // Infestazione a portare sotto metà, e i sette dopo trovano già la cura
     // fatta. Metterla fuori vorrebbe dire farla scattare a mossa finita, cioè
     // dopo che il KO è già successo.
     for (let c = 0; c < colpi; c++) {
