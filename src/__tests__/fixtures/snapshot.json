@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T13:55:12.577Z",
-    "commit": "7a27017",
-    "engineSha256": "75748ab6277de43d",
+    "generatedAt": "2026-08-31T14:09:22.237Z",
+    "commit": "aedebe8",
+    "engineSha256": "3758969b6fe60b13",
     "caseCount": 586,
     "note": "Snapshot di caratterizzazione. Congela il comportamento attuale, bug inclusi. Non è un oracolo di correttezza: quelli sono i casi golden da NCP."
   },

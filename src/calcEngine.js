@@ -18,6 +18,7 @@ import {
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
   ABILITA_ATE,
   MOSSE_SENZA_PARENTAL_BOND,
+  MOSSE_ANNULLATE_DA_DAMP,
   tipoPallaClima,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
@@ -213,6 +214,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isBite  = moveData.bite === true
   const isSlicing = moveData.slicing === true
   const isRinculo = moveData.rinculo === true
+  const isBullet = moveData.bullet === true
+  const isVento = moveData.vento === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -327,6 +330,47 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // e non fra i modificatori: esce con danno zero.
   const isPrioritaBloccata = defAbilEffect?.bloccaPriorita === true && isPrioritaria
 
+  // Le undici dello stesso `||` (`damage_MASTER.js:1107-1116`).
+  //
+  // Otto guardano il tipo, tre la famiglia della mossa, una — Wonder Guard —
+  // guarda l'efficacia. Nel riferimento sono una condizione sola con un solo
+  // `return damage: [0]`, e qui restano una condizione sola per la stessa
+  // ragione: sono la stessa regola, non undici regole che si somigliano.
+  //
+  // Il tipo NON è scritto nel motore: sta in `immuneTipo` dentro
+  // `abilityEffects.js`, un campo per abilità. Le famiglie vengono dai flag
+  // `bullet` e `vento` di moves.json, trascritti da `isBullet` e `isWind`.
+  //
+  // Wonder Guard è `typeEffectiveness <= 1`, non `< 1`: anche l'efficacia
+  // neutra è annullata. Non è una resistenza forte, è un filtro che lascia
+  // passare solo il super efficace.
+  const isImmuneDaAbilita =
+    (defAbilEffect?.immuneTipo !== undefined && moveType === defAbilEffect.immuneTipo) ||
+    (defAbilEffect?.immuneProiettili && isBullet) ||
+    (defAbilEffect?.immuneVento && isVento) ||
+    (defAbilEffect?.wonderGuard && effectiveness <= 1)
+
+  // Damp (`damage_MASTER.js:1138`): quattro mosse non partono proprio.
+  //
+  // Guarda TUTT'E DUE i lati, e lo fa il riferimento: `defAbility === "Damp"
+  // || attacker.ability === "Damp"`. Chi ce l'ha spegne queste mosse anche a
+  // sé stesso. Controllare solo il difensore sarebbe metà abilità.
+  //
+  // I quattro nomi stanno in `MOSSE_ANNULLATE_DA_DAMP` dentro `lib/rules.js`,
+  // non qui: nel vendor non c'è un flag da trascrivere, c'è un elenco.
+  const isDampSpenta =
+    (defAbilEffect?.damp === true || atkAbilEffect?.damp === true) &&
+    MOSSE_ANNULLATE_DA_DAMP.has(move)
+
+  if (isImmuneDaAbilita) {
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (isDampSpenta) {
+    // Il nome mostrato è quello di chi ce l'ha davvero: se Damp è
+    // dell'attaccante, scrivere il difensore sarebbe una bugia comoda.
+    const chi = defAbilEffect?.damp ? defAbilKey : atkAbilKey
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(chi), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
   if (isLevitating) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
@@ -786,6 +830,27 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `field.isSteelySpirit` al punto d.iii del riferimento: una casella di campo
   // che non abbiamo, come per Battery e Power Spot.
   if (atkAbilEffect?.steelySpirit && moveType === TYPES.STEEL) bpMods.push(MOD.X1_5)
+
+  // i — Dry Skin dal lato del DIFENSORE: ×1.25 sulle mosse Fuoco.
+  //
+  // È la seconda metà dell'abilità: l'altra è l'immunità all'Acqua, molto più
+  // in su, in `immunityChecks`.
+  //
+  // ─── PERCHÉ IL POSTO CONTA, E NON È QUELLO CHE SEMBRA ────────────────────
+  // La prima stesura l'aveva messa prima del punto f, con l'aura. Sbagliato:
+  // nel riferimento è il punto i, DOPO g. E fra f e g si calcola `tempBP`,
+  // cioè la potenza su cui Technician decide se accendersi — quindi un
+  // modificatore spostato di là dalla riga sbagliata cambia una soglia, non
+  // solo l'ordine di una moltiplicazione commutativa.
+  //
+  // Nel riferimento è un `else if` del punto h, che è Heatproof prima della
+  // nona generazione. A gen 10 h non scatta mai, quindi i si valuta sempre; e
+  // da noi Heatproof sta nell'altra catena (il ×0.5 al punto h di
+  // `calcAtkMods`, dov'è a gen ≥ 9). Qui non c'è nessun `else` da scrivere
+  // perché il ramo che lo precedeva non esiste in questa catena.
+  if (defAbilEffect?.debolePerIlFuoco && moveType === TYPES.FIRE) {
+    bpMods.push(MOD.X1_25)
+  }
 
   // j / k — strumenti che modificano la potenza.
   // Fino a D-2 moltiplicavano la STATISTICA d'attacco: catena sbagliata.

@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T13:54:43.552Z",
+    "generatedAt": "2026-08-31T14:08:52.213Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 237,
-    "abilitaNelGap": 83,
+    "abilitaSenzaEffetto": 224,
+    "abilitaNelGap": 70,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -97,16 +97,6 @@
         }
       },
       {
-        "chiave": "bulletproof",
-        "nome": "Bulletproof",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1113
-        }
-      },
-      {
         "chiave": "cloud nine",
         "nome": "Cloud Nine",
         "canale": "STR",
@@ -137,16 +127,6 @@
         }
       },
       {
-        "chiave": "damp",
-        "nome": "Damp",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1137
-        }
-      },
-      {
         "chiave": "defeatist",
         "nome": "Defeatist",
         "canale": "STR",
@@ -164,26 +144,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "dry skin",
-        "nome": "Dry Skin",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1110
-        }
-      },
-      {
-        "chiave": "earth eater",
-        "nome": "Earth Eater",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1112
         }
       },
       {
@@ -377,16 +337,6 @@
         }
       },
       {
-        "chiave": "lightning rod",
-        "nome": "Lightning Rod",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1111
-        }
-      },
-      {
         "chiave": "liquid voice",
         "nome": "Liquid Voice",
         "canale": "STR",
@@ -454,16 +404,6 @@
           "funzione": "abilityIgnore",
           "file": "damage_MASTER.js",
           "riga": 1001
-        }
-      },
-      {
-        "chiave": "motor drive",
-        "nome": "Motor Drive",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1111
         }
       },
       {
@@ -587,16 +527,6 @@
         }
       },
       {
-        "chiave": "sap sipper",
-        "nome": "Sap Sipper",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1108
-        }
-      },
-      {
         "chiave": "sheer force",
         "nome": "Sheer Force",
         "canale": "STR",
@@ -644,16 +574,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1979
-        }
-      },
-      {
-        "chiave": "storm drain",
-        "nome": "Storm Drain",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1110
         }
       },
       {
@@ -787,36 +707,6 @@
         }
       },
       {
-        "chiave": "volt absorb",
-        "nome": "Volt Absorb",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1111
-        }
-      },
-      {
-        "chiave": "water absorb",
-        "nome": "Water Absorb",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1110
-        }
-      },
-      {
-        "chiave": "well baked body",
-        "nome": "Well-Baked Body",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1109
-        }
-      },
-      {
         "chiave": "wind power",
         "nome": "Wind Power",
         "canale": "STR",
@@ -824,26 +714,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1764
-        }
-      },
-      {
-        "chiave": "wind rider",
-        "nome": "Wind Rider",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkWindRider",
-          "file": "damage_MASTER.js",
-          "riga": 604
-        }
-      },
-      {
-        "chiave": "wonder guard",
-        "nome": "Wonder Guard",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 389
         }
       }
     ],

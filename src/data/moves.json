@@ -152,7 +152,8 @@
 		"type": 9,
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"vento": true
 	},
 	"wing attack": {
 		"num": "17",
@@ -557,7 +558,8 @@
 		"category": 1,
 		"power": 110,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"psybeam": {
 		"num": "60",
@@ -1578,7 +1580,8 @@
 		"type": 9,
 		"category": 1,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"vento": true
 	},
 	"cotton spore": {
 		"num": "178",
@@ -1740,7 +1743,8 @@
 		"category": 1,
 		"power": 55,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"detect": {
 		"num": "197",
@@ -2102,7 +2106,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"rain dance": {
 		"num": "240",
@@ -2260,7 +2265,8 @@
 		"category": 1,
 		"power": 95,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"hail": {
 		"num": "258",
@@ -2750,7 +2756,8 @@
 		"power": 60,
 		"priority": 0,
 		"spread": true,
-		"slicing": true
+		"slicing": true,
+		"vento": true
 	},
 	"overheat": {
 		"num": "315",
@@ -4771,7 +4778,8 @@
 		"type": 9,
 		"category": 1,
 		"power": 110,
-		"priority": 0
+		"priority": 0,
+		"vento": true
 	},
 	"head charge": {
 		"num": "543",
@@ -5032,7 +5040,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"freeze-dry": {
 		"num": "573",
@@ -5132,7 +5141,8 @@
 		"type": 17,
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"vento": true
 	},
 	"moonblast": {
 		"num": "585",
@@ -5975,7 +5985,8 @@
 		"category": 1,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"blood moon": {
 		"num": "901",
@@ -6740,7 +6751,8 @@
 		"category": 1,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"scale shot": {
 		"num": "799",
@@ -6852,7 +6864,8 @@
 		"category": 1,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"steel beam": {
 		"num": "796",
@@ -7159,7 +7172,8 @@
 		"category": 1,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"vento": true
 	},
 	"light of ruin": {
 		"name": "Light of Ruin",

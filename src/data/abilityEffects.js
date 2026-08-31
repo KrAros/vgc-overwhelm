@@ -131,6 +131,72 @@ export const ABILITY_EFFECTS = {
   // di moves.json, che `gen-flag-dati.mjs` trascrive da `isSound` del vendor.
   'soundproof':  { soundproof: true },
 
+  // ── Le undici immunita' dello stesso `||` ────────────────────────────────
+  //
+  // Nel riferimento sono UNA condizione sola con un solo `return damage: [0]`
+  // (`damage_MASTER.js:1107-1116`). Non sono riduzioni: la funzione esce, e
+  // quello che l'utente deve leggere e' «non ha effetto», non un numero.
+  //
+  // Otto guardano il TIPO della mossa, quindi qui portano il tipo e non un
+  // flag col loro nome: la regola e' una, cambia il valore.
+  //
+  //   Grass       Sap Sipper
+  //   Fire        Well-Baked Body            (Flash Fire e' gia' scritta a parte)
+  //   Water       Dry Skin, Water Absorb, Storm Drain
+  //   Electric    Motor Drive, Volt Absorb, Lightning Rod
+  //   Ground      Earth Eater                (Levitate ed Eelevate stanno sotto)
+  //
+  // Le altre tre guardano una famiglia di mosse, e la famiglia viene sempre da
+  // un flag di moves.json trascritto dal vendor: mai da una lista scritta qui.
+  //
+  //   Bulletproof   flag `bullet`  (26 mosse, da `isBullet`)
+  //   Wind Rider    flag `vento`   (14 mosse, da `isWind`)
+  //   Soundproof    flag `sound`   (18 mosse, da `isSound`) — gia' sopra
+  //
+  // ─── QUATTRO NON SONO RAGGIUNGIBILI, E CI SONO LO STESSO ─────────────────
+  // Well-Baked Body, Storm Drain, Wind Rider e Wonder Guard: nessuna specie
+  // legale in M-B le porta. Ma sono clausole dello STESSO `||`, e sceglierne
+  // otto su dodici dentro una condizione unica sarebbe stato decidere a mano
+  // quale meta' del riferimento vale. Il giorno che la specie entra,
+  // l'abilita' funziona senza toccare il motore.
+  'sap-sipper':      { immuneTipo: TYPES.GRASS },
+  'well-baked-body': { immuneTipo: TYPES.FIRE },
+  'water-absorb':    { immuneTipo: TYPES.WATER },
+  'storm-drain':     { immuneTipo: TYPES.WATER },
+  'motor-drive':     { immuneTipo: TYPES.ELECTRIC },
+  'volt-absorb':     { immuneTipo: TYPES.ELECTRIC },
+  'lightning-rod':   { immuneTipo: TYPES.ELECTRIC },
+  'earth-eater':     { immuneTipo: TYPES.GROUND },
+  'bulletproof':     { immuneProiettili: true },
+  'wind-rider':      { immuneVento: true },
+
+  // Dry Skin ha due meta' che vanno in due punti diversi:
+  //
+  //   immunityChecks   (:1110)  immune all'Acqua, come Water Absorb
+  //   calcBPMods i     (:1686)  x1.25 (0x1400) sulle mosse FUOCO
+  //
+  // La seconda e' un `else if` del punto h, che e' Heatproof prima della nona
+  // generazione: a gen 10 h non scatta mai, quindi i si valuta sempre. La
+  // catena e' trascritta com'e' lo stesso, perche' l'`else` e' la specifica.
+  'dry-skin':        { immuneTipo: TYPES.WATER, debolePerIlFuoco: true },
+
+  // Wonder Guard: passa SOLO il super efficace. Il riferimento scrive
+  // `typeEffectiveness <= 1`, cioe' anche l'efficacia neutra e' annullata —
+  // non e' una resistenza forte, e' un filtro.
+  //
+  // La clausola porta anche `move.type !== 'Typeless'` e un'eccezione di
+  // quarta generazione su Fire Fang. Il primo non lo trascriviamo perche' non
+  // abbiamo mosse senza tipo; la seconda perche' e' `gen !== 4` e noi siamo a
+  // 10. Sono le uniche due parti di questo `||` che restano fuori, e restano
+  // fuori perche' non hanno nulla su cui essere vere.
+  'wonder-guard':    { wonderGuard: true },
+
+  // Damp: quattro mosse non partono proprio (`damage_MASTER.js:1138`). Vale da
+  // TUTT'E DUE i lati — chi ce l'ha le spegne anche a se' stesso — e i quattro
+  // nomi stanno in `MOSSE_ANNULLATE_DA_DAMP` dentro `lib/rules.js`, perche' nel
+  // vendor non c'e' un flag da trascrivere ma un elenco.
+  'damp':            { damp: true },
+
   // Le tre che azzerano le mosse con priorita'. Nel riferimento sono un solo
   // ramo di `immunityChecks` (`damage_MASTER.js:1155`) e un solo
   // `return damage: [0]`: qui un flag solo per tutt'e tre, perche' la

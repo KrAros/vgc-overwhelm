@@ -395,6 +395,18 @@ const FLAG_MOSSE = {
   // copre le quattro mosse con `hasCrash`. Usarlo per Reckless avrebbe dato
   // il numero giusto su tredici mosse e quello sbagliato su quattro.
   rinculo: ['hasRecoil', 'recoilHP', 'hasCrash'],
+  // `vento` entra per Wind Rider, che rende immuni alle mosse di vento.
+  //
+  // Quattordici mosse, e non sono quelle che il nome farebbe indovinare: ci
+  // sono Blizzard e Petal Blizzard, che vento nel nome non ce l'hanno, e
+  // Aeroblast, che nemmeno in italiano lo suggerisce. Scriverle a mano avrebbe
+  // significato dedurle da un'intuizione invece di leggerle.
+  //
+  // Wind Rider oggi non e' raggiungibile — nessuna specie legale in M-B ce
+  // l'ha — ma nel riferimento e' una clausola dello STESSO `||` di Sap Sipper
+  // e Bulletproof. Saltarla sarebbe stato scegliere a mano dentro una
+  // condizione unica.
+  vento: 'isWind',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
