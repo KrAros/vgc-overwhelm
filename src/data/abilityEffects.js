@@ -179,14 +179,36 @@ export const ABILITY_EFFECTS = {
   // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
   'technician':  { technician: true, showInSmogon: true },
 
-  // Abilita' Multipla: le mosse multi-colpo colpiscono sempre il massimo.
+  // Skill Link: le mosse multi-colpo colpiscono sempre il massimo.
   //
   // NON e' un moltiplicatore e non tocca la catena della potenza: agisce sul
-  // numero di colpi, che e' un concetto nuovo del motore da questa sessione.
-  // Prima di averlo non c'era niente su cui potesse agire — ed e' il motivo
-  // per cui non era nelle abilita' del divario: nemmeno il riferimento la
-  // calcola nel danno, perche' anche li' il numero di colpi lo sceglie
-  // l'utente nell'interfaccia.
+  // numero di colpi, che e' un concetto del motore solo da poco. Prima non
+  // c'era niente su cui potesse agire.
+  //
+  // ─── LA FONTE, CHE PER UN PO' NON C'E' STATA ─────────────────────────────
+  //
+  // Il riferimento NON la nomina nel codice del danno: sta solo nel pokedex
+  // come abilita' di una specie. Quando questa riga e' stata scritta l'effetto
+  // era quindi DEDOTTO, e la deduzione e' rimasta dichiarata finche' Simone non
+  // ha fornito la fonte:
+  //
+  //     «Abillegame permette alle mosse multicolpo di mandare a segno sempre
+  //      il massimo dei colpi possibili.»
+  //     wiki.pokemoncentral.it/Abillegame, sezione Effetti
+  //
+  // Coincide con quello che il motore fa. La fonte e' una wiki e non il
+  // riferimento eseguibile, quindi qui non c'e' un confronto roll per roll: e'
+  // il grado di verifica piu' alto disponibile per questa abilita', non il
+  // grado di verifica normale del progetto.
+  //
+  // ─── QUELLO CHE LA FONTE DICE E NOI NON FACCIAMO ─────────────────────────
+  //
+  // La stessa voce aggiunge che dalla quinta generazione l'abilita' vale anche
+  // per Triplocalcio e Triplo Axel. Da noi no, e non per svista: quelle due
+  // hanno `potenzaCrescente` — la potenza sale a ogni colpo — e il motore le
+  // tiene fuori dal modello dei colpi multipli proprio perche' quella
+  // meccanica non c'e'. Su Infestazione invece l'abilita' vale, ed e' il caso
+  // che conta per il meta.
   'skill-link':  { skillLink: true },
 
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
