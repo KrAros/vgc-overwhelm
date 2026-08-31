@@ -297,20 +297,37 @@ describe('le tre finali fanno ognuna il suo mestiere', () => {
 describe('Gorilla Tactics non ha una specie che possa portarla', () => {
   /**
    * È la dodicesima delle dodici, sta nella stessa riga del riferimento delle
-   * altre cinque ×1.5, ed è implementata come loro. Ma in Champions nessuna
-   * specie ce l'ha: Darmanitan-Galar, che nei giochi principali la porta, nel
-   * dex non c'è — c'è `darmanitan` con Sheer Force e Zen Mode.
+   * altre cinque ×1.5, ed è implementata come loro. Ma oggi non la porta
+   * nessuno, e NON perché ci manchi un dato: perché l'unica specie che ce
+   * l'ha non è ammessa nel gioco.
+   *
+   * ─── DUE FONTI CHE NON SI PARLANO, E DICONO LA STESSA COSA ───────────────
+   *
+   *   `POKEDEX_CHAMPIONS` (vendor/ncp/pokedex.js:18386) è un elenco chiuso di
+   *   315 specie scelte a mano. Darmanitan non c'è, in nessuna forma — e le
+   *   uniche tre forme di Galar ammesse sono Slowbro, Slowking e Stunfisk.
+   *
+   *   `regChampionsSpecie.json`, trascritto dagli elenchi ufficiali delle
+   *   regolazioni: M-A 272 specie, M-B 310, zero Darmanitan in entrambe.
+   *
+   * In `pokemon.json` la voce `darmanitan` esiste — con Sheer Force e Zen
+   * Mode, non con questa — perché quel file porta l'anagrafica completa,
+   * 1225 specie, e la legalità la decide un registro a parte invece di essere
+   * codificata togliendo righe (la ragione sta in `gen-roster.mjs`). La forma
+   * di Galar in anagrafica non c'è affatto.
    *
    * Sta in `abilities.json`, quindi il registro del divario la contava fra le
    * 95 e adesso la conta fra le calcolate. Il registro dice «selezionabile»,
    * ma selezionabile vuol dire «esiste nell'elenco», non «un Pokémon può
    * averla»: `abilitaPerSpecie` la rifiuterebbe su qualunque slot.
    *
-   * Questo test non la aggiusta. La REGISTRA: se un giorno il dex prendesse
-   * una specie che la porta, il test diventa rosso e qualcuno viene a leggere
-   * questa nota invece di scoprire il buco da un numero sbagliato.
+   * Questo test non la aggiusta, e non c'è niente da aggiustare: l'effetto è
+   * scritto e verificato, e il giorno che la specie entrasse funzionerebbe
+   * senza toccare il motore. Il test REGISTRA il confine — se l'anagrafica
+   * prendesse una specie che la porta, diventa rosso e qualcuno viene a
+   * leggere questa nota invece di scoprire il buco da un numero sbagliato.
    */
-  it('nessuna specie del dex la porta', () => {
+  it('nessuna specie dell\'anagrafica la porta', () => {
     const norm = s => String(s).toLowerCase().replace(/ /g, '-')
     const portatrici = Object.entries(pokemonData)
       .filter(([, v]) => (v.abilities ?? []).map(norm).includes('gorilla-tactics'))
