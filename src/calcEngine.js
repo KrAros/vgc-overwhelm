@@ -15,7 +15,7 @@ import {
   applyBoost,
   normalizzaMeteo,
   totalSPs,
-  STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
+  STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
   ABILITA_ATE,
   MOSSE_SENZA_PARENTAL_BOND,
   MOSSE_ANNULLATE_DA_DAMP,
@@ -184,63 +184,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defPokeData = POKEMON_DATA[defPokemon]
   if (!atkPokeData || !defPokeData) return null
 
-  // ── Il meteo, normalizzato una volta sola ────────────────────────────────
-  // Da qui in giù `meteo` è uno dei sei nomi canonici oppure null. Nessun
-  // altro punto del motore legge `field.weather`: se lo facesse, tornerebbe a
-  // vedere le forme grezze — `hail`, `sandstorm`, un `HAIL` maiuscolo — e
-  // ricomincerebbe la storia dei sinonimi sparsi.
-  const meteo = normalizzaMeteo(field.weather)
-
-  // ── Weather Ball: tipo e BP cambiano in base al meteo ────────────────────
-  // Senza meteo: Normal BP 50 — Con meteo: tipo corrispondente BP 100
-  // Tabella e regola stanno in `lib/rules.js` dalla sessione Q: la stessa
-  // domanda serve al motore, al badge del tipo mossa e al riquadro delle -ate.
-  const isWeatherBall = move === 'weather ball'
-  const weatherBallType = tipoPallaClima(move, meteo)
-  let moveType = weatherBallType !== null ? weatherBallType : moveData.type
-  const isLastRespects = move === 'last respects'
-  const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
-  const effectiveBP    = isLastRespects ? lastRespectsBP
-    : isWeatherBall && weatherBallType !== null ? 100
-    : moveData.power
-  const atkTypes = atkPokeData.type
-  const defTypes = defPokeData.type
-  // Il contatto "grezzo", quello scritto nei dati della mossa. Il contatto
-  // EFFETTIVO si decide più sotto, dopo aver letto lo strumento: Punching
-  // Glove, Protective Pads e Long Reach lo tolgono.
-  const isContactBase = moveData.contact === true
-  const isPunch = moveData.punch === true
-  const isPulse = moveData.pulse === true
-  const isSound = moveData.sound === true
-  const isPrioritaria = moveData.prioritaria === true
-  const isBite  = moveData.bite === true
-  const isSlicing = moveData.slicing === true
-  const isRinculo = moveData.rinculo === true
-  const isBullet = moveData.bullet === true
-  const isVento = moveData.vento === true
-  const isSecondario = moveData.secondario === true
-  const isSpread  = moveData.spread === true
-
-  const isSpecial = moveData.category === 1
-  // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk.
-  //
-  // ─── LA REGOLA PER INTERO (Bulbapedia, "Body Press (move)") ──────────────
-  // Cambia SOLO da dove si legge la statistica e quali stage si applicano:
-  // valgono quelli di Difesa, non quelli di Attacco. Tutto il resto resta il
-  // corredo OFFENSIVO dell'utente — strumento, abilità e bruciatura inclusi.
-  //
-  //   sì  → Huge Power, Choice Band, Slow Start, Defeatist  (modificano l'attacco)
-  //   no  → Fur Coat, Eviolite, Sword of Ruin               (modificano la difesa)
-  //
-  // Due conseguenze per il seguito di questa sessione:
-  //   1. quando Fur Coat entrerà in `dfMods`, deve restare confinata al
-  //      difensore: non deve mai gonfiare il Body Press di chi la possiede;
-  //   2. Intimidate abbassa lo stage di ATTACCO, quindi non tocca Body Press —
-  //      vedi il blocco Intimidate più sotto.
-  const isBodyPress = moveData.useDefAsStat === true
-  const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
-  const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
-
   // ── Chiavi abilità normalizzate ──────────────────────────────────────────
   const atkAbilKey = normalizeAbilityKey(atkAbility)
   const defAbilKey = normalizeAbilityKey(defAbility)
@@ -295,6 +238,84 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     ? (defAbilEffettiva?.aura !== undefined ? { aura: defAbilEffettiva.aura } : null)
     : defAbilEffettiva
 
+  // (Questo blocco stava piu' in basso fino alla sessione che ha portato
+  // Air Lock: e' salito perche' il meteo adesso dipende dalle abilita' dei due
+  // Pokemon, e una costante non puo' leggerne una dichiarata dopo di lei.)
+  // ── Il meteo, normalizzato una volta sola ────────────────────────────────
+  // Da qui in giù `meteo` è uno dei sei nomi canonici oppure null. Nessun
+  // altro punto del motore legge `field.weather`: se lo facesse, tornerebbe a
+  // vedere le forme grezze — `hail`, `sandstorm`, un `HAIL` maiuscolo — e
+  // ricomincerebbe la storia dei sinonimi sparsi.
+  //
+  // ─── AIR LOCK E CLOUD NINE: IL METEO NON C'È PIÙ ─────────────────────────
+  //
+  // Trascritto da `checkAirLock` (`damage_MASTER.js:411`), che fa
+  // `field.clearWeather()` — non riduce l'effetto del meteo, lo TOGLIE.
+  //
+  // E il riferimento la chiama su TUTT'E DUE i Pokémon (`damage_SV.js:10-11`),
+  // prima di qualunque altra cosa: basta che ce l'abbia uno dei due e il meteo
+  // sparisce per entrambi, anche per chi ci contava.
+  //
+  // Sta qui e non più in basso perché `meteo` è la variabile che tutto il
+  // motore legge: azzerarla in un punto solo spegne il ×1.5 del sole,
+  // il dimezzamento, Sand Force, Solar Power, il tipo di Weather Ball, le
+  // abilità meteo-velocità e le immunità da meteo estremo, senza che nessuna
+  // di quelle righe sappia che Air Lock esiste. Stessa forma della
+  // sostituzione di Mold Breaker, e per la stessa ragione.
+  const meteoAnnullato =
+    atkAbilEffect?.annullaMeteo === true || defAbilEffect?.annullaMeteo === true
+  const meteo = meteoAnnullato ? null : normalizzaMeteo(field.weather)
+
+  // ── Weather Ball: tipo e BP cambiano in base al meteo ────────────────────
+  // Senza meteo: Normal BP 50 — Con meteo: tipo corrispondente BP 100
+  // Tabella e regola stanno in `lib/rules.js` dalla sessione Q: la stessa
+  // domanda serve al motore, al badge del tipo mossa e al riquadro delle -ate.
+  const isWeatherBall = move === 'weather ball'
+  const weatherBallType = tipoPallaClima(move, meteo)
+  let moveType = weatherBallType !== null ? weatherBallType : moveData.type
+  const isLastRespects = move === 'last respects'
+  const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
+  const effectiveBP    = isLastRespects ? lastRespectsBP
+    : isWeatherBall && weatherBallType !== null ? 100
+    : moveData.power
+  const atkTypes = atkPokeData.type
+  const defTypes = defPokeData.type
+  // Il contatto "grezzo", quello scritto nei dati della mossa. Il contatto
+  // EFFETTIVO si decide più sotto, dopo aver letto lo strumento: Punching
+  // Glove, Protective Pads e Long Reach lo tolgono.
+  const isContactBase = moveData.contact === true
+  const isPunch = moveData.punch === true
+  const isPulse = moveData.pulse === true
+  const isSound = moveData.sound === true
+  const isPrioritaria = moveData.prioritaria === true
+  const isBite  = moveData.bite === true
+  const isSlicing = moveData.slicing === true
+  const isRinculo = moveData.rinculo === true
+  const isBullet = moveData.bullet === true
+  const isVento = moveData.vento === true
+  const isSecondario = moveData.secondario === true
+  const isSpread  = moveData.spread === true
+
+  const isSpecial = moveData.category === 1
+  // Body Press: mossa fisica che usa la Def dell'attaccante invece dell'Atk.
+  //
+  // ─── LA REGOLA PER INTERO (Bulbapedia, "Body Press (move)") ──────────────
+  // Cambia SOLO da dove si legge la statistica e quali stage si applicano:
+  // valgono quelli di Difesa, non quelli di Attacco. Tutto il resto resta il
+  // corredo OFFENSIVO dell'utente — strumento, abilità e bruciatura inclusi.
+  //
+  //   sì  → Huge Power, Choice Band, Slow Start, Defeatist  (modificano l'attacco)
+  //   no  → Fur Coat, Eviolite, Sword of Ruin               (modificano la difesa)
+  //
+  // Due conseguenze per il seguito di questa sessione:
+  //   1. quando Fur Coat entrerà in `dfMods`, deve restare confinata al
+  //      difensore: non deve mai gonfiare il Body Press di chi la possiede;
+  //   2. Intimidate abbassa lo stage di ATTACCO, quindi non tocca Body Press —
+  //      vedi il blocco Intimidate più sotto.
+  const isBodyPress = moveData.useDefAsStat === true
+  const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
+  const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
+
   // ── QUANTE VOLTE COLPISCE ────────────────────────────────────────────────
   //
   // `colpi` in moves.json è `[min, max]`, trascritto da `hitRange` del vendor
@@ -341,12 +362,31 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     && !MOSSE_SENZA_PARENTAL_BOND.has(move)
 
 
+  // ── Liquid Voice: le mosse sonore diventano Acqua ────────────────────────
+  //
+  // Trascritto da `checkAbilityTypeChange` (`damage_MASTER.js:1063`), che è la
+  // STESSA funzione delle abilità «-ate» — e ne è il ramo `if`, mentre le
+  // «-ate» sono l'`else`. I due non possono quindi accendersi insieme, ed è
+  // scritto qui come `else if` per la stessa ragione.
+  //
+  // Non è un moltiplicatore: è un cambio di TIPO, e da qui passa tutto —
+  // lo STAB, l'efficacia, il meteo, le aure, le immunità. Cambiare `moveType`
+  // in questo punto è come lo fa il riferimento: prima che chiunque altro lo
+  // legga.
+  //
+  // Le diciotto mosse sonore vengono dal flag `sound` di moves.json, lo stesso
+  // che usano Soundproof e Punk Rock — e non è indovinabile dal nome: ci sono
+  // Snore, Round, Relic Song, Chatter, Psychic Noise e Torch Song.
+  //
   // Ate abilities: Normal -> altro tipo + x1.2 BP
   // La tabella sta in `data/typeChart.js` dalla sessione Q. Qui c'erano quattro
   // `if`, e in `SearchSelects.jsx` la stessa corrispondenza scritta con gli
   // indici numerici: due copie che concordavano senza che niente lo garantisse.
   let ateBoost = false
-  if (moveType === TYPES.NORMAL && ABILITA_ATE[atkAbilKey] !== undefined) {
+  if (atkAbilEffect?.liquidVoice && isSound) {
+    moveType = TYPES.WATER
+  }
+  else if (moveType === TYPES.NORMAL && ABILITA_ATE[atkAbilKey] !== undefined) {
     moveType = ABILITA_ATE[atkAbilKey]
     ateBoost = true
   }
@@ -539,11 +579,48 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Gli altri restano: un critico di un Pokémon a +2 Attacco è comunque a +2.
   // Scritto come clamp perché `applyBoost(stat, 0)` restituisce la statistica
   // grezza: azzerare lo stadio e usare il valore grezzo sono la stessa cosa.
-  const atkBoostUsato = field.crit ? Math.max(0, atkBoostVal)  : atkBoostVal
-  const defBoostUsato = field.crit ? Math.min(0, defBoostVal)  : defBoostVal
+  // ── Il critico può non esserci affatto: Shell Armor e Battle Armor ───────
+  //
+  // Trascritto da `critMove` (`damage_MASTER.js:1018`), che è una riga sola:
+  //
+  //     return move.isCrit && ["Battle Armor", "Shell Armor"].indexOf(defAbility) === -1;
+  //
+  // Da qui in giù si legge `critico` e non più `field.crit`: l'interruttore
+  // dell'interfaccia dice cosa ha chiesto chi usa l'app, questa costante dice
+  // cosa succede davvero. Sono quattro punti — i due clamp qui sotto, lo
+  // schermo bucato, il ×1.5 dentro il tiro e Sniper — e se uno solo continuasse
+  // a leggere `field.crit` il critico sparirebbe a metà.
+  //
+  // ─── E MOLD BREAKER LO FA PASSARE ────────────────────────────────────────
+  // Nel riferimento `critMove` riceve la `defAbility` GIÀ passata per
+  // `abilityIgnore`. Qui `defAbilEffect` è già quella sostituita, quindi la
+  // cosa viene da sé: contro Mold Breaker, Battle Armor non ferma niente.
+  const critico = field.crit === true && !defAbilEffect?.bloccaCritico
+
+  const atkBoostUsato = critico ? Math.max(0, atkBoostVal)  : atkBoostVal
+  const defBoostUsato = critico ? Math.min(0, defBoostVal)  : defBoostVal
 
   const atkBoostEffective = Math.min(6, Math.max(-6, atkBoostUsato))
   let atkStatFinal = applyBoost(atkStat, atkBoostEffective)
+
+  // ── punto e di `calcAttack`: Hustle ──────────────────────────────────────
+  //
+  // Il riferimento lo commenta da sé, ed è l'unica volta che lo fa per
+  // avvertire di una differenza di forma (`damage_MASTER.js:1895`):
+  //
+  //     // unlike all other attack modifiers, Hustle gets applied directly
+  //     attack = pokeRound(attack * 3 / 2);
+  //
+  // Cioè: NON entra in `atMods`. Si applica alla statistica appena boostata, e
+  // la catena dei modificatori parte da lì. Metterlo nella catena darebbe un
+  // numero plausibile e diverso, perché `chainMods` concatena in virgola fissa
+  // e questo è un `× 3 / 2` con un solo `pokeRound` suo.
+  //
+  // Scritto `* 3 / 2` e non `* 1.5` per copiarlo com'è: sono lo stesso numero,
+  // ma la forma dice da dove viene.
+  if (atkAbilEffect?.hustle && !isSpecial) {
+    atkStatFinal = pokeRound(atkStatFinal * 3 / 2)
+  }
   let defStatFinal = applyBoost(defStat, defBoostUsato)
 
   // ── Item effects ─────────────────────────────────────────────────────────
@@ -766,6 +843,41 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     bpMods.push(MOD.X1_2)
   }
 
+  // e.iii — Analytic: ×1.3 se NON muovi per primo.
+  //
+  // ─── L'ORDINE DI TURNO NON VIENE DALL'INTERFACCIA ───────────────────────
+  //
+  // Se lo ricava il riferimento, in una riga (`damage_SV.js:147`):
+  //
+  //     var turnOrder = attacker.stats[SP] > defender.stats[SP] ? "FIRST" : "LAST";
+  //
+  // Due cose da non perdere nella traduzione.
+  //
+  // `stats` è la Velocità con gli STADI ma senza nient'altro: niente Choice
+  // Scarf, niente meteo, niente Tailwind, niente ×1.5 del paradosso. Il motore
+  // ha già `calcEffectiveSpe` in `utils/speedOrder.js`, che tutte quelle cose
+  // le sa — e usarla qui sarebbe «migliorare» il riferimento, cioè divergere
+  // da lui con le migliori intenzioni. Si copia la riga.
+  //
+  // Il confronto è `>` STRETTO, e l'`else` è «LAST». Quindi a parità esatta di
+  // Velocità Analytic SI ACCENDE. È il caso che un `>=` scritto per simmetria
+  // farebbe sparire, e nessun numero lo direbbe ad alta voce.
+  //
+  // ─── PERCHÉ IL CALCOLO STA QUI E IL PUSH PIÙ SOTTO ──────────────────────
+  // Perché i cinque punti e.i-e.v sono una catena `else if` sola, e una
+  // dichiarazione in mezzo la spezzerebbe — l'ho scoperto spezzandola. Il
+  // confronto si calcola qui sopra, il push sta al suo posto nella catena,
+  // fra e.ii (Impeto Sabbia) ed e.iv (Tough Claws).
+  const speAttaccante = applyBoost(
+    calcStat(getBaseStat(atkPokemon, STAT_SPE), atkSPs[STAT_SPE], level, atkNature, STAT_SPE),
+    preparazione.attaccante.boosts.sp,
+  )
+  const speDifensore = applyBoost(
+    calcStat(getBaseStat(defPokemon, STAT_SPE), defSPs[STAT_SPE], level, defNature, STAT_SPE),
+    preparazione.difensore.boosts.sp,
+  )
+  const muovePerPrimo = speAttaccante > speDifensore
+
   // e.i — Sheer Force: ×1.3 sulle mosse con un effetto secondario.
   //
   // Primo anello della catena `else if` del punto e, quindi batte tutti gli
@@ -809,6 +921,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // letta il giorno che una casella di campo o una copia cambiassero le carte.
   //
   // Le diciotto mosse sonore vengono dal flag `sound` di moves.json.
+  else if (atkAbilEffect?.analytic && !muovePerPrimo) bpMods.push(MOD.X1_3)
   else if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
   else if (atkAbilEffect?.punkRock && isSound) bpMods.push(MOD.X1_3)
 
@@ -1024,7 +1137,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //    quale difesa la mossa colpisce. Body Press resta fisica e passa da
   //    Reflect, com'è giusto.
   const bypassaSchermi =
-    field.crit === true ||
+    critico ||
     SCREEN_BYPASS_MOVES.has(move) ||
     atkAbilEffect?.infiltrator === true
 
@@ -1074,10 +1187,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // condizione di Tinted Lens sarebbe vera, ma lì non si arriva: l'immunità
   // esce molto prima con `damage: [0]`.
   //
-  // `field.crit` è lo stesso interruttore che più sotto moltiplica per 1.5 il
+  // `critico` è lo stesso valore che più sotto moltiplica per 1.5 il
   // danno dentro il tiro. Sniper non lo sostituisce, ci si aggiunge.
   if (atkAbilEffect?.neuroforce && effectiveness > 1) finalMods.push(MOD.X1_25)
-  if (atkAbilEffect?.sniper && field.crit)            finalMods.push(MOD.X1_5)
+  if (atkAbilEffect?.sniper && critico)               finalMods.push(MOD.X1_5)
   if (atkAbilEffect?.tintedLens && effectiveness < 1) finalMods.push(MOD.X2)
 
   if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
@@ -1157,7 +1270,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     if (meteo === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
 
     // Critico
-    if (field.crit) damage = Math.floor(damage * 1.5)
+    if (critico) damage = Math.floor(damage * 1.5)
 
     // Roll random (85-100%)
     damage = Math.floor(damage * r / 100)

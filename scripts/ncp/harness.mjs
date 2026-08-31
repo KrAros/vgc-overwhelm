@@ -417,9 +417,29 @@ export function creaHarness() {
   function costruisciCampo(field, format) {
     const latoP0 = costruisciLato(field, format)
     const latoP1 = costruisciLato(field, format)
+
+    // Il meteo è MUTABILE, e non per comodità: `checkAirLock`
+    // (`damage_MASTER.js:411`) chiama `field.clearWeather()`, cioè cancella il
+    // meteo dal campo per il resto del calcolo. Senza questo metodo l'ingresso
+    // alto scoppiava con «field.clearWeather is not a function» — ed è così
+    // che si è scoperto che Air Lock e Cloud Nine da `GET_DAMAGE_SV` non
+    // passano nemmeno.
+    //
+    // Va azzerato in TRE posti, non uno: la copia locale che `getWeather`
+    // restituisce, e il campo `weather` dei due lati. Le funzioni del danno
+    // ricevono un LATO (`field.getSide(i)`) e leggono `field.weather` da
+    // quello, non dal campo: azzerare solo il campo lascerebbe il sole acceso
+    // dentro `calcBPMods` e il numero sarebbe giusto per metà.
+    let meteoCorrente = METEO_NCP[String(field.weather || '').toLowerCase()] || ''
+
     return {
       getTerrain: () => TERRENO_NCP[field.terrain] || '',
-      getWeather: () => METEO_NCP[String(field.weather || '').toLowerCase()] || '',
+      getWeather: () => meteoCorrente,
+      clearWeather: () => {
+        meteoCorrente = ''
+        latoP0.weather = ''
+        latoP1.weather = ''
+      },
       getNeutralGas: () => false,
       getSide: (i) => (i === 0 ? latoP0 : latoP1),
       getTailwind: () => false,

@@ -41,6 +41,8 @@ import { describe, it, expect, beforeAll } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import AbilityFlags from '../components/editor/AbilityFlags.jsx'
 import { caricaLingua } from '../i18n.js'
+import gapNoti from '../data/gapNoti.json' with { type: 'json' }
+import it_ from '../locales/it.json' with { type: 'json' }
 
 /**
  * ─── PERCHÉ SI ASPETTA LA LINGUA ───────────────────────────────────────────
@@ -233,13 +235,34 @@ describe('la proprietà stabilita dalla sessione Q', () => {
  * Trovato provando la perturbazione, non ragionandoci.
  */
 describe('l’avviso «non calcolata» resta inline', () => {
-  // Guscioscudo ha descrizione E badge: è il caso in cui prima comparivano due
-  // riquadri uno sotto l'altro.
-  const CON_ENTRAMBI = 'shell armor'
+  /**
+   * ─── IL CASO DI PROVA SI SCEGLIE DA SÉ, E NON PER PIGRIZIA ───────────────
+   *
+   * Qui c'era scritto `'shell armor'`: aveva descrizione E badge, cioè era il
+   * caso in cui prima comparivano due riquadri uno sotto l'altro.
+   *
+   * Poi Guscioscudo è stata implementata, il badge se n'è andato, e questo
+   * blocco è diventato rosso — giustamente: il suo primo test esiste apposta
+   * per non lasciarlo passare su un'abilità senza avviso.
+   *
+   * Ma scrivere un altro nome a mano vuol dire ripetere la scena alla
+   * prossima abilità implementata, e il divario si accorcia di proposito ogni
+   * sessione. Il caso adesso si prende dal registro: la prima abilità che ha
+   * insieme il badge e una descrizione abbastanza lunga da mostrare la forma.
+   *
+   * La proprietà che il blocco difende non cambia — l'avviso è inline — e il
+   * controllo negativo resta: se un giorno NESSUNA abilità avesse tutt'e due
+   * le cose, il primo test lo direbbe invece di passare a vuoto.
+   */
+  const CON_ENTRAMBI = gapNoti.abilita.find(
+    a => (it_.abilities_desc?.[a.replace(/ /g, '-')] ?? '').length > 40,
+  )
 
   it('il caso di prova ha davvero sia descrizione sia avviso', () => {
     // Senza questo controllo il blocco passerebbe su un'abilità che il badge
     // non ce l'ha: cercherebbe un `<div role="note">` che non c'è mai stato.
+    expect(CON_ENTRAMBI, 'nessuna abilità nel divario ha una descrizione: caso di prova impossibile')
+      .toBeTruthy()
     const html = rendi(CON_ENTRAMBI)
     expect(html).toMatch(/role="note"/)
     expect(html.replace(/<[^>]*>/g, '').trim().length, 'testo della descrizione').toBeGreaterThan(30)
