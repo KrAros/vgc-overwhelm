@@ -163,11 +163,20 @@ export function creaHarness() {
       !!field.lightScreen,
       false,               // isForesight
       !!field.helpingHand,
-      false, false,        // isFriendGuard, isBattery
+      // ── Le cinque caselle dell'ALLEATO ──────────────────────────────────
+      // Erano `false` fisso, quindi non verificabili: qualunque cosa il motore
+      // ne facesse, il riferimento diceva sempre «spente». Adesso arrivano dal
+      // nostro `field`, con i nomi che `buildField` gli dà.
+      //
+      // `isFlowerGiftAtk` e `isFlowerGiftSpD` sono due campi qui e uno solo da
+      // noi: la traduzione la fa `buildField`, che dallo stesso interruttore
+      // ricava il verso — Attacco sul lato che attacca, Difesa Speciale su
+      // quello che subisce.
+      !!field.friendGuard, !!field.battery,
       false,               // isProtect
-      false, false, false, // isPowerSpot, isSteelySpirit, isNeutralizingGas
+      !!field.powerSpot, !!field.steelySpiritAlleato, false, // …, isNeutralizingGas
       false,               // isGmaxField
-      false, false,        // isFlowerGiftSpD, isFlowerGiftAtk
+      !!field.flowerGiftSpD, !!field.flowerGiftAtk,
       false, false,        // isTailwind, isSaltCure
       !!field.auroraVeil,
       false, false,        // isSwamp, isSeaFire

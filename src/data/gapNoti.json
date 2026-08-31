@@ -1,15 +1,14 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T15:09:30.390Z",
+    "generatedAt": "2026-08-31T15:22:30.756Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 59,
+    "abilitaNelGap": 55,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
     "aura break",
-    "battery",
     "battle bond",
     "beads of ruin",
     "blaze",
@@ -20,9 +19,7 @@
     "electromorphosis",
     "embody aspect",
     "flare boost",
-    "flower gift",
     "forecast",
-    "friend guard",
     "galvanize",
     "grass pelt",
     "gulp missile",
@@ -47,7 +44,6 @@
     "piercing drill",
     "plus",
     "power of alchemy",
-    "power spot",
     "protean",
     "rattled",
     "receiver",

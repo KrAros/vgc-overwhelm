@@ -177,6 +177,15 @@ describe('share — lo stato di campo viaggia nel link', () => {
     lightScreen: { t1: false, t2: true  },
     reflect:     { t1: true,  t2: false },
     crit:        { t1: false, t2: false },
+    // Le cinque caselle dell'alleato. Stanno qui con valori DIVERSI fra loro e
+    // fra i due lati: un codice che le scambiasse — `bt` letto come `ps`, o
+    // `t1` come `t2` — passerebbe con tutte a false, e questo test esiste per
+    // non lasciarglielo fare.
+    battery:      { t1: true,  t2: false },
+    powerSpot:    { t1: false, t2: true  },
+    steelySpirit: { t1: true,  t2: true  },
+    friendGuard:  { t1: false, t2: true  },
+    flowerGift:   { t1: true,  t2: false },
   }
 
   it('un link con Trick Room, Reflect e Tailwind li ripristina tutti', () => {

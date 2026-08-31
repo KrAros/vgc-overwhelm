@@ -242,11 +242,19 @@ describe('battleState — buildField', () => {
   })
 
   it('un campo vuoto produce tutto spento, senza default inventati', () => {
+    // L'asserzione è sulla FORMA ESATTA, non su qualche chiave: un campo nuovo
+    // che nascesse `true`, o che comparisse senza che nessuno lo abbia voluto,
+    // fa diventare rosso questo test. Va quindi allungato di proposito ogni
+    // volta che il campo di battaglia cresce — è successo con le cinque
+    // caselle dell'alleato, ed è il modo in cui doveva funzionare.
     const f = buildField()
     expect(f).toEqual({
       weather: null, terrain: null, doubleTarget: false,
       helpingHand: false, crit: false,
+      battery: false, powerSpot: false, steelySpiritAlleato: false,
       auroraVeil: false, lightScreen: false, reflect: false,
+      friendGuard: false,
+      flowerGiftAtk: false, flowerGiftSpD: false,
       trickRoom: false, tailwindT1: false, tailwindT2: false,
       atkTeamSide: 't1',
     })

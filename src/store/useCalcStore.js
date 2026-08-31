@@ -308,6 +308,8 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     if (campo.doubleTarget === false) f.dt = 0   // il default è acceso
     const coppie = {
       hh: campo.helpingHand, tw: campo.tailwind, av: campo.auroraVeil,
+      bt: campo.battery, ps: campo.powerSpot, ss: campo.steelySpirit,
+      fg: campo.friendGuard, fw: campo.flowerGift,
       ls: campo.lightScreen, rf: campo.reflect,  cr: campo.crit,
     }
     for (const [chiave, valore] of Object.entries(coppie)) {
@@ -396,6 +398,11 @@ export function decodeTeamsFromURL(encoded) {
         lightScreen:  coppia(f.ls),
         reflect:      coppia(f.rf),
         crit:         coppia(f.cr),
+        battery:      coppia(f.bt),
+        powerSpot:    coppia(f.ps),
+        steelySpirit: coppia(f.ss),
+        friendGuard:  coppia(f.fg),
+        flowerGift:   coppia(f.fw),
       }
     }
 
@@ -452,6 +459,22 @@ const campoIniziale = {
   lightScreen: { t1: false, t2: false },
   reflect:     { t1: false, t2: false },
   crit:        { t1: false, t2: false },
+  // ── Le cinque caselle dell'ALLEATO ────────────────────────────────────────
+  // Nel riferimento non sono abilita' lette dal Pokemon ma campi del terreno
+  // (`field.isBattery`, `field.isPowerSpot`, `field.isSteelySpirit`,
+  // `field.isFriendGuard`, `field.isFlowerGiftAtk`/`SpD`): chi le possiede e'
+  // il compagno accanto, non chi attacca o subisce.
+  //
+  // `flowerGift` e' UNO solo per lato anche se il riferimento ne ha due: la
+  // sua interfaccia ha due caselle separate, ma dicono la stessa cosa da due
+  // versi — l'alleato ce l'ha, quindi ti alza l'Attacco quando attacchi e la
+  // Difesa Speciale quando difendi. La proiezione per direzione la fa
+  // `buildField`.
+  battery:      { t1: false, t2: false },
+  powerSpot:    { t1: false, t2: false },
+  steelySpirit: { t1: false, t2: false },
+  friendGuard:  { t1: false, t2: false },
+  flowerGift:   { t1: false, t2: false },
   ...(statoIniziale.field || {}),
 }
 

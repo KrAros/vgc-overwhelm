@@ -410,7 +410,31 @@ export const ABILITY_EFFECTS = {
   // ce l'ha un ALLEATO. Qui c'e' solo la prima: la seconda e' una casella di
   // campo che non abbiamo, come Battery e Power Spot — e infatti tutt'e tre
   // restano nelle 108 per quella meta'.
-  'steely-spirit': { steelySpirit: true, showInSmogon: true },
+  'steely-spirit': { steelySpirit: true, casellaDiCampo: 'steelySpirit', showInSmogon: true },
+
+  // ── Le quattro che appartengono all'ALLEATO ─────────────────────────────
+  //
+  // `casellaDiCampo` dice: «questa abilita' il motore la calcola, ma non
+  // leggendola dallo slot — la legge dall'interruttore che porta questo nome
+  // nella barra dei modificatori».
+  //
+  // ─── PERCHE' SERVE UN CAMPO, E NON BASTA IL MOTORE ──────────────────────
+  //
+  // Perche' senza, il registro del divario le contava fra le «non calcolate» e
+  // il segnalino diceva all'utente che l'app non le applica. Dopo questa
+  // sessione sarebbe stata una bugia: le applica, si accendono altrove.
+  //
+  // Nel riferimento non hanno un nome proprio — sono `field.isBattery`,
+  // `field.isPowerSpot`, `field.isSteelySpirit`, `field.isFriendGuard`,
+  // `field.isFlowerGiftAtk`/`SpD` — ed e' coerente: chi le possiede non e' ne'
+  // chi attacca ne' chi subisce, e' il compagno accanto.
+  //
+  // Steely Spirit ce l'ha in aggiunta al suo `steelySpirit`, perche' ha DUE
+  // meta': una quando ce l'ha chi attacca, una quando ce l'ha l'alleato.
+  'battery':      { casellaDiCampo: 'battery' },
+  'power-spot':   { casellaDiCampo: 'powerSpot' },
+  'friend-guard': { casellaDiCampo: 'friendGuard' },
+  'flower-gift':  { casellaDiCampo: 'flowerGift' },
 
   // Tecnico: x1.5 sulle mosse con potenza base fino a 60. Quarta e ultima
   // FATTIBILE delle sei del ramo — Flare Boost e Toxic Boost vogliono gli

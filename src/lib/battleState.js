@@ -145,10 +145,25 @@ export function buildField(campo = {}, atkSide = 't1') {
     helpingHand: !!campo.helpingHand?.[mio],
     crit:        !!campo.crit?.[mio],
 
+    // Le caselle dell'ALLEATO che potenziano chi attacca.
+    battery:             !!campo.battery?.[mio],
+    powerSpot:           !!campo.powerSpot?.[mio],
+    steelySpiritAlleato: !!campo.steelySpirit?.[mio],
+
     // Modificatori del difensore: si leggono dal lato opposto.
     auroraVeil:  !!campo.auroraVeil?.[suo],
     lightScreen: !!campo.lightScreen?.[suo],
     reflect:     !!campo.reflect?.[suo],
+    friendGuard: !!campo.friendGuard?.[suo],
+
+    // Flower Gift è UNA casella per lato letta da DUE versi: alza l'Attacco di
+    // chi ce l'ha sul proprio lato, e la Difesa Speciale di chi ce l'ha sul
+    // lato che subisce. Nel riferimento sono due campi (`isFlowerGiftAtk` e
+    // `isFlowerGiftSpD`) perché la sua interfaccia ha due caselle; qui la
+    // casella è una e la direzione la decide questa funzione, che è il posto
+    // dove il progetto tiene già questa distinzione.
+    flowerGiftAtk: !!campo.flowerGift?.[mio],
+    flowerGiftSpD: !!campo.flowerGift?.[suo],
 
     // Letti solo dall'indicatore di velocità, non dal motore di danno. Stanno
     // qui perché il campo di battaglia è uno: se domani il motore ne avesse

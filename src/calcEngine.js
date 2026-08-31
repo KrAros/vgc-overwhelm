@@ -677,6 +677,20 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (preparazione.difensore.statPiuAlta === 'sd' &&  isSpecial)
   )
 
+  // punto b — Flower Gift dell'ALLEATO, lato difensore: ×1.5 sulla Difesa
+  // Speciale, col sole (`damage_MASTER.js:2097`).
+  //
+  // È la stessa casella dell'altra metà, letta dall'altro lato: nel
+  // riferimento sono due campi diversi (`isFlowerGiftAtk` e `isFlowerGiftSpD`)
+  // perché la sua interfaccia ha due caselle, ma dicono la stessa cosa —
+  // l'alleato ce l'ha, quindi ti alza l'Attacco quando attacchi e la Difesa
+  // Speciale quando difendi.
+  //
+  // Sta al punto b, prima del paradosso (punto c), ed è un `if` a sé.
+  if (field.flowerGiftSpD && isSole && isSpecial && defItemKey !== 'utility umbrella') {
+    dfMods.push(MOD.X1_5)
+  }
+
   if (paradossoDifesa) dfMods.push(MOD.X1_3)
   // punto e — Fur Coat: ×2 sulla Difesa fisica.
   else if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
@@ -736,6 +750,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // invece del ramo giusto darebbe un numero plausibile e sbagliato.
   const puntoE = paradossoAttacco ||
     (atkAbilEffect?.transistor && moveType === TYPES.ELECTRIC)
+
+  // punto c — Flower Gift dell'ALLEATO: ×1.5 sull'Attacco, col sole.
+  //
+  // Nel riferimento sono due rami dello stesso `if / else if` (`:1929-1938`):
+  // il primo è Cherrim che ce l'ha addosso, il secondo `field.isFlowerGiftAtk`,
+  // cioè l'alleato. Qui c'è solo il secondo, perché Cherrim non è in Champions
+  // e la prima metà non avrebbe nulla su cui essere vera.
+  //
+  // Il sole si legge con `indexOf("Sun")`, quindi vale anche il Sole Estremo —
+  // e la nostra `isSole` fa già quella somma. L'Utility Umbrella lo spegne,
+  // com'è scritto là.
+  //
+  // Sta PRIMA del punto d, quindi prima dell'`if / else if` qui sotto: è un
+  // `if` a sé e si somma.
+  if (field.flowerGiftAtk && isSole && !isSpecial && atkItemKey !== 'utility umbrella') {
+    atMods.push(MOD.X1_5)
+  }
 
   if (puntoD) atMods.push(MOD.X1_5)
   else if (puntoE) atMods.push(MOD.X1_3)
@@ -842,6 +873,21 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
            (atkAbilEffect?.reckless && isRinculo)) {
     bpMods.push(MOD.X1_2)
   }
+
+  // ── punto d: le abilità dell'ALLEATO ─────────────────────────────────────
+  //
+  // Nel riferimento non hanno un nome: sono `field.isBattery`,
+  // `field.isPowerSpot` e `field.isSteelySpirit` (`damage_MASTER.js:1609-1623`),
+  // cioè caselle di campo, non abilità lette dal Pokémon. È coerente: chi le
+  // possiede non è quello che attacca — è il compagno accanto.
+  //
+  // Sono tre `if` INDIPENDENTI, non una catena: un alleato con Power Spot e un
+  // altro con Battery si sommano. E stanno tutti e tre PRIMA del punto e,
+  // quindi prima di `tempBP` — un alleato con Power Spot può spegnere il
+  // Tecnico di chi attacca.
+  if (field.battery && isSpecial) bpMods.push(MOD.X1_3)
+  if (field.powerSpot) bpMods.push(MOD.X1_3)
+  if (field.steelySpiritAlleato && moveType === TYPES.STEEL) bpMods.push(MOD.X1_5)
 
   // e.iii — Analytic: ×1.3 se NON muovi per primo.
   //
@@ -1202,6 +1248,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // (Ice Scales), dove la mette il riferimento (`:2370`).
   if (defAbilEffect?.punkRock && isSound)          finalMods.push(MOD.X0_5)
   if (defAbilEffect?.iceScales && isSpecial)       finalMods.push(MOD.X0_5)
+  // k — Friend Guard dell'ALLEATO del difensore: ×0.75 (`:2380`).
+  //
+  // È l'unica delle cinque caselle che sta dal lato di chi SUBISCE, ed è anche
+  // l'unica che oggi un alleato legale in M-B può davvero avere: Vivillon e
+  // Maushold.
+  //
+  // `!move.ignoresFriendGuard` del riferimento non è trascritto: quel campo lo
+  // accende `abilityIgnore`, cioè Mold Breaker e le tre mosse che ignorano
+  // l'abilità. Da noi la condizione c'è, e passa per lo stesso valore.
+  if (field.friendGuard && !ignoraAbilitaBersaglio) finalMods.push(MOD.X0_75)
   if (defAbilEffect?.filter && effectiveness > 1)  finalMods.push(MOD.X0_75)
   if (defAbilEffect?.fluffy && moveType === TYPES.FIRE) finalMods.push(MOD.X2)
 

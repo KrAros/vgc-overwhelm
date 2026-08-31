@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T15:09:30.390Z",
+    "generatedAt": "2026-08-31T15:22:30.756Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 213,
-    "abilitaNelGap": 59,
+    "abilitaSenzaEffetto": 209,
+    "abilitaNelGap": 55,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -24,16 +24,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1576
-        }
-      },
-      {
-        "chiave": "battery",
-        "nome": "Battery",
-        "canale": "ID",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1611
         }
       },
       {
@@ -137,16 +127,6 @@
         }
       },
       {
-        "chiave": "flower gift",
-        "nome": "Flower Gift",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
-        }
-      },
-      {
         "chiave": "forecast",
         "nome": "Forecast",
         "canale": "STR",
@@ -154,16 +134,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "friend guard",
-        "nome": "Friend Guard",
-        "canale": "ID",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1006
         }
       },
       {
@@ -404,16 +374,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 388
-        }
-      },
-      {
-        "chiave": "power spot",
-        "nome": "Power Spot",
-        "canale": "ID",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1616
         }
       },
       {
