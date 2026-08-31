@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T13:02:04.835Z",
+    "generatedAt": "2026-08-31T13:54:43.552Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 249,
-    "abilitaNelGap": 95,
+    "abilitaSenzaEffetto": 237,
+    "abilitaNelGap": 83,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -167,16 +167,6 @@
         }
       },
       {
-        "chiave": "dragons maw",
-        "nome": "Dragon's Maw",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1947
-        }
-      },
-      {
         "chiave": "dry skin",
         "nome": "Dry Skin",
         "canale": "STR",
@@ -267,16 +257,6 @@
         }
       },
       {
-        "chiave": "gorilla tactics",
-        "nome": "Gorilla Tactics",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1950
-        }
-      },
-      {
         "chiave": "grass pelt",
         "nome": "Grass Pelt",
         "canale": "STR",
@@ -364,16 +344,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 388
-        }
-      },
-      {
-        "chiave": "iron fist",
-        "nome": "Iron Fist",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1604
         }
       },
       {
@@ -497,16 +467,6 @@
         }
       },
       {
-        "chiave": "neuroforce",
-        "nome": "Neuroforce",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcFinalMods",
-          "file": "damage_MASTER.js",
-          "riga": 2336
-        }
-      },
-      {
         "chiave": "neutralizing gas",
         "nome": "Neutralizing Gas",
         "canale": "ID",
@@ -597,16 +557,6 @@
         }
       },
       {
-        "chiave": "punk rock",
-        "nome": "Punk Rock",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1649
-        }
-      },
-      {
         "chiave": "rattled",
         "nome": "Rattled",
         "canale": "STR",
@@ -627,16 +577,6 @@
         }
       },
       {
-        "chiave": "reckless",
-        "nome": "Reckless",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1604
-        }
-      },
-      {
         "chiave": "rivalry",
         "nome": "Rivalry",
         "canale": "STR",
@@ -647,16 +587,6 @@
         }
       },
       {
-        "chiave": "rocky payload",
-        "nome": "Rocky Payload",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1953
-        }
-      },
-      {
         "chiave": "sap sipper",
         "nome": "Sap Sipper",
         "canale": "STR",
@@ -664,16 +594,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1108
-        }
-      },
-      {
-        "chiave": "sharpness",
-        "nome": "Sharpness",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1952
         }
       },
       {
@@ -707,16 +627,6 @@
         }
       },
       {
-        "chiave": "sniper",
-        "nome": "Sniper",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcFinalMods",
-          "file": "damage_MASTER.js",
-          "riga": 2346
-        }
-      },
-      {
         "chiave": "solar power",
         "nome": "Solar Power",
         "canale": "STR",
@@ -734,16 +644,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1979
-        }
-      },
-      {
-        "chiave": "steelworker",
-        "nome": "Steelworker",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1949
         }
       },
       {
@@ -827,16 +727,6 @@
         }
       },
       {
-        "chiave": "tinted lens",
-        "nome": "Tinted Lens",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcFinalMods",
-          "file": "damage_MASTER.js",
-          "riga": 2351
-        }
-      },
-      {
         "chiave": "torrent",
         "nome": "Torrent",
         "canale": "STR",
@@ -864,16 +754,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 389
-        }
-      },
-      {
-        "chiave": "transistor",
-        "nome": "Transistor",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1946
         }
       },
       {

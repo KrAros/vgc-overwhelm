@@ -245,7 +245,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"rolling kick": {
 		"num": "27",
@@ -345,7 +346,8 @@
 				1,
 				4
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"thrash": {
 		"num": "37",
@@ -370,7 +372,8 @@
 				1,
 				3
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"tail whip": {
 		"num": "39",
@@ -620,7 +623,8 @@
 				1,
 				4
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"low kick": {
 		"num": "67",
@@ -1207,7 +1211,8 @@
 		"category": 0,
 		"power": 130,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"glare": {
 		"num": "137",
@@ -3015,7 +3020,8 @@
 				1,
 				3
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"magical leaf": {
 		"num": "345",
@@ -3448,7 +3454,8 @@
 				1,
 				3
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"force palm": {
 		"num": "395",
@@ -3628,7 +3635,8 @@
 				1,
 				3
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"earth power": {
 		"num": "414",
@@ -3973,7 +3981,8 @@
 		"category": 0,
 		"power": 120,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"aqua jet": {
 		"num": "453",
@@ -4023,7 +4032,8 @@
 				1,
 				2
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"double hit": {
 		"num": "458",
@@ -4629,7 +4639,8 @@
 				1,
 				4
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"drill run": {
 		"num": "529",
@@ -4769,7 +4780,8 @@
 		"category": 0,
 		"power": 120,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"gear grind": {
 		"num": "544",
@@ -5908,7 +5920,8 @@
 		"category": 0,
 		"power": 120,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"barb barrage": {
 		"num": "839",
@@ -6898,7 +6911,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"rinculo": true
 	},
 	"surging strikes": {
 		"num": "818",
@@ -7125,7 +7139,8 @@
 				1,
 				3
 			]
-		}
+		},
+		"rinculo": true
 	},
 	"wicked blow": {
 		"num": "817",
@@ -7158,6 +7173,7 @@
 				1,
 				2
 			]
-		}
+		},
+		"rinculo": true
 	}
 }

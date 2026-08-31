@@ -63,7 +63,52 @@ export const ABILITY_EFFECTS = {
   'adaptability': { adaptability: true, showInSmogon: true },
 
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
-  'fire-mane':   { fireMane: true, showInSmogon: true },
+  //
+  // Nel riferimento sono clausole in `or` dentro un solo `if` — `calcAtkMods`
+  // punto d, «1.5x Offensive Abilities», `damage_MASTER.js:1941-1955` — che
+  // spinge un solo `0x1800`. Cambia solo il tipo, quindi qui cambia solo il
+  // valore del campo: nessuna delle sei ha una riga di motore sua.
+  //
+  // Fino alla sessione W Criniera Ardente aveva un flag col suo nome,
+  // `fireMane`. Era il nome di UNA abilita' scritto nel motore per una regola
+  // che ne governa sei: adesso e' il tipo, come le altre cinque.
+  'fire-mane':     { boostTipoAtk: TYPES.FIRE,     showInSmogon: true },
+  'dragons-maw':   { boostTipoAtk: TYPES.DRAGON,   showInSmogon: true },
+  'steelworker':   { boostTipoAtk: TYPES.STEEL,    showInSmogon: true },
+  'rocky-payload': { boostTipoAtk: TYPES.ROCK,     showInSmogon: true },
+
+  // Sharpness e Gorilla Tactics stanno nello STESSO `if` delle quattro sopra e
+  // spingono lo stesso `0x1800`, ma non guardano il tipo: la prima il flag
+  // `isSlice` della mossa (`:1952`), la seconda la sua categoria (`:1953`).
+  //
+  // Le trenta mosse taglienti NON sono scritte qui: e' il flag `slicing` di
+  // moves.json, che `gen-flag-dati.mjs` trascrive da `isSlice` del vendor.
+  //
+  // Su Gorilla Tactics il riferimento scrive `&& !attacker.isDynamax`: il
+  // Dynamax non esiste in Champions e il motore non lo modella, quindi la
+  // condizione qui non compare. E' l'unico pezzo dei sei che non trascriviamo,
+  // e non perche' non torni: perche' non ha nulla su cui essere falso.
+  'sharpness':       { sharpness: true,      showInSmogon: true },
+  'gorilla-tactics': { gorillaTactics: true, showInSmogon: true },
+
+  // Transistor NON e' nell'`if` delle sei: sta nell'`else if` successivo, e
+  // vale meno.
+  //
+  // ─── IL PUNTO DOVE UNA LETTURA DISTRATTA SBAGLIA ─────────────────────────
+  // Nel riferimento l'abilita' compare DUE volte, con due numeri diversi:
+  //
+  //     :1946   attacker.ability === "Transistor" && ... && gen == 8    0x1800
+  //     :1965   attacker.ability === "Transistor" && ... && gen >= 9    0x14CD
+  //
+  // Il primo e' il ramo x1.5, il secondo quello x1.3. Il nostro contesto gira
+  // a `gen = 10` (Champions, `scripts/ncp/contesto.mjs:83`), quindi vale il
+  // SECONDO: x1.3. Chi cercasse «Transistor» e si fermasse alla prima riga
+  // trovata darebbe un numero plausibile e sbagliato del quindici per cento.
+  //
+  // Ha un flag suo e non `boostTipoAtk` proprio per questo: sta in un ramo
+  // diverso con un moltiplicatore diverso, e confonderlo con gli altri sei
+  // sarebbe stato il modo piu' comodo per riprodurre l'errore.
+  'transistor':  { transistor: true, showInSmogon: true },
 
   // Impeto Sabbia: x1.3 sulle mosse Roccia, Terra e Acciaio, ma SOLO con la
   // tempesta di sabbia in campo.
@@ -178,6 +223,55 @@ export const ABILITY_EFFECTS = {
   // modificatori `chainMods` e' commutativo. Adesso lo e'. Un'aura messa dopo
   // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
   'technician':  { technician: true, showInSmogon: true },
+
+  // ── Attaccante: catena della POTENZA, non della statistica ───────────────
+  //
+  // Iron Fist e Reckless stanno nella stessa riga del riferimento — un solo
+  // `else if` con un solo `bpMods.push(0x1333)`, `damage_MASTER.js:1604` — e
+  // quel ramo e' l'ALTERNATIVA di Galvanize e compagnia (punto c.i): se la
+  // mossa e' stata convertita di tipo, il x1.2 del pugno non si somma.
+  //
+  // Il moltiplicatore e' 0x1333, cioe' x1.2. Non 0x14CD: quello e' il x1.3 del
+  // punto e, e i due si somigliano abbastanza da scambiarsi senza far rumore.
+  //
+  // Le ventidue mosse-pugno e le sedici col contraccolpo NON sono scritte qui:
+  // sono i flag `punch` e `rinculo` di moves.json, trascritti da `isPunch` e
+  // da `hasRecoil || recoilHP || hasCrash`.
+  'iron-fist':   { ironFist: true, showInSmogon: true },
+  'reckless':    { reckless: true, showInSmogon: true },
+
+  // ── Punk Rock, che compare due volte con due segni opposti ───────────────
+  //
+  //   calcBPMods punto e.v    (:1649)  chi ATTACCA: mosse sonore x1.3
+  //   calcFinalMods punto i   (:2370)  chi DIFENDE: mosse sonore x0.5
+  //
+  // Sono due punti diversi di due funzioni diverse. Un flag solo con due letture
+  // nel motore, come Unaware: farne meta' sarebbe stata un'abilita' che
+  // funziona solo quando conviene.
+  //
+  // Il ramo offensivo e' l'ultimo degli `else if` del punto e, quindi non si
+  // somma a Sheer Force, Sand Force, Analytic e Tough Claws. Quello difensivo
+  // e' un `if` a se' e si somma a tutto.
+  'punk-rock':   { punkRock: true, showInSmogon: true },
+
+  // ── Attaccante: modificatori FINALI ──────────────────────────────────────
+  //
+  // Tre abilita' che agiscono sull'ultimo anello, dopo la potenza e dopo le
+  // statistiche. Nel riferimento sono tre `if` separati e indipendenti
+  // (`calcFinalMods` punti b, d, e) — quindi si sommano fra loro: un critico
+  // poco efficace di chi ha Tinted Lens e Sniper prende tutt'e due.
+  //
+  //   Neuroforce    (:2336)  x1.25 (0x1400) se l'efficacia e' maggiore di 1
+  //   Sniper        (:2346)  x1.5  (0x1800) sul colpo critico
+  //   Tinted Lens   (:2351)  x2    (0x2000) se l'efficacia e' minore di 1
+  //
+  // Le soglie sono scritte sull'efficacia GREZZA, non sul suo logaritmo: il
+  // riferimento confronta `typeEffectiveness` con 1. Su una mossa immune
+  // l'efficacia e' 0, quindi minore di 1 — ma li' non si arriva, perche'
+  // l'immunita' esce prima con `damage: [0]`.
+  'neuroforce':  { neuroforce: true, showInSmogon: true },
+  'sniper':      { sniper: true, showInSmogon: true },
+  'tinted-lens': { tintedLens: true, showInSmogon: true },
 
   // Skill Link: le mosse multi-colpo colpiscono sempre il massimo.
   //

@@ -374,6 +374,27 @@ const FLAG_MOSSE = {
   // una mossa che fa danno senza che NCP la marchi, e i due insiemi si
   // separano in silenzio. Il flag si trascrive, come gli altri sei.
   prioritaria: 'isPriority',
+  // `rinculo` entra per Reckless, che da' x1.2 alle mosse che si ritorcono
+  // contro chi le usa.
+  //
+  // ─── PERCHE' TRE CHIAVI E NON UNA ──────────────────────────────────────
+  // Perche' il riferimento ne guarda tre in `or` (damage_MASTER.js:1604):
+  //
+  //   attacker.ability === "Reckless" &&
+  //     (move.hasRecoil || move.recoilHP || move.hasCrash)
+  //
+  // Sono cose diverse: `recoilHP` e' il contraccolpo in frazione dei danni
+  // inflitti (Double-Edge, Flare Blitz — tredici mosse), `hasCrash` e' il
+  // danno che si prende chi manca il bersaglio (High Jump Kick, Jump Kick,
+  // Axe Kick, Supercell Slam — quattro), `hasRecoil` oggi non ce l'ha
+  // nessuna mossa ma il vendor lo controlla lo stesso, e allora lo
+  // controlliamo anche noi: se un giorno comparisse, comparirebbe da sola.
+  //
+  // Noi avevamo gia' `recoil` in moves.json, ma e' un'altra cosa ancora: e'
+  // la FRAZIONE, serve al pannello per scrivere «contraccolpo 33.3%», e non
+  // copre le quattro mosse con `hasCrash`. Usarlo per Reckless avrebbe dato
+  // il numero giusto su tredici mosse e quello sbagliato su quattro.
+  rinculo: ['hasRecoil', 'recoilHP', 'hasCrash'],
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -555,7 +576,10 @@ for (const [slug, voce] of Object.entries(mosse)) {
   const nome = iMosse.get(normalizza(slug))
   if (!nome) { mosseNonMappate++; continue }
   for (const [nostro, loro] of Object.entries(FLAG_MOSSE)) {
-    if (ncp.mosse[nome][loro]) {
+    // Una voce di FLAG_MOSSE e' una chiave del vendor o un elenco di chiavi
+    // in `or`: Reckless ne guarda tre, gli altri sette una sola.
+    const chiavi = Array.isArray(loro) ? loro : [loro]
+    if (chiavi.some(chiave => ncp.mosse[nome][chiave])) {
       voce[nostro] = true
       conteggioFlag[nostro]++
     } else if (nostro in voce) {

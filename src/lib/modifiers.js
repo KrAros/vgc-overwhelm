@@ -117,6 +117,7 @@ export const MOD = {
   X1_1:      0x1199,  // 4505 — Muscle Band, Wise Glasses
   X1_1_ALT:  0x119A,  // 4506 — Punching Glove
   X1_2:      0x1333,  // 4915 — abilità "ate", item type-boost
+  X1_25:     0x1400,  // 5120 — Neuroforce sul super efficace, Rivalry
   X1_3_ORB:  0x14CC,  // 5324 — Life Orb
   X1_3:      0x14CD,  // 5325 — terreni, Tough Claws
   // 5448 — Aura Fatata e Aura Oscura. NON è uno dei ×1.3 qui sopra: il

@@ -211,6 +211,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isSound = moveData.sound === true
   const isPrioritaria = moveData.prioritaria === true
   const isBite  = moveData.bite === true
+  const isSlicing = moveData.slicing === true
+  const isRinculo = moveData.rinculo === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -531,16 +533,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Fire Mane e Flash Fire stavano fra i modificatori di POTENZA o di danno
   // finale: li ha spostati D leggendo NCP, non un test rosso.
   const puntoD =
-    (atkAbilEffect?.fireMane && moveType === TYPES.FIRE) ||
+    (atkAbilEffect?.boostTipoAtk !== undefined && moveType === atkAbilEffect.boostTipoAtk) ||
+    (atkAbilEffect?.sharpness && isSlicing) ||
+    (atkAbilEffect?.gorillaTactics && !isSpecial) ||
     (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE)
 
-  // punto e — Protosynthesis / Quark Drive sul lato offensivo: ×1.3 se la
-  // statistica più alta è quella con cui si sta attaccando.
+  // punto e — Protosynthesis / Quark Drive sul lato offensivo, e Transistor:
+  // ×1.3 se la statistica più alta è quella con cui si sta attaccando.
   //
-  // Nel riferimento d ed e sono lo stesso `if / else if`, quindi il ×1.3 del
-  // paradosso non si somma mai al ×1.5 di Fire Mane o Flash Fire. Con un campo
-  // abilità solo le due non possono nemmeno coesistere — l'`else` è qui per la
-  // stessa ragione dell'altro, in fondo alla catena di difesa.
+  // Nel riferimento d ed e sono lo stesso `if / else if`, quindi il ×1.3 non
+  // si somma mai al ×1.5 del punto d. Con un campo abilità solo le due non
+  // possono nemmeno coesistere — l'`else` è qui per la stessa ragione
+  // dell'altro, in fondo alla catena di difesa.
   //
   // La condizione guarda la CATEGORIA della mossa, non la statistica usata:
   // il riferimento scrive `move.category === "Physical"`. Su Body Press, che è
@@ -551,8 +555,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (preparazione.attaccante.statPiuAlta === 'sa' &&  isSpecial)
   )
 
+  // Transistor sta nello STESSO `else if` del paradosso (`:1965`), non nel
+  // ramo delle ×1.5 — e vale ×1.3, non ×1.5, perché il ramo ×1.5 lo nomina
+  // solo a `gen == 8` (`:1946`) e noi giriamo a `gen = 10`. Vedi il commento
+  // in `abilityEffects.js`: è il punto dove leggere la prima riga trovata
+  // invece del ramo giusto darebbe un numero plausibile e sbagliato.
+  const puntoE = paradossoAttacco ||
+    (atkAbilEffect?.transistor && moveType === TYPES.ELECTRIC)
+
   if (puntoD) atMods.push(MOD.X1_5)
-  else if (paradossoAttacco) atMods.push(MOD.X1_3)
+  else if (puntoE) atMods.push(MOD.X1_3)
 
   // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power.
   if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) atMods.push(MOD.X2)
@@ -639,6 +651,24 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
   if (ateBoost) bpMods.push(MOD.X1_2)
 
+  // c.ii — Iron Fist sulle mosse-pugno, Reckless su quelle col contraccolpo.
+  //
+  // È un `else if` di c.i, e lo è nel riferimento (`damage_MASTER.js:1604`):
+  // su una mossa convertita di tipo il ×1.2 del pugno NON si somma a quello
+  // della conversione. Sono lo stesso `0x1333`, e sommarli darebbe ×1.44.
+  //
+  // Reckless legge il flag `rinculo` di moves.json, che vale per sedici mosse:
+  // le tredici col contraccolpo in frazione dei danni inflitti (`recoilHP`) e
+  // le tre che restano fra le quattro che feriscono chi manca il bersaglio
+  // (`hasCrash`) — Double-Edge sta due volte nel vendor. Il riferimento
+  // controlla anche `hasRecoil`, che oggi non ce l'ha nessuna mossa: lo
+  // controlliamo lo stesso, dentro il flag, perché il giorno che comparisse
+  // comparirebbe da sola.
+  else if ((atkAbilEffect?.ironFist && isPunch) ||
+           (atkAbilEffect?.reckless && isRinculo)) {
+    bpMods.push(MOD.X1_2)
+  }
+
   // e.ii — Impeto Sabbia: ×1.3 sulle mosse Roccia, Terra e Acciaio, e solo
   // con la sabbia in campo.
   //
@@ -651,6 +681,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Pokémon ha tutt'e due le abilità — ma da quando Tecnico legge `tempBP`
   // l'ordine dei push è parte della trascrizione, e questi due stanno
   // entrambi prima di quella riga.
+  //
+  // È il primo anello di una catena `else if`: vedi e.iv/e.v più sotto.
   if (atkAbilEffect?.sandForce && meteo === 'sand'
       && (moveType === TYPES.ROCK || moveType === TYPES.GROUND || moveType === TYPES.STEEL)) {
     bpMods.push(MOD.X1_3)
@@ -658,7 +690,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
   // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.
-  if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+  //
+  // e.v — Punk Rock sulle mosse sonore, stesso ×1.3.
+  //
+  // I due sono incatenati con `else if` perché nel riferimento lo sono: e.i-e.v
+  // sono un solo `if / else if`, e al massimo uno dei cinque si applica. Oggi
+  // la catena non è osservabile — nessuna specie ha due di queste abilità, e
+  // un Pokémon ne ha una sola — ma è così che è scritta, ed è così che va
+  // letta il giorno che una casella di campo o una copia cambiassero le carte.
+  //
+  // Le diciotto mosse sonore vengono dal flag `sound` di moves.json.
+  else if (atkAbilEffect?.toughClaws && isContact) bpMods.push(MOD.X1_3)
+  else if (atkAbilEffect?.punkRock && isSound) bpMods.push(MOD.X1_3)
 
   // f — Aura Fatata e Aura Oscura: ×1,33 sulle mosse del tipo dell'aura.
   //
@@ -869,8 +912,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // chiudono la catena.
   //
   //   a → schermo (Reflect / Light Screen / Aurora Veil)   ×0.667  0xAAC
+  //   b → Neuroforce, se super efficace                    ×1.25   0x1400
+  //   d → Sniper, sul colpo critico                        ×1.5    0x1800
+  //   e → Tinted Lens, se poco efficace                    ×2      0x2000
   //   g → Multiscale, Shadow Shield                        ×0.5    0x800
   //   h → Fluffy da contatto                               ×0.5    0x800
+  //   i → Punk Rock in difesa, sulle mosse sonore          ×0.5    0x800
   //   j → Ice Scales sulle mosse speciali                  ×0.5    0x800
   //   l → Filter, Solid Rock, Prism Armor                  ×0.75   0xC00
   //   n → Fluffy sulle mosse Fuoco                         ×2      0x2000
@@ -885,10 +932,32 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   if (schermoAttivo) finalMods.push(SCREEN_MOD)
 
+  // b, d, e — le tre che moltiplicano il danno di chi attacca.
+  //
+  // Nel riferimento sono tre `if` SEPARATI e indipendenti (`:2336`, `:2346`,
+  // `:2351`), non una catena: si sommano fra loro, e stanno tutti e tre PRIMA
+  // di Multiscale. Un critico poco efficace di chi ha Sniper e Tinted Lens
+  // prende tutti e due i moltiplicatori.
+  //
+  // Le soglie guardano l'efficacia GREZZA — il riferimento confronta
+  // `typeEffectiveness` con 1, non il suo logaritmo. Con efficacia 0 la
+  // condizione di Tinted Lens sarebbe vera, ma lì non si arriva: l'immunità
+  // esce molto prima con `damage: [0]`.
+  //
+  // `field.crit` è lo stesso interruttore che più sotto moltiplica per 1.5 il
+  // danno dentro il tiro. Sniper non lo sostituisce, ci si aggiunge.
+  if (atkAbilEffect?.neuroforce && effectiveness > 1) finalMods.push(MOD.X1_25)
+  if (atkAbilEffect?.sniper && field.crit)            finalMods.push(MOD.X1_5)
+  if (atkAbilEffect?.tintedLens && effectiveness < 1) finalMods.push(MOD.X2)
+
   if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
     finalMods.push(MOD.X0_5)
   }
   if (defAbilEffect?.fluffy && isContact)          finalMods.push(MOD.X0_5)
+  // i — Punk Rock dal lato del DIFENSORE: le mosse sonore fanno metà danno.
+  // È la seconda metà dell'abilità, e sta fra h (Fluffy da contatto) e j
+  // (Ice Scales), dove la mette il riferimento (`:2370`).
+  if (defAbilEffect?.punkRock && isSound)          finalMods.push(MOD.X0_5)
   if (defAbilEffect?.iceScales && isSpecial)       finalMods.push(MOD.X0_5)
   if (defAbilEffect?.filter && effectiveness > 1)  finalMods.push(MOD.X0_75)
   if (defAbilEffect?.fluffy && moveType === TYPES.FIRE) finalMods.push(MOD.X2)
