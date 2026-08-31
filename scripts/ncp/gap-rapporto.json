@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T14:49:37.914Z",
+    "generatedAt": "2026-08-31T15:22:30.756Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 220,
-    "abilitaNelGap": 66,
+    "abilitaSenzaEffetto": 209,
+    "abilitaNelGap": 55,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -17,26 +17,6 @@
   "prove": {
     "abilita": [
       {
-        "chiave": "air lock",
-        "nome": "Air Lock",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAirLock",
-          "file": "damage_MASTER.js",
-          "riga": 411
-        }
-      },
-      {
-        "chiave": "analytic",
-        "nome": "Analytic",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1639
-        }
-      },
-      {
         "chiave": "aura break",
         "nome": "Aura Break",
         "canale": "STR",
@@ -44,26 +24,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1576
-        }
-      },
-      {
-        "chiave": "battery",
-        "nome": "Battery",
-        "canale": "ID",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1611
-        }
-      },
-      {
-        "chiave": "battle armor",
-        "nome": "Battle Armor",
-        "canale": "STR",
-        "prova": {
-          "funzione": "critMove",
-          "file": "damage_MASTER.js",
-          "riga": 1018
         }
       },
       {
@@ -94,16 +54,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1943
-        }
-      },
-      {
-        "chiave": "cloud nine",
-        "nome": "Cloud Nine",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAirLock",
-          "file": "damage_MASTER.js",
-          "riga": 411
         }
       },
       {
@@ -177,16 +127,6 @@
         }
       },
       {
-        "chiave": "flower gift",
-        "nome": "Flower Gift",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
-        }
-      },
-      {
         "chiave": "forecast",
         "nome": "Forecast",
         "canale": "STR",
@@ -194,16 +134,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "friend guard",
-        "nome": "Friend Guard",
-        "canale": "ID",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1006
         }
       },
       {
@@ -267,16 +197,6 @@
         }
       },
       {
-        "chiave": "hustle",
-        "nome": "Hustle",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAttack",
-          "file": "damage_MASTER.js",
-          "riga": 1896
-        }
-      },
-      {
         "chiave": "ice face",
         "nome": "Ice Face",
         "canale": "STR",
@@ -334,16 +254,6 @@
           "funzione": "getWeightMods",
           "file": "damage_MASTER.js",
           "riga": 718
-        }
-      },
-      {
-        "chiave": "liquid voice",
-        "nome": "Liquid Voice",
-        "canale": "STR",
-        "prova": {
-          "funzione": "GET_DAMAGE_SV",
-          "file": "damage_SV.js",
-          "riga": 130
         }
       },
       {
@@ -467,16 +377,6 @@
         }
       },
       {
-        "chiave": "power spot",
-        "nome": "Power Spot",
-        "canale": "ID",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1616
-        }
-      },
-      {
         "chiave": "protean",
         "nome": "Protean",
         "canale": "STR",
@@ -514,16 +414,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1585
-        }
-      },
-      {
-        "chiave": "shell armor",
-        "nome": "Shell Armor",
-        "canale": "STR",
-        "prova": {
-          "funzione": "critMove",
-          "file": "damage_MASTER.js",
-          "riga": 1018
         }
       },
       {

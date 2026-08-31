@@ -146,6 +146,49 @@ export const ABILITY_EFFECTS = {
   // tutto quello che il calcolo del danno vede.
   'sheer-force': { sheerForce: true, showInSmogon: true },
 
+  // Analytic: x1.3 se chi attacca NON muove per primo. Punto e.iii della
+  // catena della potenza (`damage_MASTER.js:1639`).
+  //
+  // L'ordine di turno non viene dall'interfaccia: se lo ricava il riferimento
+  // in una riga (`damage_SV.js:147`), confrontando la Velocita' con gli stadi
+  // — non quella effettiva con strumenti, meteo e Tailwind, che pure il motore
+  // saprebbe calcolare. Il commento nel motore dice perche' non la usiamo.
+  'analytic':    { analytic: true, showInSmogon: true },
+
+  // Hustle: x1.5 sull'Attacco fisico. Nel gioco abbassa anche la precisione,
+  // che il calcolo del danno non modella — e nemmeno il riferimento.
+  //
+  // Si applica DIRETTAMENTE alla statistica, fuori dalla catena `atMods`, ed e'
+  // l'unico punto dove il riferimento si ferma a commentare una differenza di
+  // forma: «unlike all other attack modifiers, Hustle gets applied directly»
+  // (`damage_MASTER.js:1895`).
+  'hustle':      { hustle: true, showInSmogon: true },
+
+  // Liquid Voice: le mosse sonore diventano di tipo Acqua. Non e' un
+  // moltiplicatore ma un cambio di TIPO, quindi da qui passano STAB,
+  // efficacia, meteo, aure e immunita'.
+  //
+  // Nel riferimento e' il ramo `if` di `checkAbilityTypeChange`
+  // (`damage_MASTER.js:1063`), di cui le abilita' «-ate» sono l'`else`: i due
+  // non possono accendersi insieme.
+  'liquid-voice': { liquidVoice: true, showInSmogon: true },
+
+  // ── Le due che tolgono il meteo, e le due che tolgono il critico ─────────
+  //
+  // Air Lock e Cloud Nine: `checkAirLock` (`damage_MASTER.js:411`) fa
+  // `field.clearWeather()`. Non riducono l'effetto del meteo, lo TOLGONO — e
+  // il riferimento chiama la funzione su tutt'e due i Pokemon
+  // (`damage_SV.js:10-11`), quindi basta che ce l'abbia uno dei due.
+  'air-lock':    { annullaMeteo: true, showInSmogon: true },
+  'cloud-nine':  { annullaMeteo: true, showInSmogon: true },
+
+  // Shell Armor e Battle Armor: il colpo critico non si applica. Nel
+  // riferimento sono una riga sola, `critMove` (`damage_MASTER.js:1018`), e
+  // riceve la `defAbility` GIA' passata per `abilityIgnore` — quindi contro
+  // Mold Breaker non fermano niente.
+  'shell-armor':  { bloccaCritico: true },
+  'battle-armor': { bloccaCritico: true },
+
   // ── Difensore: immunita' per famiglia di mossa ───────────────────────────
   //
   // Antisuono: le mosse sonore non hanno effetto. Nel riferimento sta in
@@ -367,7 +410,31 @@ export const ABILITY_EFFECTS = {
   // ce l'ha un ALLEATO. Qui c'e' solo la prima: la seconda e' una casella di
   // campo che non abbiamo, come Battery e Power Spot — e infatti tutt'e tre
   // restano nelle 108 per quella meta'.
-  'steely-spirit': { steelySpirit: true, showInSmogon: true },
+  'steely-spirit': { steelySpirit: true, casellaDiCampo: 'steelySpirit', showInSmogon: true },
+
+  // ── Le quattro che appartengono all'ALLEATO ─────────────────────────────
+  //
+  // `casellaDiCampo` dice: «questa abilita' il motore la calcola, ma non
+  // leggendola dallo slot — la legge dall'interruttore che porta questo nome
+  // nella barra dei modificatori».
+  //
+  // ─── PERCHE' SERVE UN CAMPO, E NON BASTA IL MOTORE ──────────────────────
+  //
+  // Perche' senza, il registro del divario le contava fra le «non calcolate» e
+  // il segnalino diceva all'utente che l'app non le applica. Dopo questa
+  // sessione sarebbe stata una bugia: le applica, si accendono altrove.
+  //
+  // Nel riferimento non hanno un nome proprio — sono `field.isBattery`,
+  // `field.isPowerSpot`, `field.isSteelySpirit`, `field.isFriendGuard`,
+  // `field.isFlowerGiftAtk`/`SpD` — ed e' coerente: chi le possiede non e' ne'
+  // chi attacca ne' chi subisce, e' il compagno accanto.
+  //
+  // Steely Spirit ce l'ha in aggiunta al suo `steelySpirit`, perche' ha DUE
+  // meta': una quando ce l'ha chi attacca, una quando ce l'ha l'alleato.
+  'battery':      { casellaDiCampo: 'battery' },
+  'power-spot':   { casellaDiCampo: 'powerSpot' },
+  'friend-guard': { casellaDiCampo: 'friendGuard' },
+  'flower-gift':  { casellaDiCampo: 'flowerGift' },
 
   // Tecnico: x1.5 sulle mosse con potenza base fino a 60. Quarta e ultima
   // FATTIBILE delle sei del ramo — Flare Boost e Toxic Boost vogliono gli

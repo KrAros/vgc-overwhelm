@@ -95,7 +95,13 @@
     "reg_filter": "Sets from reg",
     "reg_all": "All regs",
     "reg_current": "{{id}} · current",
-    "reg_no_sets": "(no sets)"
+    "reg_no_sets": "(no sets)",
+    "fgShort": "FG",
+    "btShort": "Bat",
+    "psShort": "PS",
+    "ssShort": "SS",
+    "fwShort": "Flw",
+    "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's."
   },
   "gap": {
     "badge": "Not calculated",
@@ -1895,7 +1901,11 @@
     "white-smoke": "Stats cannot be lowered by other Pokémon's moves or Abilities.",
     "zero-to-hero": "Changes into its Hero Form when it switches out of battle.",
     "storm-drain": "Draws in all Water-type moves. These moves do not work on the Pokémon. Instead, they boost its Sp. Atk stat by 1 stage.",
-    "well-baked-body": "Fire-type moves do not work on the Pokémon. Instead, they boost its Defense stat by 2 stages."
+    "well-baked-body": "Fire-type moves do not work on the Pokémon. Instead, they boost its Defense stat by 2 stages.",
+    "battery": "Powers up ally Pokémon's special moves by 30%.",
+    "power-spot": "Powers up ally Pokémon's moves by 30%.",
+    "steely-spirit": "Powers up its own and its allies' Steel-type moves by 50%.",
+    "flower-gift": "In harsh sunlight, boosts its own and its allies' Attack and Sp. Def by 50%."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) active — Speed ×2",

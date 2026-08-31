@@ -322,6 +322,11 @@ export default function ControlBar() {
   const crit         = useCalcStore(s => s.crit)
   const showKoOnly   = useCalcStore(s => s.showKoOnly)
   const tailwind     = useCalcStore(s => s.tailwind)
+  const battery      = useCalcStore(s => s.battery)
+  const powerSpot    = useCalcStore(s => s.powerSpot)
+  const steelySpirit = useCalcStore(s => s.steelySpirit)
+  const friendGuard  = useCalcStore(s => s.friendGuard)
+  const flowerGift   = useCalcStore(s => s.flowerGift)
   const team1        = useCalcStore(s => s.team1)
   const team2        = useCalcStore(s => s.team2)
   const toggleModifier   = useCalcStore(s => s.toggleModifier)
@@ -452,6 +457,35 @@ export default function ControlBar() {
     setImportTab('showdown')
   }
 
+  /* ─── LE CINQUE CASELLE DELL'ALLEATO ──────────────────────────────────────
+
+     Non sono mosse ma ABILITÀ, e non di chi attacca o subisce: del compagno
+     accanto. Nel riferimento infatti non hanno un nome, sono campi del terreno
+     — `field.isBattery`, `field.isPowerSpot`, `field.isSteelySpirit`,
+     `field.isFriendGuard`, `field.isFlowerGiftAtk`/`SpD`.
+
+     Il nome per esteso viene da `abilities.*`, che è la fonte unica: è la
+     stessa regola per cui le altre sei lo prendono da `moves.*` invece di
+     tenerne una copia in `ui.*`. Le SIGLE stanno in `ui.*` perché servono solo
+     qui e una forma breve non esiste altrove.
+
+     ─── QUATTRO SU CINQUE OGGI NON HANNO UN ALLEATO LEGALE ─────────────────
+     In M-B solo Amicoscudo può appartenere a un compagno vero (Vivillon,
+     Maushold). Le altre quattro le portano Charjabug, Stonjourner, Cherrim e
+     Perrserker, che nel dex di Champions non ci sono.
+     Ci sono lo stesso, per decisione di Simone: il motore le calcola tutte e
+     cinque — sono righe adiacenti del riferimento — e il giorno che il roster
+     cresce funzionano senza toccare niente. `caselleAlleato.test.js` registra
+     quali sono oggi irraggiungibili, così il confine è scritto e non scoperto. */
+  const MODS_ALLEATO = [
+    { label: t('ui.fgShort'), nome: t('abilities.friend-guard'),  mod: 'friendGuard',  active: 'bg-lime-400   text-gray-900' },
+    { label: t('ui.btShort'), nome: t('abilities.battery'),       mod: 'battery',      active: 'bg-amber-400  text-gray-900' },
+    { label: t('ui.psShort'), nome: t('abilities.power-spot'),    mod: 'powerSpot',    active: 'bg-orange-400 text-gray-900' },
+    { label: t('ui.ssShort'), nome: t('abilities.steely-spirit'), mod: 'steelySpirit', active: 'bg-slate-300  text-gray-900' },
+    { label: t('ui.fwShort'), nome: t('abilities.flower-gift'),   mod: 'flowerGift',   active: 'bg-rose-300   text-gray-900' },
+  ]
+  const MODS_ALLEATO_DESKTOP = MODS_ALLEATO.map(({ nome, mod, active }) => ({ label: nome, mod, active }))
+
   // Le sigle sono per lo spazio; il nome per esteso viene dalla STESSA fonte da
   // cui lo prende il desktop, così le due affordance non possono divergere.
   const MODS = [
@@ -461,6 +495,7 @@ export default function ControlBar() {
     { label: t('ui.refShort'),  nome: t('moves.reflect'),      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
     { label: t('ui.critShort'), nome: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
     { label: t('ui.twShort'),   nome: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
+    ...MODS_ALLEATO,
   ]
 
   // Cinque di queste sei levette SONO mosse, quindi l'etichetta la prendono da
@@ -481,9 +516,13 @@ export default function ControlBar() {
     { label: t('moves.reflect'),      mod: 'reflect',     active: 'bg-pink-400   text-gray-900' },
     { label: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
     { label: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
+    ...MODS_ALLEATO_DESKTOP,
   ]
 
-  const modVals = { helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind }
+  const modVals = {
+    helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind,
+    battery, powerSpot, steelySpirit, friendGuard, flowerGift,
+  }
 
   const btnBase   = 'flex items-center justify-center gap-1 text-xs px-2.5 py-1 rounded border transition-colors'
   const btnNormal = `${btnBase} bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40`

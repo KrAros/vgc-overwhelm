@@ -67,7 +67,7 @@ describe('i riquadri delle abilità', () => {
     ).toBe(true)
   })
 
-  it('tutti e undici i rami usano la costante', () => {
+  it('tutti e dodici i rami usano la costante', () => {
     // Il conteggio è esplicito perché un ramo NUOVO che se la dimentica non
     // farebbe fallire il test sopra: non ricopierebbe la firma, semplicemente
     // non avrebbe nessun minimo.
@@ -78,13 +78,18 @@ describe('i riquadri delle abilità', () => {
     // ramo solo per tutte e cinque, perché la forma è identica e la differenza
     // sta nella tabella delle abilità, non nel riquadro.
     //
-    // Tutt'e due le volte il numero è stato alzato DOPO aver visto il test
+    // Da undici a dodici col riquadro delle abilità dell'ALLEATO — Battery,
+    // Power Spot, Friend Guard, Flower Gift e la metà «alleato» di Steely
+    // Spirit: un ramo solo per tutte e cinque, che dice dove si accende la
+    // casella invece di far credere che l'app non le calcoli.
+    //
+    // Tutt'e tre le volte il numero è stato alzato DOPO aver visto il test
     // rosso, che è il modo in cui questo presidio deve funzionare.
     expect(
       conCostante.length,
-      'i rami che rendono un riquadro non sono undici: se ne hai aggiunto uno, '
+      'i rami che rendono un riquadro non sono dodici: se ne hai aggiunto uno, '
       + 'deve usare RIQUADRO e questo numero va alzato di proposito',
-    ).toBe(11)
+    ).toBe(12)
   })
 
   it('la costante porta un minimo per entrambe le larghezze', () => {

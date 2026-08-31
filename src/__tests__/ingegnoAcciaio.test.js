@@ -110,16 +110,37 @@ describe('Ingegno Acciaio muove il numero, e solo sull\'Acciaio', () => {
   })
 })
 
-describe('la metà che non c\'è resta dichiarata', () => {
-  it('l\'Ingegno Acciaio dell\'ALLEATO è una casella di campo, e non ce l\'abbiamo', () => {
-    // `battery` e `power spot` sono le altre due caselle di campo dello stesso
-    // genere, e restano nel divario col segnalino. Se un giorno arrivassero le
-    // caselle di campo, questo test dice dove guardare.
-    expect(elencoGap.abilita).toContain('battery')
-    expect(elencoGap.abilita).toContain('power spot')
+/**
+ * ─── LA METÀ CHE MANCAVA ADESSO C'È ────────────────────────────────────────
+ *
+ * Questo blocco si chiamava «la metà che non c'è resta dichiarata» e registrava
+ * un'assenza: l'Ingegno Acciaio dell'ALLEATO è `field.isSteelySpirit`, una
+ * casella di campo, e caselle di campo non ne avevamo.
+ *
+ * Diceva anche dove guardare — «se un giorno arrivassero le caselle di campo,
+ * questo test dice dove guardare» — e il giorno è arrivato: sono cinque, e
+ * stanno in `caselleAlleato.test.js`.
+ *
+ * Il blocco resta, girato dall'altra parte: adesso prova che la METÀ C'È e che
+ * la voce le dichiara tutt'e due. Un'assenza registrata che viene colmata non
+ * si cancella, si rovescia — così chi legge trova la storia invece del solo
+ * stato finale.
+ */
+describe('le due metà ci sono tutt\'e due', () => {
+  it('quella dell\'alleato è una casella di campo, e adesso ce l\'abbiamo', () => {
+    // Le altre quattro dello stesso genere. Non sono più nel divario: il campo
+    // `casellaDiCampo` dice che il motore le calcola, solo che le legge
+    // dall'interruttore nella barra invece che dallo slot.
+    for (const chiave of ['battery', 'power-spot', 'friend-guard', 'flower-gift']) {
+      expect(ABILITY_EFFECTS[chiave]?.casellaDiCampo, `${chiave}`).toBeTruthy()
+    }
+    expect(elencoGap.abilita).not.toContain('battery')
+    expect(elencoGap.abilita).not.toContain('power spot')
   })
 
-  it('la voce dichiara solo la metà offensiva', () => {
-    expect(ABILITY_EFFECTS['steely-spirit']).toEqual({ steelySpirit: true, showInSmogon: true })
+  it('la voce dichiara la metà offensiva E quella dell\'alleato', () => {
+    expect(ABILITY_EFFECTS['steely-spirit']).toEqual({
+      steelySpirit: true, casellaDiCampo: 'steelySpirit', showInSmogon: true,
+    })
   })
 })

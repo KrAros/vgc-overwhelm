@@ -163,11 +163,20 @@ export function creaHarness() {
       !!field.lightScreen,
       false,               // isForesight
       !!field.helpingHand,
-      false, false,        // isFriendGuard, isBattery
+      // ── Le cinque caselle dell'ALLEATO ──────────────────────────────────
+      // Erano `false` fisso, quindi non verificabili: qualunque cosa il motore
+      // ne facesse, il riferimento diceva sempre «spente». Adesso arrivano dal
+      // nostro `field`, con i nomi che `buildField` gli dà.
+      //
+      // `isFlowerGiftAtk` e `isFlowerGiftSpD` sono due campi qui e uno solo da
+      // noi: la traduzione la fa `buildField`, che dallo stesso interruttore
+      // ricava il verso — Attacco sul lato che attacca, Difesa Speciale su
+      // quello che subisce.
+      !!field.friendGuard, !!field.battery,
       false,               // isProtect
-      false, false, false, // isPowerSpot, isSteelySpirit, isNeutralizingGas
+      !!field.powerSpot, !!field.steelySpiritAlleato, false, // …, isNeutralizingGas
       false,               // isGmaxField
-      false, false,        // isFlowerGiftSpD, isFlowerGiftAtk
+      !!field.flowerGiftSpD, !!field.flowerGiftAtk,
       false, false,        // isTailwind, isSaltCure
       !!field.auroraVeil,
       false, false,        // isSwamp, isSeaFire
@@ -417,9 +426,29 @@ export function creaHarness() {
   function costruisciCampo(field, format) {
     const latoP0 = costruisciLato(field, format)
     const latoP1 = costruisciLato(field, format)
+
+    // Il meteo è MUTABILE, e non per comodità: `checkAirLock`
+    // (`damage_MASTER.js:411`) chiama `field.clearWeather()`, cioè cancella il
+    // meteo dal campo per il resto del calcolo. Senza questo metodo l'ingresso
+    // alto scoppiava con «field.clearWeather is not a function» — ed è così
+    // che si è scoperto che Air Lock e Cloud Nine da `GET_DAMAGE_SV` non
+    // passano nemmeno.
+    //
+    // Va azzerato in TRE posti, non uno: la copia locale che `getWeather`
+    // restituisce, e il campo `weather` dei due lati. Le funzioni del danno
+    // ricevono un LATO (`field.getSide(i)`) e leggono `field.weather` da
+    // quello, non dal campo: azzerare solo il campo lascerebbe il sole acceso
+    // dentro `calcBPMods` e il numero sarebbe giusto per metà.
+    let meteoCorrente = METEO_NCP[String(field.weather || '').toLowerCase()] || ''
+
     return {
       getTerrain: () => TERRENO_NCP[field.terrain] || '',
-      getWeather: () => METEO_NCP[String(field.weather || '').toLowerCase()] || '',
+      getWeather: () => meteoCorrente,
+      clearWeather: () => {
+        meteoCorrente = ''
+        latoP0.weather = ''
+        latoP1.weather = ''
+      },
       getNeutralGas: () => false,
       getSide: (i) => (i === 0 ? latoP0 : latoP1),
       getTailwind: () => false,

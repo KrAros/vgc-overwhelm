@@ -242,6 +242,27 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
+  // ── Le abilità dell'ALLEATO ──────────────────────────────────────────────
+  //
+  // Battery, Power Spot, Friend Guard, Flower Gift e la metà «alleato» di
+  // Steely Spirit non si leggono da questo slot: il motore le prende
+  // dall'interruttore che porta lo stesso nome nella barra dei modificatori,
+  // perché chi le possiede è il compagno accanto e non questo Pokémon.
+  //
+  // Senza questo riquadro la casella sarebbe invisibile a chi la cerca dove
+  // sta l'abilità, e l'utente concluderebbe che l'app non la calcola — che è
+  // esattamente la cosa che il segnalino «non calcolata» diceva prima, e che
+  // adesso non è più vera.
+  if (ABILITY_EFFECTS[key]?.casellaDiCampo) {
+    return (
+      <div className={`${RIQUADRO} ${SPENTO}`}>
+        <span className={TESTO_SPENTO}>
+          {t(`abilities_desc.${key}`)} {t('ui.campoAltrove')}
+        </span>
+      </div>
+    )
+  }
+
   if (key === 'supreme-overlord') {
     const kos  = flags.supremeOverlordKOs || 0
     const mult = (1 + kos * 0.1).toFixed(1)

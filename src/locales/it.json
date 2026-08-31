@@ -95,7 +95,13 @@
     "reg_filter": "Set dalla reg",
     "reg_all": "Tutte le reg",
     "reg_current": "{{id}} · in corso",
-    "reg_no_sets": "(nessun set)"
+    "reg_no_sets": "(nessun set)",
+    "fgShort": "Ami",
+    "btShort": "Tmp",
+    "psShort": "FE",
+    "ssShort": "IA",
+    "fwShort": "Reg",
+    "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon."
   },
   "gap": {
     "badge": "Non calcolata",
@@ -1895,7 +1901,11 @@
     "white-smoke": "Le statistiche non possono essere abbassate da altri Pokémon.",
     "zero-to-hero": "Quando esce di campo, si trasforma nella Forma Eroe.",
     "storm-drain": "Attira le mosse Acqua. Non ne subisce i danni; invece, l'Attacco Speciale sale di 1 grado.",
-    "well-baked-body": "Le mosse Fuoco non hanno effetto. Se colpito da una, la Difesa sale di 2 gradi."
+    "well-baked-body": "Le mosse Fuoco non hanno effetto. Se colpito da una, la Difesa sale di 2 gradi.",
+    "battery": "Aumenta del 30% la potenza delle mosse speciali degli alleati.",
+    "power-spot": "Aumenta del 30% la potenza delle mosse degli alleati.",
+    "steely-spirit": "Aumenta del 50% la potenza delle mosse di tipo Acciaio proprie e degli alleati.",
+    "flower-gift": "Con la luce solare intensa aumenta del 50% l'Attacco e la Difesa Speciale propri e degli alleati."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) attiva — Velocità ×2",
