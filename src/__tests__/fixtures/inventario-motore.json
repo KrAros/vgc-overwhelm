@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-29T08:05:40.819Z",
+    "generatedAt": "2026-08-31T03:32:10.092Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -9,9 +9,9 @@
     "fileEsaminati": 20,
     "abilitaNelMotore": 16,
     "strumentiNelMotore": 27,
-    "classificate": 9,
+    "classificate": 8,
     "badgeDaTogliere": 5,
-    "collisioniResidue": 4,
+    "collisioniResidue": 3,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 407,
+        "riga": 441,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -79,17 +79,6 @@
         "file": "src/lib/preparazione.js",
         "riga": 278,
         "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
-      }
-    },
-    {
-      "chiave": "sand force",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "damage.js:47 la rende immune al danno da sabbia. NCP la calcola per il +30% di potenza in calcBPMods:1633, che noi non facciamo",
-      "prova": {
-        "file": "src/lib/damage.js",
-        "riga": 66,
-        "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
       }
     },
     {
@@ -145,7 +134,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 305,
+          "riga": 313,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -153,7 +142,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 407,
+          "riga": 441,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },

@@ -70,10 +70,18 @@ export const CLASSIFICAZIONE = {
       verdetto: 'effetto-non-osservabile',
       nota: 'preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell\'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461',
     },
-    'sand force': {
-      verdetto: 'meccanica-diversa',
-      nota: 'damage.js:47 la rende immune al danno da sabbia. NCP la calcola per il +30% di potenza in calcBPMods:1633, che noi non facciamo',
-    },
+    // `sand force` stava qui, `meccanica-diversa`, con questa nota:
+    //
+    //     «damage.js:47 la rende immune al danno da sabbia. NCP la calcola per
+    //      il +30% di potenza in calcBPMods:1633, che noi non facciamo»
+    //
+    // Era vera fino alla sessione che ha implementato quel +30%. Adesso il
+    // motore fa tutt'e due le cose, l'abilità ha un effetto meccanico e quindi
+    // esce dal divario da sé: non è più una collisione, e la riga qui sarebbe
+    // una lapide con una frase falsa sopra.
+    //
+    // La classificazione descrive uno STATO, non un fatto storico. Quando lo
+    // stato cambia, la riga se ne va.
   },
   strumenti: {
     'iron ball': {

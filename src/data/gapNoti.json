@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-29T08:05:40.518Z",
+    "generatedAt": "2026-08-31T03:32:09.796Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 105,
+    "abilitaNelGap": 102,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -78,7 +78,6 @@
     "ripen",
     "rivalry",
     "rocky payload",
-    "sand force",
     "sap sipper",
     "sharpness",
     "sheer force",
@@ -86,7 +85,6 @@
     "slow start",
     "sniper",
     "solar power",
-    "soundproof",
     "stakeout",
     "steelworker",
     "storm drain",
@@ -103,7 +101,6 @@
     "trace",
     "transistor",
     "turboblaze",
-    "unaware",
     "unnerve",
     "unseen fist",
     "vessel of ruin",

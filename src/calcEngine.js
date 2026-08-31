@@ -207,6 +207,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isContactBase = moveData.contact === true
   const isPunch = moveData.punch === true
   const isPulse = moveData.pulse === true
+  const isSound = moveData.sound === true
   const isBite  = moveData.bite === true
   const isSpread  = moveData.spread === true
 
@@ -294,8 +295,15 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isLevitating = defAbilEffect?.levitate === true && moveType === TYPES.GROUND
   // Flash Fire: sempre immune a Fire in difesa (indipendentemente dal toggle offensivo)
   const isFlashFire  = defAbilEffect?.flashFireImmune && moveType === TYPES.FIRE
+  // Antisuono: immune alle mosse sonore. Il riferimento la mette in
+  // `immunityChecks` insieme a Levitate, quindi qui, e non fra i modificatori:
+  // esce con danno zero, non con un danno ridotto.
+  const isAntisuono  = defAbilEffect?.soundproof === true && isSound
 
   if (isLevitating) {
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (isAntisuono) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (isFlashFire) {
@@ -363,8 +371,34 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // regola scritta a parte: Intimidate abbassa lo stadio `at`, e Body Press
   // legge `df`.
   const chiaveAtk = atkStatIdx === STAT_SPA ? 'sa' : atkStatIdx === STAT_DEF ? 'df' : 'at'
-  const atkBoostVal = preparazione.attaccante.boosts[chiaveAtk]
-  const defBoostVal = preparazione.difensore.boosts[isSpecial ? 'sd' : 'df']
+  const atkBoostVal0 = preparazione.attaccante.boosts[chiaveAtk]
+  const defBoostVal0 = preparazione.difensore.boosts[isSpecial ? 'sd' : 'df']
+
+  // ── Imprudenza, da tutti e due i lati ────────────────────────────────────
+  //
+  // Nel riferimento è un'abilità sola letta da due funzioni: `calcAttack`
+  // punto b, dove il DIFENSORE che ce l'ha ignora i boost d'attacco di chi lo
+  // colpisce; e `calcDefense` punto c, dove l'ATTACCANTE che ce l'ha ignora i
+  // boost di difesa del bersaglio.
+  //
+  // In tutt'e due i casi NCP usa `rawStats`, cioè la statistica senza stadi.
+  // Qui si azzera lo stadio, che è la stessa cosa: `applyBoost(stat, 0)`
+  // restituisce la statistica grezza — lo dice già il commento del critico,
+  // qui sotto.
+  //
+  // ─── IGNORA I BOOST IN TUTT'E DUE I VERSI, NON SOLO QUELLI SCOMODI ────────
+  // Il critico ignora solo i boost che gli darebbero fastidio (i cali
+  // d'attacco propri, i boost di difesa altrui). Imprudenza no: azzera lo
+  // stadio comunque, quindi contro un attaccante a −2 il difensore con
+  // Imprudenza prende PIÙ danno. È il verso che si dimentica, e ha un caso.
+  //
+  // ─── PERCHÉ PRIMA DEL CRITICO ────────────────────────────────────────────
+  // Perché nel riferimento è così: il punto b di `calcAttack` viene prima del
+  // punto c, ed è un `else if` — quindi quando Imprudenza si accende, il ramo
+  // del critico non viene nemmeno valutato. Azzerando lo stadio qui, il clamp
+  // del critico più sotto lavora su zero e non cambia niente: stesso esito.
+  const atkBoostVal = defAbilEffect?.unaware ? 0 : atkBoostVal0
+  const defBoostVal = atkAbilEffect?.unaware ? 0 : defBoostVal0
 
   // ── Il colpo critico ignora i boost che gli darebbero fastidio ───────────
   // Seconda metà della correzione §1.3 — la prima (il critico che buca gli
@@ -576,6 +610,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
   if (ateBoost) bpMods.push(MOD.X1_2)
+
+  // e.ii — Impeto Sabbia: ×1.3 sulle mosse Roccia, Terra e Acciaio, e solo
+  // con la sabbia in campo.
+  //
+  // `field.weather === "Sand"` nel riferimento è un confronto ESATTO, non un
+  // `indexOf`: la sabbia non ha una variante «estrema» come sole e pioggia,
+  // quindi non c'è niente da far passare oltre. Copiato com'è.
+  //
+  // Sta PRIMA di Tough Claws perché nel riferimento è il punto e.ii e Tough
+  // Claws è e.iv. Oggi la posizione fra i due non è osservabile — nessun
+  // Pokémon ha tutt'e due le abilità — ma da quando Tecnico legge `tempBP`
+  // l'ordine dei push è parte della trascrizione, e questi due stanno
+  // entrambi prima di quella riga.
+  if (atkAbilEffect?.sandForce && meteo === 'sand'
+      && (moveType === TYPES.ROCK || moveType === TYPES.GROUND || moveType === TYPES.STEEL)) {
+    bpMods.push(MOD.X1_3)
+  }
 
   // e.iv — Tough Claws sulle mosse a contatto. Il contatto è quello
   // EFFETTIVO: il Punching Glove lo toglie, e allora Tough Claws non vale.

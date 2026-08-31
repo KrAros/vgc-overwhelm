@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-29T08:05:40.518Z",
+    "generatedAt": "2026-08-31T03:32:09.796Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 259,
-    "abilitaNelGap": 105,
+    "abilitaSenzaEffetto": 256,
+    "abilitaNelGap": 102,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -717,16 +717,6 @@
         }
       },
       {
-        "chiave": "sand force",
-        "nome": "Sand Force",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1633
-        }
-      },
-      {
         "chiave": "sap sipper",
         "nome": "Sap Sipper",
         "canale": "STR",
@@ -794,16 +784,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1958
-        }
-      },
-      {
-        "chiave": "soundproof",
-        "nome": "Soundproof",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1114
         }
       },
       {
@@ -964,16 +944,6 @@
           "funzione": "abilityIgnore",
           "file": "damage_MASTER.js",
           "riga": 1001
-        }
-      },
-      {
-        "chiave": "unaware",
-        "nome": "Unaware",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAttack",
-          "file": "damage_MASTER.js",
-          "riga": 1870
         }
       },
       {

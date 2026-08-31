@@ -65,6 +65,40 @@ export const ABILITY_EFFECTS = {
   // ── Attaccante: boost tipo mossa ─────────────────────────────────────────
   'fire-mane':   { fireMane: true, showInSmogon: true },
 
+  // Impeto Sabbia: x1.3 sulle mosse Roccia, Terra e Acciaio, ma SOLO con la
+  // tempesta di sabbia in campo.
+  //
+  // Il motore la nominava gia', ma per un'altra cosa: `lib/damage.js` la mette
+  // fra le abilita' immuni al danno da sabbia. Per questo
+  // `classificazione-badge.mjs` la teneva come `meccanica-diversa` — il
+  // segnalino «non calcolata» era corretto, perche' la meccanica che il
+  // riferimento calcola e' un'ALTRA. Adesso ci sono tutt'e due.
+  'sand-force':  { sandForce: true, showInSmogon: true },
+
+  // ── Difensore: immunita' per famiglia di mossa ───────────────────────────
+  //
+  // Antisuono: le mosse sonore non hanno effetto. Nel riferimento sta in
+  // `immunityChecks` (`damage_MASTER.js:1114`) accanto a Sap Sipper e
+  // Bulletproof: esce con `damage: [0]`, cioe' e' un'immunita' vera e non una
+  // riduzione.
+  //
+  // Le diciotto mosse sonore NON sono scritte nel motore: e' il flag `sound`
+  // di moves.json, che `gen-flag-dati.mjs` trascrive da `isSound` del vendor.
+  'soundproof':  { soundproof: true },
+
+  // ── I due versi di Imprudenza ────────────────────────────────────────────
+  //
+  // Un flag solo, perche' nel riferimento e' la stessa abilita' letta da due
+  // funzioni diverse:
+  //
+  //   calcAttack punto b   (riga 1870)  il DIFENSORE con Imprudenza ignora i
+  //                                     boost d'attacco di chi lo colpisce
+  //   calcDefense punto c  (riga 2039)  l'ATTACCANTE con Imprudenza ignora i
+  //                                     boost di difesa del bersaglio
+  //
+  // Farne uno solo sarebbe stato meta' abilita' con l'aria di essere intera.
+  'unaware':     { unaware: true, showInSmogon: true },
+
   // ── Attaccante: boost mosse contatto ─────────────────────────────────────
   'tough-claws': { toughClaws: true, showInSmogon: true },
 
