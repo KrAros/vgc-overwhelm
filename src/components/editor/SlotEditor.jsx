@@ -9,7 +9,6 @@ import useCalcStore from '../../store/useCalcStore'
 import { NATURES, NATURE_MODIFIERS } from '../../data/natures.js'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { spriteUrl, fallbackSpriteUrl } from '../../utils/sprite'
-import { speedWeatherAttiva } from '../../utils/speedOrder.js'
 import { normalizeAbilityKey } from '../../data/abilityEffects.js'
 import { MAX_SP_TOTAL, MAX_SP_PER_STAT } from '../../lib/rules.js'
 
@@ -44,6 +43,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const setColpiScelti       = useCalcStore(s => s.setColpiScelti)
   const setDoubleTarget = useCalcStore(s => s.setDoubleTarget)
   const weather        = useCalcStore(s => s.weather)
+  const terrain        = useCalcStore(s => s.terrain)
 
   const [showImport,     setShowImport]     = useState(false)
   const [showDuplicate,  setShowDuplicate]  = useState(false)
@@ -410,7 +410,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 boostVal={boostFields[i] ? (pokemon?.[boostFields[i]] || 0) : 0}
                 onSpChange={val => handleSp(i, val)}
                 onBoostChange={val => boostFields[i] && setBoost(team, index, boostFields[i], val)}
-                speedWeatherActive={speedWeatherAttiva(ability, weather)}
+                /* Lo slot intero, perché la colonna «Mod» non guarda più solo
+                   il meteo: legge abilità, strumento, stadi e interruttori
+                   attraverso `statMostrata`. Passare i singoli pezzi voleva
+                   dire aggiungere un parametro a ogni abilità nuova — ed è
+                   così che la colonna era rimasta indietro. */
+                slot={pokemon}
+                weather={weather}
+                terrain={terrain}
                 tailwindActive={i === 5 && tailwindActive}
               />
             ))}
