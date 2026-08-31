@@ -98,7 +98,6 @@ import { badgeDaTogliere } from '../../scripts/classificazione-badge.mjs'
 const VOCABOLARIO = [
   /potenz/i,                    // «Potenzia le mosse … del 33%»    fairy-aura
   /dann[oi]\b/i,                // «raddoppia il danno»             punk-rock
-  /dimezz/i,                    // «dimezza il danno»               ice-scales
   /critic/i,                    // «colpi critici»                  super-luck
   /immun/i,                     // «Immunizza alle mosse Terra»     levitate
   /non ha(nno)? effetto/i,      // «Le mosse Erba non hanno effetto» sap-sipper
@@ -330,23 +329,69 @@ describe('le parziali sono dichiarate a mano, e restano vere', () => {
 })
 
 describe('il vocabolario è misurato, non creduto', () => {
-  // Le abilità che NCP calcola e che hanno una descrizione da noi sono il
-  // banco di prova naturale: promettono tutte qualcosa che il danno lo tocca.
+  // Le abilità che NCP calcola e che hanno una descrizione da noi: è il pozzo
+  // da cui esce l'elenco delle sfuggite, qui sotto. Non è più un banco di
+  // prova per una percentuale — la ragione sta nel primo test.
   const conDescrizione = [...nelGap].filter(k => it_.abilities_desc[k])
-  const viste = conDescrizione.filter(k => prometteUnNumero(it_.abilities_desc[k]))
 
-  it('ne riconosce almeno otto su dieci', () => {
-    // Una SOGLIA e non i due numeri esatti, e la ragione è che i numeri esatti
-    // scendono ogni volta che un'abilità viene implementata — esce dal divario
-    // e si porta via la sua descrizione. Un test che diventa rosso a ogni
-    // sessione che fa il suo lavoro verrebbe aggiornato senza guardarlo, cioè
-    // smetterebbe di essere un controllo.
+  it('ogni regola serve: per ognuna esiste una descrizione che solo lei vede', () => {
+    // ─── PERCHÉ QUESTO E NON UNA PERCENTUALE ────────────────────────────────
     //
-    // La soglia invece scende solo se il vocabolario si indebolisce, che è
-    // quello che deve sorvegliare. Misurata quando è stata scritta: 46 su 57,
-    // cioè 0,807.
-    expect(conDescrizione.length, 'il banco di prova si è svuotato').toBeGreaterThan(40)
-    expect(viste.length / conDescrizione.length).toBeGreaterThanOrEqual(0.8)
+    // Qui c'era una soglia: «il vocabolario deve riconoscere almeno otto su
+    // dieci delle abilità del divario che hanno una descrizione». Era sbagliata
+    // in un modo che ci ha messo tre sessioni a manifestarsi: **peggiorava
+    // quando facevamo il nostro lavoro**.
+    //
+    // Ogni abilità implementata esce dal divario, e quelle che escono sono
+    // proprio le riconosciute — sono le uniche che qualcuno si mette a
+    // implementare, perché promettono un numero. Il banco di prova si svuotava
+    // dei successi e restava pieno degli scarti. Misurato: dopo Impeto Sabbia,
+    // Antisuono e Imprudenza la soglia è scesa da 0,807 a 0,788, per tre
+    // abilità implementate BENE.
+    //
+    // Un test che diventa rosso quando il lavoro va a buon fine sarebbe stato
+    // aggiornato senza guardarlo, che è il modo in cui i controlli muoiono.
+    //
+    // ─── LA PROVA CHE LO SOSTITUISCE ────────────────────────────────────────
+    //
+    // Ogni regola deve avere almeno una descrizione VERA che solo lei
+    // riconosce. Se ce l'ha, togliere quella regola cambia il verdetto su
+    // un'abilità reale — cioè la regola serve. Se non ce l'ha, la regola è
+    // peso morto e va tolta.
+    //
+    // Non degrada: le descrizioni non spariscono quando implementiamo
+    // un'abilità, e il numero di regole non dipende da quanto lavoro abbiamo
+    // fatto.
+    const descrizioni = Object.values(it_.abilities_desc)
+    const senzaTestimone = []
+    for (const regola of VOCABOLARIO) {
+      const soloLei = descrizioni.some(d =>
+        regola.test(d) && VOCABOLARIO.filter(r => r.test(d)).length === 1)
+      if (!soloLei) senzaTestimone.push(String(regola))
+    }
+    expect(
+      senzaTestimone,
+      'questa regola non decide da sola su nessuna descrizione del listino: o è '
+      + 'coperta da un\'altra, o è peso morto. Toglila, oppure aggiungi la '
+      + 'descrizione che la richiede.',
+    ).toEqual([])
+  })
+
+  it('la regola tolta era davvero ridondante', () => {
+    // `/dimezz/` stava nel vocabolario e non serviva: OGNI descrizione che
+    // contiene «dimezza» contiene anche «danno», quindi la regola non ha mai
+    // deciso niente da sola. Tolta, e questo test lo mette per iscritto invece
+    // di lasciarlo in un messaggio di commit.
+    //
+    // Se un giorno arrivasse «dimezza la potenza» senza la parola danno, a
+    // trovarla sarebbe il test qui sotto sulle sfuggite — e allora la regola
+    // andrebbe rimessa.
+    const conDimezza = Object.entries(it_.abilities_desc).filter(([, d]) => /dimezz/i.test(d))
+    expect(conDimezza.length, 'nessuna descrizione dice «dimezza»: il test non prova niente')
+      .toBeGreaterThan(0)
+    const nonViste = conDimezza.filter(([, d]) => !prometteUnNumero(d)).map(([k]) => k)
+    expect(nonViste, 'senza `/dimezz/` questa descrizione non è più vista da nessuna regola')
+      .toEqual([])
   })
 
   it('ogni descrizione che sfugge è una che non nomina un numero', () => {
