@@ -887,7 +887,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 1,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"rage": {
 		"num": "99",
@@ -1624,7 +1625,8 @@
 		"power": 40,
 		"priority": 1,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"prioritaria": true
 	},
 	"scary face": {
 		"num": "184",
@@ -2146,7 +2148,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 2,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"ancient power": {
 		"num": "246",
@@ -2209,7 +2212,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 3,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"uproar": {
 		"num": "253",
@@ -3184,7 +3188,8 @@
 		"type": 0,
 		"category": 0,
 		"power": 30,
-		"priority": 2
+		"priority": 2,
+		"prioritaria": true
 	},
 	"pluck": {
 		"num": "365",
@@ -3394,7 +3399,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 1,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"toxic spikes": {
 		"num": "390",
@@ -3587,7 +3593,8 @@
 		"type": 6,
 		"category": 1,
 		"power": 40,
-		"priority": 1
+		"priority": 1,
+		"prioritaria": true
 	},
 	"focus blast": {
 		"num": "411",
@@ -3664,7 +3671,8 @@
 		"power": 40,
 		"priority": 1,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"prioritaria": true
 	},
 	"avalanche": {
 		"num": "419",
@@ -3681,7 +3689,8 @@
 		"type": 5,
 		"category": 0,
 		"power": 40,
-		"priority": 1
+		"priority": 1,
+		"prioritaria": true
 	},
 	"shadow claw": {
 		"num": "421",
@@ -3730,7 +3739,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 1,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"mud bomb": {
 		"num": "426",
@@ -3972,7 +3982,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 1,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"attack order": {
 		"num": "454",
@@ -5171,7 +5182,8 @@
 		"colpi": [
 			2,
 			5
-		]
+		],
+		"prioritaria": true
 	},
 	"mystical fire": {
 		"num": "595",
@@ -5219,7 +5231,8 @@
 		"type": 11,
 		"category": 2,
 		"power": 0,
-		"priority": 1
+		"priority": 1,
+		"prioritaria": true
 	},
 	"geomancy": {
 		"num": "601",
@@ -5260,7 +5273,8 @@
 		"type": 17,
 		"category": 2,
 		"power": 0,
-		"priority": 1
+		"priority": 1,
+		"prioritaria": true
 	},
 	"nuzzle": {
 		"num": "609",
@@ -5367,7 +5381,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 1,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"anchor shot": {
 		"num": "",
@@ -5466,7 +5481,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 2,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"fleur cannon": {
 		"num": "",
@@ -5721,7 +5737,8 @@
 		"type": 0,
 		"category": 2,
 		"power": 0,
-		"priority": 3
+		"priority": 3,
+		"prioritaria": true
 	},
 	"stomping tantrum": {
 		"num": "",
@@ -5990,7 +6007,8 @@
 		"type": 1,
 		"category": 2,
 		"power": 0,
-		"priority": 4
+		"priority": 4,
+		"prioritaria": true
 	},
 	"burning jealousy": {
 		"num": "807",
@@ -6400,7 +6418,8 @@
 		"power": 60,
 		"priority": 1,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"prioritaria": true
 	},
 	"jungle healing": {
 		"num": "816",
@@ -6989,7 +7008,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 70,
-		"priority": 1
+		"priority": 1,
+		"prioritaria": true
 	},
 	"thunderous kick": {
 		"num": "823",
@@ -7080,7 +7100,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 3,
-		"contact": true
+		"contact": true,
+		"prioritaria": true
 	},
 	"victory dance": {
 		"num": "837",

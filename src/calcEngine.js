@@ -208,6 +208,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isPunch = moveData.punch === true
   const isPulse = moveData.pulse === true
   const isSound = moveData.sound === true
+  const isPrioritaria = moveData.prioritaria === true
   const isBite  = moveData.bite === true
   const isSpread  = moveData.spread === true
 
@@ -299,8 +300,15 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `immunityChecks` insieme a Levitate, quindi qui, e non fra i modificatori:
   // esce con danno zero, non con un danno ridotto.
   const isAntisuono  = defAbilEffect?.soundproof === true && isSound
+  // Armor Tail, Queenly Majesty e Dazzling: le mosse con priorità non hanno
+  // effetto. Anche questa sta in `immunityChecks` nel riferimento, quindi qui
+  // e non fra i modificatori: esce con danno zero.
+  const isPrioritaBloccata = defAbilEffect?.bloccaPriorita === true && isPrioritaria
 
   if (isLevitating) {
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (isPrioritaBloccata) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (isAntisuono) {
@@ -891,10 +899,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // NCP salta anche le bacche contro Unnerve e As One: non modelliamo
   // nessuna delle due, quindi il cancello non serve ancora.
+  // q — la bacca di resistenza, e le tre abilità che la governano.
+  //
+  // La condizione era già quella del riferimento (`calcFinalMods` punto q,
+  // `damage_MASTER.js:2405`). Adesso porta anche le tre abilità che stanno
+  // nella stessa riga là:
+  //
+  //   Unnerve e As One su chi ATTACCA spaventano il bersaglio, che la bacca
+  //   non la mangia: la condizione non si accende proprio.
+  //
+  //   Ripen sul DIFENSORE la fa valere il doppio: `0x400` invece di `0x800`,
+  //   cioè un quarto del danno e non la metà. Non è «×0.5 due volte» — è una
+  //   costante diversa che il riferimento spinge al posto dell'altra.
   if (defItemEffect?.resistBerry !== undefined &&
       defItemEffect.resistBerry === moveType &&
-      (effectiveness > 1 || moveType === TYPES.NORMAL)) {
-    finalMods.push(MOD.X0_5)
+      (effectiveness > 1 || moveType === TYPES.NORMAL) &&
+      !atkAbilEffect?.impedisceBacca) {
+    finalMods.push(defAbilEffect?.raddoppiaBacca ? MOD.X0_25 : MOD.X0_5)
   }
 
   for (let r = 85; r <= 100; r++) {

@@ -86,6 +86,32 @@ export const ABILITY_EFFECTS = {
   // di moves.json, che `gen-flag-dati.mjs` trascrive da `isSound` del vendor.
   'soundproof':  { soundproof: true },
 
+  // Le tre che azzerano le mosse con priorita'. Nel riferimento sono un solo
+  // ramo di `immunityChecks` (`damage_MASTER.js:1155`) e un solo
+  // `return damage: [0]`: qui un flag solo per tutt'e tre, perche' la
+  // condizione e' identica e non c'e' niente che le distingua.
+  //
+  // `prioritaria` viene dal flag di moves.json, trascritto da `isPriority` del
+  // vendor. NON e' il campo `priority` che avevamo gia': quello e' un numero
+  // e ce l'hanno anche Protect e Follow Me, che al danno non arrivano.
+  'armor-tail':      { bloccaPriorita: true },
+  'queenly-majesty': { bloccaPriorita: true },
+  'dazzling':        { bloccaPriorita: true },
+
+  // ── Le tre che governano la bacca di resistenza ──────────────────────────
+  //
+  // Stanno tutte e tre nella STESSA riga del riferimento — `calcFinalMods`
+  // punto q, `damage_MASTER.js:2405` — e il motore quella riga ce l'ha gia':
+  // dimezza il danno quando la bacca combacia col tipo della mossa.
+  //
+  //   Unnerve / As One  sull'ATTACCANTE: la bacca non si attiva affatto.
+  //                     Nel riferimento sono due nomi nella stessa condizione.
+  //   Ripen             sul DIFENSORE: la bacca vale il doppio, cioe' `0x400`
+  //                     invece di `0x800` — un quarto del danno, non la meta'.
+  'unnerve':     { impedisceBacca: true },
+  'as-one':      { impedisceBacca: true },
+  'ripen':       { raddoppiaBacca: true },
+
   // ── I due versi di Imprudenza ────────────────────────────────────────────
   //
   // Un flag solo, perche' nel riferimento e' la stessa abilita' letta da due
