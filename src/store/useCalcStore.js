@@ -356,7 +356,7 @@ export function decodeTeamsFromURL(encoded) {
               speBoost:   intero(grezzo.spb, -6, 6),
               lastRespectsKOs: intero(grezzo.lr, 0, 3),
               // Il limite superiore è quello della mossa più generosa
-              // (Bombardamento, dieci): il motore poi taglia sull'intervallo
+              // (Infestazione, dieci): il motore poi taglia sull'intervallo
               // della mossa vera, quindi un valore fuori posto non produce un
               // numero sbagliato.
               colpiScelti: typeof grezzo.cs === 'number' ? intero(grezzo.cs, 1, 10) : null,

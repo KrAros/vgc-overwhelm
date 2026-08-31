@@ -740,7 +740,7 @@ export const META_PRESETS = [
     label: 'Population Bomb Attacker',
     nature: 'Jolly',
     item: 'wide lens',
-    // `technician` sull'altro maushold: Bombardamento colpisce dieci volte a
+    // `technician` sull'altro maushold: Infestazione colpisce dieci volte a
     // 20 di potenza, quindi ogni colpo sta sotto la soglia di 60 e prende il
     // +50%. Lente Ampia ne copre la precisione.
     ability: 'technician',

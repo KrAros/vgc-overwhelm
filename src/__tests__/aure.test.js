@@ -122,9 +122,9 @@ describe('le aure, contro il riferimento', () => {
   const casi = [
     ['Aura Fatata, Luce Nefasta',    FLOETTE('fairy-aura'), 'light of ruin',  INCINEROAR],
     ['Aura Fatata, Forza Lunare',    FLOETTE('fairy-aura'), 'moonblast',      INCINEROAR],
-    ['Aura Fatata, Scintillio',      FLOETTE('fairy-aura'), 'dazzling gleam', INCINEROAR],
-    ['Aura Oscura, Pulsar Notturna', YVELTAL('dark-aura'),  'dark pulse',     INCINEROAR],
-    ['Aura Oscura, Ringhio',         YVELTAL('dark-aura'),  'snarl',          INCINEROAR],
+    ['Aura Fatata, Magibrillio',      FLOETTE('fairy-aura'), 'dazzling gleam', INCINEROAR],
+    ['Aura Oscura, Neropulsar', YVELTAL('dark-aura'),  'dark pulse',     INCINEROAR],
+    ['Aura Oscura, Urlorabbia',         YVELTAL('dark-aura'),  'snarl',          INCINEROAR],
     // Il tipo sbagliato: l'aura c'è, la mossa non è del suo tipo.
     ['Aura Fatata su mossa Fuoco',   FLOETTE('fairy-aura'), 'flamethrower',   INCINEROAR],
     ['Aura Oscura su mossa Volante', YVELTAL('dark-aura'),  'hurricane',      INCINEROAR],
@@ -205,7 +205,7 @@ describe('le aure muovono davvero il numero', () => {
     expect(con.maxDmg).toBeGreaterThan(senza.maxDmg)
   })
 
-  it('Pulsar Notturna cresce con Aura Oscura', () => {
+  it('Neropulsar cresce con Aura Oscura', () => {
     expect(nostro(YVELTAL('dark-aura'), 'dark pulse').maxDmg)
       .toBeGreaterThan(nostro(YVELTAL(null), 'dark pulse').maxDmg)
   })

@@ -68,7 +68,7 @@ describe('Impeto Sabbia, contro il riferimento', () => {
   const casi = [
     ['Terremoto in sabbia — il caso del set', 'sand-force', 'earthquake',  'sand'],
     ['Rocciotomba in sabbia',                 'sand-force', 'rock tomb',   'sand'],
-    ['Testataferrea in sabbia',               'sand-force', 'iron head',   'sand'],
+    ['Metaltestata in sabbia',               'sand-force', 'iron head',   'sand'],
     // Il tipo sbagliato: l'abilità c'è, la sabbia c'è, la mossa non è delle tre.
     ['Dragartigli in sabbia',                 'sand-force', 'dragon claw', 'sand'],
     // Il meteo sbagliato: la mossa è giusta, la sabbia non c'è.

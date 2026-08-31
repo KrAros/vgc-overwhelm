@@ -8,7 +8,7 @@
  *
  * ─── PERCHÉ ADESSO ─────────────────────────────────────────────────────────
  *
- * Per il set del meta `maushold` «Population Bomb Attacker». Bombardamento
+ * Per il set del meta `maushold` «Population Bomb Attacker». Infestazione
  * colpisce fino a dieci volte, e fino a oggi l'app mostrava il danno di UNO
  * di quei dieci colpi. Non era un errore del dieci per cento: era un decimo
  * del numero vero, e nessuno lo dichiarava.
@@ -42,7 +42,7 @@
  *
  * ─── DUE MOSSE RESTANO FUORI, E SI VEDE ────────────────────────────────────
  *
- * Tricalcio e Triplo Axel hanno `isTripleHit`: la potenza SALE a ogni colpo
+ * Triplocalcio e Triplo Axel hanno `isTripleHit`: la potenza SALE a ogni colpo
  * (10/20/30 e 20/40/60), quindi il totale non è «un colpo per tre». È una
  * meccanica diversa e non è implementata. Restano a un colpo, marcate con
  * `potenzaCrescente` invece che moltiplicate a caso.
@@ -123,7 +123,7 @@ describe('quante volte colpisce', () => {
       attacker: maushold({ colpiScelti }), defender: INCINEROAR,
       move: 'bullet seed', field: {}, debug: false,
     })
-    expect(seminta(10).colpi, 'Semintamitraglia arriva a cinque').toBe(5)
+    expect(seminta(10).colpi, 'Semitraglia arriva a cinque').toBe(5)
     expect(seminta(1).colpi, 'e non scende sotto due').toBe(2)
     expect(seminta(3).colpi).toBe(3)
   })
@@ -134,7 +134,7 @@ describe('quante volte colpisce', () => {
     }).colpi).toBe(1)
   })
 
-  it('Tricalcio resta a uno anche se ne dichiara tre', () => {
+  it('Triplocalcio resta a uno anche se ne dichiara tre', () => {
     // Non è «non l'abbiamo trascritta»: è trascritta e dichiarata NON
     // modellata, perché la potenza sale a ogni colpo.
     const r = calculateDamage({
@@ -228,7 +228,7 @@ describe('la probabilità di KO non si calcola moltiplicando', () => {
   })
 })
 
-describe('Bombardamento, il colpo singolo, contro il riferimento', () => {
+describe('Infestazione, il colpo singolo, contro il riferimento', () => {
   let harness
 
   beforeAll(async () => {

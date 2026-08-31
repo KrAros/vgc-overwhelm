@@ -97,10 +97,10 @@ describe('Antisuono, contro il riferimento', () => {
   })
 
   for (const [nome, defAbility, move, nullo] of [
-    ['Squame Rumorose contro Antisuono', 'soundproof', 'clanging scales', true],
-    ['Iper Voce contro Antisuono',       'soundproof', 'hyper voice',     true],
+    ['Clamorsquame contro Antisuono', 'soundproof', 'clanging scales', true],
+    ['Granvoce contro Antisuono',       'soundproof', 'hyper voice',     true],
     ['Dragartigli contro Antisuono',     'soundproof', 'dragon claw',     false],
-    ['Squame Rumorose senza abilità',    null,         'clanging scales', false],
+    ['Clamorsquame senza abilità',    null,         'clanging scales', false],
   ]) {
     it.runIf(vendorPresente)(`${nome} ≡ NCP`, () => {
       const rif = harness.calcola({

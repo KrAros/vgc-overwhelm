@@ -38,7 +38,7 @@
  * ─── PERCHÉ ADESSO E NON PRIMA ─────────────────────────────────────────────
  *
  * Perché tocca un set del meta: `maushold` «Population Bomb Attacker».
- * Bombardamento ha potenza 20, quindi ogni colpo passa largamente sotto la
+ * Infestazione ha potenza 20, quindi ogni colpo passa largamente sotto la
  * soglia. Attenzione però a cosa vuol dire «tocca il set»: qui si sistema il
  * danno di UN colpo. Che i colpi siano fino a dieci è un'altra cosa, non
  * modellata (`hitRange`, §1.11), e non la sistema questo file.
@@ -99,16 +99,16 @@ describe('Tecnico, contro il riferimento', () => {
   })
 
   const casi = [
-    ['Bombardamento, il colpo del set del meta', 'technician', 'population bomb', {}, bersaglio()],
-    ['Finta, 30 di potenza',                     'technician', 'feint',           {}, bersaglio()],
+    ['Infestazione, il colpo del set del meta', 'technician', 'population bomb', {}, bersaglio()],
+    ['Fintoattacco, 30 di potenza',              'technician', 'feint',           {}, bersaglio()],
     ['Aeroassalto, esattamente 60',              'technician', 'aerial ace',      {}, bersaglio()],
     ['Pestone, 65: sopra la soglia',             'technician', 'stomp',           {}, bersaglio()],
-    ['Bombardamento senza l\'abilità',           null,         'population bomb', {}, bersaglio()],
+    ['Infestazione senza l\'abilità',           null,         'population bomb', {}, bersaglio()],
     // I due che riguardano l'ORDINE della catena.
     ['Aeroassalto con Aiutone — spinto DOPO',    'technician', 'aerial ace', { helpingHand: true }, bersaglio()],
-    ['Bacio Vampiro contro un\'Aura Fatata — spinta PRIMA',
+    ['Assorbibacio contro un\'Aura Fatata — spinta PRIMA',
       'technician', 'draining kiss', {}, bersaglio('fairy-aura', 'xerneas')],
-    ['Bacio Vampiro senza aura',                 'technician', 'draining kiss', {}, bersaglio(null, 'xerneas')],
+    ['Assorbibacio senza aura',                 'technician', 'draining kiss', {}, bersaglio(null, 'xerneas')],
   ]
 
   for (const [nome, atkAbility, move, field, defender] of casi) {
@@ -138,7 +138,7 @@ describe('la soglia si misura sulla potenza GIÀ modificata', () => {
   })
 
   it('un modificatore spinto PRIMA lo spegne davvero', () => {
-    // L'Aura Fatata è il punto f, cioè prima. Bacio Vampiro ha potenza 50:
+    // L'Aura Fatata è il punto f, cioè prima. Assorbibacio ha potenza 50:
     // 50 × 1,33 fa 67, che è sopra la soglia. Quindi contro un difensore con
     // l'Aura Fatata, Tecnico NON si accende — e il danno è identico a quello
     // di chi l'abilità non ce l'ha.

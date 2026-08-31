@@ -345,7 +345,7 @@ const RINOMINA_SLUG = {
  * §1.11, insieme a `target` e `accuracy`.
  *
  * `hitRange` era in quella lista e ne è uscito: lo trascrive il passaggio
- * 4-bis, qui sotto, perché senza di lui il set del meta con Bombardamento
+ * 4-bis, qui sotto, perché senza di lui il set del meta con Infestazione
  * mostrava il danno di UN colpo su dieci.
  */
 const FLAG_MOSSE = {
@@ -563,7 +563,7 @@ for (const [slug, voce] of Object.entries(mosse)) {
 // sola, e la distinzione «fissi o variabili» si legge da `min === max`.
 //
 // ─── `potenzaCrescente` E' UN AVVISO, NON UNA MECCANICA ────────────────────
-// Tricalcio e Triplo Axel hanno `isTripleHit`: la potenza SALE a ogni colpo
+// Triplocalcio e Triplo Axel hanno `isTripleHit`: la potenza SALE a ogni colpo
 // (10/20/30 e 20/40/60), quindi il totale non e' «un colpo per N». Il flag e'
 // trascritto perche' il motore possa rifiutarsi di moltiplicare invece di
 // dare un numero sbagliato in silenzio — non perche' la meccanica sia
