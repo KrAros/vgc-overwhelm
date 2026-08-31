@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T14:35:55.199Z",
+    "generatedAt": "2026-08-31T14:49:37.914Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 69,
+    "abilitaNelGap": 66,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -46,7 +46,6 @@
     "mimicry",
     "minds eye",
     "minus",
-    "mold breaker",
     "neutralizing gas",
     "normalize",
     "orichalcum pulse",
@@ -69,11 +68,9 @@
     "sword of ruin",
     "tablets of ruin",
     "tera shell",
-    "teravolt",
     "torrent",
     "toxic boost",
     "trace",
-    "turboblaze",
     "unseen fist",
     "vessel of ruin",
     "wind power"

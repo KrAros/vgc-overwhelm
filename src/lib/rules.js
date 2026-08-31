@@ -469,3 +469,77 @@ export const MOSSE_ANNULLATE_DA_DAMP = new Set([
   'mind blown',
   'misty explosion',
 ])
+
+/**
+ * ─── LE DIECI ABILITÀ CHE MOLD BREAKER NON RIESCE A IGNORARE ────────────────
+ *
+ * Trascritte da `damage_MASTER.js:999`, che le elenca per nome:
+ *
+ *     var isIgnoreable = ['Shadow Shield', 'Full Metal Body', 'Prism Armor',
+ *         'As One', 'Protosynthesis', 'Quark Drive', 'Tablets of Ruin',
+ *         'Vessel of Ruin', 'Sword of Ruin', 'Beads of Ruin']
+ *         .indexOf(defAbility) == -1 && defItem !== "Ability Shield";
+ *
+ * ─── PERCHÉ UNA LISTA QUI E NON UN CAMPO IN `ABILITY_EFFECTS` ──────────────
+ *
+ * Perché un campo `nonIgnorabile` mentirebbe al registro del divario.
+ *
+ * Quattro di queste dieci — le «of Ruin» — non hanno oggi nessuna voce in
+ * `ABILITY_EFFECTS`: non le calcoliamo, e il badge «non calcolata» lo dice.
+ * Ma `haEffetto` (in `scripts/campi-meta.mjs`) considera calcolata qualunque
+ * voce con almeno un campo non-meta: scrivere `{ nonIgnorabile: true }` le
+ * farebbe sparire dal divario senza che il motore ne calcoli niente.
+ *
+ * È lo stesso motivo per cui il riferimento stesso le tiene in un elenco
+ * dentro la funzione invece che addosso alle abilità.
+ *
+ * ─── IL CONFINE SUI NOMI ───────────────────────────────────────────────────
+ *
+ * L'elenco porta anche `defItem !== "Ability Shield"`, cioè lo strumento che
+ * protegge l'abilità dall'essere ignorata. Nei nostri `items.json` non esiste,
+ * quindi quella metà non è trascritta: come `gen !== 4`, è una condizione che
+ * non ha nulla su cui essere vera. Il giorno che l'oggetto entrasse, il posto
+ * dove aggiungerlo è la funzione che legge questo insieme.
+ */
+export const ABILITA_NON_IGNORABILI = new Set([
+  'shadow-shield',
+  'full-metal-body',
+  'prism-armor',
+  'as-one',
+  'protosynthesis',
+  'quark-drive',
+  'tablets-of-ruin',
+  'vessel-of-ruin',
+  'sword-of-ruin',
+  'beads-of-ruin',
+])
+
+/**
+ * ─── LE MOSSE CHE IGNORANO L'ABILITÀ DEL BERSAGLIO ──────────────────────────
+ *
+ * Trascritte da `damage_MASTER.js:1002`, che ne elenca nove:
+ *
+ *     var isIgnoreMove = ["Moongeist Beam", "Sunsteel Strike", "Photon Geyser",
+ *         "Searing Sunraze Smash", "Menacing Moonraze Maelstrom",
+ *         "Light That Burns the Sky", 'G-Max Drum Solo', 'G-Max Fireball',
+ *         'G-Max Hydrosnipe'].indexOf(move.name) !== -1;
+ *
+ * Fanno lo stesso di Mold Breaker senza che nessuno abbia l'abilità.
+ *
+ * ─── PERCHÉ TRE E NON NOVE ─────────────────────────────────────────────────
+ *
+ * Perché sei di quelle nove non esistono nei nostri `moves.json`: le tre mosse
+ * Z (Searing Sunraze Smash, Menacing Moonraze Maelstrom, Light That Burns the
+ * Sky) e le tre G-Max. Non è una scelta di modello, è il contenuto dei dati —
+ * e se un giorno entrassero, il generatore dei dati le porterebbe e questa
+ * lista andrebbe allungata a mano.
+ *
+ * Il test che accompagna questa costante misura esattamente quello: quali
+ * delle nove esistono. Se il conto cambia, diventa rosso invece di restare
+ * silenziosamente incompleto.
+ */
+export const MOSSE_CHE_IGNORANO_ABILITA = new Set([
+  'moongeist beam',
+  'sunsteel strike',
+  'photon geyser',
+])
