@@ -70,7 +70,8 @@
 		"power": 75,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"ice punch": {
 		"num": "8",
@@ -80,7 +81,8 @@
 		"power": 75,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"thunder punch": {
 		"num": "9",
@@ -90,7 +92,8 @@
 		"power": 75,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"scratch": {
 		"num": "10",
@@ -215,7 +218,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"double kick": {
 		"num": "24",
@@ -256,7 +260,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"sand attack": {
 		"num": "28",
@@ -273,7 +278,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"horn attack": {
 		"num": "30",
@@ -322,7 +328,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"wrap": {
 		"num": "35",
@@ -391,7 +398,8 @@
 		"type": 7,
 		"category": 0,
 		"power": 15,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"twineedle": {
 		"num": "41",
@@ -403,7 +411,8 @@
 		"colpi": [
 			2,
 			2
-		]
+		],
+		"secondario": true
 	},
 	"pin missile": {
 		"num": "42",
@@ -434,7 +443,8 @@
 		"power": 60,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"growl": {
 		"num": "45",
@@ -492,7 +502,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"ember": {
 		"num": "52",
@@ -500,7 +511,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"flamethrower": {
 		"num": "53",
@@ -508,7 +520,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"mist": {
 		"num": "54",
@@ -549,7 +562,8 @@
 		"type": 5,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"blizzard": {
 		"num": "59",
@@ -559,7 +573,8 @@
 		"power": 110,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"psybeam": {
 		"num": "60",
@@ -567,7 +582,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"bubble beam": {
 		"num": "61",
@@ -575,7 +591,8 @@
 		"type": 2,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"aurora beam": {
 		"num": "62",
@@ -583,7 +600,8 @@
 		"type": 5,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"hyper beam": {
 		"num": "63",
@@ -778,7 +796,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"thunderbolt": {
 		"num": "85",
@@ -786,7 +805,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"thunder wave": {
 		"num": "86",
@@ -802,7 +822,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 110,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"rock throw": {
 		"num": "88",
@@ -860,7 +881,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"hypnosis": {
 		"num": "95",
@@ -1091,7 +1113,8 @@
 		"category": 0,
 		"power": 30,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"smog": {
 		"num": "123",
@@ -1099,7 +1122,8 @@
 		"type": 7,
 		"category": 1,
 		"power": 30,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"sludge": {
 		"num": "124",
@@ -1107,7 +1131,8 @@
 		"type": 7,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"bone club": {
 		"num": "125",
@@ -1115,7 +1140,8 @@
 		"type": 8,
 		"category": 0,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"fire blast": {
 		"num": "126",
@@ -1123,7 +1149,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 110,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"waterfall": {
 		"num": "127",
@@ -1132,7 +1159,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"clamp": {
 		"num": "128",
@@ -1180,7 +1208,8 @@
 		"category": 0,
 		"power": 10,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"amnesia": {
 		"num": "133",
@@ -1277,7 +1306,8 @@
 		"type": 9,
 		"category": 0,
 		"power": 140,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"transform": {
 		"num": "144",
@@ -1294,7 +1324,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"dizzy punch": {
 		"num": "146",
@@ -1304,7 +1335,8 @@
 		"power": 70,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"spore": {
 		"num": "147",
@@ -1404,7 +1436,8 @@
 		"category": 0,
 		"power": 75,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"hyper fang": {
 		"num": "158",
@@ -1414,7 +1447,8 @@
 		"power": 80,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"sharpen": {
 		"num": "159",
@@ -1438,7 +1472,8 @@
 		"type": 0,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"super fang": {
 		"num": "162",
@@ -1538,7 +1573,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"snore": {
 		"num": "173",
@@ -1547,7 +1583,8 @@
 		"category": 1,
 		"power": 50,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"curse": {
 		"num": "174",
@@ -1615,7 +1652,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"protect": {
 		"num": "182",
@@ -1676,7 +1714,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"mud-slap": {
 		"num": "189",
@@ -1684,7 +1723,8 @@
 		"type": 8,
 		"category": 1,
 		"power": 20,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"octazooka": {
 		"num": "190",
@@ -1693,7 +1733,8 @@
 		"category": 1,
 		"power": 65,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"spikes": {
 		"num": "191",
@@ -1710,7 +1751,8 @@
 		"category": 1,
 		"power": 120,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"foresight": {
 		"num": "193",
@@ -1744,7 +1786,8 @@
 		"power": 55,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"detect": {
 		"num": "197",
@@ -1856,7 +1899,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"fury cutter": {
 		"num": "210",
@@ -1875,7 +1919,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"mean look": {
 		"num": "212",
@@ -1957,7 +2002,8 @@
 		"type": 1,
 		"category": 0,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"magnitude": {
 		"num": "222",
@@ -1976,7 +2022,8 @@
 		"power": 100,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"megahorn": {
 		"num": "224",
@@ -1993,7 +2040,8 @@
 		"type": 14,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"baton pass": {
 		"num": "226",
@@ -2027,7 +2075,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"sweet scent": {
 		"num": "230",
@@ -2045,7 +2094,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"metal claw": {
 		"num": "232",
@@ -2055,7 +2105,8 @@
 		"power": 50,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"vital throw": {
 		"num": "233",
@@ -2107,7 +2158,8 @@
 		"power": 40,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"rain dance": {
 		"num": "240",
@@ -2133,7 +2185,8 @@
 		"power": 80,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"mirror coat": {
 		"num": "243",
@@ -2167,7 +2220,8 @@
 		"type": 12,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shadow ball": {
 		"num": "247",
@@ -2176,7 +2230,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"future sight": {
 		"num": "248",
@@ -2193,7 +2248,8 @@
 		"category": 0,
 		"power": 40,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"whirlpool": {
 		"num": "250",
@@ -2223,7 +2279,8 @@
 		"power": 40,
 		"priority": 3,
 		"contact": true,
-		"prioritaria": true
+		"prioritaria": true,
+		"secondario": true
 	},
 	"uproar": {
 		"num": "253",
@@ -2266,7 +2323,8 @@
 		"power": 95,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"hail": {
 		"num": "258",
@@ -2540,7 +2598,8 @@
 		"type": 0,
 		"category": 0,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"dive": {
 		"num": "291",
@@ -2586,7 +2645,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 95,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"mist ball": {
 		"num": "296",
@@ -2595,7 +2655,8 @@
 		"category": 1,
 		"power": 95,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"feather dance": {
 		"num": "297",
@@ -2621,7 +2682,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"mud sport": {
 		"num": "300",
@@ -2648,7 +2710,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"slack off": {
 		"num": "303",
@@ -2676,7 +2739,8 @@
 		"power": 50,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"crush claw": {
 		"num": "306",
@@ -2712,7 +2776,8 @@
 		"power": 90,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"astonish": {
 		"num": "310",
@@ -2721,7 +2786,8 @@
 		"category": 0,
 		"power": 30,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"weather ball": {
 		"num": "311",
@@ -2781,7 +2847,8 @@
 		"type": 12,
 		"category": 0,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"silver wind": {
 		"num": "318",
@@ -2789,7 +2856,8 @@
 		"type": 11,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"metal sound": {
 		"num": "319",
@@ -2838,7 +2906,8 @@
 		"type": 11,
 		"category": 1,
 		"power": 75,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shadow punch": {
 		"num": "325",
@@ -2856,7 +2925,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"sky uppercut": {
 		"num": "327",
@@ -2891,7 +2961,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"bullet seed": {
 		"num": "331",
@@ -2985,7 +3056,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"mud shot": {
 		"num": "341",
@@ -2993,7 +3065,8 @@
 		"type": 8,
 		"category": 1,
 		"power": 55,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"poison tail": {
 		"num": "342",
@@ -3002,7 +3075,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"covet": {
 		"num": "343",
@@ -3028,7 +3102,8 @@
 				3
 			]
 		},
-		"rinculo": true
+		"rinculo": true,
+		"secondario": true
 	},
 	"magical leaf": {
 		"num": "345",
@@ -3100,7 +3175,8 @@
 		"category": 1,
 		"power": 60,
 		"priority": 0,
-		"pulse": true
+		"pulse": true,
+		"secondario": true
 	},
 	"doom desire": {
 		"num": "353",
@@ -3462,7 +3538,8 @@
 				3
 			]
 		},
-		"rinculo": true
+		"rinculo": true,
+		"secondario": true
 	},
 	"force palm": {
 		"num": "395",
@@ -3471,7 +3548,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"aura sphere": {
 		"num": "396",
@@ -3498,7 +3576,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"dark pulse": {
 		"num": "399",
@@ -3507,7 +3586,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"pulse": true
+		"pulse": true,
+		"secondario": true
 	},
 	"night slash": {
 		"num": "400",
@@ -3544,7 +3624,8 @@
 		"category": 1,
 		"power": 75,
 		"priority": 0,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"x-scissor": {
 		"num": "404",
@@ -3563,7 +3644,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"dragon pulse": {
 		"num": "406",
@@ -3581,7 +3663,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"power gem": {
 		"num": "408",
@@ -3617,7 +3700,8 @@
 		"category": 1,
 		"power": 120,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"energy ball": {
 		"num": "412",
@@ -3626,7 +3710,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"brave bird": {
 		"num": "413",
@@ -3651,7 +3736,8 @@
 		"type": 8,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"switcheroo": {
 		"num": "415",
@@ -3725,7 +3811,8 @@
 		"power": 65,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"ice fang": {
 		"num": "423",
@@ -3735,7 +3822,8 @@
 		"power": 65,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"fire fang": {
 		"num": "424",
@@ -3745,7 +3833,8 @@
 		"power": 65,
 		"priority": 0,
 		"contact": true,
-		"bite": true
+		"bite": true,
+		"secondario": true
 	},
 	"shadow sneak": {
 		"num": "425",
@@ -3764,7 +3853,8 @@
 		"category": 1,
 		"power": 65,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"psycho cut": {
 		"num": "427",
@@ -3782,7 +3872,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"mirror shot": {
 		"num": "429",
@@ -3790,7 +3881,8 @@
 		"type": 16,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"flash cannon": {
 		"num": "430",
@@ -3798,7 +3890,8 @@
 		"type": 16,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"rock climb": {
 		"num": "431",
@@ -3807,7 +3900,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"defog": {
 		"num": "432",
@@ -3840,7 +3934,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"lava plume": {
 		"num": "436",
@@ -3849,7 +3944,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"leaf storm": {
 		"num": "437",
@@ -3885,7 +3981,8 @@
 		"power": 70,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"gunk shot": {
 		"num": "441",
@@ -3893,7 +3990,8 @@
 		"type": 7,
 		"category": 0,
 		"power": 120,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"iron head": {
 		"num": "442",
@@ -3902,7 +4000,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"magnet bomb": {
 		"num": "443",
@@ -3954,7 +4053,8 @@
 		"category": 1,
 		"power": 65,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"judgment": {
 		"num": "449",
@@ -3979,7 +4079,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"wood hammer": {
 		"num": "452",
@@ -4111,7 +4212,8 @@
 		"type": 4,
 		"category": 1,
 		"power": 120,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"ominous wind": {
 		"num": "466",
@@ -4119,7 +4221,8 @@
 		"type": 13,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shadow force": {
 		"num": "467",
@@ -4250,7 +4353,8 @@
 		"category": 1,
 		"power": 95,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"quiver dance": {
 		"num": "483",
@@ -4302,7 +4406,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"coil": {
 		"num": "489",
@@ -4319,7 +4424,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"acid spray": {
 		"num": "491",
@@ -4328,7 +4434,8 @@
 		"category": 1,
 		"power": 40,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"foul play": {
 		"num": "492",
@@ -4428,7 +4535,8 @@
 		"type": 2,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shell smash": {
 		"num": "504",
@@ -4546,7 +4654,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"water pledge": {
 		"num": "518",
@@ -4587,7 +4696,8 @@
 		"category": 1,
 		"power": 50,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"bulldoze": {
 		"num": "523",
@@ -4596,7 +4706,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"frost breath": {
 		"num": "524",
@@ -4630,7 +4741,8 @@
 		"category": 1,
 		"power": 55,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"wild charge": {
 		"num": "528",
@@ -4678,7 +4790,8 @@
 		"category": 0,
 		"power": 60,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"horn leech": {
 		"num": "532",
@@ -4707,7 +4820,8 @@
 		"power": 75,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"heat crash": {
 		"num": "535",
@@ -4724,7 +4838,8 @@
 		"type": 4,
 		"category": 1,
 		"power": 65,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"steamroller": {
 		"num": "537",
@@ -4733,7 +4848,8 @@
 		"category": 0,
 		"power": 65,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"cotton guard": {
 		"num": "538",
@@ -4749,7 +4865,8 @@
 		"type": 15,
 		"category": 1,
 		"power": 85,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"psystrike": {
 		"num": "540",
@@ -4779,7 +4896,8 @@
 		"category": 1,
 		"power": 110,
 		"priority": 0,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"head charge": {
 		"num": "543",
@@ -4812,7 +4930,8 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"techno blast": {
 		"num": "546",
@@ -4830,7 +4949,8 @@
 		"power": 75,
 		"priority": 0,
 		"spread": true,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"secret sword": {
 		"num": "548",
@@ -4847,7 +4967,8 @@
 		"category": 1,
 		"power": 65,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"bolt strike": {
 		"num": "550",
@@ -4856,7 +4977,8 @@
 		"category": 0,
 		"power": 130,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"blue flare": {
 		"num": "551",
@@ -4864,7 +4986,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 130,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"fiery dance": {
 		"num": "552",
@@ -4872,7 +4995,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"freeze shock": {
 		"num": "553",
@@ -4880,7 +5004,8 @@
 		"type": 5,
 		"category": 0,
 		"power": 140,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"ice burn": {
 		"num": "554",
@@ -4888,7 +5013,8 @@
 		"type": 5,
 		"category": 1,
 		"power": 140,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"snarl": {
 		"num": "555",
@@ -4898,7 +5024,8 @@
 		"power": 55,
 		"priority": 0,
 		"spread": true,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"icicle crash": {
 		"num": "556",
@@ -4906,7 +5033,8 @@
 		"type": 5,
 		"category": 0,
 		"power": 85,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"v-create": {
 		"num": "557",
@@ -5049,7 +5177,8 @@
 		"type": 5,
 		"category": 1,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"disarming voice": {
 		"num": "574",
@@ -5133,7 +5262,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"fairy wind": {
 		"num": "584",
@@ -5150,7 +5280,8 @@
 		"type": 17,
 		"category": 1,
 		"power": 95,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"boomburst": {
 		"num": "586",
@@ -5213,7 +5344,8 @@
 		"type": 1,
 		"category": 1,
 		"power": 75,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"spiky shield": {
 		"num": "596",
@@ -5305,7 +5437,8 @@
 		"category": 0,
 		"power": 20,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"infestation": {
 		"num": "611",
@@ -5324,7 +5457,8 @@
 		"power": 40,
 		"priority": 0,
 		"contact": true,
-		"punch": true
+		"punch": true,
+		"secondario": true
 	},
 	"oblivion wing": {
 		"num": "613",
@@ -5394,7 +5528,8 @@
 		"category": 0,
 		"power": 100,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"accelerock": {
 		"num": "",
@@ -5413,7 +5548,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"aurora veil": {
 		"num": "",
@@ -5494,7 +5630,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"first impression": {
 		"num": "",
@@ -5580,7 +5717,8 @@
 		"category": 0,
 		"power": 85,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"lunge": {
 		"num": "",
@@ -5589,7 +5727,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"moongeist beam": {
 		"num": "",
@@ -5681,7 +5820,8 @@
 		"type": 13,
 		"category": 0,
 		"power": 85,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shell trap": {
 		"num": "",
@@ -5726,7 +5866,8 @@
 		"power": 90,
 		"priority": 0,
 		"spread": true,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"spectral thief": {
 		"num": "",
@@ -5751,7 +5892,8 @@
 		"type": 13,
 		"category": 0,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"spotlight": {
 		"num": "",
@@ -5803,7 +5945,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"toxic thread": {
 		"num": "",
@@ -5820,7 +5963,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"zing zap": {
 		"num": "",
@@ -5829,7 +5973,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"pulverizing pancake": {
 		"num": "",
@@ -5870,7 +6015,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"apple acid": {
 		"num": "787",
@@ -5878,7 +6024,8 @@
 		"type": 4,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"aqua cutter": {
 		"num": "895",
@@ -5896,7 +6043,8 @@
 		"category": 0,
 		"power": 80,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"armor cannon": {
 		"num": "890",
@@ -5921,7 +6069,8 @@
 		"type": 3,
 		"category": 0,
 		"power": 110,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"axe kick": {
 		"num": "853",
@@ -5931,7 +6080,8 @@
 		"power": 120,
 		"priority": 0,
 		"contact": true,
-		"rinculo": true
+		"rinculo": true,
+		"secondario": true
 	},
 	"barb barrage": {
 		"num": "839",
@@ -5939,7 +6089,8 @@
 		"type": 7,
 		"category": 0,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"behemoth bash": {
 		"num": "782",
@@ -5976,7 +6127,8 @@
 		"type": 13,
 		"category": 1,
 		"power": 75,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"bleakwind storm": {
 		"num": "846",
@@ -5986,7 +6138,8 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"blood moon": {
 		"num": "901",
@@ -6023,7 +6176,8 @@
 		"power": 60,
 		"priority": 0,
 		"contact": true,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"burning bulwark": {
 		"num": "908",
@@ -6041,7 +6195,8 @@
 		"category": 1,
 		"power": 70,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"ceaseless edge": {
 		"num": "845",
@@ -6051,7 +6206,8 @@
 		"power": 65,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"chilling water": {
 		"num": "886",
@@ -6059,7 +6215,8 @@
 		"type": 2,
 		"category": 1,
 		"power": 50,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"chilly reception": {
 		"num": "881",
@@ -6142,7 +6299,8 @@
 		"power": 80,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"doodle": {
 		"num": "867",
@@ -6197,7 +6355,8 @@
 		"type": 4,
 		"category": 0,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"dual wingbeat": {
 		"num": "814",
@@ -6226,7 +6385,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"electro drift": {
 		"num": "879",
@@ -6243,7 +6403,8 @@
 		"type": 3,
 		"category": 1,
 		"power": 130,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"esper wing": {
 		"num": "840",
@@ -6251,7 +6412,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"expanding force": {
 		"num": "797",
@@ -6285,7 +6447,8 @@
 		"category": 1,
 		"power": 90,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"fillet away": {
 		"num": "868",
@@ -6318,7 +6481,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"gigaton hammer": {
 		"num": "893",
@@ -6361,7 +6525,8 @@
 		"type": 4,
 		"category": 0,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"hard press": {
 		"num": "912",
@@ -6414,7 +6579,8 @@
 		"type": 13,
 		"category": 1,
 		"power": 60,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"ivy cudgel": {
 		"num": "904",
@@ -6494,7 +6660,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"lunar blessing": {
 		"num": "849",
@@ -6527,7 +6694,8 @@
 		"type": 7,
 		"category": 1,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"matcha gotcha": {
 		"num": "902",
@@ -6536,7 +6704,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"meteor beam": {
 		"num": "800",
@@ -6573,7 +6742,8 @@
 		"power": 30,
 		"priority": 0,
 		"contact": true,
-		"spread": true
+		"spread": true,
+		"secondario": true
 	},
 	"mountain gale": {
 		"num": "836",
@@ -6581,7 +6751,8 @@
 		"type": 5,
 		"category": 0,
 		"power": 100,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"mystical power": {
 		"num": "832",
@@ -6589,7 +6760,8 @@
 		"type": 10,
 		"category": 1,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"no retreat": {
 		"num": "748",
@@ -6605,7 +6777,8 @@
 		"type": 14,
 		"category": 0,
 		"power": 80,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"overdrive": {
 		"num": "786",
@@ -6646,7 +6819,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"psyblade": {
 		"num": "875",
@@ -6665,7 +6839,8 @@
 		"category": 1,
 		"power": 75,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"psyshield bash": {
 		"num": "828",
@@ -6674,7 +6849,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"pyro ball": {
 		"num": "780",
@@ -6683,7 +6859,8 @@
 		"category": 0,
 		"power": 120,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"rage fist": {
 		"num": "889",
@@ -6742,7 +6919,8 @@
 		"type": 12,
 		"category": 0,
 		"power": 40,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"sandsear storm": {
 		"num": "848",
@@ -6752,7 +6930,8 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"scale shot": {
 		"num": "799",
@@ -6772,7 +6951,8 @@
 		"type": 8,
 		"category": 1,
 		"power": 70,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shed tail": {
 		"num": "880",
@@ -6788,7 +6968,8 @@
 		"type": 7,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"shelter": {
 		"num": "842",
@@ -6813,7 +6994,8 @@
 		"category": 0,
 		"power": 70,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"snipe shot": {
 		"num": "745",
@@ -6855,7 +7037,8 @@
 		"category": 0,
 		"power": 75,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"springtide storm": {
 		"num": "831",
@@ -6865,7 +7048,8 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"steel beam": {
 		"num": "796",
@@ -6899,7 +7083,8 @@
 		"power": 65,
 		"priority": 0,
 		"contact": true,
-		"slicing": true
+		"slicing": true,
+		"secondario": true
 	},
 	"strange steam": {
 		"num": "790",
@@ -6907,7 +7092,8 @@
 		"type": 17,
 		"category": 1,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"stuff cheeks": {
 		"num": "747",
@@ -6948,7 +7134,8 @@
 		"category": 1,
 		"power": 60,
 		"priority": 0,
-		"bullet": true
+		"bullet": true,
+		"secondario": true
 	},
 	"tachyon cutter": {
 		"num": "911",
@@ -7045,7 +7232,8 @@
 		"category": 0,
 		"power": 90,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"tidy up": {
 		"num": "882",
@@ -7062,7 +7250,8 @@
 		"category": 1,
 		"power": 80,
 		"priority": 0,
-		"sound": true
+		"sound": true,
+		"secondario": true
 	},
 	"trailblaze": {
 		"num": "885",
@@ -7071,7 +7260,8 @@
 		"category": 0,
 		"power": 50,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"secondario": true
 	},
 	"triple arrows": {
 		"num": "843",
@@ -7079,7 +7269,8 @@
 		"type": 6,
 		"category": 0,
 		"power": 90,
-		"priority": 0
+		"priority": 0,
+		"secondario": true
 	},
 	"triple axel": {
 		"num": "813",
@@ -7128,7 +7319,8 @@
 		"power": 65,
 		"priority": 3,
 		"contact": true,
-		"prioritaria": true
+		"prioritaria": true,
+		"secondario": true
 	},
 	"victory dance": {
 		"num": "837",
@@ -7173,7 +7365,8 @@
 		"power": 100,
 		"priority": 0,
 		"spread": true,
-		"vento": true
+		"vento": true,
+		"secondario": true
 	},
 	"light of ruin": {
 		"name": "Light of Ruin",

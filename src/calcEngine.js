@@ -216,6 +216,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isRinculo = moveData.rinculo === true
   const isBullet = moveData.bullet === true
   const isVento = moveData.vento === true
+  const isSecondario = moveData.secondario === true
   const isSpread  = moveData.spread === true
 
   const isSpecial = moveData.category === 1
@@ -715,6 +716,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     bpMods.push(MOD.X1_2)
   }
 
+  // e.i — Sheer Force: ×1.3 sulle mosse con un effetto secondario.
+  //
+  // Primo anello della catena `else if` del punto e, quindi batte tutti gli
+  // altri quattro. Le 193 mosse non sono scritte qui: è il flag `secondario`
+  // di moves.json, trascritto da `hasSecondaryEffect` del vendor.
+  //
+  // Nel gioco l'abilità toglie anche l'effetto secondario e spegne il
+  // contraccolpo del Life Orb. Il riferimento non modella né l'una né l'altra
+  // cosa nel danno: qui c'è il ×1.3 e basta.
+  if (atkAbilEffect?.sheerForce && isSecondario) bpMods.push(MOD.X1_3)
+
   // e.ii — Impeto Sabbia: ×1.3 sulle mosse Roccia, Terra e Acciaio, e solo
   // con la sabbia in campo.
   //
@@ -728,8 +740,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // l'ordine dei push è parte della trascrizione, e questi due stanno
   // entrambi prima di quella riga.
   //
-  // È il primo anello di una catena `else if`: vedi e.iv/e.v più sotto.
-  if (atkAbilEffect?.sandForce && meteo === 'sand'
+  // È il SECONDO anello della catena `else if`, non il primo: e.i è Sheer
+  // Force, qui sopra. Vedi anche e.iv/e.v più sotto.
+  else if (atkAbilEffect?.sandForce && meteo === 'sand'
       && (moveType === TYPES.ROCK || moveType === TYPES.GROUND || moveType === TYPES.STEEL)) {
     bpMods.push(MOD.X1_3)
   }

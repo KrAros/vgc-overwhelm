@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T14:29:26.411Z",
+    "generatedAt": "2026-08-31T14:35:55.199Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 70,
+    "abilitaNelGap": 69,
     "strumentiNelGap": 40,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -59,7 +59,6 @@
     "rattled",
     "receiver",
     "rivalry",
-    "sheer force",
     "shell armor",
     "slow start",
     "solar power",

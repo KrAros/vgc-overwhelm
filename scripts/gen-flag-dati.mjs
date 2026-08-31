@@ -407,6 +407,23 @@ const FLAG_MOSSE = {
   // e Bulletproof. Saltarla sarebbe stato scegliere a mano dentro una
   // condizione unica.
   vento: 'isWind',
+  // `secondario` entra per Sheer Force, che da' x1.3 alle mosse con un effetto
+  // secondario.
+  //
+  // ─── E' IL FLAG PIU' GROSSO CHE ABBIAMO TRASCRITTO ──────────────────────
+  // Duecentosette mosse nel vendor, contro le ventidue dei pugni e le
+  // diciotto delle sonore. Costa in bundle piu' di tutti gli altri sette messi
+  // insieme, e il costo va misurato e dichiarato invece che scoperto: il
+  // numero sta nel messaggio del commit.
+  //
+  // ─── E SOPRATTUTTO: NON E' DEDUCIBILE ───────────────────────────────────
+  // «Ha un effetto secondario» sembra una cosa che si possa decidere leggendo
+  // la mossa, e non lo e'. Non basta guardare `secondaries` di un'altra fonte
+  // ne' la percentuale: il vendor marca anche mosse dove l'effetto e' certo e
+  // non probabilistico, e ne lascia fuori altre che un lettore ci metterebbe.
+  // Duecentosette righe da indovinare sono duecentosette occasioni di
+  // sbagliare in silenzio, e questo flag esiste per non provarci.
+  secondario: 'hasSecondaryEffect',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

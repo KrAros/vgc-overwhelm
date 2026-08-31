@@ -121,6 +121,31 @@ export const ABILITY_EFFECTS = {
   // riferimento calcola e' un'ALTRA. Adesso ci sono tutt'e due.
   'sand-force':  { sandForce: true, showInSmogon: true },
 
+  // Sheer Force: x1.3 sulle mosse con un effetto secondario. Nel riferimento e'
+  // il punto e.i (`damage_MASTER.js:1628`), cioe' il PRIMO anello della catena
+  // `else if` di cui Impeto Sabbia e' il secondo — quindi i due non si sommano
+  // mai, e nell'ordine dei push Sheer Force viene prima.
+  //
+  // ─── LE 193 MOSSE NON SONO SCRITTE QUI, E NON SI POTEVANO DEDURRE ───────
+  //
+  // E' il flag piu' grosso che abbiamo trascritto: `secondario` in moves.json,
+  // da `hasSecondaryEffect` del vendor. Duecentosette voci la' dentro, 193
+  // delle quali esistono anche da noi.
+  //
+  // «Ha un effetto secondario» sembra una cosa che si possa decidere leggendo
+  // la mossa, e non lo e': il vendor marca anche mosse dove l'effetto e' certo
+  // invece che probabilistico, e ne lascia fuori altre che un lettore ci
+  // metterebbe. Scriverne 193 a mano sarebbe stato 193 occasioni di sbagliare
+  // in silenzio.
+  //
+  // ─── COSA NON FA ────────────────────────────────────────────────────────
+  //
+  // Nel gioco Sheer Force TOGLIE l'effetto secondario e disattiva il
+  // contraccolpo del Life Orb. Il riferimento non modella ne' l'una ne'
+  // l'altra cosa nel danno, e nemmeno noi: qui c'e' il x1.3 e basta, che e'
+  // tutto quello che il calcolo del danno vede.
+  'sheer-force': { sheerForce: true, showInSmogon: true },
+
   // ── Difensore: immunita' per famiglia di mossa ───────────────────────────
   //
   // Antisuono: le mosse sonore non hanno effetto. Nel riferimento sta in
