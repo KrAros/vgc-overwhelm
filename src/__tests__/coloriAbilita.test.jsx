@@ -37,10 +37,27 @@
  * diventa una decisione invece di un effetto collaterale.
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import AbilityFlags from '../components/editor/AbilityFlags.jsx'
-import '../i18n.js'
+import { caricaLingua } from '../i18n.js'
+
+/**
+ * ─── PERCHÉ SI ASPETTA LA LINGUA ───────────────────────────────────────────
+ *
+ * Qui c'era `import '../i18n.js'`, per il solo effetto collaterale: bastava,
+ * perché l'inglese INTERO entrava nel bundle all'import.
+ *
+ * Da quando il file di traduzione è tagliato in due — guscio statico,
+ * cataloghi a richiesta, vedi `sezioni-locale.mjs` — le descrizioni delle
+ * abilità arrivano col caricamento. Senza aspettarlo i riquadri
+ * renderizzavano `abilities_desc.huge-power` invece del testo, e trentasei
+ * casi cadevano.
+ *
+ * Aspettarla è anche più onesto di com'era: questo file rende un componente
+ * che ha bisogno del dizionario, e adesso lo dice.
+ */
+beforeAll(() => caricaLingua('en'))
 
 /**
  * La famiglia di colore del riquadro: la prima classe `bg-<nome>-<n>/<a>`.

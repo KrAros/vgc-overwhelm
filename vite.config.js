@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { CAMPI_POTATI, pota } from './scripts/potatura-dati.mjs'
+import { guscio, catalogo } from './scripts/sezioni-locale.mjs'
 
 /**
  * ─── LA VERSIONE HA UNA FONTE SOLA ───────────────────────────────────────────
@@ -48,6 +49,56 @@ function potaturaDati() {
   }
 }
 
+/**
+ * ─── IL TAGLIO DEI FILE DI TRADUZIONE ────────────────────────────────────────
+ *
+ * `en.json` fa da lingua di ripiego e viaggia statico, ma pesava 22,7 kB gzip
+ * su un budget di 210 — l'undici per cento della prima apertura. Misurato, quel
+ * peso non è una cosa sola: 3,1 kB sono il guscio dell'interfaccia, 19,7 sono
+ * cataloghi di nomi. Il ripiego serve al guscio; i nomi possono arrivare con la
+ * lingua.
+ *
+ * Il taglio si chiede con una query sull'import:
+ *
+ *     import guscio from './locales/en.json?guscio'      ← statico, 3,1 kB
+ *     () => import('./locales/en.json?catalogo')         ← pigro, 19,7 kB
+ *
+ * Senza query il file resta INTERO: i test, i generatori e chiunque lo apra
+ * vedono la fonte vera. È la stessa forma della potatura dei dati.
+ *
+ * ─── PERCHÉ NON `apply: 'build'` ─────────────────────────────────────────────
+ *
+ * La potatura è solo in build perché toglie campi, e in sviluppo conviene
+ * vederli. Qui no: se il taglio non girasse in sviluppo, `?guscio` e
+ * `?catalogo` non risolverebbero affatto e l'app non partirebbe. Girando
+ * sempre, sviluppo e produzione caricano le stesse due metà — che è anche il
+ * modo di accorgersi subito se una sezione finisce nella metà sbagliata.
+ *
+ * L'elenco delle sezioni sta in `scripts/sezioni-locale.mjs`, letto anche dal
+ * test che verifica che il taglio sia esaustivo.
+ */
+function taglioLocali() {
+  return {
+    name: 'sixth-ember:taglio-locali',
+    enforce: 'pre',
+    load(id) {
+      const [percorso, query] = id.split('?')
+      if (!percorso.includes('/src/locales/') || !percorso.endsWith('.json')) return null
+      if (query !== 'guscio' && query !== 'catalogo') return null
+      const intero = JSON.parse(readFileSync(percorso, 'utf8'))
+      const meta = query === 'guscio' ? guscio(intero) : catalogo(intero)
+      // Si restituisce un MODULO già fatto, non testo JSON.
+      //
+      // La potatura dei dati qui sopra può permettersi di restituire JSON
+      // perché il plugin di Vite lo riconosce dall'estensione e lo trasforma.
+      // Con una query in coda non lo fa più: il testo arriva al parser
+      // JavaScript, che su `{"ui": …}` si ferma dicendo che manca un punto e
+      // virgola. Costava due errori di build identici e incomprensibili.
+      return `export default ${JSON.stringify(meta)}`
+    },
+  }
+}
+
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(VERSIONE) },
   /**
@@ -69,6 +120,7 @@ export default defineConfig({
 
   plugins: [
     potaturaDati(),
+    taglioLocali(),
     react(),
     tailwindcss(),
   ],
@@ -101,7 +153,14 @@ export default defineConfig({
           // e portava il totale gzip da 210,2 a 233,0 kB — cioè annullava il
           // caricamento pigro senza che nessun singolo numero della build
           // sembrasse sbagliato. Si vede solo sommando i chunk.
-          if (id.includes('/src/data/') || id.endsWith('locales/en.json')) return 'dati'
+          // `locales/en.json` stava qui, per far entrare la lingua di ripiego
+          // nel chunk dei dati. Non ci sta più, e non per una svista: da
+          // quando `i18n.js` la importa tagliata — `?guscio` statico,
+          // `?catalogo` a richiesta — questa riga non la incontrerebbe
+          // comunque, perché l'id porta la query in coda. Il guscio finisce
+          // nel chunk d'ingresso (3,1 kB) e il catalogo diventa un chunk
+          // pigro suo, che è esattamente quello che si voleva.
+          if (id.includes('/src/data/')) return 'dati'
           if (id.includes('node_modules')) return 'vendor'
         },
       },
