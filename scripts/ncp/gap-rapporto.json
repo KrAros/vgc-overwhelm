@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T03:32:09.796Z",
+    "generatedAt": "2026-08-31T13:02:04.835Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 256,
-    "abilitaNelGap": 102,
+    "abilitaSenzaEffetto": 249,
+    "abilitaNelGap": 95,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -34,26 +34,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1639
-        }
-      },
-      {
-        "chiave": "armor tail",
-        "nome": "Armor Tail",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1155
-        }
-      },
-      {
-        "chiave": "as one",
-        "nome": "As One",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
         }
       },
       {
@@ -164,16 +144,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1137
-        }
-      },
-      {
-        "chiave": "dazzling",
-        "nome": "Dazzling",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1155
         }
       },
       {
@@ -577,16 +547,6 @@
         }
       },
       {
-        "chiave": "parental bond",
-        "nome": "Parental Bond",
-        "canale": "STR",
-        "prova": {
-          "funzione": "setDamage",
-          "file": "damage_MASTER.js",
-          "riga": 1172
-        }
-      },
-      {
         "chiave": "piercing drill",
         "nome": "Piercing Drill",
         "canale": "STR",
@@ -647,16 +607,6 @@
         }
       },
       {
-        "chiave": "queenly majesty",
-        "nome": "Queenly Majesty",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1155
-        }
-      },
-      {
         "chiave": "rattled",
         "nome": "Rattled",
         "canale": "STR",
@@ -684,16 +634,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1604
-        }
-      },
-      {
-        "chiave": "ripen",
-        "nome": "Ripen",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcFinalMods",
-          "file": "damage_MASTER.js",
-          "riga": 2407
         }
       },
       {
@@ -944,16 +884,6 @@
           "funzione": "abilityIgnore",
           "file": "damage_MASTER.js",
           "riga": 1001
-        }
-      },
-      {
-        "chiave": "unnerve",
-        "nome": "Unnerve",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcFinalMods",
-          "file": "damage_MASTER.js",
-          "riga": 2406
         }
       },
       {

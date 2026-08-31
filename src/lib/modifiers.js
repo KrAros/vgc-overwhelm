@@ -110,6 +110,7 @@ export function chainMods(mods) {
  * il Punching Glove la seconda. Un punto di differenza che si propaga.
  */
 export const MOD = {
+  X0_25:     0x400,   // 1024 — Ripen sulla bacca di resistenza
   X0_5:      0x800,   // 2048
   X0_75:     0xC00,   // 3072
   NEUTRO:    0x1000,  // 4096

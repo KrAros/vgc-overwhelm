@@ -17,6 +17,7 @@ import {
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
   ABILITA_ATE,
+  MOSSE_SENZA_PARENTAL_BOND,
   tipoPallaClima,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
@@ -208,6 +209,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isPunch = moveData.punch === true
   const isPulse = moveData.pulse === true
   const isSound = moveData.sound === true
+  const isPrioritaria = moveData.prioritaria === true
   const isBite  = moveData.bite === true
   const isSpread  = moveData.spread === true
 
@@ -263,6 +265,25 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
         : Math.min(intervalloColpi[1], Math.max(intervalloColpi[0], colpiScelti ?? intervalloColpi[1])))
     : 1
 
+  // ── PARENTAL BOND: due colpi, il secondo a un quarto ─────────────────────
+  //
+  // La condizione e' quella del riferimento (`damage_MASTER.js:2456`):
+  //
+  //     move.hits === 1 && !move.hitRange && (format === "Singles" || !move.isSpread)
+  //
+  // cioe': non una mossa gia' multi-colpo, e non una mossa ad area che sta
+  // colpendo piu' di un bersaglio. Il nostro `doubleTarget` dice esattamente
+  // «quanti bersagli sono vivi», quindi la seconda meta' si traduce senza
+  // forzature — ed e' la stessa distinzione che fa la fonte del gioco.
+  //
+  // Piu' le quattro mosse su cui il gioco non l'attiva e il riferimento si':
+  // vedi `MOSSE_SENZA_PARENTAL_BOND`. E' l'unico punto in cui divergiamo
+  // dall'oracolo di proposito.
+  const parentalBond = atkAbilEffect?.parentalBond === true
+    && !intervalloColpi
+    && !(isSpread && field.doubleTarget)
+    && !MOSSE_SENZA_PARENTAL_BOND.has(move)
+
 
   // Ate abilities: Normal -> altro tipo + x1.2 BP
   // La tabella sta in `data/typeChart.js` dalla sessione Q. Qui c'erano quattro
@@ -299,8 +320,15 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `immunityChecks` insieme a Levitate, quindi qui, e non fra i modificatori:
   // esce con danno zero, non con un danno ridotto.
   const isAntisuono  = defAbilEffect?.soundproof === true && isSound
+  // Armor Tail, Queenly Majesty e Dazzling: le mosse con priorità non hanno
+  // effetto. Anche questa sta in `immunityChecks` nel riferimento, quindi qui
+  // e non fra i modificatori: esce con danno zero.
+  const isPrioritaBloccata = defAbilEffect?.bloccaPriorita === true && isPrioritaria
 
   if (isLevitating) {
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+  if (isPrioritaBloccata) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
   if (isAntisuono) {
@@ -789,8 +817,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const modifiedBP = Math.max(1, pokeRound(effectiveBP * chainMods(bpMods) / FIXED_POINT))
 
   // ── Calcolo rolls (r = 85..100) ───────────────────────────────────────────
-  const rolls = []
-
   // Base damage (fuori dal loop — identico per tutti i 16 roll)
   let baseDmg = Math.floor(
     Math.floor(
@@ -889,16 +915,40 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // nell'interfaccia, è legale in Champions (`ITEMS_CHAMPIONS` in vendor/ncp),
   // e non faceva niente in nessuna condizione.
   //
-  // NCP salta anche le bacche contro Unnerve e As One: non modelliamo
-  // nessuna delle due, quindi il cancello non serve ancora.
+  // q — la bacca di resistenza, e le tre abilità che la governano.
+  //
+  // La condizione era già quella del riferimento (`calcFinalMods` punto q,
+  // `damage_MASTER.js:2405`). Adesso porta anche le tre abilità che stanno
+  // nella stessa riga là:
+  //
+  //   Unnerve e As One su chi ATTACCA spaventano il bersaglio, che la bacca
+  //   non la mangia: la condizione non si accende proprio.
+  //
+  //   Ripen sul DIFENSORE la fa valere il doppio: `0x400` invece di `0x800`,
+  //   cioè un quarto del danno e non la metà. Non è «×0.5 due volte» — è una
+  //   costante diversa che il riferimento spinge al posto dell'altra.
   if (defItemEffect?.resistBerry !== undefined &&
       defItemEffect.resistBerry === moveType &&
-      (effectiveness > 1 || moveType === TYPES.NORMAL)) {
-    finalMods.push(MOD.X0_5)
+      (effectiveness > 1 || moveType === TYPES.NORMAL) &&
+      !atkAbilEffect?.impedisceBacca) {
+    finalMods.push(defAbilEffect?.raddoppiaBacca ? MOD.X0_25 : MOD.X0_5)
   }
 
-  for (let r = 85; r <= 100; r++) {
-    let damage = baseDmg
+  /**
+   * I sedici roll a partire da un danno base.
+   *
+   * Era un ciclo scritto una volta sola, perché di colpi ce n'era uno. Con
+   * Parental Bond ce ne sono due, e il secondo NON è il primo moltiplicato:
+   * il quarto si applica al danno BASE — prima del meteo, del critico, del
+   * tiro, dello STAB, dell'efficacia e della catena finale — quindi va
+   * ricalcolato tutto da lì. Il riferimento fa esattamente così
+   * (`damage_MASTER.js:2160`, subito dopo il modificatore delle mosse ad
+   * area) ed è il motivo per cui questo è diventato un parametro.
+   */
+  const tiraRoll = (base) => {
+    const out = []
+    for (let r = 85; r <= 100; r++) {
+    let damage = base
 
     // Meteo — il ×1.5 vale anche coi meteo estremi, il ×0.5 solo con quelli
     // normali (col meteo estremo il tipo opposto è già uscito come immune)
@@ -926,8 +976,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       damage = pokeRound(damage * chainMods(finalMods) / FIXED_POINT)
     }
 
-    rolls.push(damage)
+    out.push(damage)
+    }
+    return out
   }
+
+  const rolls = tiraRoll(baseDmg)
+
+  // ── Il secondo colpo di Parental Bond ────────────────────────────────────
+  //
+  // `0x0400` sul danno base, con `pokeRound`, esattamente dove lo mette il
+  // riferimento: dopo il modificatore delle mosse ad area e prima di tutto il
+  // resto. Non è «il primo colpo diviso quattro» — fra il danno base e il
+  // numero finale ci sono sei passaggi che arrotondano, e farlo alla fine
+  // darebbe un altro numero.
+  const rollsFiglio = parentalBond
+    ? tiraRoll(pokeRound(baseDmg * MOD.X0_25 / FIXED_POINT))
+    : null
 
   // ── IL CONTRATTO DEL RISULTATO, CHE DA OGGI HA DUE LIVELLI ───────────────
   //
@@ -948,8 +1013,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // 10-13 non sono un colpo da 100-130, perché la somma di dieci tiri è molto
   // più stretta della somma degli estremi. Chi la calcola prende `rolls` e
   // `colpi` separati — vedi `koChanceCumulative`, parametro `colpiPerTurno`.
-  const minDmg = rolls[0] * colpi
-  const maxDmg = rolls[rolls.length - 1] * colpi
+  // Con Parental Bond i colpi sono DUE e diversi, quindi il totale non è una
+  // moltiplicazione: è una somma dei due estremi.
+  const minDmg = rollsFiglio ? rolls[0] + rollsFiglio[0] : rolls[0] * colpi
+  const maxDmg = rollsFiglio
+    ? rolls[rolls.length - 1] + rollsFiglio[rollsFiglio.length - 1]
+    : rolls[rolls.length - 1] * colpi
   const minPct = Math.floor(minDmg / defHP * 1000) / 10
   const maxPct = Math.floor(maxDmg / defHP * 1000) / 10
 
@@ -994,6 +1063,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   return {
     rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log,
     atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType,
+    // I sedici roll del SECONDO colpo di Parental Bond, o `null` se non
+    // c'entra. Sono un array a parte e non un moltiplicatore perché i due
+    // colpi hanno numeri diversi: chi calcola la probabilità di KO ha bisogno
+    // di tutt'e due le distribuzioni, non della somma.
+    rollsFiglio,
     // Quante volte ha colpito: 1 per tutte le mosse normali.
     //
     // È l'unico campo nuovo del risultato, e ci sta perché è CALCOLATO — il
@@ -1002,6 +1076,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // e il flag `potenzaCrescente` invece sono dati della mossa: chi disegna
     // il selettore li legge da `moves.json`, che ha già in mano, invece di
     // farseli ripetere da qui.
-    colpi,
+    colpi: rollsFiglio ? 2 : colpi,
   }
 }

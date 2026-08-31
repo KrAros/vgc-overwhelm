@@ -359,6 +359,21 @@ const FLAG_MOSSE = {
   // di qui e non scritta a mano nel motore, cosi' se NCP la cambia il flag
   // cambia con lei invece di restare una tabella che marcisce.
   pulse: 'isPulse',
+  // `prioritaria` entra per le tre abilita' che azzerano le mosse con
+  // priorita': Armor Tail, Queenly Majesty e Dazzling.
+  //
+  // ─── PERCHE' NON BASTAVA IL CAMPO `priority` CHE ABBIAMO GIA' ────────────
+  // Perche' e' un'altra cosa. Il nostro `priority` e' un NUMERO e ce l'hanno
+  // 38 mosse; l'`isPriority` del vendor e' un FLAG e ce l'hanno 21. Le 17 di
+  // differenza sono Protect, Detect, Follow Me, Helping Hand, Wide Guard e
+  // compagnia.
+  //
+  // Misurato: tutte e 17 hanno potenza ZERO, quindi al calcolo del danno non
+  // arrivano e `priority > 0` darebbe oggi la stessa risposta. Ma sarebbe una
+  // deduzione che regge per coincidenza: basta che il gioco dia priorita' a
+  // una mossa che fa danno senza che NCP la marchi, e i due insiemi si
+  // separano in silenzio. Il flag si trascrive, come gli altri sei.
+  prioritaria: 'isPriority',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

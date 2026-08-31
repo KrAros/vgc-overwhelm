@@ -46,8 +46,8 @@ import { TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
  * un tetto di 6 turni scritto a mano contro i 9 di `findBestNHKO`, e una
  * narrativa turno per turno che nessun componente renderizzava.
  */
-function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true, colpiPerTurno = 1) {
-  const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus, colpiPerTurno })
+function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true, colpiPerTurno = 1, rollsFiglio = null) {
+  const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus, colpiPerTurno, rollsFiglio })
   const parti = conSitrus ? [...condParts, 'sitrus'] : [...condParts]
 
   if (!best) return { summary: { type: 'noKo', condParts: parti } }
@@ -249,6 +249,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   // non porta il campo: lì il danno è zero e il numero di colpi non conta.
   const rolls  = result.rolls
   const colpi  = result.colpi ?? 1
+  // Parental Bond: i due colpi hanno numeri diversi, quindi non basta contarli.
+  const rollsFiglio = result.rollsFiglio ?? null
   const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
 
   const defHP = result.defHP
@@ -257,7 +259,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const eotParts = []
   if (isSand && !isSandImmune) eotParts.push('sand')
   if (leftoversHP > 0)         eotParts.push('left')
-  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts, true, colpi) : null
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts, true, colpi, rollsFiglio) : null
 
 
 
@@ -278,7 +280,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    const best = findBestNHKO(rolls, defHP, eot, { colpiPerTurno: colpi })
+    const best = findBestNHKO(rolls, defHP, eot, { colpiPerTurno: colpi, rollsFiglio })
     if (!best || best.hits === 1) return null
 
     const label = `${best.hits}HKO`

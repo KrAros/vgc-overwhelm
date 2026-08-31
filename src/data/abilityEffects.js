@@ -86,6 +86,32 @@ export const ABILITY_EFFECTS = {
   // di moves.json, che `gen-flag-dati.mjs` trascrive da `isSound` del vendor.
   'soundproof':  { soundproof: true },
 
+  // Le tre che azzerano le mosse con priorita'. Nel riferimento sono un solo
+  // ramo di `immunityChecks` (`damage_MASTER.js:1155`) e un solo
+  // `return damage: [0]`: qui un flag solo per tutt'e tre, perche' la
+  // condizione e' identica e non c'e' niente che le distingua.
+  //
+  // `prioritaria` viene dal flag di moves.json, trascritto da `isPriority` del
+  // vendor. NON e' il campo `priority` che avevamo gia': quello e' un numero
+  // e ce l'hanno anche Protect e Follow Me, che al danno non arrivano.
+  'armor-tail':      { bloccaPriorita: true },
+  'queenly-majesty': { bloccaPriorita: true },
+  'dazzling':        { bloccaPriorita: true },
+
+  // ── Le tre che governano la bacca di resistenza ──────────────────────────
+  //
+  // Stanno tutte e tre nella STESSA riga del riferimento — `calcFinalMods`
+  // punto q, `damage_MASTER.js:2405` — e il motore quella riga ce l'ha gia':
+  // dimezza il danno quando la bacca combacia col tipo della mossa.
+  //
+  //   Unnerve / As One  sull'ATTACCANTE: la bacca non si attiva affatto.
+  //                     Nel riferimento sono due nomi nella stessa condizione.
+  //   Ripen             sul DIFENSORE: la bacca vale il doppio, cioe' `0x400`
+  //                     invece di `0x800` — un quarto del danno, non la meta'.
+  'unnerve':     { impedisceBacca: true },
+  'as-one':      { impedisceBacca: true },
+  'ripen':       { raddoppiaBacca: true },
+
   // ── I due versi di Imprudenza ────────────────────────────────────────────
   //
   // Un flag solo, perche' nel riferimento e' la stessa abilita' letta da due
@@ -153,15 +179,56 @@ export const ABILITY_EFFECTS = {
   // Tecnico invece che prima cambierebbe `tempBP` e quindi la soglia.
   'technician':  { technician: true, showInSmogon: true },
 
-  // Abilita' Multipla: le mosse multi-colpo colpiscono sempre il massimo.
+  // Skill Link: le mosse multi-colpo colpiscono sempre il massimo.
   //
   // NON e' un moltiplicatore e non tocca la catena della potenza: agisce sul
-  // numero di colpi, che e' un concetto nuovo del motore da questa sessione.
-  // Prima di averlo non c'era niente su cui potesse agire — ed e' il motivo
-  // per cui non era nelle abilita' del divario: nemmeno il riferimento la
-  // calcola nel danno, perche' anche li' il numero di colpi lo sceglie
-  // l'utente nell'interfaccia.
+  // numero di colpi, che e' un concetto del motore solo da poco. Prima non
+  // c'era niente su cui potesse agire.
+  //
+  // ─── LA FONTE, CHE PER UN PO' NON C'E' STATA ─────────────────────────────
+  //
+  // Il riferimento NON la nomina nel codice del danno: sta solo nel pokedex
+  // come abilita' di una specie. Quando questa riga e' stata scritta l'effetto
+  // era quindi DEDOTTO, e la deduzione e' rimasta dichiarata finche' Simone non
+  // ha fornito la fonte:
+  //
+  //     «Abillegame permette alle mosse multicolpo di mandare a segno sempre
+  //      il massimo dei colpi possibili.»
+  //     wiki.pokemoncentral.it/Abillegame, sezione Effetti
+  //
+  // Coincide con quello che il motore fa. La fonte e' una wiki e non il
+  // riferimento eseguibile, quindi qui non c'e' un confronto roll per roll: e'
+  // il grado di verifica piu' alto disponibile per questa abilita', non il
+  // grado di verifica normale del progetto.
+  //
+  // ─── QUELLO CHE LA FONTE DICE E NOI NON FACCIAMO ─────────────────────────
+  //
+  // La stessa voce aggiunge che dalla quinta generazione l'abilita' vale anche
+  // per Triplocalcio e Triplo Axel. Da noi no, e non per svista: quelle due
+  // hanno `potenzaCrescente` — la potenza sale a ogni colpo — e il motore le
+  // tiene fuori dal modello dei colpi multipli proprio perche' quella
+  // meccanica non c'e'. Su Infestazione invece l'abilita' vale, ed e' il caso
+  // che conta per il meta.
   'skill-link':  { skillLink: true },
+
+  // Parental Bond: la mossa colpisce due volte, la seconda a un quarto.
+  //
+  // Non e' un moltiplicatore: e' un secondo COLPO, con un danno suo. La
+  // meccanica dei colpi multipli che il motore ha gia' non basta, perche'
+  // quella assume colpi identici — Infestazione tira dieci volte lo stesso
+  // tiro. Qui i due colpi sono diversi, e il secondo si calcola a parte.
+  //
+  // Fonte del meccanismo: `damage_MASTER.js`, tre punti —
+  //   :2456  la condizione (non gia' multi-colpo, e un bersaglio solo)
+  //   :2493  il secondo colpo, con l'abilita' dell'attaccante azzerata
+  //   :2160  `childMod = 0x0400`, applicato al danno base
+  //
+  // Confermato dalla wiki, che per la settima generazione in poi dice «un
+  // quarto del danno». Le due fonti coincidono sul numero.
+  //
+  // Le quattro mosse su cui il gioco NON la attiva e il riferimento si' stanno
+  // in `MOSSE_SENZA_PARENTAL_BOND`, in lib/rules.js, con la fonte accanto.
+  'parental-bond': { parentalBond: true, showInSmogon: true },
 
   // ── Le due aure: x1.33 sulle mosse del proprio tipo, da qualunque lato ───
   //
