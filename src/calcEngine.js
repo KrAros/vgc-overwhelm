@@ -803,7 +803,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     dfMods.push(MOD.X1_5)
   }
 
-  if (paradossoDifesa) dfMods.push(MOD.X1_3)
+  // punto c — Grass Pelt: ×1,5 sulla Difesa col Campo Erboso, solo fisiche
+  // (`damage_MASTER.js:2104`).
+  //
+  // Nel riferimento sta nello STESSO `if` di Marvel Scale, che vuole uno stato
+  // e non lo modelliamo ancora; e apre la catena `c / else if d / else if e`
+  // che prosegue col paradosso e con Fur Coat. Qui apre la stessa catena, con
+  // lo stesso ordine: se un giorno arrivasse un caso a tre modificatori la
+  // posizione conterebbe, e dev'essere gia' quella giusta.
+  if (defAbilEffect?.grassPelt && field.terrain === 'grassy' && !isSpecial) {
+    dfMods.push(MOD.X1_5)
+  }
+  else if (paradossoDifesa) dfMods.push(MOD.X1_3)
   // punto e — Fur Coat: ×2 sulla Difesa fisica.
   else if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
 
@@ -837,6 +848,18 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   }
   else if (ruinInCampo('vessel') && isSpecial && atkAbilEffect?.ruin !== 'vessel') {
     atMods.push(MOD.X0_75)
+  }
+
+  // punto b — Slow Start: ×0,5 sull'attacco fisico, quando l'interruttore e'
+  // acceso (`damage_MASTER.js:1924`).
+  //
+  // Il riferimento la mette in `or` con Defeatist, che chiede i punti salute e
+  // non li modelliamo ancora. La sua condizione comprende anche le mosse Z
+  // speciali: da noi le mosse Z non esistono, quindi resta il solo fisico.
+  //
+  // E' un `if` a se', prima del punto c e del punto d.
+  if (atkAbilEffect?.slowStart && atkAbilityFlags.interruttore === true && !isSpecial) {
+    atMods.push(MOD.X0_5)
   }
 
   // punto d — ×1.5 offensive.
@@ -901,12 +924,37 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const solarPower = atkAbilEffect?.solarPower && isSole && isSpecial
     && atkItemKey !== 'utility umbrella'
 
+  // punto f — Orichalcum Pulse e Hadron Engine: ×1,3333 (`0x1555`, `:1970`).
+  //
+  // ─── ORICHALCUM PULSE VUOLE IL SOLE NORMALE, NON QUELLO ESTREMO ─────────
+  //
+  // Il riferimento scrive `field.weather === "Sun"`, con l'uguale, dove Solar
+  // Power due righe sopra scrive `indexOf("Sun") > -1`. Sotto Desolate Land
+  // Solar Power si applica e Orichalcum Pulse no. Qui percio' si legge
+  // `meteo === 'sun'` e non `isSole`: sono le due variabili che l'app tiene
+  // gia' distinte per questa ragione.
+  //
+  // Hadron Engine guarda il terreno, dove la distinzione non esiste.
+  const puntoF =
+    (atkAbilEffect?.orichalcum && meteo === 'sun' && !isSpecial
+      && atkItemKey !== 'utility umbrella') ||
+    (atkAbilEffect?.hadron && field.terrain === 'electric' && isSpecial)
+
   if (puntoDConInterruttore) atMods.push(MOD.X1_5)
   else if (solarPower) atMods.push(MOD.X1_5)
   else if (puntoE) atMods.push(MOD.X1_3)
+  else if (puntoF) atMods.push(MOD.X1_3333)
 
-  // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power.
+  // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power,
+  // e Stakeout quando l'interruttore e' acceso (`:1979`).
+  //
+  // Nel riferimento sono un `if` solo, in `or`: le tre non possono coesistere
+  // — un campo abilita' e' uno — quindi il tre-in-uno non e' osservabile, ma
+  // e' com'e' scritto.
   if (atkAbilEffect?.waterBubble && moveType === TYPES.WATER) atMods.push(MOD.X2)
+  if (atkAbilEffect?.stakeout && atkAbilityFlags.interruttore === true) {
+    atMods.push(MOD.X2)
+  }
   if (atkAbilEffect?.atkMult) {
     const isCorrectType = !atkAbilEffect.statType
       || (atkAbilEffect.statType === 'physical' && !isSpecial)
@@ -1008,6 +1056,22 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defGrounded = isGrounded(defPokeData, defAbilEffect)
   const atkGrounded = isGrounded(atkPokeData, atkAbilEffect)
   const bpMods = []
+
+  // ─── PUNTO a — FRANGIAURA ────────────────────────────────────────────────
+  //
+  // Rovescia l'aura: dove ci sarebbe un ×1,33 mette un ×0,75
+  // (`damage_MASTER.js:1573`). Non ci si moltiplica sopra — sono due rami
+  // esclusivi dello stesso `auraBreak`, uno al punto a e uno al punto f.
+  //
+  // Vale per chi ce l'ha da tutt'e due i lati, come l'aura che rovescia: nel
+  // riferimento sono due caselle senza lato.
+  const auraDelTipoInCampo =
+    [atkAbilEffect?.aura, defAbilEffect?.aura]
+      .some(tipo => tipo !== undefined && tipo === moveType)
+  const frangiaura =
+    atkAbilEffect?.auraBreak === true || defAbilEffect?.auraBreak === true
+
+  if (auraDelTipoInCampo && frangiaura) bpMods.push(MOD.X0_75)
 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
   if (ateBoost) bpMods.push(MOD.X1_2)
@@ -1149,10 +1213,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Frangiaura (`aura-break`) rovescia l'aura in ×0,75 — nel riferimento è il
   // punto a della stessa funzione. Non è implementata, e resta nelle 108: il
   // segnalino «non calcolata» lo dice all'utente che la sceglie.
-  const aureInCampo = [atkAbilEffect?.aura, defAbilEffect?.aura]
-  if (aureInCampo.some(tipo => tipo !== undefined && tipo === moveType)) {
-    bpMods.push(MOD.X1_33)
-  }
+  if (auraDelTipoInCampo && !frangiaura) bpMods.push(MOD.X1_33)
 
   // g — Megalancio sulle mosse-impulso: ×1.5.
   //
@@ -1266,9 +1327,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // riferimento spinge `0x2000`, cioè ×2, non uno dei ×1.5 che gli stanno
   // intorno (`damage_MASTER.js:1764`).
   //
-  // Nella stessa riga ci sono Wind Power — che nessuna specie legale porta — e
-  // `field.isCharge`, la mossa Carica, che non modelliamo: nessuna delle due
-  // ha oggi qualcosa su cui essere vera.
+  // Nella stessa riga c'e' anche Wind Power, con lo stesso `abilityOn` e lo
+  // stesso ×2: e' la stessa clausola, e da noi e' lo stesso campo `caricata`.
+  // Il commento che stava qui diceva che nessuna specie legale la porta, ed
+  // era falso — ce l'hanno Wattrel e Kilowattrel. Restava fuori `field.isCharge`,
+  // la mossa Carica, che non modelliamo.
   if (atkAbilEffect?.caricata && atkAbilityFlags.interruttore === true
       && moveType === TYPES.ELECTRIC) {
     bpMods.push(MOD.X2)

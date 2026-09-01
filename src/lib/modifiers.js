@@ -127,6 +127,11 @@ export const MOD = {
   // spostare un 2HKO. Il nome dice 1_33 e non 1_3 proprio per non farsi
   // scegliere per sbaglio al posto dell'altro.
   X1_33:     0x1548,
+  // 5461 — Orichalcum Pulse e Hadron Engine (`calcAtMods` punto f). E' il
+  // TERZO valore vicino a un terzo in piu', e va tenuto distinto dagli altri
+  // due: 0x1555 fa 1,33325…, 0x1548 fa 1,33007…, 0x14CD fa 1,29980…. Il
+  // riferimento li usa in tre punti diversi e non li confonde; nemmeno noi.
+  X1_3333:   0x1555,
   X1_5:      0x1800,  // 6144
   X2:        0x2000,  // 8192
 }

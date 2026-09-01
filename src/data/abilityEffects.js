@@ -165,6 +165,14 @@ export const ABILITY_EFFECTS = {
   // moltiplicatore piu' grosso fra quelli aggiunti in questa sessione.
   'electromorphosis': { caricata: true, showInSmogon: true },
 
+  // Wind Power sta nella STESSA riga del riferimento (`damage_MASTER.js:1764`),
+  // con lo stesso `abilityOn` e lo stesso x2: e' la stessa clausola, non una
+  // clausola gemella. Per questo la voce e' identica.
+  //
+  // Il commento che stava in `calcEngine.js` diceva che nessuna specie legale
+  // la porta. Era falso: ce l'hanno Wattrel e Kilowattrel.
+  'wind-power': { caricata: true, showInSmogon: true },
+
   // ── Protean e Libero, e la meta' che abbiamo deciso di NON fare ─────────
   //
   // Nel riferimento e' un `else` (`damage_MASTER.js:2224-2233`):
@@ -706,6 +714,49 @@ export const ABILITY_EFFECTS = {
   'vessel-of-ruin':  { ruin: 'vessel',  showInSmogon: true },
   'sword-of-ruin':   { ruin: 'sword',   showInSmogon: true },
   'beads-of-ruin':   { ruin: 'beads',   showInSmogon: true },
+
+  // ── Frangiaura ───────────────────────────────────────────────────────────
+  //
+  // Non e' un'abilita' che potenzia: e' una che ROVESCIA. Quando c'e' un'aura
+  // del tipo della mossa, il ×1,33 diventa ×0,75 (`damage_MASTER.js:1573`).
+  // Senza un'aura in campo non fa niente — il riferimento chiede `auraActive`
+  // prima di guardare `auraBreak`.
+  //
+  // Sta al punto a, cioe' PRIMA di tutto il resto della catena della potenza,
+  // mentre l'aura che sostituisce sta al punto f. Non e' la stessa posizione,
+  // e non e' un dettaglio: fra i due punti il riferimento non calcola niente,
+  // ma dopo f calcola `tempBP` per decidere Technician, e tutt'e due ci
+  // finiscono dentro.
+  'aura-break': { auraBreak: true, showInSmogon: true },
+
+  // ── Le tre condizionate dal campo ────────────────────────────────────────
+  //
+  // Orichalcum Pulse e Hadron Engine spingono `0x1555` (`:1970`), Grass Pelt
+  // `0x1800` sulla Difesa col Campo Erboso (`:2104`).
+  //
+  // ─── ORICHALCUM PULSE VUOLE IL SOLE NORMALE ─────────────────────────────
+  //
+  // Il riferimento scrive `field.weather === "Sun"`, con l'uguale, mentre
+  // Solar Power e il ×1,5 delle mosse Fuoco scrivono `indexOf("Sun") > -1`.
+  // Sotto il sole estremo (Desolate Land) Orichalcum Pulse quindi NON si
+  // applica. Sembra una svista del riferimento, e finche' e' il riferimento a
+  // dirlo lo trascriviamo: l'oracolo e' il riferimento eseguito.
+  //
+  // Hadron Engine guarda il terreno, dove la distinzione non esiste.
+  'orichalcum-pulse': { orichalcum: true, showInSmogon: true },
+  'hadron-engine':    { hadron: true,    showInSmogon: true },
+  'grass-pelt':       { grassPelt: true, showInSmogon: true },
+
+  // ── Le due con l'interruttore ────────────────────────────────────────────
+  //
+  // Stakeout raddoppia l'attacco quando il bersaglio e' appena entrato
+  // (`:1979`, punto g, `0x2000`). Slow Start lo dimezza nei primi cinque turni
+  // (`:1924`, punto b, `0x800`) e solo sulle mosse fisiche — la parte speciale
+  // della condizione riguarda le mosse Z, che da noi non esistono.
+  //
+  // Tutt'e due leggono `attacker.abilityOn`, cioe' il nostro `interruttore`.
+  'stakeout':   { stakeout: true,  showInSmogon: true },
+  'slow-start': { slowStart: true, showInSmogon: true },
 
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
