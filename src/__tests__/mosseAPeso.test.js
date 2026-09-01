@@ -356,17 +356,16 @@ describe('roll per roll contro NCP', () => {
  *                       divergenza voluta, come le quattro mosse di Parental
  *                       Bond.
  *
- *   ANCORA APERTE       kommo-o, typhlosion-hisui, tauros-paldea-aqua. Non
- *                       sono Mega e non erano nel gruppo su cui la domanda è
- *                       stata posta, quindi il verdetto non le copre. Tengono
- *                       il nostro valore per inerzia, non per decisione.
+ * Le altre tre — kommo-o, typhlosion-hisui, tauros-paldea-aqua — sono state
+ * chieste a parte, dopo essersi accorti che il primo verdetto non le copriva:
+ * tutte e tre a NCP.
  *
  * Da qui in avanti «divergiamo da NCP sul peso» non è più di per sé un
- * problema: metà di queste sei è una scelta. Il test le tiene separate proprio
- * per non far ricomparire la domanda già risposta.
+ * problema: le tre che restano sono una SCELTA, e questo test esiste per non
+ * far ricomparire la domanda già risposta.
  */
 describe('le specie dove il nostro peso e quello di NCP non concordano', () => {
-  it.runIf(vendorPresente)('ne restano sei: tre per scelta, tre da chiedere', async () => {
+  it.runIf(vendorPresente)('ne restano tre, tutte volute', async () => {
     const { creaHarness } = await import('../../scripts/ncp/harness.mjs')
     const { traduttore, ncp } = creaHarness()
 
@@ -378,16 +377,10 @@ describe('le specie dove il nostro peso e quello di NCP non concordano', () => {
       if (loro !== voce.weight) diverse.push(slug)
     }
 
-    const VOLUTE = ['arctovish', 'drednaw', 'lurantis']
-    const APERTE = ['kommo-o', 'tauros-paldea-aqua', 'typhlosion-hisui']
-
-    expect(diverse.filter(s => VOLUTE.includes(s)).sort(),
-      'una divergenza VOLUTA è sparita: qualcuno ha allineato il peso a NCP senza chiedere')
-      .toEqual(VOLUTE)
-    expect(diverse.filter(s => APERTE.includes(s)).sort(),
-      'una delle tre aperte è stata decisa senza passare dall\'aggiudicazione')
-      .toEqual(APERTE)
-    expect(diverse.sort(), 'è comparsa una divergenza nuova: va aggiudicata')
-      .toEqual([...VOLUTE, ...APERTE].sort())
+    // Le tre dove il nostro dato ha vinto, e nient'altro. Un elenco più corto
+    // vorrebbe dire che qualcuno le ha allineate a NCP senza chiedere; uno più
+    // lungo, che è comparsa una divergenza nuova da aggiudicare.
+    expect(diverse.sort(), 'l\'elenco delle divergenze volute è cambiato')
+      .toEqual(['arctovish', 'drednaw', 'lurantis'])
   })
 })

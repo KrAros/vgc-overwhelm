@@ -42,13 +42,28 @@
  *
  * Trentaquattro pesi corretti, tre confermati come nostri.
  *
- * ─── TRE RESTANO APERTE, E NON SI INDOVINANO ───────────────────────────────
+ * ─── LE TRE SCOPERTE, CHIESTE A PARTE ──────────────────────────────────────
  *
  * Kommo-o, Typhlosion di Hisui e Tauros di Paldea (forma Acqua) non sono forme
- * Mega e non erano nel gruppo D: il verdetto non le copre. Restano col nostro
- * valore e sono elencate qui sotto come domanda aperta, non come decisione.
+ * Mega e non erano nel gruppo D: il primo verdetto non le copriva, e sono
+ * rimaste col nostro valore finché non è arrivata una risposta — non per
+ * decisione, per inerzia dichiarata.
  *
- * Nessuna delle tre cambia il gradino di potenza tranne Tauros — e quello sì.
+ * La risposta è arrivata su richiesta: NCP su tutte e tre.
+ *
+ * Vale la pena che resti scritto che sono state chieste DUE volte, in due
+ * momenti diversi: il primo elenco era ordinato per impatto e le tre non
+ * ricadevano in nessuna delle categorie della domanda. Accorgersene e chiedere
+ * di nuovo è costato un giro; darle per aggiudicate sarebbe costato un numero
+ * sbagliato su Tauros, che è l'unica delle tre a cambiare un gradino.
+ *
+ * ─── COSA RESTA DIVERSO DA NCP, E PERCHÉ VA BENE ───────────────────────────
+ *
+ * Tre pesi soli: lurantis, drednaw, arctovish. Divergono perché il nostro dato
+ * ha vinto — su Drednaw NCP dice 8,5 kg, che non sta in piedi. Sono divergenze
+ * VOLUTE, come le quattro mosse escluse da Parental Bond, e
+ * `mosseAPeso.test.js` le tiene separate proprio per non far ricomparire una
+ * domanda già risposta.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -72,14 +87,15 @@ const AGGIUDICATI = [
   ['victreebel-mega', 125.5, 'NCP'],
   ['eelektross-mega', 180,   'NCP'],
   ['staraptor-mega',   50,   'NCP'],
+  // Le tre chieste a parte, dopo essersi accorti che il primo verdetto non le
+  // copriva. Tutte a NCP.
+  ['kommo-o',           78.2, 'NCP'],
+  ['typhlosion-hisui',  69.8, 'NCP'],
+  ['tauros-paldea-aqua', 110, 'NCP'],
 ]
 
-/** Le tre che il verdetto non copre: restano col nostro valore, in attesa. */
-const APERTE = [
-  ['kommo-o',            72.8,  78.2],
-  ['typhlosion-hisui',   79.5,  69.8],
-  ['tauros-paldea-aqua', 99.2, 110],
-]
+/** Le tre dove divergiamo da NCP per scelta, non per caso. */
+const VOLUTE = ['lurantis', 'drednaw', 'arctovish']
 
 describe('il verdetto sui pesi è registrato, non ricordato', () => {
   for (const [specie, peso, chi] of AGGIUDICATI) {
@@ -88,13 +104,11 @@ describe('il verdetto sui pesi è registrato, non ricordato', () => {
     })
   }
 
-  it('le tre non aggiudicate restano col NOSTRO valore', () => {
-    // Non è una decisione: è lo stato di partenza, tenuto fermo finché non
-    // arriva una risposta. Se qualcuno le cambia senza chiedere, questo test
-    // lo dice.
-    for (const [specie, nostro] of APERTE) {
-      expect(pokemonData[specie]?.weight, `${specie} è stata cambiata senza aggiudicazione`)
-        .toBe(nostro)
-    }
+  it('non resta piu' + String.fromCharCode(39) + ' niente da chiedere', () => {
+    // Quaranta divergenze, quaranta aggiudicate. Se un giorno ne comparisse
+    // una nuova, `mosseAPeso.test.js` la trova; questo file registra soltanto
+    // le decisioni prese, e una decisione senza fonte non è una decisione.
+    expect(AGGIUDICATI.every(([, , chi]) => chi === 'NCP' || chi === 'noi')).toBe(true)
+    expect(VOLUTE.every(s => pokemonData[s]?.weight !== undefined)).toBe(true)
   })
 })

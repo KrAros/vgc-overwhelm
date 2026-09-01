@@ -720,9 +720,9 @@ console.log('  Il dato E\' diventato osservabile: Low Kick, Grass Knot, Heavy Sl
 console.log('  Heat Crash ne ricavano la potenza. Le quaranta di allora sono state')
 console.log('  aggiudicate da Simone — NCP su tutte le Mega e su altre cinque, noi su')
 console.log('  tre — e il verdetto sta in `pesiAggiudicati.test.js`.')
-console.log('  Delle sei che restano, TRE sono divergenze volute (arctovish, drednaw,')
-console.log('  lurantis: NCP da\' 8,5 kg a Drednaw) e tre sono ancora da chiedere')
-console.log('  (kommo-o, typhlosion-hisui, tauros-paldea-aqua).')
+console.log('  Le tre che restano sono divergenze VOLUTE — arctovish, drednaw,')
+console.log('  lurantis — dove il nostro dato ha vinto: NCP da\' 8,5 kg a Drednaw.')
+console.log('  Una divergenza in piu\' qui e\' quindi da aggiudicare, non da correggere.')
 if (process.argv.includes('--pesi')) {
   for (const riga of divergenzePeso) console.log(`    ${riga}`)
 } else {
