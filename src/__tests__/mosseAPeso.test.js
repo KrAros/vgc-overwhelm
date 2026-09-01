@@ -336,30 +336,37 @@ describe('roll per roll contro NCP', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * ─── IL DATO È DIVENTATO OSSERVABILE, E ORA VA AGGIUDICATO ─────────────────
+ * ─── LE QUARANTA SONO STATE AGGIUDICATE ────────────────────────────────────
  *
- * `gen-flag-dati.mjs` elenca da tempo le specie su cui il nostro peso e quello
- * di NCP non concordano, con questa nota:
+ * `gen-flag-dati.mjs` elencava le specie dove il nostro peso e quello di NCP
+ * non concordano, con la nota: «entrambe le parti sbagliano a turno, quindi
+ * ogni voce va aggiudicata a mano quando il dato diventerà osservabile».
  *
- *     «`weight` non è letto da src/: le mosse che lo userebbero sono §1.11.
- *      Entrambe le parti sbagliano a turno, quindi ogni voce va aggiudicata a
- *      mano quando il dato diventerà osservabile.»
+ * È diventato osservabile in questa sessione, e Simone ha aggiudicato: NCP su
+ * tutte le ventinove forme Mega e su altre cinque, noi su tre. Il verdetto,
+ * riga per riga e con la sua fonte, sta in `pesiAggiudicati.test.js`.
  *
- * È diventato osservabile in questa sessione. Da adesso, su quelle specie, Low
- * Kick e Heavy Slam danno un numero che dipende da quale delle due fonti ha
- * ragione — e nessuna delle due è affidabile per costruzione: NCP dà 8,5 kg a
- * Drednaw, noi diamo a Victreebel-Mega il peso della sua forma base.
+ * ─── RESTANO SEI DIVERGENZE, IN DUE CATEGORIE DIVERSE ─────────────────────
  *
- * Quasi tutte sono forme MEGA, che è coerente: il nostro dato le prende da una
- * fonte che per le Mega di Champions è incompleta.
+ * E la differenza fra le due conta più del numero:
  *
- * Questo blocco NON aggiudica: registra il numero, così se cambia qualcuno se
- * ne accorge. L'aggiudicazione vuole una fonte che non abbiamo, ed è una
- * domanda per Simone — come i nomi italiani e i valori delle abilità che
- * assorbono.
+ *   AGGIUDICATE A NOI   lurantis, drednaw, arctovish. Divergono da NCP perché
+ *                       Simone ha deciso che il nostro dato è quello giusto —
+ *                       su Drednaw NCP dice 8,5 kg, che non sta in piedi. Una
+ *                       divergenza voluta, come le quattro mosse di Parental
+ *                       Bond.
+ *
+ *   ANCORA APERTE       kommo-o, typhlosion-hisui, tauros-paldea-aqua. Non
+ *                       sono Mega e non erano nel gruppo su cui la domanda è
+ *                       stata posta, quindi il verdetto non le copre. Tengono
+ *                       il nostro valore per inerzia, non per decisione.
+ *
+ * Da qui in avanti «divergiamo da NCP sul peso» non è più di per sé un
+ * problema: metà di queste sei è una scelta. Il test le tiene separate proprio
+ * per non far ricomparire la domanda già risposta.
  */
 describe('le specie dove il nostro peso e quello di NCP non concordano', () => {
-  it.runIf(vendorPresente)('sono quaranta, e quasi tutte sono forme Mega', async () => {
+  it.runIf(vendorPresente)('ne restano sei: tre per scelta, tre da chiedere', async () => {
     const { creaHarness } = await import('../../scripts/ncp/harness.mjs')
     const { traduttore, ncp } = creaHarness()
 
@@ -371,10 +378,16 @@ describe('le specie dove il nostro peso e quello di NCP non concordano', () => {
       if (loro !== voce.weight) diverse.push(slug)
     }
 
-    expect(diverse.length, 'il conto delle divergenze è cambiato: vanno riguardate')
-      .toBe(40)
-    const mega = diverse.filter(s => s.includes('mega') || s.includes('origin'))
-    expect(mega.length, 'la forma del problema è cambiata: non sono più quasi tutte Mega')
-      .toBeGreaterThan(28)
+    const VOLUTE = ['arctovish', 'drednaw', 'lurantis']
+    const APERTE = ['kommo-o', 'tauros-paldea-aqua', 'typhlosion-hisui']
+
+    expect(diverse.filter(s => VOLUTE.includes(s)).sort(),
+      'una divergenza VOLUTA è sparita: qualcuno ha allineato il peso a NCP senza chiedere')
+      .toEqual(VOLUTE)
+    expect(diverse.filter(s => APERTE.includes(s)).sort(),
+      'una delle tre aperte è stata decisa senza passare dall\'aggiudicazione')
+      .toEqual(APERTE)
+    expect(diverse.sort(), 'è comparsa una divergenza nuova: va aggiudicata')
+      .toEqual([...VOLUTE, ...APERTE].sort())
   })
 })

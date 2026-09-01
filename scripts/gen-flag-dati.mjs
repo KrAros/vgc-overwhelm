@@ -716,9 +716,13 @@ for (const [slug, voce] of Object.entries(pokemon)) {
 console.log('')
 console.log('── Pesi (solo elenco, NON scritti) ─────────────────────────────')
 console.log(`  divergenze: ${divergenzePeso.length}`)
-console.log('  `weight` non è letto da src/: le mosse che lo userebbero sono §1.11.')
-console.log('  Entrambe le parti sbagliano a turno, quindi ogni voce va aggiudicata')
-console.log('  a mano quando il dato diventerà osservabile.')
+console.log('  Il dato E\' diventato osservabile: Low Kick, Grass Knot, Heavy Slam e')
+console.log('  Heat Crash ne ricavano la potenza. Le quaranta di allora sono state')
+console.log('  aggiudicate da Simone — NCP su tutte le Mega e su altre cinque, noi su')
+console.log('  tre — e il verdetto sta in `pesiAggiudicati.test.js`.')
+console.log('  Delle sei che restano, TRE sono divergenze volute (arctovish, drednaw,')
+console.log('  lurantis: NCP da\' 8,5 kg a Drednaw) e tre sono ancora da chiedere')
+console.log('  (kommo-o, typhlosion-hisui, tauros-paldea-aqua).')
 if (process.argv.includes('--pesi')) {
   for (const riga of divergenzePeso) console.log(`    ${riga}`)
 } else {
