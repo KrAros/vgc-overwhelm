@@ -21,6 +21,7 @@ export const DEFAULT_ABILITY_FLAGS = {
   supremeOverlordKOs:    0,     // attaccante: numero alleati KO (0-5), boost ×(1 + n*0.1)
   eelevateKOActive:      false, // Rapidascesa: ha messo KO — +1 alla stat più alta
   assorbimentoAttivo:    false, // Parafulmine e le altre quattro: ha gia' assorbito una mossa
+  interruttore:          false, // Plus, Minus, Electromorphosis, Protean, Libero: `abilityOn` del riferimento
 }
 
 /**
@@ -145,6 +146,65 @@ export const ABILITY_EFFECTS = {
   // l'altra cosa nel danno, e nemmeno noi: qui c'e' il x1.3 e basta, che e'
   // tutto quello che il calcolo del danno vede.
   'sheer-force': { sheerForce: true, showInSmogon: true },
+
+  // ── Le cinque che il riferimento accende con `abilityOn` ────────────────
+  //
+  // Nel riferimento sono un interruttore solo, `attacker.abilityOn`, letto da
+  // condizioni diverse. Da noi e' il flag `interruttore` in `abilityFlags`, e
+  // vale lo stesso per tutte e cinque: un Pokemon ha un'abilita' sola, quindi
+  // non possono mai accendersi insieme e non serve un flag per ciascuna.
+  //
+  //   Plus, Minus        (:1951)  x1.5 all'Att. Speciale, se l'alleato ha l'altra
+  //   Electromorphosis   (:1764)  x2 sulle mosse Elettro, se si e' caricata
+  //   Protean, Libero    (:2231)  STAB su qualunque mossa
+  'plus':             { plusMinus: true, showInSmogon: true },
+  'minus':            { plusMinus: true, showInSmogon: true },
+
+  // Electromorphosis vale x2, non x1.5: sta al punto t della catena della
+  // potenza (`bpMods.push(0x2000)`), insieme a Charge e Wind Power. E' il
+  // moltiplicatore piu' grosso fra quelli aggiunti in questa sessione.
+  'electromorphosis': { caricata: true, showInSmogon: true },
+
+  // ── Protean e Libero, e la meta' che abbiamo deciso di NON fare ─────────
+  //
+  // Nel riferimento e' un `else` (`damage_MASTER.js:2224-2233`):
+  //
+  //     if (attacker.hasType(move.type)) stabMod = 0x1800;      // STAB normale
+  //     else if (Protean/Libero && abilityOn) stabMod = 0x1800; // ← qui
+  //
+  // Quindi: se la mossa e' GIA' del tipo del Pokemon, Protean non entra
+  // nemmeno — vince il primo ramo e il numero e' identico. Si vede SOLO sulle
+  // mosse fuori tipo, dove porta lo STAB da assente a x1.5.
+  //
+  // ─── IL RIFERIMENTO NON CAMBIA IL TIPO, E NOI NEMMENO ──────────────────
+  //
+  // Nel gioco Protean trasforma chi la usa nel tipo della mossa, e quel
+  // cambiamento vale anche in DIFESA: un Greninja che ha usato Surf prende
+  // doppio dall'Elettro. Il riferimento non lo modella: `checkTerastal`
+  // riscrive `type1`/`type2` per la Teracristallizzazione, ma per Protean non
+  // c'e' niente di simile.
+  //
+  // Simone ha deciso di curare per ora la sola meta' offensiva — l'interruttore
+  // che accende Protean e lo STAB sulla mossa selezionata — e di tornare
+  // sull'altra piu' avanti. La scelta e' REGISTRATA in `protean.test.js`, con
+  // che cosa comporterebbe: il tipo effettivo dovrebbe propagarsi agli undici
+  // punti che oggi leggono `pokemonData[key].type`, badge dell'editor compresi.
+  //
+  // La Teracristallizzazione, che vorrebbe la stessa infrastruttura e che il
+  // riferimento invece modella, in Champions non esiste: verificato con Simone.
+  'protean':          { protean: true, showInSmogon: true },
+  'libero':           { protean: true, showInSmogon: true },
+
+  // Solar Power: x1.5 all'Att. Speciale col sole. NON chiede l'interruttore, e
+  // nemmeno gli HP — nel gioco costa PS ogni turno, ma quello non e' danno e il
+  // riferimento non lo modella. Bastano sole, mossa speciale e niente Utility
+  // Umbrella (`:1958`).
+  'solar-power':      { solarPower: true, showInSmogon: true },
+
+  // Klutz: lo strumento di chi ce l'ha non conta piu'. I sette che restano in
+  // piedi stanno in `STRUMENTI_IMMUNI_A_KLUTZ` dentro `lib/rules.js`, perche'
+  // nel vendor sono un elenco di nomi dentro la funzione e non un flag.
+  'klutz':            { klutz: true, showInSmogon: true },
 
   // Analytic: x1.3 se chi attacca NON muove per primo. Punto e.iii della
   // catena della potenza (`damage_MASTER.js:1639`).

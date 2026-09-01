@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T15:22:30.756Z",
+    "generatedAt": "2026-09-01T03:19:11.148Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 209,
-    "abilitaNelGap": 55,
+    "abilitaSenzaEffetto": 202,
+    "abilitaNelGap": 48,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 175,
     "strumentiNelGap": 40,
@@ -94,16 +94,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "electromorphosis",
-        "nome": "Electromorphosis",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1764
         }
       },
       {
@@ -227,26 +217,6 @@
         }
       },
       {
-        "chiave": "klutz",
-        "nome": "Klutz",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkKlutz",
-          "file": "damage_MASTER.js",
-          "riga": 448
-        }
-      },
-      {
-        "chiave": "libero",
-        "nome": "Libero",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcGeneralMods",
-          "file": "damage_MASTER.js",
-          "riga": 2231
-        }
-      },
-      {
         "chiave": "light metal",
         "nome": "Light Metal",
         "canale": "STR",
@@ -294,16 +264,6 @@
           "funzione": "GET_DAMAGE_SV",
           "file": "damage_SV.js",
           "riga": 135
-        }
-      },
-      {
-        "chiave": "minus",
-        "nome": "Minus",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1951
         }
       },
       {
@@ -357,16 +317,6 @@
         }
       },
       {
-        "chiave": "plus",
-        "nome": "Plus",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1951
-        }
-      },
-      {
         "chiave": "power of alchemy",
         "nome": "Power of Alchemy",
         "canale": "STR",
@@ -374,16 +324,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 388
-        }
-      },
-      {
-        "chiave": "protean",
-        "nome": "Protean",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcGeneralMods",
-          "file": "damage_MASTER.js",
-          "riga": 2231
         }
       },
       {
@@ -424,16 +364,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1924
-        }
-      },
-      {
-        "chiave": "solar power",
-        "nome": "Solar Power",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1958
         }
       },
       {

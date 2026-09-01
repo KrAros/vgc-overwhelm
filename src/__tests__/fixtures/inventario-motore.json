@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-31T15:22:31.179Z",
+    "generatedAt": "2026-09-01T03:19:11.527Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 645,
+        "riga": 667,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -142,9 +142,9 @@
       "verdetto": "meccanica-diversa",
       "nota": "speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:449",
       "prova": {
-        "file": "src/utils/speedOrder.js",
-        "riga": 93,
-        "testo": "'macho brace', 'iron ball',"
+        "file": "src/lib/rules.js",
+        "riga": 575,
+        "testo": "'macho brace',"
       }
     }
   ],
@@ -194,7 +194,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 478,
+          "riga": 479,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -210,7 +210,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 645,
+          "riga": 667,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -539,9 +539,9 @@
       {
         "chiave": "macho brace",
         "prova": {
-          "file": "src/utils/speedOrder.js",
-          "riga": 93,
-          "testo": "'macho brace', 'iron ball',"
+          "file": "src/lib/rules.js",
+          "riga": 575,
+          "testo": "'macho brace',"
         }
       },
       {

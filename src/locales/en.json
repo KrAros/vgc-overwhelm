@@ -1859,7 +1859,7 @@
     "sniper": "Boosts the power of the Pokémon's critical hits by 125% instead of 50%.",
     "snow-cloak": "Boosts the Pokémon's evasiveness by 25% in snow.",
     "snow-warning": "Summons snow for 5 turns when the Pokémon enters a battle.",
-    "solar-power": "In harsh sunlight, the Pokémon's Sp. Atk stat is boosted by 50%, but it loses 1/8 of its max HP at the end of every turn.",
+    "solar-power": "In harsh sunlight, boosts Sp. Atk by 50% but loses HP each turn.",
     "solid-rock": "Reduces the damage the Pokémon takes from supereffective moves by 25%.",
     "soundproof": "Is immune to sound-based moves.",
     "speed-boost": "Boosts the Pokémon's Speed stat by 1 stage at the end of every turn.",
@@ -1905,7 +1905,8 @@
     "battery": "Powers up ally Pokémon's special moves by 30%.",
     "power-spot": "Powers up ally Pokémon's moves by 30%.",
     "steely-spirit": "Powers up its own and its allies' Steel-type moves by 50%.",
-    "flower-gift": "In harsh sunlight, boosts its own and its allies' Attack and Sp. Def by 50%."
+    "flower-gift": "In harsh sunlight, boosts its own and its allies' Attack and Sp. Def by 50%.",
+    "klutz": "Cannot use its held item."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) active — Speed ×2",
@@ -1926,7 +1927,12 @@
     "lightning-rod": "$t(abilities.lightning-rod) — Electric move absorbed: +1 Sp. Atk",
     "storm-drain": "$t(abilities.storm-drain) — Water move absorbed: +1 Sp. Atk",
     "motor-drive": "$t(abilities.motor-drive) — Electric move absorbed: +1 Speed",
-    "well-baked-body": "$t(abilities.well-baked-body) — Fire move absorbed: +2 Defense"
+    "well-baked-body": "$t(abilities.well-baked-body) — Fire move absorbed: +2 Defense",
+    "plus": "$t(abilities.plus) — ally has $t(abilities.minus): +50% Sp. Atk",
+    "minus": "$t(abilities.minus) — ally has $t(abilities.plus): +50% Sp. Atk",
+    "electromorphosis": "$t(abilities.electromorphosis) — charged: Electric moves ×2",
+    "protean": "$t(abilities.protean) — type changed: STAB on any move",
+    "libero": "$t(abilities.libero) — type changed: STAB on any move"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1947,6 +1953,11 @@
     "lightning-rod": "Immune to Electric moves — none absorbed yet",
     "storm-drain": "Immune to Water moves — none absorbed yet",
     "motor-drive": "Immune to Electric moves — none absorbed yet",
-    "well-baked-body": "Immune to Fire moves — none absorbed yet"
+    "well-baked-body": "Immune to Fire moves — none absorbed yet",
+    "plus": "No ally with $t(abilities.minus) on the field",
+    "minus": "No ally with $t(abilities.plus) on the field",
+    "electromorphosis": "Not charged yet — needs to have been hit",
+    "protean": "Not triggered yet — no off-type STAB",
+    "libero": "Not triggered yet — no off-type STAB"
   }
 }

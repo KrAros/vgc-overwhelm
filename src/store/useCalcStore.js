@@ -293,6 +293,7 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     if (f.supremeOverlordKOs) af.so = f.supremeOverlordKOs
     if (f.eelevateKOActive)   af.ee = 1
     if (f.assorbimentoAttivo) af.as = 1
+    if (f.interruttore)       af.io = 1
     if (Object.keys(af).length) s.af = af
 
     return s
@@ -371,6 +372,7 @@ export function decodeTeamsFromURL(encoded) {
                 supremeOverlordKOs: intero(af.so, 0, 5),
                 eelevateKOActive:   af.ee === 1,
                 assorbimentoAttivo: af.as === 1,
+                interruttore:       af.io === 1,
               },
             }
           })

@@ -275,7 +275,16 @@ export function creaHarness() {
       extra: {
         crit: field.crit,
         lastRespectsKOs: a.lastRespectsKOs || 0,
-        abilitaAttiva: a.atkAbilityFlags?.flashFireActive,
+        // `abilityOn` del riferimento è uno solo, letto da condizioni diverse:
+        // Flash Fire, Plus, Minus, Electromorphosis, Protean, Libero. Da noi
+        // sono due flag — `flashFireActive` (che c'era già) e `interruttore`
+        // (le altre cinque) — e qui si riuniscono, perché un Pokémon ha
+        // un'abilità sola e non possono mai essere accesi tutt'e due sul serio.
+        //
+        // Era `flashFireActive` e basta: qualunque cosa il motore facesse con
+        // le altre cinque, il riferimento le vedeva sempre spente.
+        abilitaAttiva: a.atkAbilityFlags?.flashFireActive
+          || a.atkAbilityFlags?.interruttore,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -490,7 +499,8 @@ export function creaHarness() {
       extra: {
         crit: field.crit,
         lastRespectsKOs: a.lastRespectsKOs || 0,
-        abilitaAttiva: a.atkAbilityFlags?.flashFireActive || a.atkAbilityFlags?.abilityOn,
+        abilitaAttiva: a.atkAbilityFlags?.flashFireActive
+          || a.atkAbilityFlags?.interruttore || a.atkAbilityFlags?.abilityOn,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })

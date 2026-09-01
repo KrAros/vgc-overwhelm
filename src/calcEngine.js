@@ -19,6 +19,7 @@ import {
   ABILITA_ATE,
   MOSSE_SENZA_PARENTAL_BOND,
   MOSSE_ANNULLATE_DA_DAMP,
+  STRUMENTI_IMMUNI_A_KLUTZ,
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
   tipoPallaClima,
@@ -630,8 +631,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // (scatta con Intimidate e sparisce). Chi legge `atkItem` direttamente da
   // qui in giù vedrebbe uno strumento che nel gioco non c'è più — e Knock Off
   // gli darebbe un ×1.5 che non gli spetta.
-  const atkItemKey = (preparazione.attaccante.strumento || '').toLowerCase()
-  const defItemKey = (preparazione.difensore.strumento || '').toLowerCase()
+  const atkItemGrezzo = (preparazione.attaccante.strumento || '').toLowerCase()
+  const defItemGrezzo = (preparazione.difensore.strumento || '').toLowerCase()
+
+  // ── Klutz: lo strumento non conta più ────────────────────────────────────
+  //
+  // Trascritto da `checkKlutz` (`damage_MASTER.js:448`), che scrive
+  // `pokemon.item = "Klutz"` — cioè un nome che nessuna tabella conosce, ed è
+  // il modo in cui il riferimento dice «non ha più niente in mano».
+  //
+  // Da noi la stessa cosa si dice azzerando la chiave: il resto del motore
+  // legge `atkItemKey` e non sa che Klutz esiste. Stessa forma della
+  // sostituzione di Mold Breaker e dell'azzeramento del meteo di Air Lock.
+  //
+  // I sette che restano in piedi — gli attrezzi da allenamento — stanno in
+  // `STRUMENTI_IMMUNI_A_KLUTZ`. Uno solo dei sette esiste nei nostri dati, ma
+  // ci sono tutti: la lista è l'eccezione a una regola che ANNULLA, e tenerne
+  // una parte vorrebbe dire che il giorno in cui uno degli altri entrasse,
+  // Klutz comincerebbe a spegnerlo in silenzio.
+  const klutzAtk = ABILITY_EFFECTS[atkAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(atkItemGrezzo)
+  const klutzDef = ABILITY_EFFECTS[defAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(defItemGrezzo)
+
+  const atkItemKey = klutzAtk ? '' : atkItemGrezzo
+  const defItemKey = klutzDef ? '' : defItemGrezzo
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
@@ -768,7 +790,19 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atMods.push(MOD.X1_5)
   }
 
-  if (puntoD) atMods.push(MOD.X1_5)
+  // Plus e Minus stanno nello STESSO `if` del punto d (`:1951`), quindi fra le
+  // ×1.5: il riferimento le mette in `or` con Guts, Overgrow e le altre. Il
+  // loro `abilityOn` significa «l'alleato ha l'altra delle due».
+  const puntoDConInterruttore = puntoD ||
+    (atkAbilEffect?.plusMinus && atkAbilityFlags.interruttore === true)
+
+  // Solar Power è l'`else if` SUCCESSIVO (`:1958`), quindi non si somma al
+  // punto d — e viene prima del ×1.3 del punto e.
+  const solarPower = atkAbilEffect?.solarPower && isSole && isSpecial
+    && atkItemKey !== 'utility umbrella'
+
+  if (puntoDConInterruttore) atMods.push(MOD.X1_5)
+  else if (solarPower) atMods.push(MOD.X1_5)
   else if (puntoE) atMods.push(MOD.X1_3)
 
   // punto g — ×2 offensive: Water Bubble sull'Acqua, Huge Power / Pure Power.
@@ -807,9 +841,31 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // di `calcDefMods` e viene PRIMA di Eviolite, non dopo.)
 
   // ── STAB ─────────────────────────────────────────────────────────────────
+  // ── Protean e Libero: lo STAB anche fuori tipo ───────────────────────────
+  //
+  // Nel riferimento è un `else` (`damage_MASTER.js:2224-2233`), e la forma
+  // conta più del numero:
+  //
+  //     if (attacker.hasType(move.type)) stabMod = Adaptability ? 0x2000 : 0x1800
+  //     else if (Protean/Libero && (gen < 9 || abilityOn)) stabMod = 0x1800
+  //
+  // Se la mossa è GIÀ del tipo del Pokémon, Protean non viene nemmeno valutata:
+  // vince il primo ramo, e il numero è identico a quello di chiunque altro.
+  // Si vede SOLO sulle mosse fuori tipo. Un test che la provasse su una mossa
+  // del tipo giusto passerebbe anche con l'abilità non implementata.
+  //
+  // A gen ≥ 9 serve l'interruttore; noi giriamo a 10, quindi `gen < 9` è falso
+  // e resta solo `abilityOn`. Trascritto senza il primo ramo, che non ha nulla
+  // su cui essere vero.
+  //
+  // ─── QUESTA È SOLO LA METÀ OFFENSIVA, ED È UNA SCELTA ────────────────────
+  // Nel gioco Protean cambia il TIPO di chi la usa, e quel cambiamento vale
+  // anche in difesa. Il riferimento non lo modella e per ora nemmeno noi:
+  // decisione di Simone, registrata in `protean.test.js` insieme a cosa
+  // comporterebbe farla.
   const stab = hasSTAB(moveType, atkTypes)
     ? (atkAbilEffect?.adaptability ? 2.0 : 1.5)
-    : 1
+    : (atkAbilEffect?.protean && atkAbilityFlags.interruttore === true ? 1.5 : 1)
 
   // ── CATENA POTENZA (`calcBPMods` di NCP) ─────────────────────────────────
   // Rinominata da `terrainBP` a `modifiedBP`: il vecchio nome mentiva da
@@ -1103,6 +1159,20 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   // s — Helping Hand.
   if (field.helpingHand) bpMods.push(MOD.X1_5)
+
+  // t — Electromorphosis: ×2 sulle mosse Elettro quando si è caricata.
+  //
+  // È il moltiplicatore più grosso di questo gruppo, e va letto bene: il
+  // riferimento spinge `0x2000`, cioè ×2, non uno dei ×1.5 che gli stanno
+  // intorno (`damage_MASTER.js:1764`).
+  //
+  // Nella stessa riga ci sono Wind Power — che nessuna specie legale porta — e
+  // `field.isCharge`, la mossa Carica, che non modelliamo: nessuna delle due
+  // ha oggi qualcosa su cui essere vera.
+  if (atkAbilEffect?.caricata && atkAbilityFlags.interruttore === true
+      && moveType === TYPES.ELECTRIC) {
+    bpMods.push(MOD.X2)
+  }
 
   // v — terreno offensivo: potenzia le mosse del proprio tipo se
   // l'ATTACCANTE è a terra.
