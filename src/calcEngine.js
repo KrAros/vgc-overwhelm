@@ -837,7 +837,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //   f   → Aura Fatata, Aura Oscura                    ×1.33  0x1548
   //   ——— qui il riferimento calcola `tempBP`, che serve a Tecnico ———
   //   g   → Tecnico, Megalancio, Ferromascella,
-  //         Ingegno Acciaio                             ×1.5   0x1800
+  //         Spiritoferreo                             ×1.5   0x1800
   //   j   → Muscle Band, Wise Glasses                   ×1.1   0x1199
   //   k   → item type-boost                             ×1.2   0x1333
   //   o   → Knock Off su strumento rimovibile           ×1.5   0x1800
@@ -1050,7 +1050,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (atkAbilEffect?.technician && tempBP <= 60) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
-  // Ingegno Acciaio, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
+  // Spiritoferreo, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
   // `field.isSteelySpirit` al punto d.iii del riferimento: una casella di campo
   // che non abbiamo, come per Battery e Power Spot.
   if (atkAbilEffect?.steelySpirit && moveType === TYPES.STEEL) bpMods.push(MOD.X1_5)

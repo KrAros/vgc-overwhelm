@@ -401,7 +401,7 @@ export const ABILITY_EFFECTS = {
   // moves.json, che `gen-flag-dati.mjs` trascrive da `isBite` del vendor.
   'strong-jaw':  { strongJaw: true, showInSmogon: true },
 
-  // Ingegno Acciaio: x1.5 sulle mosse Acciaio. Terza delle sei dello stesso
+  // Spiritoferreo: x1.5 sulle mosse Acciaio. Terza delle sei dello stesso
   // ramo, e ultima raggiungibile per ora — delle altre due, Flare Boost vuole
   // lo stato «bruciato» e Toxic Boost «avvelenato», che non modelliamo.
   //
