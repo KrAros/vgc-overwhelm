@@ -20,6 +20,10 @@ import {
   MOSSE_SENZA_PARENTAL_BOND,
   MOSSE_ANNULLATE_DA_DAMP,
   STRUMENTI_IMMUNI_A_KLUTZ,
+  haPotenzaDaPeso,
+  potenzaDaPeso,
+  potenzaDaRapportoPeso,
+  MOSSE_PESO_BERSAGLIO,
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
   tipoPallaClima,
@@ -179,7 +183,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   validateSPs(defSPs, debug)
 
   const moveData = MOVE_DATA[move]
-  if (!moveData || !moveData.power) return null
+  // Le quattro mosse a peso hanno `power: 0` nei dati — la potenza vera si
+  // ricava dal peso dei due Pokémon, più in basso. Senza questa eccezione il
+  // motore uscirebbe prima di guardarle, ed è il motivo per cui fino a questa
+  // sessione restituivano `null`.
+  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move))) return null
 
   const atkPokeData = POKEMON_DATA[atkPokemon]
   const defPokeData = POKEMON_DATA[defPokemon]
@@ -276,9 +284,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   let moveType = weatherBallType !== null ? weatherBallType : moveData.type
   const isLastRespects = move === 'last respects'
   const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
-  const effectiveBP    = isLastRespects ? lastRespectsBP
-    : isWeatherBall && weatherBallType !== null ? 100
-    : moveData.power
   const atkTypes = atkPokeData.type
   const defTypes = defPokeData.type
   // Il contatto "grezzo", quello scritto nei dati della mossa. Il contatto
@@ -656,6 +661,52 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defItemKey = klutzDef ? '' : defItemGrezzo
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
+
+  // ── La potenza di base ───────────────────────────────────────────────────
+  //
+  // Sta QUI e non più in alto perché le quattro mosse a peso hanno bisogno
+  // degli strumenti già risolti: la Pietrapiuma dimezza il peso, e Klutz la
+  // spegne. Nel riferimento l'ordine è lo stesso — `checkKlutz` gira a
+  // `damage_SV.js:18`, `getWeightMods` a `:59`.
+  //
+  // ─── IL PESO EFFETTIVO ───────────────────────────────────────────────────
+  //
+  // Trascritto da `getWeightMods` (`damage_MASTER.js:716-725`), che gira su
+  // tutt'e due i Pokémon:
+  //
+  //     Heavy Metal  ×2      \ un `if / else if`: non si sommano
+  //     Light Metal  ÷2      /
+  //     Float Stone  ÷2        un `if` a sé: si somma a entrambe
+  const pesoEffettivo = (specie, abilEffect, itemEffect) => {
+    let peso = POKEMON_DATA[specie]?.weight ?? 0
+    if (abilEffect?.pesoMult) peso *= abilEffect.pesoMult
+    if (itemEffect?.dimezzaPeso) peso /= 2
+    return peso
+  }
+
+  // ─── LE DUE TABELLE ──────────────────────────────────────────────────────
+  // Stanno in `lib/rules.js`, trascritte da `basePowerFunc` punto b. Low Kick
+  // e Grass Knot guardano il peso del BERSAGLIO; Heavy Slam e Heat Crash il
+  // RAPPORTO fra i due — quindi le prime due leggono un peso solo e le altre
+  // due tutt'e due.
+  let potenzaDalPeso = null
+  if (haPotenzaDaPeso(move)) {
+    const pesoDif = pesoEffettivo(defPokemon, defAbilEffect, defItemEffect)
+    if (MOSSE_PESO_BERSAGLIO.has(move)) {
+      potenzaDalPeso = potenzaDaPeso(pesoDif)
+    } else {
+      const pesoAtk = pesoEffettivo(atkPokemon, atkAbilEffect, atkItemEffect)
+      // Divisione per zero: nessuna specie pesa 0 (il minimo è 0,1 kg), ma un
+      // peso mancante darebbe `Infinity` e quindi 120 fisso. Meglio il gradino
+      // più basso, che è la risposta di chi non sa.
+      potenzaDalPeso = pesoDif > 0 ? potenzaDaRapportoPeso(pesoAtk / pesoDif) : 40
+    }
+  }
+
+  const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
+    : isLastRespects ? lastRespectsBP
+    : isWeatherBall && weatherBallType !== null ? 100
+    : moveData.power
 
   // ── Contatto effettivo ───────────────────────────────────────────────────
   // NCP (`checkContactOverride`, damage_MASTER.js riga 826) toglie il contatto

@@ -580,3 +580,63 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
   'power lens',
   'power weight',
 ])
+
+/**
+ * ─── LE QUATTRO MOSSE LA CUI POTENZA VIENE DAL PESO ─────────────────────────
+ *
+ * Nei dati hanno `power: 0`, che il motore tratta come «non calcolabile»: la
+ * potenza vera non è scritta nella mossa, si ricava dal peso dei due Pokémon.
+ *
+ * Trascritte da `basePowerFunc` punto b (`damage_MASTER.js:1318-1347`), che le
+ * divide in due famiglie con due tabelle diverse.
+ *
+ * ─── LE DUE TABELLE, COPIATE E NON RICOSTRUITE ─────────────────────────────
+ *
+ * Sono scritte come catene di ternari nel riferimento, e qui restano catene:
+ * le soglie sono `>=`, il confronto è sul peso in VIRGOLA MOBILE — nessun
+ * arrotondamento, e i nostri dati vanno da 0,1 a 999,9 kg.
+ *
+ *     Low Kick, Grass Knot     guardano il peso del BERSAGLIO
+ *     Heavy Slam, Heat Crash   guardano il RAPPORTO attaccante / bersaglio
+ *
+ * ─── PERCHÉ UNA LISTA DI NOMI E NON UN FLAG ────────────────────────────────
+ *
+ * Perché nel vendor sono quattro `case` di uno `switch` sul nome della mossa,
+ * non un campo che si possa trascrivere. Stessa forma di
+ * `MOSSE_ANNULLATE_DA_DAMP` e per la stessa ragione.
+ */
+export const MOSSE_PESO_BERSAGLIO = new Set(['low kick', 'grass knot'])
+export const MOSSE_PESO_RAPPORTO  = new Set(['heavy slam', 'heat crash'])
+
+/** Vero se la potenza di questa mossa si ricava dal peso invece che dai dati. */
+export function haPotenzaDaPeso(mossa) {
+  return MOSSE_PESO_BERSAGLIO.has(mossa) || MOSSE_PESO_RAPPORTO.has(mossa)
+}
+
+/**
+ * Low Kick e Grass Knot: la potenza dal peso del bersaglio.
+ * `damage_MASTER.js:1323`
+ */
+export function potenzaDaPeso(peso) {
+  return peso >= 200 ? 120
+    : peso >= 100 ? 100
+    : peso >= 50 ? 80
+    : peso >= 25 ? 60
+    : peso >= 10 ? 40
+    : 20
+}
+
+/**
+ * Heavy Slam e Heat Crash: la potenza dal rapporto fra i due pesi.
+ * `damage_MASTER.js:1336`
+ *
+ * Nota che la catena è più corta dell'altra e non ha il gradino più basso: sotto
+ * il rapporto 2 la potenza è 40 e non scende oltre.
+ */
+export function potenzaDaRapportoPeso(rapporto) {
+  return rapporto >= 5 ? 120
+    : rapporto >= 4 ? 100
+    : rapporto >= 3 ? 80
+    : rapporto >= 2 ? 60
+    : 40
+}

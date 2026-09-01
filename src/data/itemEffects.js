@@ -120,6 +120,19 @@ export const ITEM_EFFECTS = {
   'eviolite':       { defMult: 1.5, spdMult: 1.5, soloSeEvolvibile: true },
   'assault vest':   { spdMult: 1.5 },
 
+  // Pietrapiuma: dimezza il PESO. Non tocca nessuna catena — il peso serve
+  // solo alle quattro mosse che ne ricavano la potenza (Low Kick, Grass Knot,
+  // Heavy Slam, Heat Crash).
+  //
+  // Nel riferimento e' una riga di `getWeightMods` (`damage_MASTER.js:723`),
+  // un `if` a se' che si somma a Heavy Metal e Light Metal.
+  //
+  // Klutz la spegne, e viene da se': `checkKlutz` gira PRIMA di
+  // `getWeightMods` (`damage_SV.js:18` contro `:59`), quindi lo strumento e'
+  // gia' sparito quando i pesi si calcolano. Da noi la chiave dello strumento
+  // e' gia' quella passata per Klutz.
+  'float stone':    { dimezzaPeso: true },
+
   // ── Resist Berries (×0.5 danno se il tipo della mossa corrisponde) ────────
   // Trattate come sempre attive (nessun tracking consumo)
   'colbur berry':   { resistBerry: TYPES.DARK     },

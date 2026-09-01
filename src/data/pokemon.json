@@ -20451,7 +20451,7 @@
 			6
 		],
 		"mega": null,
-		"weight": 72.8,
+		"weight": 78.2,
 		"gender": null,
 		"stats": [
 			75,
@@ -20845,7 +20845,7 @@
 			13
 		],
 		"mega": null,
-		"weight": 350.2,
+		"weight": 350,
 		"gender": null,
 		"stats": [
 			97,
@@ -20914,7 +20914,7 @@
 			13
 		],
 		"mega": null,
-		"weight": 22.1,
+		"weight": 22.2,
 		"gender": null,
 		"stats": [
 			90,
@@ -27409,7 +27409,7 @@
 			6
 		],
 		"mega": null,
-		"weight": 92,
+		"weight": 92.2,
 		"gender": "M",
 		"stats": [
 			88,
@@ -27881,7 +27881,7 @@
 			13
 		],
 		"mega": null,
-		"weight": 79.5,
+		"weight": 69.8,
 		"gender": null,
 		"stats": [
 			73,
@@ -27955,7 +27955,7 @@
 			14
 		],
 		"mega": null,
-		"weight": 848.7,
+		"weight": 850,
 		"gender": "N",
 		"stats": [
 			100,
@@ -27979,7 +27979,7 @@
 			14
 		],
 		"mega": null,
-		"weight": 336,
+		"weight": 660,
 		"gender": "N",
 		"stats": [
 			90,
@@ -28222,7 +28222,7 @@
 			2
 		],
 		"mega": null,
-		"weight": 99.2,
+		"weight": 110,
 		"gender": "M",
 		"stats": [
 			75,
@@ -28321,7 +28321,7 @@
 			6
 		],
 		"mega": 1,
-		"weight": 96,
+		"weight": 100,
 		"gender": null,
 		"stats": [
 			72,
@@ -28344,7 +28344,7 @@
 			0
 		],
 		"mega": 1,
-		"weight": 81.5,
+		"weight": 93.3,
 		"gender": null,
 		"stats": [
 			86,
@@ -28366,7 +28366,7 @@
 			3
 		],
 		"mega": 1,
-		"weight": 80.5,
+		"weight": 180,
 		"gender": null,
 		"stats": [
 			85,
@@ -28389,7 +28389,7 @@
 			9
 		],
 		"mega": 1,
-		"weight": 24.9,
+		"weight": 50,
 		"gender": null,
 		"stats": [
 			85,
@@ -28412,7 +28412,7 @@
 			17
 		],
 		"mega": 1,
-		"weight": 100.5,
+		"weight": 201,
 		"gender": null,
 		"stats": [
 			80,
@@ -28435,7 +28435,7 @@
 			14
 		],
 		"mega": 1,
-		"weight": 88.8,
+		"weight": 108.8,
 		"gender": null,
 		"stats": [
 			85,
@@ -28458,7 +28458,7 @@
 			6
 		],
 		"mega": 1,
-		"weight": 150,
+		"weight": 180.3,
 		"gender": null,
 		"stats": [
 			110,
@@ -28481,7 +28481,7 @@
 			9
 		],
 		"mega": 1,
-		"weight": 210,
+		"weight": 290,
 		"gender": null,
 		"stats": [
 			91,
@@ -28573,7 +28573,7 @@
 			16
 		],
 		"mega": 1,
-		"weight": 40.4,
+		"weight": 60,
 		"gender": null,
 		"stats": [
 			110,
@@ -28619,7 +28619,7 @@
 			9
 		],
 		"mega": 1,
-		"weight": 40,
+		"weight": 42.3,
 		"gender": null,
 		"stats": [
 			95,
@@ -28642,7 +28642,7 @@
 			7
 		],
 		"mega": 1,
-		"weight": 15.5,
+		"weight": 125.5,
 		"gender": null,
 		"stats": [
 			80,
@@ -28665,7 +28665,7 @@
 			14
 		],
 		"mega": 1,
-		"weight": 185,
+		"weight": 240.5,
 		"gender": null,
 		"stats": [
 			78,
@@ -28688,7 +28688,7 @@
 			13
 		],
 		"mega": 1,
-		"weight": 26.6,
+		"weight": 29.6,
 		"gender": 1,
 		"stats": [
 			70,
@@ -28711,7 +28711,7 @@
 			9
 		],
 		"mega": 1,
-		"weight": 21.5,
+		"weight": 25,
 		"gender": null,
 		"stats": [
 			78,
@@ -28734,7 +28734,7 @@
 			5
 		],
 		"mega": 1,
-		"weight": 180,
+		"weight": 252.8,
 		"gender": null,
 		"stats": [
 			97,
@@ -28780,7 +28780,7 @@
 			16
 		],
 		"mega": 1,
-		"weight": 1,
+		"weight": 8,
 		"gender": null,
 		"stats": [
 			75,
@@ -28803,7 +28803,7 @@
 			9
 		],
 		"mega": 1,
-		"weight": 50.5,
+		"weight": 40.4,
 		"gender": null,
 		"stats": [
 			65,
@@ -28826,7 +28826,7 @@
 			1
 		],
 		"mega": 1,
-		"weight": 15,
+		"weight": 22,
 		"gender": null,
 		"stats": [
 			65,
@@ -28849,7 +28849,7 @@
 			7
 		],
 		"mega": 1,
-		"weight": 45,
+		"weight": 77,
 		"gender": null,
 		"stats": [
 			83,
@@ -28872,7 +28872,7 @@
 			13
 		],
 		"mega": 1,
-		"weight": 34.3,
+		"weight": 69.6,
 		"gender": "N",
 		"stats": [
 			60,
@@ -28894,7 +28894,7 @@
 			17
 		],
 		"mega": 1,
-		"weight": 0.9,
+		"weight": 100.8,
 		"gender": 1,
 		"stats": [
 			74,
@@ -28916,7 +28916,7 @@
 			10
 		],
 		"mega": 1,
-		"weight": 8.5,
+		"weight": 10.1,
 		"gender": null,
 		"stats": [
 			74,
@@ -28938,7 +28938,7 @@
 			3
 		],
 		"mega": 1,
-		"weight": 32,
+		"weight": 38,
 		"gender": null,
 		"stats": [
 			60,
@@ -28960,7 +28960,7 @@
 			3
 		],
 		"mega": 1,
-		"weight": 24,
+		"weight": 26,
 		"gender": null,
 		"stats": [
 			60,
@@ -28983,7 +28983,7 @@
 			10
 		],
 		"mega": 1,
-		"weight": 47,
+		"weight": 69.8,
 		"gender": null,
 		"stats": [
 			86,
@@ -29006,7 +29006,7 @@
 			6
 		],
 		"mega": 1,
-		"weight": 30,
+		"weight": 31,
 		"gender": null,
 		"stats": [
 			65,
@@ -29029,7 +29029,7 @@
 			7
 		],
 		"mega": 1,
-		"weight": 200.5,
+		"weight": 230.5,
 		"gender": null,
 		"stats": [
 			60,
@@ -29052,7 +29052,7 @@
 			14
 		],
 		"mega": 1,
-		"weight": 81.5,
+		"weight": 100.3,
 		"gender": null,
 		"stats": [
 			65,
@@ -29074,7 +29074,7 @@
 			6
 		],
 		"mega": 1,
-		"weight": 62,
+		"weight": 99,
 		"gender": "N",
 		"stats": [
 			65,

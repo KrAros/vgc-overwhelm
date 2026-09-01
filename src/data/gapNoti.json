@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T03:19:11.148Z",
+    "generatedAt": "2026-09-01T06:22:54.428Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 48,
-    "strumentiNelGap": 40,
+    "abilitaNelGap": 46,
+    "strumentiNelGap": 39,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
@@ -24,11 +24,9 @@
     "gulp missile",
     "guts",
     "hadron engine",
-    "heavy metal",
     "ice face",
     "illusion",
     "imposter",
-    "light metal",
     "marvel scale",
     "mega sol",
     "mimicry",
@@ -72,7 +70,6 @@
     "fairy memory",
     "fighting memory",
     "fire memory",
-    "float stone",
     "flying gem",
     "flying memory",
     "ghost memory",

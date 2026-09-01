@@ -1,16 +1,16 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T03:19:11.148Z",
+    "generatedAt": "2026-09-01T06:22:54.428Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 202,
-    "abilitaNelGap": 48,
+    "abilitaSenzaEffetto": 200,
+    "abilitaNelGap": 46,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 175,
-    "strumentiNelGap": 40,
+    "strumentiSenzaEffetto": 174,
+    "strumentiNelGap": 39,
     "badgeToltiDallaSecondaFonte": 5,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
   },
@@ -177,16 +177,6 @@
         }
       },
       {
-        "chiave": "heavy metal",
-        "nome": "Heavy Metal",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getWeightMods",
-          "file": "damage_MASTER.js",
-          "riga": 717
-        }
-      },
-      {
         "chiave": "ice face",
         "nome": "Ice Face",
         "canale": "STR",
@@ -214,16 +204,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 388
-        }
-      },
-      {
-        "chiave": "light metal",
-        "nome": "Light Metal",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getWeightMods",
-          "file": "damage_MASTER.js",
-          "riga": 718
         }
       },
       {
@@ -716,16 +696,6 @@
           "funzione": "checkKlutz",
           "file": "damage_MASTER.js",
           "riga": 449
-        }
-      },
-      {
-        "chiave": "float stone",
-        "nome": "Float Stone",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getWeightMods",
-          "file": "damage_MASTER.js",
-          "riga": 723
         }
       },
       {

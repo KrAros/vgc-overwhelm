@@ -185,19 +185,30 @@ describe('contro il riferimento', () => {
     })
   }
 
-  it('Low Kick, la quarta mossa del set, non è calcolabile — e non per colpa di questa abilità', () => {
-    // Fatto registrato invece che saltato in silenzio: il set del meta di
-    // Kangaskhan Mega porta Low Kick, e il motore per quella mossa non
-    // restituisce niente. La potenza dipende dal PESO del bersaglio, e il peso
-    // è un campo che il progetto toglie dal bundle di proposito
-    // (`potatura-dati.mjs`) perché nessuna riga di `src/` lo legge.
-    //
-    // È un buco dichiarato e precedente a Parental Bond, ma vale la pena che
-    // stia scritto qui: di quattro mosse del set, tre prendono il secondo
-    // colpo e la quarta non produce nemmeno un numero.
-    expect(movesData['low kick'].power).toBe(0)
-    expect(nostro('parental-bond', 'low kick')).toBeNull()
-    expect(nostro(null, 'low kick'), 'e non è Parental Bond a romperla').toBeNull()
+  /**
+   * ─── LOW KICK ADESSO SI CALCOLA ────────────────────────────────────────
+   *
+   * Questo test diceva il contrario, e registrava un buco: «di quattro mosse
+   * del set, tre prendono il secondo colpo e la quarta non produce nemmeno un
+   * numero». La potenza dipendeva dal PESO del bersaglio, e il peso era potato
+   * dal bundle perché nessuna riga di `src/` lo leggeva.
+   *
+   * Adesso lo legge. Il test resta, girato: prova che la quarta mossa del set
+   * è calcolabile, e che prende il secondo colpo come le altre tre.
+   *
+   * Nei dati la potenza è ancora 0 — non è cambiato il dato, è cambiato chi lo
+   * guarda: il motore ricava la potenza dal peso prima di usarla.
+   */
+  it('Low Kick, la quarta mossa del set, adesso si calcola — e prende il secondo colpo', () => {
+    expect(movesData['low kick'].power, 'nei dati resta 0: la potenza viene dal peso').toBe(0)
+
+    const r = nostro('parental-bond', 'low kick')
+    expect(r, 'Low Kick è tornata non calcolabile').not.toBeNull()
+    expect(r.rollsFiglio, 'la quarta mossa del set non prende il secondo colpo').not.toBeNull()
+
+    // E il numero dipende davvero dal peso del bersaglio: contro Incineroar
+    // (83 kg) la potenza è 80, non il 20 del gradino più basso.
+    expect(r.effectiveBP).toBe(80)
   })
 
   it.runIf(vendorPresente)('senza l\'abilità il riferimento non aggiunge colpi', () => {
