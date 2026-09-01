@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T18:58:12.092Z",
+    "generatedAt": "2026-09-01T20:19:09.248Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 194,
-    "abilitaNelGap": 40,
+    "abilitaSenzaEffetto": 187,
+    "abilitaNelGap": 33,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -16,16 +16,6 @@
   },
   "prove": {
     "abilita": [
-      {
-        "chiave": "aura break",
-        "nome": "Aura Break",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1576
-        }
-      },
       {
         "chiave": "battle bond",
         "nome": "Battle Bond",
@@ -127,16 +117,6 @@
         }
       },
       {
-        "chiave": "grass pelt",
-        "nome": "Grass Pelt",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcDefMods",
-          "file": "damage_MASTER.js",
-          "riga": 2104
-        }
-      },
-      {
         "chiave": "gulp missile",
         "nome": "Gulp Missile",
         "canale": "STR",
@@ -154,16 +134,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1941
-        }
-      },
-      {
-        "chiave": "hadron engine",
-        "nome": "Hadron Engine",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1971
         }
       },
       {
@@ -257,16 +227,6 @@
         }
       },
       {
-        "chiave": "orichalcum pulse",
-        "nome": "Orichalcum Pulse",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1970
-        }
-      },
-      {
         "chiave": "overgrow",
         "nome": "Overgrow",
         "canale": "STR",
@@ -314,26 +274,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1585
-        }
-      },
-      {
-        "chiave": "slow start",
-        "nome": "Slow Start",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1924
-        }
-      },
-      {
-        "chiave": "stakeout",
-        "nome": "Stakeout",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1979
         }
       },
       {
@@ -404,16 +344,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 389
-        }
-      },
-      {
-        "chiave": "wind power",
-        "nome": "Wind Power",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1764
         }
       }
     ],
