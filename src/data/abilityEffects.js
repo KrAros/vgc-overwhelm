@@ -206,6 +206,23 @@ export const ABILITY_EFFECTS = {
   // nel vendor sono un elenco di nomi dentro la funzione e non un flag.
   'klutz':            { klutz: true, showInSmogon: true },
 
+  // ── Heavy Metal e Light Metal: il peso, non il danno ────────────────────
+  //
+  // Non toccano nessuna catena di modificatori: cambiano il PESO, e il peso
+  // serve solo alle quattro mosse che ne ricavano la potenza. Nel riferimento
+  // sono due righe di `getWeightMods` (`damage_MASTER.js:717-718`), che gira
+  // su tutt'e due i Pokemon prima di qualunque calcolo.
+  //
+  // Sono un `if / else if`, quindi non si sommano — ma la Pietrapiuma e' un
+  // `if` a se' e si somma a entrambe: un Aggron con Heavy Metal e Pietrapiuma
+  // pesa quanto prima, non il doppio ne' la meta'.
+  //
+  // Fino a questa sessione erano un miraggio: il campo `weight` c'era nei dati
+  // ma era POTATO dal bundle, e le quattro mosse che lo userebbero hanno
+  // `power: 0`. Il motore usciva prima di guardarle.
+  'heavy-metal': { pesoMult: 2,   showInSmogon: true },
+  'light-metal': { pesoMult: 0.5, showInSmogon: true },
+
   // Analytic: x1.3 se chi attacca NON muove per primo. Punto e.iii della
   // catena della potenza (`damage_MASTER.js:1639`).
   //

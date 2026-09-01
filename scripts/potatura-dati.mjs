@@ -45,10 +45,24 @@
 export const CAMPI_POTATI = {
   'pokemon.json': {
     voci: [
-      // Aggiudicato in `gen-flag-dati.mjs`, che dichiara a chiare lettere
-      // «`weight` non è letto da src/». Le mosse che lo userebbero (Grass
-      // Knot, Heavy Slam) sono nel gap dichiarato.
-      'weight',
+      // ─── `weight` E' USCITO DA QUI, ED E' LA REGOLA CHE FUNZIONA ─────────
+      //
+      // Stava in questa lista con la nota: «`weight` non è letto da src/. Le
+      // mosse che lo userebbero (Grass Knot, Heavy Slam) sono nel gap
+      // dichiarato».
+      //
+      // Quelle mosse sono uscite dal gap: Low Kick, Grass Knot, Heavy Slam e
+      // Heat Crash adesso ricavano la potenza dal peso, e con loro Heavy Metal,
+      // Light Metal e la Pietrapiuma. Quindi `src/` il peso lo legge, e
+      // l'affermazione forte che questa lista contiene è diventata falsa.
+      //
+      // `potaturaDati.test.js` se n'è accorto da solo — è diventato rosso alla
+      // prima riga di motore che tocca `weight` — e la correzione è quella che
+      // il commento in cima a questo file prescrive: «va tolto da qui, non
+      // silenziato là».
+      //
+      // Costa 3,33 kB gzip, misurati: il margine sotto soglia passa da 16,82 a
+      // 13,49 kB.
       // Nessun calcolo dei doppi guarda il genere: Rivalry e Attract non
       // sono nel motore, e il formato non li espone.
       'gender',
