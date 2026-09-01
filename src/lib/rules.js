@@ -543,3 +543,40 @@ export const MOSSE_CHE_IGNORANO_ABILITA = new Set([
   'sunsteel strike',
   'photon geyser',
 ])
+
+/**
+ * ─── I SETTE STRUMENTI CHE KLUTZ NON ANNULLA ────────────────────────────────
+ *
+ * Trascritti da `checkKlutz` (`damage_MASTER.js:448`):
+ *
+ *     if (['Macho Brace', 'Power Anklet', 'Power Band', 'Power Belt',
+ *          'Power Bracer', 'Power Lens', 'Power Weight']
+ *         .indexOf(pokemon.item) === -1) {
+ *         pokemon.item = "Klutz";      // cioè: lo strumento non c'è più
+ *     }
+ *
+ * Klutz spegne lo strumento di chi ce l'ha. Questi sette no — sono gli attrezzi
+ * da allenamento, che continuano a pesare sulla Velocità anche con Klutz.
+ *
+ * ─── UNO SU SETTE ESISTE NEI NOSTRI DATI ───────────────────────────────────
+ *
+ * Solo `macho brace`. Gli altri sei — Power Anklet, Power Band, Power Belt,
+ * Power Bracer, Power Lens, Power Weight — in `items.json` non ci sono.
+ *
+ * Sono scritti lo stesso, e non per completezza: la lista è l'eccezione a una
+ * regola che ANNULLA. Tenerne una parte vorrebbe dire che il giorno in cui uno
+ * dei sei entrasse nei dati, Klutz comincerebbe a spegnerlo in silenzio — e un
+ * effetto che sparisce non lascia tracce come un effetto che compare.
+ *
+ * Il test che accompagna questa costante misura quanti dei sette esistono, così
+ * se il conto cambia diventa rosso invece di restare una nota vecchia.
+ */
+export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
+  'macho brace',
+  'power anklet',
+  'power band',
+  'power belt',
+  'power bracer',
+  'power lens',
+  'power weight',
+])

@@ -253,6 +253,40 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   // sta l'abilità, e l'utente concluderebbe che l'app non la calcola — che è
   // esattamente la cosa che il segnalino «non calcolata» diceva prima, e che
   // adesso non è più vera.
+  // ── Le cinque che il riferimento accende con `abilityOn` ─────────────────
+  //
+  // Plus, Minus, Electromorphosis, Protean, Libero. Nel riferimento sono un
+  // interruttore solo (`attacker.abilityOn`) letto da condizioni diverse, e
+  // qui e' un ramo solo per la stessa ragione: un Pokemon ha un'abilita' sola,
+  // quindi le cinque non possono mai accendersi insieme.
+  //
+  // Cosa significa la levetta cambia con l'abilita', e lo dicono le stringhe:
+  // per Plus e Minus «l'alleato ha l'altra», per Electromorphosis «si e'
+  // caricata», per Protean e Libero «ha cambiato tipo».
+  if (ABILITY_EFFECTS[key]?.plusMinus || ABILITY_EFFECTS[key]?.caricata
+      || ABILITY_EFFECTS[key]?.protean) {
+    return (
+      <div className={`${RIQUADRO} gap-2 ${flags.interruttore ? ACCESO : SPENTO}`}>
+        <button
+          type="button"
+          onClick={() => onFlagChange('interruttore', !flags.interruttore)}
+          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
+            flags.interruttore ? PERNO_ACCESO : PERNO_SPENTO
+          }`}
+        >
+          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
+            flags.interruttore ? 'left-4' : 'left-0.5'
+          }`} />
+        </button>
+        <span className={flags.interruttore ? TESTO_ACCESO : TESTO_SPENTO}>
+          {flags.interruttore
+            ? t(`abilities_desc_on.${key}`)
+            : t(`abilities_desc_off.${key}`)}
+        </span>
+      </div>
+    )
+  }
+
   if (ABILITY_EFFECTS[key]?.casellaDiCampo) {
     return (
       <div className={`${RIQUADRO} ${SPENTO}`}>

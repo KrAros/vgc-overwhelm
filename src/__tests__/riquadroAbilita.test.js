@@ -67,7 +67,7 @@ describe('i riquadri delle abilità', () => {
     ).toBe(true)
   })
 
-  it('tutti e dodici i rami usano la costante', () => {
+  it('tutti e tredici i rami usano la costante', () => {
     // Il conteggio è esplicito perché un ramo NUOVO che se la dimentica non
     // farebbe fallire il test sopra: non ricopierebbe la firma, semplicemente
     // non avrebbe nessun minimo.
@@ -83,13 +83,18 @@ describe('i riquadri delle abilità', () => {
     // Spirit: un ramo solo per tutte e cinque, che dice dove si accende la
     // casella invece di far credere che l'app non le calcoli.
     //
-    // Tutt'e tre le volte il numero è stato alzato DOPO aver visto il test
+    // Da dodici a tredici con la levetta delle cinque che il riferimento
+    // accende con `abilityOn` — Plus, Minus, Electromorphosis, Protean,
+    // Libero: un ramo solo, perché un Pokémon ha un'abilità sola e le cinque
+    // non possono accendersi insieme.
+    //
+    // Tutt'e quattro le volte il numero è stato alzato DOPO aver visto il test
     // rosso, che è il modo in cui questo presidio deve funzionare.
     expect(
       conCostante.length,
-      'i rami che rendono un riquadro non sono dodici: se ne hai aggiunto uno, '
+      'i rami che rendono un riquadro non sono tredici: se ne hai aggiunto uno, '
       + 'deve usare RIQUADRO e questo numero va alzato di proposito',
-    ).toBe(12)
+    ).toBe(13)
   })
 
   it('la costante porta un minimo per entrambe le larghezze', () => {

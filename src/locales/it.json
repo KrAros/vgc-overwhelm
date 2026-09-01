@@ -1859,7 +1859,7 @@
     "sniper": "Potenzia del 50% la potenza dei colpi critici.",
     "snow-cloak": "Aumenta la schivata del 20% durante una nevicata.",
     "snow-warning": "Genera neve per 5 turni all'entrata in campo.",
-    "solar-power": "Sotto la luce solare intensa, l'Attacco Speciale sale del 50% ma perde 1/8 degli HP massimi ogni turno.",
+    "solar-power": "Con la luce solare intensa aumenta del 50% l'Attacco Speciale, ma perde PS ogni turno.",
     "solid-rock": "Riduce del 25% il danno subito dalle mosse super efficaci.",
     "soundproof": "Immunizza alle mosse basate sul suono.",
     "speed-boost": "La Velocità sale di 1 grado alla fine di ogni turno.",
@@ -1905,7 +1905,8 @@
     "battery": "Aumenta del 30% la potenza delle mosse speciali degli alleati.",
     "power-spot": "Aumenta del 30% la potenza delle mosse degli alleati.",
     "steely-spirit": "Aumenta del 50% la potenza delle mosse di tipo Acciaio proprie e degli alleati.",
-    "flower-gift": "Con la luce solare intensa aumenta del 50% l'Attacco e la Difesa Speciale propri e degli alleati."
+    "flower-gift": "Con la luce solare intensa aumenta del 50% l'Attacco e la Difesa Speciale propri e degli alleati.",
+    "klutz": "Non può usare lo strumento che tiene."
   },
   "abilities_desc_on": {
     "chlorophyll": "$t(abilities.chlorophyll) attiva — Velocità ×2",
@@ -1926,7 +1927,12 @@
     "lightning-rod": "$t(abilities.lightning-rod) — mossa Elettro assorbita: +1 Att. Speciale",
     "storm-drain": "$t(abilities.storm-drain) — mossa Acqua assorbita: +1 Att. Speciale",
     "motor-drive": "$t(abilities.motor-drive) — mossa Elettro assorbita: +1 Velocità",
-    "well-baked-body": "$t(abilities.well-baked-body) — mossa Fuoco assorbita: +2 Difesa"
+    "well-baked-body": "$t(abilities.well-baked-body) — mossa Fuoco assorbita: +2 Difesa",
+    "plus": "$t(abilities.plus) — l'alleato ha $t(abilities.minus): +50% Att. Speciale",
+    "minus": "$t(abilities.minus) — l'alleato ha $t(abilities.plus): +50% Att. Speciale",
+    "electromorphosis": "$t(abilities.electromorphosis) — caricata: mosse Elettro ×2",
+    "protean": "$t(abilities.protean) — ha cambiato tipo: STAB su qualunque mossa",
+    "libero": "$t(abilities.libero) — ha cambiato tipo: STAB su qualunque mossa"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1947,6 +1953,11 @@
     "lightning-rod": "Immune alle mosse Elettro — nessuna ancora assorbita",
     "storm-drain": "Immune alle mosse Acqua — nessuna ancora assorbita",
     "motor-drive": "Immune alle mosse Elettro — nessuna ancora assorbita",
-    "well-baked-body": "Immune alle mosse Fuoco — nessuna ancora assorbita"
+    "well-baked-body": "Immune alle mosse Fuoco — nessuna ancora assorbita",
+    "plus": "Nessun alleato con $t(abilities.minus) in campo",
+    "minus": "Nessun alleato con $t(abilities.plus) in campo",
+    "electromorphosis": "Non ancora caricata — serve aver subito un colpo",
+    "protean": "Non ancora attivata — nessuno STAB fuori tipo",
+    "libero": "Non ancora attivata — nessuno STAB fuori tipo"
   }
 }
