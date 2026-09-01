@@ -732,7 +732,46 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `canEvolve` è generato in pokemon.json da scripts/gen-flag-dati.mjs; per
   // le poche voci non mappabili su NCP il campo è assente, e in quel caso
   // preferiamo NON applicare il bonus piuttosto che applicarlo a caso.
+  // ─── LE QUATTRO ROVINA ────────────────────────────────────────────────────
+  //
+  // Ognuna abbassa di un quarto (`0x0C00`) una statistica di tutti gli ALTRI
+  // in campo. Nel riferimento sono due `if / else if` gemelli, uno per catena:
+  // Tablets e Vessel in `calcAtMods` punto a (`damage_MASTER.js:1913`), Sword
+  // e Beads in `calcDefMods` punto a (`:2082`). In tutt'e due i casi sono la
+  // PRIMA cosa della catena.
+  //
+  // ─── PERCHE' NON BASTA GUARDARE L'ALTRO ──────────────────────────────────
+  //
+  // Verrebbe da scrivere «se il difensore ha Tablets, abbassa l'attacco»: nel
+  // nostro modello a due Pokemon sembra equivalente, perche' se ce l'ha
+  // l'attaccante il riferimento lo esenta comunque.
+  //
+  // Non lo e' nello specchio. Wo-Chien contro Wo-Chien: la casella e' accesa,
+  // ma `attacker.ability !== "Tablets of Ruin"` e' FALSA, quindi il
+  // riferimento non abbassa niente. La scorciatoia abbasserebbe. Percio' qui
+  // e' trascritta la forma del riferimento — «e' in campo» E «non e' chi la
+  // subisce» — e non la sua semplificazione.
+  const ruinInCampo = (nome) =>
+    atkAbilEffect?.ruin === nome || defAbilEffect?.ruin === nome
+
   const dfMods = []
+
+  // punto a — Sword of Ruin e Beads of Ruin: ×0,75 sulla DIFESA di chi subisce.
+  //
+  // `hitsPhysical` nel riferimento non e' esattamente `!isSpecial`: comprende
+  // anche Psyshock, Psystrike e Secret Sword, speciali che colpiscono la
+  // Difesa (`damage_MASTER.js:2025`). Quella distinzione il nostro motore non
+  // ce l'ha — `defStatIdx` sceglie la difesa dalla sola categoria — ed e' un
+  // limite che precede questo blocco, non uno che introduce.
+  //
+  // L'`else if` fra le due e' del riferimento. Non e' osservabile — fisico e
+  // speciale si escludono — ma si trascrive com'e' scritto.
+  if (ruinInCampo('sword') && !isSpecial && defAbilEffect?.ruin !== 'sword') {
+    dfMods.push(MOD.X0_75)
+  }
+  else if (ruinInCampo('beads') && isSpecial && defAbilEffect?.ruin !== 'beads') {
+    dfMods.push(MOD.X0_75)
+  }
 
   // punto d — Protosynthesis / Quark Drive sul lato difensivo: ×1.3 se la
   // statistica più alta è quella che sta subendo il colpo.
@@ -789,6 +828,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //             l'attacco altrui                       ×0.5
   //   punto j → Choice Band / Choice Specs             ×1.5
   const atMods = []
+
+  // punto a — Tablets of Ruin e Vessel of Ruin: ×0,75 sull'ATTACCO di chi
+  // colpisce (`damage_MASTER.js:1913`). Prima cosa della catena, come nel
+  // riferimento, e con la stessa esenzione del portatore.
+  if (ruinInCampo('tablets') && !isSpecial && atkAbilEffect?.ruin !== 'tablets') {
+    atMods.push(MOD.X0_75)
+  }
+  else if (ruinInCampo('vessel') && isSpecial && atkAbilEffect?.ruin !== 'vessel') {
+    atMods.push(MOD.X0_75)
+  }
 
   // punto d — ×1.5 offensive.
   // Fire Mane e Flash Fire stavano fra i modificatori di POTENZA o di danno

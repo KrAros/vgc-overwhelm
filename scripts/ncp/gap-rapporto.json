@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T13:48:53.124Z",
+    "generatedAt": "2026-09-01T18:58:12.092Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 198,
-    "abilitaNelGap": 44,
+    "abilitaSenzaEffetto": 194,
+    "abilitaNelGap": 40,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -34,16 +34,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 387
-        }
-      },
-      {
-        "chiave": "beads of ruin",
-        "nome": "Beads of Ruin",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1000
         }
       },
       {
@@ -377,26 +367,6 @@
         }
       },
       {
-        "chiave": "sword of ruin",
-        "nome": "Sword of Ruin",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1000
-        }
-      },
-      {
-        "chiave": "tablets of ruin",
-        "nome": "Tablets of Ruin",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1000
-        }
-      },
-      {
         "chiave": "tera shell",
         "nome": "Tera Shell",
         "canale": "STR",
@@ -434,16 +404,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 389
-        }
-      },
-      {
-        "chiave": "vessel of ruin",
-        "nome": "Vessel of Ruin",
-        "canale": "STR",
-        "prova": {
-          "funzione": "abilityIgnore",
-          "file": "damage_MASTER.js",
-          "riga": 1000
         }
       },
       {

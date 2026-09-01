@@ -675,6 +675,38 @@ export const ABILITY_EFFECTS = {
   'fairy-aura': { aura: TYPES.FAIRY, showInSmogon: true },
   'dark-aura':  { aura: TYPES.DARK,  showInSmogon: true },
 
+  // ── Le quattro Rovina ────────────────────────────────────────────────────
+  //
+  // Abbassano di un quarto una statistica di TUTTI gli altri in campo: Tablets
+  // l'Attacco, Vessel l'Attacco Speciale, Sword la Difesa, Beads la Difesa
+  // Speciale. Un portatore ciascuna — Wo-Chien, Ting-Lu, Chien-Pao, Chi-Yu.
+  //
+  // ─── PERCHE' UN CAMPO SOLO CON QUATTRO VALORI ───────────────────────────
+  //
+  // Perche' nel riferimento sono un blocco solo, due `if / else if` gemelli:
+  // Tablets e Vessel nella catena della statistica d'ATTACCO
+  // (`damage_MASTER.js:1913`), Sword e Beads in quella della DIFESA (`:2082`).
+  // Quattro campi booleani avrebbero nascosto che sono la stessa cosa vista da
+  // due lati, e il motore avrebbe dovuto scrivere quattro condizioni invece di
+  // due.
+  //
+  // ─── PERCHE' SI LEGGONO DAI DUE SLOT, COME LE AURE ──────────────────────
+  //
+  // Nel riferimento sono una casella dell'interfaccia (`tablets-of-ruin`), non
+  // un'abilita' letta da uno slot: cosi' la puo' portare anche un alleato che
+  // nel calcolo non compare. Da noi valgono la stessa regola delle aure — si
+  // guarda l'abilita' di tutti e due i Pokemon dello scontro — perche' e' il
+  // modello che l'app ha gia' e perche' e' quello che Simone ha chiesto:
+  // contano dove i due interagiscono.
+  //
+  // Il portatore e' esente da se' stesso: la sua Rovina non abbassa la propria
+  // statistica. Sta scritto nel riferimento come `attacker.ability !== "..."`,
+  // ed e' confermato da Simone.
+  'tablets-of-ruin': { ruin: 'tablets', showInSmogon: true },
+  'vessel-of-ruin':  { ruin: 'vessel',  showInSmogon: true },
+  'sword-of-ruin':   { ruin: 'sword',   showInSmogon: true },
+  'beads-of-ruin':   { ruin: 'beads',   showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     
