@@ -173,7 +173,9 @@ export function creaHarness() {
       // ricava il verso — Attacco sul lato che attacca, Difesa Speciale su
       // quello che subisce.
       !!field.friendGuard, !!field.battery,
-      false,               // isProtect
+      // Era `false` fisso, quindi Unseen Fist e Piercing Drill non erano
+      // verificabili: il riferimento vedeva sempre un bersaglio scoperto.
+      !!field.protect,     // isProtect
       !!field.powerSpot, !!field.steelySpiritAlleato, false, // …, isNeutralizingGas
       false,               // isGmaxField
       !!field.flowerGiftSpD, !!field.flowerGiftAtk,

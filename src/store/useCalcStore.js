@@ -311,6 +311,7 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
       hh: campo.helpingHand, tw: campo.tailwind, av: campo.auroraVeil,
       bt: campo.battery, ps: campo.powerSpot, ss: campo.steelySpirit,
       fg: campo.friendGuard, fw: campo.flowerGift,
+      pt: campo.protect,
       ls: campo.lightScreen, rf: campo.reflect,  cr: campo.crit,
     }
     for (const [chiave, valore] of Object.entries(coppie)) {
@@ -405,6 +406,7 @@ export function decodeTeamsFromURL(encoded) {
         steelySpirit: coppia(f.ss),
         friendGuard:  coppia(f.fg),
         flowerGift:   coppia(f.fw),
+        protect:      coppia(f.pt),
       }
     }
 

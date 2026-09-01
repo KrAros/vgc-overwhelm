@@ -254,6 +254,7 @@ describe('battleState — buildField', () => {
       battery: false, powerSpot: false, steelySpiritAlleato: false,
       auroraVeil: false, lightScreen: false, reflect: false,
       friendGuard: false,
+      protect: false,
       flowerGiftAtk: false, flowerGiftSpD: false,
       trickRoom: false, tailwindT1: false, tailwindT2: false,
       atkTeamSide: 't1',
