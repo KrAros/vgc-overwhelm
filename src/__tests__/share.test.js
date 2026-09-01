@@ -186,6 +186,7 @@ describe('share — lo stato di campo viaggia nel link', () => {
     steelySpirit: { t1: true,  t2: true  },
     friendGuard:  { t1: false, t2: true  },
     flowerGift:   { t1: true,  t2: false },
+    protect:      { t1: false, t2: true  },
   }
 
   it('un link con Trick Room, Reflect e Tailwind li ripristina tutti', () => {

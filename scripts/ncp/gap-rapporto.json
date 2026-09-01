@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T06:22:54.428Z",
+    "generatedAt": "2026-09-01T13:48:53.124Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 200,
-    "abilitaNelGap": 46,
+    "abilitaSenzaEffetto": 198,
+    "abilitaNelGap": 44,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -287,16 +287,6 @@
         }
       },
       {
-        "chiave": "piercing drill",
-        "nome": "Piercing Drill",
-        "canale": "STR",
-        "prova": {
-          "funzione": "setIsQuarteredByProtect",
-          "file": "damage_MASTER.js",
-          "riga": 833
-        }
-      },
-      {
         "chiave": "power of alchemy",
         "nome": "Power of Alchemy",
         "canale": "STR",
@@ -444,16 +434,6 @@
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
           "riga": 389
-        }
-      },
-      {
-        "chiave": "unseen fist",
-        "nome": "Unseen Fist",
-        "canale": "STR",
-        "prova": {
-          "funzione": "setIsQuarteredByProtect",
-          "file": "damage_MASTER.js",
-          "riga": 833
         }
       },
       {

@@ -156,6 +156,14 @@ export function buildField(campo = {}, atkSide = 't1') {
     reflect:     !!campo.reflect?.[suo],
     friendGuard: !!campo.friendGuard?.[suo],
 
+    // Protect: e' il DIFENSORE che si protegge, quindi si legge dal lato
+    // opposto a chi attacca — come gli schermi.
+    //
+    // Fino a questa sessione `protect` esisteva nello store e NON arrivava
+    // qui, ne' al link, ne' a un componente: stato morto, dichiarato e mai
+    // usato. Adesso serve, perche' Unseen Fist e Piercing Drill lo leggono.
+    protect:     !!campo.protect?.[suo],
+
     // Flower Gift è UNA casella per lato letta da DUE versi: alza l'Attacco di
     // chi ce l'ha sul proprio lato, e la Difesa Speciale di chi ce l'ha sul
     // lato che subisce. Nel riferimento sono due campi (`isFlowerGiftAtk` e

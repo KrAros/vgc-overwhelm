@@ -1338,6 +1338,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Fluffy compare DUE volte, e non è una svista: le due metà stanno in punti
   // diversi della catena (h e n). Su una mossa Fuoco a contatto si applicano
   // entrambe e il netto è ×1, ma passando per due arrotondamenti distinti.
+  // Il quarto del Protect: serve che il bersaglio si stia proteggendo E che
+  // chi attacca sia uno dei due che lo bucano. Protect da solo non riduce
+  // niente — nel riferimento non c'e' nessun ramo che lo faccia.
+  const bucaProtect = field.protect === true && atkAbilEffect?.bucaProtect === true
+
   const finalMods = []
 
   if (schermoAttivo) finalMods.push(SCREEN_MOD)
@@ -1463,6 +1468,19 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // roll. Qui dentro si applica e basta.
     if (finalMods.length > 0) {
       damage = pokeRound(damage * chainMods(finalMods) / FIXED_POINT)
+    }
+
+    // punto j — il quarto di chi buca il Protect.
+    //
+    // Sta FUORI dalla catena finale e DOPO di essa (`damage_MASTER.js:2261`):
+    // e' un `pokeRound` suo, non un modificatore da concatenare. Metterlo in
+    // `finalMods` darebbe un numero vicino e diverso, perche' `chainMods`
+    // concatena in virgola fissa prima di arrotondare una volta sola.
+    //
+    // Essendo dentro il tiro, vale per ogni roll — e quindi anche per il
+    // secondo colpo di Parental Bond, che passa dalla stessa funzione.
+    if (bucaProtect) {
+      damage = pokeRound(damage * MOD.X0_25 / FIXED_POINT)
     }
 
     out.push(damage)

@@ -101,7 +101,8 @@
     "psShort": "FE",
     "ssShort": "IA",
     "fwShort": "Reg",
-    "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon."
+    "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon.",
+    "ptShort": "Prot"
   },
   "gap": {
     "badge": "Non calcolata",

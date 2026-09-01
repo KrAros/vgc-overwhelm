@@ -206,6 +206,28 @@ export const ABILITY_EFFECTS = {
   // nel vendor sono un elenco di nomi dentro la funzione e non un flag.
   'klutz':            { klutz: true, showInSmogon: true },
 
+  // ── Unseen Fist e Piercing Drill: bucano il Protect ─────────────────────
+  //
+  // ─── PROTECT DA SOLO NON FA NIENTE, ED E' LA COSA DA SAPERE ────────────
+  //
+  // Nel riferimento `field.isProtect` non blocca il danno: lo riduce a un
+  // QUARTO, e solo per chi il Protect lo buca (`damage_MASTER.js:833`):
+  //
+  //     field.isProtect && (move.isZ || move.isSignatureZ
+  //                         || attacker.isDynamax
+  //                         || attacker.ability === 'Piercing Drill'
+  //                         || (attacker.ability === 'Unseen Fist' && gen >= 10))
+  //
+  // Mosse Z e Dynamax da noi non esistono. Quindi «implementare Protect» e'
+  // implementare queste due, e l'interruttore del campo conta solo per loro.
+  //
+  // Il `gen >= 10` di Unseen Fist non e' trascritto: giriamo a 10, quindi non
+  // ha nulla su cui essere falso. Piercing Drill non ha nessun cancello.
+  //
+  // Un portatore legale ciascuna: Golurk-Mega ed Excadrill-Mega.
+  'unseen-fist':      { bucaProtect: true, showInSmogon: true },
+  'piercing-drill':   { bucaProtect: true, showInSmogon: true },
+
   // ── Heavy Metal e Light Metal: il peso, non il danno ────────────────────
   //
   // Non toccano nessuna catena di modificatori: cambiano il PESO, e il peso

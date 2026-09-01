@@ -101,7 +101,8 @@
     "psShort": "PS",
     "ssShort": "SS",
     "fwShort": "Flw",
-    "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's."
+    "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's.",
+    "ptShort": "Pro"
   },
   "gap": {
     "badge": "Not calculated",

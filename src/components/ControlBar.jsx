@@ -327,6 +327,7 @@ export default function ControlBar() {
   const steelySpirit = useCalcStore(s => s.steelySpirit)
   const friendGuard  = useCalcStore(s => s.friendGuard)
   const flowerGift   = useCalcStore(s => s.flowerGift)
+  const protect      = useCalcStore(s => s.protect)
   const team1        = useCalcStore(s => s.team1)
   const team2        = useCalcStore(s => s.team2)
   const toggleModifier   = useCalcStore(s => s.toggleModifier)
@@ -484,6 +485,16 @@ export default function ControlBar() {
     { label: t('ui.ssShort'), nome: t('abilities.steely-spirit'), mod: 'steelySpirit', active: 'bg-slate-300  text-gray-900' },
     { label: t('ui.fwShort'), nome: t('abilities.flower-gift'),   mod: 'flowerGift',   active: 'bg-rose-300   text-gray-900' },
   ]
+
+  /* Protect non e' un'abilita' dell'alleato: e' una MOSSA del difensore, quindi
+     sta con le altre cinque mosse della barra e prende il nome da `moves.*`.
+
+     Sta qui pero' e non fra quelle perche' la sua semantica e' la loro rovescia:
+     le altre potenziano chi le ha, questa riduce a un quarto il danno di chi
+     riesce comunque a colpire — e solo per Unseen Fist e Piercing Drill.
+     Contro tutti gli altri l'interruttore non cambia un numero, ed e' giusto
+     cosi': il riferimento non ha nessun ramo che lo faccia. */
+  const MOD_PROTECT = { label: t('ui.ptShort'), nome: t('moves.protect'), mod: 'protect', active: 'bg-violet-400 text-gray-900' }
   const MODS_ALLEATO_DESKTOP = MODS_ALLEATO.map(({ nome, mod, active }) => ({ label: nome, mod, active }))
 
   // Le sigle sono per lo spazio; il nome per esteso viene dalla STESSA fonte da
@@ -496,6 +507,7 @@ export default function ControlBar() {
     { label: t('ui.critShort'), nome: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
     { label: t('ui.twShort'),   nome: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
     ...MODS_ALLEATO,
+    MOD_PROTECT,
   ]
 
   // Cinque di queste sei levette SONO mosse, quindi l'etichetta la prendono da
@@ -517,11 +529,12 @@ export default function ControlBar() {
     { label: t('ui.crit'),            mod: 'crit',        active: 'bg-red-400    text-gray-900' },
     { label: t('moves.tailwind'),     mod: 'tailwind',    active: 'bg-cyan-400   text-gray-900' },
     ...MODS_ALLEATO_DESKTOP,
+    { label: MOD_PROTECT.nome, mod: 'protect', active: MOD_PROTECT.active },
   ]
 
   const modVals = {
     helpingHand, auroraVeil, lightScreen, reflect, crit, tailwind,
-    battery, powerSpot, steelySpirit, friendGuard, flowerGift,
+    battery, powerSpot, steelySpirit, friendGuard, flowerGift, protect,
   }
 
   const btnBase   = 'flex items-center justify-center gap-1 text-xs px-2.5 py-1 rounded border transition-colors'
