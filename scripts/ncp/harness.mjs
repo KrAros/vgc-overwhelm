@@ -212,6 +212,15 @@ export function creaHarness() {
     'Fairy Aura': 'fairy-aura',
     'Dark Aura': 'dark-aura',
     'Aura Break': 'aura-break',
+    // Le quattro Rovina: nel riferimento sono caselle dell'interfaccia, non
+    // abilita' lette da uno slot, esattamente come le aure. Il nostro modello
+    // le legge dai due slot dello scontro, quindi qui si spunta la casella
+    // quando uno dei due la porta — la stessa traduzione gia' fatta per le
+    // aure, e lo stesso motivo.
+    'Tablets of Ruin': 'tablets-of-ruin',
+    'Vessel of Ruin': 'vessel-of-ruin',
+    'Sword of Ruin': 'sword-of-ruin',
+    'Beads of Ruin': 'beads-of-ruin',
   }
   const caselleDa = (...abilitaNCP) =>
     [...new Set(abilitaNCP.map(x => CASELLE_DA_ABILITA[x]).filter(Boolean))]

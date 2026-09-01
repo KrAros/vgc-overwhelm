@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T13:48:53.640Z",
+    "generatedAt": "2026-09-01T18:58:12.577Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -11,7 +11,7 @@
     "strumentiNelMotore": 27,
     "classificate": 12,
     "badgeDaTogliere": 5,
-    "collisioniResidue": 7,
+    "collisioniResidue": 3,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
