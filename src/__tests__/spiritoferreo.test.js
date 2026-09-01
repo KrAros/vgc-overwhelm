@@ -2,14 +2,14 @@
 // Copyright (C) 2026 KrAros
 
 /**
- * src/__tests__/ingegnoAcciaio.test.js
+ * src/__tests__/spiritoferreo.test.js
  *
- * Ingegno Acciaio (`steely-spirit`): ×1,5 sulle mosse di tipo Acciaio.
+ * Spiritoferreo (`steely-spirit`): ×1,5 sulle mosse di tipo Acciaio.
  *
  * ─── LA TERZA DELLE SEI, E L'ULTIMA RAGGIUNGIBILE ──────────────────────────
  *
  * Il ramo delle «1.5x Abilities» (`damage_MASTER.js:1668`) ne raccoglie sei.
- * Con questa siamo a tre: Megalancio, Ferromascella, Ingegno Acciaio. Delle
+ * Con questa siamo a tre: Megalancio, Ferromascella, Spiritoferreo. Delle
  * altre tre, due non sono raggiungibili — Flare Boost vuole lo stato
  * «bruciato», Toxic Boost «avvelenato», e gli stati non li modelliamo (§1.12)
  * — e Technician sì, ma ha una condizione che dipende dalla potenza GIÀ
@@ -17,7 +17,7 @@
  *
  * ─── METÀ ABILITÀ, METÀ CASELLA DI CAMPO ───────────────────────────────────
  *
- * Nel riferimento Ingegno Acciaio compare DUE volte, con lo stesso `0x1800`:
+ * Nel riferimento Spiritoferreo compare DUE volte, con lo stesso `0x1800`:
  *
  *     punto g      attacker.ability === "Steely Spirit"   ← questa
  *     punto d.iii  field.isSteelySpirit                   ← l'alleato
@@ -54,7 +54,7 @@ const nostro = (atkAbility, move) => calculateDamage({
   attacker: perrserker(atkAbility), defender: INCINEROAR, move, field: {}, debug: false,
 })
 
-describe('Ingegno Acciaio, contro il riferimento', () => {
+describe('Spiritoferreo, contro il riferimento', () => {
   let harness
 
   beforeAll(async () => {
@@ -91,7 +91,7 @@ describe('Ingegno Acciaio, contro il riferimento', () => {
   }
 })
 
-describe('Ingegno Acciaio muove il numero, e solo sull\'Acciaio', () => {
+describe('Spiritoferreo muove il numero, e solo sull\'Acciaio', () => {
   it('Iron Head cresce di metà', () => {
     expect(nostro('steely-spirit', 'iron head').maxDmg)
       .toBeGreaterThan(nostro(null, 'iron head').maxDmg)
@@ -114,7 +114,7 @@ describe('Ingegno Acciaio muove il numero, e solo sull\'Acciaio', () => {
  * ─── LA METÀ CHE MANCAVA ADESSO C'È ────────────────────────────────────────
  *
  * Questo blocco si chiamava «la metà che non c'è resta dichiarata» e registrava
- * un'assenza: l'Ingegno Acciaio dell'ALLEATO è `field.isSteelySpirit`, una
+ * un'assenza: l'Spiritoferreo dell'ALLEATO è `field.isSteelySpirit`, una
  * casella di campo, e caselle di campo non ne avevamo.
  *
  * Diceva anche dove guardare — «se un giorno arrivassero le caselle di campo,

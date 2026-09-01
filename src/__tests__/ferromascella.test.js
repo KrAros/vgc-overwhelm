@@ -16,7 +16,7 @@
  *
  * Delle quattro che restano, due non sono raggiungibili da noi: Flare Boost
  * vuole lo stato «bruciato» e Toxic Boost lo stato «avvelenato», e gli stati
- * non sono modellati (§1.12). Technician e Ingegno Acciaio sì.
+ * non sono modellati (§1.12). Technician e Spiritoferreo sì.
  *
  * ─── LE MOSSE DI MORSO VENGONO DAL VENDOR ──────────────────────────────────
  *
