@@ -1056,7 +1056,25 @@ export const ABILITY_EFFECTS = {
   'oblivious': { intimidateAnnulla: true },
   'own-tempo': { intimidateAnnulla: true },
   'purifying-salt': { purifyingSalt: true, showInSmogon: true },
-  'scrappy': { intimidateAnnulla: true },
+  // ─── SCRAPPY AVEVA META' DELL'EFFETTO, E IL REGISTRO NON SE NE ACCORGEVA ──
+  //
+  // La voce c'era, con `intimidateAnnulla`, e questo bastava a `haEffetto` per
+  // dichiararla calcolata: fuori dal divario, nessun segnalino. Ma la sua meta'
+  // principale — le mosse Normale e Lotta colpiscono i Ghost
+  // (`damage_MASTER.js:230`) — non era implementata, e sono quattordici le
+  // specie che ce l'hanno.
+  //
+  // E' un buco che il registro non poteva vedere: guarda se una voce ha UN
+  // effetto, non se ha IL suo effetto. Mind's Eye, che sta nella stessa
+  // clausola del riferimento, era invece nel divario perche' non aveva voce
+  // affatto.
+  'scrappy':   { intimidateAnnulla: true, ignoraGhost: true },
+  'minds-eye': { ignoraGhost: true, showInSmogon: true },
+
+  // Terapagos-Terastal: a vita piena porta ogni colpo che sarebbe sopra 0,5 a
+  // esattamente 0,5. Vedi `typeChart.js` per la condizione sui punti salute,
+  // che non modelliamo e assumiamo sempre pieni.
+  'tera-shell': { teraShell: true, showInSmogon: true },
   'solid-rock': { filter: true, showInSmogon: true },
   'thick-fat': { thickFat: true, showInSmogon: true },
   'water-bubble': { waterBubble: true, showInSmogon: true },

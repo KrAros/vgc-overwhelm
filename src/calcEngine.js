@@ -429,7 +429,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   }
 
   // effectiveness calcolata DOPO la conversione ate
-  const effectiveness = getEffectiveness(moveType, defTypes)
+  // Scrappy e Mind's Eye stanno nella stessa clausola del riferimento
+  // (`damage_MASTER.js:230`); Tera Shell nel punto che la chiama (`:215`).
+  //
+  // Tera Shell si legge da `defAbilEffect`, che Mold Breaker azzera: nel
+  // riferimento la condizione guarda `defAbility`, cioe' il valore gia'
+  // sostituito con `[ignored]`. Quindi Mold Breaker la spegne, e da noi lo fa
+  // senza che serva scriverlo.
+  const effectiveness = getEffectiveness(moveType, defTypes, {
+    ignoraGhost: atkAbilEffect?.ignoraGhost === true,
+    teraShell: defAbilEffect?.teraShell === true,
+  })
 
   // ── Meteo: sole e pioggia, normali ed estremi ────────────────────────────
   // NCP (`calcGeneralMods`, punto c) riconosce il sole con `indexOf("Sun") > -1`:
