@@ -803,6 +803,32 @@ export const ABILITY_EFFECTS = {
   'trace':            { trace: true, showInSmogon: true },
   'neutralizing-gas': { gasNeutro: true, showInSmogon: true },
 
+  // ── Le quattro che leggono lo STATO ──────────────────────────────────────
+  //
+  // Guts       x1,5 all'attacco fisico, con QUALUNQUE stato   (`:1941`)
+  // Flare Boost x1,5 alla potenza speciale, se bruciato        (`:1670`)
+  // Toxic Boost x1,5 alla potenza fisica, se avvelenato        (`:1671`)
+  // Marvel Scale x1,5 alla Difesa di chi subisce, con qualunque stato (`:2103`)
+  //
+  // ─── PERCHE' NIENTE LEVETTA ─────────────────────────────────────────────
+  //
+  // Perche' adesso lo stato c'e'. Una levetta che dice «fidati, l'abilita' e'
+  // attiva» e' un surrogato: serviva finche' la condizione non era esprimibile.
+  // Queste quattro la condizione ce l'hanno, e la leggono.
+  //
+  // Guts porta anche la seconda meta' della propria clausola, che sta altrove:
+  // annulla il dimezzamento da bruciatura (`:2237`). Chi ha Guts ed e'
+  // bruciato prende il x1,5 E non prende il dimezzamento — due effetti, una
+  // riga sola nel riferimento.
+  //
+  // Flare Boost e Toxic Boost stanno nella catena della POTENZA, Guts e Marvel
+  // Scale in quella della statistica: sono tre punti diversi, e il campo dice
+  // quale.
+  'guts':         { guts: true, showInSmogon: true },
+  'flare-boost':  { flareBoost: true, showInSmogon: true },
+  'toxic-boost':  { toxicBoost: true, showInSmogon: true },
+  'marvel-scale': { marvelScale: true, showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     

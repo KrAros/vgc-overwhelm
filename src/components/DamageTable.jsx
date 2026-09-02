@@ -47,6 +47,12 @@ function immuneLabel(result) {
   }
   // Meteo estremo: la mossa non viene ridotta, fallisce. Il colore è quello
   // del meteo perché la causa è di campo, non del difensore.
+  // La mossa che fallisce da se', senza che il difensore c'entri: oggi solo
+  // Dream Eater contro chi non dorme (`calcEngine.js`, `reason: 'move'`).
+  if (result.reason === 'move') {
+    const nome = toTitleCase(result.moveName || '')
+    return { text: `Fails (${nome})`, cls: 'text-gray-400' }
+  }
   if (result.reason === 'weather') {
     const nome = result.weatherName === 'heavy rain' ? 'Heavy Rain' : 'Harsh Sunshine'
     return { text: `Fails (${nome})`, cls: 'text-sky-400' }

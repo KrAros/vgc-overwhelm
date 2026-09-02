@@ -209,7 +209,8 @@
     "ability": "Abilità",
     "clear_pokemon": "Svuota il Pokémon",
     "clear_item": "Svuota lo strumento",
-    "clear_move": "Svuota la mossa"
+    "clear_move": "Svuota la mossa",
+    "status": "Stato del Pokémon"
   },
   "natures": {
     "adamant": "Decisa",
@@ -1978,5 +1979,13 @@
     "defeatist": "PS sopra la metà — attacco pieno",
     "wind-power": "Non ancora caricata — serve un colpo di vento",
     "trace": "Non ancora copiata — nessuna abilità presa in prestito"
+  },
+  "statuses": {
+    "healthy": "Sano",
+    "burned": "Bruciato",
+    "paralyzed": "Paralizzato",
+    "poisoned": "Avvelenato",
+    "badly-poisoned": "Gravemente avvelenato",
+    "asleep": "Addormentato"
   }
 }

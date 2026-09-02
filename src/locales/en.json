@@ -209,7 +209,8 @@
     "ability": "Ability",
     "clear_pokemon": "Clear Pokémon",
     "clear_item": "Clear item",
-    "clear_move": "Clear move"
+    "clear_move": "Clear move",
+    "status": "Pokémon status"
   },
   "natures": {
     "adamant": "Adamant",
@@ -1978,5 +1979,13 @@
     "defeatist": "HP above half — full attack",
     "wind-power": "Not charged yet — needs a wind move",
     "trace": "Not copied yet — no borrowed ability"
+  },
+  "statuses": {
+    "healthy": "Healthy",
+    "burned": "Burned",
+    "paralyzed": "Paralyzed",
+    "poisoned": "Poisoned",
+    "badly-poisoned": "Badly poisoned",
+    "asleep": "Asleep"
   }
 }

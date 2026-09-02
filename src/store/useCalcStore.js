@@ -18,7 +18,7 @@ import { create } from 'zustand'
 import { slotConAbilitaValida, abilitaPerSpecie } from '../lib/abilitaSpecie.js'
 import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
 import { NATURE_MODIFIERS } from '../data/natures.js'
-import { MAX_SP_PER_STAT } from '../lib/rules.js'
+import { MAX_SP_PER_STAT, STATI } from '../lib/rules.js'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 
@@ -40,6 +40,11 @@ export const emptyPokemon = () => ({
   nature: null,
   ability: null,
   item: null,
+  // Lo stato del Pokemon nel turno che si sta calcolando. `null` e 'healthy'
+  // valgono lo stesso — il motore normalizza — ma il default e' `null` perche'
+  // «non l'ho scelto» e «l'ho scelto sano» si scrivono uguale nel link, e
+  // scriverne uno solo tiene il link corto.
+  status: null,
   atkBoost: 0,
   defBoost: 0,
   spAtkBoost: 0,
@@ -281,6 +286,9 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     // se un giorno lo diventasse un `if` semplice lo butterebbe via in
     // silenzio. È lo stesso errore che `multiscaleActive` evita qui sopra.
     if (slot.colpiScelti != null) s.cs = slot.colpiScelti
+    // Lo stato: si scrive solo se c'e' e non e' «sano», per non allungare il
+    // link con l'unico valore che il motore tratta come assenza.
+    if (slot.status && slot.status !== 'healthy') s.st = slot.status
 
     // I flag abilità: si scrive solo ciò che differisce dal default. Nota che
     // `multiscaleActive` è `true` di default, quindi qui si registra quando è
@@ -354,6 +362,9 @@ export function decodeTeamsFromURL(encoded) {
               // payload, e chi lo apre non ha modo di accorgersene.
               ability:    abilitaPerSpecie(chiave, typeof grezzo.a === 'string' ? grezzo.a : null),
               item:       typeof grezzo.i === 'string' ? grezzo.i : null,
+              // Un valore fuori elenco diventa `null`: un link storpiato non
+              // deve produrre uno stato che il motore non sa leggere.
+              status:     STATI.includes(grezzo.st) ? grezzo.st : null,
               atkBoost:   intero(grezzo.ab,  -6, 6),
               defBoost:   intero(grezzo.db,  -6, 6),
               spAtkBoost: intero(grezzo.sab, -6, 6),
@@ -557,6 +568,9 @@ const useCalcStore = create((set) => ({
       saveToLocalStorage(t1, t2)
       return next
     }),
+
+  setStatus: (team, index, status) =>
+    set((s) => updateSlot(s, team, index, { status: status || null })),
 
   setNature: (team, index, nature) =>
     set((s) => updateSlot(s, team, index, { nature })),

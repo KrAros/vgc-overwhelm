@@ -17,6 +17,7 @@ import { MAX_SP_TOTAL, MAX_SP_PER_STAT } from '../../lib/rules.js'
 
 import PresetSelect, { CustomSetModal } from './PresetSelect.jsx'
 import StatRow from './StatRow.jsx'
+import StatusSelect from './StatusSelect.jsx'
 import { PokemonSearch, MoveSearch, ItemSearch, AbilitySelect } from './SearchSelects.jsx'
 import { useTranslation } from 'react-i18next'
 import AbilityFlags from './AbilityFlags.jsx'
@@ -33,6 +34,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const level          = useCalcStore(s => s.level)
   const setPokemon     = useCalcStore(s => s.setPokemon)
   const setNature      = useCalcStore(s => s.setNature)
+  const setStatus      = useCalcStore(s => s.setStatus)
   const setSPs         = useCalcStore(s => s.setSPs)
   const setMove        = useCalcStore(s => s.setMove)
   const setBoost       = useCalcStore(s => s.setBoost)
@@ -56,6 +58,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const nature       = pokemon?.nature || null
   const item         = pokemon?.item || null
   const ability      = pokemon?.ability || null
+  const status       = pokemon?.status || null
   const abilityFlags     = pokemon?.abilityFlags || {}
   const lastRespectsKOs  = pokemon?.lastRespectsKOs ?? 0
   const hasLastRespects  = pokemon?.moves?.some(m => m === 'last respects')
@@ -359,6 +362,15 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 {strumentoNonCalcolato(item) && (
                   <div className="mt-1"><BadgeNonCalcolata tipo="item" /></div>
                 )}
+              </div>
+            </div>
+          )}
+          {data && (
+            /* Lo stato: riga sua, mezza larghezza. Il perche' di tutt'e due le
+               scelte sta in `StatusSelect.jsx`, con le misure. */
+            <div className="flex gap-2 w-full mt-2">
+              <div className="w-full sm:w-1/2">
+                <StatusSelect value={status} onChange={v => setStatus(team, index, v)} />
               </div>
             </div>
           )}

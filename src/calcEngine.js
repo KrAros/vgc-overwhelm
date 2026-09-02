@@ -8,6 +8,11 @@ import { ITEM_EFFECTS } from './data/itemEffects.js'
 import { ABILITY_EFFECTS } from './data/abilityEffects.js'
 import { IS_DEBUG, publishDebugLog } from './lib/debugBus.js'
 import {
+  STATI_VELENO,
+  MOSSE_X2_STATO_QUALUNQUE, MOSSE_X2_VELENO, MOSSE_X2_PARALISI, MOSSE_X2_SONNO,
+  STATI_CHE_ACCENDONO_FACADE, MOSSE_CHE_IGNORANO_BRUCIATURA,
+} from './lib/rules.js'
+import {
   LEVEL,
   MAX_SP_TOTAL,
   SCREEN_MOD,
@@ -154,6 +159,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkSpDefBoost = 0,
     atkSpeBoost = 0,
     atkAbilityFlags = {},
+    // Lo stato di chi attacca. Sei valori (`rules.js` → `STATI`); `null` e
+    // 'healthy' valgono lo stesso.
+    atkStatus = null,
     lastRespectsKOs = 0,
     // Quante volte colpisce una mossa multi-colpo. Come `lastRespectsKOs`:
     // uno stato che dichiara chi usa l'app, non un numero che il motore possa
@@ -177,6 +185,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     defSpAtkBoost = 0,
     defSpeBoost = 0,
     defAbilityFlags = {},
+    // Lo stato di chi subisce. Lo leggono Hex, Venoshock, Smelling Salts,
+    // Wake-Up Slap, Dream Eater e Marvel Scale.
+    defStatus = null,
   } = defender
 
   validateSPs(atkSPs, debug)
@@ -479,6 +490,19 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (defAbilEffect?.damp === true || atkAbilEffect?.damp === true) &&
     MOSSE_ANNULLATE_DA_DAMP.has(move)
 
+  // Dream Eater contro chi NON dorme non fa niente (`damage_MASTER.js:1163`):
+  // il riferimento esce con danno zero, dentro `immunityChecks`.
+  //
+  // Non e' un'immunita' del difensore — e' la mossa che fallisce — quindi il
+  // motivo e' `move` e non `ability`, e il riquadro scrive «Fallisce» col nome
+  // della mossa, come gia' fa per le mosse Fuoco sotto pioggia intensa.
+  //
+  // Comatose la sbloccherebbe (vale come «addormentato»): non e' implementata,
+  // e il giorno che entra si aggiunge qui.
+  if (move === 'dream eater' && (defStatus || 'healthy') !== 'asleep') {
+    return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+
   if (isImmuneDaAbilita) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
@@ -723,9 +747,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     }
   }
 
+  // ─── LE MOSSE CHE LO STATO RADDOPPIA ──────────────────────────────────────
+  //
+  // Nel riferimento sono rami del `switch` di `calcBasePower`
+  // (`damage_MASTER.js:1405-1419`) e il punto u di `calcBPMods` (`:1770`).
+  // Raddoppiano la POTENZA BASE, quindi stanno qui e non fra i moltiplicatori:
+  // un ×2 sulla potenza base passa poi per Technician, che guarda il numero.
+  //
+  // Ognuna legge uno stato diverso, e su un lato diverso. Le quattro qui sotto
+  // guardano CHI SUBISCE; Facade guarda CHI ATTACCA, ed e' l'unica.
+  //
+  // Comatose non c'e' ancora: nel riferimento vale come «addormentato» per Hex
+  // e Wake-Up Slap (`:1407`, `:1417`). Resta nel divario, e il giorno che
+  // entra si aggiunge in queste due condizioni.
+  const statoDif = defStatus || 'healthy'
+  const statoAtk = atkStatus || 'healthy'
+
+  const raddoppiaPerStato =
+    (MOSSE_X2_STATO_QUALUNQUE.has(move) && statoDif !== 'healthy') ||
+    (MOSSE_X2_VELENO.has(move)   && STATI_VELENO.has(statoDif)) ||
+    (MOSSE_X2_PARALISI.has(move) && statoDif === 'paralyzed') ||
+    (MOSSE_X2_SONNO.has(move)    && statoDif === 'asleep') ||
+    (move === 'facade' && STATI_CHE_ACCENDONO_FACADE.has(statoAtk))
+
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
     : isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
+    : raddoppiaPerStato ? moveData.power * 2
     : moveData.power
 
   // ── Contatto effettivo ───────────────────────────────────────────────────
@@ -831,7 +879,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // che prosegue col paradosso e con Fur Coat. Qui apre la stessa catena, con
   // lo stesso ordine: se un giorno arrivasse un caso a tre modificatori la
   // posizione conterebbe, e dev'essere gia' quella giusta.
-  if (defAbilEffect?.grassPelt && field.terrain === 'grassy' && !isSpecial) {
+  // Marvel Scale sta nello STESSO `if` di Grass Pelt (`:2103`), in `or`: x1,5
+  // sulla Difesa di chi subisce, con qualunque stato. Finalmente ha una
+  // condizione da leggere.
+  if ((defAbilEffect?.marvelScale && statoDif !== 'healthy' && !isSpecial)
+      || (defAbilEffect?.grassPelt && field.terrain === 'grassy' && !isSpecial)) {
     dfMods.push(MOD.X1_5)
   }
   else if (paradossoDifesa) dfMods.push(MOD.X1_3)
@@ -898,7 +950,10 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // quando i punti salute sono a un terzo o meno (`:1942-1945`). Stanno
     // nello stesso `if` del resto del punto d, in `or`.
     (atkAbilEffect?.psBassiTipo !== undefined && moveType === atkAbilEffect.psBassiTipo
-      && atkAbilityFlags.interruttore === true)
+      && atkAbilityFlags.interruttore === true) ||
+    // Guts: x1,5 sull'attacco fisico con qualunque stato (`:1941`). E' la
+    // PRIMA condizione dello stesso `if`, in `or` con tutte le altre.
+    (atkAbilEffect?.guts && statoAtk !== 'healthy' && !isSpecial)
 
   // punto e — Protosynthesis / Quark Drive sul lato offensivo, e Transistor:
   // ×1.3 se la statistica più alta è quella con cui si sta attaccando.
@@ -1310,6 +1365,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // leggono flag diversi, ma non possono accendersi in due (un Pokémon ha
   // un'abilità sola).
   if (atkAbilEffect?.technician && tempBP <= 60) bpMods.push(MOD.X1_5)
+  // Flare Boost e Toxic Boost stanno nello stesso `if` di Tecnico (`:1670-1671`),
+  // e sono le due che aspettavano lo stato. Leggono anche la CATEGORIA, e sono
+  // opposte: Flare Boost solo speciale, Toxic Boost solo fisico.
+  if (atkAbilEffect?.flareBoost && statoAtk === 'burned' && isSpecial) bpMods.push(MOD.X1_5)
+  if (atkAbilEffect?.toxicBoost && STATI_VELENO.has(statoAtk) && !isSpecial) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.megaLauncher && isPulse) bpMods.push(MOD.X1_5)
   if (atkAbilEffect?.strongJaw && isBite) bpMods.push(MOD.X1_5)
   // Spiritoferreo, solo la metà «ce l'ha chi attacca». Quella dell'ALLEATO è
@@ -1596,6 +1656,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
    * (`damage_MASTER.js:2160`, subito dopo il modificatore delle mosse ad
    * area) ed è il motivo per cui questo è diventato un parametro.
    */
+  // La bruciatura non dipende dal roll: si decide una volta.
+  const bruciaturaDimezza =
+    statoAtk === 'burned' && !isSpecial
+    && !atkAbilEffect?.guts
+    && !MOSSE_CHE_IGNORANO_BRUCIATURA.has(move)
+
   const tiraRoll = (base) => {
     const out = []
     for (let r = 85; r <= 100; r++) {
@@ -1619,6 +1685,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
     // Efficacia tipo
     damage = Math.floor(damage * effectiveness)
+
+    // punto h — la bruciatura dimezza il danno fisico.
+    //
+    // ─── NON E' UN MODIFICATORE FINALE, ED E' LA COSA DA SAPERE ────────────
+    //
+    // Sta FRA l'efficacia di tipo (punto g) e la catena finale (punto i), ed e'
+    // un `Math.floor(damage / 2)` nudo — non un `0x800` da concatenare
+    // (`damage_MASTER.js:2255`). Metterlo in `finalMods` darebbe un numero
+    // vicino e diverso, perche' `chainMods` accumula in virgola fissa e
+    // arrotonda una volta sola, mentre qui si tronca subito.
+    //
+    // E' lo stesso genere di trappola del quarto di Protect, dall'altra parte
+    // della catena.
+    //
+    // Le due eccezioni sono trascritte: Guts, che la annulla, e le mosse con
+    // `ignoresBurn`, che nel vendor e' una sola — Facade.
+    if (bruciaturaDimezza) damage = Math.floor(damage / 2)
 
     // ── CATENA FINALE (`calcFinalMods` di NCP) ─────────────────────────────
     // `finalMods` è costruita UNA volta sola, fuori dal loop: non dipende dal

@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T07:42:25.570Z",
+    "generatedAt": "2026-09-02T11:48:40.046Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
     "fileEsaminati": 21,
-    "abilitaNelMotore": 49,
+    "abilitaNelMotore": 50,
     "strumentiNelMotore": 27,
     "classificate": 15,
     "badgeDaTogliere": 5,
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 738,
+        "riga": 786,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -259,7 +259,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 504,
+          "riga": 528,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -323,7 +323,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 738,
+          "riga": 786,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -397,6 +397,14 @@
           "file": "src/lib/rules.js",
           "riga": 510,
           "testo": "'quark-drive',"
+        }
+      },
+      {
+        "chiave": "quick feet",
+        "prova": {
+          "file": "src/utils/speedOrder.js",
+          "riga": 225,
+          "testo": "const quickFeet = normalizeAbilityKey(pokemon.ability) === 'quick-feet'"
         }
       },
       {

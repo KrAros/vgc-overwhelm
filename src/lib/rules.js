@@ -711,3 +711,54 @@ export const ABILITA_NON_SPEGNIBILI = new Set([
   'zen-mode',
   'zero-to-hero',
 ])
+
+/**
+ * ─── GLI STATI ──────────────────────────────────────────────────────────────
+ *
+ * Sono sei, e sono quelli che il riferimento sa nominare: `Healthy`, `Burned`,
+ * `Paralyzed`, `Poisoned`, `Badly Poisoned`, `Asleep`.
+ *
+ * Congelato NON c'e'. Cercato in tutto `vendor/ncp/`: la stringa `Frozen` non
+ * compare da nessuna parte. Metterlo nel menu' vorrebbe dire offrire una scelta
+ * che non cambia un numero — e Simone ha confermato che nel gioco non esiste
+ * piu'. `Drowsy` c'e', ma solo dentro un ramo `gen == 9.5` che non ci riguarda.
+ *
+ * L'ordine e' quello del menu': prima «sano», poi i cinque in ordine di quanto
+ * spesso si vedono in doppi.
+ */
+export const STATI = ['healthy', 'burned', 'paralyzed', 'poisoned', 'badly-poisoned', 'asleep']
+
+/** Vero per i due avvelenamenti, che il riferimento tratta quasi sempre insieme. */
+export const STATI_VELENO = new Set(['poisoned', 'badly-poisoned'])
+
+/**
+ * ─── LE MOSSE CHE LO STATO RADDOPPIA ────────────────────────────────────────
+ *
+ * Trascritte dal `switch` di `calcBasePower` (`damage_MASTER.js:1405-1419`) e
+ * dal punto u di `calcBPMods` (`:1770-1772`). Ognuna guarda uno stato diverso,
+ * e su un lato diverso — ed e' il motivo per cui sono quattro insiemi e non
+ * uno: Facade legge lo stato di CHI ATTACCA, le altre quello di CHI SUBISCE.
+ *
+ * Hex e Infernal Parade raddoppiano su QUALUNQUE stato; Venoshock e Barb
+ * Barrage sul veleno; Smelling Salts sulla paralisi; Wake-Up Slap sul sonno.
+ *
+ * Facade raddoppia su bruciatura, paralisi o veleno — NON sul sonno. E non e'
+ * una svista: nel riferimento la lista e' scritta per esteso
+ * (`["Burned", "Paralyzed", "Poisoned", "Badly Poisoned"]`), e «Asleep» non
+ * c'e'.
+ */
+export const MOSSE_X2_STATO_QUALUNQUE = new Set(['hex', 'infernal parade'])
+export const MOSSE_X2_VELENO          = new Set(['venoshock', 'barb barrage'])
+export const MOSSE_X2_PARALISI        = new Set(['smelling salts'])
+export const MOSSE_X2_SONNO           = new Set(['wake-up slap'])
+export const STATI_CHE_ACCENDONO_FACADE = new Set(['burned', 'paralyzed', 'poisoned', 'badly-poisoned'])
+
+/**
+ * Le mosse che ignorano il dimezzamento da bruciatura (`move.ignoresBurn`).
+ *
+ * Nel vendor ce n'e' UNA: Facade (`move_data.js:3415`). Cercato `ignoresBurn`
+ * in tutti i file — compare li' e nella condizione che la legge, e basta.
+ * L'insieme esiste lo stesso perche' e' un insieme nel riferimento, e perche'
+ * un giorno potrebbe averne due.
+ */
+export const MOSSE_CHE_IGNORANO_BRUCIATURA = new Set(['facade'])

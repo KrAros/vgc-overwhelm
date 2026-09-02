@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T07:39:15.721Z",
+    "generatedAt": "2026-09-02T11:48:39.655Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 180,
-    "abilitaNelGap": 18,
+    "abilitaSenzaEffetto": 176,
+    "abilitaNelGap": 14,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -47,16 +47,6 @@
         }
       },
       {
-        "chiave": "flare boost",
-        "nome": "Flare Boost",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1670
-        }
-      },
-      {
         "chiave": "forecast",
         "nome": "Forecast",
         "canale": "STR",
@@ -74,26 +64,6 @@
           "funzione": "checkAbilityTypeChange",
           "file": "damage_MASTER.js",
           "riga": 1081
-        }
-      },
-      {
-        "chiave": "guts",
-        "nome": "Guts",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1941
-        }
-      },
-      {
-        "chiave": "marvel scale",
-        "nome": "Marvel Scale",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcDefMods",
-          "file": "damage_MASTER.js",
-          "riga": 2103
         }
       },
       {
@@ -184,16 +154,6 @@
           "funzione": "GET_DAMAGE_SV",
           "file": "damage_SV.js",
           "riga": 135
-        }
-      },
-      {
-        "chiave": "toxic boost",
-        "nome": "Toxic Boost",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1671
         }
       }
     ],
