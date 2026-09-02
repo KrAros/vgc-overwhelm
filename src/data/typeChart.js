@@ -82,14 +82,57 @@ export const TYPE_CHART = [
   [ 1,-1, 1, 1, 1, 1, 2,-1, 1, 1, 1, 1, 1, 1, 2, 2,-1, 1],
 ]
 
-export function getEffectiveness(moveType, defTypes) {
+/**
+ * L'efficacia di UN tipo difensore, trascritta da `getSingleTypeEffectiveness`
+ * (`damage_MASTER.js:229`).
+ *
+ * Il riferimento calcola i due tipi separatamente e poi moltiplica: non e' un
+ * dettaglio di stile. L'eccezione dei Ghost vale PER TIPO, quindi su un
+ * Ghost/Buio colpito da una mossa Normale il primo tipo diventa 1 e il secondo
+ * resta 1 — mentre uscendo subito allo zero, come faceva la versione
+ * precedente, non ci si arrivava nemmeno.
+ */
+function efficaciaSingola(moveType, defType, ignoraGhost) {
+  // Scrappy, Mind's Eye e la mossa Foresight: le mosse Normale e Lotta
+  // colpiscono i Ghost invece di non toccarli (`:230`).
+  if (ignoraGhost && defType === TYPES.GHOST
+      && (moveType === TYPES.NORMAL || moveType === TYPES.FIGHTING)) {
+    return 1
+  }
+  const val = TYPE_CHART[moveType][defType]
+  if (val === 0) return 0
+  if (val === 2) return 2
+  if (val === -1) return 0.5
+  return 1
+}
+
+/**
+ * @param {number} moveType
+ * @param {number[]} defTypes
+ * @param {{ignoraGhost?: boolean, teraShell?: boolean}} [opzioni]
+ */
+export function getEffectiveness(moveType, defTypes, opzioni = {}) {
+  const { ignoraGhost = false, teraShell = false } = opzioni
+
   let multiplier = 1
   for (const defType of defTypes) {
-    const val = TYPE_CHART[moveType][defType]
-    if (val === 0) return 0        // immunità
-    if (val === 2) multiplier *= 2
-    if (val === -1) multiplier *= 0.5
+    multiplier *= efficaciaSingola(moveType, defType, ignoraGhost)
   }
+
+  // ─── TERA SHELL ───────────────────────────────────────────────────────────
+  //
+  // Porta l'efficacia a ESATTAMENTE 0,5, e solo se era sopra 0,5
+  // (`damage_MASTER.js:215` e `:266`). Quindi un colpo neutro e uno super
+  // efficace diventano tutt'e due «non molto efficace»; uno che era gia' 0,5,
+  // 0,25 o zero resta com'era — la condizione e' `> 0.5`, non «riduci».
+  //
+  // Nel riferimento chiede anche `defender.curHP === defender.maxHP`. I punti
+  // salute non stanno nel nostro modello e assumiamo sempre pieni: e' la
+  // stessa assunzione sotto Eruption a potenza 150, registrata in CONTRIBUTING.
+  // Quando i punti salute entreranno, questa condizione diventa vera solo a
+  // vita piena e va aggiunta qui.
+  if (teraShell && multiplier > 0.5) return 0.5
+
   return multiplier
 }
 

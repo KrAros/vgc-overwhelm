@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T15:42:43.744Z",
+    "generatedAt": "2026-09-02T18:38:39.833Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 173,
-    "abilitaNelGap": 11,
+    "abilitaSenzaEffetto": 171,
+    "abilitaNelGap": 9,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -67,16 +67,6 @@
         }
       },
       {
-        "chiave": "minds eye",
-        "nome": "Mind's Eye",
-        "canale": "STR",
-        "prova": {
-          "funzione": "GET_DAMAGE_SV",
-          "file": "damage_SV.js",
-          "riga": 135
-        }
-      },
-      {
         "chiave": "normalize",
         "nome": "Normalize",
         "canale": "STR",
@@ -114,16 +104,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1144
-        }
-      },
-      {
-        "chiave": "tera shell",
-        "nome": "Tera Shell",
-        "canale": "STR",
-        "prova": {
-          "funzione": "GET_DAMAGE_SV",
-          "file": "damage_SV.js",
-          "riga": 135
         }
       }
     ],
