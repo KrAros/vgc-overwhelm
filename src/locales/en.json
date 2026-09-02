@@ -1933,7 +1933,15 @@
     "minus": "$t(abilities.minus) — ally has $t(abilities.plus): +50% Sp. Atk",
     "electromorphosis": "$t(abilities.electromorphosis) — charged: Electric moves ×2",
     "protean": "$t(abilities.protean) — type changed: STAB on any move",
-    "libero": "$t(abilities.libero) — type changed: STAB on any move"
+    "libero": "$t(abilities.libero) — type changed: STAB on any move",
+    "stakeout": "$t(abilities.stakeout) — target just switched in: Attack ×2",
+    "slow-start": "$t(abilities.slow-start) — first five turns: physical Attack ×0.5",
+    "overgrow": "$t(abilities.overgrow) — HP at a third or less: Grass moves ×1.5",
+    "blaze": "$t(abilities.blaze) — HP at a third or less: Fire moves ×1.5",
+    "torrent": "$t(abilities.torrent) — HP at a third or less: Water moves ×1.5",
+    "swarm": "$t(abilities.swarm) — HP at a third or less: Bug moves ×1.5",
+    "defeatist": "$t(abilities.defeatist) — HP below half: attack ×0.5",
+    "wind-power": "$t(abilities.wind-power) — charged: Electric moves ×2"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1959,6 +1967,14 @@
     "minus": "No ally with $t(abilities.plus) on the field",
     "electromorphosis": "Not charged yet — needs to have been hit",
     "protean": "Not triggered yet — no off-type STAB",
-    "libero": "Not triggered yet — no off-type STAB"
+    "libero": "Not triggered yet — no off-type STAB",
+    "stakeout": "Target was already out — no doubling",
+    "slow-start": "Past the five turns — full attack",
+    "overgrow": "HP above a third — no boost",
+    "blaze": "HP above a third — no boost",
+    "torrent": "HP above a third — no boost",
+    "swarm": "HP above a third — no boost",
+    "defeatist": "HP above half — full attack",
+    "wind-power": "Not charged yet — needs a wind move"
   }
 }

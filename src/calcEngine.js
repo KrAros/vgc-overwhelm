@@ -858,7 +858,11 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // speciali: da noi le mosse Z non esistono, quindi resta il solo fisico.
   //
   // E' un `if` a se', prima del punto c e del punto d.
-  if (atkAbilEffect?.slowStart && atkAbilityFlags.interruttore === true && !isSpecial) {
+  // Defeatist sta nello STESSO `if` (`:1925`), in `or`: ×0,5 sull'attacco
+  // quando i punti salute sono sotto la meta'. Non ha il controllo di
+  // categoria che ha Slow Start — vale anche sulle mosse speciali.
+  if ((atkAbilEffect?.slowStart && atkAbilityFlags.interruttore === true && !isSpecial)
+      || (atkAbilEffect?.defeatist && atkAbilityFlags.interruttore === true)) {
     atMods.push(MOD.X0_5)
   }
 
@@ -869,7 +873,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (atkAbilEffect?.boostTipoAtk !== undefined && moveType === atkAbilEffect.boostTipoAtk) ||
     (atkAbilEffect?.sharpness && isSlicing) ||
     (atkAbilEffect?.gorillaTactics && !isSpecial) ||
-    (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE)
+    (atkAbilEffect?.flashFireImmune && atkAbilityFlags.flashFireActive && moveType === TYPES.FIRE) ||
+    // Overgrow, Blaze, Torrent, Swarm: ×1,5 sulle mosse del proprio tipo
+    // quando i punti salute sono a un terzo o meno (`:1942-1945`). Stanno
+    // nello stesso `if` del resto del punto d, in `or`.
+    (atkAbilEffect?.psBassiTipo !== undefined && moveType === atkAbilEffect.psBassiTipo
+      && atkAbilityFlags.interruttore === true)
 
   // punto e — Protosynthesis / Quark Drive sul lato offensivo, e Transistor:
   // ×1.3 se la statistica più alta è quella con cui si sta attaccando.

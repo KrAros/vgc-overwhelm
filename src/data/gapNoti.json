@@ -1,18 +1,16 @@
 {
   "meta": {
-    "generatedAt": "2026-09-01T20:19:09.248Z",
+    "generatedAt": "2026-09-02T06:47:30.515Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 33,
+    "abilitaNelGap": 28,
     "strumentiNelGap": 39,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
     "battle bond",
-    "blaze",
     "comatose",
     "commander",
-    "defeatist",
     "disguise",
     "embody aspect",
     "flare boost",
@@ -29,16 +27,13 @@
     "minds eye",
     "neutralizing gas",
     "normalize",
-    "overgrow",
     "power of alchemy",
     "rattled",
     "receiver",
     "rivalry",
     "sturdy",
     "supersweet syrup",
-    "swarm",
     "tera shell",
-    "torrent",
     "toxic boost",
     "trace"
   ],

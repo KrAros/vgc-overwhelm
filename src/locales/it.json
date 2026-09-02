@@ -1933,7 +1933,15 @@
     "minus": "$t(abilities.minus) — l'alleato ha $t(abilities.plus): +50% Att. Speciale",
     "electromorphosis": "$t(abilities.electromorphosis) — caricata: mosse Elettro ×2",
     "protean": "$t(abilities.protean) — ha cambiato tipo: STAB su qualunque mossa",
-    "libero": "$t(abilities.libero) — ha cambiato tipo: STAB su qualunque mossa"
+    "libero": "$t(abilities.libero) — ha cambiato tipo: STAB su qualunque mossa",
+    "stakeout": "$t(abilities.stakeout) — il bersaglio è appena entrato: Attacco ×2",
+    "slow-start": "$t(abilities.slow-start) — primi cinque turni: Attacco fisico ×0,5",
+    "overgrow": "$t(abilities.overgrow) — PS a un terzo o meno: mosse Erba ×1,5",
+    "blaze": "$t(abilities.blaze) — PS a un terzo o meno: mosse Fuoco ×1,5",
+    "torrent": "$t(abilities.torrent) — PS a un terzo o meno: mosse Acqua ×1,5",
+    "swarm": "$t(abilities.swarm) — PS a un terzo o meno: mosse Coleottero ×1,5",
+    "defeatist": "$t(abilities.defeatist) — PS sotto la metà: attacco ×0,5",
+    "wind-power": "$t(abilities.wind-power) — caricata: mosse Elettro ×2"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1959,6 +1967,14 @@
     "minus": "Nessun alleato con $t(abilities.plus) in campo",
     "electromorphosis": "Non ancora caricata — serve aver subito un colpo",
     "protean": "Non ancora attivata — nessuno STAB fuori tipo",
-    "libero": "Non ancora attivata — nessuno STAB fuori tipo"
+    "libero": "Non ancora attivata — nessuno STAB fuori tipo",
+    "stakeout": "Il bersaglio era già in campo — nessun raddoppio",
+    "slow-start": "Passati i cinque turni — attacco pieno",
+    "overgrow": "PS sopra un terzo — nessun potenziamento",
+    "blaze": "PS sopra un terzo — nessun potenziamento",
+    "torrent": "PS sopra un terzo — nessun potenziamento",
+    "swarm": "PS sopra un terzo — nessun potenziamento",
+    "defeatist": "PS sopra la metà — attacco pieno",
+    "wind-power": "Non ancora caricata — serve un colpo di vento"
   }
 }
