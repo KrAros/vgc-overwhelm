@@ -829,6 +829,33 @@ export const ABILITY_EFFECTS = {
   'toxic-boost':  { toxicBoost: true, showInSmogon: true },
   'marvel-scale': { marvelScale: true, showInSmogon: true },
 
+  // ── I tre che alzano o abbassano stadi nella preparazione ────────────────
+  //
+  // Supersweet Syrup fa a chi subisce quello che fa Intimidate, ma sulla
+  // Difesa invece che sull'Attacco (`damage_MASTER.js:549`). Vuole
+  // `abilityOn`, quindi la levetta. Portatori: Dipplin e Hydrapple.
+  //
+  // Embody Aspect e Battle Bond alzano stadi propri. Nessuna delle due ha oggi
+  // un portatore in Champions — e' la stessa situazione gia' accettata per
+  // Darmanitan-Galar: quando la specie arrivera', l'abilita' funzionera' gia'.
+  //
+  // ─── DUE DIVERGENZE VOLUTE DAL RIFERIMENTO, AGGIUDICATE DA SIMONE ────────
+  //
+  // Le trovi scritte per esteso in `src/__tests__/divergenzeAggiudicate.test.js`,
+  // che e' il posto dove questo progetto tiene le decisioni umane. In breve:
+  //
+  //   Supersweet Syrup con Competitive — il riferimento scrive
+  //   `target.boosts[AT] = target.boosts[SA] + 2` (`:554`): scrive
+  //   sull'Attacco leggendo l'Attacco Speciale. Due funzioni sopra, in
+  //   `checkIntimidate` (`:580`), la stessa clausola e' scritta giusta.
+  //   Noi seguiamo quella giusta.
+  //
+  //   Battle Bond — il riferimento la chiude dietro `gen == 9` (`:684`) e noi
+  //   giriamo a `gen = 10`: da loro non si applica mai. Noi la applichiamo.
+  'supersweet-syrup': { supersweetSyrup: true, showInSmogon: true },
+  'embody-aspect':    { embodyAspect: true, showInSmogon: true },
+  'battle-bond':      { battleBond: true, showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     

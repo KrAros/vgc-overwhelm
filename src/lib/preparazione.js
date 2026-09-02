@@ -418,6 +418,98 @@ function checkBoostSuKO(lato) {
 // abilita', quindi oggi non e' osservabile — ma l'ordine e' quello giusto, e
 // non per caso.
 
+// ───────────────────────────────────────────────────────────────────────────
+// checkSupersweetSyrup                 damage_MASTER.js:549
+// ───────────────────────────────────────────────────────────────────────────
+//
+// Fa a chi subisce quello che fa Intimidate, ma sulla DIFESA: -1, e le stesse
+// due abilita' che si ribellano — Defiant e Competitive — reagiscono col +2.
+// Vuole `abilityOn`, cioe' la levetta.
+//
+// Il riferimento NON ripete qui le dodici abilita' che bloccano Intimidate:
+// guarda solo il Clear Amulet. Trascritto com'e': un Clear Body davanti a
+// Supersweet Syrup, nel riferimento, non protegge.
+//
+// ─── LA DIVERGENZA AGGIUDICATA ─────────────────────────────────────────────
+//
+// Sul ramo Competitive il riferimento scrive
+//
+//     target.boosts[AT] = Math.min(6, target.boosts[SA] + 2);
+//
+// cioe' scrive sull'ATTACCO leggendo l'ATTACCO SPECIALE. Due funzioni sopra,
+// in `checkIntimidate` (`:580`), la stessa clausola e' scritta giusta:
+// `target.boosts[SA] = ... target.boosts[SA] + 2`. E' uno scivolone loro, non
+// una regola.
+//
+// Simone ha aggiudicato: seguiamo quella giusta. Il caso oracolo per
+// Competitive quindi non esiste — divergeremmo di proposito — ed e' registrato
+// in `divergenzeAggiudicate.test.js`.
+function checkSupersweetSyrup(sorgente, bersaglio) {
+  if (!sorgente.effettoAbilita?.supersweetSyrup || !sorgente.abilitaAccesa) return
+  if (ITEM_EFFECTS[chiaveStrumento(bersaglio)]?.bloccaCaliAvversari === true) return
+
+  const eff = bersaglio.effettoAbilita
+  bersaglio.boosts.df = limita(bersaglio.boosts.df - 1)
+  if (eff?.defiant) {
+    bersaglio.boosts.at = limita(bersaglio.boosts.at + 2)
+  } else if (eff?.competitive) {
+    bersaglio.boosts.sa = limita(bersaglio.boosts.sa + 2)
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// checkEmbodyAspect                    damage_MASTER.js:666
+// ───────────────────────────────────────────────────────────────────────────
+//
+// Ogerpon alza di uno una statistica diversa per ogni forma, e le tre forme
+// mascherate lo fanno solo se portano la propria maschera.
+//
+// ─── NON E' RAGGIUNGIBILE OGGI, E VA DETTO ─────────────────────────────────
+//
+// In Champions nessuna specie ha Embody Aspect: le quattro Ogerpon portano
+// Defiant, Sturdy, Mold Breaker e Water Absorb. E le tre maschere non sono
+// fra i nostri strumenti. Quindi nessuno dei quattro rami puo' essere vero.
+//
+// E' la situazione gia' accettata per Darmanitan-Galar: si scrive adesso, e il
+// giorno che la specie arriva funziona.
+const STAT_EMBODY_ASPECT = {
+  'ogerpon':             { stat: 'sp', maschera: null },
+  'ogerpon-wellspring':  { stat: 'sd', maschera: 'wellspring mask' },
+  'ogerpon-hearthflame': { stat: 'at', maschera: 'hearthflame mask' },
+  'ogerpon-cornerstone': { stat: 'df', maschera: 'cornerstone mask' },
+}
+
+function checkEmbodyAspect(lato) {
+  if (!lato.effettoAbilita?.embodyAspect) return
+  const voce = STAT_EMBODY_ASPECT[lato.pokemon]
+  if (!voce) return
+  if (voce.maschera && chiaveStrumento(lato) !== voce.maschera) return
+  lato.boosts[voce.stat] = limita(lato.boosts[voce.stat] + 1)
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// checkBattleBond                      damage_MASTER.js:683
+// ───────────────────────────────────────────────────────────────────────────
+//
+// +1 ad Attacco, Attacco Speciale e Velocita', con la levetta.
+//
+// ─── L'ALTRA DIVERGENZA AGGIUDICATA ────────────────────────────────────────
+//
+// Il riferimento la chiude dietro `gen == 9`, e noi giriamo a `gen = 10`
+// (Champions): da loro non si applica MAI. Il nome compare nel sorgente, ed e'
+// per questo che il registro la contava fra le mancanti.
+//
+// Simone ha aggiudicato di implementarla lo stesso. Nessun caso oracolo puo'
+// verificarla — divergeremmo di proposito — ed e' registrata in
+// `divergenzeAggiudicate.test.js`. Anche qui, in Champions nessuna specie ce
+// l'ha ancora.
+function checkBattleBond(lato) {
+  if (!lato.effettoAbilita?.battleBond || !lato.abilitaAccesa) return
+  for (const stat of ['at', 'sa', 'sp']) {
+    lato.boosts[stat] = limita(lato.boosts[stat] + 1)
+  }
+}
+
 function checkBoostAssorbimento(lato) {
   const boost = lato.effettoAbilita?.boostAssorbimento
   if (!boost) return
@@ -529,6 +621,18 @@ export function preparaCoppia({ attaccante, difensore, meteo = null, terreno = n
 
   checkIntimidate(p1, p2)
   checkIntimidate(p2, p1)
+
+  // Dopo Intimidate, come nel riferimento (`damage_SV.js:29-32`). L'ordine
+  // conta: Defiant reagisce a tutt'e due, e chi arriva prima decide da quale
+  // valore parte il secondo +2.
+  checkSupersweetSyrup(p1, p2)
+  checkSupersweetSyrup(p2, p1)
+
+  checkEmbodyAspect(p1)
+  checkEmbodyAspect(p2)
+
+  checkBattleBond(p1)
+  checkBattleBond(p2)
 
   checkDownload(p1, p2)
   checkDownload(p2, p1)

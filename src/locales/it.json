@@ -1943,7 +1943,9 @@
     "swarm": "$t(abilities.swarm) — PS a un terzo o meno: mosse Coleottero ×1,5",
     "defeatist": "$t(abilities.defeatist) — PS sotto la metà: attacco ×0,5",
     "wind-power": "$t(abilities.wind-power) — caricata: mosse Elettro ×2",
-    "trace": "$t(abilities.trace) — ha copiato l'abilità dell'avversario"
+    "trace": "$t(abilities.trace) — ha copiato l'abilità dell'avversario",
+    "supersweet-syrup": "$t(abilities.supersweet-syrup) — è entrato in campo: Difesa avversaria −1",
+    "battle-bond": "$t(abilities.battle-bond) — ha messo KO: +1 ad Attacco, Att. Speciale e Velocità"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1978,7 +1980,9 @@
     "swarm": "PS sopra un terzo — nessun potenziamento",
     "defeatist": "PS sopra la metà — attacco pieno",
     "wind-power": "Non ancora caricata — serve un colpo di vento",
-    "trace": "Non ancora copiata — nessuna abilità presa in prestito"
+    "trace": "Non ancora copiata — nessuna abilità presa in prestito",
+    "supersweet-syrup": "Non ancora entrato — nessun calo",
+    "battle-bond": "Nessun KO — nessun potenziamento"
   },
   "statuses": {
     "healthy": "Sano",

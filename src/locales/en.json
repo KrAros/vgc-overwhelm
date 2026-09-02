@@ -1943,7 +1943,9 @@
     "swarm": "$t(abilities.swarm) — HP at a third or less: Bug moves ×1.5",
     "defeatist": "$t(abilities.defeatist) — HP below half: attack ×0.5",
     "wind-power": "$t(abilities.wind-power) — charged: Electric moves ×2",
-    "trace": "$t(abilities.trace) — has copied the opponent's ability"
+    "trace": "$t(abilities.trace) — has copied the opponent's ability",
+    "supersweet-syrup": "$t(abilities.supersweet-syrup) — switched in: target's Defense −1",
+    "battle-bond": "$t(abilities.battle-bond) — scored a KO: +1 Attack, Sp. Atk and Speed"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1978,7 +1980,9 @@
     "swarm": "HP above a third — no boost",
     "defeatist": "HP above half — full attack",
     "wind-power": "Not charged yet — needs a wind move",
-    "trace": "Not copied yet — no borrowed ability"
+    "trace": "Not copied yet — no borrowed ability",
+    "supersweet-syrup": "Not switched in yet — no drop",
+    "battle-bond": "No KO — no boost"
   },
   "statuses": {
     "healthy": "Healthy",

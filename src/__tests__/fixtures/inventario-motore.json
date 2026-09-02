@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T11:48:40.046Z",
+    "generatedAt": "2026-09-02T15:42:44.287Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -9,9 +9,9 @@
     "fileEsaminati": 21,
     "abilitaNelMotore": 50,
     "strumentiNelMotore": 27,
-    "classificate": 15,
+    "classificate": 10,
     "badgeDaTogliere": 5,
-    "collisioniResidue": 6,
+    "collisioniResidue": 5,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -82,17 +82,6 @@
       }
     },
     {
-      "chiave": "battle bond",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js la nomina fra le abilita' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — la forma di Ash-Greninja e il +1 alle statistiche in gen 9 — non e' implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 672,
-        "testo": "'battle-bond',"
-      }
-    },
-    {
       "chiave": "comatose",
       "tipo": "abilita",
       "verdetto": "meccanica-diversa",
@@ -112,50 +101,6 @@
         "file": "src/lib/rules.js",
         "riga": 677,
         "testo": "'forecast',"
-      }
-    },
-    {
-      "chiave": "tablets of ruin",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js:511 la nomina fra le dieci che Mold Breaker non ignora (trascritte da damage_MASTER.js:999). Il suo effetto — -25% Attacco a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 511,
-        "testo": "'tablets-of-ruin',"
-      }
-    },
-    {
-      "chiave": "vessel of ruin",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js:512 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Att. Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 512,
-        "testo": "'vessel-of-ruin',"
-      }
-    },
-    {
-      "chiave": "sword of ruin",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js:513 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 513,
-        "testo": "'sword-of-ruin',"
-      }
-    },
-    {
-      "chiave": "beads of ruin",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js:514 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 514,
-        "testo": "'beads-of-ruin',"
       }
     },
     {
