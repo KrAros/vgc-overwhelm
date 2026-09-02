@@ -110,9 +110,29 @@ export function creaHarness() {
         tera_type: dex.t1,
         level: 50,
         maxHP,
-        // Multiscale legge `curHP === maxHP`. Quando il nostro toggle è spento,
-        // togliamo un punto: è il modo di dire a NCP "non è più a vita piena".
-        curHP: extra.hpPieni === false ? maxHP - 1 : maxHP,
+        // ─── I PUNTI SALUTE, CHE DA NOI NON ESISTONO ─────────────────────
+        //
+        // Il nostro modello non ha i punti salute: ha delle levette. NCP
+        // invece legge `curHP`, e tre condizioni diverse ci si appoggiano.
+        // Qui si traduce, ed e' l'unico posto dove si traduce.
+        //
+        //   `hpPieni: false`  → un punto in meno. Multiscale legge
+        //                       `curHP === maxHP`, e questo lo spegne.
+        //   `psBassi: true`   → un terzo. Overgrow, Blaze, Torrent e Swarm
+        //                       leggono `curHP <= maxHP / 3`, Defeatist
+        //                       `<= maxHP / 2`: `floor(maxHP / 3)` soddisfa
+        //                       tutt'e due, quindi un valore solo basta.
+        //
+        // ATTENZIONE, ed e' scritto anche nel test: abbassare `curHP` cambia
+        // in NCP anche la POTENZA di Eruption, Water Spout, Flail, Reversal,
+        // Crush Grip e Wring Out (`damage_MASTER.js:1354`, `:1360`, `:1367`,
+        // `:1371`). Quelle mosse il nostro motore non le modella affatto — e'
+        // il divario delle mosse registrato in CONTRIBUTING — quindi un caso
+        // che accenda `psBassi` su una di loro divergerebbe per una ragione
+        // che non c'entra con l'abilita' in prova.
+        curHP: extra.psBassi === true
+          ? Math.floor(maxHP / 3)
+          : (extra.hpPieni === false ? maxHP - 1 : maxHP),
         HPSPs: sps[NOSTRO_INDICE.hp] || 0,
         HPEVs: 0,
         HPIVs: 31,
@@ -222,6 +242,22 @@ export function creaHarness() {
     'Sword of Ruin': 'sword-of-ruin',
     'Beads of Ruin': 'beads-of-ruin',
   }
+  /**
+   * Le cinque che il riferimento accende dai PUNTI SALUTE, non da `abilityOn`.
+   *
+   * Trascritte dai nomi NCP: Overgrow, Blaze, Torrent e Swarm leggono
+   * `curHP <= maxHP / 3` (`damage_MASTER.js:1942-1945`), Defeatist
+   * `curHP <= maxHP / 2` (`:1925`).
+   *
+   * Da noi sono una levetta. Questo insieme e' il punto in cui la levetta
+   * diventa punti salute: senza, accenderla non cambierebbe NIENTE nel
+   * riferimento, e il confronto direbbe che divergiamo quando invece e'
+   * l'oracolo a non essere stato interrogato bene.
+   */
+  const ABILITA_A_PS_BASSI = new Set([
+    'Overgrow', 'Blaze', 'Torrent', 'Swarm', 'Defeatist',
+  ])
+
   const caselleDa = (...abilitaNCP) =>
     [...new Set(abilitaNCP.map(x => CASELLE_DA_ABILITA[x]).filter(Boolean))]
 
@@ -296,6 +332,8 @@ export function creaHarness() {
         // le altre cinque, il riferimento le vedeva sempre spente.
         abilitaAttiva: a.atkAbilityFlags?.flashFireActive
           || a.atkAbilityFlags?.interruttore,
+        psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
+          && a.atkAbilityFlags?.interruttore === true,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -512,6 +550,8 @@ export function creaHarness() {
         lastRespectsKOs: a.lastRespectsKOs || 0,
         abilitaAttiva: a.atkAbilityFlags?.flashFireActive
           || a.atkAbilityFlags?.interruttore || a.atkAbilityFlags?.abilityOn,
+        psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
+          && a.atkAbilityFlags?.interruttore === true,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })

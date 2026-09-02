@@ -758,6 +758,34 @@ export const ABILITY_EFFECTS = {
   'stakeout':   { stakeout: true,  showInSmogon: true },
   'slow-start': { slowStart: true, showInSmogon: true },
 
+  // ── Le cinque che il riferimento legge dai PUNTI SALUTE ──────────────────
+  //
+  // Overgrow, Blaze, Torrent e Swarm danno ×1,5 alle mosse del proprio tipo
+  // quando i punti salute sono scesi a un terzo o meno (`:1942-1945`, punto
+  // d). Defeatist da' ×0,5 all'attacco sotto la meta' (`:1925`, punto b, nello
+  // stesso `if` di Slow Start).
+  //
+  // ─── PERCHE' UN INTERRUTTORE E NON I PUNTI SALUTE ───────────────────────
+  //
+  // Perche' i punti salute non stanno nel nostro modello, e metterceli e'
+  // un'altra cosa — un campo nell'interfaccia, nello store, nel link, e la
+  // riapertura di tutto quello che il riferimento scala sui PS (Eruption,
+  // Flail, Endeavor: vedi il divario delle mosse in CONTRIBUTING).
+  //
+  // Simone ha scelto la levetta: l'utente dichiara «l'abilita' e' attiva», che
+  // e' l'informazione che serve al danno. E' la stessa levetta di Plus, Minus,
+  // Electromorphosis, Stakeout e Slow Start, e l'harness la traduce in punti
+  // salute bassi per poter interrogare l'oracolo — come gia' fa per Multiscale.
+  //
+  // La differenza fra le due soglie (un terzo e una meta') non e' quindi
+  // osservabile da qui: un solo valore di PS le soddisfa tutt'e due. Resta
+  // scritta perche' e' vera nel riferimento.
+  'overgrow': { psBassiTipo: TYPES.GRASS, showInSmogon: true },
+  'blaze':    { psBassiTipo: TYPES.FIRE,  showInSmogon: true },
+  'torrent':  { psBassiTipo: TYPES.WATER, showInSmogon: true },
+  'swarm':    { psBassiTipo: TYPES.BUG,   showInSmogon: true },
+  'defeatist': { defeatist: true, showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     

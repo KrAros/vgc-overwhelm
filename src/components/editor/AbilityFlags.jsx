@@ -253,18 +253,32 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   // sta l'abilità, e l'utente concluderebbe che l'app non la calcola — che è
   // esattamente la cosa che il segnalino «non calcolata» diceva prima, e che
   // adesso non è più vera.
-  // ── Le cinque che il riferimento accende con `abilityOn` ─────────────────
+  // ── Le dodici che si accendono con una levetta ──────────────────────────
   //
-  // Plus, Minus, Electromorphosis, Protean, Libero. Nel riferimento sono un
-  // interruttore solo (`attacker.abilityOn`) letto da condizioni diverse, e
-  // qui e' un ramo solo per la stessa ragione: un Pokemon ha un'abilita' sola,
-  // quindi le cinque non possono mai accendersi insieme.
+  // Plus, Minus, Electromorphosis, Wind Power, Protean, Libero, Stakeout,
+  // Slow Start, Overgrow, Blaze, Torrent, Swarm, Defeatist.
   //
-  // Cosa significa la levetta cambia con l'abilita', e lo dicono le stringhe:
-  // per Plus e Minus «l'alleato ha l'altra», per Electromorphosis «si e'
-  // caricata», per Protean e Libero «ha cambiato tipo».
+  // Nel riferimento le prime otto sono un interruttore solo
+  // (`attacker.abilityOn`) letto da condizioni diverse; le ultime cinque non
+  // hanno interruttore affatto — il riferimento le legge dai punti salute, che
+  // nel nostro modello non esistono. Simone ha scelto la levetta anche per
+  // loro: chi costruisce il set dichiara che l'abilita' e' attiva, ed e'
+  // l'informazione che serve al danno.
+  //
+  // E' un ramo solo perche' un Pokemon ha un'abilita' sola: non possono mai
+  // accendersi insieme. Cosa significhi la levetta cambia con l'abilita', e lo
+  // dicono le stringhe.
+  //
+  // ─── PERCHE' QUESTA CONDIZIONE E' ELENCATA E NON DEDOTTA ────────────────
+  //
+  // Stakeout e Slow Start erano state scritte nel motore e non qui: il calcolo
+  // le applicava e l'utente non poteva accenderle. Non le ha viste nessun
+  // presidio perche' nessun presidio guardava questo. Adesso c'e'
+  // (`levette.test.js`), e confronta questa condizione con ABILITY_EFFECTS.
   if (ABILITY_EFFECTS[key]?.plusMinus || ABILITY_EFFECTS[key]?.caricata
-      || ABILITY_EFFECTS[key]?.protean) {
+      || ABILITY_EFFECTS[key]?.protean || ABILITY_EFFECTS[key]?.stakeout
+      || ABILITY_EFFECTS[key]?.slowStart || ABILITY_EFFECTS[key]?.defeatist
+      || ABILITY_EFFECTS[key]?.psBassiTipo !== undefined) {
     return (
       <div className={`${RIQUADRO} gap-2 ${flags.interruttore ? ACCESO : SPENTO}`}>
         <button
