@@ -76,6 +76,10 @@ export function buildAttackerInput(slot, level = LEVEL) {
     atkItem:         s.item || null,
     atkAbility:      s.ability || null,
     atkAbilityFlags: s.abilityFlags || {},
+    // Lo stato: lo leggono la bruciatura, Guts, Flare Boost, Toxic Boost e
+    // Facade. Sta qui e non fra i flag perche' non e' un'abilita': e' una
+    // condizione del Pokemon, come gli stadi.
+    atkStatus: s.status || null,
     lastRespectsKOs: s.lastRespectsKOs || 0,
     // Stessa ragione di `lastRespectsKOs`: sta nella costruzione e non fra i
     // parametri opzionali, così nessun chiamante può ometterlo per distrazione.
@@ -107,6 +111,9 @@ export function buildDefenderInput(slot) {
     defItem:         s.item || null,
     defAbility:      s.ability || null,
     defAbilityFlags: s.abilityFlags || {},
+    // Lo leggono Hex, Venoshock, Smelling Salts, Wake-Up Slap, Dream Eater e
+    // Marvel Scale.
+    defStatus: s.status || null,
   }
 }
 

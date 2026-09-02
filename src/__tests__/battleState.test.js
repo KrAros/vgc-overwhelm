@@ -38,6 +38,11 @@ const attaccanteTabellaStorico = (atk, level) => ({
   atkItem:         atk.item || null,
   atkAbility:      atk.ability || null,
   atkAbilityFlags: atk.abilityFlags || {},
+  // Aggiunto quando e' arrivato il menu' dello stato. Questa e' una copia
+  // STORICA di cio' che il componente costruiva: la si aggiorna quando il
+  // campo nuovo e' arrivato a tutt'e due, che e' proprio quello che il test
+  // controlla.
+  atkStatus:       atk.status || null,
   lastRespectsKOs: atk.lastRespectsKOs || 0,
   level,
 })
@@ -52,6 +57,7 @@ const attaccantePannelloStorico = (atk) => ({
   atkItem:         atk.item || null,
   atkAbility:      atk.ability || null,
   atkAbilityFlags: atk.abilityFlags || {},
+  atkStatus:       atk.status || null,
   level: 50,
 })
 

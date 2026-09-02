@@ -153,7 +153,11 @@ export function creaHarness() {
         rivalryGender: 'N/A',
         highestStat: -1,
         item: item || '',
-        status: 'Healthy',
+        // Era `'Healthy'` fisso, quindi la bruciatura, Guts, Flare Boost,
+        // Toxic Boost, Marvel Scale, Facade, Hex, Venoshock, Smelling Salts,
+        // Wake-Up Slap e Dream Eater non erano verificabili: il riferimento
+        // vedeva sempre un Pokemon sano.
+        status: STATO_NCP[extra.stato] || 'Healthy',
         toxicCounter: 0,
         moves: [mossa, mossa, mossa, mossa],
         glaiveRushMod: false,
@@ -269,6 +273,22 @@ export function creaHarness() {
    * Si guarda l'abilita' ORIGINALE, non quella dopo Trace: se Trace copiasse
    * un Neutralizing Gas, vorrebbe dire che il copiato ce l'ha gia'.
    */
+  /**
+   * I nostri sei stati nei nomi che il riferimento usa.
+   *
+   * Trascritti da `damage_MASTER.js`: `Healthy`, `Burned`, `Paralyzed`,
+   * `Poisoned`, `Badly Poisoned`, `Asleep`. Congelato non c'e' — la stringa
+   * `Frozen` non compare in tutto il vendor — e infatti non e' fra i nostri.
+   */
+  const STATO_NCP = {
+    healthy: 'Healthy',
+    burned: 'Burned',
+    paralyzed: 'Paralyzed',
+    poisoned: 'Poisoned',
+    'badly-poisoned': 'Badly Poisoned',
+    asleep: 'Asleep',
+  }
+
   const gasInCampo = (a, d) =>
     tr.abilitaNCP(a) === 'Neutralizing Gas' || tr.abilitaNCP(d) === 'Neutralizing Gas'
 
@@ -352,6 +372,7 @@ export function creaHarness() {
           || a.atkAbilityFlags?.interruttore,
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
+        stato: a.atkStatus,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -366,7 +387,10 @@ export function creaHarness() {
       boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0 },
       mossaNCP,
       datiMossa,
-      extra: { hpPieni: d.defAbilityFlags?.multiscaleActive !== false },
+      extra: {
+        hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
+        stato: d.defStatus,
+      },
     })
     if (!dif) return { ok: false, motivo: `specie non presente in NCP: ${d.defPokemon}` }
 
@@ -574,6 +598,7 @@ export function creaHarness() {
           || a.atkAbilityFlags?.interruttore || a.atkAbilityFlags?.abilityOn,
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
+        stato: a.atkStatus,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -599,6 +624,7 @@ export function creaHarness() {
       // riferimento — e il confronto diceva che divergiamo noi.
       extra: {
         hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
+        stato: d.defStatus,
         abilitaAttiva: d.defAbilityFlags?.intimidateActive
           || d.defAbilityFlags?.interruttore,
       },

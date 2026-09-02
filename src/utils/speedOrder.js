@@ -216,7 +216,29 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = n
   const { paradosso, statPiuAlta } = preparaSingolo(pokemon, weather, terrain)
   if (paradosso && statPiuAlta === 'sp') altriMod *= 1.5
 
-  return pokeRound(spe * altriMod)
+  // Punto d — Quick Feet: x1,5 con QUALUNQUE stato (`damage_MASTER.js:324`).
+  // Sta prima delle abilita' meteo, in un `if / else if` con Slow Start: da noi
+  // e' qui perche' la moltiplicazione e' commutativa e `altriMod` non
+  // arrotonda mai a meta' strada — l'unico arrotondamento e' il `pokeRound`
+  // finale.
+  const stato = pokemon.status || 'healthy'
+  const quickFeet = normalizeAbilityKey(pokemon.ability) === 'quick-feet'
+  if (quickFeet && stato !== 'healthy') altriMod *= 1.5
+
+  const velocita = pokeRound(spe * altriMod)
+
+  // ─── PUNTO 3 — LA PARALISI, E STA FUORI DA `altriMod` ─────────────────────
+  //
+  // Nel riferimento non e' un moltiplicatore: e' un passaggio a se', DOPO il
+  // `pokeRound` di tutti gli altri, e tronca invece di arrotondare
+  // (`damage_MASTER.js:349-355`). Scriverlo come `altriMod *= 0.5` darebbe un
+  // numero diverso ogni volta che la Velocita' e' dispari.
+  //
+  // Quick Feet la annulla: chi ce l'ha non subisce il dimezzamento — ed e'
+  // scritto nella stessa condizione, non altrove.
+  if (stato === 'paralyzed' && !quickFeet) return Math.floor(velocita / 2)
+
+  return velocita
 }
 
 /**
