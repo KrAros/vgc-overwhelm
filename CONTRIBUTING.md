@@ -23,14 +23,50 @@ nella PR da dove viene il set**: il file dichiara la propria fonte in testa, e
 quella riga deve restare vera.
 
 **Traduzioni.** [`src/locales/en.json`](src/locales/en.json) e
-[`it.json`](src/locales/it.json), 1891 chiavi foglia ciascuno — oggi allineati.
+[`it.json`](src/locales/it.json), 1934 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
-**Le abilità col badge.** 109 abilità e 40 strumenti che il riferimento calcola
+**Le abilità col badge.** 33 abilità e 39 strumenti che il riferimento calcola
 e noi no; l'elenco generato è in
 [`src/data/gapNoti.json`](src/data/gapNoti.json). Ognuna è una PR piccola e
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 È il contributo più prezioso, ed è quello con le regole più severe qui sotto.
+
+**Le mosse SENZA il badge — un lavoro aperto, non ancora cominciato.**
+`gapNoti.json` ha due liste, `abilita` e `strumenti`. Non ha le mosse, e le
+mosse un divario ce l'hanno.
+
+`calcEngine.js` esce con `null` per qualunque mossa con `power: 0` che non sia
+una delle quattro a peso. Nella matrice un `null` si disegna come `~`, cioè
+esattamente come una mossa di stato: **Seismic Toss oggi sembra Protect.**
+Delle 303 mosse a potenza zero nei nostri dati, 34 il riferimento le considera
+offensive e le calcola:
+
+> Bide, Comeuppance, Counter, Crush Grip, Dragon Rage, Electro Ball, Endeavor,
+> Final Gambit, Fissure, Flail, Fling, Frustration, Guillotine, Gyro Ball,
+> Hard Press, Horn Drill, Magnitude, Metal Burst, Mirror Coat, Natural Gift,
+> Night Shade, Present, Psywave, Punishment, Return, Reversal, Ruination,
+> Seismic Toss, Sheer Cold, Sonic Boom, Spit Up, Super Fang, Trump Card,
+> Wring Out
+
+Non sono tutte lo stesso problema: ci sono le mosse a danno fisso (Seismic
+Toss, Night Shade, Sonic Boom, Dragon Rage), quelle legate ai punti salute
+(Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Ruination),
+quelle legate alla Velocità (Gyro Ball, Electro Ball), quelle legate
+all'affetto (Return, Frustration), le KO immediate e le reattive (Counter,
+Mirror Coat, Metal Burst, Comeuppance, Bide).
+
+C'è poi un caso diverso e più insidioso, perché oggi non si vede: **Eruption e
+Water Spout**. Nei nostri dati hanno `power: 150` e il motore la usa cosi'
+com'e', mentre il riferimento la scala sui punti salute
+(`damage_MASTER.js:1354`). A punti salute pieni i due numeri coincidono, quindi
+il confronto con l'oracolo e' verde e resta verde: non e' un errore visibile,
+e' un'assunzione — «il Pokemon e' integro» — che nessun caso puo' oggi
+contraddire, perche' i punti salute non stanno nel nostro modello.
+
+Chi apre questo lavoro cominci da li': prima decidere se i punti salute entrano
+nel modello, poi il registro delle mosse nel divario (`gapNoti.json` con una
+terza lista e un badge, come per abilita' e strumenti), poi le implementazioni.
 
 ---
 
