@@ -196,7 +196,11 @@ export function creaHarness() {
       // Era `false` fisso, quindi Unseen Fist e Piercing Drill non erano
       // verificabili: il riferimento vedeva sempre un bersaglio scoperto.
       !!field.protect,     // isProtect
-      !!field.powerSpot, !!field.steelySpiritAlleato, false, // …, isNeutralizingGas
+      // Era `false` fisso: `field.isNeutralizingGas` e' letto dalle due aure
+      // (`damage_MASTER.js:1574` e `:1655`) e dalle quattro Rovina
+      // (`:1908-1909`, `:2077-2078`), che senza di esso restavano accese
+      // anche col gas in campo.
+      !!field.powerSpot, !!field.steelySpiritAlleato, !!field.gasNeutro,
       false,               // isGmaxField
       !!field.flowerGiftSpD, !!field.flowerGiftAtk,
       false, false,        // isTailwind, isSaltCure
@@ -254,6 +258,20 @@ export function creaHarness() {
    * riferimento, e il confronto direbbe che divergiamo quando invece e'
    * l'oracolo a non essere stato interrogato bene.
    */
+  /**
+   * Il gas in campo, ricavato dai due slot.
+   *
+   * Nel riferimento e' `field.getNeutralGas()`, una casella dell'interfaccia
+   * indipendente da chi e' in campo. Da noi si legge dai due Pokemon dello
+   * scontro — la regola gia' scelta per le aure e per le quattro Rovina — e
+   * qui si traduce, come si traduce la levetta in punti salute.
+   *
+   * Si guarda l'abilita' ORIGINALE, non quella dopo Trace: se Trace copiasse
+   * un Neutralizing Gas, vorrebbe dire che il copiato ce l'ha gia'.
+   */
+  const gasInCampo = (a, d) =>
+    tr.abilitaNCP(a) === 'Neutralizing Gas' || tr.abilitaNCP(d) === 'Neutralizing Gas'
+
   const ABILITA_A_PS_BASSI = new Set([
     'Overgrow', 'Blaze', 'Torrent', 'Swarm', 'Defeatist',
   ])
@@ -372,7 +390,7 @@ export function creaHarness() {
     let risultato
     try {
       ncp.spuntaCaselle(caselleDa(att.pokemon.ability, dif.pokemon.ability))
-      risultato = ncp.GET_DAMAGE_SV(att.pokemon, dif.pokemon, att.mossa, costruisciLato(field, format))
+      risultato = ncp.GET_DAMAGE_SV(att.pokemon, dif.pokemon, att.mossa, costruisciLato({ ...field, gasNeutro: gasInCampo(a.atkAbility, d.defAbility) }, format))
     } catch (e) {
       return { ok: false, motivo: `errore dentro il motore NCP: ${e.message}` }
     } finally {
@@ -507,7 +525,11 @@ export function creaHarness() {
         latoP0.weather = ''
         latoP1.weather = ''
       },
-      getNeutralGas: () => false,
+      // Era `false` fisso, quindi `checkNeutralGas` non spegneva mai niente e
+      // Neutralizing Gas non era verificabile. Il valore arriva da noi: nel
+      // riferimento e' una casella dell'interfaccia, da noi si ricava dai due
+      // slot come le aure e le Rovina.
+      getNeutralGas: () => !!field.gasNeutro,
       getSide: (i) => (i === 0 ? latoP0 : latoP1),
       getTailwind: () => false,
       getSwamp: () => false,
@@ -566,11 +588,19 @@ export function creaHarness() {
       boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0 },
       mossaNCP,
       datiMossa,
-      // `abilityOn` sul difensore è il nostro `intimidateActive`: in NCP
-      // `checkIntimidate` parte solo se `source.abilityOn` è vero.
+      // `abilityOn` sul difensore raccoglie i nostri due flag che vi
+      // corrispondono. Era il solo `intimidateActive`, e bastava finche' le
+      // uniche abilita' del difensore che il riferimento accende con
+      // `abilityOn` erano Intimidate e le sue dodici contrarie.
+      //
+      // Trace lo ha reso insufficiente: `checkTrace(p1, p2)` parte solo se
+      // `source.abilityOn` e' vero, e p1 e' il DIFENSORE. Senza
+      // `interruttore` qui, un Trace sul difensore non copiava mai niente nel
+      // riferimento — e il confronto diceva che divergiamo noi.
       extra: {
         hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
-        abilitaAttiva: d.defAbilityFlags?.intimidateActive,
+        abilitaAttiva: d.defAbilityFlags?.intimidateActive
+          || d.defAbilityFlags?.interruttore,
       },
     })
     if (!dif) return { ok: false, motivo: `specie non presente in NCP: ${d.defPokemon}` }
@@ -597,7 +627,7 @@ export function creaHarness() {
     try {
       ncp.spuntaCaselle(caselleDa(att.pokemon.ability, dif.pokemon.ability))
       // p1 = difensore (porta l'abilità di supporto), p2 = attaccante.
-      risultati = ncp.CALCULATE_ALL_MOVES_SV(dif.pokemon, att.pokemon, costruisciCampo(field, format))
+      risultati = ncp.CALCULATE_ALL_MOVES_SV(dif.pokemon, att.pokemon, costruisciCampo({ ...field, gasNeutro: gasInCampo(a.atkAbility, d.defAbility) }, format))
     } catch (e) {
       return { ok: false, motivo: `errore dentro il motore NCP: ${e.message}` }
     } finally {

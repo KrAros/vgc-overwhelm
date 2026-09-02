@@ -786,6 +786,23 @@ export const ABILITY_EFFECTS = {
   'swarm':    { psBassiTipo: TYPES.BUG,   showInSmogon: true },
   'defeatist': { defeatist: true, showInSmogon: true },
 
+  // ── I due che riscrivono QUALE abilita' si ha ────────────────────────────
+  //
+  // Non moltiplicano niente: cambiano l'abilita' stessa, prima di tutto il
+  // resto. Il motore li legge da `abilitaEffettive` in `preparazione.js`, che
+  // trascrive le prime tre righe di `CALCULATE_ALL_MOVES_SV`
+  // (`damage_SV.js:7-9`).
+  //
+  // Trace vuole `abilityOn` nel riferimento, quindi da noi la levetta: chi
+  // costruisce il set dichiara che la copia e' avvenuta. Neutralizing Gas no
+  // — nel riferimento e' una casella di campo, e da noi si legge dai due slot
+  // come le aure e le quattro Rovina.
+  //
+  // Il gas spegne anche l'abilita' di chi lo porta: `cannotSupress` non lo
+  // contiene.
+  'trace':            { trace: true, showInSmogon: true },
+  'neutralizing-gas': { gasNeutro: true, showInSmogon: true },
+
   // ── Attaccante: boost condizionale (stato) ───────────────────────────────
   'flash-fire':  { flashFireImmune: true, showInSmogon: true
     

@@ -102,6 +102,29 @@ export const CLASSIFICAZIONE = {
     //
     // Il giorno che le implementiamo, escono dal divario da sé e queste
     // quattro righe se ne vanno con loro.
+    // ── Nominate perche' stanno nelle due liste dei copiatori ─────────────
+    //
+    // `ABILITA_NON_COPIABILI` e `ABILITA_NON_SPEGNIBILI` in rules.js sono
+    // trascritte da `cannotCopy` (damage_MASTER.js:387) e `cannotSupress`
+    // (:403). Nominare un'abilita' li' dentro vuol dire il contrario di
+    // calcolarla: vuol dire che Trace non la copia e che il gas non la spegne.
+    //
+    // Comatose e Forecast il riferimento le calcola ALTROVE (Comatose in
+    // `immunityChecks` e nelle mosse che leggono lo stato, Forecast in
+    // `checkForecast`), e noi no. Il badge quindi e' corretto.
+    'battle bond': {
+      verdetto: 'meccanica-diversa',
+      nota: 'rules.js la nomina fra le abilita\' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — la forma di Ash-Greninja e il +1 alle statistiche in gen 9 — non e\' implementato, e NCP lo calcola',
+    },
+    'comatose': {
+      verdetto: 'meccanica-diversa',
+      nota: 'rules.js la nomina fra le abilita\' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — valere come «addormentato» per Hex, Dream Eater e Wake-Up Slap — non e\' implementato, e NCP lo calcola',
+    },
+    'forecast': {
+      verdetto: 'meccanica-diversa',
+      nota: 'rules.js la nomina fra le abilita\' che Trace non copia (damage_MASTER.js:387). Il suo effetto — riscrivere il tipo di Castform col meteo, in `checkForecast` — non e\' implementato, e NCP lo calcola',
+    },
+
     'tablets of ruin': {
       verdetto: 'meccanica-diversa',
       nota: 'rules.js:511 la nomina fra le dieci che Mold Breaker non ignora (trascritte da damage_MASTER.js:999). Il suo effetto — -25% Attacco a tutti tranne chi la porta — non è implementato, e NCP lo calcola',

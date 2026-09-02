@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T06:47:31.049Z",
+    "generatedAt": "2026-09-02T07:42:25.570Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
     "fileEsaminati": 21,
-    "abilitaNelMotore": 26,
+    "abilitaNelMotore": 49,
     "strumentiNelMotore": 27,
-    "classificate": 12,
+    "classificate": 15,
     "badgeDaTogliere": 5,
-    "collisioniResidue": 3,
+    "collisioniResidue": 6,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -66,7 +66,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 718,
+        "riga": 738,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -77,8 +77,41 @@
       "nota": "preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461",
       "prova": {
         "file": "src/lib/preparazione.js",
-        "riga": 283,
+        "riga": 285,
         "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
+      }
+    },
+    {
+      "chiave": "battle bond",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js la nomina fra le abilita' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — la forma di Ash-Greninja e il +1 alle statistiche in gen 9 — non e' implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 672,
+        "testo": "'battle-bond',"
+      }
+    },
+    {
+      "chiave": "comatose",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js la nomina fra le abilita' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — valere come «addormentato» per Hex, Dream Eater e Wake-Up Slap — non e' implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 673,
+        "testo": "'comatose',"
+      }
+    },
+    {
+      "chiave": "forecast",
+      "tipo": "abilita",
+      "verdetto": "meccanica-diversa",
+      "nota": "rules.js la nomina fra le abilita' che Trace non copia (damage_MASTER.js:387). Il suo effetto — riscrivere il tipo di Castform col meteo, in `checkForecast` — non e' implementato, e NCP lo calcola",
+      "prova": {
+        "file": "src/lib/rules.js",
+        "riga": 677,
+        "testo": "'forecast',"
       }
     },
     {
@@ -167,6 +200,14 @@
         }
       },
       {
+        "chiave": "battle bond",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 672,
+          "testo": "'battle-bond',"
+        }
+      },
+      {
         "chiave": "beads of ruin",
         "prova": {
           "file": "src/lib/rules.js",
@@ -183,6 +224,30 @@
         }
       },
       {
+        "chiave": "comatose",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 673,
+          "testo": "'comatose',"
+        }
+      },
+      {
+        "chiave": "commander",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 674,
+          "testo": "'commander',"
+        }
+      },
+      {
+        "chiave": "disguise",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 675,
+          "testo": "'disguise',"
+        }
+      },
+      {
         "chiave": "dragonize",
         "prova": {
           "file": "src/lib/rules.js",
@@ -194,8 +259,24 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 484,
+          "riga": 504,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
+        }
+      },
+      {
+        "chiave": "flower gift",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 676,
+          "testo": "'flower-gift',"
+        }
+      },
+      {
+        "chiave": "forecast",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 677,
+          "testo": "'forecast',"
         }
       },
       {
@@ -207,10 +288,42 @@
         }
       },
       {
+        "chiave": "gulp missile",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 678,
+          "testo": "'gulp-missile',"
+        }
+      },
+      {
+        "chiave": "ice face",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 679,
+          "testo": "'ice-face',"
+        }
+      },
+      {
+        "chiave": "illusion",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 680,
+          "testo": "'illusion',"
+        }
+      },
+      {
+        "chiave": "imposter",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 681,
+          "testo": "'imposter',"
+        }
+      },
+      {
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 718,
+          "riga": 738,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -220,6 +333,14 @@
           "file": "src/lib/damage.js",
           "riga": 66,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
+        }
+      },
+      {
+        "chiave": "multitype",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 682,
+          "testo": "'multitype',"
         }
       },
       {
@@ -236,6 +357,22 @@
           "file": "src/lib/rules.js",
           "riga": 126,
           "testo": "'pixilate':    TYPES.FAIRY,"
+        }
+      },
+      {
+        "chiave": "power construct",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 705,
+          "testo": "'power-construct',"
+        }
+      },
+      {
+        "chiave": "power of alchemy",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 683,
+          "testo": "'power-of-alchemy',"
         }
       },
       {
@@ -266,8 +403,16 @@
         "chiave": "rattled",
         "prova": {
           "file": "src/lib/preparazione.js",
-          "riga": 283,
+          "riga": 285,
           "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
+        }
+      },
+      {
+        "chiave": "receiver",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 686,
+          "testo": "'receiver',"
         }
       },
       {
@@ -276,6 +421,14 @@
           "file": "src/lib/rules.js",
           "riga": 128,
           "testo": "'refrigerate': TYPES.ICE,"
+        }
+      },
+      {
+        "chiave": "rks system",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 687,
+          "testo": "'rks-system',"
         }
       },
       {
@@ -303,6 +456,14 @@
         }
       },
       {
+        "chiave": "schooling",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 688,
+          "testo": "'schooling',"
+        }
+      },
+      {
         "chiave": "shadow shield",
         "prova": {
           "file": "src/lib/rules.js",
@@ -311,11 +472,27 @@
         }
       },
       {
+        "chiave": "shields down",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 689,
+          "testo": "'shields-down',"
+        }
+      },
+      {
         "chiave": "slush rush",
         "prova": {
           "file": "src/utils/speedOrder.js",
           "riga": 67,
           "testo": "'slush-rush':  ['snow'],"
+        }
+      },
+      {
+        "chiave": "stance change",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 690,
+          "testo": "'stance-change',"
         }
       },
       {
@@ -351,11 +528,51 @@
         }
       },
       {
+        "chiave": "tera shift",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 710,
+          "testo": "'tera-shift',"
+        }
+      },
+      {
+        "chiave": "trace",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 691,
+          "testo": "'trace',"
+        }
+      },
+      {
         "chiave": "vessel of ruin",
         "prova": {
           "file": "src/lib/rules.js",
           "riga": 512,
           "testo": "'vessel-of-ruin',"
+        }
+      },
+      {
+        "chiave": "wonder guard",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 692,
+          "testo": "'wonder-guard',"
+        }
+      },
+      {
+        "chiave": "zen mode",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 693,
+          "testo": "'zen-mode',"
+        }
+      },
+      {
+        "chiave": "zero to hero",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 694,
+          "testo": "'zero-to-hero',"
         }
       }
     ],

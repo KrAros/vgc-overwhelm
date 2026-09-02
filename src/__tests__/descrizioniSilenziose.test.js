@@ -135,6 +135,12 @@ const VERDETTI = {
   'interruttore-critico':
     'promette una probabilità di brutto colpo. Nell\'app il critico è un '
     + 'interruttore che sceglie l\'utente, non una probabilità che calcoliamo.',
+  'nemmeno-il-riferimento':
+    'il RIFERIMENTO non la calcola. Il suo nome compare nel sorgente di NCP '
+    + 'una volta sola, dentro `cannotCopy` — la lista di cio\' che Trace non '
+    + 'puo\' copiare — e da nessun\'altra parte. Non siamo indietro: non c\'e\' '
+    + 'un numero da recuperare, e il segnalino «non calcolata» direbbe il '
+    + 'contrario. Verificato da `listeDiSoliNomi.test.js`.',
   'silenziosa':
     'DIFETTO. L\'app descrive un effetto su un numero che mostra, non lo '
     + 'applica, e il segnalino non lo dichiara.',
@@ -155,6 +161,19 @@ const REGISTRO = {
     verdetto: 'applicata-altrove',
     prova: 'lib/damage.js — SAND_IMMUNE_ABILITIES, come magic-guard.',
   },
+
+  // ── Il riferimento non le calcola nemmeno lui ───────────────────────────
+  //
+  // Stavano nel divario perche' il registro cerca il nome dell'abilita' nel
+  // sorgente di NCP, e il loro nome c'e': dentro `cannotCopy`, la lista di
+  // cio' che Trace non puo' copiare. Comparire li' non e' essere calcolati.
+  //
+  // Tolto il segnalino, la descrizione e' rimasta a promettere un effetto
+  // senza nessuno che dichiarasse il silenzio — ed e' questo test ad averlo
+  // detto, appena rigenerato il registro. Il verdetto e' che non c'e' niente
+  // da recuperare.
+  'disguise': { verdetto: 'nemmeno-il-riferimento' },
+  'illusion': { verdetto: 'nemmeno-il-riferimento' },
 
   // ── Variazioni di statistica fra turni ──────────────────────────────────
   'anger-point': { verdetto: 'stadi' },
