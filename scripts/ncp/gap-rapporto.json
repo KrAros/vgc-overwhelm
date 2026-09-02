@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T11:48:39.655Z",
+    "generatedAt": "2026-09-02T15:42:43.744Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 176,
-    "abilitaNelGap": 14,
+    "abilitaSenzaEffetto": 173,
+    "abilitaNelGap": 11,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -17,16 +17,6 @@
   "prove": {
     "abilita": [
       {
-        "chiave": "battle bond",
-        "nome": "Battle Bond",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkBattleBond",
-          "file": "damage_MASTER.js",
-          "riga": 684
-        }
-      },
-      {
         "chiave": "comatose",
         "nome": "Comatose",
         "canale": "STR",
@@ -34,16 +24,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1163
-        }
-      },
-      {
-        "chiave": "embody aspect",
-        "nome": "Embody Aspect",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkEmbodyAspect",
-          "file": "damage_MASTER.js",
-          "riga": 666
         }
       },
       {
@@ -134,16 +114,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1144
-        }
-      },
-      {
-        "chiave": "supersweet syrup",
-        "nome": "Supersweet Syrup",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkSupersweetSyrup",
-          "file": "damage_MASTER.js",
-          "riga": 549
         }
       },
       {

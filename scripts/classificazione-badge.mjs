@@ -83,25 +83,6 @@ export const CLASSIFICAZIONE = {
     // La classificazione descrive uno STATO, non un fatto storico. Quando lo
     // stato cambia, la riga se ne va.
 
-    // ── Le quattro «of Ruin» ────────────────────────────────────────────────
-    //
-    // Il motore le NOMINA da quando c'è Mold Breaker: stanno in
-    // `ABILITA_NON_IGNORABILI` dentro `lib/rules.js`, l'elenco delle dieci che
-    // Mold Breaker non riesce a ignorare (trascritto da
-    // `damage_MASTER.js:999`).
-    //
-    // Ma essere nominate lì non vuol dire essere calcolate. Quella lista dice
-    // solo «se un giorno le calcolassimo, Mold Breaker non le spegnerebbe». Il
-    // loro effetto vero — abbassare di un quarto una statistica di TUTTI i
-    // Pokémon in campo tranne chi la porta — non è implementato, e il badge
-    // «non calcolata» è corretto.
-    //
-    // Sono in quella lista perché il riferimento le mette nella stessa riga
-    // delle altre sei: prenderne sei su dieci dentro un elenco unico sarebbe
-    // stato decidere a mano quale metà vale.
-    //
-    // Il giorno che le implementiamo, escono dal divario da sé e queste
-    // quattro righe se ne vanno con loro.
     // ── Nominate perche' stanno nelle due liste dei copiatori ─────────────
     //
     // `ABILITA_NON_COPIABILI` e `ABILITA_NON_SPEGNIBILI` in rules.js sono
@@ -112,10 +93,6 @@ export const CLASSIFICAZIONE = {
     // Comatose e Forecast il riferimento le calcola ALTROVE (Comatose in
     // `immunityChecks` e nelle mosse che leggono lo stato, Forecast in
     // `checkForecast`), e noi no. Il badge quindi e' corretto.
-    'battle bond': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js la nomina fra le abilita\' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — la forma di Ash-Greninja e il +1 alle statistiche in gen 9 — non e\' implementato, e NCP lo calcola',
-    },
     'comatose': {
       verdetto: 'meccanica-diversa',
       nota: 'rules.js la nomina fra le abilita\' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — valere come «addormentato» per Hex, Dream Eater e Wake-Up Slap — non e\' implementato, e NCP lo calcola',
@@ -125,22 +102,6 @@ export const CLASSIFICAZIONE = {
       nota: 'rules.js la nomina fra le abilita\' che Trace non copia (damage_MASTER.js:387). Il suo effetto — riscrivere il tipo di Castform col meteo, in `checkForecast` — non e\' implementato, e NCP lo calcola',
     },
 
-    'tablets of ruin': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js:511 la nomina fra le dieci che Mold Breaker non ignora (trascritte da damage_MASTER.js:999). Il suo effetto — -25% Attacco a tutti tranne chi la porta — non è implementato, e NCP lo calcola',
-    },
-    'vessel of ruin': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js:512 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Att. Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola',
-    },
-    'sword of ruin': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js:513 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa a tutti tranne chi la porta — non è implementato, e NCP lo calcola',
-    },
-    'beads of ruin': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js:514 la nomina fra le dieci che Mold Breaker non ignora. Il suo effetto — -25% Difesa Speciale a tutti tranne chi la porta — non è implementato, e NCP lo calcola',
-    },
   },
   strumenti: {
     'iron ball': {
