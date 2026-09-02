@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T06:47:30.515Z",
+    "generatedAt": "2026-09-02T07:39:15.721Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 182,
-    "abilitaNelGap": 28,
+    "abilitaSenzaEffetto": 180,
+    "abilitaNelGap": 18,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -21,9 +21,9 @@
         "nome": "Battle Bond",
         "canale": "STR",
         "prova": {
-          "funzione": "checkTrace",
+          "funzione": "checkBattleBond",
           "file": "damage_MASTER.js",
-          "riga": 387
+          "riga": 684
         }
       },
       {
@@ -31,29 +31,9 @@
         "nome": "Comatose",
         "canale": "STR",
         "prova": {
-          "funzione": "checkTrace",
+          "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
-          "riga": 387
-        }
-      },
-      {
-        "chiave": "commander",
-        "nome": "Commander",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
-        }
-      },
-      {
-        "chiave": "disguise",
-        "nome": "Disguise",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
+          "riga": 1163
         }
       },
       {
@@ -83,7 +63,7 @@
         "prova": {
           "funzione": "checkTrace",
           "file": "damage_MASTER.js",
-          "riga": 387
+          "riga": 392
         }
       },
       {
@@ -97,16 +77,6 @@
         }
       },
       {
-        "chiave": "gulp missile",
-        "nome": "Gulp Missile",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 387
-        }
-      },
-      {
         "chiave": "guts",
         "nome": "Guts",
         "canale": "STR",
@@ -114,36 +84,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1941
-        }
-      },
-      {
-        "chiave": "ice face",
-        "nome": "Ice Face",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
-        }
-      },
-      {
-        "chiave": "illusion",
-        "nome": "Illusion",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
-        }
-      },
-      {
-        "chiave": "imposter",
-        "nome": "Imposter",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
         }
       },
       {
@@ -187,16 +127,6 @@
         }
       },
       {
-        "chiave": "neutralizing gas",
-        "nome": "Neutralizing Gas",
-        "canale": "ID",
-        "prova": {
-          "funzione": "calcBPMods",
-          "file": "damage_MASTER.js",
-          "riga": 1574
-        }
-      },
-      {
         "chiave": "normalize",
         "nome": "Normalize",
         "canale": "STR",
@@ -207,16 +137,6 @@
         }
       },
       {
-        "chiave": "power of alchemy",
-        "nome": "Power of Alchemy",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
-        }
-      },
-      {
         "chiave": "rattled",
         "nome": "Rattled",
         "canale": "STR",
@@ -224,16 +144,6 @@
           "funzione": "checkIntimidate",
           "file": "damage_MASTER.js",
           "riga": 588
-        }
-      },
-      {
-        "chiave": "receiver",
-        "nome": "Receiver",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 388
         }
       },
       {
@@ -284,16 +194,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1671
-        }
-      },
-      {
-        "chiave": "trace",
-        "nome": "Trace",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 389
         }
       }
     ],

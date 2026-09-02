@@ -255,6 +255,60 @@ const norm = (s) => String(s).toLowerCase().replace(/[.'’:]/g, '').replace(/[\
 // il punto cieco è sopravvissuto. Due copie della stessa assunzione non sono
 // due verifiche.
 
+/**
+ * ─── LE DUE LISTE CHE SONO SOLO NOMI, E NON UN CALCOLO ──────────────────────
+ *
+ * Il registro cerca il nome di un'abilita' dentro il sorgente del riferimento:
+ * se lo trova, conclude che il riferimento la calcola. Per quasi tutte e'
+ * vero, e per due liste no.
+ *
+ *     `cannotCopy`     in `checkTrace`       (`damage_MASTER.js:387`)
+ *     `cannotSupress`  in `checkNeutralGas`  (`:403`)
+ *
+ * Sono elenchi di abilita' che Trace non puo' copiare e che Neutralizing Gas
+ * non puo' spegnere. Comparire li' dentro non e' essere calcolati: e' il
+ * contrario — e' essere l'eccezione a un calcolo altrui.
+ *
+ * Misurato prima di scrivere questo: otto abilita' stavano nel divario SOLO
+ * per questo — Commander, Disguise, Gulp Missile, Ice Face, Illusion,
+ * Imposter, Power of Alchemy, Receiver. Nessuna occorrenza altrove nel
+ * riferimento. Il segnalino «non calcolata» diceva all'utente che siamo
+ * indietro su qualcosa che non ha niente da calcolare.
+ *
+ * (Battle Bond, Comatose, Forecast e Trace comparivano anch'esse in quelle
+ * liste, ma sono calcolate ALTROVE: restano nel divario, com'e' giusto. E'
+ * il motivo per cui qui si tolgono i LETTERALI dentro la lista e non le
+ * abilita' che la lista nomina.)
+ */
+const LISTE_DI_SOLI_NOMI = ['cannotCopy', 'cannotSupress']
+
+/**
+ * Le righe (assolute) occupate dalle due liste, per ogni corpo di funzione.
+ *
+ * Si lavora su `c.codice`, dove `scandisci` ha gia' sostituito ogni stringa
+ * con ` _STR_ `: qui non serve il contenuto, serve solo sapere DOVE comincia
+ * e dove finisce la parentesi quadra.
+ */
+function righeDelleListe(c) {
+  const fuori = new Set()
+  const righe = c.codice.split('\n')
+  for (let i = 0; i < righe.length; i++) {
+    const apre = LISTE_DI_SOLI_NOMI.some(
+      nome => new RegExp(`\\b${nome}\\s*=\\s*\\[`).test(righe[i]))
+    if (!apre) continue
+    let profondita = 0
+    for (let j = i; j < righe.length; j++) {
+      for (const ch of righe[j]) {
+        if (ch === '[') profondita++
+        else if (ch === ']') profondita--
+      }
+      fuori.add(c.rigaInizio + j)
+      if (profondita === 0) { i = j; break }
+    }
+  }
+  return fuori
+}
+
 function costruisciIndice(corpi, funzioni) {
   const perLetterale = new Map()
   const perIdentificatore = new Map()
@@ -263,7 +317,11 @@ function costruisciIndice(corpi, funzioni) {
   for (const f of funzioni) {
     const c = corpi[f]
     if (!c) continue
+    const righeSoloNomi = righeDelleListe(c)
     for (const l of c.letterali) {
+      // Un nome dentro `cannotCopy` o `cannotSupress` non e' una prova che il
+      // riferimento calcoli quell'abilita': e' una prova del contrario.
+      if (righeSoloNomi.has(l.riga)) continue
       const n = norm(l.testo)
       if (!perLetterale.has(n)) perLetterale.set(n, [])
       perLetterale.get(n).push({ funzione: f, file: c.file, riga: l.riga })

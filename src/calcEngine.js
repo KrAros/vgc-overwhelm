@@ -5,7 +5,7 @@ import pokemonData from './data/pokemon.json'
 import movesData from './data/moves.json'
 import { getEffectiveness, hasSTAB, TYPES } from './data/typeChart.js'
 import { ITEM_EFFECTS } from './data/itemEffects.js'
-import { ABILITY_EFFECTS, normalizeAbilityKey } from './data/abilityEffects.js'
+import { ABILITY_EFFECTS } from './data/abilityEffects.js'
 import { IS_DEBUG, publishDebugLog } from './lib/debugBus.js'
 import {
   LEVEL,
@@ -30,7 +30,7 @@ import {
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
-import { preparaCoppia } from './lib/preparazione.js'
+import { preparaCoppia, abilitaEffettive } from './lib/preparazione.js'
 
 /**
  * Supreme Overlord: un moltiplicatore di potenza per ogni alleato caduto.
@@ -194,8 +194,28 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (!atkPokeData || !defPokeData) return null
 
   // ── Chiavi abilità normalizzate ──────────────────────────────────────────
-  const atkAbilKey = normalizeAbilityKey(atkAbility)
-  const defAbilKey = normalizeAbilityKey(defAbility)
+  //
+  // Prima di normalizzare c'e' da sapere QUALE abilita' ciascuno dei due ha
+  // davvero: Trace copia quella dell'altro e Neutralizing Gas le spegne
+  // tutt'e due. Nel riferimento sono le prime tre righe di
+  // `CALCULATE_ALL_MOVES_SV` (`damage_SV.js:7-9`), prima di ogni altra cosa,
+  // e da noi stanno in `abilitaEffettive` per la stessa ragione per cui ci
+  // sta la preparazione: sono una trasformazione dei due Pokemon, non un
+  // pezzo della formula.
+  //
+  // `gasNeutro` torna a parte perche' non e' un'abilita': e' il segnale di
+  // campo che le aure e le quattro Rovina leggono come
+  // `field.isNeutralizingGas`, e resta acceso anche dopo che il gas ha spento
+  // l'abilita' di chi lo porta.
+  const { attaccante: atkAbilVera, difensore: defAbilVera, gasNeutro } =
+    abilitaEffettive({
+      atkAbility, defAbility,
+      atkInterruttore: atkAbilityFlags.interruttore === true,
+      defInterruttore: defAbilityFlags.interruttore === true,
+    })
+
+  const atkAbilKey = atkAbilVera || ''
+  const defAbilKey = defAbilVera || ''
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffettiva = ABILITY_EFFECTS[defAbilKey] || null
 
@@ -513,7 +533,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const preparazione = preparaCoppia({
     attaccante: {
       pokemon: atkPokemon, sps: atkSPs, natura: atkNature, livello: level,
-      abilita: atkAbility, strumento: atkItem,
+      abilita: atkAbilVera, strumento: atkItem,
       abilitaAccesa: atkAbilityFlags.intimidateActive === true,
       koFatto: atkAbilityFlags.eelevateKOActive === true,
       assorbimentoFatto: atkAbilityFlags.assorbimentoAttivo === true,
@@ -521,7 +541,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     },
     difensore: {
       pokemon: defPokemon, sps: defSPs, natura: defNature,
-      abilita: defAbility, strumento: defItem,
+      abilita: defAbilVera, strumento: defItem,
       abilitaAccesa: defAbilityFlags.intimidateActive === true,
       koFatto: defAbilityFlags.eelevateKOActive === true,
       assorbimentoFatto: defAbilityFlags.assorbimentoAttivo === true,
@@ -752,7 +772,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // e' trascritta la forma del riferimento — «e' in campo» E «non e' chi la
   // subisce» — e non la sua semplificazione.
   const ruinInCampo = (nome) =>
-    atkAbilEffect?.ruin === nome || defAbilEffect?.ruin === nome
+    !gasNeutro && (atkAbilEffect?.ruin === nome || defAbilEffect?.ruin === nome)
 
   const dfMods = []
 
@@ -1080,7 +1100,23 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const frangiaura =
     atkAbilEffect?.auraBreak === true || defAbilEffect?.auraBreak === true
 
-  if (auraDelTipoInCampo && frangiaura) bpMods.push(MOD.X0_75)
+  // `!field.isNeutralizingGas` sta in tutt'e due i rami dell'aura
+  // (`damage_MASTER.js:1574` e `:1655`) e nelle quattro Rovina (`:1908-1909`,
+  // `:2077-2078`).
+  //
+  // ─── E DA NOI NON E' OSSERVABILE. MISURATO. ──────────────────────────────
+  //
+  // Nel riferimento aure e Rovina vengono da CASELLE, che possono essere
+  // accese da un alleato che nel calcolo non compare: li' il gas deve
+  // spegnerle esplicitamente. Da noi vengono dai due slot, e il gas quegli
+  // slot li ha gia' azzerati in `abilitaEffettive` — nessuna delle sei sta
+  // fra le non spegnibili. Quindi la condizione non puo' mai essere la sola
+  // cosa che decide.
+  //
+  // E' scritta lo stesso perche' e' vera nel riferimento, e perche' il giorno
+  // in cui aure o Rovina diventassero caselle diventerebbe l'unica cosa che
+  // le spegne.
+  if (auraDelTipoInCampo && frangiaura && !gasNeutro) bpMods.push(MOD.X0_75)
 
   // c.i — abilità "ate": Pixilate, Aerilate, Refrigerate, Dragonize.
   if (ateBoost) bpMods.push(MOD.X1_2)
@@ -1222,7 +1258,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Frangiaura (`aura-break`) rovescia l'aura in ×0,75 — nel riferimento è il
   // punto a della stessa funzione. Non è implementata, e resta nelle 108: il
   // segnalino «non calcolata» lo dice all'utente che la sceglie.
-  if (auraDelTipoInCampo && !frangiaura) bpMods.push(MOD.X1_33)
+  if (auraDelTipoInCampo && !frangiaura && !gasNeutro) bpMods.push(MOD.X1_33)
 
   // g — Megalancio sulle mosse-impulso: ×1.5.
   //

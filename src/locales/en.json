@@ -1941,7 +1941,8 @@
     "torrent": "$t(abilities.torrent) — HP at a third or less: Water moves ×1.5",
     "swarm": "$t(abilities.swarm) — HP at a third or less: Bug moves ×1.5",
     "defeatist": "$t(abilities.defeatist) — HP below half: attack ×0.5",
-    "wind-power": "$t(abilities.wind-power) — charged: Electric moves ×2"
+    "wind-power": "$t(abilities.wind-power) — charged: Electric moves ×2",
+    "trace": "$t(abilities.trace) — has copied the opponent's ability"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1975,6 +1976,7 @@
     "torrent": "HP above a third — no boost",
     "swarm": "HP above a third — no boost",
     "defeatist": "HP above half — full attack",
-    "wind-power": "Not charged yet — needs a wind move"
+    "wind-power": "Not charged yet — needs a wind move",
+    "trace": "Not copied yet — no borrowed ability"
   }
 }

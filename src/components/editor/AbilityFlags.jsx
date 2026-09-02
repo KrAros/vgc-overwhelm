@@ -278,7 +278,8 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   if (ABILITY_EFFECTS[key]?.plusMinus || ABILITY_EFFECTS[key]?.caricata
       || ABILITY_EFFECTS[key]?.protean || ABILITY_EFFECTS[key]?.stakeout
       || ABILITY_EFFECTS[key]?.slowStart || ABILITY_EFFECTS[key]?.defeatist
-      || ABILITY_EFFECTS[key]?.psBassiTipo !== undefined) {
+      || ABILITY_EFFECTS[key]?.psBassiTipo !== undefined
+      || ABILITY_EFFECTS[key]?.trace) {
     return (
       <div className={`${RIQUADRO} gap-2 ${flags.interruttore ? ACCESO : SPENTO}`}>
         <button

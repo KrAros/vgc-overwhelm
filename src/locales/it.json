@@ -1941,7 +1941,8 @@
     "torrent": "$t(abilities.torrent) — PS a un terzo o meno: mosse Acqua ×1,5",
     "swarm": "$t(abilities.swarm) — PS a un terzo o meno: mosse Coleottero ×1,5",
     "defeatist": "$t(abilities.defeatist) — PS sotto la metà: attacco ×0,5",
-    "wind-power": "$t(abilities.wind-power) — caricata: mosse Elettro ×2"
+    "wind-power": "$t(abilities.wind-power) — caricata: mosse Elettro ×2",
+    "trace": "$t(abilities.trace) — ha copiato l'abilità dell'avversario"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1975,6 +1976,7 @@
     "torrent": "PS sopra un terzo — nessun potenziamento",
     "swarm": "PS sopra un terzo — nessun potenziamento",
     "defeatist": "PS sopra la metà — attacco pieno",
-    "wind-power": "Non ancora caricata — serve un colpo di vento"
+    "wind-power": "Non ancora caricata — serve un colpo di vento",
+    "trace": "Non ancora copiata — nessuna abilità presa in prestito"
   }
 }

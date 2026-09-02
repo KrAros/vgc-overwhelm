@@ -75,6 +75,8 @@ import {
   applyBoost,
   normalizzaMeteo,
   STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
+  ABILITA_NON_COPIABILI,
+  ABILITA_NON_SPEGNIBILI,
 } from './rules.js'
 
 /**
@@ -442,6 +444,75 @@ function checkBoostAssorbimento(lato) {
  *          `boosts` (i cinque stadi finali), `strumento` (eventualmente
  *          consumato), `paradosso` (booleano), `statPiuAlta` (chiave).
  */
+/**
+ * ─── I DUE CHE RISCRIVONO L'ABILITA' PRIMA DI TUTTO ─────────────────────────
+ *
+ * Trace e Neutralizing Gas non moltiplicano niente: cambiano QUALE abilita'
+ * ciascuno dei due ha, e tutto il resto — Intimidate, Download, le abilita'
+ * paradosso, le catene — gira poi sull'abilita' nuova.
+ *
+ * Nel riferimento sono le prime tre righe di `CALCULATE_ALL_MOVES_SV`
+ * (`damage_SV.js:7-9`), prima di ogni altro controllo:
+ *
+ *     checkTrace(p1, p2);
+ *     checkTrace(p2, p1);
+ *     checkNeutralGas(p1, p2, field.getNeutralGas());
+ *
+ * ─── L'ORDINE DELLE DUE CHIAMATE A TRACE E' OSSERVABILE ────────────────────
+ *
+ * `checkTrace(p1, p2)` scrive dentro `p1.ability`. La chiamata dopo,
+ * `checkTrace(p2, p1)`, LEGGE `p1.ability` — cioe' quella appena scritta. Con
+ * due Trace uno di fronte all'altro la seconda copierebbe la copia. Non
+ * succede, perche' `Trace` sta nella lista delle non copiabili e la prima
+ * chiamata quindi non scrive niente; ma la sequenza e' quella, ed e'
+ * trascritta cosi'.
+ *
+ * ─── NEUTRALIZING GAS: DA NOI E' NEI DUE SLOT, NEL RIFERIMENTO E' UNA CASELLA
+ *
+ * Il riferimento legge `field.getNeutralGas()`, una casella dell'interfaccia:
+ * la presenza dell'abilita' addosso a qualcuno, da sola, non spegne niente.
+ * Da noi vale la regola gia' scelta per le aure e per le quattro Rovina — si
+ * guarda l'abilita' dei due Pokemon dello scontro.
+ *
+ * Si decide sugli slot ORIGINALI, prima di Trace. Non e' una scorciatoia: se
+ * Trace copiasse un Neutralizing Gas, vorrebbe dire che il copiato ce l'ha
+ * gia', e il gas sarebbe in campo comunque.
+ *
+ * E il gas spegne ANCHE l'abilita' di chi lo porta: `cannotSupress` non
+ * contiene Neutralizing Gas, e il riferimento azzera tutt'e due i Pokemon.
+ * Il segnale di campo resta pero' acceso — serve alle aure e alle Rovina, che
+ * lo leggono come `field.isNeutralizingGas` — ed e' per questo che qui torna
+ * separato dalle due abilita'.
+ *
+ * @returns {{attaccante: string|null, difensore: string|null, gasNeutro: boolean}}
+ */
+export function abilitaEffettive({
+  atkAbility, defAbility, atkInterruttore = false, defInterruttore = false,
+}) {
+  // p1 = difensore, p2 = attaccante: la convenzione di tutto questo file.
+  let p1 = normalizeAbilityKey(defAbility) || null
+  let p2 = normalizeAbilityKey(atkAbility) || null
+
+  const gas = k => ABILITY_EFFECTS[k]?.gasNeutro === true
+  const gasNeutro = gas(p1) || gas(p2)
+
+  // checkTrace(p1, p2) — il difensore copia l'attaccante.
+  if (ABILITY_EFFECTS[p1]?.trace && defInterruttore && p2 && !ABILITA_NON_COPIABILI.has(p2)) {
+    p1 = p2
+  }
+  // checkTrace(p2, p1) — l'attaccante copia il difensore, gia' aggiornato.
+  if (ABILITY_EFFECTS[p2]?.trace && atkInterruttore && p1 && !ABILITA_NON_COPIABILI.has(p1)) {
+    p2 = p1
+  }
+
+  if (gasNeutro) {
+    if (p1 && !ABILITA_NON_SPEGNIBILI.has(p1)) p1 = null
+    if (p2 && !ABILITA_NON_SPEGNIBILI.has(p2)) p2 = null
+  }
+
+  return { attaccante: p2, difensore: p1, gasNeutro }
+}
+
 export function preparaCoppia({ attaccante, difensore, meteo = null, terreno = null }) {
   // p1 = difensore, p2 = attaccante. Vedi la nota in cima al file.
   const p1 = costruisciLato(difensore)

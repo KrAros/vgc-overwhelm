@@ -640,3 +640,74 @@ export function potenzaDaRapportoPeso(rapporto) {
     : rapporto >= 2 ? 60
     : 40
 }
+
+/**
+ * ─── LE DUE LISTE DEI COPIATORI ─────────────────────────────────────────────
+ *
+ * Trascritte da `checkTrace` (`damage_MASTER.js:387`) e da `checkNeutralGas`
+ * (`:403`). Sono le abilita' che Trace non puo' copiare e quelle che
+ * Neutralizing Gas non puo' spegnere.
+ *
+ * Le due liste NON coincidono, ed e' la cosa da non dedurre. Contate:
+ *
+ *   undici stanno solo fra le non copiabili — Commander, Flower Gift,
+ *   Forecast, Illusion, Imposter, Power of Alchemy, Protosynthesis, Quark
+ *   Drive, Receiver, Trace, Wonder Guard: Trace non le copia, Neutralizing
+ *   Gas le spegne;
+ *
+ *   due stanno solo fra le non spegnibili — Power Construct e Tera Shift:
+ *   Neutralizing Gas non le spegne, e Trace le copierebbe.
+ *
+ * Trascritte separatamente proprio per questo: dedurre l'una dall'altra
+ * sbaglierebbe tredici voci su ventiquattro.
+ *
+ * I rami del riferimento per `gen <= 4` non sono qui: giriamo a `gen = 10`.
+ *
+ * L'`Ability Shield` che il riferimento controlla in tutt'e due le funzioni
+ * non e' fra i nostri strumenti, quindi la sua condizione non ha oggi niente
+ * su cui essere vera. Resta scritta nei commenti del motore.
+ */
+export const ABILITA_NON_COPIABILI = new Set([
+  'as-one',
+  'battle-bond',
+  'comatose',
+  'commander',
+  'disguise',
+  'flower-gift',
+  'forecast',
+  'gulp-missile',
+  'ice-face',
+  'illusion',
+  'imposter',
+  'multitype',
+  'power-of-alchemy',
+  'protosynthesis',
+  'quark-drive',
+  'receiver',
+  'rks-system',
+  'schooling',
+  'shields-down',
+  'stance-change',
+  'trace',
+  'wonder-guard',
+  'zen-mode',
+  'zero-to-hero',
+])
+
+export const ABILITA_NON_SPEGNIBILI = new Set([
+  'as-one',
+  'battle-bond',
+  'comatose',
+  'disguise',
+  'gulp-missile',
+  'ice-face',
+  'multitype',
+  'power-construct',
+  'rks-system',
+  'schooling',
+  'shields-down',
+  'stance-change',
+  'tera-shift',
+  'zen-mode',
+  'zero-to-hero',
+])
