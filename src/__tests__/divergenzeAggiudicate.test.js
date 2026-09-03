@@ -32,6 +32,7 @@ import path from 'node:path'
 import { preparaCoppia } from '../lib/preparazione.js'
 import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
 import { DANNO_FINE_TURNO_PER_STATO, STATI } from '../lib/rules.js'
+import { vociFineTurnoDaStato } from '../lib/damage.js'
 
 const RADICE = path.resolve(import.meta.dirname, '..', '..')
 const SORGENTE = path.join(RADICE, 'vendor', 'ncp', 'damage_MASTER.js')
@@ -305,13 +306,20 @@ describe('scritte adesso, raggiungibili quando la specie arriverà', () => {
  * massimi. È la ragione per cui `calcEOT` torna anche `eotAlTurno`, e per cui
  * le due DP accettano una funzione al posto del numero.
  *
+ * ─── E HEATPROOF, CHE DIMEZZA LA BRUCIATURA ────────────────────────────────
+ *
+ * Qui c'era scritto che non l'avevamo fatto, e che era il caso successivo.
+ * Adesso c'è, aggiudicato da Simone come tutto il resto del fine turno.
+ *
+ * Non era solo una riga mancante: era una MEZZA ABILITÀ, della stessa forma di
+ * Magicscudo. La descrizione dice da sempre «dimezza il danno subito dalle
+ * mosse Fuoco **e dalla bruciatura**», e di quelle due metà il motore ne
+ * applicava una. Nessun presidio poteva dirlo — `descrizioniSilenziose` scarta
+ * un'abilità appena ha UN campo, ed è il suo punto cieco dichiarato.
+ *
  * ─── COSA RESTA FUORI, E VA DETTO ──────────────────────────────────────────
  *
- * Heatproof, nel gioco, dimezza il danno da bruciatura. Non l'abbiamo
- * scritto: il riferimento non lo dice, e sarebbe un'aggiudicazione in più di
- * quelle chieste. È il caso successivo, non una dimenticanza.
- *
- * E lo stato è un'ASSERZIONE DI CHI USA L'APP, non un fatto verificato: il
+ * Lo stato è un'ASSERZIONE DI CHI USA L'APP, non un fatto verificato: il
  * menù lascia scegliere «bruciato» su un Pokémon di tipo Fuoco, che nel gioco
  * non si può bruciare. Non lo impediamo, e non è una svista — l'app calcola il
  * turno che le si descrive.
@@ -395,10 +403,25 @@ describe('il fine turno: cinque abilità dove il riferimento non arriva', () => 
     }
   })
 
-  it('Heatproof NON dimezza la bruciatura, ed è una scelta', () => {
-    // Nel gioco la dimezza. Il giorno che si decide di scriverlo, questo test
-    // diventa rosso e la nota qui sopra va riscritta nello stesso commit.
-    expect(ABILITY_EFFECTS['heatproof']?.annullaDannoDaStato).toBeUndefined()
-    expect(ABILITY_EFFECTS['heatproof']?.dimezzaBruciatura).toBeUndefined()
+  it('Heatproof dimezza la bruciatura, e solo quella', () => {
+    // Il numero: 185 PS fanno 11 di bruciatura, e con Heatproof 5 — la
+    // divisione intera si fa in fondo, sul numero già calcolato, come per
+    // sabbia e Avanzi.
+    expect(ABILITY_EFFECTS['heatproof'].dimezzaBruciatura).toBe(true)
+    expect(vociFineTurnoDaStato('burned', 'heatproof', 185)[0].hp).toBe(-5)
+    expect(vociFineTurnoDaStato('burned', null, 185)[0].hp).toBe(-11)
+    // Sul veleno non c'entra niente, e la condizione lo dice invece di
+    // appoggiarsi al fatto che chi ha Heatproof non sarà mai avvelenato.
+    expect(vociFineTurnoDaStato('poisoned', 'heatproof', 185)[0].hp)
+      .toBe(vociFineTurnoDaStato('poisoned', null, 185)[0].hp)
   })
+
+  it('e nessun\'altra abilità la dimezza', () => {
+    // Elenco esatto: se ne compare una seconda è una decisione nuova, e va
+    // scritta qui prima che nel motore.
+    const dimezzano = Object.keys(ABILITY_EFFECTS)
+      .filter(k => ABILITY_EFFECTS[k].dimezzaBruciatura)
+    expect(dimezzano).toEqual(['heatproof'])
+  })
+
 })

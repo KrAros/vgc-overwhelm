@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T07:45:51.052Z",
+    "generatedAt": "2026-09-03T11:12:20.790Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
     "fileEsaminati": 21,
-    "abilitaNelMotore": 50,
+    "abilitaNelMotore": 47,
     "strumentiNelMotore": 27,
     "classificate": 8,
     "badgeDaTogliere": 6,
@@ -88,7 +88,7 @@
       "nota": "speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:451, che è l'annullamento dello strumento",
       "prova": {
         "file": "src/utils/speedOrder.js",
-        "riga": 93,
+        "riga": 103,
         "testo": "'macho brace', 'iron ball',"
       }
     },
@@ -136,14 +136,6 @@
           "file": "src/lib/rules.js",
           "riga": 575,
           "testo": "'beads-of-ruin',"
-        }
-      },
-      {
-        "chiave": "chlorophyll",
-        "prova": {
-          "file": "src/utils/speedOrder.js",
-          "riga": 64,
-          "testo": "'chlorophyll': ['sun', 'harsh sunshine'],"
         }
       },
       {
@@ -334,7 +326,7 @@
         "chiave": "quick feet",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 225,
+          "riga": 235,
           "testo": "const quickFeet = normalizeAbilityKey(pokemon.ability) === 'quick-feet'"
         }
       },
@@ -411,14 +403,6 @@
         }
       },
       {
-        "chiave": "slush rush",
-        "prova": {
-          "file": "src/utils/speedOrder.js",
-          "riga": 67,
-          "testo": "'slush-rush':  ['snow'],"
-        }
-      },
-      {
         "chiave": "stance change",
         "prova": {
           "file": "src/lib/rules.js",
@@ -430,16 +414,8 @@
         "chiave": "surge surfer",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 206,
+          "riga": 216,
           "testo": "if (normalizeAbilityKey(pokemon.ability) === 'surge-surfer'"
-        }
-      },
-      {
-        "chiave": "swift swim",
-        "prova": {
-          "file": "src/utils/speedOrder.js",
-          "riga": 65,
-          "testo": "'swift-swim':  ['rain', 'heavy rain'],"
         }
       },
       {
@@ -520,7 +496,7 @@
         "chiave": "leftovers",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 248,
+          "riga": 265,
           "testo": "const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'"
         }
       },
@@ -528,7 +504,7 @@
         "chiave": "choice scarf",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 197,
+          "riga": 207,
           "testo": "if (item === 'choice scarf') altriMod *= 1.5"
         }
       },
@@ -680,7 +656,7 @@
         "chiave": "iron ball",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 93,
+          "riga": 103,
           "testo": "'macho brace', 'iron ball',"
         }
       },
@@ -696,7 +672,7 @@
         "chiave": "sitrus berry",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 251,
+          "riga": 268,
           "testo": "const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'"
         }
       },

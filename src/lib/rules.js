@@ -886,12 +886,13 @@ export function famigliaMeteo(meteo) {
  * un'assenza taciuta e' una dimenticanza: `stato.test.js` controlla che ogni
  * voce di `STATI` compaia qui.
  *
- * ─── COSA NON CONTIENE, E VA DETTO ─────────────────────────────────────────
+ * ─── E CHI LO DIMEZZA NON STA QUI ──────────────────────────────────────────
  *
- * Heatproof, nel gioco, DIMEZZA il danno da bruciatura. Non l'abbiamo scritto:
- * il riferimento non lo dice, e sarebbe un'aggiudicazione in piu' di quelle
- * chieste. Sta in `fineTurno.test.js` come cosa nota e non fatta, non come
- * cosa dimenticata.
+ * Heatproof dimezza il danno da bruciatura, e quella riga sta in
+ * `vociFineTurnoDaStato` insieme a Magicscudo e Velencura: questa tabella dice
+ * quanto TOGLIE uno stato, non chi lo attenua. Tenere le due cose separate e'
+ * quello che permette a `divergenzeAggiudicate.test.js` di controllare
+ * l'elenco esatto di chi lo dimezza — oggi uno solo.
  */
 export const DANNO_FINE_TURNO_PER_STATO = Object.freeze({
   'healthy':         { frazione: 0 },

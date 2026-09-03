@@ -595,3 +595,45 @@ describe('e la stringa Smogon conta i turni con la successione', () => {
     expect(s).not.toContain('4HKO')
   })
 })
+
+describe('Heatproof, la meta\' che mancava', () => {
+  /**
+   * ─── ERA UNA MEZZA ABILITA', E LA DESCRIZIONE LO DICEVA ──────────────────
+   *
+   * «Dimezza il danno subito dalle mosse Fuoco **e dalla bruciatura**»: due
+   * metà, e il motore ne applicava una. La stessa forma di Magicscudo, trovata
+   * allo stesso modo — rileggendo la descrizione accanto a quello che il
+   * motore fa — e invisibile agli stessi presidi, perché
+   * `descrizioniSilenziose` scarta un'abilità appena ha UN campo.
+   *
+   * La metà sul Fuoco resta dov'era, nella catena difensiva del danno. Questa
+   * è l'altra.
+   */
+  it('la bruciatura scende a metà, e la divisione intera si fa in fondo', () => {
+    // 185 PS: 11 di bruciatura, 5 con Heatproof. Dimezzare la FRAZIONE invece
+    // del numero — 1/32 — darebbe 5 anche lui qui, ma non su ogni numero: a
+    // 200 PS sono 6 contro 6, a 100 PS 3 contro 3… e a 24 PS 0 contro 1.
+    // Si dimezza il danno, che è quello che dice la descrizione.
+    expect(vociFineTurnoDaStato('burned', 'heatproof', 185)[0].hp).toBe(-5)
+    expect(vociFineTurnoDaStato('burned', null, 185)[0].hp).toBe(-11)
+  })
+
+  it('e non tocca il veleno', () => {
+    // Il controllo negativo: la condizione nomina la bruciatura, non «gli
+    // stati». Senza, un Heatproof avvelenato prenderebbe metà veleno.
+    for (const s of ['poisoned', 'badly-poisoned']) {
+      expect(vociFineTurnoDaStato(s, 'heatproof', 185)[0].hp, s)
+        .toBe(vociFineTurnoDaStato(s, null, 185)[0].hp)
+    }
+  })
+
+  it('arriva fino al conteggio dei turni', () => {
+    const con = calcEOT({ ability: 'heatproof', item: null, status: 'burned' }, 185, null, [])
+    const senza = calcEOT({ ability: null, item: null, status: 'burned' }, 185, null, [])
+    expect(con.eotNet).toBe(-5)
+    expect(senza.eotNet).toBe(-11)
+    const colpo = new Array(16).fill(20)
+    expect(findBestNHKO(colpo, 185, con.eotNet).hits)
+      .toBeGreaterThan(findBestNHKO(colpo, 185, senza.eotNet).hits)
+  })
+})
