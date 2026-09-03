@@ -260,7 +260,12 @@ function CopyCalcButton({ smogon }) {
 
 // ── MoveCard NCP style ────────────────────────────────────────────────────────
 
-function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
+// Esportata per `pannelloFineTurno.test.jsx`, che la monta da sola con un
+// `field` scritto a mano. Il pannello intero non e' montabile in un test: il
+// meteo lo legge dallo store, e in SSR Zustand serve lo stato INIZIALE, non
+// quello impostato dal test. Qui il campo arriva come proprieta', e la catena
+// del fine turno si vede davvero disegnata.
+export function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
   const { t } = useTranslation()
 
   // ── Pannello di debug: la cella cliccata, non l'ultima calcolata ──────────
