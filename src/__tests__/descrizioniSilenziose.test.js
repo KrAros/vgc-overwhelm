@@ -134,8 +134,22 @@ const VERDETTI = {
     + 'calcola un colpo solo, e lo stadio si imposta a mano nell\'editor: '
     + 'l\'effetto è esprimibile, ma non è il motore a doverlo accendere.',
   'stato':
-    'promette una condizione di stato (o l\'immunità a una). Gli stati non '
-    + 'sono modellati — §1.12 — e le mosse di stato hanno potenza zero.',
+    // ─── QUESTO TESTO E' STATO RISCRITTO, PERCHE' NON ERA PIU' VERO ────────
+    //
+    // Diceva «gli stati non sono modellati — §1.12». Da questa sessione lo
+    // sono: c'e' il menu' nell'editor, il danno da bruciatura e veleno a fine
+    // turno, e sette abilita' che lo leggono. Un verdetto che afferma una cosa
+    // sul codice e non la ricontrolla e' un registro che diventa una lapide,
+    // ed e' proprio il difetto contro cui questo file mette in guardia.
+    //
+    // Le otto voci qui sotto restano classificate cosi', ma per un'altra
+    // ragione: nessuna LEGGE uno stato — lo INFLIGGONO, lo prevengono o lo
+    // curano. Quello resta fuori dal modello, e resta fuori di proposito.
+    'promette di INFLIGGERE una condizione di stato, di prevenirla o di '
+    + 'curarla. Lo stato ora e\' modellato — c\'e\' il menu\', e sette abilita\' '
+    + 'lo leggono — ma come ASSERZIONE di chi usa l\'app: e\' la descrizione '
+    + 'del turno che si sta calcolando, non un esito che simuliamo. Chi lo '
+    + 'legge e\' implementato; chi lo cambia no.',
   'fuori-turno':
     'promette qualcosa che succede dopo il colpo calcolato: un altro turno, '
     + 'un altro bersaglio, un altro colpo.',
@@ -208,6 +222,13 @@ const REGISTRO = {
   'stalwart':    { verdetto: 'fuori-turno' },
 
   // ── Il critico ──────────────────────────────────────────────────────────
+  // Merciless e' l'unica delle due che oggi POTREBBE cambiare: «infligge
+  // sempre critici ai bersagli avvelenati», e l'avvelenamento del difensore
+  // adesso esiste nel modello. Accendere da sola la levetta del critico
+  // quando il bersaglio e' avvelenato sarebbe un'aggiudicazione — il
+  // riferimento Merciless non la nomina affatto, ne' in `damage_MASTER.js`
+  // ne' in `damage_SV.js`, misurato — e finche' non e' aggiudicata il
+  // verdetto resta questo, scritto e non sottinteso.
   'merciless':  { verdetto: 'interruttore-critico' },
   'super-luck': { verdetto: 'interruttore-critico' },
 

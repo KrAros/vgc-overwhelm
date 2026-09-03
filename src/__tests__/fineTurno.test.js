@@ -595,3 +595,147 @@ describe('e la stringa Smogon conta i turni con la successione', () => {
     expect(s).not.toContain('4HKO')
   })
 })
+
+describe('Heatproof, la meta\' che mancava', () => {
+  /**
+   * ─── ERA UNA MEZZA ABILITA', E LA DESCRIZIONE LO DICEVA ──────────────────
+   *
+   * «Dimezza il danno subito dalle mosse Fuoco **e dalla bruciatura**»: due
+   * metà, e il motore ne applicava una. La stessa forma di Magicscudo, trovata
+   * allo stesso modo — rileggendo la descrizione accanto a quello che il
+   * motore fa — e invisibile agli stessi presidi, perché
+   * `descrizioniSilenziose` scarta un'abilità appena ha UN campo.
+   *
+   * La metà sul Fuoco resta dov'era, nella catena difensiva del danno. Questa
+   * è l'altra.
+   */
+  it('la bruciatura scende a metà, e la divisione intera si fa in fondo', () => {
+    // 185 PS: 11 di bruciatura, 5 con Heatproof. Dimezzare la FRAZIONE invece
+    // del numero — 1/32 — darebbe 5 anche lui qui, ma non su ogni numero: a
+    // 200 PS sono 6 contro 6, a 100 PS 3 contro 3… e a 24 PS 0 contro 1.
+    // Si dimezza il danno, che è quello che dice la descrizione.
+    expect(vociFineTurnoDaStato('burned', 'heatproof', 185)[0].hp).toBe(-5)
+    expect(vociFineTurnoDaStato('burned', null, 185)[0].hp).toBe(-11)
+  })
+
+  it('e non tocca il veleno', () => {
+    // Il controllo negativo: la condizione nomina la bruciatura, non «gli
+    // stati». Senza, un Heatproof avvelenato prenderebbe metà veleno.
+    for (const s of ['poisoned', 'badly-poisoned']) {
+      expect(vociFineTurnoDaStato(s, 'heatproof', 185)[0].hp, s)
+        .toBe(vociFineTurnoDaStato(s, null, 185)[0].hp)
+    }
+  })
+
+  it('arriva fino al conteggio dei turni', () => {
+    const con = calcEOT({ ability: 'heatproof', item: null, status: 'burned' }, 185, null, [])
+    const senza = calcEOT({ ability: null, item: null, status: 'burned' }, 185, null, [])
+    expect(con.eotNet).toBe(-5)
+    expect(senza.eotNet).toBe(-11)
+    const colpo = new Array(16).fill(20)
+    expect(findBestNHKO(colpo, 185, con.eotNet).hits)
+      .toBeGreaterThan(findBestNHKO(colpo, 185, senza.eotNet).hits)
+  })
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 9. Chi legge lo stato, e da quale lato
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── IL CONTROLLO CHE HA CHIUSO IL GIRO ────────────────────────────────────
+ *
+ * Aggiungere il menù dello stato ha reso ESPRIMIBILE una cosa che prima non lo
+ * era, e quindi ha reso osservabili delle abilità che prima non potevano
+ * sbagliare. Sette lo leggono, e ognuna legge UN lato solo:
+ *
+ *   Guts, Flare Boost, Toxic Boost     lo stato di CHI ATTACCA
+ *   Marvel Scale, Poison Heal,         lo stato di CHI SUBISCE
+ *   Magic Guard, Heatproof
+ *
+ * Scambiare i due lati è l'errore facile, e non lo vedrebbe nessun test che usa
+ * lo stesso stato su tutt'e due: un caso con l'attaccante bruciato e il
+ * difensore sano passerebbe identico a uno scritto al contrario.
+ *
+ * Quindi ogni caso qui sotto mette lo stato su UN lato solo, e controlla che
+ * l'effetto ci sia da quel lato e NON dall'altro.
+ */
+describe('ogni abilità che legge lo stato legge il lato giusto', () => {
+  const att = (abilita, stato) => ({
+    atkPokemon: 'garchomp', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null,
+    atkAbility: abilita, atkItem: null, level: 50, atkStatus: stato,
+  })
+  const dif = (abilita, stato) => ({
+    defPokemon: 'blissey', defSPs: [0, 0, 0, 0, 0, 0], defNature: null,
+    defAbility: abilita, defItem: null, defBoost: 0, spDefBoost: 0,
+    defAbilityFlags: {}, defStatus: stato,
+  })
+  const danno = (a, d, mossa) =>
+    calculateDamage({ attacker: a, defender: d, move: mossa, field: {} }).rolls[0]
+
+  const CASI = [
+    // abilità        stato        mossa           lato
+    ['guts',         'burned',    'earthquake',   'attaccante'],
+    ['flare-boost',  'burned',    'flamethrower', 'attaccante'],
+    ['toxic-boost',  'poisoned',  'earthquake',   'attaccante'],
+    // ─── PERCHE' MARVEL SCALE USA IL VELENO E NON LA BRUCIATURA ──────────
+    //
+    // La prima stesura le dava `burned`, e il caso scambiato — attaccante
+    // bruciato, difensore con l'abilità ma sano — usciva 141 invece di 282.
+    // Non era un difetto del motore: la bruciatura dell'ATTACCANTE dimezza il
+    // danno fisico comunque, quindi quel caso non poteva essere neutro.
+    //
+    // Col veleno il controllo torna pulito: un attaccante avvelenato senza
+    // Toxic Boost non cambia niente, e Marvel Scale sale con qualunque stato.
+    ['marvel-scale', 'poisoned',  'earthquake',   'difensore'],
+  ]
+
+  for (const [abilita, stato, mossa, lato] of CASI) {
+    it(`${abilita} guarda ${lato}, e solo quello`, () => {
+      const attivo = lato === 'attaccante'
+        ? danno(att(abilita, stato), dif(null, null), mossa)
+        : danno(att(null, null), dif(abilita, stato), mossa)
+      const neutro = danno(att(null, null), dif(null, null), mossa)
+      expect(attivo, `${abilita} non cambia niente dal suo lato`).not.toBe(neutro)
+
+      // Lo stesso stato sull'ALTRO lato non deve fare niente: è il controllo
+      // che distingue «legge lo stato» da «legge lo stato di chi capita».
+      const scambiato = lato === 'attaccante'
+        ? danno(att(abilita, null), dif(null, stato), mossa)
+        : danno(att(null, stato), dif(abilita, null), mossa)
+      expect(scambiato, `${abilita} risponde allo stato del lato sbagliato`).toBe(neutro)
+    })
+  }
+
+  it('e Guts toglie anche il dimezzamento della bruciatura', () => {
+    // La seconda metà di Guts, che sta nella catena del danno e non
+    // nell'Attacco: senza l'abilità un attaccante bruciato dimezza il fisico.
+    const conGuts = danno(att('guts', 'burned'), dif(null, null), 'earthquake')
+    const senza   = danno(att(null, 'burned'), dif(null, null), 'earthquake')
+    const sano    = danno(att(null, null), dif(null, null), 'earthquake')
+    expect(senza).toBeLessThan(sano)
+    expect(conGuts).toBeGreaterThan(sano)
+  })
+
+  it('Quick Feet legge lo stato, e le sue due metà sono trascritte', async () => {
+    // Non è nella catena del danno: sta in `calcEffectiveSpe`, ed è l'unica
+    // delle sette che il riferimento nomina DUE volte —
+    // `damage_MASTER.js:324` per il ×1,5 e `:351` per la paralisi che non
+    // abbassa la Velocità. Due righe, due metà, tutt'e due implementate: è la
+    // forma che a Magicscudo e a Heatproof mancava.
+    const { calcEffectiveSpe } = await import('../utils/speedOrder.js')
+    const p = (ability, status) => ({
+      key: 'jolteon', sps: [0, 0, 0, 0, 0, 0], nature: null,
+      ability, item: null, status, speBoost: 0,
+    })
+    const base = calcEffectiveSpe(p(null, null), null, false, null)
+    expect(calcEffectiveSpe(p('quick-feet', 'burned'), null, false, null))
+      .toBeGreaterThan(base)
+    // Paralizzato: senza l'abilità la Velocità si dimezza, con l'abilità no —
+    // e in più sale.
+    expect(calcEffectiveSpe(p(null, 'paralyzed'), null, false, null))
+      .toBeLessThan(base)
+    expect(calcEffectiveSpe(p('quick-feet', 'paralyzed'), null, false, null))
+      .toBeGreaterThan(base)
+  })
+})

@@ -914,26 +914,34 @@ export const ABILITY_EFFECTS = {
     
     },
 
-  // ── Meteo: Modifica le statistiche ─────────────────────────
-  'sand-rush':     { sandRush: true
-    
-    
-    },
-
-  'chlorophyll':   { speedWeather: true
-    
-    
-    },
-
-  'swift-swim':    { speedWeather: true
-    
-    
-    },
-
-  'slush-rush':    { speedWeather: true
-    
-    
-    },
+  // ── Meteo: raddoppia la Velocita' ────────────────────────────────────────
+  //
+  // ─── IL VALORE E' L'ELENCO DEI METEO, E NON E' PIU' UN `true` ───────────
+  //
+  // Prima erano `sandRush: true` e `speedWeather: true`, e NESSUNO li leggeva:
+  // il meccanismo vive in `utils/speedOrder.js`, che teneva la corrispondenza
+  // abilita' → meteo in una tabella sua. Due dichiarazioni che sembravano il
+  // meccanismo e non lo erano.
+  //
+  // La testa di `speedOrder.js` racconta che quella tabella era gia' stata in
+  // TRE copie, con tre convenzioni diverse per le chiavi, e che due su quattro
+  // erano sbagliate. Questa era la quarta copia — dormiente, e per questo
+  // sopravvissuta alla riunificazione.
+  //
+  // Adesso il dato sta qui, dove stanno gli altri effetti delle abilita', e
+  // `speedOrder.js` costruisce la sua tabella da questo. Il campo e' letto, e
+  // `campiMorti.test.js` non lo lascia tornare a non esserlo.
+  //
+  // ─── PERCHE' CHLOROPHYLL HA DUE METEO E SAND RUSH UNO ──────────────────
+  //
+  // E' l'asimmetria del riferimento, non nostra: Chlorophyll controlla
+  // `weather.indexOf("Sun")`, che accetta anche il Sole Estremo, mentre Sand
+  // Rush confronta con `"Sand"` esatto. Il perche' per esteso sta in
+  // `speedOrder.js`, dove la tabella si legge.
+  'sand-rush':     { speedWeather: ['sand'] },
+  'chlorophyll':   { speedWeather: ['sun', 'harsh sunshine'] },
+  'swift-swim':    { speedWeather: ['rain', 'heavy rain'] },
+  'slush-rush':    { speedWeather: ['snow'] },
 
   // ── Immunita' alle mosse Terra ───────────────────────────────────────────
   //
@@ -1063,7 +1071,17 @@ export const ABILITY_EFFECTS = {
   'ice-scales': { iceScales: true, showInSmogon: true },
   'prism-armor': { filter: true, showInSmogon: true },
   'fur-coat': { furCoat: true, showInSmogon: true },
-  'heatproof': { heatproof: true, showInSmogon: true },
+  // Heatproof dimezza DUE cose, e la descrizione le dice tutt'e due: «il danno
+  // subito dalle mosse Fuoco e dalla bruciatura». La prima era implementata
+  // (`calcEngine.js`, la catena difensiva), la seconda no — e nessun presidio
+  // poteva dirlo, perche' `descrizioniSilenziose` scarta un'abilita' appena ha
+  // UN campo. Era una mezza abilita' come Magicscudo, trovata allo stesso
+  // modo: rileggendo la descrizione accanto a quello che il motore fa.
+  //
+  // La meta' sulla bruciatura e' un'aggiudicazione di Simone, come tutto il
+  // fine turno: il riferimento non lo calcola. Sta in
+  // `divergenzeAggiudicate.test.js`.
+  'heatproof': { heatproof: true, dimezzaBruciatura: true, showInSmogon: true },
   'hyper-cutter': { intimidateAnnulla: true },
   // Sessione G: attivata la parte che tocca il danno — ignora gli schermi.
   // Safeguard e substitute non sono modellati dal motore, quindi restano

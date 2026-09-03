@@ -37,7 +37,7 @@
 
 import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
-import { normalizeAbilityKey } from '../data/abilityEffects.js'
+import { normalizeAbilityKey, ABILITY_EFFECTS } from '../data/abilityEffects.js'
 import { calcStat } from '../lib/stats.js'
 import { preparaSingolo, preparaCoppia } from '../lib/preparazione.js'
 import { applyBoost, normalizzaMeteo, LEVEL, STAT_SPE } from '../lib/rules.js'
@@ -50,6 +50,15 @@ import { pokeRound } from '../lib/modifiers.js'
  * i valori in quella di `normalizzaMeteo`. Nessuna delle due estremità accetta
  * sinonimi: la traduzione avviene una volta, in `speedWeatherAttiva`.
  *
+ * ─── E LA QUARTA COPIA, CHE ERA DORMIENTE ──────────────────────────────────
+ * La nota qui sotto racconta di tre copie disallineate, riunite in questa. Ce
+ * n'era una quarta e nessuna delle tre l'aveva vista: `sandRush: true` e
+ * `speedWeather: true` in `ABILITY_EFFECTS`, che NESSUN file leggeva. Non
+ * sbagliavano — non facevano niente, e sembravano il meccanismo.
+ *
+ * Adesso il dato sta LA' — `speedWeather: ['sun', 'harsh sunshine']` — e
+ * questa tabella si costruisce da quello. Le copie sono zero.
+ *
  * ─── PERCHÉ CHLOROPHYLL HA DUE METEO E SAND RUSH UNO ──────────────────────
  * Non è un'asimmetria nostra, è quella di NCP (`getFinalSpeed`, punto f):
  * Chlorophyll controlla `weather.indexOf("Sun")`, che accetta anche il Sole
@@ -60,12 +69,13 @@ import { pokeRound } from '../lib/modifiers.js'
  * Slush Rush in NCP accetta `["Hail", "Snow"]`; da noi la grandine non è più
  * una condizione separata (vedi `normalizzaMeteo`), quindi resta `snow`.
  */
-export const SPEED_WEATHER_ABILITIES = Object.freeze({
-  'chlorophyll': ['sun', 'harsh sunshine'],
-  'swift-swim':  ['rain', 'heavy rain'],
-  'sand-rush':   ['sand'],
-  'slush-rush':  ['snow'],
-})
+export const SPEED_WEATHER_ABILITIES = Object.freeze(
+  Object.fromEntries(
+    Object.entries(ABILITY_EFFECTS)
+      .filter(([, v]) => Array.isArray(v.speedWeather))
+      .map(([chiave, v]) => [chiave, Object.freeze([...v.speedWeather])]),
+  ),
+)
 
 /**
  * True se l'abilità raddoppia la Velocità con questo meteo.

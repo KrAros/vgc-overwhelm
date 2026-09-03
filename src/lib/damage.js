@@ -193,9 +193,26 @@ export function vociFineTurnoDaStato(stato, abilita, defHP, turno = 1) {
   if (effetto?.annullaDannoDaVeleno && STATI_VELENO.has(stato)) return []
 
   const passi = regola.crescente ? Math.min(turno, TETTO_IRIDE) : 1
+  const pieno = Math.floor(defHP * passi / regola.frazione)
+
+  // ─── HEATPROOF DIMEZZA LA BRUCIATURA ────────────────────────────────────
+  //
+  // La sua descrizione lo dice da sempre — «dimezza il danno subito dalle
+  // mosse Fuoco E dalla bruciatura» — e finora ne era implementata una meta'
+  // sola. Nessun presidio poteva vederlo: `descrizioniSilenziose` scarta
+  // un'abilita' appena ha UN campo, ed e' il suo punto cieco dichiarato.
+  //
+  // Solo la bruciatura: sul veleno non c'entra niente, e questa condizione lo
+  // dice esplicitamente invece di appoggiarsi al fatto che chi ha Heatproof
+  // non sara' mai avvelenato — che non e' vero.
+  //
+  // La divisione intera si fa in fondo, sul numero gia' calcolato: e' la
+  // stessa convenzione di sabbia e Avanzi, e a 185 PS fa 5 invece di 5,5.
+  const dimezza = stato === 'burned' && effetto?.dimezzaBruciatura === true
+
   return [{
     chiave: stato,
-    hp: -Math.floor(defHP * passi / regola.frazione),
+    hp: -(dimezza ? Math.floor(pieno / 2) : pieno),
     tipo: 'stato',
     crescente: regola.crescente === true,
     abilita: false,
