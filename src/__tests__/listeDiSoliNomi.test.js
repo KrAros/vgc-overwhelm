@@ -73,10 +73,13 @@ const SOLO_NOMI = [
  * Battle Bond ne e' uscita dopo, e per una ragione ancora diversa: il
  * riferimento la chiude dietro `gen == 9` mentre noi giriamo a 10, quindi da
  * loro non si applica MAI. Simone ha aggiudicato di implementarla lo stesso.
- * Vive in `divergenzeAggiudicate.test.js`, non qui: qui restano solo quelle
- * che il riferimento calcola davvero e noi ancora no.
+ * Vive in `divergenzeAggiudicate.test.js`, non qui.
+ *
+ * Poi e' uscita anche Forecast, implementata col blocco del tipo effettivo.
+ * Resta Comatose, sola: qui ci stanno solo quelle che il riferimento calcola
+ * davvero e noi ancora no.
  */
-const NELLA_LISTA_MA_CALCOLATE = ['comatose', 'forecast']
+const NELLA_LISTA_MA_CALCOLATE = ['comatose']
 
 describe('le liste di soli nomi del riferimento', () => {
   it.runIf(vendorPresente)('le due liste esistono ancora, con quei nomi', () => {
@@ -130,7 +133,7 @@ describe('le liste di soli nomi del riferimento', () => {
     expect(gapNoti.abilita).not.toContain('trace')
   })
 
-  it('le due che la lista nomina ma il riferimento calcola sono rimaste', () => {
+  it('quella che la lista nomina ma il riferimento calcola e\' rimasta', () => {
     // Il controllo opposto, e serve: un filtro troppo largo — che togliesse
     // le abilita' NOMINATE dalla lista invece dei letterali DENTRO la lista —
     // porterebbe via anche queste, e il divario direbbe il falso al contrario.

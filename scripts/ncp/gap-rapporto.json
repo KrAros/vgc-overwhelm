@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T18:38:39.833Z",
+    "generatedAt": "2026-09-03T06:07:50.637Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 171,
-    "abilitaNelGap": 9,
+    "abilitaSenzaEffetto": 167,
+    "abilitaNelGap": 4,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
-    "badgeToltiDallaSecondaFonte": 5,
+    "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
   },
   "prove": {
@@ -24,56 +24,6 @@
           "funzione": "immunityChecks",
           "file": "damage_MASTER.js",
           "riga": 1163
-        }
-      },
-      {
-        "chiave": "forecast",
-        "nome": "Forecast",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkTrace",
-          "file": "damage_MASTER.js",
-          "riga": 392
-        }
-      },
-      {
-        "chiave": "galvanize",
-        "nome": "Galvanize",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1081
-        }
-      },
-      {
-        "chiave": "mega sol",
-        "nome": "Mega Sol",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkMoveTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 729
-        }
-      },
-      {
-        "chiave": "mimicry",
-        "nome": "Mimicry",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkMimicry",
-          "file": "damage_MASTER.js",
-          "riga": 430
-        }
-      },
-      {
-        "chiave": "normalize",
-        "nome": "Normalize",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkAbilityTypeChange",
-          "file": "damage_MASTER.js",
-          "riga": 1070
         }
       },
       {

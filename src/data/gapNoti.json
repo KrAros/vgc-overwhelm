@@ -1,19 +1,14 @@
 {
   "meta": {
-    "generatedAt": "2026-09-02T18:38:39.833Z",
+    "generatedAt": "2026-09-03T06:07:50.637Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
-    "abilitaNelGap": 9,
+    "abilitaNelGap": 4,
     "strumentiNelGap": 39,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
     "comatose",
-    "forecast",
-    "galvanize",
-    "mega sol",
-    "mimicry",
-    "normalize",
     "rattled",
     "rivalry",
     "sturdy"

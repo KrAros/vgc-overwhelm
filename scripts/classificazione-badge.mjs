@@ -62,6 +62,10 @@ export const CLASSIFICAZIONE = {
       verdetto: 'badge-sbagliato',
       nota: 'tabella ABILITA_ATE in lib/rules.js — Normale→Drago e ×1,2',
     },
+    'galvanize': {
+      verdetto: 'badge-sbagliato',
+      nota: 'tabella ABILITA_ATE in lib/rules.js — Normale→Elettro e ×1,2, quinto ramo dello stesso switch di checkAbilityTypeChange (damage_MASTER.js:1081)',
+    },
     'long reach': {
       verdetto: 'badge-sbagliato',
       nota: 'calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero',

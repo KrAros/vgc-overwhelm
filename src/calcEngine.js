@@ -22,6 +22,7 @@ import {
   totalSPs,
   STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
   ABILITA_ATE,
+  tipiEffettivi,
   MOSSE_SENZA_PARENTAL_BOND,
   MOSSE_ANNULLATE_DA_DAMP,
   STRUMENTI_IMMUNI_A_KLUTZ,
@@ -311,12 +312,25 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Tabella e regola stanno in `lib/rules.js` dalla sessione Q: la stessa
   // domanda serve al motore, al badge del tipo mossa e al riquadro delle -ate.
   const isWeatherBall = move === 'weather ball'
-  const weatherBallType = tipoPallaClima(move, meteo)
+  // Mega Sol la porta a Fuoco a prescindere dal meteo, ed e' il PRIMO ramo del
+  // ternario nel riferimento (`:729`): viene prima del sole vero, quindi vince
+  // anche sotto pioggia o sabbia.
+  const weatherBallType = isWeatherBall && atkAbilEffect?.megaSol === true
+    ? TYPES.FIRE
+    : tipoPallaClima(move, meteo)
   let moveType = weatherBallType !== null ? weatherBallType : moveData.type
   const isLastRespects = move === 'last respects'
   const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
-  const atkTypes = atkPokeData.type
-  const defTypes = defPokeData.type
+  // ─── IL TIPO EFFETTIVO, NON QUELLO SCRITTO NEI DATI ──────────────────────
+  //
+  // Forecast segue il meteo, Mimicry il terreno, e tutt'e due azzerano il
+  // secondo tipo. Nel riferimento sono due passaggi dell'ingresso alto
+  // (`damage_SV.js:12-15`), prima di ogni calcolo: da qui passano lo STAB,
+  // l'efficacia, le immunita' e le statistiche potenziate dal meteo.
+  const atkTypes = tipiEffettivi(
+    atkPokeData.type, atkAbilEffect, atkPokemon, meteo, field.terrain)
+  const defTypes = tipiEffettivi(
+    defPokeData.type, defAbilEffect, defPokemon, meteo, field.terrain)
   // Il contatto "grezzo", quello scritto nei dati della mossa. Il contatto
   // EFFETTIVO si decide più sotto, dopo aver letto lo strumento: Punching
   // Glove, Protective Pads e Long Reach lo tolgono.
@@ -423,6 +437,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (atkAbilEffect?.liquidVoice && isSound) {
     moveType = TYPES.WATER
   }
+  else if (atkAbilEffect?.normalize) {
+    // Normalize e' l'`else if` DOPO le «-ate» (`damage_MASTER.js:1091`), e la
+    // sua condizione e' l'opposto: le altre chiedono che la mossa sia gia'
+    // Normale, lei la rende Normale qualunque fosse.
+    //
+    // Prende il x1,2 come le altre — `isBoosted = gen >= 7 ? true : false`, e
+    // noi giriamo a 10.
+    moveType = TYPES.NORMAL
+    ateBoost = true
+  }
   else if (moveType === TYPES.NORMAL && ABILITA_ATE[atkAbilKey] !== undefined) {
     moveType = ABILITA_ATE[atkAbilKey]
     ateBoost = true
@@ -452,6 +476,20 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const isSoleEstremo    = meteo === 'harsh sunshine'
   const isPioggiaEstrema = meteo === 'heavy rain'
   const isSole    = meteo === 'sun'  || isSoleEstremo
+
+  // ─── MEGA SOL: «E' COME SE CI FOSSE IL SOLE», MA NON PER TUTTO ────────────
+  //
+  // Meganium-Mega. Nel riferimento non e' un meteo: e' una condizione in `or`
+  // ripetuta in sette punti diversi, ognuno col proprio dettaglio. Non si puo'
+  // quindi scrivere `isSole || megaSol` una volta e basta — su alcune righe
+  // c'e' e su altre no, e la differenza e' voluta.
+  //
+  //   c'e':   il x1,5 sulle mosse Fuoco (`:2163`), il tipo e la potenza di
+  //           Weather Ball (`:729`, `:1424`), l'esenzione dal dimezzamento
+  //           della pioggia sul Fuoco (`:2173`)
+  //   NON c'e': il dimezzamento del sole sulle mosse Acqua — quello resta
+  //           legato al meteo vero
+  const megaSol = atkAbilEffect?.megaSol === true
   const isPioggia = meteo === 'rain' || isPioggiaEstrema
 
   // ── Immunità ─────────────────────────────────────────────────────────────
@@ -1679,10 +1717,16 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
     // Meteo — il ×1.5 vale anche coi meteo estremi, il ×0.5 solo con quelli
     // normali (col meteo estremo il tipo opposto è già uscito come immune)
-    if (isSole    && moveType === TYPES.FIRE)  damage = Math.floor(damage * 1.5)
+    // Mega Sol entra qui, e in due delle quattro righe: da' il ×1.5 al Fuoco
+    // come farebbe il sole (`:2163`) e toglie il dimezzamento della pioggia
+    // sul Fuoco (`:2173`). Sulle mosse Acqua non compare — il dimezzamento del
+    // sole resta legato al meteo vero.
+    if ((isSole || megaSol) && moveType === TYPES.FIRE) damage = Math.floor(damage * 1.5)
     if (isPioggia && moveType === TYPES.WATER) damage = Math.floor(damage * 1.5)
     if (meteo === 'sun'  && moveType === TYPES.WATER) damage = Math.floor(damage * 0.5)
-    if (meteo === 'rain' && moveType === TYPES.FIRE)  damage = Math.floor(damage * 0.5)
+    if (meteo === 'rain' && moveType === TYPES.FIRE && !megaSol) {
+      damage = Math.floor(damage * 0.5)
+    }
 
     // Critico
     if (critico) damage = Math.floor(damage * 1.5)
