@@ -87,24 +87,13 @@ export const CLASSIFICAZIONE = {
     // La classificazione descrive uno STATO, non un fatto storico. Quando lo
     // stato cambia, la riga se ne va.
 
-    // ── Nominate perche' stanno nelle due liste dei copiatori ─────────────
-    //
-    // `ABILITA_NON_COPIABILI` e `ABILITA_NON_SPEGNIBILI` in rules.js sono
+    // Qui stavano Battle Bond, Comatose e Forecast, nominate da rules.js
+    // dentro `ABILITA_NON_COPIABILI` e `ABILITA_NON_SPEGNIBILI` — le due liste
     // trascritte da `cannotCopy` (damage_MASTER.js:387) e `cannotSupress`
-    // (:403). Nominare un'abilita' li' dentro vuol dire il contrario di
-    // calcolarla: vuol dire che Trace non la copia e che il gas non la spegne.
+    // (:403), dove comparire vuol dire il contrario di essere calcolate.
     //
-    // Comatose e Forecast il riferimento le calcola ALTROVE (Comatose in
-    // `immunityChecks` e nelle mosse che leggono lo stato, Forecast in
-    // `checkForecast`), e noi no. Il badge quindi e' corretto.
-    'comatose': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js la nomina fra le abilita\' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — valere come «addormentato» per Hex, Dream Eater e Wake-Up Slap — non e\' implementato, e NCP lo calcola',
-    },
-    'forecast': {
-      verdetto: 'meccanica-diversa',
-      nota: 'rules.js la nomina fra le abilita\' che Trace non copia (damage_MASTER.js:387). Il suo effetto — riscrivere il tipo di Castform col meteo, in `checkForecast` — non e\' implementato, e NCP lo calcola',
-    },
+    // Adesso le calcoliamo tutte e tre, quindi le loro righe se ne sono
+    // andate: la classificazione descrive uno stato, non un fatto storico.
 
   },
   strumenti: {

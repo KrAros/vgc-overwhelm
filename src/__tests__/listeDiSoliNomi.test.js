@@ -62,24 +62,35 @@ const SOLO_NOMI = [
 ]
 
 /**
- * Quelle che stanno nella lista E il riferimento le calcola altrove, e che
- * NOI ancora non calcoliamo: restano nel divario, com'e' giusto.
+ * Le tre che stanno dentro `cannotCopy` E che il riferimento calcola ALTROVE.
  *
- * Trace stava in questo elenco fino a poche righe di storia fa. Ne e' uscita
- * perche' l'abbiamo implementata, non perche' il filtro l'abbia mangiata — e
- * la differenza fra le due cose e' esattamente quello che questo test
- * sorveglia. Neutralizing Gas non c'e' mai stata: non compare in `cannotCopy`.
+ * Sono uscite dal divario una dopo l'altra — Trace, poi Battle Bond, poi
+ * Comatose e Forecast — perche' le abbiamo implementate. Nessuna e' uscita
+ * perche' il filtro l'ha mangiata, ed e' la differenza che questo test
+ * sorveglia.
  *
- * Battle Bond ne e' uscita dopo, e per una ragione ancora diversa: il
- * riferimento la chiude dietro `gen == 9` mentre noi giriamo a 10, quindi da
- * loro non si applica MAI. Simone ha aggiudicato di implementarla lo stesso.
- * Vive in `divergenzeAggiudicate.test.js`, non qui.
+ * ─── PERCHE' NON BASTA PIU' CONTROLLARE CHE SIANO NEL DIVARIO ─────────────
  *
- * Poi e' uscita anche Forecast, implementata col blocco del tipo effettivo.
- * Resta Comatose, sola: qui ci stanno solo quelle che il riferimento calcola
- * davvero e noi ancora no.
+ * Finche' ce n'era almeno una dentro, il controllo era «queste devono
+ * restare». Adesso sono implementate tutte, l'elenco «devono restare» e'
+ * vuoto, e un test su una lista vuota passa anche se il filtro si mangiasse
+ * tutto.
+ *
+ * Il controllo diventa quindi un altro: fuori dal divario ci sono, ma con una
+ * VOCE che dichiara l'effetto. Un filtro troppo largo — che togliesse le
+ * abilita' NOMINATE dalle liste invece dei letterali DENTRO le liste — le
+ * porterebbe fuori lo stesso, ma senza voce. E' cio' che distingue le due
+ * ragioni.
  */
-const NELLA_LISTA_MA_CALCOLATE = ['comatose']
+const NELLA_LISTA_MA_CALCOLATE = ['battle bond', 'comatose', 'forecast', 'trace']
+
+/** Il campo di ABILITY_EFFECTS che prova che l'abbiamo implementata davvero. */
+const CAMPO_CHE_LO_PROVA = {
+  'battle bond': 'battleBond',
+  'comatose': 'comatose',
+  'forecast': 'forecast',
+  'trace': 'trace',
+}
 
 describe('le liste di soli nomi del riferimento', () => {
   it.runIf(vendorPresente)('le due liste esistono ancora, con quei nomi', () => {
@@ -125,22 +136,18 @@ describe('le liste di soli nomi del riferimento', () => {
     ).toEqual([])
   })
 
-  it('Trace e\' uscita dal divario perche\' e\' implementata, non per il filtro', () => {
+  it('le quattro sono uscite dal divario, e con una voce che lo prova', () => {
     // Il filtro toglie i LETTERALI dentro la lista, non le abilita' che la
-    // lista nomina: se togliesse queste, Trace sarebbe sparita gia' prima di
-    // essere scritta, e non ce ne saremmo accorti.
-    expect(ABILITY_EFFECTS['trace']?.trace, 'Trace non e\' piu\' implementata').toBe(true)
-    expect(gapNoti.abilita).not.toContain('trace')
-  })
-
-  it('quella che la lista nomina ma il riferimento calcola e\' rimasta', () => {
-    // Il controllo opposto, e serve: un filtro troppo largo — che togliesse
-    // le abilita' NOMINATE dalla lista invece dei letterali DENTRO la lista —
-    // porterebbe via anche queste, e il divario direbbe il falso al contrario.
-    const perse = NELLA_LISTA_MA_CALCOLATE.filter(k => !gapNoti.abilita.includes(k))
+    // lista nomina. Se togliesse queste, sarebbero fuori dal divario senza
+    // che nessuno le calcoli — e il segnalino direbbe il falso al contrario.
+    const senzaVoce = NELLA_LISTA_MA_CALCOLATE.filter(
+      k => ABILITY_EFFECTS[k.replace(/ /g, '-')]?.[CAMPO_CHE_LO_PROVA[k]] !== true)
     expect(
-      perse,
-      'il filtro e\' troppo largo: queste il riferimento le calcola altrove',
+      senzaVoce,
+      'fuori dal divario ma senza effetto: il filtro si e\' mangiato dei nomi',
     ).toEqual([])
+
+    const ancoraDentro = NELLA_LISTA_MA_CALCOLATE.filter(k => gapNoti.abilita.includes(k))
+    expect(ancoraDentro, 'implementata ma ancora nel divario: rigenerare').toEqual([])
   })
 })

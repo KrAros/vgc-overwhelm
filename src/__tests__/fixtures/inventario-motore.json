@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:07:51.029Z",
+    "generatedAt": "2026-09-03T06:22:12.958Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -9,9 +9,9 @@
     "fileEsaminati": 21,
     "abilitaNelMotore": 51,
     "strumentiNelMotore": 27,
-    "classificate": 11,
+    "classificate": 9,
     "badgeDaTogliere": 6,
-    "collisioniResidue": 4,
+    "collisioniResidue": 3,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 834,
+        "riga": 840,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -90,28 +90,6 @@
         "file": "src/lib/preparazione.js",
         "riga": 285,
         "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
-      }
-    },
-    {
-      "chiave": "comatose",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js la nomina fra le abilita' che Trace non copia e che Neutralizing Gas non spegne (trascritte da damage_MASTER.js:387 e :403). Il suo effetto — valere come «addormentato» per Hex, Dream Eater e Wake-Up Slap — non e' implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 734,
-        "testo": "'comatose',"
-      }
-    },
-    {
-      "chiave": "forecast",
-      "tipo": "abilita",
-      "verdetto": "meccanica-diversa",
-      "nota": "rules.js la nomina fra le abilita' che Trace non copia (damage_MASTER.js:387). Il suo effetto — riscrivere il tipo di Castform col meteo, in `checkForecast` — non e' implementato, e NCP lo calcola",
-      "prova": {
-        "file": "src/lib/rules.js",
-        "riga": 738,
-        "testo": "'forecast',"
       }
     },
     {
@@ -215,7 +193,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 576,
+          "riga": 577,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -287,7 +265,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 834,
+          "riga": 840,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
