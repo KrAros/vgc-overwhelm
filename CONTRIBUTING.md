@@ -23,11 +23,11 @@ nella PR da dove viene il set**: il file dichiara la propria fonte in testa, e
 quella riga deve restare vera.
 
 **Traduzioni.** [`src/locales/en.json`](src/locales/en.json) e
-[`it.json`](src/locales/it.json), 1934 chiavi foglia ciascuno — oggi allineati.
+[`it.json`](src/locales/it.json), 1966 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
-**Le abilità col badge.** 33 abilità e 39 strumenti che il riferimento calcola
-e noi no; l'elenco generato è in
+**Le abilità col badge.** 2 abilità — `rivalry` e `sturdy` — e 39 strumenti che
+il riferimento calcola e noi no; l'elenco generato è in
 [`src/data/gapNoti.json`](src/data/gapNoti.json). Ognuna è una PR piccola e
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 È il contributo più prezioso, ed è quello con le regole più severe qui sotto.
