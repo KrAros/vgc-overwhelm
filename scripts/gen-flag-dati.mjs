@@ -424,6 +424,21 @@ const FLAG_MOSSE = {
   // Duecentosette righe da indovinare sono duecentosette occasioni di
   // sbagliare in silenzio, e questo flag esiste per non provarci.
   secondario: 'hasSecondaryEffect',
+  // `koSecco` entra per Sturdy, che azzera le mosse KO — ed e' l'unica cosa
+  // che Sturdy fa nel riferimento (`damage_MASTER.js:1144`). Il «sopravvive
+  // con 1 PS» li' non c'e': non e' la catena del danno.
+  //
+  // ─── QUATTRO MOSSE, E LE SAPEVAMO GIA' ──────────────────────────────────
+  // Guillotine, Horn Drill, Fissure, Sheer Cold. Sono quattro nomi che uno
+  // scriverebbe a mano senza sbagliare — e il flag si trascrive lo stesso,
+  // per la stessa ragione di `prioritaria`: il giorno che il gioco ne
+  // aggiunge una quinta, o ne toglie una, la lista cambia da sola invece di
+  // restare una tabella che marcisce.
+  //
+  // Nel vendor hanno `bp: 1`, che non e' la loro potenza: e' un segnaposto
+  // perche' la formula non divida per zero. Il danno vero lo decide il punto f
+  // (`:1278`), che torna i PS del difensore.
+  koSecco: 'isOHKO',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

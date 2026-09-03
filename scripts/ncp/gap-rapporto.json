@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T07:37:32.586Z",
+    "generatedAt": "2026-09-03T07:45:50.623Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 160,
-    "abilitaNelGap": 2,
+    "abilitaSenzaEffetto": 159,
+    "abilitaNelGap": 1,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -24,16 +24,6 @@
           "funzione": "calcBPMods",
           "file": "damage_MASTER.js",
           "riga": 1585
-        }
-      },
-      {
-        "chiave": "sturdy",
-        "nome": "Sturdy",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1144
         }
       }
     ],

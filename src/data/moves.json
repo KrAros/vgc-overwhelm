@@ -120,7 +120,8 @@
 		"category": 0,
 		"power": 0,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"koSecco": true
 	},
 	"razor wind": {
 		"num": "13",
@@ -310,7 +311,8 @@
 		"category": 0,
 		"power": 0,
 		"priority": 0,
-		"contact": true
+		"contact": true,
+		"koSecco": true
 	},
 	"tackle": {
 		"num": "33",
@@ -848,7 +850,8 @@
 		"type": 8,
 		"category": 0,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"koSecco": true
 	},
 	"dig": {
 		"num": "91",
@@ -2952,7 +2955,8 @@
 		"type": 5,
 		"category": 1,
 		"power": 0,
-		"priority": 0
+		"priority": 0,
+		"koSecco": true
 	},
 	"muddy water": {
 		"num": "330",

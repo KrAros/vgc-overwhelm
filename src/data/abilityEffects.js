@@ -1162,6 +1162,11 @@ export const ABILITY_EFFECTS = {
   // Mold Breaker la spegne, perche' tutte e tre le righe leggono `defAbility`
   // — il valore gia' sostituito — e Comatose non sta fra le non ignorabili.
   'comatose': { comatose: true, showInSmogon: true },
+  // Sturdy: nel riferimento e' UNA riga (`damage_MASTER.js:1144`) e azzera le
+  // quattro mosse KO. Il «sopravvive con un punto salute» del gioco li' non
+  // c'e' — non e' la catena del danno di un colpo — e quindi non c'e' nemmeno
+  // qui. La riga sta in `calcEngine.js`, fra le immunita'.
+  'sturdy': { sturdy: true, showInSmogon: true },
   'solid-rock': { filter: true, showInSmogon: true },
   'thick-fat': { thickFat: true, showInSmogon: true },
   'water-bubble': { waterBubble: true, showInSmogon: true },

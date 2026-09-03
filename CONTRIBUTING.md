@@ -26,8 +26,9 @@ quella riga deve restare vera.
 [`it.json`](src/locales/it.json), 1972 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
-**Le abilità col badge.** 2 abilità — `rivalry` e `sturdy` — e 39 strumenti che
-il riferimento calcola e noi no; l'elenco generato è in
+**Le abilità col badge.** 1 abilità — `rivalry`, che aspetta un dato sul sesso
+che oggi manca a 986 specie su 1225 — e 39 strumenti che il riferimento calcola
+e noi no; l'elenco generato è in
 [`src/data/gapNoti.json`](src/data/gapNoti.json). Ognuna è una PR piccola e
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 È il contributo più prezioso, ed è quello con le regole più severe qui sotto.
@@ -37,24 +38,32 @@ isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 mosse un divario ce l'hanno.
 
 `calcEngine.js` esce con `null` per qualunque mossa con `power: 0` che non sia
-una delle quattro a peso. Nella matrice un `null` si disegna come `~`, cioè
-esattamente come una mossa di stato: **Seismic Toss oggi sembra Protect.**
-Delle 303 mosse a potenza zero nei nostri dati, 34 il riferimento le considera
-offensive e le calcola:
+una delle quattro a peso o una delle quattro KO. Nella matrice un `null` si
+disegna come `~`, cioè esattamente come una mossa di stato: **Seismic Toss oggi
+sembra Protect.** Delle 303 mosse a potenza zero nei nostri dati, 34 il
+riferimento le considera offensive e le calcola. Quattro sono state fatte —
+Fissure, Guillotine, Horn Drill e Sheer Cold, il flag `koSecco` e il punto f
+del riferimento — e ne restano **30**:
 
 > Bide, Comeuppance, Counter, Crush Grip, Dragon Rage, Electro Ball, Endeavor,
-> Final Gambit, Fissure, Flail, Fling, Frustration, Guillotine, Gyro Ball,
-> Hard Press, Horn Drill, Magnitude, Metal Burst, Mirror Coat, Natural Gift,
-> Night Shade, Present, Psywave, Punishment, Return, Reversal, Ruination,
-> Seismic Toss, Sheer Cold, Sonic Boom, Spit Up, Super Fang, Trump Card,
-> Wring Out
+> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Magnitude,
+> Metal Burst, Mirror Coat, Natural Gift, Night Shade, Present, Psywave,
+> Punishment, Return, Reversal, Ruination, Seismic Toss, Sonic Boom, Spit Up,
+> Super Fang, Trump Card, Wring Out
+
+Chi riprende il filo parta dalle quattro a **danno fisso** — Seismic Toss,
+Night Shade, Dragon Rage, Sonic Boom — che stanno nello STESSO blocco del
+riferimento (`damage_MASTER.js:1240-1283`) delle quattro appena fatte, e che
+adesso hanno un oracolo interrogabile: fino a questa sessione l'harness
+confondeva un danno fisso con un colpo nullo, e a chiedergli «Seismic Toss»
+rispondeva «zero».
 
 Non sono tutte lo stesso problema: ci sono le mosse a danno fisso (Seismic
 Toss, Night Shade, Sonic Boom, Dragon Rage), quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Ruination),
 quelle legate alla Velocità (Gyro Ball, Electro Ball), quelle legate
-all'affetto (Return, Frustration), le KO immediate e le reattive (Counter,
-Mirror Coat, Metal Burst, Comeuppance, Bide).
+all'affetto (Return, Frustration) e le reattive (Counter, Mirror Coat, Metal
+Burst, Comeuppance, Bide).
 
 C'è poi un caso diverso e più insidioso, perché oggi non si vede: **Eruption e
 Water Spout**. Nei nostri dati hanno `power: 150` e il motore la usa cosi'
