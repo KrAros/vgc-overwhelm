@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:34:49.486Z",
+    "generatedAt": "2026-09-03T06:50:43.555Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 165,
+    "abilitaSenzaEffetto": 164,
     "abilitaNelGap": 2,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,

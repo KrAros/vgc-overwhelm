@@ -12,7 +12,7 @@
 
 import { TYPES } from '../data/typeChart'
 import { MAX_HITS, normalizzaMeteo } from './rules.js'
-import { normalizeAbilityKey } from '../data/abilityEffects.js'
+import { normalizeAbilityKey, ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
 
@@ -114,6 +114,42 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
   const eotNet = leftoversHP - sandDmgHP
 
   return { isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP, eotNet }
+}
+
+/**
+ * ─── IL CONTRACCOLPO, E ROCK HEAD ───────────────────────────────────────────
+ *
+ * Vero se il contraccolpo di questa mossa va MOSTRATO, cioe' se l'abilita' di
+ * chi attacca non lo annulla.
+ *
+ * ─── QUI L'ORACOLO NON ARRIVA ──────────────────────────────────────────────
+ *
+ * Il riferimento il contraccolpo non lo calcola affatto: `Rock Head` compare
+ * in `vendor/ncp/ability_data.js` (un elenco di nomi) e in `pokedex.js` (i
+ * dati delle specie), e mai in `damage_MASTER.js`. Il contraccolpo lo
+ * mostriamo NOI.
+ *
+ * Quindi questa non e' una trascrizione: e' un'affermazione nostra sulle
+ * regole del gioco, e nessun confronto roll per roll potra' mai dire se e'
+ * giusta. Sta in `divergenzeAggiudicate.test.js` come decisione di Simone,
+ * accanto alla potenza di Pound e allo scivolone di Supersweet Syrup.
+ *
+ * ─── LE DUE FAMIGLIE DI MOSSE, CHE NON SONO LA STESSA COSA ─────────────────
+ *
+ * Delle tredici mosse con `recoil` nei nostri dati, dieci sono di tipo
+ * `damage` — il contraccolpo e' una frazione del danno inflitto — e tre di
+ * tipo `maxhp`: Mind Blown, Chloroblast e Steel Beam, che costano meta' dei
+ * PS massimi come PREZZO della mossa, non come contraccolpo.
+ *
+ * Rock Head copre le dieci e non le tre. Aggiudicato da Simone.
+ *
+ * @param {object|null} recoil   il campo `recoil` della mossa
+ * @param {string} abilita       l'abilita' di chi attacca
+ */
+export function contraccolpoDaMostrare(recoil, abilita) {
+  if (!recoil) return false
+  if (recoil.type !== 'damage') return true
+  return ABILITY_EFFECTS[normalizeAbilityKey(abilita)]?.annullaContraccolpo !== true
 }
 
 // ── KO Chance ─────────────────────────────────────────────────────────────────

@@ -9,7 +9,7 @@ import useFieldState from '../hooks/useFieldState'
 import { IS_DEBUG } from '../lib/debugBus'
 import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
-import { calcEOT, findBestNHKO, findBestNHKOSitrus } from '../lib/damage'
+import { calcEOT, findBestNHKO, findBestNHKOSitrus, contraccolpoDaMostrare } from '../lib/damage'
 import { MAX_HITS } from '../lib/rules'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
@@ -306,7 +306,13 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
     return { text: `${best.pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: label, pct: best.pct }
   })()
 
-  const moveRecoil = movesData[move]?.recoil || null
+  // Rock Head lo azzera sulle dieci di tipo `damage`. La decisione sta in
+  // `contraccolpoDaMostrare`, non qui, perche' cosi' e' provabile senza
+  // montare il componente — e perche' e' una scelta aggiudicata, non una
+  // trascrizione, e va scritta dove si legge il perche'.
+  const moveRecoil = contraccolpoDaMostrare(movesData[move]?.recoil, atk.ability)
+    ? movesData[move].recoil
+    : null
   let recoilInfo = null
   if (moveRecoil) {
     const atkPokeData = pokemonData[atk.key]
