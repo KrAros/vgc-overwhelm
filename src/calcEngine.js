@@ -547,7 +547,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // Comatose la sbloccherebbe (vale come «addormentato»): non e' implementata,
   // e il giorno che entra si aggiunge qui.
-  if (move === 'dream eater' && (defStatus || 'healthy') !== 'asleep') {
+  if (move === 'dream eater' && (defStatus || 'healthy') !== 'asleep'
+      && !defAbilEffect?.comatose) {
     return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
 
@@ -805,17 +806,22 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Ognuna legge uno stato diverso, e su un lato diverso. Le quattro qui sotto
   // guardano CHI SUBISCE; Facade guarda CHI ATTACCA, ed e' l'unica.
   //
-  // Comatose non c'e' ancora: nel riferimento vale come «addormentato» per Hex
-  // e Wake-Up Slap (`:1407`, `:1417`). Resta nel divario, e il giorno che
-  // entra si aggiunge in queste due condizioni.
+  // Comatose e' entrata: vale come «addormentato» per Wake-Up Slap e Dream
+  // Eater, e come «ha uno stato» per Hex. Le due condizioni sono separate piu'
+  // sotto proprio perche' nel riferimento sono diverse.
   const statoDif = defStatus || 'healthy'
   const statoAtk = atkStatus || 'healthy'
 
+  // Comatose vale come stato per Hex e come sonno per Wake-Up Slap. Le due
+  // condizioni sono diverse nel riferimento e restano diverse qui.
+  const dorme = statoDif === 'asleep' || defAbilEffect?.comatose === true
+  const haUnoStato = statoDif !== 'healthy' || defAbilEffect?.comatose === true
+
   const raddoppiaPerStato =
-    (MOSSE_X2_STATO_QUALUNQUE.has(move) && statoDif !== 'healthy') ||
+    (MOSSE_X2_STATO_QUALUNQUE.has(move) && haUnoStato) ||
     (MOSSE_X2_VELENO.has(move)   && STATI_VELENO.has(statoDif)) ||
     (MOSSE_X2_PARALISI.has(move) && statoDif === 'paralyzed') ||
-    (MOSSE_X2_SONNO.has(move)    && statoDif === 'asleep') ||
+    (MOSSE_X2_SONNO.has(move)    && dorme) ||
     (move === 'facade' && STATI_CHE_ACCENDONO_FACADE.has(statoAtk))
 
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso

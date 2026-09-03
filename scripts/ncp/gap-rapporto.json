@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:07:50.637Z",
+    "generatedAt": "2026-09-03T06:22:12.507Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 167,
-    "abilitaNelGap": 4,
+    "abilitaSenzaEffetto": 166,
+    "abilitaNelGap": 3,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -16,16 +16,6 @@
   },
   "prove": {
     "abilita": [
-      {
-        "chiave": "comatose",
-        "nome": "Comatose",
-        "canale": "STR",
-        "prova": {
-          "funzione": "immunityChecks",
-          "file": "damage_MASTER.js",
-          "riga": 1163
-        }
-      },
       {
         "chiave": "rattled",
         "nome": "Rattled",

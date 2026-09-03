@@ -1107,6 +1107,28 @@ export const ABILITY_EFFECTS = {
   // mossa che abbiamo ma il cui ramo speciale non modelliamo). Sono scritti
   // nel test come non osservabili, non come fatti.
   'mega-sol':  { megaSol: true, showInSmogon: true },
+
+  // ── Comatose: vale come «addormentato», e a volte come «malato» ──────────
+  //
+  // Komala, unica portatrice. Non e' un moltiplicatore: e' una condizione che
+  // altre tre righe leggono al posto dello stato vero (`damage_MASTER.js`):
+  //
+  //   `:1163`  Dream Eater arriva, invece di fallire
+  //   `:1417`  Wake-Up Slap raddoppia
+  //   `:1407`  Hex e Infernal Parade raddoppiano
+  //
+  // Le prime due la trattano come «addormentata», la terza come «ha uno stato
+  // qualunque»: sono tre condizioni diverse e vanno lette una per una, perche'
+  // dedurne una dall'altra sbaglierebbe Hex — che raddoppia su QUALUNQUE
+  // stato, non solo sul sonno.
+  //
+  // C'e' un quarto punto (`:2481`, dentro `canBeBurned`) che la elenca fra le
+  // abilita' che non si possono bruciare: serve al danno aggiuntivo di Spicy
+  // Spray, che non modelliamo.
+  //
+  // Mold Breaker la spegne, perche' tutte e tre le righe leggono `defAbility`
+  // — il valore gia' sostituito — e Comatose non sta fra le non ignorabili.
+  'comatose': { comatose: true, showInSmogon: true },
   'solid-rock': { filter: true, showInSmogon: true },
   'thick-fat': { thickFat: true, showInSmogon: true },
   'water-bubble': { waterBubble: true, showInSmogon: true },
