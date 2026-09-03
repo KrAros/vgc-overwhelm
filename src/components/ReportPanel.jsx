@@ -137,13 +137,29 @@ function HpStep({ range, defKey }) {
 // e `smogonString`. Ognuno sapeva di due voci, e con sette sarebbero stati tre
 // elenchi liberi di divergere.
 
-/** L'emoji per famiglia di meteo. Le voci di stato — Velencura — non ne hanno. */
+/** L'emoji per famiglia di meteo. Le voci di stato non ne hanno. */
 const EMOJI_METEO = { sun: '☀️', rain: '🌧', snow: '❄️', sand: '🌪' }
+
+/**
+ * Le voci che non sono né meteo né strumento né abilità: i tre stati che a
+ * fine turno tolgono PS. Nome breve, nome esteso, emoji.
+ *
+ * Stanno in una tabella e non in una catena di ternari perché sono tre e
+ * domani potrebbero essere quattro — e perché i nomi degli stati (`statuses.*`)
+ * sono aggettivi, «Bruciato», che accanto a «−11 HP» leggono male: qui servono
+ * i sostantivi.
+ */
+const VOCI_DI_STATO = {
+  'burned':         { breve: 'report.burn',   esteso: 'eot.burn_damage',   emoji: '🔥' },
+  'poisoned':       { breve: 'report.poison', esteso: 'eot.poison_damage', emoji: '☠️' },
+  'badly-poisoned': { breve: 'report.toxic',  esteso: 'eot.toxic_damage',  emoji: '☠️' },
+}
 
 /** Il nome breve, quello sotto l'icona nella catena dei PS. */
 function nomeVoce(voce, t) {
   if (voce.chiave === 'sand')      return t('report.sandstorm')
   if (voce.chiave === 'leftovers') return t('report.leftovers')
+  if (VOCI_DI_STATO[voce.chiave])  return t(VOCI_DI_STATO[voce.chiave].breve)
   // `abilities.*` e' la fonte unica dei nomi: scriverne una copia in `report.*`
   // e' esattamente il difetto che `traduzioni.test.js` esiste per impedire.
   return t(`abilities.${voce.chiave}`, { defaultValue: voce.chiave })
@@ -153,6 +169,7 @@ function nomeVoce(voce, t) {
 function etichettaVoce(voce, t) {
   if (voce.chiave === 'sand')      return t('eot.sandstorm_damage')
   if (voce.chiave === 'leftovers') return t('eot.leftovers_recovery')
+  if (VOCI_DI_STATO[voce.chiave])  return t(VOCI_DI_STATO[voce.chiave].esteso)
   const nome = t(`abilities.${voce.chiave}`, { defaultValue: voce.chiave })
   return voce.hp >= 0
     ? t('eot.recovery_from', { nome })
@@ -165,8 +182,8 @@ function IconaVoce({ voce, classe, classeImg }) {
     return <img src={itemIconUrl('leftovers')} alt="" className={classeImg}
       onError={e => { e.target.style.display = 'none' }} />
   }
-  const emoji = voce.chiave === 'sand'
-    ? EMOJI_METEO.sand
+  const emoji = voce.chiave === 'sand' ? EMOJI_METEO.sand
+    : VOCI_DI_STATO[voce.chiave] ? VOCI_DI_STATO[voce.chiave].emoji
     : (EMOJI_METEO[voce.meteo] ?? '☠️')
   const colore = voce.chiave === 'sand' ? 'text-[#c2a139]' : ''
   return <span className={`${classe} ${colore}`}>{emoji}</span>
@@ -305,8 +322,16 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
 
   const defHP = result.defHP
   const defTypes = pokemonData[def.key]?.type || []
-  const { voci, eotNet: eot } = calcEOT(def, defHP, field.weather, defTypes)
-  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, voci, true, colpi, rollsFiglio) : null
+  // Due valori e non uno, e la differenza e' l'iride:
+  //
+  //   `eot`        il delta del turno UNO. La catena dei PS disegna un turno,
+  //                e la riga «Fine turno: −11» ne nomina uno.
+  //   `eotAlTurno` la successione. Chi conta i turni al KO deve sapere che al
+  //                terzo l'iride toglie 34 e non 11.
+  //
+  // Per tutto il resto le due cose coincidono, ed e' il caso normale.
+  const { voci, eotNet: eot, eotAlTurno } = calcEOT(def, defHP, field.weather, defTypes)
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eotAlTurno, voci, true, colpi, rollsFiglio) : null
 
   const formatSummary = (s) => {
     if (!s) return ''
@@ -323,7 +348,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    const best = findBestNHKO(rolls, defHP, eot, { colpiPerTurno: colpi, rollsFiglio })
+    const best = findBestNHKO(rolls, defHP, eotAlTurno, { colpiPerTurno: colpi, rollsFiglio })
     if (!best || best.hits === 1) return null
 
     const label = `${best.hits}HKO`

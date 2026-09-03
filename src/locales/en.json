@@ -159,7 +159,10 @@
     "attacks_short": "▶ attacks",
     "attacked_by_short": "◀ attacked by",
     "turn_breakdown": "Turn breakdown",
-    "recoil": "{{valore}}% recoil damage"
+    "recoil": "{{valore}}% recoil damage",
+    "burn": "Burn",
+    "poison": "Poison",
+    "toxic": "Toxic"
   },
   "editor": {
     "delete_pokemon": "Delete Pokémon",
@@ -195,7 +198,10 @@
     "sitrus_recovery_cap": "Recovery",
     "pkmn_takes": "takes",
     "recovery_from": "{{nome}} recovery",
-    "damage_from": "{{nome}} damage"
+    "damage_from": "{{nome}} damage",
+    "burn_damage": "burn damage",
+    "poison_damage": "poison damage",
+    "toxic_damage": "toxic damage"
   },
   "aria": {
     "team_modifiers": "Team modifiers and actions",

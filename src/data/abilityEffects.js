@@ -1219,7 +1219,15 @@ export const ABILITY_EFFECTS = {
   // bruciatura allo stesso modo — ma da oggi si vede, perche' Velencura lo
   // mette accanto. Sta scritto in `fineTurno.test.js` come il caso successivo,
   // non come una cosa risolta.
-  'poison-heal': { fineTurno: [{ stato: 'veleno', frazione: 8, segno: 1 }], showInSmogon: true },
+  //
+  // `annullaDannoDaVeleno` e' l'«invece»: senza, un Gliscor avvelenato
+  // prenderebbe -1/8 dal veleno e +1/8 da Velencura, cioe' zero, e la voce
+  // sarebbe scritta due volte per annullarsi da sola.
+  'poison-heal': {
+    fineTurno: [{ stato: 'veleno', frazione: 8, segno: 1 }],
+    annullaDannoDaVeleno: true,
+    showInSmogon: true,
+  },
 
   // Magicscudo: subisce danno solo dagli attacchi diretti.
   //
@@ -1232,5 +1240,21 @@ export const ABILITY_EFFECTS = {
   // le stesse dieci mosse: quelle in cui il contraccolpo e' una frazione del
   // danno inflitto. Mind Blown, Chloroblast e Steel Beam restano fuori da
   // entrambe — non sono contraccolpo, sono il prezzo della mossa.
-  'magic-guard': { annullaContraccolpo: true, showInSmogon: true },
+  //
+  // ─── TRE MEZZE ABILITA', E TRE CAMPI DIVERSI ────────────────────────────
+  //
+  // «Subisce danno solo dagli attacchi diretti» sono almeno tre cose, e il
+  // motore le legge in tre punti che non si parlano: la sabbia da
+  // `SAND_IMMUNE_ABILITIES` (per nome, in `lib/damage.js`), il contraccolpo da
+  // `annullaContraccolpo`, il danno da stato da `annullaDannoDaStato`.
+  //
+  // Un campo solo non basterebbe, e non e' pigrizia: Rock Head ha SOLO il
+  // contraccolpo, Overcoat e le tre di sabbia hanno SOLO la sabbia. Le tre
+  // liste hanno tre membri diversi, e Magicscudo e' l'unica che sta in tutt'e
+  // tre.
+  'magic-guard': {
+    annullaContraccolpo: true,
+    annullaDannoDaStato: true,
+    showInSmogon: true,
+  },
 }

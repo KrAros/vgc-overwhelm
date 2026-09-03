@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T07:21:17.314Z",
+    "generatedAt": "2026-09-03T07:32:10.522Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -262,7 +262,7 @@
         "chiave": "magic guard",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -278,7 +278,7 @@
         "chiave": "overcoat",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -366,7 +366,7 @@
         "chiave": "sand force",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -374,7 +374,7 @@
         "chiave": "sand rush",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -382,7 +382,7 @@
         "chiave": "sand veil",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -520,7 +520,7 @@
         "chiave": "leftovers",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 193,
+          "riga": 248,
           "testo": "const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'"
         }
       },
@@ -696,7 +696,7 @@
         "chiave": "sitrus berry",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 196,
+          "riga": 251,
           "testo": "const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'"
         }
       },
@@ -720,7 +720,7 @@
         "chiave": "safety goggles",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 79,
+          "riga": 82,
           "testo": "item.toLowerCase() === 'safety goggles'"
         }
       }

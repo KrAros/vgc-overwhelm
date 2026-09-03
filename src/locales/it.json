@@ -159,7 +159,10 @@
     "attacks_short": "▶ Attacca",
     "attacked_by_short": "◀ Attaccato da",
     "turn_breakdown": "Analisi del turno",
-    "recoil": "{{valore}}% di contraccolpo"
+    "recoil": "{{valore}}% di contraccolpo",
+    "burn": "Bruciatura",
+    "poison": "Veleno",
+    "toxic": "Veleno grave"
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",
@@ -195,7 +198,10 @@
     "sitrus_recovery_cap": "Recupero",
     "pkmn_takes": "subisce",
     "recovery_from": "recupero {{nome}}",
-    "damage_from": "danno {{nome}}"
+    "damage_from": "danno {{nome}}",
+    "burn_damage": "danno da bruciatura",
+    "poison_damage": "danno da veleno",
+    "toxic_damage": "danno da veleno grave"
   },
   "aria": {
     "team_modifiers": "Modificatori e azioni del team",

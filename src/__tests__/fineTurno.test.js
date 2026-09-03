@@ -48,11 +48,13 @@
 import { describe, it, expect } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
-import { calcEOT, vociFineTurnoAbilita, findBestNHKO } from '../lib/damage.js'
+import { calcEOT, vociFineTurnoAbilita, vociFineTurnoDaStato, findBestNHKO, MAX_HITS } from '../lib/damage.js'
 import { buildSmogonString } from '../utils/smogonString.js'
 import { calculateDamage } from '../calcEngine.js'
 import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
-import { famigliaMeteo, METEO_CANONICI } from '../lib/rules.js'
+import {
+  famigliaMeteo, METEO_CANONICI, STATI, DANNO_FINE_TURNO_PER_STATO, TETTO_IRIDE,
+} from '../lib/rules.js'
 
 /** Un difensore da 160 PS: 1/16 = 10, 1/8 = 20. Numeri che si leggono. */
 const PS = 160
@@ -376,6 +378,187 @@ describe('nessuno dei tre posti ricostruisce la lista a mano', () => {
       for (const nome of ['sandDmgHP', 'leftoversHP', 'hpAfterSand', 'hpAfterLefto']) {
         expect(codice.includes(nome), `${file} nomina ancora ${nome}`).toBe(false)
       }
+    })
+  }
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 8. Il danno da stato
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── ERA IL «CASO SUCCESSIVO» SCRITTO QUI SOPRA ────────────────────────────
+ *
+ * Fino a un commit fa questo file diceva che il danno da stato non c'era, e
+ * che Velencura dava +1/8 a chi ce l'ha mentre chi era avvelenato senza non
+ * perdeva niente. Adesso c'è, e le due metà si tengono.
+ *
+ * ─── L'IRIDE E' L'UNICA COSA CHE CAMBIA FORMA ──────────────────────────────
+ *
+ * Tutto il resto del fine turno è un numero: lo stesso a ogni turno. L'iride
+ * no — al turno n toglie n/16 — e per questo `calcEOT` torna anche
+ * `eotAlTurno`, e le due DP accettano una funzione al posto del numero.
+ *
+ * La divisione intera si fa UNA volta, alla fine: su 185 PS al terzo turno
+ * sono 34, non 33. È la differenza fra `floor(185*3/16)` e `3*floor(185/16)`,
+ * e i test qui sotto la guardano perché è esattamente il genere di cosa che si
+ * scrive nell'altro modo senza accorgersene.
+ */
+
+describe('lo stato che toglie PS a fine turno', () => {
+  const casi = [
+    ['healthy',        0],
+    ['burned',       -11],   // floor(185/16)
+    ['paralyzed',      0],
+    ['poisoned',     -23],   // floor(185/8)
+    ['badly-poisoned', -11], // il PRIMO turno: 1/16
+    ['asleep',         0],
+  ]
+
+  for (const [stato, atteso] of casi) {
+    it(`${stato}: ${atteso} PS al primo turno`, () => {
+      const voci = vociFineTurnoDaStato(stato, null, 185)
+      expect(voci.reduce((s, v) => s + v.hp, 0)).toBe(atteso)
+    })
+  }
+
+  it('ogni stato del menù ha una regola scritta', () => {
+    // Un settimo stato senza fine turno deciso resterebbe a zero in silenzio.
+    for (const s of STATI) {
+      expect(DANNO_FINE_TURNO_PER_STATO[s], `${s} non ha una regola`).toBeTruthy()
+    }
+  })
+
+  it('l\'iride cresce, e la divisione intera si fa una volta sola', () => {
+    // 185 PS: al terzo turno floor(185*3/16) = 34, mentre 3*floor(185/16) = 33.
+    // Scrivere la moltiplicazione fuori dal floor è l'errore facile.
+    expect(vociFineTurnoDaStato('badly-poisoned', null, 185, 1)[0].hp).toBe(-11)
+    expect(vociFineTurnoDaStato('badly-poisoned', null, 185, 2)[0].hp).toBe(-23)
+    expect(vociFineTurnoDaStato('badly-poisoned', null, 185, 3)[0].hp).toBe(-34)
+    expect(3 * Math.floor(185 / 16), 'il conto sbagliato darebbe questo').toBe(33)
+  })
+
+  it('e si ferma a 15/16, che con nove turni non si tocca mai', () => {
+    const a15 = vociFineTurnoDaStato('badly-poisoned', null, 185, 15)[0].hp
+    expect(vociFineTurnoDaStato('badly-poisoned', null, 185, 40)[0].hp).toBe(a15)
+    expect(MAX_HITS).toBeLessThan(TETTO_IRIDE)
+  })
+
+  it('Magic Guard toglie tutt\'e tre gli stati', () => {
+    for (const s of ['burned', 'poisoned', 'badly-poisoned']) {
+      expect(vociFineTurnoDaStato(s, 'magic-guard', 185), s).toEqual([])
+    }
+  })
+
+  it('Poison Heal toglie il veleno e NON la bruciatura', () => {
+    // È la differenza fra «non subisce danno indiretto» e «al posto del veleno
+    // si cura»: Velencura non c'entra niente con la bruciatura.
+    expect(vociFineTurnoDaStato('poisoned', 'poison-heal', 185)).toEqual([])
+    expect(vociFineTurnoDaStato('badly-poisoned', 'poison-heal', 185)).toEqual([])
+    expect(vociFineTurnoDaStato('burned', 'poison-heal', 185)[0].hp).toBe(-11)
+  })
+
+  it('un\'abilità qualunque non toglie niente', () => {
+    // Il controllo negativo: senza, i due test sopra passerebbero anche se la
+    // funzione tornasse sempre lista vuota.
+    expect(vociFineTurnoDaStato('poisoned', 'blaze', 185)[0].hp).toBe(-23)
+  })
+})
+
+describe('calcEOT e le due letture del fine turno', () => {
+  const avvelenato = (extra = {}) =>
+    ({ ability: null, item: null, status: 'badly-poisoned', ...extra })
+
+  it('`eotNet` è il turno uno, `eotAlTurno` è la successione', () => {
+    const eot = calcEOT(avvelenato(), 185, null, [])
+    expect(eot.eotNet).toBe(-11)
+    expect(eot.eotAlTurno(1)).toBe(-11)
+    expect(eot.eotAlTurno(3)).toBe(-34)
+  })
+
+  it('e per tutto il resto le due coincidono a ogni turno', () => {
+    // Il caso normale, che è quasi tutti: sabbia, Avanzi, le cinque abilità,
+    // la bruciatura, il veleno semplice.
+    for (const d of [
+      { ability: 'ice-body', item: 'leftovers', status: null },
+      { ability: null, item: null, status: 'burned' },
+      { ability: null, item: null, status: 'poisoned' },
+      { ability: 'poison-heal', item: null, status: 'poisoned' },
+    ]) {
+      const eot = calcEOT(d, 185, 'snow', [])
+      for (const turno of [1, 2, 5, 9]) {
+        expect(eot.eotAlTurno(turno), `${d.ability ?? d.status} al turno ${turno}`)
+          .toBe(eot.eotNet)
+      }
+    }
+  })
+
+  it('Velencura sull\'avvelenato: una voce sola, e positiva', () => {
+    // Senza `annullaDannoDaVeleno` sarebbero due voci che si annullano, e
+    // l'abilità non si vedrebbe affatto.
+    const eot = calcEOT(
+      { ability: 'poison-heal', item: null, status: 'poisoned' }, 185, null, [])
+    expect(eot.voci).toHaveLength(1)
+    expect(eot.eotNet).toBe(23)
+  })
+
+  it('l\'ordine: lo stato viene dopo gli Avanzi', () => {
+    const eot = calcEOT(
+      { ability: null, item: 'leftovers', status: 'burned' }, 185, 'sand', [])
+    expect(eot.voci.map(v => v.chiave)).toEqual(['sand', 'leftovers', 'burned'])
+  })
+})
+
+describe('l\'iride arriva fino al conteggio dei turni', () => {
+  const colpo = new Array(16).fill(20)
+
+  it('la funzione e il numero danno conti diversi, e non è un dettaglio', () => {
+    // 185 PS, 20 di danno a turno. Con l'iride crescente il KO arriva prima
+    // che col solo -11 del primo turno ripetuto: è tutto il punto di
+    // `eotAlTurno`, e se qualcuno ricollegasse `eotNet` alle DP questo test lo
+    // direbbe.
+    const eot = calcEOT(
+      { ability: null, item: null, status: 'badly-poisoned' }, 185, null, [])
+    const conCrescita = findBestNHKO(colpo, 185, eot.eotAlTurno).hits
+    const conCostante = findBestNHKO(colpo, 185, eot.eotNet).hits
+    expect(conCrescita).toBeLessThan(conCostante)
+  })
+
+  it('e la bruciatura, che costante lo è davvero, dà lo stesso conto', () => {
+    const eot = calcEOT({ ability: null, item: null, status: 'burned' }, 185, null, [])
+    expect(findBestNHKO(colpo, 185, eot.eotAlTurno).hits)
+      .toBe(findBestNHKO(colpo, 185, eot.eotNet).hits)
+  })
+})
+
+describe('e la stringa Smogon nomina anche gli stati', () => {
+  const slotAtk = { key: 'garchomp', sps: [0, 32, 0, 0, 0, 0], nature: 'hardy', ability: 'sand veil', item: null }
+  const slotDef = { key: 'venusaur', sps: [32, 0, 32, 0, 0, 0], nature: 'hardy', ability: 'chlorophyll', item: null }
+  const risultato = calculateDamage({
+    attacker: {
+      atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0],
+      atkNature: 'hardy', atkAbility: 'sand veil', atkItem: null, level: 50,
+    },
+    defender: {
+      defPokemon: 'venusaur', defSPs: [32, 0, 32, 0, 0, 0],
+      defNature: 'hardy', defAbility: 'chlorophyll', defItem: null,
+    },
+    move: 'crunch', field: {}, debug: false,
+  })
+
+  const casi = [
+    ['burned', 'burn damage'],
+    ['poisoned', 'poison damage'],
+    ['badly-poisoned', 'toxic damage'],
+  ]
+
+  for (const [stato, atteso] of casi) {
+    it(`«after ${atteso}», come lo scrive Smogon`, () => {
+      // Non «Burned damage»: lo stato non è un'abilità e non si nomina col suo
+      // aggettivo.
+      const s = buildSmogonString(
+        slotAtk, { ...slotDef, status: stato }, 'crunch', risultato, {})
+      expect(s).toContain(`after ${atteso}`)
     })
   }
 })

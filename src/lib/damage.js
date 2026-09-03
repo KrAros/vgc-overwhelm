@@ -11,7 +11,10 @@
  */
 
 import { TYPES } from '../data/typeChart'
-import { MAX_HITS, normalizzaMeteo, famigliaMeteo, STATI_VELENO } from './rules.js'
+import {
+  MAX_HITS, normalizzaMeteo, famigliaMeteo, STATI_VELENO,
+  DANNO_FINE_TURNO_PER_STATO, TETTO_IRIDE,
+} from './rules.js'
 import { normalizeAbilityKey, ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
@@ -148,6 +151,58 @@ export function vociFineTurnoAbilita(abilita, item, defHP, meteo, stato) {
 }
 
 /**
+ * ─── IL DANNO CHE LO STATO TOGLIE, E CHI LO SPEGNE ──────────────────────────
+ *
+ * Bruciatura, veleno e iride. Le frazioni stanno in
+ * `DANNO_FINE_TURNO_PER_STATO` (`lib/rules.js`), insieme alla nota che dice
+ * perche' sono una decisione e non una trascrizione.
+ *
+ * ─── DUE ABILITA' LO SPENGONO, PER DUE RAGIONI DIVERSE ─────────────────────
+ *
+ * Magicscudo lo toglie tutto: e' la terza meta' della stessa abilita' — la
+ * sabbia e il contraccolpo sono le altre due, e stanno in altri due posti.
+ *
+ * Velencura toglie solo quello da veleno, e non perche' «resiste»: al suo
+ * posto CURA. Senza `annullaDannoDaVeleno` un Gliscor avvelenato prenderebbe
+ * -1/8 e +1/8 nello stesso turno, cioe' zero, e la sua abilita' non si
+ * vedrebbe affatto.
+ *
+ * ─── L'IRIDE NON E' UN NUMERO, E' UNA SUCCESSIONE ──────────────────────────
+ *
+ * Al turno n toglie n/16 dei PS massimi. La voce che questa funzione torna
+ * porta il valore del PRIMO turno — quello che il pannello disegna, perche' la
+ * catena dei PS e' di un turno solo — e il marchio `crescente`, che dice a
+ * `eotAlTurno` di ricalcolarlo.
+ *
+ * `Math.floor(defHP * turno / 16)` e non `turno` volte `Math.floor(defHP/16)`:
+ * la divisione intera si fa una volta sola, alla fine. Su 185 PS al terzo
+ * turno sono 34 contro 33.
+ *
+ * @param {string} stato    — uno di `STATI` in `lib/rules.js`
+ * @param {string} abilita  — abilità del difensore
+ * @param {number} defHP    — PS massimi
+ * @param {number} [turno=1]
+ * @returns {{chiave: string, hp: number, tipo: string, crescente: boolean}[]}
+ */
+export function vociFineTurnoDaStato(stato, abilita, defHP, turno = 1) {
+  const regola = DANNO_FINE_TURNO_PER_STATO[stato]
+  if (!regola || regola.frazione === 0) return []
+
+  const effetto = ABILITY_EFFECTS[normalizeAbilityKey(abilita || '')]
+  if (effetto?.annullaDannoDaStato) return []
+  if (effetto?.annullaDannoDaVeleno && STATI_VELENO.has(stato)) return []
+
+  const passi = regola.crescente ? Math.min(turno, TETTO_IRIDE) : 1
+  return [{
+    chiave: stato,
+    hp: -Math.floor(defHP * passi / regola.frazione),
+    tipo: 'stato',
+    crescente: regola.crescente === true,
+    abilita: false,
+  }]
+}
+
+/**
  * Calcola tutti gli effetti fine turno rilevanti per un difensore.
  *
  * ─── PERCHE' TORNA ANCHE UNA LISTA ─────────────────────────────────────────
@@ -200,15 +255,39 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
   const daAbilita = vociFineTurnoAbilita(
     def.ability || '', def.item || '', defHP, weather, def.status || '')
 
+  const daStato = vociFineTurnoDaStato(def.status || '', def.ability || '', defHP)
+
   const voci = []
   if (sandDmgHP > 0) voci.push({ chiave: 'sand', hp: -sandDmgHP, abilita: false })
   voci.push(...daAbilita.filter(v => v.tipo === 'meteo'))
   if (leftoversHP > 0) voci.push({ chiave: 'leftovers', hp: leftoversHP, abilita: false })
+  voci.push(...daStato)
   voci.push(...daAbilita.filter(v => v.tipo === 'stato'))
 
   const eotNet = voci.reduce((somma, v) => somma + v.hp, 0)
 
-  return { isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP, voci, eotNet }
+  // ─── E POI C'E' L'IRIDE, CHE OGNI TURNO TOGLIE DI PIU' ──────────────────
+  //
+  // `eotNet` e' il turno UNO: e' quello che il pannello disegna nella catena
+  // dei PS, che di turni ne mostra uno. Chi conta i turni al KO invece deve
+  // sapere che al terzo turno il numero e' un altro, e per quello c'e' questa
+  // funzione — che `koChanceCumulative` e `koChanceSitrus` accettano al posto
+  // del numero.
+  //
+  // Per tutti gli altri e' lo stesso valore a ogni turno, ed e' la ragione per
+  // cui le due DP accettano ANCHE un numero: la stragrande maggioranza delle
+  // chiamate non ha niente di crescente, e obbligarle a costruire una
+  // funzione sarebbe rumore.
+  const eotAlTurno = (turno) => voci.reduce((somma, v) => somma + (
+    v.crescente
+      ? -Math.floor(defHP * Math.min(turno, TETTO_IRIDE) / DANNO_FINE_TURNO_PER_STATO[v.chiave].frazione)
+      : v.hp
+  ), 0)
+
+  return {
+    isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP,
+    voci, eotNet, eotAlTurno,
+  }
 }
 
 /**
@@ -248,6 +327,21 @@ export function contraccolpoDaMostrare(recoil, abilita) {
 }
 
 // ── KO Chance ─────────────────────────────────────────────────────────────────
+
+/**
+ * Il delta di fine turno del turno `turno`.
+ *
+ * Le due DP accettano `eotNet` come NUMERO o come FUNZIONE. Numero per tutti —
+ * sabbia, Avanzi, le cinque abilita', la bruciatura, il veleno: tolgono o
+ * danno lo stesso a ogni turno. Funzione per l'iride, che al turno n toglie
+ * n/16 dei PS massimi, e la costruisce `calcEOT` (`eotAlTurno`).
+ *
+ * Sta qui, in una riga sola, perche' le due DP la leggano nello stesso modo:
+ * sono due copie della stessa semantica del turno, e ogni volta che una delle
+ * due ha imparato qualcosa da sola il pannello ha detto due numeri diversi.
+ */
+const passoEot = (eotNet, turno) =>
+  typeof eotNet === 'function' ? eotNet(turno) : eotNet
 
 /**
  * Probabilità cumulativa di KO, colpo per colpo.
@@ -349,9 +443,10 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS,
     }
 
     // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const passo = passoEot(eotNet, h + 1)
     const prossimi = new Map()
     for (const [hp, prob] of stati) {
-      let nuoviHP = hp + eotNet
+      let nuoviHP = hp + passo
       if (nuoviHP <= 0) { koTotale += prob; continue }       // KO dall'EOT
       if (nuoviHP > defHP) nuoviHP = defHP                   // la cura non supera il massimo
       prossimi.set(nuoviHP, (prossimi.get(nuoviHP) || 0) + prob)
@@ -535,10 +630,11 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
     }
 
     // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const passo = passoEot(eotNet, h + 1)
     const prossimi = new Map()
     for (const [stato, prob] of stati) {
       const usata = (stato & 1) === 1
-      let nuoviHP = (stato >> 1) + eotNet
+      let nuoviHP = (stato >> 1) + passo
       if (nuoviHP <= 0) { koTotale += prob; continue }
       if (nuoviHP > defHP) nuoviHP = defHP
       const chiave = nuoviHP * 2 + (usata ? 1 : 0)

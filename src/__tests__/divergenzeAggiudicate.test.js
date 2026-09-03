@@ -31,6 +31,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { preparaCoppia } from '../lib/preparazione.js'
 import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
+import { DANNO_FINE_TURNO_PER_STATO, STATI } from '../lib/rules.js'
 
 const RADICE = path.resolve(import.meta.dirname, '..', '..')
 const SORGENTE = path.join(RADICE, 'vendor', 'ncp', 'damage_MASTER.js')
@@ -293,16 +294,27 @@ describe('scritte adesso, raggiungibili quando la specie arriverà', () => {
  * dicano la stessa cosa. È la verifica più forte disponibile quando l'oracolo
  * tace: non prova che la regola sia giusta, prova che non ci contraddiciamo.
  *
+ * ─── E IL DANNO DA STATO, CHE ERA IL CASO SUCCESSIVO ───────────────────────
+ *
+ * Qui c'era scritto che non lo calcolavamo: «Velencura guadagna 1/8, e chi è
+ * avvelenato senza non perde niente». Adesso c'è, ed è la stessa forma di
+ * aggiudicazione — bruciatura 1/16, veleno 1/8, iride 1/16 crescente — con le
+ * frazioni in `DANNO_FINE_TURNO_PER_STATO` (`lib/rules.js`).
+ *
+ * L'iride non è un numero ma una successione: al turno n toglie n/16 dei PS
+ * massimi. È la ragione per cui `calcEOT` torna anche `eotAlTurno`, e per cui
+ * le due DP accettano una funzione al posto del numero.
+ *
  * ─── COSA RESTA FUORI, E VA DETTO ──────────────────────────────────────────
  *
- * Il danno da stato — la bruciatura che toglie 1/16, il veleno 1/8, l'iride
- * che cresce ogni turno — non lo calcoliamo. Quindi un Pokémon avvelenato con
- * Velencura guadagna 1/8, e uno avvelenato senza non perde niente. La prima
- * metà è giusta, la seconda è zero al posto di un numero.
+ * Heatproof, nel gioco, dimezza il danno da bruciatura. Non l'abbiamo
+ * scritto: il riferimento non lo dice, e sarebbe un'aggiudicazione in più di
+ * quelle chieste. È il caso successivo, non una dimenticanza.
  *
- * Non è un difetto che le cinque abilità introducono: c'era già, e vale per la
- * bruciatura allo stesso modo. Ma da oggi si vede, perché Velencura lo mette
- * accanto — ed è scritto qui perché sia il caso successivo e non una sorpresa.
+ * E lo stato è un'ASSERZIONE DI CHI USA L'APP, non un fatto verificato: il
+ * menù lascia scegliere «bruciato» su un Pokémon di tipo Fuoco, che nel gioco
+ * non si può bruciare. Non lo impediamo, e non è una svista — l'app calcola il
+ * turno che le si descrive.
  */
 describe('il fine turno: cinque abilità dove il riferimento non arriva', () => {
   const DAL_RIFERIMENTO = ['Leftovers', 'Ice Body', 'Rain Dish', 'Poison Heal']
@@ -353,14 +365,40 @@ describe('il fine turno: cinque abilità dove il riferimento non arriva', () => 
     }
   })
 
-  it('il danno da stato NON è modellato, e questo test lo dice a voce alta', () => {
-    // Il giorno che entra, questo test diventa rosso e la nota qui sopra —
-    // «Velencura guadagna 1/8 e chi non ce l'ha non perde niente» — va
-    // riscritta nello stesso commit.
-    const damage = fs.readFileSync(path.join(RADICE, 'src/lib/damage.js'), 'utf8')
-    expect(
-      /burned|bruciatura/.test(damage),
-      'il fine turno ora conosce la bruciatura: aggiornare la nota su Velencura',
-    ).toBe(false)
+  it('il danno da stato: le tre frazioni, e le tre assenze scritte', () => {
+    // Elenco esatto su tutti e sei gli stati: un'assenza scritta è una
+    // decisione, un'assenza taciuta è una dimenticanza. Se domani si
+    // aggiungesse un settimo stato senza deciderne il fine turno, questo test
+    // lo direbbe.
+    expect(Object.keys(DANNO_FINE_TURNO_PER_STATO).sort()).toEqual([...STATI].sort())
+    expect(DANNO_FINE_TURNO_PER_STATO['burned'].frazione).toBe(16)
+    expect(DANNO_FINE_TURNO_PER_STATO['poisoned'].frazione).toBe(8)
+    expect(DANNO_FINE_TURNO_PER_STATO['badly-poisoned']).toEqual({ frazione: 16, crescente: true })
+    for (const s of ['healthy', 'paralyzed', 'asleep']) {
+      expect(DANNO_FINE_TURNO_PER_STATO[s].frazione, `${s} ora toglie PS`).toBe(0)
+    }
+  })
+
+  it.runIf(vendorPresente)('e il riferimento non ne calcola nessuna', () => {
+    // `Badly Poisoned` NCP lo nomina — legge lo stato per raddoppiare Venoshock
+    // e Facade — ma mai per togliere PS. La prova è che nessuna di quelle righe
+    // parla di punti salute, ed è la stessa forma di controllo usata sopra per
+    // Solar Power e Dry Skin.
+    const src = fs.readFileSync(SORGENTE, 'utf8')
+    const righe = src.split('\n').filter(r => /Badly Poisoned|"Burned"|"Poisoned"/.test(r))
+    expect(righe.length, 'il riferimento ha smesso di nominare gli stati: rileggere').toBeGreaterThan(0)
+    for (const r of righe) {
+      expect(
+        /curHP|maxHP|hp\s*[-+]=/.test(r),
+        `il riferimento ora tocca i PS su questa riga: ${r.trim()}`,
+      ).toBe(false)
+    }
+  })
+
+  it('Heatproof NON dimezza la bruciatura, ed è una scelta', () => {
+    // Nel gioco la dimezza. Il giorno che si decide di scriverlo, questo test
+    // diventa rosso e la nota qui sopra va riscritta nello stesso commit.
+    expect(ABILITY_EFFECTS['heatproof']?.annullaDannoDaStato).toBeUndefined()
+    expect(ABILITY_EFFECTS['heatproof']?.dimezzaBruciatura).toBeUndefined()
   })
 })

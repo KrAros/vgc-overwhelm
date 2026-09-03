@@ -139,3 +139,34 @@ describe('il pannello disegna le voci di fine turno', () => {
     expect(html).not.toContain('Sandstorm')
   })
 })
+
+describe('e disegna anche il danno da stato', () => {
+  it('la bruciatura, col suo nome e non con l\'aggettivo', () => {
+    // `statuses.burned` è «Burned», un aggettivo: accanto a «−11 HP» leggeva
+    // male. La catena usa `report.burn`, che è il sostantivo.
+    const html = disegna(slot('walrein', { status: 'burned' }), null)
+    expect(html).toContain('Burn')
+    expect(html).toMatch(/−\d+ HP/)
+  })
+
+  it('il veleno grave, che nella catena mostra il PRIMO turno', () => {
+    // La catena dei PS è di un turno solo: il numero disegnato è quello del
+    // turno uno, mentre il conteggio dei turni al KO usa la successione.
+    const html = disegna(slot('walrein', { status: 'badly-poisoned' }), null)
+    expect(html).toContain('Toxic')
+  })
+
+  it('Magic Guard la toglie', () => {
+    const html = disegna(
+      slot('walrein', { ability: 'magic-guard', status: 'burned' }), null)
+    expect(html).not.toContain('Burn')
+  })
+
+  it('Poison Heal sostituisce il veleno invece di sommarcisi', () => {
+    const html = disegna(
+      slot('walrein', { ability: 'poison-heal', status: 'poisoned' }), null)
+    expect(html).toContain('Poison Heal')
+    expect(html).toMatch(/\+\d+ HP/)
+    expect(html).not.toMatch(/−\d+ HP/)
+  })
+})

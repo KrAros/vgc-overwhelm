@@ -865,3 +865,48 @@ const FAMIGLIA_DI = Object.freeze({
 export function famigliaMeteo(meteo) {
   return FAMIGLIA_DI[normalizzaMeteo(meteo)] ?? null
 }
+
+/**
+ * ─── IL DANNO CHE LO STATO TOGLIE A FINE TURNO ──────────────────────────────
+ *
+ * ─── QUI L'ORACOLO NON ARRIVA ──────────────────────────────────────────────
+ *
+ * Il riferimento calcola UN colpo e il fine turno non lo guarda: e' la stessa
+ * situazione delle cinque abilita' di `fineTurno` e di Rock Head. Queste tre
+ * righe sono una decisione, registrata in `divergenzeAggiudicate.test.js`.
+ *
+ * ─── LE TRE VOCI, E LE TRE CHE NON CI SONO ─────────────────────────────────
+ *
+ * Bruciatura 1/16, veleno 1/8, iride 1/16 CRESCENTE — al turno n toglie
+ * n/16 dei PS massimi, e non n volte 1/16: la divisione intera si fa una
+ * volta sola, alla fine, e i due conti non danno lo stesso numero.
+ *
+ * Paralisi, sonno e «sano» non tolgono niente. Sono nella tabella lo stesso —
+ * con `frazione: 0` — perche' un'assenza scritta e' una decisione e
+ * un'assenza taciuta e' una dimenticanza: `stato.test.js` controlla che ogni
+ * voce di `STATI` compaia qui.
+ *
+ * ─── COSA NON CONTIENE, E VA DETTO ─────────────────────────────────────────
+ *
+ * Heatproof, nel gioco, DIMEZZA il danno da bruciatura. Non l'abbiamo scritto:
+ * il riferimento non lo dice, e sarebbe un'aggiudicazione in piu' di quelle
+ * chieste. Sta in `fineTurno.test.js` come cosa nota e non fatta, non come
+ * cosa dimenticata.
+ */
+export const DANNO_FINE_TURNO_PER_STATO = Object.freeze({
+  'healthy':         { frazione: 0 },
+  'burned':          { frazione: 16 },
+  'paralyzed':       { frazione: 0 },
+  'poisoned':        { frazione: 8 },
+  'badly-poisoned':  { frazione: 16, crescente: true },
+  'asleep':          { frazione: 0 },
+})
+
+/**
+ * Il contatore dell'iride nel gioco si ferma a 15/16.
+ *
+ * `MAX_HITS` e' 9, quindi questo tetto non si tocca mai: e' scritto perche' la
+ * formula sia giusta e non perche' serva. Se un giorno la ricerca del KO
+ * salisse sopra i quindici turni, sarebbe gia' a posto.
+ */
+export const TETTO_IRIDE = 15
