@@ -1075,6 +1075,38 @@ export const ABILITY_EFFECTS = {
   // esattamente 0,5. Vedi `typeChart.js` per la condizione sui punti salute,
   // che non modelliamo e assumiamo sempre pieni.
   'tera-shell': { teraShell: true, showInSmogon: true },
+
+  // ── I quattro che riscrivono un tipo ─────────────────────────────────────
+  //
+  // Forecast e Mimicry cambiano il tipo del POKEMON (`:415` e `:429`);
+  // Galvanize e Normalize quello della MOSSA (`:1081` e `:1091`). Sono due
+  // cose diverse, e la differenza si vede nello STAB: chi cambia tipo lo
+  // guadagna sulle mosse di quel tipo, chi cambia la mossa se lo porta dietro.
+  //
+  // Galvanize sta nella tabella `ABILITA_ATE` di rules.js, con le altre
+  // quattro «-ate»: nel riferimento e' il quinto ramo dello stesso `switch`.
+  // Normalize no, perche' riscrive QUALUNQUE tipo e non solo il Normale — la
+  // tabella non saprebbe esprimerlo.
+  'forecast':  { forecast: true, showInSmogon: true },
+  'mimicry':   { mimicry: true, showInSmogon: true },
+  'normalize': { normalize: true, showInSmogon: true },
+
+  // ── Mega Sol: «e' come se ci fosse il sole», per sette cose ──────────────
+  //
+  // Meganium-Mega. Nel riferimento compare in sette punti, e quattro sono
+  // osservabili da noi:
+  //
+  //   Weather Ball diventa Fuoco             `:729`
+  //   Weather Ball raddoppia la potenza      `:1424`
+  //   le mosse Fuoco prendono il x1,5        `:2163`
+  //   la pioggia NON dimezza le mosse Fuoco  `:2173`
+  //
+  // Gli altri tre esentano Mega Sol da cose che noi non calcoliamo affatto —
+  // il dimezzamento di Solar Beam col maltempo (`:1722`), il +50% difensivo di
+  // sabbia e neve (`:2066`), e il x1,5 su Hydro Steam (`:2164`, che e' una
+  // mossa che abbiamo ma il cui ramo speciale non modelliamo). Sono scritti
+  // nel test come non osservabili, non come fatti.
+  'mega-sol':  { megaSol: true, showInSmogon: true },
   'solid-rock': { filter: true, showInSmogon: true },
   'thick-fat': { thickFat: true, showInSmogon: true },
   'water-bubble': { waterBubble: true, showInSmogon: true },

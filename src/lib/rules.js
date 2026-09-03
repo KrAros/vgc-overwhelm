@@ -127,7 +127,68 @@ export const ABILITA_ATE = Object.freeze({
   'aerilate':    TYPES.FLYING,
   'refrigerate': TYPES.ICE,
   'dragonize':   TYPES.DRAGON,
+  // Galvanize e' il quinto ramo dello STESSO `switch` (`damage_MASTER.js:1081`).
+  // Normalize invece NON sta qui: e' l'`else if` successivo, e riscrive
+  // qualunque tipo invece del solo Normale — la tabella non saprebbe dirlo.
+  'galvanize':   TYPES.ELECTRIC,
 })
+
+/**
+ * ─── IL TIPO DEL POKEMON RISCRITTO DAL CAMPO ────────────────────────────────
+ *
+ * Forecast segue il METEO (`checkForecast`, `damage_MASTER.js:415`), Mimicry
+ * il TERRENO (`checkMimicry`, `:429`). Tutt'e due sostituiscono il primo tipo
+ * e AZZERANO il secondo: chi le porta diventa monotipo.
+ *
+ * Forecast ha una condizione in piu': `pokemon.name === "Castform"`. Nel
+ * riferimento e' scritta, e Castform e' l'unica specie che la porta anche da
+ * noi — ma la condizione si trascrive, non si deduce dai dati.
+ *
+ * Senza meteo Forecast mette Normale, cioe' il tipo che Castform ha gia': e'
+ * l'unico dei quattro rami che non cambia niente, e non e' un caso da saltare
+ * — azzera comunque il secondo tipo, che per Castform e' gia' vuoto.
+ *
+ * Mimicry invece non fa NIENTE senza terreno (`terrain !== ""`), e il suo
+ * ultimo ramo e' un `else` senza condizione: qualunque terreno che non sia
+ * Elettrico, Erboso o Nebbioso diventa Psico. Con quattro terreni possibili
+ * quel ramo vale solo per lo Psichico, ma e' scritto come `else` e cosi' resta.
+ */
+export const TIPO_FORECAST = Object.freeze({
+  sun: TYPES.FIRE,
+  'harsh sunshine': TYPES.FIRE,
+  rain: TYPES.WATER,
+  'heavy rain': TYPES.WATER,
+  snow: TYPES.ICE,
+})
+
+export const TIPO_MIMICRY = Object.freeze({
+  electric: TYPES.ELECTRIC,
+  grassy: TYPES.GRASS,
+  misty: TYPES.FAIRY,
+  psychic: TYPES.PSYCHIC,
+})
+
+/**
+ * Il tipo effettivo di un Pokemon, dopo Forecast e Mimicry.
+ *
+ * @param {number[]} tipiBase
+ * @param {object|null} effettoAbilita
+ * @param {string} specie
+ * @param {string|null} meteo   gia' normalizzato
+ * @param {string|null} terreno
+ * @returns {number[]}
+ */
+export function tipiEffettivi(tipiBase, effettoAbilita, specie, meteo, terreno) {
+  if (effettoAbilita?.forecast && specie === 'castform') {
+    return [TIPO_FORECAST[meteo] ?? TYPES.NORMAL]
+  }
+  if (effettoAbilita?.mimicry && terreno) {
+    // L'ultimo ramo del riferimento e' un `else` senza condizione: tutto cio'
+    // che non e' Elettrico, Erboso o Nebbioso diventa Psico.
+    return [TIPO_MIMICRY[terreno] ?? TYPES.PSYCHIC]
+  }
+  return tipiBase
+}
 
 export const LEVEL = 50
 
