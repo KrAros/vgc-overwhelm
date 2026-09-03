@@ -39,7 +39,7 @@ import pokemonData from '../data/pokemon.json'
 import movesData   from '../data/moves.json'
 import { normalizeAbilityKey } from '../data/abilityEffects.js'
 import { calcStat } from '../lib/stats.js'
-import { preparaSingolo } from '../lib/preparazione.js'
+import { preparaSingolo, preparaCoppia } from '../lib/preparazione.js'
 import { applyBoost, normalizzaMeteo, LEVEL, STAT_SPE } from '../lib/rules.js'
 import { pokeRound } from '../lib/modifiers.js'
 
@@ -244,14 +244,66 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = n
 /**
  * Restituisce 't1' se T1 va prima, 't2' se T2 va prima, null se pareggio.
  */
+/**
+ * Da slot dello store a «lato» come lo vuole `preparaCoppia`.
+ *
+ * I nomi dei campi non coincidono — lo store dice `key` e `abilityFlags`, la
+ * preparazione dice `pokemon` e `abilitaAccesa` — e questa e' la traduzione,
+ * scritta una volta sola.
+ */
+function latoPerPreparazione(p) {
+  const f = p?.abilityFlags || {}
+  return {
+    pokemon: p?.key ?? null,
+    sps: p?.sps || [0, 0, 0, 0, 0, 0],
+    natura: p?.nature ?? null,
+    livello: LEVEL,
+    abilita: p?.ability ?? null,
+    strumento: p?.item ?? null,
+    abilitaAccesa: f.intimidateActive === true || f.interruttore === true,
+    koFatto: f.eelevateKOActive === true,
+    assorbimentoFatto: f.assorbimentoAttivo === true,
+    boosts: {
+      at: p?.atkBoost || 0, df: p?.defBoost || 0, sa: p?.spAtkBoost || 0,
+      sd: p?.spDefBoost || 0, sp: p?.speBoost || 0,
+    },
+  }
+}
+
 export function whoGoesFirst(t1, t2, bestMoveT1, bestMoveT2, weather, trickRoom, tailwindT1 = false, tailwindT2 = false, terrain = null) {
   const p1 = movesData[bestMoveT1?.move]?.priority ?? 0
   const p2 = movesData[bestMoveT2?.move]?.priority ?? 0
 
   if (p1 !== p2) return p1 > p2 ? 't1' : 't2'
 
-  const spe1 = calcEffectiveSpe(t1, weather, tailwindT1, terrain)
-  const spe2 = calcEffectiveSpe(t2, weather, tailwindT2, terrain)
+  // ─── GLI STADI VENGONO DALLA PREPARAZIONE, NON DALLO STORE ────────────────
+  //
+  // `calcEffectiveSpe` legge `pokemon.speBoost`, cioe' lo stadio messo a mano
+  // nell'editor. Ma alla Velocita' arrivano anche gradi che nessuno mette a
+  // mano: il +1 di Rattled quando subisce Intimidate (`damage_MASTER.js:588`),
+  // il +1 dell'Orbo Adrenalina, il +1 di Battle Bond.
+  //
+  // La preparazione li calcola gia' tutti — e li calcolava anche prima, ma
+  // finivano in un campo che nessuno leggeva. Qui i due Pokemon ci sono
+  // tutt'e due, quindi si puo' chiedere a lei.
+  //
+  // ─── PERCHE' NON BASTAVA LA COLONNA «Mod» ────────────────────────────────
+  //
+  // Perche' avrebbe creato due sorgenti che dicono numeri diversi sullo stesso
+  // Pokemon: la colonna con Rattled e l'indicatore senza. E' il difetto che
+  // `statMostrata` esiste per aver corretto una volta.
+  const prep = preparaCoppia({
+    attaccante: latoPerPreparazione(t1),
+    difensore:  latoPerPreparazione(t2),
+    meteo: weather, terreno: terrain,
+  })
+  const conStadio = (p, stadio) =>
+    (p?.speBoost || 0) === stadio ? p : { ...p, speBoost: stadio }
+
+  const spe1 = calcEffectiveSpe(
+    conStadio(t1, prep.attaccante.boosts.sp), weather, tailwindT1, terrain)
+  const spe2 = calcEffectiveSpe(
+    conStadio(t2, prep.difensore.boosts.sp), weather, tailwindT2, terrain)
 
   if (spe1 === spe2) return null
   if (trickRoom) return spe1 < spe2 ? 't1' : 't2'

@@ -56,6 +56,7 @@ import {
 import { preparaSingolo, CHIAVI_BOOST } from './preparazione.js'
 import { MOD, chainMods, pokeRound, FIXED_POINT } from './modifiers.js'
 import { calcEffectiveSpe } from '../utils/speedOrder.js'
+import { ITEM_EFFECTS } from '../data/itemEffects.js'
 
 /** Da indice di statistica alla chiave di boost usata dalla preparazione. */
 const CHIAVE_DA_INDICE = Object.freeze({
@@ -84,7 +85,7 @@ const CAMPO_STADIO = Object.freeze({
  * vera) e Rapidascesa quando ha messo KO (`boostStatPiuAltaSuKO`, che chiede
  * quale sia la statistica più alta e quindi la preparazione).
  */
-function stadioEffettivo(slot, statIdx, statPiuAlta) {
+function stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate) {
   const chiave = CHIAVE_DA_INDICE[statIdx]
   if (!chiave) return 0
 
@@ -100,6 +101,27 @@ function stadioEffettivo(slot, statIdx, statPiuAlta) {
   // dichiara che l'assorbimento c'e' gia' stato. Well-Baked Body ne dà due.
   if (eff?.boostAssorbimento?.stat === chiave && slot?.abilityFlags?.assorbimentoAttivo) {
     stadio += eff.boostAssorbimento.gradi
+  }
+
+  // ─── RATTLED: +1 ALLA VELOCITA' QUANDO SUBISCE INTIMIDATE ────────────────
+  //
+  // Il riferimento glielo da' DENTRO `checkIntimidate` (`:588`), e la nostra
+  // preparazione lo calcola: `boosts.sp` vale 1. Ma quel valore non arrivava
+  // qui — questa funzione riceve un Pokemon solo, e Rattled dipende
+  // dall'avversario.
+  //
+  // Il dato pero' l'app ce l'ha gia': `SlotEditor` calcola
+  // `opponentHasIntimidateActive` per Defiant, Contrary e Competitive, che
+  // sono le altre tre della stessa famiglia. Rattled e' la quarta, e usa lo
+  // stesso booleano — cosi' la colonna e il motore non possono dire due cose
+  // diverse, perche' guardano lo stesso fatto.
+  //
+  // Resta una differenza di portata, ed e' voluta: l'editor guarda «qualcuno
+  // nella squadra avversaria», la matrice guarda «questo avversario preciso».
+  // Sono due domande diverse, e in quei due posti sono tutt'e due giuste.
+  if (eff?.rattled && chiave === 'sp' && avversarioConIntimidate
+      && !ITEM_EFFECTS[String(slot?.item || '').toLowerCase()]?.bloccaCaliAvversari) {
+    stadio += 1
   }
 
   return Math.max(-6, Math.min(6, stadio))
@@ -156,7 +178,10 @@ function moltiplicatori(slot, statIdx, { paradosso, statPiuAlta }) {
  *          due differiscono — cioè se c'è qualcosa da mostrare.
  */
 export function statMostrata(slot, statIdx, contesto = {}) {
-  const { meteo = null, terreno = null, tailwind = false, livello = LEVEL } = contesto
+  const {
+    meteo = null, terreno = null, tailwind = false, livello = LEVEL,
+    avversarioConIntimidate = false,
+  } = contesto
 
   const base = pokemonData[slot?.key]?.stats?.[statIdx]
   if (base === undefined) return { grezza: 0, effettiva: 0, modificata: false }
@@ -180,13 +205,13 @@ export function statMostrata(slot, statIdx, contesto = {}) {
   // slot con lo stadio già alzato: così l'ordine di velocità resta quello che
   // era e la colonna dice la verità.
   if (statIdx === STAT_SPE) {
-    const stadio = stadioEffettivo(slot, statIdx, statPiuAlta)
+    const stadio = stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate)
     const conStadio = stadio === (slot?.speBoost || 0) ? slot : { ...slot, speBoost: stadio }
     const effettiva = calcEffectiveSpe(conStadio, meteo, tailwind, terreno)
     return { grezza, effettiva, modificata: effettiva !== grezza }
   }
 
-  const stadio = stadioEffettivo(slot, statIdx, statPiuAlta)
+  const stadio = stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate)
   const conStadio = applyBoost(grezza, stadio)
 
   const mods = moltiplicatori(slot, statIdx, { paradosso, statPiuAlta })

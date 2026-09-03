@@ -282,7 +282,7 @@ function checkIntimidate(sorgente, bersaglio) {
     bersaglio.boosts.sp = limita(bersaglio.boosts.sp + 1 * (1 + raddoppia))
     bersaglio.strumento = null
   }
-  if (bersaglio.chiaveAbilita === 'rattled'
+  if (bersaglio.effettoAbilita?.rattled
       && ITEM_EFFECTS[chiaveStrumento(bersaglio)]?.bloccaCaliAvversari !== true) {
     bersaglio.boosts.sp = limita(bersaglio.boosts.sp + 1)
   }

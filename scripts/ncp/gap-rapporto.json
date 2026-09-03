@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:22:12.507Z",
+    "generatedAt": "2026-09-03T06:34:49.486Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
     "funzioniConsiderate": 55,
     "abilitaSelezionabili": 312,
-    "abilitaSenzaEffetto": 166,
-    "abilitaNelGap": 3,
+    "abilitaSenzaEffetto": 165,
+    "abilitaNelGap": 2,
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
@@ -16,16 +16,6 @@
   },
   "prove": {
     "abilita": [
-      {
-        "chiave": "rattled",
-        "nome": "Rattled",
-        "canale": "STR",
-        "prova": {
-          "funzione": "checkIntimidate",
-          "file": "damage_MASTER.js",
-          "riga": 588
-        }
-      },
       {
         "chiave": "rivalry",
         "nome": "Rivalry",

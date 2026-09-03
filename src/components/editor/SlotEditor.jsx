@@ -435,6 +435,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 weather={weather}
                 terrain={terrain}
                 tailwindActive={i === 5 && tailwindActive}
+                /* Lo stesso booleano che il riquadro usa per Defiant, Contrary
+                   e Competitive. Rattled e' la quarta della famiglia, e senza
+                   questo la colonna «Mod» era l'unico posto dove non si
+                   vedeva. */
+                avversarioConIntimidate={opponentHasIntimidateActive}
               />
             ))}
           </div>
