@@ -203,11 +203,19 @@ export const ABILITY_EFFECTS = {
   'protean':          { protean: true, showInSmogon: true },
   'libero':           { protean: true, showInSmogon: true },
 
-  // Solar Power: x1.5 all'Att. Speciale col sole. NON chiede l'interruttore, e
-  // nemmeno gli HP — nel gioco costa PS ogni turno, ma quello non e' danno e il
-  // riferimento non lo modella. Bastano sole, mossa speciale e niente Utility
-  // Umbrella (`:1958`).
-  'solar-power':      { solarPower: true, showInSmogon: true },
+  // Solar Power: x1.5 all'Att. Speciale col sole. NON chiede l'interruttore:
+  // bastano sole, mossa speciale e niente Utility Umbrella (`:1958`).
+  //
+  // Il -1/8 a fine turno il riferimento non lo modella, e per parecchie
+  // sessioni non l'abbiamo modellato nemmeno noi — questo commento diceva
+  // «quello non e' danno», che e' vero per la catena del danno e falso per
+  // chi guarda quanti turni sopravvive. Adesso c'e', in `fineTurno`, ed e'
+  // una decisione nostra e non una trascrizione (vedi il blocco in fondo).
+  'solar-power':      {
+    solarPower: true,
+    fineTurno: [{ meteo: 'sun', frazione: 8, segno: -1 }],
+    showInSmogon: true,
+  },
 
   // Klutz: lo strumento di chi ce l'ha non conta piu'. I sette che restano in
   // piedi stanno in `STRUMENTI_IMMUNI_A_KLUTZ` dentro `lib/rules.js`, perche'
@@ -389,7 +397,18 @@ export const ABILITY_EFFECTS = {
   // La seconda e' un `else if` del punto h, che e' Heatproof prima della nona
   // generazione: a gen 10 h non scatta mai, quindi i si valuta sempre. La
   // catena e' trascritta com'e' lo stesso, perche' l'`else` e' la specifica.
-  'dry-skin':        { immuneTipo: TYPES.WATER, debolePerIlFuoco: true },
+  //
+  // La terza meta' — perche' Pellearsa di meta' ne ha tre — e' il fine turno:
+  // +1/8 sotto la pioggia, -1/8 sotto il sole. E' l'unica delle cinque con
+  // DUE voci, ed e' la ragione per cui `fineTurno` e' una lista.
+  'dry-skin':        {
+    immuneTipo: TYPES.WATER,
+    debolePerIlFuoco: true,
+    fineTurno: [
+      { meteo: 'rain', frazione: 8, segno: 1 },
+      { meteo: 'sun',  frazione: 8, segno: -1 },
+    ],
+  },
 
   // Wonder Guard: passa SOLO il super efficace. Il riferimento scrive
   // `typeEffectiveness <= 1`, cioe' anche l'efficacia neutra e' annullata —
@@ -1147,4 +1166,71 @@ export const ABILITY_EFFECTS = {
   'thick-fat': { thickFat: true, showInSmogon: true },
   'water-bubble': { waterBubble: true, showInSmogon: true },
   'white-smoke': { intimidateAnnulla: true },
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // IL FINE TURNO
+  // ═════════════════════════════════════════════════════════════════════════
+  //
+  // ─── QUI L'ORACOLO NON ARRIVA, E VA DETTO PRIMA DI TUTTO ────────────────
+  //
+  // Il riferimento il fine turno non lo calcola affatto. Cercato nei due file
+  // del danno: `Leftovers`, `Ice Body`, `Rain Dish` e `Poison Heal` non
+  // compaiono nemmeno una volta. `Solar Power` e `Dry Skin` ci sono, ma solo
+  // per la meta' che tocca il danno — il x1,5 all'Att. Speciale e il x1,25
+  // sulle mosse Fuoco — mai per i PS.
+  //
+  // Quindi queste cinque righe sono decisioni di Simone, come Rock Head, e
+  // stanno in `divergenzeAggiudicate.test.js`. Nessun confronto roll per roll
+  // potra' mai dire se sono giuste: la fonte e' la descrizione che l'app
+  // stessa mostra all'utente, che le frazioni le scrive per esteso.
+  //
+  // ─── LA FORMA ───────────────────────────────────────────────────────────
+  //
+  // Una lista, non un oggetto: Pellearsa e' l'unica che ne ha due, e averla
+  // dovuta trattare come caso a parte era il modo per non vederla.
+  //
+  //   meteo     famiglia di meteo (`famigliaMeteo` in `lib/rules.js`), cioe'
+  //             `rain` vale anche per la Pioggia Intensa
+  //   stato     `veleno`, cioe' i due avvelenamenti insieme
+  //   frazione  il denominatore sui PS massimi
+  //   segno     +1 recupera, -1 perde
+  //
+  // Chi le legge: `calcEOT` in `lib/damage.js`, che spegne quelle di sole e
+  // di pioggia se il portatore ha l'Utility Umbrella.
+
+  // Corpogelo, sotto la neve. L'ombrello non c'entra: ripara da sole e
+  // pioggia, e la neve non e' nessuno dei due.
+  'ice-body':  { fineTurno: [{ meteo: 'snow', frazione: 16, segno: 1 }], showInSmogon: true },
+
+  // Copripioggia. Vale anche sotto la Pioggia Intensa, ed e' la ragione per
+  // cui `fineTurno` legge la FAMIGLIA del meteo e non il nome canonico.
+  'rain-dish': { fineTurno: [{ meteo: 'rain', frazione: 16, segno: 1 }], showInSmogon: true },
+
+  // Velencura: 1/8 dei PS massimi INVECE di perderli.
+  //
+  // ─── UNA META' DI QUESTA RIGA E' VERA E L'ALTRA NON C'E' ────────────────
+  //
+  // Il danno da veleno non lo calcoliamo, ne' qui ne' altrove: il fine turno
+  // conosce sabbia, Avanzi, Baccacedro e adesso queste cinque, e basta.
+  // Quindi il numero di CHI HA Velencura e' giusto (+1/8), e quello di chi e'
+  // avvelenato senza averla e' zero invece di -1/8.
+  //
+  // Non e' un difetto che questa riga introduce — c'era gia', e vale per la
+  // bruciatura allo stesso modo — ma da oggi si vede, perche' Velencura lo
+  // mette accanto. Sta scritto in `fineTurno.test.js` come il caso successivo,
+  // non come una cosa risolta.
+  'poison-heal': { fineTurno: [{ stato: 'veleno', frazione: 8, segno: 1 }], showInSmogon: true },
+
+  // Magicscudo: subisce danno solo dagli attacchi diretti.
+  //
+  // Erano due meta', e ne era implementata una sola. La sabbia la toglieva gia'
+  // `SAND_IMMUNE_ABILITIES` in `lib/damage.js` — per nome, senza passare da
+  // qui — e per questo la voce in `ABILITY_EFFECTS` non esisteva affatto.
+  //
+  // Il contraccolpo no: era rimasto fuori DI PROPOSITO quando e' entrato Rock
+  // Head, perche' Simone aveva aggiudicato solo quello. Adesso c'e', e copre
+  // le stesse dieci mosse: quelle in cui il contraccolpo e' una frazione del
+  // danno inflitto. Mind Blown, Chloroblast e Steel Beam restano fuori da
+  // entrambe — non sono contraccolpo, sono il prezzo della mossa.
+  'magic-guard': { annullaContraccolpo: true, showInSmogon: true },
 }

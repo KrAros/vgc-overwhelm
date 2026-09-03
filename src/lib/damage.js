@@ -11,7 +11,7 @@
  */
 
 import { TYPES } from '../data/typeChart'
-import { MAX_HITS, normalizzaMeteo } from './rules.js'
+import { MAX_HITS, normalizzaMeteo, famigliaMeteo, STATI_VELENO } from './rules.js'
 import { normalizeAbilityKey, ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
@@ -83,9 +83,93 @@ export function isSandImmune(defTypes = [], ability = '', item = '') {
 // ── EOT (End of Turn) ─────────────────────────────────────────────────────────
 
 /**
+ * ─── LE CINQUE ABILITA' CHE MUOVONO I PS A FINE TURNO ───────────────────────
+ *
+ * Corpogelo, Copripioggia, Solarpotere, Pellearsa e Velencura. Le frazioni
+ * stanno in `ABILITY_EFFECTS`, sotto `fineTurno`, insieme alla nota che dice
+ * perche' sono una decisione e non una trascrizione: il riferimento il fine
+ * turno non lo calcola affatto.
+ *
+ * ─── L'UTILITY UMBRELLA ────────────────────────────────────────────────────
+ *
+ * Ripara da sole e pioggia, e quindi spegne Copripioggia, Solarpotere e le
+ * due meta' di Pellearsa. NON spegne Corpogelo: la neve non e' nessuno dei
+ * due. E' lo stesso ombrello che il motore controlla gia' su Solar Power e su
+ * Flower Gift (`calcEngine.js:1050` e `:1063`), letto qui con la stessa
+ * grafia.
+ *
+ * ─── LE DUE CHIAVI CHE QUESTA FUNZIONE CAPISCE ─────────────────────────────
+ *
+ * `meteo` e' una FAMIGLIA (`sun`, `rain`, `sand`, `snow`), non un nome
+ * canonico: Copripioggia recupera anche sotto la Pioggia Intensa. `stato` per
+ * ora vale solo `veleno`, cioe' i due avvelenamenti insieme. Una voce che
+ * nominasse qualcos'altro resterebbe spenta in silenzio, ed e' il motivo per
+ * cui `fineTurno.test.js` controlla che ogni voce dichiarata usi una chiave
+ * che sta qui dentro.
+ *
+ * @param {string} abilita — abilità del difensore
+ * @param {string} item    — strumento del difensore
+ * @param {number} defHP   — PS massimi
+ * @param {string} meteo   — meteo attivo, anche in forma non canonica
+ * @param {string} stato   — stato del difensore (`STATI` in `lib/rules.js`)
+ * @returns {{chiave: string, hp: number, tipo: string, abilita: boolean}[]}
+ */
+export function vociFineTurnoAbilita(abilita, item, defHP, meteo, stato) {
+  const chiave = normalizeAbilityKey(abilita || '')
+  const dichiarate = ABILITY_EFFECTS[chiave]?.fineTurno
+  if (!dichiarate) return []
+
+  const famiglia = famigliaMeteo(meteo)
+  const conOmbrello = (item || '').toLowerCase() === 'utility umbrella'
+
+  return dichiarate
+    .filter((v) => {
+      if (v.meteo) {
+        if (v.meteo !== famiglia) return false
+        return !(conOmbrello && (v.meteo === 'sun' || v.meteo === 'rain'))
+      }
+      if (v.stato === 'veleno') return STATI_VELENO.has(stato)
+      return false
+    })
+    .map((v) => ({
+      chiave,
+      // Stessa divisione intera di sabbia e Avanzi, che sono qui accanto da
+      // sempre: nel gioco il minimo e' 1 PS, e con `Math.floor` un Pokemon da
+      // meno di 16 PS massimi non prenderebbe niente. Non ne esistono in
+      // Champions, e inventare un `Math.max(1, ...)` qui e non sulle due righe
+      // di sopra vorrebbe dire tre arrotondamenti diversi nella stessa somma.
+      hp: v.segno * Math.floor(defHP / v.frazione),
+      tipo: v.meteo ? 'meteo' : 'stato',
+      // Serve a chi disegna, per scegliere l'icona: il sole, la pioggia, la
+      // neve. Le voci di stato non ce l'hanno.
+      meteo: v.meteo ?? null,
+      abilita: true,
+    }))
+}
+
+/**
  * Calcola tutti gli effetti fine turno rilevanti per un difensore.
  *
- * @param {object} def      — slot difensore dallo store { item, ability }
+ * ─── PERCHE' TORNA ANCHE UNA LISTA ─────────────────────────────────────────
+ *
+ * Fino a ieri le voci erano due — sabbia e Avanzi — e i tre posti che le
+ * mostrano le scrivevano a mano: il ReportPanel due volte (la barra del turno
+ * e la catena dei PS) e `smogonString` una terza. Tre copie della stessa
+ * somma, che con cinque voci in piu' sarebbero diventate tre elenchi liberi di
+ * divergere — la forma di difetto che questo progetto ha gia' chiuso sui
+ * sinonimi del meteo e sulle levette.
+ *
+ * `voci` e' quella somma, in ordine di turno, con il segno gia' dentro:
+ * `eotNet` non e' altro che la sua somma. Chi disegna sceglie l'icona e il
+ * nome, non decide piu' chi c'e'.
+ *
+ * ─── L'ORDINE ──────────────────────────────────────────────────────────────
+ *
+ * Meteo, poi strumento, poi stato: la sabbia e le abilita' che il meteo accende
+ * stanno nello stesso passo del gioco, gli Avanzi vengono dopo, e il veleno —
+ * cioe' Velencura — dopo ancora.
+ *
+ * @param {object} def      — slot difensore dallo store { item, ability, status }
  * @param {number} defHP    — HP massimi del difensore (da result.defHP)
  * @param {string} weather  — meteo attivo (slug lowercase)
  * @param {number[]} defTypes — tipi del difensore (indici numerici)
@@ -95,6 +179,7 @@ export function isSandImmune(defTypes = [], ability = '', item = '') {
  *   sandDmgHP: number,
  *   leftoversHP: number,
  *   sitrusBerryHP: number,
+ *   voci: {chiave: string, hp: number}[],
  *   eotNet: number,
  * }}
  */
@@ -111,9 +196,19 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
   const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'
     ? Math.floor(defHP / 4)
     : 0
-  const eotNet = leftoversHP - sandDmgHP
 
-  return { isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP, eotNet }
+  const daAbilita = vociFineTurnoAbilita(
+    def.ability || '', def.item || '', defHP, weather, def.status || '')
+
+  const voci = []
+  if (sandDmgHP > 0) voci.push({ chiave: 'sand', hp: -sandDmgHP, abilita: false })
+  voci.push(...daAbilita.filter(v => v.tipo === 'meteo'))
+  if (leftoversHP > 0) voci.push({ chiave: 'leftovers', hp: leftoversHP, abilita: false })
+  voci.push(...daAbilita.filter(v => v.tipo === 'stato'))
+
+  const eotNet = voci.reduce((somma, v) => somma + v.hp, 0)
+
+  return { isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP, voci, eotNet }
 }
 
 /**

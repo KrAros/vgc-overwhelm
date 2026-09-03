@@ -159,14 +159,17 @@ const VERDETTI = {
  */
 const REGISTRO = {
   // ── Il motore le applica davvero, ma non da ABILITY_EFFECTS ─────────────
-  'magic-guard': {
+  //
+  // Qui c'era anche `magic-guard`, con la stessa prova di `overcoat`: la
+  // sabbia. Era vera e restava mezza — «subisce danno solo dagli attacchi
+  // diretti» sono anche il contraccolpo e il fine turno — e questo verdetto
+  // non aveva modo di dirlo, perche' `applicata-altrove` guarda UN effetto e
+  // si accontenta. Adesso Magicscudo ha una voce sua in `ABILITY_EFFECTS`
+  // (`annullaContraccolpo`) ed esce dal setaccio per la porta giusta.
+  'overcoat': {
     verdetto: 'applicata-altrove',
     prova: 'lib/damage.js — SAND_IMMUNE_ABILITIES: toglie il danno da sabbia '
          + 'dal calcolo di fine turno, che il pannello mostra.',
-  },
-  'overcoat': {
-    verdetto: 'applicata-altrove',
-    prova: 'lib/damage.js — SAND_IMMUNE_ABILITIES, come magic-guard.',
   },
 
   // ── Il riferimento non le calcola nemmeno lui ───────────────────────────

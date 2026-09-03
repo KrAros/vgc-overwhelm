@@ -162,7 +162,7 @@ describe('Battle Bond', () => {
 })
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3. Rock Head, dove l'oracolo non arriva proprio
+// 3. Il contraccolpo, dove l'oracolo non arriva proprio
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -183,11 +183,25 @@ describe('Battle Bond', () => {
  * contraccolpo delle dieci mosse in cui è una frazione del danno, e non tocca
  * le tre in cui è un prezzo in PS massimi.
  *
- * Magic Guard è stata lasciata fuori di proposito, non dimenticata.
+ * ─── E POI MAGIC GUARD, CHE ERA RIMASTA FUORI ─────────────────────────────
+ *
+ * Quando Rock Head è entrata, Magic Guard è stata lasciata fuori DI PROPOSITO:
+ * Simone aveva aggiudicato «solo Rock Head, le dieci», e questo file lo
+ * scriveva con un test che chiedeva che Magic Guard NON ci fosse.
+ *
+ * Adesso c'è, ed è la stessa aggiudicazione applicata due volte: la stessa
+ * riga di codice (`contraccolpoDaMostrare`), le stesse dieci mosse, le stesse
+ * tre lasciate fuori. Magicscudo nel gioco toglie ogni danno che non venga da
+ * un attacco diretto — e la sua descrizione nell'app lo dice: «Subisce danno
+ * solo dagli attacchi diretti».
+ *
+ * Le tre di tipo `maxhp` — Mind Blown, Chloroblast, Steel Beam — restano fuori
+ * da entrambe. Non sono contraccolpo: sono il prezzo che la mossa chiede per
+ * essere usata, e si paga anche quando la mossa fallisce.
  *
  * I dettagli e i casi stanno in `rockHead.test.js`; qui c'è la decisione.
  */
-describe('Rock Head, e il contraccolpo che il riferimento non conosce', () => {
+describe('Rock Head e Magic Guard, e il contraccolpo che il riferimento non conosce', () => {
   it.runIf(vendorPresente)('il riferimento non guarda mai quell\'abilità', () => {
     const src = fs.readFileSync(SORGENTE, 'utf8')
     expect(
@@ -196,12 +210,23 @@ describe('Rock Head, e il contraccolpo che il riferimento non conosce', () => {
     ).toBe(false)
   })
 
-  it('e noi sì, ma solo sulle dieci', () => {
+  it.runIf(vendorPresente)('e nemmeno l\'altra', () => {
+    // Misurato, non ricordato: `Magic Guard` in tutto il vendor compare in
+    // `ability_data.js` (due elenchi di nomi) e in `pokedex.js` (le specie che
+    // ce l'hanno). Nei due file del danno, mai — esattamente come Rock Head.
+    const src = fs.readFileSync(SORGENTE, 'utf8')
+    expect(
+      src.includes('Magic Guard'),
+      'il riferimento adesso la nomina: questa non è più un\'aggiudicazione',
+    ).toBe(false)
+  })
+
+  it('e noi sì, tutt\'e due, ma solo sulle dieci', () => {
     expect(ABILITY_EFFECTS['rock-head'].annullaContraccolpo).toBe(true)
     expect(
       ABILITY_EFFECTS['magic-guard']?.annullaContraccolpo,
-      'Magic Guard è entrata: era stata lasciata fuori di proposito',
-    ).toBeUndefined()
+      'Magic Guard è uscita: era entrata di proposito',
+    ).toBe(true)
   })
 })
 
@@ -238,5 +263,104 @@ describe('scritte adesso, raggiungibili quando la specie arriverà', () => {
     expect(ABILITY_EFFECTS['embody-aspect']?.embodyAspect).toBe(true)
     expect(ABILITY_EFFECTS['battle-bond']?.battleBond).toBe(true)
     expect(ABILITY_EFFECTS['supersweet-syrup']?.supersweetSyrup).toBe(true)
+  })
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 5. Il fine turno, che il riferimento non calcola affatto
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── STESSA FORMA DELLA SEZIONE 3, SU CINQUE ABILITÀ ───────────────────────
+ *
+ * NCP calcola UN colpo. Quanti PS il difensore recupera o perde alla fine del
+ * turno non lo guarda: `Leftovers`, `Ice Body`, `Rain Dish` e `Poison Heal`
+ * non compaiono nemmeno una volta nei due file del danno, ed è asserito qui
+ * sotto invece che ricordato. `Solar Power` e `Dry Skin` ci sono, ma solo per
+ * la metà che tocca il danno.
+ *
+ * Il fine turno lo mostriamo noi, e lo mostravamo già: sabbia, Avanzi,
+ * Baccacedro. Quelle tre righe erano aggiudicazioni anche prima che questo
+ * file esistesse, e non erano scritte da nessuna parte — la prima volta che
+ * qualcuno se ne accorge è questa. Le cinque abilità si aggiungono a loro.
+ *
+ * ─── LA FONTE, VISTO CHE NON È IL RIFERIMENTO ──────────────────────────────
+ *
+ * La descrizione che l'app stessa mostra all'utente, che le frazioni le scrive
+ * per esteso: «ripristina 1/16 degli HP massimi alla fine di ogni turno».
+ * Il test qui sotto legge quelle descrizioni e controlla che il numero scritto
+ * nel motore sia quello promesso all'utente — cioè che le due metà dell'app
+ * dicano la stessa cosa. È la verifica più forte disponibile quando l'oracolo
+ * tace: non prova che la regola sia giusta, prova che non ci contraddiciamo.
+ *
+ * ─── COSA RESTA FUORI, E VA DETTO ──────────────────────────────────────────
+ *
+ * Il danno da stato — la bruciatura che toglie 1/16, il veleno 1/8, l'iride
+ * che cresce ogni turno — non lo calcoliamo. Quindi un Pokémon avvelenato con
+ * Velencura guadagna 1/8, e uno avvelenato senza non perde niente. La prima
+ * metà è giusta, la seconda è zero al posto di un numero.
+ *
+ * Non è un difetto che le cinque abilità introducono: c'era già, e vale per la
+ * bruciatura allo stesso modo. Ma da oggi si vede, perché Velencura lo mette
+ * accanto — ed è scritto qui perché sia il caso successivo e non una sorpresa.
+ */
+describe('il fine turno: cinque abilità dove il riferimento non arriva', () => {
+  const DAL_RIFERIMENTO = ['Leftovers', 'Ice Body', 'Rain Dish', 'Poison Heal']
+
+  it.runIf(vendorPresente)('nessuno dei due file del danno le nomina', () => {
+    for (const file of ['damage_MASTER.js', 'damage_SV.js']) {
+      const src = fs.readFileSync(path.join(RADICE, 'vendor', 'ncp', file), 'utf8')
+      for (const nome of DAL_RIFERIMENTO) {
+        expect(
+          src.includes(nome),
+          `${file} ora nomina ${nome}: il fine turno non è più solo nostro`,
+        ).toBe(false)
+      }
+    }
+  })
+
+  it.runIf(vendorPresente)('e delle altre due nomina solo la metà che tocca il danno', () => {
+    // Solar Power e Dry Skin il riferimento le conosce — il ×1,5 all'Att.
+    // Speciale e il ×1,25 sulle mosse Fuoco — e quelle metà sono trascritte.
+    // Ciò che non conosce sono i PS: nessuna delle righe che le nominano parla
+    // di punti salute.
+    const src = fs.readFileSync(SORGENTE, 'utf8')
+    const righe = src.split('\n').filter(r => /Solar Power|Dry Skin/.test(r))
+    expect(righe.length, 'il riferimento ha smesso di nominarle: rileggere').toBeGreaterThan(0)
+    for (const r of righe) {
+      expect(
+        /curHP|maxHP|hp\s*[-+]=/.test(r),
+        `il riferimento ora tocca i PS su questa riga: ${r.trim()}`,
+      ).toBe(false)
+    }
+  })
+
+  it('il numero nel motore è quello che la descrizione promette', () => {
+    // `1/16` e `1/8` scritti nella descrizione italiana, contro il
+    // denominatore in `ABILITY_EFFECTS`. Se qualcuno cambia uno dei due, il
+    // test dice quale dei due sta mentendo all'altro.
+    const descrizioni = JSON.parse(
+      fs.readFileSync(path.join(RADICE, 'src/locales/it.json'), 'utf8')).abilities_desc
+    for (const chiave of ['ice-body', 'rain-dish', 'solar-power', 'dry-skin', 'poison-heal']) {
+      const voci = ABILITY_EFFECTS[chiave].fineTurno
+      expect(voci, `${chiave} non dichiara il fine turno`).toBeTruthy()
+      for (const v of voci) {
+        expect(
+          descrizioni[chiave],
+          `${chiave}: il motore dice 1/${v.frazione}, la descrizione no`,
+        ).toMatch(new RegExp(`1/${v.frazione}\\b`))
+      }
+    }
+  })
+
+  it('il danno da stato NON è modellato, e questo test lo dice a voce alta', () => {
+    // Il giorno che entra, questo test diventa rosso e la nota qui sopra —
+    // «Velencura guadagna 1/8 e chi non ce l'ha non perde niente» — va
+    // riscritta nello stesso commit.
+    const damage = fs.readFileSync(path.join(RADICE, 'src/lib/damage.js'), 'utf8')
+    expect(
+      /burned|bruciatura/.test(damage),
+      'il fine turno ora conosce la bruciatura: aggiornare la nota su Velencura',
+    ).toBe(false)
   })
 })

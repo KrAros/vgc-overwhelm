@@ -823,3 +823,45 @@ export const STATI_CHE_ACCENDONO_FACADE = new Set(['burned', 'paralyzed', 'poiso
  * un giorno potrebbe averne due.
  */
 export const MOSSE_CHE_IGNORANO_BRUCIATURA = new Set(['facade'])
+
+/**
+ * ─── LA FAMIGLIA DEL METEO ──────────────────────────────────────────────────
+ *
+ * Sei nomi canonici, quattro famiglie: il Sole Estremo È sole e la Pioggia
+ * Intensa È pioggia, per quasi tutto quello che le guarda. Il motore lo dice
+ * gia' con due variabili scritte a mano (`calcEngine.js:478` e `:493`):
+ *
+ *     const isSole    = meteo === 'sun'  || isSoleEstremo
+ *     const isPioggia = meteo === 'rain' || isPioggiaEstrema
+ *
+ * Quella somma serviva ora anche al fine turno — Copripioggia sotto la
+ * Pioggia Intensa recupera, Solarpotere sotto Terrenopalude perde PS — e
+ * scriverla una terza volta era la forma di difetto che questo file esiste
+ * per non ripetere (vedi la nota di `normalizzaMeteo`).
+ *
+ * ─── DOVE LA DISTINZIONE INVECE CONTA ──────────────────────────────────────
+ *
+ * Non ovunque: Orichalcum Pulse vuole il sole NORMALE, e il riferimento lo
+ * scrive con l'uguale (`damage_MASTER.js:1970`) dove Solar Power due righe
+ * sopra scrive `indexOf("Sun") > -1`. Chi ha bisogno di quella differenza
+ * legge `normalizzaMeteo`, non questa: la famiglia e' una semplificazione
+ * dichiarata, non l'unico modo di leggere il meteo.
+ */
+const FAMIGLIA_DI = Object.freeze({
+  'sun': 'sun',
+  'harsh sunshine': 'sun',
+  'rain': 'rain',
+  'heavy rain': 'rain',
+  'sand': 'sand',
+  'snow': 'snow',
+})
+
+/**
+ * La famiglia di un meteo: `sun`, `rain`, `sand`, `snow`, oppure `null`.
+ *
+ * @param {string|null|undefined} meteo — anche in forma non canonica
+ * @returns {string|null}
+ */
+export function famigliaMeteo(meteo) {
+  return FAMIGLIA_DI[normalizzaMeteo(meteo)] ?? null
+}

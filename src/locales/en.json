@@ -189,12 +189,13 @@
     "ko_arrow": "→ KO",
     "neutralize": "cancel out",
     "turn": "Turn",
-    "takes_pct": "takes",
     "sitrus_activates": "Sitrus Berry activates!",
     "eot_delta": "End of turn:",
     "and": "and",
     "sitrus_recovery_cap": "Recovery",
-    "pkmn_takes": "takes"
+    "pkmn_takes": "takes",
+    "recovery_from": "{{nome}} recovery",
+    "damage_from": "{{nome}} damage"
   },
   "aria": {
     "team_modifiers": "Team modifiers and actions",
@@ -1861,7 +1862,7 @@
     "sniper": "Boosts the power of the Pokémon's critical hits by 125% instead of 50%.",
     "snow-cloak": "Boosts the Pokémon's evasiveness by 25% in snow.",
     "snow-warning": "Summons snow for 5 turns when the Pokémon enters a battle.",
-    "solar-power": "In harsh sunlight, boosts Sp. Atk by 50% but loses HP each turn.",
+    "solar-power": "In harsh sunlight, boosts Sp. Atk by 50% but loses 1/8 of its max HP at the end of every turn.",
     "solid-rock": "Reduces the damage the Pokémon takes from supereffective moves by 25%.",
     "soundproof": "Is immune to sound-based moves.",
     "speed-boost": "Boosts the Pokémon's Speed stat by 1 stage at the end of every turn.",
