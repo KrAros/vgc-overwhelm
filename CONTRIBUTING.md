@@ -23,7 +23,7 @@ nella PR da dove viene il set**: il file dichiara la propria fonte in testa, e
 quella riga deve restare vera.
 
 **Traduzioni.** [`src/locales/en.json`](src/locales/en.json) e
-[`it.json`](src/locales/it.json), 1966 chiavi foglia ciascuno — oggi allineati.
+[`it.json`](src/locales/it.json), 1972 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
 **Le abilità col badge.** 2 abilità — `rivalry` e `sturdy` — e 39 strumenti che
