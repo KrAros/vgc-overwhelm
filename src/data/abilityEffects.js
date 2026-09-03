@@ -1074,6 +1074,15 @@ export const ABILITY_EFFECTS = {
   // gliela dava gia' dentro `checkIntimidate`, per NOME; la voce serve alla
   // colonna «Mod» e al riquadro, che leggono da qui.
   'rattled':   { rattled: true, showInSmogon: true },
+
+  // Rock Head: azzera il contraccolpo delle dieci mosse in cui e' una frazione
+  // del danno inflitto. NON tocca Mind Blown, Chloroblast e Steel Beam, che
+  // costano meta' dei PS massimi come prezzo e non come contraccolpo.
+  //
+  // Il riferimento il contraccolpo non lo calcola: questa e' una decisione di
+  // Simone, registrata in `divergenzeAggiudicate.test.js`, non una
+  // trascrizione. Vedi `contraccolpoDaMostrare` in `lib/damage.js`.
+  'rock-head': { annullaContraccolpo: true, showInSmogon: true },
   'minds-eye': { ignoraGhost: true, showInSmogon: true },
 
   // Terapagos-Terastal: a vita piena porta ogni colpo che sarebbe sopra 0,5 a

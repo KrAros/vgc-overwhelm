@@ -162,7 +162,51 @@ describe('Battle Bond', () => {
 })
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3. Cosa NON è ancora raggiungibile, e va detto invece che sottinteso
+// 3. Rock Head, dove l'oracolo non arriva proprio
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── NON È UNA DIVERGENZA: È UN TERRITORIO SCOPERTO ────────────────────────
+ *
+ * Le due qui sopra sono punti in cui il riferimento dice una cosa e noi ne
+ * facciamo un'altra. Rock Head è diverso, e per questo sta in fondo con una
+ * sezione sua: il riferimento **non dice niente**.
+ *
+ * Il contraccolpo NCP non lo calcola. `Rock Head` non compare mai in
+ * `damage_MASTER.js` né in `damage_SV.js` — solo in `ability_data.js`, un
+ * elenco di nomi, e in `pokedex.js`. Il contraccolpo lo mostriamo noi, ed è
+ * una funzione che l'app ha in più rispetto all'oracolo.
+ *
+ * Quindi quello che abbiamo scritto è un'affermazione sulle regole del gioco,
+ * non una trascrizione, e nessun confronto roll per roll potrà mai
+ * confermarla o smentirla. Simone ha aggiudicato: Rock Head azzera il
+ * contraccolpo delle dieci mosse in cui è una frazione del danno, e non tocca
+ * le tre in cui è un prezzo in PS massimi.
+ *
+ * Magic Guard è stata lasciata fuori di proposito, non dimenticata.
+ *
+ * I dettagli e i casi stanno in `rockHead.test.js`; qui c'è la decisione.
+ */
+describe('Rock Head, e il contraccolpo che il riferimento non conosce', () => {
+  it.runIf(vendorPresente)('il riferimento non guarda mai quell\'abilità', () => {
+    const src = fs.readFileSync(SORGENTE, 'utf8')
+    expect(
+      src.includes('Rock Head'),
+      'il riferimento adesso la nomina: questa non è più un\'aggiudicazione',
+    ).toBe(false)
+  })
+
+  it('e noi sì, ma solo sulle dieci', () => {
+    expect(ABILITY_EFFECTS['rock-head'].annullaContraccolpo).toBe(true)
+    expect(
+      ABILITY_EFFECTS['magic-guard']?.annullaContraccolpo,
+      'Magic Guard è entrata: era stata lasciata fuori di proposito',
+    ).toBeUndefined()
+  })
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 4. Cosa NON è ancora raggiungibile, e va detto invece che sottinteso
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('scritte adesso, raggiungibili quando la specie arriverà', () => {

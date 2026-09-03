@@ -63,9 +63,16 @@
  * verdetto fa fallire il file — ed è il punto: la prossima volta il silenzio
  * non passa.
  *
- * `silenziosa` è l'unico verdetto che è un difetto. Alla chiusura di questa
- * sessione ne resta uno, `rock-head`, e resta scritto invece che sistemato o
- * tolto: vedi il test in fondo.
+ * `silenziosa` è l'unico verdetto che è un difetto. Per parecchie sessioni ne
+ * è restato uno, `rock-head`, scritto invece che sistemato o tolto — il
+ * contraccolpo non era la catena del danno, e le sessioni lavoravano su
+ * quella. Adesso è zero, ed è merito di questo registro: nessun altro presidio
+ * poteva vederlo, perché il divario elenca ciò che il RIFERIMENTO calcola e
+ * NCP il contraccolpo non lo calcola affatto.
+ *
+ * Zero non è un traguardo da difendere abbassando l'asticella: il giorno che
+ * ne compare un altro va scritto qui, e il test in fondo diventa rosso finché
+ * non lo si fa.
  *
  * ─── E IL PUNTO CIECO DI QUESTO PRESIDIO ───────────────────────────────────
  *
@@ -213,23 +220,23 @@ const REGISTRO = {
   // il caso per cui era stato scritto. Vale la pena scriverlo per intero,
   // perché è la prova che il controllo serve.
   //
-  // `ReportPanel.jsx:299` calcola e mostra il contraccolpo — «(rinculo 33.4 -
-  // 39.1%)» — leggendo `recoil` da moves.json e nient'altro. Testa di Roccia
-  // lo azzera, e il pannello non lo sa: mostra la percentuale piena.
+  // ─── ROCK HEAD STAVA QUI, ED E' STATA SISTEMATA ──────────────────────────
   //
-  // Non è teorico. `metaPresets.js` ha un set che si chiama «Rock Head
-  // Attacker»: Arcanine di Hisui con Fuococarica e Insaccata, cioè DUE mosse
-  // con contraccolpo, ed è esattamente il Pokémon che quel contraccolpo non
-  // lo subisce.
+  // La sua riga diceva: «`ReportPanel.jsx:299` calcola e mostra il
+  // contraccolpo leggendo `recoil` da moves.json e nient'altro. Testa di
+  // Roccia lo azzera, e il pannello non lo sa: mostra la percentuale piena».
+  // E aggiungeva che non era teorico — `metaPresets.js` ha un set che si
+  // chiama «Rock Head Attacker», Arcanine di Hisui con due mosse che il
+  // contraccolpo ce l'hanno.
   //
-  // Resta qui invece di essere sistemato: il contraccolpo non è la catena del
-  // danno, e questa sessione lavora su quella. Il registro marca, non nasconde.
-  'rock-head': {
-    verdetto: 'silenziosa',
-    prova: 'ReportPanel.jsx:299 mostra il contraccolpo senza guardare '
-         + 'l\'abilità; metaPresets.js ha «Rock Head Attacker» con due mosse '
-         + 'che ne hanno uno.',
-  },
+  // Chiudeva con «resta qui invece di essere sistemato: il contraccolpo non e'
+  // la catena del danno, e questa sessione lavora su quella. Il registro
+  // marca, non nasconde».
+  //
+  // Adesso e' sistemata: `contraccolpoDaMostrare` in `lib/damage.js`. Il
+  // registro l'aveva marcata quando nessun altro presidio poteva vederla — il
+  // divario elenca cio' che il RIFERIMENTO calcola, e NCP il contraccolpo non
+  // lo calcola affatto.
 }
 
 // ───────────────────────────────────────────────────────────────────────────
@@ -314,9 +321,13 @@ describe('descrizioni che promettono un numero', () => {
   it('le silenziose sono esattamente quelle note', () => {
     // Elenco esatto, non «al massimo N»: se ne compare una nuova il file è
     // rosso, e quando una viene sistemata va tolta di qui nello stesso commit.
+    // Vuoto, e non e' un test che ha perso il suo soggetto: e' l'elenco dei
+    // difetti noti, e adesso non ce ne sono. Se ne compare uno nuovo va
+    // aggiunto qui nello stesso commit che lo scopre, e questa riga diventa
+    // rossa finche' non lo si fa.
     const silenziose = Object.entries(REGISTRO)
       .filter(([, v]) => v.verdetto === 'silenziosa').map(([k]) => k).sort()
-    expect(silenziose).toEqual(['rock-head'])
+    expect(silenziose).toEqual([])
   })
 })
 
