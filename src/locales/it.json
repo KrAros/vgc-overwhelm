@@ -1945,7 +1945,8 @@
     "wind-power": "$t(abilities.wind-power) — caricata: mosse Elettro ×2",
     "trace": "$t(abilities.trace) — ha copiato l'abilità dell'avversario",
     "supersweet-syrup": "$t(abilities.supersweet-syrup) — è entrato in campo: Difesa avversaria −1",
-    "battle-bond": "$t(abilities.battle-bond) — ha messo KO: +1 ad Attacco, Att. Speciale e Velocità"
+    "battle-bond": "$t(abilities.battle-bond) — ha messo KO: +1 ad Attacco, Att. Speciale e Velocità",
+    "rattled": "$t(abilities.rattled) — l'avversario ha $t(abilities.intimidate): +1 Velocità"
   },
   "abilities_desc_off": {
     "chlorophyll": "Raddoppia la Velocità sotto la luce solare intensa",
@@ -1982,7 +1983,8 @@
     "wind-power": "Non ancora caricata — serve un colpo di vento",
     "trace": "Non ancora copiata — nessuna abilità presa in prestito",
     "supersweet-syrup": "Non ancora entrato — nessun calo",
-    "battle-bond": "Nessun KO — nessun potenziamento"
+    "battle-bond": "Nessun KO — nessun potenziamento",
+    "rattled": "Nessun $t(abilities.intimidate) avversario attivo — nessun bonus"
   },
   "statuses": {
     "healthy": "Sano",

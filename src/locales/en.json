@@ -1945,7 +1945,8 @@
     "wind-power": "$t(abilities.wind-power) — charged: Electric moves ×2",
     "trace": "$t(abilities.trace) — has copied the opponent's ability",
     "supersweet-syrup": "$t(abilities.supersweet-syrup) — switched in: target's Defense −1",
-    "battle-bond": "$t(abilities.battle-bond) — scored a KO: +1 Attack, Sp. Atk and Speed"
+    "battle-bond": "$t(abilities.battle-bond) — scored a KO: +1 Attack, Sp. Atk and Speed",
+    "rattled": "$t(abilities.rattled) — the opponent has $t(abilities.intimidate): +1 Speed"
   },
   "abilities_desc_off": {
     "chlorophyll": "Doubles Speed in harsh sunlight",
@@ -1982,7 +1983,8 @@
     "wind-power": "Not charged yet — needs a wind move",
     "trace": "Not copied yet — no borrowed ability",
     "supersweet-syrup": "Not switched in yet — no drop",
-    "battle-bond": "No KO — no boost"
+    "battle-bond": "No KO — no boost",
+    "rattled": "No active opposing $t(abilities.intimidate) — no bonus"
   },
   "statuses": {
     "healthy": "Healthy",

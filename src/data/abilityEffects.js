@@ -1069,6 +1069,11 @@ export const ABILITY_EFFECTS = {
   // clausola del riferimento, era invece nel divario perche' non aveva voce
   // affatto.
   'scrappy':   { intimidateAnnulla: true, ignoraGhost: true },
+
+  // Rattled: +1 alla Velocita' quando subisce Intimidate (`:588`). Il motore
+  // gliela dava gia' dentro `checkIntimidate`, per NOME; la voce serve alla
+  // colonna «Mod» e al riquadro, che leggono da qui.
+  'rattled':   { rattled: true, showInSmogon: true },
   'minds-eye': { ignoraGhost: true, showInSmogon: true },
 
   // Terapagos-Terastal: a vita piena porta ogni colpo che sarebbe sopra 0,5 a

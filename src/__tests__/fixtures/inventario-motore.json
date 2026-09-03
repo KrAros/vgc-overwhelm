@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:22:12.958Z",
+    "generatedAt": "2026-09-03T06:34:49.267Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
     "fileEsaminati": 21,
-    "abilitaNelMotore": 51,
+    "abilitaNelMotore": 50,
     "strumentiNelMotore": 27,
-    "classificate": 9,
+    "classificate": 8,
     "badgeDaTogliere": 6,
-    "collisioniResidue": 3,
+    "collisioniResidue": 2,
     "note": "Voci su cui il motore ramifica, cercate come letterali nello strato che calcola, commenti esclusi. Indipendente da ABILITY_EFFECTS e ITEM_EFFECTS di proposito: serve a scoprire i badge sbagliati, e quelle due tabelle sono la fonte che li produceva."
   },
   "classificate": [
@@ -79,17 +79,6 @@
         "file": "src/calcEngine.js",
         "riga": 840,
         "testo": "atkAbilKey === 'long-reach' ||"
-      }
-    },
-    {
-      "chiave": "rattled",
-      "tipo": "abilita",
-      "verdetto": "effetto-non-osservabile",
-      "nota": "preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461",
-      "prova": {
-        "file": "src/lib/preparazione.js",
-        "riga": 285,
-        "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
       }
     },
     {
@@ -347,14 +336,6 @@
           "file": "src/utils/speedOrder.js",
           "riga": 225,
           "testo": "const quickFeet = normalizeAbilityKey(pokemon.ability) === 'quick-feet'"
-        }
-      },
-      {
-        "chiave": "rattled",
-        "prova": {
-          "file": "src/lib/preparazione.js",
-          "riga": 285,
-          "testo": "if (bersaglio.chiaveAbilita === 'rattled'"
         }
       },
       {

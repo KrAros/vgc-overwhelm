@@ -70,10 +70,10 @@ export const CLASSIFICAZIONE = {
       verdetto: 'badge-sbagliato',
       nota: 'calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero',
     },
-    'rattled': {
-      verdetto: 'effetto-non-osservabile',
-      nota: 'preparazione:275 le dà il +1 Velocità, ma calcEffectiveSpe (speedOrder:189) legge `pokemon.speBoost`, cioè lo stadio messo a mano nell\'editor — non `boosts.sp` della preparazione. Il boost non raggiunge nessun numero mostrato. Deciso in J, verificato di nuovo in F-3: vedi preparazione.test.js:461',
-    },
+    // Rattled stava qui, prima `effetto-non-osservabile` e poi
+    // `badge-sbagliato`. Adesso non serve piu' nessuna delle due: ha una voce
+    // in ABILITY_EFFECTS che dichiara l'effetto, quindi esce dal divario da
+    // se' come tutte le altre. Il motore non la nomina piu' per stringa.
     // `sand force` stava qui, `meccanica-diversa`, con questa nota:
     //
     //     «damage.js:47 la rende immune al danno da sabbia. NCP la calcola per

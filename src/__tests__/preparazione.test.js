@@ -458,11 +458,41 @@ describe('il badge dice ancora la verità', () => {
     })
   }
 
-  it('Rattled invece il badge ce l\'ha ancora, ed è giusto così', () => {
-    // La preparazione le dà il suo +1 Velocità, ma la Velocità della matrice
-    // arriva da `speedOrder.js`, che non passa dalla preparazione per gli
-    // stadi. Finché è così, Rattled non sposta nessun numero che l'app
-    // mostri: toglierle il badge sarebbe affermare un calcolo che non c'è.
-    expect(abilitaNonCalcolata('rattled')).toBe(true)
+  /**
+   * ─── RATTLED HA PERSO IL BADGE, E LA RAGIONE PER CUI L'AVEVA ────────────
+   *
+   * Qui c'era il test opposto: «il badge ce l'ha ancora, ed è giusto così»,
+   * perché la preparazione le dava il +1 Velocità e nessuno lo leggeva —
+   * `speedOrder.js` prendeva gli stadi dallo store, non dalla preparazione.
+   * Era vero, ed è stato vero per parecchie sessioni.
+   *
+   * Adesso quel grado arriva, per due strade diverse:
+   *
+   *   la colonna «Mod», via `statMostrata`, che usa lo stesso
+   *   `opponentHasIntimidateActive` con cui il riquadro accende Defiant,
+   *   Contrary e Competitive — le altre tre della stessa famiglia;
+   *
+   *   l'indicatore di chi va prima, via `whoGoesFirst`, che adesso chiede gli
+   *   stadi alla preparazione invece che allo store.
+   *
+   * Le due strade erano necessarie insieme: farne una sola avrebbe lasciato
+   * due sorgenti a dire numeri diversi sullo stesso Pokémon, che è il difetto
+   * per cui `statMostrata` esiste.
+   */
+  it('Rattled non porta più il badge, e il +1 arriva davvero', () => {
+    expect(abilitaNonCalcolata('rattled'), 'rigenerare con `npm run gap:gen`').toBe(false)
+
+    // E il controllo che rende la riga sopra qualcosa di più di un'etichetta:
+    // la preparazione lo calcola ancora.
+    const lato = (pokemon, abilita, accesa = false) => ({
+      pokemon, sps: [0,0,0,0,0,0], natura: null, livello: 50, abilita,
+      strumento: null, abilitaAccesa: accesa,
+      boosts: { at: 0, df: 0, sa: 0, sd: 0, sp: 0 },
+    })
+    const r = preparaCoppia({
+      attaccante: lato('incineroar', 'intimidate', true),
+      difensore: lato('magikarp', 'rattled'),
+    })
+    expect(r.difensore.boosts.sp).toBe(1)
   })
 })

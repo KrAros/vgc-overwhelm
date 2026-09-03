@@ -372,7 +372,10 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
-  if (key === 'defiant' || key === 'contrary') {
+  // Rattled e' la quarta della famiglia che reagisce a Intimidate, insieme a
+  // Defiant, Contrary e Competitive: stesso riquadro, stesso booleano. Non
+  // aveva un ramo, ed era l'unica delle quattro a non dire niente.
+  if (key === 'defiant' || key === 'contrary' || key === 'rattled') {
     return (
       <div className={`${RIQUADRO} ${
         opponentHasIntimidateActive

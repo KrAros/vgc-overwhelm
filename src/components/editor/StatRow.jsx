@@ -9,7 +9,9 @@ import { NATURE_MODIFIERS } from '../../data/natures.js'
 
 // ─── StatRow ─────────────────────────────────────────────────────────────────
 
-export default function StatRow({ statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, slot, weather, terrain, tailwindActive = false }) {
+export default function StatRow({
+  statIdx, base, sp, level, nature, boostVal, onSpChange, onBoostChange, slot,
+  weather, terrain, tailwindActive = false, avversarioConIntimidate = false }) {
   const { t } = useTranslation()
   const finalStat = calcStat(base, sp, level, nature, statIdx)
 
@@ -39,6 +41,11 @@ export default function StatRow({ statIdx, base, sp, level, nature, boostVal, on
      statistica si deve SEMPRE poter leggere il nuovo valore. */
   const { effettiva, modificata } = statMostrata(slot, statIdx, {
     meteo: weather, terreno: terrain, tailwind: tailwindActive, livello: level,
+    // Serve a Rattled: e' lo stesso booleano che il riquadro usa per Defiant,
+    // Contrary e Competitive, e viene da `SlotEditor`, che vede la squadra
+    // avversaria. Senza, la colonna «Mod» resterebbe l'unico posto in cui
+    // Rattled non si vede.
+    avversarioConIntimidate,
   })
   const boostedStat = modificata ? effettiva : null
   const alzata = modificata && effettiva > finalStat
