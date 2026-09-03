@@ -69,15 +69,15 @@ const slot = (key, extra = {}) => ({
 const ATT = slot('garchomp', { moves: ['crunch', null, null, null] })
 const MOSSA = 'crunch'
 
-const disegna = (def, meteo) => {
+const disegna = (def, meteo, atk = ATT, mossa = MOSSA) => {
   const field = meteo ? { weather: meteo } : {}
   const result = calculateDamage({
-    attacker: buildAttackerInput(ATT),
+    attacker: buildAttackerInput(atk),
     defender: buildDefenderInput(def),
-    move: MOSSA, field,
+    move: mossa, field,
   })
   return renderToStaticMarkup(
-    <MoveCard atk={ATT} def={def} move={MOSSA} result={result} field={field} onClose={() => {}} />)
+    <MoveCard atk={atk} def={def} move={mossa} result={result} field={field} onClose={() => {}} />)
 }
 
 beforeAll(() => caricaLingua('en'))
@@ -168,5 +168,37 @@ describe('e disegna anche il danno da stato', () => {
     expect(html).toContain('Poison Heal')
     expect(html).toMatch(/\+\d+ HP/)
     expect(html).not.toMatch(/−\d+ HP/)
+  })
+})
+
+describe('e il conteggio dei turni vede l\'iride crescere', () => {
+  /**
+   * ─── QUESTO BLOCCO NASCE DA UNA ROTTURA CHE NESSUNO VEDEVA ───────────────
+   *
+   * Ricollegando `eot` al posto di `eotAlTurno` dentro `findBestNHKO` — cioè
+   * facendo credere al pannello che l'iride tolga sempre il numero del primo
+   * turno — tutti e 3079 i test restavano verdi. Il badge avrebbe detto un
+   * numero sbagliato e nessuno l'avrebbe saputo.
+   *
+   * Serviva un matchup in cui le due letture danno conti DIVERSI. Cercato su
+   * una griglia di difensori grossi e mosse deboli: Pikachu con Attacco Rapido
+   * su Blissey (330 PS, 39-46 a colpo) fa 4HKO con l'iride che cresce e 6HKO
+   * con il numero costante. Due turni di differenza, impossibili da confondere.
+   */
+  const PIKA = slot('pikachu', { moves: ['quick attack', null, null, null] })
+
+  it('4HKO con la successione, e non il 6HKO del numero fisso', () => {
+    const html = disegna(
+      slot('blissey', { status: 'badly-poisoned' }), null, PIKA, 'quick attack')
+    expect(html).toContain('4HKO')
+    expect(html, 'il pannello sta usando il delta del primo turno per tutti i turni')
+      .not.toContain('6HKO')
+  })
+
+  it('e senza lo stato il conto è un altro ancora: il controllo negativo', () => {
+    // Senza questo, il test sopra passerebbe anche se lo stato non entrasse
+    // affatto nel conteggio.
+    const html = disegna(slot('blissey'), null, PIKA, 'quick attack')
+    expect(html).not.toContain('4HKO')
   })
 })

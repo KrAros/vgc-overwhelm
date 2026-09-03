@@ -562,3 +562,36 @@ describe('e la stringa Smogon nomina anche gli stati', () => {
     })
   }
 })
+
+describe('e la stringa Smogon conta i turni con la successione', () => {
+  // Stessa ragione del blocco gemello in `pannelloFineTurno.test.jsx`: senza,
+  // ricollegare `eotNet` al posto di `eotAlTurno` non rompe niente — provato,
+  // e restava tutto verde. Pikachu con Attacco Rapido su Blissey: 4HKO con
+  // l'iride che cresce, 6HKO col numero fisso.
+  const atk = { key: 'pikachu', sps: [0, 0, 0, 0, 0, 0], nature: null, ability: null, item: null }
+  const def = { key: 'blissey', sps: [0, 0, 0, 0, 0, 0], nature: null, ability: null, item: null }
+  const risultato = calculateDamage({
+    attacker: {
+      atkPokemon: 'pikachu', atkSPs: [0, 0, 0, 0, 0, 0],
+      atkNature: null, atkAbility: null, atkItem: null, level: 50,
+    },
+    defender: {
+      defPokemon: 'blissey', defSPs: [0, 0, 0, 0, 0, 0],
+      defNature: null, defAbility: null, defItem: null,
+    },
+    move: 'quick attack', field: {}, debug: false,
+  })
+
+  it('4HKO, non 6HKO', () => {
+    const s = buildSmogonString(
+      atk, { ...def, status: 'badly-poisoned' }, 'quick attack', risultato, {})
+    expect(s).toContain('4HKO')
+    expect(s, 'la stringa sta usando il delta del primo turno per tutti i turni')
+      .not.toContain('6HKO')
+  })
+
+  it('e senza lo stato il conto è un altro: il controllo negativo', () => {
+    const s = buildSmogonString(atk, def, 'quick attack', risultato, {})
+    expect(s).not.toContain('4HKO')
+  })
+})
