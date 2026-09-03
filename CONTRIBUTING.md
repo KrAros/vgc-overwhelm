@@ -26,6 +26,14 @@ quella riga deve restare vera.
 [`it.json`](src/locales/it.json), 1972 chiavi foglia ciascuno — oggi allineati.
 Se aggiungi una chiave a uno, aggiungila a entrambi.
 
+**Cosa resta aperto, tutto in un posto.**
+[`docs/lavoro-aperto.md`](docs/lavoro-aperto.md) elenca il lavoro che resta —
+diviso fra ciò che ha un oracolo, ciò che aspetta una decisione e ciò che
+aspetta un dato — e dice per ognuno **perché** non è stato fatto. È presidiato
+da `lavoroAperto.test.js`: una voce che viene fatta rende rosso quel file, così
+il registro non diventa una lapide. Le due sezioni qui sotto sono i due punti
+di ingresso più battuti.
+
 **Le abilità col badge.** 1 abilità — `rivalry`, che aspetta un dato sul sesso
 che oggi manca a 986 specie su 1225 — e 39 strumenti che il riferimento calcola
 e noi no; l'elenco generato è in
