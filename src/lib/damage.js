@@ -278,11 +278,25 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
   // cui le due DP accettano ANCHE un numero: la stragrande maggioranza delle
   // chiamate non ha niente di crescente, e obbligarle a costruire una
   // funzione sarebbe rumore.
-  const eotAlTurno = (turno) => voci.reduce((somma, v) => somma + (
-    v.crescente
-      ? -Math.floor(defHP * Math.min(turno, TETTO_IRIDE) / DANNO_FINE_TURNO_PER_STATO[v.chiave].frazione)
-      : v.hp
-  ), 0)
+  //
+  // ─── LA FORMULA STA IN UN POSTO SOLO ────────────────────────────────────
+  //
+  // La prima stesura la riscriveva qui — `-Math.floor(defHP * turno / 16)` —
+  // ed era la seconda copia di quella dentro `vociFineTurnoDaStato`. Se n'e'
+  // accorta una rottura voluta: togliendo la crescita alla funzione, il
+  // pannello continuava a crescere lo stesso e un test solo diventava rosso.
+  // Due copie della stessa verita', e quella che nessuno guarda invecchia.
+  //
+  // Adesso le voci fisse si sommano da `voci`, e quella che cresce si
+  // richiede alla funzione con il turno giusto.
+  const eotAlTurno = (turno) => {
+    const fisse = voci.filter(v => !v.crescente).reduce((somma, v) => somma + v.hp, 0)
+    if (turno <= 1) return eotNet
+    const crescenti = vociFineTurnoDaStato(def.status || '', def.ability || '', defHP, turno)
+      .filter(v => v.crescente)
+      .reduce((somma, v) => somma + v.hp, 0)
+    return fisse + crescenti
+  }
 
   return {
     isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP,
