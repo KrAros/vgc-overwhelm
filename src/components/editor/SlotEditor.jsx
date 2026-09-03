@@ -368,7 +368,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
           {data && (
             /* Lo stato: riga sua, mezza larghezza. Il perche' di tutt'e due le
                scelte sta in `StatusSelect.jsx`, con le misure. */
-            <div className="flex gap-2 w-full mt-2">
+            /* Niente `mt-2`: il contenitore e' gia' `flex flex-col gap-1.5`, e
+               una spaziatura in piu' rendeva questa riga piu' staccata di
+               tutte le altre. Lo spazio dalla riga di abilita'/natura/strumento
+               e' adesso lo stesso che c'e' fra quella e la ricerca sopra. */
+            <div className="flex gap-2 w-full">
               <div className="w-full sm:w-1/2">
                 <StatusSelect value={status} onChange={v => setStatus(team, index, v)} />
               </div>
