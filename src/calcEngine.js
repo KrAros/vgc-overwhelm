@@ -199,7 +199,15 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // ricava dal peso dei due Pokémon, più in basso. Senza questa eccezione il
   // motore uscirebbe prima di guardarle, ed è il motivo per cui fino a questa
   // sessione restituivano `null`.
-  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move))) return null
+  //
+  // Le quattro mosse KO — `koSecco` — hanno potenza zero e non ce l'hanno
+  // affatto una potenza: il loro danno non passa dalla formula. Il riferimento
+  // scrive `bp: 1`, che e' un segnaposto perche' la moltiplicazione non
+  // annulli tutto, e poi le intercetta al punto f (`damage_MASTER.js:1278`)
+  // tornando i punti salute del difensore. Anche loro devono superare questa
+  // riga, per la stessa ragione delle mosse a peso: qui non si decide il
+  // danno, si decide chi entra.
+  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move) && !moveData.koSecco)) return null
 
   const atkPokeData = POKEMON_DATA[atkPokemon]
   const defPokeData = POKEMON_DATA[defPokemon]
@@ -552,6 +560,24 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
 
+  // ─── STURDY, CHE NEL RIFERIMENTO E' SOLO QUESTO ─────────────────────────
+  //
+  //     if (move.isOHKO && defAbility === "Sturdy")   `damage_MASTER.js:1144`
+  //
+  // Una riga, dentro `immunityChecks`, e nient'altro in tutt'e due i file del
+  // danno. Il «sopravvive con un punto salute» che l'abilita' ha nel gioco li'
+  // non c'e', e non e' una dimenticanza del riferimento: non e' la catena del
+  // danno di un colpo: e' cosa succede DOPO che il danno e' stato calcolato.
+  //
+  // Legge `defAbility` — il valore gia' passato da `abilityIgnore` — quindi
+  // Mold Breaker la spegne. Da noi quello e' `defAbilEffect`, che e' `null`
+  // quando l'abilita' e' ignorata: la condizione lo eredita senza dover
+  // nominare Mold Breaker.
+  const isKoSeccoFermatoDaSturdy = moveData.koSecco === true && defAbilEffect?.sturdy === true
+
+  if (isKoSeccoFermatoDaSturdy) {
+    return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
   if (isImmuneDaAbilita) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
@@ -593,6 +619,48 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, meteo, atkTypes)
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
+
+  // ── PUNTO f — LE MOSSE KO (`damage_MASTER.js:1277-1283`) ─────────────────
+  //
+  //     if (move.isOHKO) {
+  //         if (move.name == 'Sheer Cold' && defender.hasType("Ice"))
+  //             return { "damage": [0], … };
+  //         else
+  //             return { "damage": [defender.curHP], … };
+  //     }
+  //
+  // Trascritto com'e'. Due cose che si vedono solo leggendolo:
+  //
+  //   · il danno e' UN numero, non sedici. Non c'e' variazione: la mossa
+  //     toglie tutti i punti salute che il bersaglio ha. Il nostro `rolls` ha
+  //     quindi un elemento solo, e non e' un caso limite da aggirare — e' il
+  //     risultato. (L'harness lo confondeva con un colpo nullo, e la
+  //     distinzione fra `[0]` e `[185]` e' stata aggiunta li' per questo.)
+  //
+  //   · l'eccezione e' scritta sul NOME della mossa, non su un flag. Sheer
+  //     Cold contro un Ghiaccio fallisce; le altre tre no. E' l'unico posto di
+  //     questo motore dove si guarda il nome di una mossa KO, e ci si guarda
+  //     perche' li' il riferimento guarda quello.
+  //
+  // `defender.curHP` sono i punti salute CORRENTI. Noi assumiamo la vita
+  // piena, com'e' scritto in `CONTRIBUTING.md` per Eruption e Water Spout:
+  // quindi `defHP`.
+  //
+  // Sta qui e non piu' in alto perche' ha bisogno di `defHP`, e sta dopo tutte
+  // le immunita' perche' li' sta nel riferimento: Fissure contro uno Volante e
+  // Guillotine contro uno Spettro escono zero dall'immunita' di tipo, non da
+  // questo ramo. Verificato contro l'oracolo, non dedotto.
+  if (moveData.koSecco) {
+    if (move === 'sheer cold' && defTypes.includes(TYPES.ICE)) {
+      return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+    }
+    return {
+      rolls: [defHP], minDmg: defHP, maxDmg: defHP, minPct: 100, maxPct: 100,
+      defHP, effectiveness, stab: 1, log: null,
+      atkBoostEffective: 0, weatherBallType: null, effectiveBP: 0,
+      effectiveMoveType: moveType, rollsFiglio: null, colpi: 1,
+    }
+  }
 
   // ── LO STRATO DI PREPARAZIONE (`lib/preparazione.js`) ────────────────────
   // Tutto quello che il riferimento fa ai due Pokémon PRIMA della formula:

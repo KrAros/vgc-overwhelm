@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T06:50:43.960Z",
+    "generatedAt": "2026-09-03T07:45:51.052Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 840,
+        "riga": 908,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -182,7 +182,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 577,
+          "riga": 603,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -254,7 +254,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 840,
+          "riga": 908,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -262,7 +262,7 @@
         "chiave": "magic guard",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -278,7 +278,7 @@
         "chiave": "overcoat",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -366,7 +366,7 @@
         "chiave": "sand force",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -374,7 +374,7 @@
         "chiave": "sand rush",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -382,7 +382,7 @@
         "chiave": "sand veil",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 66,
+          "riga": 69,
           "testo": "'sand-force', 'sand-rush', 'sand-veil', 'magic-guard', 'overcoat',"
         }
       },
@@ -520,7 +520,7 @@
         "chiave": "leftovers",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 108,
+          "riga": 248,
           "testo": "const leftoversHP = (def.item || '').toLowerCase() === 'leftovers'"
         }
       },
@@ -696,7 +696,7 @@
         "chiave": "sitrus berry",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 111,
+          "riga": 251,
           "testo": "const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'"
         }
       },
@@ -720,7 +720,7 @@
         "chiave": "safety goggles",
         "prova": {
           "file": "src/lib/damage.js",
-          "riga": 79,
+          "riga": 82,
           "testo": "item.toLowerCase() === 'safety goggles'"
         }
       }

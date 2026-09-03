@@ -443,7 +443,7 @@ export function creaHarness() {
     // quindi non proverebbe niente.
     const rollsAggiuntivi = multiplo ? risultato.damage.slice(1) : []
 
-    // Sedici roll è l'esito normale. Qualunque altra cosa significa che NCP
+    // Sedici roll è l'esito normale. Un array vuoto, o `[0]`, significa che NCP
     // considera il colpo nullo: immunità di tipo, immunità da abilità, oppure
     // una mossa che sotto quel meteo fallisce del tutto (le mosse Fire sotto
     // pioggia intensa, quelle Water sotto sole estremo).
@@ -451,6 +451,38 @@ export function creaHarness() {
     // Questo NON è un motivo di esclusione: è un risultato, e va confrontato.
     // Se noi calcoliamo un danno dove NCP dice zero, quella è esattamente la
     // divergenza che vogliamo vedere — è il §1.6 del documento diagnostico.
+    // ─── UN SOLO NUMERO NON E' UN COLPO NULLO ────────────────────────────
+    //
+    // Sedici roll e' l'esito normale. `[0]` — o un array vuoto — e' il colpo
+    // nullo. Ma c'e' un terzo esito, e questa funzione lo confondeva col
+    // secondo: il DANNO FISSO.
+    //
+    // Il riferimento ha un blocco intero di mosse che tornano UN numero solo
+    // (`damage_MASTER.js:1240-1283`): Seismic Toss e Night Shade tornano il
+    // livello, Dragon Rage 40, Sonic Boom 20, e le quattro mosse KO — Fissure,
+    // Guillotine, Horn Drill, Sheer Cold — tornano i punti salute del
+    // difensore. Non hanno variazione, quindi un numero solo, e il numero c'e'.
+    //
+    // Chiedendo a questo harness «Fissure su Walrein» la risposta era
+    // `nullo: true, rolls: []`, cioe' «il riferimento dice zero». Falso: il
+    // riferimento dice 185. La distinzione e' fra `[0]` e `[185]`, e prima non
+    // si guardava.
+    //
+    // Il colpo nullo resta nullo: `[0]` non e' un danno fisso.
+    if (Array.isArray(danno) && danno.length === 1 && danno[0] > 0) {
+      return {
+        ok: true,
+        nullo: false,
+        fisso: true,
+        rolls: danno,
+        rollsAggiuntivi,
+        format,
+        defHP: dif.pokemon.maxHP,
+        descrizione: risultato.description,
+        entita: { pokemon: [a.atkPokemon, d.defPokemon], mosse: [move] },
+      }
+    }
+
     if (!Array.isArray(danno) || danno.length !== 16) {
       return {
         ok: true,
@@ -676,6 +708,11 @@ export function creaHarness() {
       entita: { pokemon: [a.atkPokemon, d.defPokemon], mosse: [move] },
     }
 
+    // Stessa distinzione dell'ingresso basso: un numero solo e maggiore di zero
+    // è un DANNO FISSO, non un colpo nullo. La ragione, per esteso, sta lì.
+    if (Array.isArray(danno) && danno.length === 1 && danno[0] > 0) {
+      return { ...comune, nullo: false, fisso: true, rolls: danno }
+    }
     if (!Array.isArray(danno) || danno.length !== 16) {
       return { ...comune, nullo: true, rolls: [] }
     }

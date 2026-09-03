@@ -159,7 +159,10 @@
     "attacks_short": "▶ Attacca",
     "attacked_by_short": "◀ Attaccato da",
     "turn_breakdown": "Analisi del turno",
-    "recoil": "{{valore}}% di contraccolpo"
+    "recoil": "{{valore}}% di contraccolpo",
+    "burn": "Bruciatura",
+    "poison": "Veleno",
+    "toxic": "Veleno grave"
   },
   "editor": {
     "delete_pokemon": "Elimina Pokémon",
@@ -189,12 +192,16 @@
     "ko_arrow": "→ KO",
     "neutralize": "si annullano",
     "turn": "Turno",
-    "takes_pct": "subisce",
     "sitrus_activates": "La Baccacedro si attiva!",
     "eot_delta": "Fine turno:",
     "and": "e",
     "sitrus_recovery_cap": "Recupero",
-    "pkmn_takes": "subisce"
+    "pkmn_takes": "subisce",
+    "recovery_from": "recupero {{nome}}",
+    "damage_from": "danno {{nome}}",
+    "burn_damage": "danno da bruciatura",
+    "poison_damage": "danno da veleno",
+    "toxic_damage": "danno da veleno grave"
   },
   "aria": {
     "team_modifiers": "Modificatori e azioni del team",
@@ -1733,7 +1740,7 @@
     "dragonize": "Le mosse di tipo Normale diventano di tipo Drago e la loro potenza aumenta del 20%.",
     "drizzle": "Fa piovere per 5 turni all'entrata in campo.",
     "drought": "Attiva la luce solare intensa per 5 turni all'entrata in campo.",
-    "dry-skin": "Le mosse Acqua ripristinano 1/4 degli HP. Le mosse Fuoco causano il 25% di danno aggiuntivo. Recupera HP sotto la pioggia, li perde sotto il sole.",
+    "dry-skin": "Le mosse Acqua ripristinano 1/4 degli HP. Le mosse Fuoco causano il 25% di danno aggiuntivo. Ripristina 1/8 degli HP massimi sotto la pioggia e ne perde 1/8 con la luce solare intensa.",
     "early-bird": "Si sveglia dal sonno il doppio più in fretta.",
     "earth-eater": "Le mosse Terra non hanno effetto. Se colpito da una, ripristina 1/4 degli HP massimi.",
     "eelevate": "Immunizza alle mosse Terra. Aumenta la statistica più alta di 1 grado quando mette KO un avversario.",
@@ -1861,7 +1868,7 @@
     "sniper": "Potenzia del 50% la potenza dei colpi critici.",
     "snow-cloak": "Aumenta la schivata del 20% durante una nevicata.",
     "snow-warning": "Genera neve per 5 turni all'entrata in campo.",
-    "solar-power": "Con la luce solare intensa aumenta del 50% l'Attacco Speciale, ma perde PS ogni turno.",
+    "solar-power": "Con la luce solare intensa aumenta del 50% l'Attacco Speciale, ma perde 1/8 degli HP massimi alla fine di ogni turno.",
     "solid-rock": "Riduce del 25% il danno subito dalle mosse super efficaci.",
     "soundproof": "Immunizza alle mosse basate sul suono.",
     "speed-boost": "La Velocità sale di 1 grado alla fine di ogni turno.",

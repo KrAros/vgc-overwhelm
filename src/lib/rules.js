@@ -823,3 +823,90 @@ export const STATI_CHE_ACCENDONO_FACADE = new Set(['burned', 'paralyzed', 'poiso
  * un giorno potrebbe averne due.
  */
 export const MOSSE_CHE_IGNORANO_BRUCIATURA = new Set(['facade'])
+
+/**
+ * ─── LA FAMIGLIA DEL METEO ──────────────────────────────────────────────────
+ *
+ * Sei nomi canonici, quattro famiglie: il Sole Estremo È sole e la Pioggia
+ * Intensa È pioggia, per quasi tutto quello che le guarda. Il motore lo dice
+ * gia' con due variabili scritte a mano (`calcEngine.js:478` e `:493`):
+ *
+ *     const isSole    = meteo === 'sun'  || isSoleEstremo
+ *     const isPioggia = meteo === 'rain' || isPioggiaEstrema
+ *
+ * Quella somma serviva ora anche al fine turno — Copripioggia sotto la
+ * Pioggia Intensa recupera, Solarpotere sotto Terrenopalude perde PS — e
+ * scriverla una terza volta era la forma di difetto che questo file esiste
+ * per non ripetere (vedi la nota di `normalizzaMeteo`).
+ *
+ * ─── DOVE LA DISTINZIONE INVECE CONTA ──────────────────────────────────────
+ *
+ * Non ovunque: Orichalcum Pulse vuole il sole NORMALE, e il riferimento lo
+ * scrive con l'uguale (`damage_MASTER.js:1970`) dove Solar Power due righe
+ * sopra scrive `indexOf("Sun") > -1`. Chi ha bisogno di quella differenza
+ * legge `normalizzaMeteo`, non questa: la famiglia e' una semplificazione
+ * dichiarata, non l'unico modo di leggere il meteo.
+ */
+const FAMIGLIA_DI = Object.freeze({
+  'sun': 'sun',
+  'harsh sunshine': 'sun',
+  'rain': 'rain',
+  'heavy rain': 'rain',
+  'sand': 'sand',
+  'snow': 'snow',
+})
+
+/**
+ * La famiglia di un meteo: `sun`, `rain`, `sand`, `snow`, oppure `null`.
+ *
+ * @param {string|null|undefined} meteo — anche in forma non canonica
+ * @returns {string|null}
+ */
+export function famigliaMeteo(meteo) {
+  return FAMIGLIA_DI[normalizzaMeteo(meteo)] ?? null
+}
+
+/**
+ * ─── IL DANNO CHE LO STATO TOGLIE A FINE TURNO ──────────────────────────────
+ *
+ * ─── QUI L'ORACOLO NON ARRIVA ──────────────────────────────────────────────
+ *
+ * Il riferimento calcola UN colpo e il fine turno non lo guarda: e' la stessa
+ * situazione delle cinque abilita' di `fineTurno` e di Rock Head. Queste tre
+ * righe sono una decisione, registrata in `divergenzeAggiudicate.test.js`.
+ *
+ * ─── LE TRE VOCI, E LE TRE CHE NON CI SONO ─────────────────────────────────
+ *
+ * Bruciatura 1/16, veleno 1/8, iride 1/16 CRESCENTE — al turno n toglie
+ * n/16 dei PS massimi, e non n volte 1/16: la divisione intera si fa una
+ * volta sola, alla fine, e i due conti non danno lo stesso numero.
+ *
+ * Paralisi, sonno e «sano» non tolgono niente. Sono nella tabella lo stesso —
+ * con `frazione: 0` — perche' un'assenza scritta e' una decisione e
+ * un'assenza taciuta e' una dimenticanza: `stato.test.js` controlla che ogni
+ * voce di `STATI` compaia qui.
+ *
+ * ─── COSA NON CONTIENE, E VA DETTO ─────────────────────────────────────────
+ *
+ * Heatproof, nel gioco, DIMEZZA il danno da bruciatura. Non l'abbiamo scritto:
+ * il riferimento non lo dice, e sarebbe un'aggiudicazione in piu' di quelle
+ * chieste. Sta in `fineTurno.test.js` come cosa nota e non fatta, non come
+ * cosa dimenticata.
+ */
+export const DANNO_FINE_TURNO_PER_STATO = Object.freeze({
+  'healthy':         { frazione: 0 },
+  'burned':          { frazione: 16 },
+  'paralyzed':       { frazione: 0 },
+  'poisoned':        { frazione: 8 },
+  'badly-poisoned':  { frazione: 16, crescente: true },
+  'asleep':          { frazione: 0 },
+})
+
+/**
+ * Il contatore dell'iride nel gioco si ferma a 15/16.
+ *
+ * `MAX_HITS` e' 9, quindi questo tetto non si tocca mai: e' scritto perche' la
+ * formula sia giusta e non perche' serva. Se un giorno la ricerca del KO
+ * salisse sopra i quindici turni, sarebbe gia' a posto.
+ */
+export const TETTO_IRIDE = 15

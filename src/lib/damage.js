@@ -11,7 +11,10 @@
  */
 
 import { TYPES } from '../data/typeChart'
-import { MAX_HITS, normalizzaMeteo } from './rules.js'
+import {
+  MAX_HITS, normalizzaMeteo, famigliaMeteo, STATI_VELENO,
+  DANNO_FINE_TURNO_PER_STATO, TETTO_IRIDE,
+} from './rules.js'
 import { normalizeAbilityKey, ABILITY_EFFECTS } from '../data/abilityEffects.js'
 
 // ── Costanti ──────────────────────────────────────────────────────────────────
@@ -83,9 +86,145 @@ export function isSandImmune(defTypes = [], ability = '', item = '') {
 // ── EOT (End of Turn) ─────────────────────────────────────────────────────────
 
 /**
+ * ─── LE CINQUE ABILITA' CHE MUOVONO I PS A FINE TURNO ───────────────────────
+ *
+ * Corpogelo, Copripioggia, Solarpotere, Pellearsa e Velencura. Le frazioni
+ * stanno in `ABILITY_EFFECTS`, sotto `fineTurno`, insieme alla nota che dice
+ * perche' sono una decisione e non una trascrizione: il riferimento il fine
+ * turno non lo calcola affatto.
+ *
+ * ─── L'UTILITY UMBRELLA ────────────────────────────────────────────────────
+ *
+ * Ripara da sole e pioggia, e quindi spegne Copripioggia, Solarpotere e le
+ * due meta' di Pellearsa. NON spegne Corpogelo: la neve non e' nessuno dei
+ * due. E' lo stesso ombrello che il motore controlla gia' su Solar Power e su
+ * Flower Gift (`calcEngine.js:1050` e `:1063`), letto qui con la stessa
+ * grafia.
+ *
+ * ─── LE DUE CHIAVI CHE QUESTA FUNZIONE CAPISCE ─────────────────────────────
+ *
+ * `meteo` e' una FAMIGLIA (`sun`, `rain`, `sand`, `snow`), non un nome
+ * canonico: Copripioggia recupera anche sotto la Pioggia Intensa. `stato` per
+ * ora vale solo `veleno`, cioe' i due avvelenamenti insieme. Una voce che
+ * nominasse qualcos'altro resterebbe spenta in silenzio, ed e' il motivo per
+ * cui `fineTurno.test.js` controlla che ogni voce dichiarata usi una chiave
+ * che sta qui dentro.
+ *
+ * @param {string} abilita — abilità del difensore
+ * @param {string} item    — strumento del difensore
+ * @param {number} defHP   — PS massimi
+ * @param {string} meteo   — meteo attivo, anche in forma non canonica
+ * @param {string} stato   — stato del difensore (`STATI` in `lib/rules.js`)
+ * @returns {{chiave: string, hp: number, tipo: string, abilita: boolean}[]}
+ */
+export function vociFineTurnoAbilita(abilita, item, defHP, meteo, stato) {
+  const chiave = normalizeAbilityKey(abilita || '')
+  const dichiarate = ABILITY_EFFECTS[chiave]?.fineTurno
+  if (!dichiarate) return []
+
+  const famiglia = famigliaMeteo(meteo)
+  const conOmbrello = (item || '').toLowerCase() === 'utility umbrella'
+
+  return dichiarate
+    .filter((v) => {
+      if (v.meteo) {
+        if (v.meteo !== famiglia) return false
+        return !(conOmbrello && (v.meteo === 'sun' || v.meteo === 'rain'))
+      }
+      if (v.stato === 'veleno') return STATI_VELENO.has(stato)
+      return false
+    })
+    .map((v) => ({
+      chiave,
+      // Stessa divisione intera di sabbia e Avanzi, che sono qui accanto da
+      // sempre: nel gioco il minimo e' 1 PS, e con `Math.floor` un Pokemon da
+      // meno di 16 PS massimi non prenderebbe niente. Non ne esistono in
+      // Champions, e inventare un `Math.max(1, ...)` qui e non sulle due righe
+      // di sopra vorrebbe dire tre arrotondamenti diversi nella stessa somma.
+      hp: v.segno * Math.floor(defHP / v.frazione),
+      tipo: v.meteo ? 'meteo' : 'stato',
+      // Serve a chi disegna, per scegliere l'icona: il sole, la pioggia, la
+      // neve. Le voci di stato non ce l'hanno.
+      meteo: v.meteo ?? null,
+      abilita: true,
+    }))
+}
+
+/**
+ * ─── IL DANNO CHE LO STATO TOGLIE, E CHI LO SPEGNE ──────────────────────────
+ *
+ * Bruciatura, veleno e iride. Le frazioni stanno in
+ * `DANNO_FINE_TURNO_PER_STATO` (`lib/rules.js`), insieme alla nota che dice
+ * perche' sono una decisione e non una trascrizione.
+ *
+ * ─── DUE ABILITA' LO SPENGONO, PER DUE RAGIONI DIVERSE ─────────────────────
+ *
+ * Magicscudo lo toglie tutto: e' la terza meta' della stessa abilita' — la
+ * sabbia e il contraccolpo sono le altre due, e stanno in altri due posti.
+ *
+ * Velencura toglie solo quello da veleno, e non perche' «resiste»: al suo
+ * posto CURA. Senza `annullaDannoDaVeleno` un Gliscor avvelenato prenderebbe
+ * -1/8 e +1/8 nello stesso turno, cioe' zero, e la sua abilita' non si
+ * vedrebbe affatto.
+ *
+ * ─── L'IRIDE NON E' UN NUMERO, E' UNA SUCCESSIONE ──────────────────────────
+ *
+ * Al turno n toglie n/16 dei PS massimi. La voce che questa funzione torna
+ * porta il valore del PRIMO turno — quello che il pannello disegna, perche' la
+ * catena dei PS e' di un turno solo — e il marchio `crescente`, che dice a
+ * `eotAlTurno` di ricalcolarlo.
+ *
+ * `Math.floor(defHP * turno / 16)` e non `turno` volte `Math.floor(defHP/16)`:
+ * la divisione intera si fa una volta sola, alla fine. Su 185 PS al terzo
+ * turno sono 34 contro 33.
+ *
+ * @param {string} stato    — uno di `STATI` in `lib/rules.js`
+ * @param {string} abilita  — abilità del difensore
+ * @param {number} defHP    — PS massimi
+ * @param {number} [turno=1]
+ * @returns {{chiave: string, hp: number, tipo: string, crescente: boolean}[]}
+ */
+export function vociFineTurnoDaStato(stato, abilita, defHP, turno = 1) {
+  const regola = DANNO_FINE_TURNO_PER_STATO[stato]
+  if (!regola || regola.frazione === 0) return []
+
+  const effetto = ABILITY_EFFECTS[normalizeAbilityKey(abilita || '')]
+  if (effetto?.annullaDannoDaStato) return []
+  if (effetto?.annullaDannoDaVeleno && STATI_VELENO.has(stato)) return []
+
+  const passi = regola.crescente ? Math.min(turno, TETTO_IRIDE) : 1
+  return [{
+    chiave: stato,
+    hp: -Math.floor(defHP * passi / regola.frazione),
+    tipo: 'stato',
+    crescente: regola.crescente === true,
+    abilita: false,
+  }]
+}
+
+/**
  * Calcola tutti gli effetti fine turno rilevanti per un difensore.
  *
- * @param {object} def      — slot difensore dallo store { item, ability }
+ * ─── PERCHE' TORNA ANCHE UNA LISTA ─────────────────────────────────────────
+ *
+ * Fino a ieri le voci erano due — sabbia e Avanzi — e i tre posti che le
+ * mostrano le scrivevano a mano: il ReportPanel due volte (la barra del turno
+ * e la catena dei PS) e `smogonString` una terza. Tre copie della stessa
+ * somma, che con cinque voci in piu' sarebbero diventate tre elenchi liberi di
+ * divergere — la forma di difetto che questo progetto ha gia' chiuso sui
+ * sinonimi del meteo e sulle levette.
+ *
+ * `voci` e' quella somma, in ordine di turno, con il segno gia' dentro:
+ * `eotNet` non e' altro che la sua somma. Chi disegna sceglie l'icona e il
+ * nome, non decide piu' chi c'e'.
+ *
+ * ─── L'ORDINE ──────────────────────────────────────────────────────────────
+ *
+ * Meteo, poi strumento, poi stato: la sabbia e le abilita' che il meteo accende
+ * stanno nello stesso passo del gioco, gli Avanzi vengono dopo, e il veleno —
+ * cioe' Velencura — dopo ancora.
+ *
+ * @param {object} def      — slot difensore dallo store { item, ability, status }
  * @param {number} defHP    — HP massimi del difensore (da result.defHP)
  * @param {string} weather  — meteo attivo (slug lowercase)
  * @param {number[]} defTypes — tipi del difensore (indici numerici)
@@ -95,6 +234,7 @@ export function isSandImmune(defTypes = [], ability = '', item = '') {
  *   sandDmgHP: number,
  *   leftoversHP: number,
  *   sitrusBerryHP: number,
+ *   voci: {chiave: string, hp: number}[],
  *   eotNet: number,
  * }}
  */
@@ -111,9 +251,57 @@ export function calcEOT(def, defHP, weather, defTypes = []) {
   const sitrusBerryHP = (def.item || '').toLowerCase() === 'sitrus berry'
     ? Math.floor(defHP / 4)
     : 0
-  const eotNet = leftoversHP - sandDmgHP
 
-  return { isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP, eotNet }
+  const daAbilita = vociFineTurnoAbilita(
+    def.ability || '', def.item || '', defHP, weather, def.status || '')
+
+  const daStato = vociFineTurnoDaStato(def.status || '', def.ability || '', defHP)
+
+  const voci = []
+  if (sandDmgHP > 0) voci.push({ chiave: 'sand', hp: -sandDmgHP, abilita: false })
+  voci.push(...daAbilita.filter(v => v.tipo === 'meteo'))
+  if (leftoversHP > 0) voci.push({ chiave: 'leftovers', hp: leftoversHP, abilita: false })
+  voci.push(...daStato)
+  voci.push(...daAbilita.filter(v => v.tipo === 'stato'))
+
+  const eotNet = voci.reduce((somma, v) => somma + v.hp, 0)
+
+  // ─── E POI C'E' L'IRIDE, CHE OGNI TURNO TOGLIE DI PIU' ──────────────────
+  //
+  // `eotNet` e' il turno UNO: e' quello che il pannello disegna nella catena
+  // dei PS, che di turni ne mostra uno. Chi conta i turni al KO invece deve
+  // sapere che al terzo turno il numero e' un altro, e per quello c'e' questa
+  // funzione — che `koChanceCumulative` e `koChanceSitrus` accettano al posto
+  // del numero.
+  //
+  // Per tutti gli altri e' lo stesso valore a ogni turno, ed e' la ragione per
+  // cui le due DP accettano ANCHE un numero: la stragrande maggioranza delle
+  // chiamate non ha niente di crescente, e obbligarle a costruire una
+  // funzione sarebbe rumore.
+  //
+  // ─── LA FORMULA STA IN UN POSTO SOLO ────────────────────────────────────
+  //
+  // La prima stesura la riscriveva qui — `-Math.floor(defHP * turno / 16)` —
+  // ed era la seconda copia di quella dentro `vociFineTurnoDaStato`. Se n'e'
+  // accorta una rottura voluta: togliendo la crescita alla funzione, il
+  // pannello continuava a crescere lo stesso e un test solo diventava rosso.
+  // Due copie della stessa verita', e quella che nessuno guarda invecchia.
+  //
+  // Adesso le voci fisse si sommano da `voci`, e quella che cresce si
+  // richiede alla funzione con il turno giusto.
+  const eotAlTurno = (turno) => {
+    const fisse = voci.filter(v => !v.crescente).reduce((somma, v) => somma + v.hp, 0)
+    if (turno <= 1) return eotNet
+    const crescenti = vociFineTurnoDaStato(def.status || '', def.ability || '', defHP, turno)
+      .filter(v => v.crescente)
+      .reduce((somma, v) => somma + v.hp, 0)
+    return fisse + crescenti
+  }
+
+  return {
+    isSand, sandImmune, sandDmgHP, leftoversHP, sitrusBerryHP,
+    voci, eotNet, eotAlTurno,
+  }
 }
 
 /**
@@ -153,6 +341,21 @@ export function contraccolpoDaMostrare(recoil, abilita) {
 }
 
 // ── KO Chance ─────────────────────────────────────────────────────────────────
+
+/**
+ * Il delta di fine turno del turno `turno`.
+ *
+ * Le due DP accettano `eotNet` come NUMERO o come FUNZIONE. Numero per tutti —
+ * sabbia, Avanzi, le cinque abilita', la bruciatura, il veleno: tolgono o
+ * danno lo stesso a ogni turno. Funzione per l'iride, che al turno n toglie
+ * n/16 dei PS massimi, e la costruisce `calcEOT` (`eotAlTurno`).
+ *
+ * Sta qui, in una riga sola, perche' le due DP la leggano nello stesso modo:
+ * sono due copie della stessa semantica del turno, e ogni volta che una delle
+ * due ha imparato qualcosa da sola il pannello ha detto due numeri diversi.
+ */
+const passoEot = (eotNet, turno) =>
+  typeof eotNet === 'function' ? eotNet(turno) : eotNet
 
 /**
  * Probabilità cumulativa di KO, colpo per colpo.
@@ -254,9 +457,10 @@ export function koChanceCumulative(rolls, defHP, eotNet = 0, maxHits = MAX_HITS,
     }
 
     // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const passo = passoEot(eotNet, h + 1)
     const prossimi = new Map()
     for (const [hp, prob] of stati) {
-      let nuoviHP = hp + eotNet
+      let nuoviHP = hp + passo
       if (nuoviHP <= 0) { koTotale += prob; continue }       // KO dall'EOT
       if (nuoviHP > defHP) nuoviHP = defHP                   // la cura non supera il massimo
       prossimi.set(nuoviHP, (prossimi.get(nuoviHP) || 0) + prob)
@@ -440,10 +644,11 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
     }
 
     // ── L'EOT, una volta sola, a fine turno ────────────────────────────────
+    const passo = passoEot(eotNet, h + 1)
     const prossimi = new Map()
     for (const [stato, prob] of stati) {
       const usata = (stato & 1) === 1
-      let nuoviHP = (stato >> 1) + eotNet
+      let nuoviHP = (stato >> 1) + passo
       if (nuoviHP <= 0) { koTotale += prob; continue }
       if (nuoviHP > defHP) nuoviHP = defHP
       const chiave = nuoviHP * 2 + (usata ? 1 : 0)

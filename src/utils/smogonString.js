@@ -232,7 +232,7 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   // una volta (vedi la nota qui sotto sui due cicli).
   const colpi2 = result.colpi ?? 1
   const rollsFiglio2 = result.rollsFiglio ?? null
-  const { sandDmgHP: sandDmg2, leftoversHP: leftHP2, eotNet } = calcEOT(def, defHP2, field.weather, defTypes2)
+  const { voci, eotNet, eotAlTurno } = calcEOT(def, defHP2, field.weather, defTypes2)
 
   // Prima qui c'erano due cicli quasi identici che rifacevano a mano il lavoro
   // di findBestNHKO (§2.6): due implementazioni della stessa cosa, libere di
@@ -242,16 +242,43 @@ export function buildSmogonString(atk, def, move, result, field = {}) {
   // L'eventuale chance di OHKO è già mostrata a parte nel ReportPanel.
   let eotSuffix = ''
   if (result.minPct < 100) {
-    const eotParts = []
-    if (sandDmg2 > 0) eotParts.push('sandstorm damage')
-    if (leftHP2 > 0)  eotParts.push('Leftovers recovery')
-    const condStr2 = eotParts.join(' and ')
+    // ─── LE ETICHETTE DEL FINE TURNO, IN INGLESE E A MANO ──────────────────
+    //
+    // Questa stringa imita il calculator di Smogon e va in inglese anche a
+    // interfaccia italiana: e' fatta per essere incollata in una chat dove la
+    // leggono tutti. Quindi qui non si passa da i18n — il pannello ci passa,
+    // ed e' l'unico posto dove queste voci hanno due lingue.
+    //
+    // Le VOCI pero' sono le stesse, e vengono da `calcEOT`: prima erano due
+    // `if` scritti a mano che sapevano di sabbia e Avanzi, e le cinque abilita'
+    // del fine turno sarebbero entrate nel pannello e non qui.
+    // I tre stati non sono abilità e non si scrivono col nome dello stato:
+    // Smogon dice «burn damage», non «Burned damage».
+    const DA_STATO = {
+      'burned': 'burn damage',
+      'poisoned': 'poison damage',
+      'badly-poisoned': 'toxic damage',
+    }
+    const condStr2 = voci.map((v) => {
+      if (v.chiave === 'sand')      return 'sandstorm damage'
+      if (v.chiave === 'leftovers') return 'Leftovers recovery'
+      if (DA_STATO[v.chiave])       return DA_STATO[v.chiave]
+      // `_tc` con i trattini gia' tolti: «ice-body» → «Ice Body», che e' come
+      // Smogon scrive queste voci. (La riga 131 usa `_tc` sui trattini e
+      // stampa «Solar-Power»: e' una stortura piu' vecchia di questa modifica,
+      // e non la tocco qui per non cambiare mille stringhe di colpo.)
+      const nome = _tc(v.chiave.replace(/-/g, ' '))
+      return v.hp >= 0 ? `${nome} recovery` : `${nome} damage`
+    }).join(' and ')
 
     // Se sabbia e Leftovers si annullano (eotNet === 0) il KO si calcola senza
     // EOT e la condizione non viene nominata: era già così prima.
     const afterStr = eotNet !== 0 && condStr2 ? ` after ${condStr2}` : ''
 
-    const best = findBestNHKO(rolls2, defHP2, eotNet, { minHits: 2, colpiPerTurno: colpi2, rollsFiglio: rollsFiglio2 })
+    // `eotAlTurno` e non `eotNet`: il conteggio dei turni deve vedere l'iride
+    // crescere. La riga sopra usa `eotNet` — il turno uno — perche' li' la
+    // domanda e' un'altra: «le voci si annullano?».
+    const best = findBestNHKO(rolls2, defHP2, eotAlTurno, { minHits: 2, colpiPerTurno: colpi2, rollsFiglio: rollsFiglio2 })
     if (best) {
       eotSuffix = best.guaranteed
         ? ` -- guaranteed ${best.hits}HKO${afterStr}`

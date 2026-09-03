@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { calculateDamage } from '../calcEngine'
 import { buildAttackerInput, buildDefenderInput, buildField } from '../lib/battleState'
@@ -48,7 +48,11 @@ import { TYPE_NAMES, TYPE_COLORS, TYPE_HEX } from '../data/typeChart'
  */
 function riassuntoSitrus(rolls, defHP, eotNet = 0, condParts = [], conSitrus = true, colpiPerTurno = 1, rollsFiglio = null) {
   const best = findBestNHKOSitrus(rolls, defHP, { eotNet, conSitrus, colpiPerTurno, rollsFiglio })
-  const parti = conSitrus ? [...condParts, 'sitrus'] : [...condParts]
+  // `condParts` sono le VOCI di `calcEOT` — {chiave, hp} — e non piu' tre
+  // stringhe che il chiamante traduceva con una catena di ternari. La bacca si
+  // aggiunge qui perche' non e' una voce di fine turno: si attiva sotto meta'
+  // PS, e il suo recupero e' gia' dentro questa simulazione. `hp: 0` lo dice.
+  const parti = conSitrus ? [...condParts, { chiave: 'sitrus', hp: 0 }] : [...condParts]
 
   if (!best) return { summary: { type: 'noKo', condParts: parti } }
 
@@ -123,9 +127,71 @@ function HpStep({ range, defKey }) {
   )
 }
 
+// ── Le voci di fine turno ─────────────────────────────────────────────────────
+//
+// `calcEOT` torna una LISTA di voci — sabbia, Avanzi, e da oggi le cinque
+// abilita' che muovono i PS — con il segno gia' dentro. Qui si decide soltanto
+// come si chiamano e che faccia hanno.
+//
+// Prima erano tre elenchi scritti a mano: la barra narrativa, la catena dei PS
+// e `smogonString`. Ognuno sapeva di due voci, e con sette sarebbero stati tre
+// elenchi liberi di divergere.
+
+/** L'emoji per famiglia di meteo. Le voci di stato non ne hanno. */
+const EMOJI_METEO = { sun: '☀️', rain: '🌧', snow: '❄️', sand: '🌪' }
+
+/**
+ * Le voci che non sono né meteo né strumento né abilità: i tre stati che a
+ * fine turno tolgono PS. Nome breve, nome esteso, emoji.
+ *
+ * Stanno in una tabella e non in una catena di ternari perché sono tre e
+ * domani potrebbero essere quattro — e perché i nomi degli stati (`statuses.*`)
+ * sono aggettivi, «Bruciato», che accanto a «−11 HP» leggono male: qui servono
+ * i sostantivi.
+ */
+const VOCI_DI_STATO = {
+  'burned':         { breve: 'report.burn',   esteso: 'eot.burn_damage',   emoji: '🔥' },
+  'poisoned':       { breve: 'report.poison', esteso: 'eot.poison_damage', emoji: '☠️' },
+  'badly-poisoned': { breve: 'report.toxic',  esteso: 'eot.toxic_damage',  emoji: '☠️' },
+}
+
+/** Il nome breve, quello sotto l'icona nella catena dei PS. */
+function nomeVoce(voce, t) {
+  if (voce.chiave === 'sand')      return t('report.sandstorm')
+  if (voce.chiave === 'leftovers') return t('report.leftovers')
+  if (VOCI_DI_STATO[voce.chiave])  return t(VOCI_DI_STATO[voce.chiave].breve)
+  // `abilities.*` e' la fonte unica dei nomi: scriverne una copia in `report.*`
+  // e' esattamente il difetto che `traduzioni.test.js` esiste per impedire.
+  return t(`abilities.${voce.chiave}`, { defaultValue: voce.chiave })
+}
+
+/** Il nome esteso, quello della riga «dopo …»: dice anche se cura o toglie. */
+function etichettaVoce(voce, t) {
+  if (voce.chiave === 'sand')      return t('eot.sandstorm_damage')
+  if (voce.chiave === 'leftovers') return t('eot.leftovers_recovery')
+  if (VOCI_DI_STATO[voce.chiave])  return t(VOCI_DI_STATO[voce.chiave].esteso)
+  const nome = t(`abilities.${voce.chiave}`, { defaultValue: voce.chiave })
+  return voce.hp >= 0
+    ? t('eot.recovery_from', { nome })
+    : t('eot.damage_from', { nome })
+}
+
+/** L'icona: lo strumento ha la sua, il resto e' un'emoji per meteo o il veleno. */
+function IconaVoce({ voce, classe, classeImg }) {
+  if (voce.chiave === 'leftovers') {
+    return <img src={itemIconUrl('leftovers')} alt="" className={classeImg}
+      onError={e => { e.target.style.display = 'none' }} />
+  }
+  const emoji = voce.chiave === 'sand' ? EMOJI_METEO.sand
+    : VOCI_DI_STATO[voce.chiave] ? VOCI_DI_STATO[voce.chiave].emoji
+    : (EMOJI_METEO[voce.meteo] ?? '☠️')
+  const colore = voce.chiave === 'sand' ? 'text-[#c2a139]' : ''
+  return <span className={`${classe} ${colore}`}>{emoji}</span>
+}
+
 // ── Turn narrative bar ────────────────────────────────────────────────────────
 
-function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftoversHP, sitrus, sitrusText, endOfTurnInfo, activeMove, defHP }) {
+function TurnNarrative({ voci, sitrus, sitrusText, endOfTurnInfo, activeMove, defHP }) {
   const { t } = useTranslation()
   const steps = []
 
@@ -146,24 +212,20 @@ function TurnNarrative({ def: defender, isSand, isSandImmune, sandDmgHP, leftove
     )
   }
 
-  // 3. Fine turno: sand damage
-  if (isSand && !isSandImmune && sandDmgHP > 0) {
-    const pct = Math.floor(sandDmgHP / defHP * 1000) / 10
+  // 3. Fine turno: una voce per passo, nell'ordine in cui `calcEOT` le mette.
+  //
+  // Erano due `if` scritti a mano, sabbia e Avanzi, e il nome del difensore
+  // compariva solo nel primo: la sabbia diceva «Garchomp subisce 6,2%», gli
+  // Avanzi «Avanzi +6,2%». Adesso le voci sono sette e la forma e' una sola —
+  // il nome della voce, il segno, la percentuale — perche' sette righe diverse
+  // sarebbero sette occasioni di scriverne una storta.
+  for (const voce of voci) {
+    const pct = Math.floor(Math.abs(voce.hp) / defHP * 1000) / 10
+    const cura = voce.hp >= 0
     steps.push(
-      <span key="sand" className="flex items-center gap-1.5 text-xs font-medium">
-        <span className="text-[#c2a139]">🌪</span>
-        <span className="text-red-400 capitalize">{defender.key.split('-')[0].charAt(0).toUpperCase() + defender.key.split('-')[0].slice(1)} {t('eot.takes_pct')} {pct}%</span>
-      </span>
-    )
-  }
-
-  // 4. Fine turno: Leftovers
-  if (leftoversHP > 0) {
-    const pct = Math.floor(leftoversHP / defHP * 1000) / 10
-    steps.push(
-      <span key="leftovers" className="flex items-center gap-1.5 text-green-400 text-xs font-medium">
-        <img src={itemIconUrl('leftovers')} alt="" className="w-4 h-4 object-contain" onError={e => { e.target.style.display = 'none' }} />
-        <span>{t("report.leftovers")} +{pct}%</span>
+      <span key={`eot-${voce.chiave}`} className={`flex items-center gap-1.5 text-xs font-medium ${cura ? 'text-green-400' : 'text-red-400'}`}>
+        <IconaVoce voce={voce} classe="" classeImg="w-4 h-4 object-contain" />
+        <span>{nomeVoce(voce, t)} {cura ? '+' : '−'}{pct}%</span>
       </span>
     )
   }
@@ -215,7 +277,12 @@ function CopyCalcButton({ smogon }) {
 
 // ── MoveCard NCP style ────────────────────────────────────────────────────────
 
-function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
+// Esportata per `pannelloFineTurno.test.jsx`, che la monta da sola con un
+// `field` scritto a mano. Il pannello intero non e' montabile in un test: il
+// meteo lo legge dallo store, e in SSR Zustand serve lo stato INIZIALE, non
+// quello impostato dal test. Qui il campo arriva come proprieta', e la catena
+// del fine turno si vede davvero disegnata.
+export function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
   const { t } = useTranslation()
 
   // ── Pannello di debug: la cella cliccata, non l'ultima calcolata ──────────
@@ -255,20 +322,21 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
   const defHP = result.defHP
   const defTypes = pokemonData[def.key]?.type || []
-  const { isSand, sandImmune: isSandImmune, sandDmgHP, leftoversHP, eotNet: eot } = calcEOT(def, defHP, field.weather, defTypes)
-  const eotParts = []
-  if (isSand && !isSandImmune) eotParts.push('sand')
-  if (leftoversHP > 0)         eotParts.push('left')
-  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eot, eotParts, true, colpi, rollsFiglio) : null
-
-
+  // Due valori e non uno, e la differenza e' l'iride:
+  //
+  //   `eot`        il delta del turno UNO. La catena dei PS disegna un turno,
+  //                e la riga «Fine turno: −11» ne nomina uno.
+  //   `eotAlTurno` la successione. Chi conta i turni al KO deve sapere che al
+  //                terzo l'iride toglie 34 e non 11.
+  //
+  // Per tutto il resto le due cose coincidono, ed e' il caso normale.
+  const { voci, eotNet: eot, eotAlTurno } = calcEOT(def, defHP, field.weather, defTypes)
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eotAlTurno, voci, true, colpi, rollsFiglio) : null
 
   const formatSummary = (s) => {
     if (!s) return ''
-    const partLabels = (s.condParts || []).map(p =>
-      p === 'sitrus' ? t('eot.sitrus_recovery') :
-      p === 'sand'   ? t('eot.sandstorm_damage') :
-      p === 'left'   ? t('eot.leftovers_recovery') : p
+    const partLabels = (s.condParts || []).map(v =>
+      v.chiave === 'sitrus' ? t('eot.sitrus_recovery') : etichettaVoce(v, t)
     )
     const condStr = partLabels.join(` ${t('eot.and')} `)
     if (s.type === 'noKo')       return `${t('eot.no_ko_in_n', { turni: MAX_HITS })} ${condStr}`
@@ -280,23 +348,19 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    const best = findBestNHKO(rolls, defHP, eot, { colpiPerTurno: colpi, rollsFiglio })
+    const best = findBestNHKO(rolls, defHP, eotAlTurno, { colpiPerTurno: colpi, rollsFiglio })
     if (!best || best.hits === 1) return null
 
     const label = `${best.hits}HKO`
 
-    if (leftoversHP === 0 && sandDmgHP === 0) {
+    if (voci.length === 0) {
       // Nessun EOT — solo badge, nessun breadcrumb
       return best.guaranteed
         ? { hkoSuffix: label, guaranteed: true }
         : { hkoSuffix: label, pct: best.pct }
     }
 
-    const parts = []
-    if (isSand && !isSandImmune) parts.push('sand')
-    if (leftoversHP > 0)         parts.push('left')
-    const partLabels = parts.map(p => p === 'sand' ? t('eot.sandstorm_damage') : t('eot.leftovers_recovery'))
-    const condStr = partLabels.join(` ${t('eot.and')} `)
+    const condStr = voci.map(v => etichettaVoce(v, t)).join(` ${t('eot.and')} `)
 
     if (eot === 0) return { text: `${condStr} ${t('eot.neutralize')}`, hkoSuffix: null }
 
@@ -494,11 +558,7 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
 
         {/* Barra narrativa turno */}
         <TurnNarrative
-          def={def}
-          isSand={isSand}
-          isSandImmune={isSandImmune}
-          sandDmgHP={sandDmgHP}
-          leftoversHP={leftoversHP}
+          voci={voci}
           sitrus={sitrus}
           sitrusText={sitrus ? formatSummary(sitrus.summary) : null}
           endOfTurnInfo={endOfTurnInfo}
@@ -571,10 +631,27 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
           const hpAfterMove = [hpMin, hpMax]
           if (sitrus) { hpMin = Math.min(hpMin + sitrusHeal, defHP); hpMax = Math.min(hpMax + sitrusHeal, defHP) }
           const hpAfterSitrus = [hpMin, hpMax]
-          if (isSand && !isSandImmune) { hpMin = Math.max(0, hpMin - sandDmgHP); hpMax = Math.max(0, hpMax - sandDmgHP) }
-          const hpAfterSand = [hpMin, hpMax]
-          if (leftoversHP > 0) { hpMin = Math.min(hpMin + leftoversHP, defHP); hpMax = Math.min(hpMax + leftoversHP, defHP) }
-          const hpAfterLefto = [hpMin, hpMax]
+          // Un passo per voce, nell'ordine di `calcEOT`. Erano due `if` scritti
+          // a mano e due variabili — `hpAfterSand`, `hpAfterLefto` — e la
+          // riga del risultato in fondo doveva sapere quale delle due era
+          // l'ultima viva, con un ternario a tre rami. Adesso l'ultima e'
+          // l'ultima della lista, e la catena regge sette voci come ne reggeva
+          // due.
+          //
+          // `reduce` e non `map` con due variabili che si riassegnano: il
+          // lint di React vieta la riassegnazione dopo il render, e ha
+          // ragione — la catena e' un accumulo, e scritta cosi' lo dice.
+          const passi = voci.reduce((acc, voce) => {
+            const [min, max] = acc.length ? acc[acc.length - 1].range : [hpMin, hpMax]
+            acc.push({
+              voce,
+              range: [
+                Math.max(0, Math.min(min + voce.hp, defHP)),
+                Math.max(0, Math.min(max + voce.hp, defHP)),
+              ],
+            })
+            return acc
+          }, [])
 
           // Caso 1: KO garantito — catena corta, no EOT, centrata verticalmente
           if (isOHKO) {
@@ -668,31 +745,22 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                   <HpStep range={hpAfterSitrus} defKey={def.key} />
                 </>}
 
-                {/* 3. Sandstorm */}
-                {(isSand && !isSandImmune) && <>
-                  <span className="text-gray-400 shrink-0 mb-8">→</span>
-                  <div className="flex flex-col items-center shrink-0 w-20">
-                    <div className="h-10 flex items-center justify-center mb-2">
-                      <span className="text-3xl text-[#C2a193]">🌪</span>
+                {/* 3. Il fine turno, una voce per passo */}
+                {passi.map(({ voce, range }) => (
+                  <Fragment key={`passo-${voce.chiave}`}>
+                    <span className="text-gray-400 shrink-0 mb-8">→</span>
+                    <div className="flex flex-col items-center shrink-0 w-20">
+                      <div className="h-10 flex items-center justify-center mb-2">
+                        <IconaVoce voce={voce} classe="text-3xl" classeImg="w-8 h-8 object-contain" />
+                      </div>
+                      <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{nomeVoce(voce, t)}</div>
+                      <div className={`text-xs font-bold mt-1 ${voce.hp >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {voce.hp >= 0 ? '+' : '−'}{Math.abs(voce.hp)} HP
+                      </div>
                     </div>
-                    <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{t("report.sandstorm")}</div>
-                    <div className="text-xs font-bold text-red-400 mt-1">−{sandDmgHP} HP</div>
-                  </div>
-                  <HpStep range={hpAfterSand} defKey={def.key} />
-                </>}
-
-                {/* 4. Leftovers */}
-                {leftoversHP > 0 && <>
-                  <span className="text-gray-400 shrink-0 mb-8">→</span>
-                  <div className="flex flex-col items-center shrink-0 w-20">
-                    <div className="h-10 flex items-center justify-center mb-2">
-                      <img src={itemIconUrl('leftovers')} alt="" className="w-8 h-8 object-contain" onError={e => { e.target.style.display = 'none' }} />
-                    </div>
-                    <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight text-center">{t("report.leftovers")}</div>
-                    <div className="text-xs font-bold text-green-400 mt-1">+{leftoversHP} HP</div>
-                  </div>
-                  <HpStep range={hpAfterLefto} defKey={def.key} />
-                </>}
+                    <HpStep range={range} defKey={def.key} />
+                  </Fragment>
+                ))}
 
                 {/* 5. Result */}
                 <span className="text-gray-400 shrink-0 mb-8">→</span>
@@ -706,7 +774,8 @@ function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMov
                       <div className="text-sm font-black mt-1 whitespace-nowrap text-orange-400">{ohkoPct}%</div>
                     )
                     // Mostra % danno finale (dopo tutto l'EOT)
-                    const finalRange = leftoversHP > 0 ? hpAfterLefto : (isSand && !isSandImmune) ? hpAfterSand : sitrus ? hpAfterSitrus : hpAfterMove
+                    const finalRange = passi.length > 0 ? passi[passi.length - 1].range
+                      : sitrus ? hpAfterSitrus : hpAfterMove
                     const minFinalPct = Math.round(Math.max(0, defHP - finalRange[1]) / defHP * 1000) / 10
                     const maxFinalPct = Math.round(Math.max(0, defHP - finalRange[0]) / defHP * 1000) / 10
                     return (

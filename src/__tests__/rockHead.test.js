@@ -26,6 +26,19 @@
  * Blown, Chloroblast e Steel Beam, che costano metà dei PS massimi come
  * PREZZO della mossa. Rock Head copre le dieci e non le tre: aggiudicato.
  *
+ * ─── E POI MAGIC GUARD ─────────────────────────────────────────────────────
+ *
+ * Quando questo file è nato, Magic Guard era stata lasciata fuori di proposito
+ * — «solo Rock Head, le dieci» — e il test in fondo lo teneva fermo con un
+ * elenco esatto. Adesso è entrata, con la stessa aggiudicazione e sulle stesse
+ * dieci mosse: la sua descrizione dice «subisce danno solo dagli attacchi
+ * diretti», e il contraccolpo non è un attacco.
+ *
+ * L'altra metà di Magicscudo — la sabbia — era già implementata da prima e per
+ * nome, in `SAND_IMMUNE_ABILITIES`. Era metà abilità: la descrizione ne
+ * prometteva due e il motore ne applicava una, e nessun presidio poteva dirlo,
+ * perché `descrizioniSilenziose` scarta un'abilità appena ha UN effetto.
+ *
  * ─── CHI L'AVEVA TROVATA ───────────────────────────────────────────────────
  *
  * `descrizioniSilenziose.test.js`, che la teneva col verdetto `silenziosa` —
@@ -63,8 +76,9 @@ describe('i presupposti', () => {
     expect(con.length).toBeGreaterThanOrEqual(23)
   })
 
-  it('la voce dichiara l\'effetto', () => {
+  it('le due voci dichiarano l\'effetto', () => {
     expect(ABILITY_EFFECTS['rock-head'].annullaContraccolpo).toBe(true)
+    expect(ABILITY_EFFECTS['magic-guard'].annullaContraccolpo).toBe(true)
   })
 
   it.runIf(vendorPresente)('il riferimento non calcola il contraccolpo — verificato, non ricordato', () => {
@@ -102,15 +116,17 @@ describe('i presupposti', () => {
 
 describe('cosa azzera e cosa no', () => {
   for (const mossa of DA_DANNO) {
-    it(`${mossa}: Rock Head lo azzera`, () => {
+    it(`${mossa}: Rock Head e Magic Guard lo azzerano`, () => {
       expect(contraccolpoDaMostrare(movesData[mossa].recoil, 'rock-head')).toBe(false)
+      expect(contraccolpoDaMostrare(movesData[mossa].recoil, 'magic-guard')).toBe(false)
       expect(contraccolpoDaMostrare(movesData[mossa].recoil, 'blaze')).toBe(true)
     })
   }
 
   for (const mossa of DA_PS_MASSIMI) {
-    it(`${mossa}: non è contraccolpo, è un prezzo — Rock Head non lo tocca`, () => {
+    it(`${mossa}: non è contraccolpo, è un prezzo — nessuna delle due lo tocca`, () => {
       expect(contraccolpoDaMostrare(movesData[mossa].recoil, 'rock-head')).toBe(true)
+      expect(contraccolpoDaMostrare(movesData[mossa].recoil, 'magic-guard')).toBe(true)
     })
   }
 
@@ -119,13 +135,14 @@ describe('cosa azzera e cosa no', () => {
     expect(contraccolpoDaMostrare(null, 'blaze')).toBe(false)
   })
 
-  it('nessun\'altra abilità lo azzera', () => {
-    // Magic Guard lo farebbe nel gioco, ed è stata lasciata fuori di proposito:
-    // Simone ha aggiudicato solo Rock Head. Se un giorno entra, questo test è
-    // il posto dove la decisione si vede cambiare.
+  it('sono due, e sono queste', () => {
+    // Elenco esatto e non «almeno queste»: se ne compare una terza è una
+    // decisione nuova, e va scritta in `divergenzeAggiudicate.test.js` prima
+    // che qui. Qui c'era `['rock-head']` da sola, ed è la riga in cui si vede
+    // la decisione di Simone cambiare.
     const azzerano = Object.keys(ABILITY_EFFECTS)
-      .filter(k => ABILITY_EFFECTS[k].annullaContraccolpo)
-    expect(azzerano).toEqual(['rock-head'])
+      .filter(k => ABILITY_EFFECTS[k].annullaContraccolpo).sort()
+    expect(azzerano).toEqual(['magic-guard', 'rock-head'])
   })
 })
 
