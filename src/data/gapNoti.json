@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T12:33:24.240Z",
+    "generatedAt": "2026-09-05T12:58:49.995Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
     "strumentiNelGap": 39,
-    "mosseNelGap": 20,
+    "mosseNelGap": 17,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
@@ -61,17 +61,14 @@
     "final gambit",
     "flail",
     "fling",
-    "frustration",
     "hard press",
     "metal burst",
     "mirror coat",
     "natural gift",
     "natures madness",
-    "return",
     "reversal",
     "ruination",
     "super fang",
-    "trump card",
     "wring out"
   ]
 }

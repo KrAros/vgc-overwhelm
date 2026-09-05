@@ -33,6 +33,8 @@ import {
   MOSSE_STADI_ATTACCANTE,
   usaAttaccoAvversario,
   potenzaAcrobatics,
+  MOSSE_POTENZA_ASSUNTA,
+  haPotenzaAssunta,
   haPotenzaDaStadi,
   potenzaDaStadiAttaccante,
   potenzaDaStadiDifensore,
@@ -1042,6 +1044,14 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // vuota, che qui vorrebbe dire l'opposto.
   const potenzaAcro = move === 'acrobatics' ? potenzaAcrobatics(atkItemGrezzo) : null
 
+  // ─── LA POTENZA ASSUNTA ──────────────────────────────────────────────────
+  //
+  // Return, Frustration e Trump Card: il riferimento non le calcola — i punti
+  // d ed i.vii sono commenti senza codice — e cade sul `move.bp` dei suoi
+  // dati. Noi abbiamo `power: 0`, quindi il numero arriva dalla tabella in
+  // `rules.js`, che lo tiene accanto all'ipotesi sotto cui vale.
+  const potenzaAssunta = haPotenzaAssunta(move) ? MOSSE_POTENZA_ASSUNTA[move] : null
+
   let potenzaDagliStadi = null
   if (haPotenzaDaStadi(move)) {
     potenzaDagliStadi = MOSSE_STADI_ATTACCANTE.has(move)
@@ -1081,6 +1091,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     : potenzaDallaVelocita !== null ? potenzaDallaVelocita
     : potenzaDagliStadi !== null ? potenzaDagliStadi
     : potenzaAcro !== null ? potenzaAcro
+    : potenzaAssunta !== null ? potenzaAssunta
     : isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2

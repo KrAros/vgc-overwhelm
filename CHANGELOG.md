@@ -16,6 +16,17 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Return, Frustration e Trump Card mostrano un danno
+- Erano fra le mosse che disegnavano `~`. Adesso hanno un numero, e le mosse
+  col badge scendono da 20 a **17**
+- Il numero vale **sotto un'ipotesi dichiarata**, la stessa del riferimento:
+  Return e Frustration al massimo dell'affetto, Trump Card con quattro o più
+  PP. Nel gioco quelle potenze variano, e né l'affetto né i PP sono nel
+  modello
+- **Beat Up** sembra della stessa famiglia e resta col badge: il riferimento la
+  calcola con un colpo solo mentre i nostri dati ne prevedono fino a sei, e
+  scegliere quale sia il numero giusto sarebbe una decisione, non una copia
+
 ### Foul Play usava la statistica del Pokémon sbagliato
 - **Foul Play** colpisce con l'Attacco del BERSAGLIO, non col proprio: è tutto
   il senso della mossa. L'app usava quello di chi attacca — un Blissey faceva
