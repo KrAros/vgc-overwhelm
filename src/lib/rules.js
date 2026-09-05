@@ -1057,6 +1057,86 @@ export function potenzaDaRapportoPeso(rapporto) {
 }
 
 /**
+ * ─── LE CINQUE MOSSE IL CUI DANNO E' I PUNTI SALUTE ─────────────────────────
+ *
+ * Punti b e c di `setDamage` (`damage_MASTER.js:1221-1254`), cioe' i due
+ * blocchi SOPRA quello del danno fisso che il progetto ha gia'. Stessa forma:
+ * il danno non passa dalla formula, e' un numero solo.
+ *
+ *     //b. Defender HP Dependent
+ *     if (["Super Fang", "Nature's Madness", "Ruination"].includes(move.name)) {
+ *         def_curHP = Math.floor(defender.curHP / 2);
+ *         if (isParentBond) def_curHP = Math.floor(def_curHP * 3 / 2);
+ *         return { damage: [def_curHP] };
+ *     }
+ *
+ *     //c. Attacker HP Dependent
+ *     if (move.name === "Endeavor") {
+ *         var endvr_dmg = 0;
+ *         if (attacker.curHP < defender.curHP) endvr_dmg = defender.curHP - attacker.curHP;
+ *         return { damage: [endvr_dmg] };
+ *     }
+ *     if (move.name === "Final Gambit") return { damage: [attacker.curHP] };
+ *
+ * ─── TRE MODI DIVERSI DI LEGGERE LA STESSA COSA ─────────────────────────────
+ *
+ *   Super Fang & c.  META' dei punti salute di CHI SUBISCE
+ *   Endeavor         la DIFFERENZA fra i due, e zero se chi tira sta meglio
+ *   Final Gambit     TUTTI i punti salute di CHI TIRA
+ *
+ * Endeavor e' l'unica mossa del motore che legge i punti salute di tutt'e due
+ * i lati nella stessa riga, ed e' anche l'unica che puo' tornare zero senza
+ * che ci sia un'immunita' di mezzo: un colpo che arriva e non fa niente.
+ *
+ * ─── COSA HO LASCIATO FUORI, E PERCHE' ──────────────────────────────────────
+ *
+ *   Guardian of Alola  non e' nei nostri dati (e' una mossa Z). Il riferimento
+ *                      ce l'ha nello stesso `else if`, e non si trascrive una
+ *                      riga per una mossa che nessuno puo' scegliere.
+ *   `isDynamax`        il Dynamax non e' nel nostro modello.
+ *   `gen == 9.5`       non e' la nostra generazione: Champions e' la 10.
+ *
+ * ─── PARENTAL BOND, ED E' UN TERZO MOLTIPLICATORE ──────────────────────────
+ *
+ * Su Super Fang e famiglia il riferimento fa `×3/2`, non `×2` come sulle
+ * mosse a danno fisso e non `×1` come sulle mosse KO. Tre famiglie nello
+ * stesso blocco, tre comportamenti: e' il motivo per cui non c'e' una regola
+ * sola da scrivere da qualche parte, e ognuna se lo porta scritto addosso.
+ */
+export const MOSSE_META_PS_BERSAGLIO = new Set([
+  'super fang', 'natures madness', 'ruination',
+])
+
+/** Vero se il danno di questa mossa e' i punti salute di qualcuno. */
+export function haDannoDaiPuntiSalute(mossa) {
+  return MOSSE_META_PS_BERSAGLIO.has(mossa)
+    || mossa === 'endeavor'
+    || mossa === 'final gambit'
+}
+
+/**
+ * Il danno di una mossa che legge i punti salute, o `null` se non e' una di
+ * quelle. `damage_MASTER.js:1221-1254`
+ *
+ * @param {string} mossa
+ * @param {number} psAtk  punti salute correnti di chi tira
+ * @param {number} psDif  punti salute correnti di chi subisce
+ * @param {boolean} parentalBond
+ */
+export function dannoDaiPuntiSalute(mossa, psAtk, psDif, parentalBond = false) {
+  if (MOSSE_META_PS_BERSAGLIO.has(mossa)) {
+    const meta = Math.floor(psDif / 2)
+    return parentalBond ? Math.floor(meta * 3 / 2) : meta
+  }
+  // Endeavor pareggia: porta il bersaglio ai punti salute di chi tira, e se
+  // chi tira sta gia' peggio non fa niente. Il riferimento non lo raddoppia
+  // con Parental Bond, e nemmeno noi: la riga li' non lo nomina.
+  if (mossa === 'endeavor') return psAtk < psDif ? psDif - psAtk : 0
+  if (mossa === 'final gambit') return psAtk
+  return null
+}
+
+/**
  * ─── LE QUATTRO MOSSE A DANNO FISSO ─────────────────────────────────────────
  *
  * Il danno non passa dalla formula: è un numero deciso in partenza. Nei dati
@@ -1151,6 +1231,7 @@ export function haDannoFisso(mossa) {
  *   Velocita'    Gyro Ball, Electro Ball
  *   stadi        Stored Power, Power Trip, Punishment
  *   assunta      Return, Frustration, Trump Card — un numero, non una formula
+ *   punti salute Super Fang e famiglia, Endeavor, Final Gambit
  *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
  *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
  *
@@ -1160,6 +1241,7 @@ export function haDannoFisso(mossa) {
 export function mossaEntraNelCalcolo(mossa, dati) {
   if (!dati) return false
   return Boolean(dati.power)
+    || haDannoDaiPuntiSalute(mossa)
     || haPotenzaAssunta(mossa)
     || haPotenzaDaPeso(mossa)
     || haPotenzaDaVelocita(mossa)

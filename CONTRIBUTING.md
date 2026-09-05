@@ -58,7 +58,7 @@ diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro d
 stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
 che il riferimento non ha e ne perdeva una che ha.
 
-Diciotto sono fatte:
+Ventitré sono fatte:
 
 - le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash, punto b
   di `basePowerFunc`;
@@ -77,11 +77,14 @@ Diciotto sono fatte:
   scritto nei suoi dati. Quel numero, con l'ipotesi che lo regge, sta in
   `MOSSE_POTENZA_ASSUNTA`.
 
-E ne restano **17**:
+- **le cinque il cui DANNO sono i punti salute** — Super Fang, Nature's
+  Madness, Ruination, Endeavor e Final Gambit, i punti b e c di `setDamage`
+  (`:1221-1254`).
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
-> Fling, Hard Press, Metal Burst, Mirror Coat, Natural Gift, Nature's Madness,
-> Reversal, Ruination, Super Fang, Wring Out
+E ne restano **12**:
+
+> Beat Up, Comeuppance, Counter, Crush Grip, Flail, Fling, Hard Press,
+> Metal Burst, Mirror Coat, Natural Gift, Reversal, Wring Out
 
 Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,

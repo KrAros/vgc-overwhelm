@@ -95,7 +95,7 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     expect(fs.existsSync(path.join(RADICE, 'src/__tests__/mosseADannoFisso.test.js'))).toBe(true)
   })
 
-  it.runIf(vendorPresente)('e le diciassette che restano sono ancora diciassette', () => {
+  it.runIf(vendorPresente)('e le dodici che restano sono ancora dodici', () => {
     // Il numero che il documento scrive, misurato invece che copiato: le mosse
     // a potenza zero che il RIFERIMENTO tratta come offensive e che da noi
     // escono ancora `null`. Il giorno che qualcuno ne fa una, questo test
@@ -105,7 +105,7 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     // considera offensiva?» la può rispondere solo lui. Scrivere qui i nomi a
     // mano vorrebbe dire copiare una misura invece che rifarla — ed è
     // esattamente il modo in cui l'elenco di CONTRIBUTING.md si era sfasato.
-    expect(resteDaFare()).toHaveLength(17)
+    expect(resteDaFare()).toHaveLength(12)
   })
 
   it('Foul Play e Acrobatics non sono più una voce aperta', () => {
@@ -135,8 +135,8 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     // La seconda voce che si chiude, e anche questa girata invece che tolta.
     // Il registro aveva due liste; ne ha tre, e la terza è quella che mancava.
     expect(Object.keys(gapNoti)).toEqual(['meta', 'abilita', 'strumenti', 'mosse'])
-    expect(gapNoti.mosse.length).toBe(17)
-    expect(gapNoti.meta.mosseNelGap).toBe(17)
+    expect(gapNoti.mosse.length).toBe(12)
+    expect(gapNoti.meta.mosseNelGap).toBe(12)
   })
 
   it('e le due liste dicono la stessa cosa: nessuna mossa calcolata col badge', () => {

@@ -16,6 +16,14 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Cinque mosse che leggono i punti salute mostrano il loro danno
+- **Super Fang**, **Nature's Madness** e **Ruination** tolgono metà dei punti
+  salute che il bersaglio ha ancora. **Final Gambit** toglie tutti quelli di
+  chi la usa. **Endeavor** pareggia i due
+- Prima disegnavano `~`. Le mosse col badge scendono da 17 a **12**
+- Endeavor fa danno anche fra due Pokémon interi, se il bersaglio è più
+  robusto: un Garchomp intero ne toglie 147 a una Blissey intera
+
 ### Tera Shell proteggeva anche un Pokémon ferito
 - **Tera Shell** dimezza i colpi solo quando chi la porta è a vita piena. L'app
   la applicava sempre, e nell'editor non c'era nemmeno l'interruttore per dire

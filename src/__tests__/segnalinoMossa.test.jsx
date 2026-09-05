@@ -58,7 +58,7 @@ const nomeAccessibile = (html) => {
 describe('il segnalino sulla mossa', () => {
   it('compare su una mossa del divario', () => {
     expect(haSegnalino(rendi('counter'))).toBe(true)
-    expect(haSegnalino(rendi('super fang'))).toBe(true)
+    expect(haSegnalino(rendi('crush grip'))).toBe(true)
   })
 
   it('non compare su una mossa che calcoliamo', () => {
