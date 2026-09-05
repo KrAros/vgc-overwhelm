@@ -166,7 +166,11 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
-  if (key === 'multiscale' || key === 'shadow-shield') {
+  // `tera-shell` e' entrata qui insieme al cancello nel motore: e' la terza
+  // abilita' che chiede «sei a vita piena?», e senza questa riga la levetta
+  // c'era nel calcolo e non nell'interfaccia — cioe' una condizione vera che
+  // nessuno poteva mettere a false.
+  if (key === 'multiscale' || key === 'shadow-shield' || key === 'tera-shell') {
     return (
       <div className={`${RIQUADRO} gap-2 ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
         <button
