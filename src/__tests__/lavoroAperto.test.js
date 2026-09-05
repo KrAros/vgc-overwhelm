@@ -32,12 +32,16 @@ import path from 'node:path'
 import { calculateDamage } from '../calcEngine.js'
 import { ABILITY_EFFECTS } from '../data/abilityEffects.js'
 import { vociFineTurnoDaStato } from '../lib/damage.js'
+import { MOSSE_SENZA_PARENTAL_BOND } from '../lib/rules.js'
 import movesData from '../data/moves.json' with { type: 'json' }
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import gapNoti from '../data/gapNoti.json' with { type: 'json' }
+import { caricaNCP } from '../../scripts/ncp/contesto.mjs'
 
 const RADICE = path.resolve(import.meta.dirname, '..', '..')
 const DOCUMENTO = path.join(RADICE, 'docs', 'lavoro-aperto.md')
+
+const vendorPresente = fs.existsSync(path.join(RADICE, 'vendor', 'ncp', 'damage_SV.js'))
 
 const att = { atkPokemon: 'garchomp', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, atkAbility: null, atkItem: null, level: 50 }
 const dif = (abilita = null, status = null) => ({
@@ -45,6 +49,24 @@ const dif = (abilita = null, status = null) => ({
   defAbility: abilita, defItem: null, defBoost: 0, spDefBoost: 0,
   defAbilityFlags: {}, defStatus: status,
 })
+
+/**
+ * Le mosse a potenza zero che il riferimento calcola e noi no.
+ *
+ * La domanda «il riferimento la considera offensiva?» si legge dai suoi dati,
+ * non dal nome: `category` diversa da `Status` nel suo `move_data.js`. Le
+ * mosse che lì sono commentate — Bide, Magnitude, Present, Spit Up, Psywave —
+ * non ci sono affatto, e infatti non entrano nel conto: per loro non c'è un
+ * oracolo da confrontare, quindi non sono lavoro di trascrizione.
+ */
+function resteDaFare() {
+  const dati = caricaNCP().leggi('moves')
+  return Object.entries(movesData)
+    .filter(([, v]) => !v.power)
+    .filter(([, v]) => dati[v.name]?.category && dati[v.name].category !== 'Status')
+    .map(([k]) => k)
+    .filter(m => calculateDamage({ attacker: att, defender: dif(), move: m, field: {} }) === null)
+}
 
 describe('il documento esiste ed è raggiungibile', () => {
   it('c\'è, e CONTRIBUTING.md ci manda', () => {
@@ -58,17 +80,32 @@ describe('il documento esiste ed è raggiungibile', () => {
 })
 
 describe('A — le voci che aspettano una trascrizione sono ancora aperte', () => {
-  it('le quattro mosse a danno fisso escono ancora `null`', () => {
-    // Il giorno che entrano, questo test dice di togliere la voce dal
-    // documento — e di aggiungerne i casi contro l'oracolo, che adesso
-    // risponde.
+  it('le quattro mosse a danno fisso non sono più una voce aperta', () => {
+    // La prima voce del registro che si chiude. Il test non è stato tolto: è
+    // stato girato. Prima diceva «escono ancora `null`» e presidiava una voce
+    // aperta; adesso dice «entrano», e presidia il fatto che nessuno le
+    // rimetta fuori — perché il documento non le elenca più.
     for (const m of ['seismic toss', 'night shade', 'dragon rage', 'sonic boom']) {
-      expect(movesData[m].power, `${m} ha una potenza`).toBe(0)
       expect(
         calculateDamage({ attacker: att, defender: dif(), move: m, field: {} }),
-        `${m} adesso il motore la calcola: aggiornare docs/lavoro-aperto.md`,
-      ).toBeNull()
+        `${m} è tornata nulla: rimettere la voce in docs/lavoro-aperto.md`,
+      ).not.toBeNull()
     }
+    // I casi contro l'oracolo stanno in `mosseADannoFisso.test.js`.
+    expect(fs.existsSync(path.join(RADICE, 'src/__tests__/mosseADannoFisso.test.js'))).toBe(true)
+  })
+
+  it.runIf(vendorPresente)('e le ventidue che restano sono ancora ventidue', () => {
+    // Il numero che il documento scrive, misurato invece che copiato: le mosse
+    // a potenza zero che il RIFERIMENTO tratta come offensive e che da noi
+    // escono ancora `null`. Il giorno che qualcuno ne fa una, questo test
+    // diventa rosso e il documento va aggiornato nello stesso commit.
+    //
+    // Gira solo col vendor presente perché la domanda «il riferimento la
+    // considera offensiva?» la può rispondere solo lui. Scrivere qui i nomi a
+    // mano vorrebbe dire copiare una misura invece che rifarla — ed è
+    // esattamente il modo in cui l'elenco di CONTRIBUTING.md si era sfasato.
+    expect(resteDaFare()).toHaveLength(22)
   })
 
   it('`gapNoti.json` non ha ancora la lista delle mosse', () => {
@@ -94,6 +131,23 @@ describe('B — le decisioni non sono ancora state prese', () => {
     const conImmunity = vociFineTurnoDaStato('poisoned', 'immunity', 200)
     expect(conImmunity).toHaveLength(1)
     expect(conImmunity[0].hp).toBe(-25)
+  })
+
+  it('Parental Bond sul danno fisso segue ancora il riferimento', () => {
+    // Nata chiudendo la voce delle quattro mosse a danno fisso, ed è una
+    // decisione perché le due fonti non dicono la stessa cosa: il riferimento
+    // raddoppia il numero (`[100]` invece di `[50]`), la wiki dice che nel
+    // gioco Parental Bond su queste mosse non fa niente.
+    //
+    // Finché nessuno sceglie si segue l'oracolo, che è la regola del progetto.
+    // La levetta esiste già ed è questa lista: quattro nomi lì dentro e il
+    // motore smette di raddoppiare senza che si tocchi una riga di codice.
+    for (const m of ['seismic toss', 'night shade', 'dragon rage', 'sonic boom']) {
+      expect(
+        MOSSE_SENZA_PARENTAL_BOND.has(m),
+        `${m}: la decisione è stata presa, aggiornare docs/lavoro-aperto.md`,
+      ).toBe(false)
+    }
   })
 
   it('Sturdy ha ancora una metà sola', () => {

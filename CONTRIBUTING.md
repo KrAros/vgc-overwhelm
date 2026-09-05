@@ -41,37 +41,51 @@ e noi no; l'elenco generato è in
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 È il contributo più prezioso, ed è quello con le regole più severe qui sotto.
 
-**Le mosse SENZA il badge — un lavoro aperto, non ancora cominciato.**
+**Le mosse SENZA il badge — un lavoro aperto, cominciato.**
 `gapNoti.json` ha due liste, `abilita` e `strumenti`. Non ha le mosse, e le
 mosse un divario ce l'hanno.
 
 `calcEngine.js` esce con `null` per qualunque mossa con `power: 0` che non sia
-una delle quattro a peso o una delle quattro KO. Nella matrice un `null` si
-disegna come `~`, cioè esattamente come una mossa di stato: **Seismic Toss oggi
-sembra Protect.** Delle 303 mosse a potenza zero nei nostri dati, 34 il
-riferimento le considera offensive e le calcola. Quattro sono state fatte —
-Fissure, Guillotine, Horn Drill e Sheer Cold, il flag `koSecco` e il punto f
-del riferimento — e ne restano **30**:
+una delle quattro a peso, una delle quattro KO o una delle quattro a danno
+fisso. Nella matrice un `null` si disegna come `~`, cioè esattamente come una
+mossa di stato: prima della sessione delle mosse a danno fisso **Seismic Toss
+sembrava Protect**.
 
-> Bide, Comeuppance, Counter, Crush Grip, Dragon Rage, Electro Ball, Endeavor,
-> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Magnitude,
-> Metal Burst, Mirror Coat, Natural Gift, Night Shade, Present, Psywave,
-> Punishment, Return, Reversal, Ruination, Seismic Toss, Sonic Boom, Spit Up,
+Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
+come offensive. La misura si fa sui SUOI dati e non sul nome — `category`
+diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro da
+`lavoroAperto.test.js` invece di essere copiata: l'elenco scritto a mano che
+stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
+che il riferimento non ha e ne perdeva una che ha.
+
+Dodici sono fatte:
+
+- le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash;
+- le quattro **KO** — Fissure, Guillotine, Horn Drill, Sheer Cold, col flag
+  `koSecco` e il punto f del riferimento;
+- le quattro a **danno fisso** — Sonic Boom, Dragon Rage, Seismic Toss,
+  Night Shade, i punti d ed e (`damage_MASTER.js:1256-1275`).
+
+E ne restano **22**:
+
+> Beat Up, Comeuppance, Counter, Crush Grip, Electro Ball, Endeavor,
+> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Metal Burst,
+> Mirror Coat, Natural Gift, Punishment, Return, Reversal, Ruination,
 > Super Fang, Trump Card, Wring Out
 
-Chi riprende il filo parta dalle quattro a **danno fisso** — Seismic Toss,
-Night Shade, Dragon Rage, Sonic Boom — che stanno nello STESSO blocco del
-riferimento (`damage_MASTER.js:1240-1283`) delle quattro appena fatte, e che
-adesso hanno un oracolo interrogabile: fino a questa sessione l'harness
-confondeva un danno fisso con un colpo nullo, e a chiedergli «Seismic Toss»
-rispondeva «zero».
+Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
+(Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,
+Ruination, Final Gambit), quelle legate alla Velocità (Gyro Ball, Electro
+Ball), quelle legate all'affetto (Return, Frustration), quelle legate allo
+strumento (Fling, Natural Gift) e le reattive (Counter, Mirror Coat, Metal
+Burst, Comeuppance) — che nel riferimento ci sono ma calcolano il colpo appena
+subito dal difensore, cioè un pezzo di turno che non modelliamo.
 
-Non sono tutte lo stesso problema: ci sono le mosse a danno fisso (Seismic
-Toss, Night Shade, Sonic Boom, Dragon Rage), quelle legate ai punti salute
-(Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Ruination),
-quelle legate alla Velocità (Gyro Ball, Electro Ball), quelle legate
-all'affetto (Return, Frustration) e le reattive (Counter, Mirror Coat, Metal
-Burst, Comeuppance, Bide).
+**Cinque mosse che sembrano di questa lista non ci sono, e non è una svista.**
+Bide, Magnitude, Present, Spit Up e Psywave nel riferimento sono **commentate**
+dentro `move_data.js`; il punto g di `setDamage` si chiama «Psywave» ed è un
+commento senza codice sotto. L'harness risponde «mossa non presente in NCP».
+Per loro non c'è un oracolo, quindi non sono lavoro di trascrizione.
 
 C'è poi un caso diverso e più insidioso, perché oggi non si vede: **Eruption e
 Water Spout**. Nei nostri dati hanno `power: 150` e il motore la usa cosi'

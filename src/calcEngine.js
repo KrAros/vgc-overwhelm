@@ -29,6 +29,8 @@ import {
   haPotenzaDaPeso,
   potenzaDaPeso,
   potenzaDaRapportoPeso,
+  dannoFisso,
+  haDannoFisso,
   MOSSE_PESO_BERSAGLIO,
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
@@ -207,7 +209,13 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // tornando i punti salute del difensore. Anche loro devono superare questa
   // riga, per la stessa ragione delle mosse a peso: qui non si decide il
   // danno, si decide chi entra.
-  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move) && !moveData.koSecco)) return null
+  //
+  // E le quattro a danno fisso — Sonic Boom, Dragon Rage, Seismic Toss, Night
+  // Shade — per la terza volta la stessa storia: `power: 0` nei dati, il danno
+  // deciso ai punti d ed e (`damage_MASTER.js:1256-1275`), il blocco subito
+  // sopra quello delle mosse KO. Finche' non superavano questa riga il motore
+  // le disegnava come mosse di stato.
+  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move) && !moveData.koSecco && !haDannoFisso(move))) return null
 
   const atkPokeData = POKEMON_DATA[atkPokemon]
   const defPokeData = POKEMON_DATA[defPokemon]
@@ -619,6 +627,64 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, meteo, atkTypes)
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
+
+  // ── PUNTI d ed e — IL DANNO FISSO (`damage_MASTER.js:1256-1275`) ─────────
+  //
+  //     //d. Set Damage (Sonic Boom, Dragon Rage)
+  //     if (move.name === "Sonic Boom")
+  //         return !isParentBond ? { "damage": [20] } : { "damage": [40] };
+  //     if (move.name === "Dragon Rage")
+  //         return !isParentBond ? { "damage": [40] } : { "damage": [80] };
+  //
+  //     //e. Level Dependent Damage (Seismic Toss, Night Shade)
+  //     if (move.name === "Seismic Toss" || move.name === "Night Shade") {
+  //         var lv = attacker.level;
+  //         if (isParentBond) lv *= 2;
+  //         return { "damage": [lv] };
+  //     }
+  //
+  // Trascritto com'e', e sta QUI perche' li' sta: `setDamage` gira dopo
+  // `immunityChecks` (`damage_SV.js:136-142`) e prima di ogni riga di formula.
+  // I punti d ed e vengono prima del punto f, quindi vengono prima anche qui —
+  // l'ordine non cambia niente, nessuna mossa e' in due blocchi, e si rispetta
+  // lo stesso.
+  //
+  // Come per le mosse KO il danno e' UN numero, non sedici: non c'e' roll,
+  // quindi non c'e' variazione. La differenza e' che qui il numero non guarda
+  // il bersaglio — Sonic Boom toglie 20 punti a chiunque, e la percentuale
+  // cambia solo perche' cambia il denominatore.
+  //
+  // ─── PARENTAL BOND RADDOPPIA, E NON E' UN SECONDO COLPO ──────────────────
+  //
+  // Il riferimento non torna due colpi: torna un numero gia' raddoppiato
+  // (`[100]`, non `[50, 50]`). Quindi `rollsFiglio` resta `null` e `colpi`
+  // resta 1 — chi calcola la probabilita' di KO non ha due distribuzioni da
+  // sommare, ne ha una deterministica.
+  //
+  // La condizione del riferimento e' il solo `attacker.ability === "Parental
+  // Bond"`, senza i controlli su colpi multipli e mosse ad area che ci sono
+  // altrove. Qui si usa lo stesso `parentalBond` del resto del motore perche'
+  // su queste quattro le due condizioni coincidono: nessuna e' multi-colpo,
+  // nessuna e' ad area, nessuna sta in `MOSSE_SENZA_PARENTAL_BOND`.
+  //
+  // Quell'ultima clausola non e' un dettaglio: e' la levetta della decisione
+  // che questa sessione NON ha preso. La wiki dice che nel gioco Parental Bond
+  // su una mossa a danno fisso non fa niente, il riferimento la raddoppia, e
+  // finche' nessuno sceglie si segue il riferimento — che e' l'oracolo. Il
+  // giorno che si sceglie diversamente, la modifica sono quattro nomi in
+  // quella lista e nessuna riga qui. Vedi `docs/lavoro-aperto.md`, sezione B.
+  const fisso = dannoFisso(move, level)
+  if (fisso !== null) {
+    const danno = parentalBond ? fisso * 2 : fisso
+    return {
+      rolls: [danno], minDmg: danno, maxDmg: danno,
+      minPct: Math.floor(danno / defHP * 1000) / 10,
+      maxPct: Math.floor(danno / defHP * 1000) / 10,
+      defHP, effectiveness, stab: 1, log: null,
+      atkBoostEffective: 0, weatherBallType: null, effectiveBP: 0,
+      effectiveMoveType: moveType, rollsFiglio: null, colpi: 1,
+    }
+  }
 
   // ── PUNTO f — LE MOSSE KO (`damage_MASTER.js:1277-1283`) ─────────────────
   //
