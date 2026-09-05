@@ -102,7 +102,9 @@
     "ssShort": "IA",
     "fwShort": "Reg",
     "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon.",
-    "ptShort": "Prot"
+    "ptShort": "Prot",
+    "ko_certo": "KO garantito",
+    "ko_possibile": "KO possibile: {{pct}}%"
   },
   "gap": {
     "badge": "Non calcolata",
