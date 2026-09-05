@@ -185,9 +185,15 @@ const ITEM_META_VELOCITA = new Set([
  * @param {string|null} [terrain=null] — serve a Surge Surfer. Ultimo parametro
  *        e con un valore di riposo, così i chiamanti che non lo passano
  *        continuano a funzionare come prima.
+ * @param {number} [livello=LEVEL] — il livello di chi calcola. La matrice
+ *        lavora sempre a 50 e non lo passa; `calculateDamage` invece accetta
+ *        un livello per chiamata, e da quando l'ordine di turno di Analytic
+ *        passa di qui quel livello deve arrivarci. Inchiodarlo a `LEVEL`
+ *        avrebbe dato la risposta giusta a 50 e sbagliata altrove, cioè il
+ *        difetto che non si vede.
  * @returns {number}
  */
-export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = null) {
+export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = null, livello = LEVEL) {
   if (!pokemon?.key) return 0
   const base = pokemonData[pokemon.key]?.stats?.[STAT_SPE] ?? 0
   const sp   = pokemon.sps?.[STAT_SPE] ?? 0
@@ -196,7 +202,7 @@ export function calcEffectiveSpe(pokemon, weather, tailwind = false, terrain = n
   // ne aveva una copia propria, con 2/2 in posizione neutra invece di 1/1.
   // Davano lo stesso risultato, ma erano due tabelle.
   const spe = applyBoost(
-    calcStat(base, sp, LEVEL, pokemon.nature, STAT_SPE),
+    calcStat(base, sp, livello, pokemon.nature, STAT_SPE),
     pokemon.speBoost ?? 0,
   )
 

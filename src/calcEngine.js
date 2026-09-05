@@ -20,7 +20,7 @@ import {
   applyBoost,
   normalizzaMeteo,
   totalSPs,
-  STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
+  STAT_HP, STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD,
   ABILITA_ATE,
   tipiEffettivi,
   MOSSE_SENZA_PARENTAL_BOND,
@@ -39,6 +39,7 @@ import {
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
 import { preparaCoppia, abilitaEffettive } from './lib/preparazione.js'
+import { calcEffectiveSpe } from './utils/speedOrder.js'
 
 /**
  * Supreme Overlord: un moltiplicatore di potenza per ogni alleato caduto.
@@ -1412,11 +1413,46 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // Due cose da non perdere nella traduzione.
   //
-  // `stats` è la Velocità con gli STADI ma senza nient'altro: niente Choice
-  // Scarf, niente meteo, niente Tailwind, niente ×1.5 del paradosso. Il motore
-  // ha già `calcEffectiveSpe` in `utils/speedOrder.js`, che tutte quelle cose
-  // le sa — e usarla qui sarebbe «migliorare» il riferimento, cioè divergere
-  // da lui con le migliori intenzioni. Si copia la riga.
+  // ─── E `stats[SP]` NON E' LA VELOCITA' COI SOLI STADI ───────────────────
+  //
+  // Qui c'era scritto il contrario, e la riga era sbagliata. Leggendo il solo
+  // `damage_SV.js:147` sembra che `stats[SP]` siano gli stadi e basta, e la
+  // sessione che ha scritto Analytic ne ha tratto la conclusione ragionevole:
+  // usare `calcEffectiveSpe` sarebbe stato «migliorare» il riferimento.
+  //
+  // Ma quattro righe piu' su nello STESSO file (`damage_SV.js:43-53`),
+  // dentro `CALCULATE_ALL_MOVES_SV` — che `CONTRIBUTING.md` dichiara essere
+  // l'ingresso vero — c'e' questo, prima di ogni singolo calcolo:
+  //
+  //     p1.stats[SP] = getModifiedStat(p1.rawStats[SP], p1.boosts[SP]);
+  //     setHighestStat(p1, 0);
+  //     p1.stats[SP] = getFinalSpeed(p1, weather, tailwind, swamp, terrain);
+  //
+  // `getFinalSpeed` (`damage_MASTER.js:307`) e' Ferrolimo, Ferroblocco, Quick
+  // Feet, Slow Start, le abilita' meteo, Surge Surfer, Unburden, Ventoincoda,
+  // il paradosso e la paralisi. Quindi il riferimento la Velocita' effettiva
+  // la guarda eccome: la scrive dentro `stats[SP]` prima di leggerla.
+  //
+  // Usare `calcEffectiveSpe` non e' migliorare il riferimento. E' trascriverlo.
+  //
+  // ─── PERCHE' NESSUN TEST L'HA VISTO PER DUE SESSIONI ───────────────────
+  //
+  // Perche' l'harness sbagliava d'accordo con noi. `calcola` entra da
+  // `GET_DAMAGE_SV`, un livello sotto, e quelle tre righe non le eseguiva:
+  // l'oracolo rispondeva con la stessa Velocita' incompleta, e il confronto
+  // usciva verde. C'era perfino un caso «Analytic con lo Scarf ≡ NCP» che
+  // passava — confrontando due numeri sbagliati nello stesso modo.
+  //
+  // La correzione all'harness e' nello stesso commit di questa riga, ed e' il
+  // pezzo che rende la differenza rossa invece che invisibile. E' la stessa
+  // forma del difetto che confondeva un danno fisso con un colpo nullo.
+  //
+  // ─── COSA RESTA FUORI ──────────────────────────────────────────────────
+  //
+  // Il Ventoincoda: `calculateDamage` non riceve i due lati del campo, e
+  // l'harness lo passa `false` da tutt'e due le parti. Non e' una divergenza
+  // nascosta — e' una casella che nessuno dei due accende — ma e' un confine,
+  // e sta scritto invece che essere scoperto.
   //
   // Il confronto è `>` STRETTO, e l'`else` è «LAST». Quindi a parità esatta di
   // Velocità Analytic SI ACCENDE. È il caso che un `>=` scritto per simmetria
@@ -1427,14 +1463,22 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // dichiarazione in mezzo la spezzerebbe — l'ho scoperto spezzandola. Il
   // confronto si calcola qui sopra, il push sta al suo posto nella catena,
   // fra e.ii (Impeto Sabbia) ed e.iv (Tough Claws).
-  const speAttaccante = applyBoost(
-    calcStat(getBaseStat(atkPokemon, STAT_SPE), atkSPs[STAT_SPE], level, atkNature, STAT_SPE),
-    preparazione.attaccante.boosts.sp,
-  )
-  const speDifensore = applyBoost(
-    calcStat(getBaseStat(defPokemon, STAT_SPE), defSPs[STAT_SPE], level, defNature, STAT_SPE),
-    preparazione.difensore.boosts.sp,
-  )
+  //
+  // Gli stadi che si passano sono quelli DOPO la preparazione, non quelli
+  // dell'argomento: nel riferimento `getFinalSpeed` gira dopo `checkIntimidate`
+  // e compagnia, e legge `pokemon.boosts[SP]` gia' modificato. Stessa cosa per
+  // l'abilita', che e' quella VERA — dopo Trace e Neutralizing Gas — perche'
+  // `checkTrace` e `checkNeutralGas` sono le prime tre righe dell'ingresso
+  // alto, prima di ogni assegnamento a `stats`.
+  const velocitaDi = (specie, sps, natura, abilita, strumento, stato, boostSp) =>
+    calcEffectiveSpe(
+      { key: specie, sps, nature: natura, speBoost: boostSp, item: strumento, ability: abilita, status: stato },
+      meteo, false, field.terrain, level,
+    )
+  const speAttaccante = velocitaDi(
+    atkPokemon, atkSPs, atkNature, atkAbilVera, atkItem, atkStatus, preparazione.attaccante.boosts.sp)
+  const speDifensore = velocitaDi(
+    defPokemon, defSPs, defNature, defAbilVera, defItem, defStatus, preparazione.difensore.boosts.sp)
   const muovePerPrimo = speAttaccante > speDifensore
 
   // e.i — Sheer Force: ×1.3 sulle mosse con un effetto secondario.

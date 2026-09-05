@@ -16,6 +16,15 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Analytic leggeva la Velocità sbagliata
+- **Analytic** (×1,3 quando attacchi per secondo) decideva l'ordine di turno
+  guardando una Velocità senza Ferrolimo, senza Ferroblocco, senza paralisi e
+  senza le abilità meteo. Un Watchog con Ferrolimo è più veloce di un
+  Charizard, ma l'app gli dava lo stesso il ×1,3: **27% di danno in più del
+  dovuto**, e nessun avviso
+- Adesso guarda la Velocità effettiva, che è quella che guarda anche il
+  riferimento
+
 ### Il badge «non calcolata» adesso c'è anche sulle mosse
 - Le **22 mosse** che il riferimento calcola e noi no mostrano il segnalino
   ambra accanto alla potenza — Counter, Super Fang, Gyro Ball, Return e le
@@ -44,6 +53,14 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 - Nessun numero calcolato cambia: la potatura tocca il bundle, non il motore
 
 ### Sotto il cofano
+- Il confronto col riferimento verifica **519 configurazioni** della formula e
+  **35** dello stato di partenza, contro 509 e 27. Otto di quelle nuove coprono
+  una direzione mai verificata prima: l'abilità che prepara il campo addosso a
+  **chi attacca**, non a chi subisce
+- `npm run ncp:gen` è tornato rigenerabile. Produceva 11 casi marcati come
+  difetti nostri che difetti non erano — confrontati col punto d'ingresso
+  sbagliato — e il manuale diceva di non rigenerarlo. Adesso quel controllo lo
+  fa da sé, e nessuno degli 11 era un errore di calcolo
 - `npm run bundle:check` pesa ciò che il browser scarica davvero e fallisce
   sopra i 210 kB. Era l'unico criterio del progetto senza una rete sotto, ed
   era stato sforato senza che nessuno se ne accorgesse

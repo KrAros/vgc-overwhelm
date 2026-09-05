@@ -7,8 +7,8 @@ sistema SP.
 > Italian; the code comments, docs and commit messages are Italian.*
 
 Il motore è verificato contro il [NCP VGC Damage Calculator][ncp], eseguito
-davvero come oracolo e non citato a memoria: 509 configurazioni della formula e
-27 dello stato di partenza producono gli stessi numeri del riferimento.
+davvero come oracolo e non citato a memoria: 519 configurazioni della formula e
+35 dello stato di partenza producono gli stessi numeri del riferimento.
 
 [ncp]: https://github.com/nerd-of-now/NCP-VGC-Damage-Calculator
 
@@ -85,8 +85,8 @@ Numeri letti dall'esecuzione, non dichiarati a memoria:
 | **1876 test** su 30 file<br><small>1875 verdi · 1 saltato</small> | — | — |
 | **586 casi** di caratterizzazione formula | che il motore non cambi numeri per sbaglio | `calculateDamage` |
 | **180 celle** di caratterizzazione matrice<br><small>5 scenari</small> | la logica di `DamageTable` | il componente |
-| **509 golden** dal riferimento | la formula contro NCP | `GET_DAMAGE_SV` |
-| **27 golden** di preparazione | Intimidate, abilità paradosso, Spada e Scudo, Download | `CALCULATE_ALL_MOVES_SV` |
+| **519 golden** dal riferimento | la formula contro NCP | `GET_DAMAGE_SV` |
+| **35 golden** di preparazione | Intimidate dai due lati, abilità paradosso, Spada e Scudo, Download | `CALCULATE_ALL_MOVES_SV` |
 
 **Il confine dell'oracolo è dichiarato di proposito.** «Verificato contro il
 riferimento» è vero fino a dove l'harness entra, e i due ingressi coprono cose

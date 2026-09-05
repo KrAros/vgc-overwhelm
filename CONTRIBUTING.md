@@ -182,22 +182,30 @@ guardando il diff caso per caso, mai per zittire un test rosso. Le versioni
 `*:report` (`ncp:report`, `matrice:report`, `gap:report`) non scrivono niente e
 sono quelle da usare per guardare.
 
-> **Nota su `ncp:gen`, agosto 2026.** Oggi non è idempotente: rigenerato sullo
-> snapshot attuale produce 11 casi marcati `divergente` che non sono bug del
-> motore, ma casi di preparazione (Intimidate, Booster Energy, Download)
-> confrontati all'ingresso basso, che per costruzione non applica lo stato di
-> partenza. La fixture committata — 509 concordi, zero divergenti — è quella
-> giusta. Non rigenerarla senza aver capito questo punto.
+> **`ncp:gen` è idempotente, da settembre 2026.** Prima non lo era: rigenerato
+> produceva 11 casi marcati `divergente` che non erano difetti del motore, ma
+> casi di preparazione (Intimidate, Booster Energy, Download) confrontati
+> all'ingresso basso, che per costruzione non applica lo stato di partenza. La
+> nota qui diceva «non rigenerarla senza aver capito questo punto», e la
+> fixture è rimasta ferma un mese.
+>
+> Adesso il generatore quel punto lo applica da sé: chiede a tutt'e due gli
+> ingressi e, quando rispondono diverso, esclude il caso con un motivo scritto
+> — «lo strato di preparazione cambia il risultato» — invece di registrarlo
+> come un difetto nostro. Non è una lista di nomi da tenere allineata: è una
+> misura, quindi copre anche l'abilità di preparazione che qualcuno aggiungerà
+> domani.
 
 **I due oracoli entrano da punti diversi**, e la differenza è sostanziale:
 
 | fixture | ingresso NCP | applica lo stato di partenza |
 |---|---|---|
-| `ncp-golden.json` (509) | `GET_DAMAGE_SV` | no |
-| `ncp-preparazione.json` (27) | `CALCULATE_ALL_MOVES_SV` | sì |
+| `ncp-golden.json` (519) | `GET_DAMAGE_SV` | no |
+| `ncp-preparazione.json` (35) | `CALCULATE_ALL_MOVES_SV` | sì |
 
 Un caso con Intimidate confrontato col primo diverge **per costruzione**. Non è
-un bug: è l'ingresso sbagliato.
+un bug: è l'ingresso sbagliato — e adesso è il generatore a saperlo, non solo
+questa riga.
 
 ---
 

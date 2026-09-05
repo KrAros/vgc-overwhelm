@@ -134,6 +134,24 @@ export function caricaNCP() {
     CALCULATE_ALL_MOVES_SV: leggi('CALCULATE_ALL_MOVES_SV'),
     /** Applica il moltiplicatore di boost (+1, -2…) a una statistica grezza. */
     getModifiedStat: leggi('getModifiedStat'),
+    /**
+     * La Velocità FINALE (`damage_MASTER.js:307`): stadi, Ferrolimo,
+     * Ferroblocco, Quick Feet, Slow Start, le abilità meteo, Surge Surfer,
+     * Unburden, Ventoincoda, il paradosso e la paralisi.
+     *
+     * Serve perché `CALCULATE_ALL_MOVES_SV` la applica a `stats[SP]` prima di
+     * ogni calcolo (`damage_SV.js:45` e `:53`), e da lì la leggono l'ordine di
+     * turno di Analytic e la potenza di Gyro Ball ed Electro Ball. Chi entra
+     * da `GET_DAMAGE_SV` deve applicarla da sé, o il motore legge una
+     * Velocità che nell'applicazione vera non esiste.
+     */
+    getFinalSpeed: leggi('getFinalSpeed'),
+    /**
+     * Decide qual è la statistica più alta, che è ciò su cui il paradosso si
+     * accende (`damage_MASTER.js:364`). Va chiamata FRA i due assegnamenti di
+     * `stats[SP]`: `getFinalSpeed` legge `highestStat` per il suo ×1,5.
+     */
+    setHighestStat: leggi('setHighestStat'),
     /** Il costruttore del lato campo, dal prelude. */
     Side: leggi('Side'),
     /** Il metodo `hasType` che ogni Pokémon NCP deve avere addosso. */

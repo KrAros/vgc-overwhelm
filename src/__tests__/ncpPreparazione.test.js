@@ -36,11 +36,16 @@
  * cieco lasciato dentro conterebbe come «concorde» e gonfierebbe il punteggio.
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
+import fs from 'node:fs'
+import path from 'node:path'
 import { calculateDamage } from '../calcEngine.js'
 import fixture from './fixtures/ncp-preparazione.json' with { type: 'json' }
 
 const { meta, cases, esclusi } = fixture
+
+const RADICE = path.resolve(import.meta.dirname, '..', '..')
+const vendorPresente = fs.existsSync(path.join(RADICE, 'vendor', 'ncp', 'damage_SV.js'))
 
 describe('calcEngine — strato di preparazione di NCP', () => {
   it('la fixture è stata generata dall\'ingresso alto', () => {
@@ -103,6 +108,59 @@ describe('calcEngine — strato di preparazione di NCP', () => {
       expect(risultato).not.toBeNull()
       expect(risultato.rolls).toEqual(caso.rolls)
       if (caso.defHP !== undefined) expect(risultato.defHP).toBe(caso.defHP)
+    })
+  }
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// E CHI PRESIDIA L'ORACOLO?
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── IL BUCO CHE QUESTO BLOCCO CHIUDE ──────────────────────────────────────
+ *
+ * Tutto il file qui sopra legge la FIXTURE, che è una fotografia. Se domani
+ * qualcuno rompe l'harness, la fixture resta com'è e ogni test resta verde:
+ * la rottura si scopre solo quando qualcuno rigenera, cioè per caso.
+ *
+ * Non è ipotetico. È successo tre volte, e tutt'e tre le volte l'harness
+ * rispondeva a una domanda diversa da quella fatta:
+ *
+ *   · un danno fisso scambiato per un colpo nullo — «Seismic Toss?» «zero»
+ *   · la Velocità senza Ferrolimo né paralisi, che teneva accesa Analytic
+ *   · `intimidateActive` tradotto per il difensore e non per l'attaccante,
+ *     che faceva risultare divergenti due casi in cui avevamo ragione noi
+ *
+ * Quindi qui l'oracolo si RIESEGUE, dal vivo, sui casi del gruppo P5 — quelli
+ * che verificano la preparazione dalla parte di chi attacca, cioè la
+ * direzione che l'harness non sapeva porre. Se la traduzione torna indietro,
+ * questi diventano rossi subito invece che alla prossima rigenerazione.
+ */
+describe('l\'harness dice ancora quello che la fixture ha fotografato', () => {
+  let harness
+
+  beforeAll(async () => {
+    if (!vendorPresente) return
+    harness = (await import('../../scripts/ncp/harness.mjs')).creaHarness()
+  })
+
+  it.runIf(!vendorPresente)('vendor/ncp assente — non verificabile', () => {
+    expect(vendorPresente).toBe(false)
+  })
+
+  const casiP5 = cases.filter(c => c.id.startsWith('P5-'))
+
+  it('il gruppo P5 esiste, se no il blocco non prova niente', () => {
+    expect(casiP5.length).toBeGreaterThan(0)
+  })
+
+  for (const caso of casiP5) {
+    it.runIf(vendorPresente)(`${caso.id} — l'oracolo rieseguito dà gli stessi roll`, () => {
+      const rif = harness.calcolaConPreparazione(caso.input)
+      expect(rif.motivo ?? null).toBeNull()
+      expect(rif.ok).toBe(true)
+      expect(rif.rolls, `${caso.id}: l'harness è cambiato, rigenerare con \`npm run ncp:prep\``)
+        .toEqual(caso.rolls)
     })
   }
 })
