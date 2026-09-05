@@ -67,7 +67,7 @@ describe('i riquadri delle abilità', () => {
     ).toBe(true)
   })
 
-  it('tutti e tredici i rami usano la costante', () => {
+  it('tutti e quattordici i rami usano la costante', () => {
     // Il conteggio è esplicito perché un ramo NUOVO che se la dimentica non
     // farebbe fallire il test sopra: non ricopierebbe la firma, semplicemente
     // non avrebbe nessun minimo.
@@ -88,13 +88,20 @@ describe('i riquadri delle abilità', () => {
     // Libero: un ramo solo, perché un Pokémon ha un'abilità sola e le cinque
     // non possono accendersi insieme.
     //
-    // Tutt'e quattro le volte il numero è stato alzato DOPO aver visto il test
+    // Da tredici a quattordici con le cinque a vita bassa — Erbaiuto,
+    // Aiutofuoco, Torrente, Insettoshock, Sconfittite. Sono USCITE dal ramo
+    // dell'interruttore, dove stavano insieme a Protean e Stakeout, per
+    // andare in un ramo proprio che legge i punti salute. Il conto sale di
+    // uno anche se il numero di abilità coperte non cambia: quello che si
+    // conta qui sono i rami, non le abilità.
+    //
+    // Tutt'e cinque le volte il numero è stato alzato DOPO aver visto il test
     // rosso, che è il modo in cui questo presidio deve funzionare.
     expect(
       conCostante.length,
-      'i rami che rendono un riquadro non sono tredici: se ne hai aggiunto uno, '
-      + 'deve usare RIQUADRO e questo numero va alzato di proposito',
-    ).toBe(13)
+      'i rami che rendono un riquadro non sono quattordici: se ne hai aggiunto '
+      + 'uno, deve usare RIQUADRO e questo numero va alzato di proposito',
+    ).toBe(14)
   })
 
   it('la costante porta un minimo per entrambe le larghezze', () => {

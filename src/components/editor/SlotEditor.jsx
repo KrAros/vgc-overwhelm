@@ -18,11 +18,13 @@ import { MAX_SP_TOTAL, MAX_SP_PER_STAT } from '../../lib/rules.js'
 import PresetSelect, { CustomSetModal } from './PresetSelect.jsx'
 import StatRow from './StatRow.jsx'
 import StatusSelect from './StatusSelect.jsx'
+import BarraPS from './BarraPS.jsx'
 import { PokemonSearch, MoveSearch, ItemSearch, AbilitySelect } from './SearchSelects.jsx'
 import { useTranslation } from 'react-i18next'
 import AbilityFlags from './AbilityFlags.jsx'
 import BadgeNonCalcolata from './BadgeNonCalcolata.jsx'
 import { strumentoNonCalcolato } from '../../lib/gap.js'
+import { psMassimi, psCorrenti } from '../../lib/psSlot.js'
 import { teamToShowdown } from '../../utils/showdownIO.js'
 import { ImportModal, DuplicateModal } from './Modals.jsx'
 
@@ -35,6 +37,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const setPokemon     = useCalcStore(s => s.setPokemon)
   const setNature      = useCalcStore(s => s.setNature)
   const setStatus      = useCalcStore(s => s.setStatus)
+  const setPS          = useCalcStore(s => s.setPS)
   const setSPs         = useCalcStore(s => s.setSPs)
   const setMove        = useCalcStore(s => s.setMove)
   const setBoost       = useCalcStore(s => s.setBoost)
@@ -59,6 +62,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
   const item         = pokemon?.item || null
   const ability      = pokemon?.ability || null
   const status       = pokemon?.status || null
+  // I punti salute. `psCorrenti` traduce anche le vecchie levette, così una
+  // squadra salvata prima che questo campo esistesse si apre mostrando lo
+  // stato che descriveva invece di mostrare vita piena e calcolarne un'altra.
+  const psMax        = psMassimi(pokemon, level)
+  const ps           = psCorrenti(pokemon, psMax)
   const abilityFlags     = pokemon?.abilityFlags || {}
   const lastRespectsKOs  = pokemon?.lastRespectsKOs ?? 0
   const hasLastRespects  = pokemon?.moves?.some(m => m === 'last respects')
@@ -372,7 +380,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                una spaziatura in piu' rendeva questa riga piu' staccata di
                tutte le altre. Lo spazio dalla riga di abilita'/natura/strumento
                e' adesso lo stesso che c'e' fra quella e la ricerca sopra. */
-            <div className="flex gap-2 w-full">
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
+              {/* Prima i punti salute, poi lo stato: e' la scelta di Simone, e
+                  regge da se' — la barra e' il controllo che si guarda per
+                  primo quando si legge «quanto e' messo male», e lo stato e'
+                  una precisazione. */}
+              <div className="w-full sm:w-1/2">
+                <BarraPS ps={ps} psMax={psMax} onChange={v => setPS(team, index, v)} />
+              </div>
               <div className="w-full sm:w-1/2">
                 <StatusSelect value={status} onChange={v => setStatus(team, index, v)} />
               </div>
@@ -382,6 +397,10 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
             <AbilityFlags
               ability={ability}
               moves={pokemon?.moves}
+              /* Multiscale e le cinque a vita bassa non hanno piu' una levetta
+                 propria: il loro riquadro legge questo numero. */
+              ps={ps}
+              psMax={psMax}
               flags={abilityFlags}
               opponentHasIntimidateActive={opponentHasIntimidateActive}
               onFlagChange={(flag, val) => setAbilityFlag(team, index, flag, val)}

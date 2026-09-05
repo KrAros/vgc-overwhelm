@@ -28,8 +28,13 @@
  * ─── LARGHEZZA A METÀ ──────────────────────────────────────────────────────
  *
  * Il menù non ha bisogno di tutta la riga: l'etichetta più lunga è
- * «Gravemente avvelenato». L'altra metà resta libera, ed è lo spazio dove
- * andrà il tipo Tera quando arriverà.
+ * «Gravemente avvelenato».
+ *
+ * L'altra metà è tenuta dalla barra dei punti salute (`BarraPS.jsx`), che sta
+ * PRIMA — scelta di Simone. Fino a ieri qui c'era scritto che quello spazio
+ * aspettava il tipo Tera: era una lapide nel layout, perché in Champions il
+ * tipo Tera non esiste. Mezza riga tenuta libera per una cosa che non arriva
+ * è mezza riga persa, e su telefono era la metà buona.
  */
 
 import { useTranslation } from 'react-i18next'

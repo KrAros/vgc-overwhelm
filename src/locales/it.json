@@ -220,7 +220,9 @@
     "clear_pokemon": "Svuota il Pokémon",
     "clear_item": "Svuota lo strumento",
     "clear_move": "Svuota la mossa",
-    "status": "Stato del Pokémon"
+    "status": "Stato del Pokémon",
+    "ps_value": "Punti salute — valore esatto",
+    "ps_slider": "Punti salute — cursore"
   },
   "natures": {
     "adamant": "Decisa",

@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T17:20:12.711Z",
+    "generatedAt": "2026-09-05T20:04:57.779Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
       "src/utils"
     ],
-    "fileEsaminati": 21,
+    "fileEsaminati": 22,
     "abilitaNelMotore": 52,
     "strumentiNelMotore": 28,
     "classificate": 9,

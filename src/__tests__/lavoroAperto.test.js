@@ -195,19 +195,22 @@ describe('B — le decisioni non sono ancora state prese', () => {
     expect(Object.keys(ABILITY_EFFECTS['sturdy']).sort()).toEqual(['showInSmogon', 'sturdy'])
   })
 
-  it('i punti salute non sono nel modello', () => {
-    // Tre prove che l'assunzione «vita piena» è ancora ovunque: nessuno slot
-    // porta i PS correnti, Eruption usa la potenza piena, e una mossa KO
-    // toglie tutti i PS massimi.
-    // Solo il CODICE: `curHP` compare nei commenti del punto f, dove si
-    // spiega che il riferimento legge i PS correnti e noi assumiamo la vita
-    // piena. La prima stesura di questa riga guardava tutto il file ed è
-    // diventata rossa su quel commento — cercava la parola, non la cosa.
-    const motore = fs.readFileSync(path.join(RADICE, 'src/calcEngine.js'), 'utf8')
-      .split('\n').filter(r => !/^\s*(\/\/|\*|\/\*)/.test(r)).join('\n')
-    expect(/\bcurHP\b/.test(motore), 'i PS correnti sono entrati nel motore').toBe(false)
-    expect(movesData['eruption'].power).toBe(150)
-  })
+  // ─── I PUNTI SALUTE NON SONO PIÙ QUI, ED È IL PUNTO ───────────────────
+  //
+  // Qui c'era `i punti salute non sono nel modello`. Le sue tre prove erano
+  // ancora VERDI il giorno in cui i punti salute sono arrivati: cercava
+  // `curHP` nel motore — e il motore li chiama `psAtk` e `psDif` — e leggeva
+  // `power: 150` da `moves.json`, che è il dato di Eruption e non cambia
+  // quando la potenza vera si calcola dai punti salute.
+  //
+  // Cioè: era un presidio che sorvegliava la PAROLA e non la cosa, ed è
+  // esattamente il difetto contro cui l'intestazione di questo file mette in
+  // guardia. Non è stato tolto perché era rosso: è stato tolto perché era
+  // verde a torto, e le due sezioni che sorvegliava sono chiuse.
+  //
+  // Chi presidia adesso quel fatto: `puntiSaluteInterfaccia.test.jsx` tira la
+  // catena dal numero nello slot fino al danno, e `levette.test.js` sorveglia
+  // che le cinque a vita bassa NON tornino a leggere l'interruttore.
 })
 
 describe('C — il dato che manca, manca ancora', () => {

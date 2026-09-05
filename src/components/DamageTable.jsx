@@ -9,6 +9,7 @@ import { formatPokeName, nomeCompleto } from '../utils/nomiPokemon'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { costruisciMatrice } from '../lib/matrice'
 import { verdettoKO } from '../lib/damage'
+import { psMassimi, psCorrenti, colorePS } from '../lib/psSlot'
 import useFieldState from '../hooks/useFieldState'
 import useBordiScorrimento from '../hooks/useBordiScorrimento'
 
@@ -89,6 +90,33 @@ function immuneLabel(result) {
 function etichettaKO(t, ko) {
   if (ko.stato === 'certo') return t('ui.ko_certo')
   return t('ui.ko_possibile', { pct: Math.round(ko.probabilita * 1000) / 10 })
+}
+
+// ─── Il segno dei punti salute nelle intestazioni ───────────────────────────
+//
+// Un Pokémon messo al 50% e poi dimenticato cambia il significato di tutta la
+// sua riga e di tutta la sua colonna, in silenzio: i suoi Eruption calano, i
+// Multiscale si spengono, i Crush Grip che subisce fanno meno. La barra sta
+// nell'editor, che mostra UN Pokémon alla volta — quindi da qui non si vede.
+//
+// Questo segno c'è solo quando c'è qualcosa da dire: a vita piena non compare.
+// È la stessa regola della percentuale nella barra.
+export function SegnoPS({ slot }) {
+  const psMax = psMassimi(slot)
+  if (!psMax) return null
+  const ps = psCorrenti(slot, psMax)
+  if (ps >= psMax) return null
+
+  const pct = Math.round((ps / psMax) * 100)
+  return (
+    <span
+      className="absolute top-0 left-0 px-0.5 rounded text-[9px] font-bold leading-tight bg-gray-900/80"
+      style={{ color: colorePS(ps, psMax) }}
+      title={`${ps} / ${psMax}`}
+    >
+      {pct}%
+    </span>
+  )
 }
 
 const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelect, ri, ci, dirPrima, dirSeconda, showKoOnly, isOnAxis, hasSelection, selDir }) {
@@ -460,6 +488,7 @@ export default function DamageTable({ onCellSelect }) {
                             onError={e => { e.target.style.display = 'none' }}
                           />
                         )}
+                        <SegnoPS slot={p} />
                       </div>
                       <div title={nomeCompleto(p.key)} className="text-gray-300 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-tight line-clamp-2 sm:line-clamp-none sm:truncate max-w-16 sm:max-w-none mx-auto">{formatPokeName(p.key)}</div>
                     </>
@@ -512,6 +541,7 @@ export default function DamageTable({ onCellSelect }) {
                             onError={e => { e.target.style.display = 'none' }}
                           />
                         )}
+                        <SegnoPS slot={row} />
                       </div>
                       <div title={nomeCompleto(row.key)} className="text-gray-300 text-[10px] sm:text-xs mt-0.5 sm:mt-1 leading-tight line-clamp-2 sm:line-clamp-none sm:truncate max-w-14 sm:max-w-none mx-auto">{formatPokeName(row.key)}</div>
                     </>

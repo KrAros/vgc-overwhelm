@@ -108,11 +108,15 @@ describe('battleState — costruzione di attaccante e difensore', () => {
     // a Body Press — quindi lo dichiariamo qui, esplicitamente, invece di
     // riscrivere la copia storica.
     //
-    // Stessa cosa per `colpiScelti`, aggiunto con le mosse multi-colpo: si
-    // dichiara qui, e l'elenco che cresce sotto gli occhi è il punto — dice
-    // quanto la costruzione si è allontanata dalla fotografia del 2024.
+    // Stessa cosa per `colpiScelti`, aggiunto con le mosse multi-colpo, e per
+    // `atkPS`, aggiunto con la barra dei punti salute: si dichiarano qui, e
+    // l'elenco che cresce sotto gli occhi è il punto — dice quanto la
+    // costruzione si è allontanata dalla fotografia del 2024.
     expect(buildAttackerInput(houndstone, LEVEL))
-      .toEqual({ ...attaccanteTabellaStorico(houndstone, 50), atkDefBoost: 0, colpiScelti: null })
+      .toEqual({
+        ...attaccanteTabellaStorico(houndstone, 50),
+        atkDefBoost: 0, colpiScelti: null, atkPS: null,
+      })
   })
 
   it('l\'attaccante porta lastRespectsKOs — è il campo che il pannello perdeva', () => {

@@ -80,6 +80,10 @@ export function buildAttackerInput(slot, level = LEVEL) {
     // Facade. Sta qui e non fra i flag perche' non e' un'abilita': e' una
     // condizione del Pokemon, come gli stadi.
     atkStatus: s.status || null,
+    // I punti salute correnti. `null` = pieni, e allora il motore ricava il
+    // numero dalle levette (`psDaLevetta`) per le squadre salvate prima che
+    // questo campo esistesse.
+    atkPS: s.ps ?? null,
     lastRespectsKOs: s.lastRespectsKOs || 0,
     // Stessa ragione di `lastRespectsKOs`: sta nella costruzione e non fra i
     // parametri opzionali, così nessun chiamante può ometterlo per distrazione.
@@ -114,6 +118,9 @@ export function buildDefenderInput(slot) {
     // Lo leggono Hex, Venoshock, Smelling Salts, Wake-Up Slap, Dream Eater e
     // Marvel Scale.
     defStatus: s.status || null,
+    // Stessa cosa dal lato di chi subisce: lo leggono Multiscale, Tera Shell,
+    // Crush Grip, Wring Out, Hard Press e le mosse che tolgono meta' dei PS.
+    defPS: s.ps ?? null,
   }
 }
 

@@ -76,6 +76,10 @@ function teamCasuale(rnd) {
       // come gli altri — un `if` sbagliato nella codifica lo trasformerebbe in
       // un numero.
       colpiScelti: rnd() < 0.4 ? null : 1 + Math.floor(rnd() * 10),
+      // Stessa forma di `colpiScelti`, e per la stessa ragione: `null` vuol
+      // dire «a vita piena», e se la codifica lo trasformasse in un numero il
+      // link condividerebbe un Pokemon ferito che non era ferito.
+      ps: rnd() < 0.5 ? null : 1 + Math.floor(rnd() * 300),
     }
   })
 }
