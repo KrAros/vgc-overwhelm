@@ -101,6 +101,40 @@ export async function generaGolden() {
       continue
     }
 
+    // ── Cancello 2-bis: e' l'INGRESSO GIUSTO per questo caso? ─────────────
+    //
+    // `CONTRIBUTING.md` lo dichiara da tempo: «un caso con Intimidate
+    // confrontato con `GET_DAMAGE_SV` diverge PER COSTRUZIONE. Non e' un bug:
+    // e' l'ingresso sbagliato.» Questo generatore pero' non lo applicava, e
+    // quei casi finivano nel fixture marcati `divergente` — cioe' registrati
+    // come difetti NOSTRI, con un `it.fails` che afferma che sbagliamo.
+    //
+    // Undici casi del blocco B12 stavano per entrare cosi': Intrepid Sword,
+    // Dauntless Shield, Download, le abilita' paradosso, l'Adrenaline Orb,
+    // Mirror Armor. Nessuno dei undici era un difetto nostro — il nostro
+    // motore coincide al roll con l'ingresso alto.
+    //
+    // Il cancello NON e' una lista di nomi. Sarebbe una lista da tenere
+    // allineata a mano, e la prima abilita' di preparazione aggiunta dopo la
+    // dimenticherebbe. Si MISURA: si chiedono tutt'e due gli ingressi, e se
+    // rispondono diverso allora lo strato di preparazione conta per questo
+    // caso — quindi l'ingresso basso non lo esprime, e l'oracolo giusto e'
+    // `ncp-preparazione.json`.
+    //
+    // Se l'ingresso alto non sa rispondere, non si esclude niente: si resta
+    // sul basso, che e' il comportamento di prima.
+    const alto = harness.calcolaConPreparazione(caso.input)
+    if (alto.ok && JSON.stringify(alto.rolls) !== JSON.stringify(ncp.rolls)) {
+      esclusi.push({
+        id: caso.id,
+        categoria: 'ingresso sbagliato',
+        motivo: 'lo strato di preparazione cambia il risultato: GET_DAMAGE_SV non esprime '
+              + 'questa configurazione. L\'oracolo giusto e\' ncp-preparazione.json '
+              + `(basso ${ncp.rolls[0]}-${ncp.rolls.at(-1)}, alto ${alto.rolls[0]}-${alto.rolls.at(-1)})`,
+      })
+      continue
+    }
+
     // ── Il nostro motore, solo per etichettare ────────────────────────────
     const nostro = calculateDamage({ ...caso.input, debug: false })
     const nostriRolls = nostro && Array.isArray(nostro.rolls) ? nostro.rolls : []

@@ -225,11 +225,87 @@ const gruppoDownload = [
   }),
 ]
 
+// ─── Gruppo 5 · La preparazione dalla parte di CHI ATTACCA ─────────────────
+//
+// ─── PERCHE' QUESTO GRUPPO NASCE ADESSO ────────────────────────────────────
+//
+// Tutti i casi qui sopra hanno il portatore dell'abilita' dal lato del
+// DIFENSORE, e non per scelta: l'harness sapeva porre solo quella domanda.
+// `checkIntimidate(source, target)` parte se `source.abilityOn` e' vero, e il
+// costruttore del difensore traduceva `intimidateActive` mentre quello
+// dell'attaccante no. Chiedendo «l'attaccante ha Intimidate» il riferimento
+// rispondeva con Intimidate spenta — un numero plausibile per un'altra
+// domanda.
+//
+// Corretto quello, la direzione si e' aperta, e questi quattro casi sono la
+// prima volta che viene verificata.
+//
+// ─── COME SI VEDE UN'ABILITA' DI CHI ATTACCA ───────────────────────────────
+//
+// Intimidate abbassa l'Attacco del BERSAGLIO, che sul danno di chi attacca non
+// si vede. Servono quindi configurazioni in cui il calo torna indietro o
+// consuma qualcosa:
+//
+//   Mirror Armor      rimanda il calo al mittente: l'Attacco di chi attacca
+//                     scende di uno, e una mossa fisica lo mostra.
+//   Adrenaline Orb    Intimidate lo fa scattare e lo CONSUMA
+//                     (`damage_MASTER.js:584`: `target.item = ''`). Knock Off
+//                     perde cosi' il suo x1,5 sull'oggetto da rubare — il
+//                     danno scende, e non perche' e' cambiata una statistica.
+//   Booster Energy    stessa forma, ma a consumarlo e' il paradosso.
+//
+// Ogni caso ha il suo controllo con l'abilita' NEUTRA: senza, un motore che
+// non facesse niente passerebbe.
+
+const gruppoAttaccante = [
+  caso('P5-intimidate-attaccante-mirror-armor', {
+    atk: 'incineroar', atkAb: 'intimidate', atkFlags: { intimidateActive: true },
+    mossa: 'knock off', dif: 'garchomp', difAb: 'mirror armor',
+    nota: 'Intimidate di chi attacca contro Mirror Armor: il calo torna indietro',
+  }),
+  caso('P5-intimidate-attaccante-mirror-armor-controllo', {
+    atk: 'incineroar', atkAb: NEUTRA,
+    mossa: 'knock off', dif: 'garchomp', difAb: 'mirror armor',
+    nota: 'controllo — senza Intimidate non c\u2019e\u0300 niente da rimandare',
+  }),
+  caso('P5-intimidate-attaccante-adrenaline-orb', {
+    atk: 'incineroar', atkAb: 'intimidate', atkFlags: { intimidateActive: true },
+    mossa: 'knock off', dif: 'garchomp', difItem: 'adrenaline orb',
+    nota: 'Intimidate consuma l\u2019Adrenaline Orb, e Knock Off perde il x1,5',
+  }),
+  caso('P5-intimidate-attaccante-adrenaline-orb-controllo', {
+    atk: 'incineroar', atkAb: NEUTRA,
+    mossa: 'knock off', dif: 'garchomp', difItem: 'adrenaline orb',
+    nota: 'controllo — l\u2019oggetto resta addosso e Knock Off tiene il x1,5',
+  }),
+  caso('P5-booster-energy-consumato', {
+    atk: 'incineroar', atkAb: NEUTRA,
+    mossa: 'knock off', dif: 'roaring-moon', difAb: 'protosynthesis', difItem: 'booster energy',
+    nota: 'il paradosso consuma il Booster Energy, e Knock Off perde il x1,5',
+  }),
+  caso('P5-booster-energy-controllo', {
+    atk: 'incineroar', atkAb: NEUTRA,
+    mossa: 'knock off', dif: 'roaring-moon', difAb: NEUTRA, difItem: 'booster energy',
+    nota: 'controllo — senza paradosso l\u2019oggetto non si consuma',
+  }),
+  caso('P5-quark-drive-difensore', {
+    atk: 'garchomp', atkAb: NEUTRA, mossa: 'earthquake',
+    dif: 'iron-treads', difAb: 'quark drive', field: { terrain: 'electric' },
+    nota: 'Quark Drive sul DIFENSORE: alza la statistica piu\u0300 alta di chi subisce',
+  }),
+  caso('P5-quark-drive-difensore-controllo', {
+    atk: 'garchomp', atkAb: NEUTRA, mossa: 'earthquake',
+    dif: 'iron-treads', difAb: NEUTRA, field: { terrain: 'electric' },
+    nota: 'controllo — stesso campo, abilita\u0300 neutra',
+  }),
+]
+
 export const CASI_PREPARAZIONE = [
   ...gruppoIntimidate,
   ...gruppoIngresso,
   ...gruppoParadosso,
   ...gruppoDownload,
+  ...gruppoAttaccante,
 ]
 
 /**
@@ -249,4 +325,8 @@ export const COPPIE = [
   ['P3-quark-drive-booster', 'P3-quark-drive-spento'],
   ['P3-quark-drive-campo', 'P3-quark-drive-spento'],
   ['P4-download-fisico', 'P4-download-controllo'],
+  ['P5-intimidate-attaccante-mirror-armor', 'P5-intimidate-attaccante-mirror-armor-controllo'],
+  ['P5-intimidate-attaccante-adrenaline-orb', 'P5-intimidate-attaccante-adrenaline-orb-controllo'],
+  ['P5-booster-energy-consumato', 'P5-booster-energy-controllo'],
+  ['P5-quark-drive-difensore', 'P5-quark-drive-difensore-controllo'],
 ]

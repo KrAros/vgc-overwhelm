@@ -368,8 +368,15 @@ export function creaHarness() {
         //
         // Era `flashFireActive` e basta: qualunque cosa il motore facesse con
         // le altre cinque, il riferimento le vedeva sempre spente.
+        // `intimidateActive` c'e' anche qui e non solo nell'altro percorso: il
+        // flag descrive lo stesso fatto — «l'abilita' di chi attacca e'
+        // accesa» — e due costruttori che lo traducono in modo diverso sono
+        // due modi di rispondere alla stessa domanda. In questo percorso non
+        // cambia nessun numero (`checkIntimidate` sta nell'ingresso alto), ma
+        // il giorno che lo cambiasse, cambierebbe da solo.
         abilitaAttiva: a.atkAbilityFlags?.flashFireActive
-          || a.atkAbilityFlags?.interruttore,
+          || a.atkAbilityFlags?.interruttore
+          || a.atkAbilityFlags?.intimidateActive,
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
         stato: a.atkStatus,
@@ -672,8 +679,22 @@ export function creaHarness() {
       extra: {
         crit: field.crit,
         lastRespectsKOs: a.lastRespectsKOs || 0,
+        // ─── `intimidateActive` MANCAVA, E IL DIFENSORE CE L'AVEVA ────────
+        //
+        // `checkIntimidate(source, target)` parte solo se `source.abilityOn`
+        // e' vero (`damage_MASTER.js:558`). Il costruttore del DIFENSORE
+        // traduceva `intimidateActive`, questo no: quindi l'harness sapeva
+        // porre «il difensore ha Intimidate» e non «ce l'ha chi attacca».
+        //
+        // Nel secondo caso il riferimento rispondeva con Intimidate SPENTA —
+        // un numero plausibile per una domanda diversa da quella fatta. Due
+        // casi golden risultavano divergenti per questo, e nessuno dei due era
+        // un difetto nostro: sono Mirror Armor che rimanda il calo
+        // sull'attaccante e l'Adrenaline Orb che si consuma, e il nostro
+        // motore li faceva gia' tutt'e due giusti.
         abilitaAttiva: a.atkAbilityFlags?.flashFireActive
-          || a.atkAbilityFlags?.interruttore || a.atkAbilityFlags?.abilityOn,
+          || a.atkAbilityFlags?.interruttore || a.atkAbilityFlags?.abilityOn
+          || a.atkAbilityFlags?.intimidateActive,
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
         stato: a.atkStatus,

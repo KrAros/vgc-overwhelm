@@ -53,6 +53,14 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 - Nessun numero calcolato cambia: la potatura tocca il bundle, non il motore
 
 ### Sotto il cofano
+- Il confronto col riferimento verifica **519 configurazioni** della formula e
+  **35** dello stato di partenza, contro 509 e 27. Otto di quelle nuove coprono
+  una direzione mai verificata prima: l'abilità che prepara il campo addosso a
+  **chi attacca**, non a chi subisce
+- `npm run ncp:gen` è tornato rigenerabile. Produceva 11 casi marcati come
+  difetti nostri che difetti non erano — confrontati col punto d'ingresso
+  sbagliato — e il manuale diceva di non rigenerarlo. Adesso quel controllo lo
+  fa da sé, e nessuno degli 11 era un errore di calcolo
 - `npm run bundle:check` pesa ciò che il browser scarica davvero e fallisce
   sopra i 210 kB. Era l'unico criterio del progetto senza una rete sotto, ed
   era stato sforato senza che nessuno se ne accorgesse
