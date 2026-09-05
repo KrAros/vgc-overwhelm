@@ -508,7 +508,32 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // senza che serva scriverlo.
   const effectiveness = getEffectiveness(moveType, defTypes, {
     ignoraGhost: atkAbilEffect?.ignoraGhost === true,
-    teraShell: defAbilEffect?.teraShell === true,
+    // ─── TERA SHELL VUOLE LA VITA PIENA, E NON GLIELO CHIEDEVAMO ─────────
+    //
+    // Nel riferimento la condizione e' doppia (`damage_SV.js:135`):
+    //
+    //     defAbility === 'Tera Shell' && defender.curHP === defender.maxHP
+    //
+    // Noi guardavamo solo la prima meta': l'abilita' dimezzava sempre.
+    //
+    // Non si vedeva perche' l'app assume la vita piena ovunque, quindi
+    // «sempre» e «a vita piena» danno lo stesso numero — verde per
+    // costruzione, come Eruption. A trovarlo e' stato allargare lo snapshot
+    // alle abilita' che leggono i punti salute: il generatore dei golden ha
+    // prodotto il caso da solo, e diceva 54 dove il riferimento dice 93-109.
+    //
+    // ─── LA LEVETTA E' QUELLA DI MULTISCALE, E NON E' UN RIUSO PIGRO ──────
+    //
+    // `multiscaleActive` porta il nome della prima abilita' che l'ha avuta, ma
+    // la domanda che pone e' «questo Pokemon e' a vita piena?» — la stessa per
+    // tutt'e tre. L'harness lo dice meglio di noi: la traduce in `hpPieni`, un
+    // nome solo per le tre abilita'.
+    //
+    // Il nome resta perche' e' anche la chiave nel link condiviso (`af.ms`):
+    // cambiarlo romperebbe le squadre gia' salvate, per guadagnare una
+    // parola. Il giorno che i punti salute entrano nel modello, questa levetta
+    // diventa derivata e la domanda torna a essere una sola.
+    teraShell: defAbilEffect?.teraShell === true && defAbilityFlags.multiscaleActive !== false,
   })
 
   // ── Meteo: sole e pioggia, normali ed estremi ────────────────────────────

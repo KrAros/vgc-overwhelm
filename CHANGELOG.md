@@ -16,6 +16,16 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Tera Shell proteggeva anche un Pokémon ferito
+- **Tera Shell** dimezza i colpi solo quando chi la porta è a vita piena. L'app
+  la applicava sempre, e nell'editor non c'era nemmeno l'interruttore per dire
+  «è danneggiato» — c'è per Multiscale e Shadow Shield, non per lei
+- Oggi il numero era giusto lo stesso, perché l'app dà per scontato che tutti
+  siano a vita piena. Sarebbe diventato sbagliato nel momento in cui si potrà
+  dire il contrario
+- Adesso l'interruttore c'è, e il calcolo lo guarda: 54 di danno contro i 109
+  veri
+
 ### Return, Frustration e Trump Card mostrano un danno
 - Erano fra le mosse che disegnavano `~`. Adesso hanno un numero, e le mosse
   col badge scendono da 20 a **17**
