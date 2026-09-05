@@ -16,6 +16,17 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Eruption dava sempre il danno massimo, anche a un punto di vita
+- **Eruption**, **Water Spout** e **Dragon Energy** valgono meno man mano che
+  chi le usa si indebolisce: a metà vita fanno metà. L'app dava sempre il
+  numero pieno, e senza avvisi — hanno una potenza nei dati, quindi mostravano
+  un numero che sembrava giusto
+- **Flail** e **Reversal** fanno l'opposto: più sei ferito, più fanno male
+- **Crush Grip**, **Wring Out** e **Hard Press** guardano invece la vita del
+  bersaglio
+- Le mosse col badge scendono da 12 a **7**, e quelle che restano non aspettano
+  più i punti salute
+
 ### Cinque mosse che leggono i punti salute mostrano il loro danno
 - **Super Fang**, **Nature's Madness** e **Ruination** tolgono metà dei punti
   salute che il bersaglio ha ancora. **Final Gambit** toglie tutti quelli di

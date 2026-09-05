@@ -2,6 +2,7 @@
 // Copyright (C) 2026 KrAros
 
 import { TYPES } from '../data/typeChart.js'
+import { pokeRound } from './modifiers.js'
 
 /**
  * src/lib/rules.js
@@ -928,6 +929,95 @@ export function potenzaDaStadiDifensore(boosts) {
 }
 
 /**
+ * ─── LE OTTO MOSSE LA CUI POTENZA VIENE DAI PUNTI SALUTE ────────────────────
+ *
+ * Punto c di `basePowerFunc` (`damage_MASTER.js:1350-1373`), il blocco fra
+ * quello del peso e quello dell'affetto. Tre famiglie, tre formule diverse, e
+ * due leggono chi tira mentre la terza legge chi subisce.
+ *
+ *     //c.i. Eruption, Water Spout, Dragon Energy
+ *     basePower = Math.max(1, Math.floor(150 * attacker.curHP / attacker.maxHP));
+ *
+ *     //c.ii. Flail, Reversal
+ *     var p = Math.floor(48 * attacker.curHP / attacker.maxHP);
+ *     basePower = p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100
+ *               : p <= 16 ? 80 : p <= 32 ? 40 : 20;
+ *
+ *     //c.iii. Crush Grip, Wring Out, Hard Press
+ *     basePower = Math.floor(pokeRound(120 * 100
+ *               * Math.floor(defender.curHP * 0x1000 / defender.maxHP) / 0x1000) / 100);
+ *
+ * ─── TRE DI QUESTE NON ERANO NEL DIVARIO, ED E' IL PUNTO ────────────────────
+ *
+ * Eruption, Water Spout e Dragon Energy hanno `power: 150` nei nostri dati: il
+ * motore quel 150 lo usava sempre e mostrava un numero senza avvisi. E'
+ * l'assunzione che `CONTRIBUTING.md` dichiara da sessioni — «il Pokemon e'
+ * integro» — e finche' i punti salute non c'erano era vera per costruzione.
+ *
+ * Adesso i punti salute ci sono, e quella riga puo' finalmente sbagliare. Un
+ * Torkoal a meta' vita tira un Eruption da 75, non da 150.
+ *
+ * ─── LA TERZA FORMULA E' SCRITTA IN VIRGOLA FISSA, E RESTA COSI' ────────────
+ *
+ * `Math.floor(defender.curHP * 0x1000 / defender.maxHP)` e' la frazione di
+ * vita in dodicesimi di 4096, e da li' in poi si moltiplica per 120 (o 100) e
+ * per 100, si arrotonda col `pokeRound` del gioco e si divide per 100.
+ *
+ * Riscritta come `Math.round(120 * ps / psMax)` darebbe quasi sempre lo stesso
+ * numero e ogni tanto no — che e' il modo peggiore di sbagliare. Si copia.
+ *
+ * ─── E LA SOGLIA DI FLAIL E' A GRADINI SU UN QUARANTOTTESIMO ────────────────
+ *
+ * Non su una percentuale: `48 * curHP / maxHP` troncato. Con 48 al posto di
+ * 100 i gradini cadono in punti che una percentuale non riproduce, e il primo
+ * — `p <= 1`, cioe' meno di un quarantottesimo — e' la potenza 200.
+ */
+export const MOSSE_POTENZA_PS_ATTACCANTE = new Set([
+  'eruption', 'water spout', 'dragon energy',
+])
+export const MOSSE_POTENZA_PS_FLAIL = new Set(['flail', 'reversal'])
+export const MOSSE_POTENZA_PS_BERSAGLIO = Object.freeze({
+  'crush grip': 120,
+  'wring out': 120,
+  'hard press': 100,
+})
+
+/** Vero se la potenza di questa mossa si ricava dai punti salute. */
+export function haPotenzaDaiPuntiSalute(mossa) {
+  return MOSSE_POTENZA_PS_ATTACCANTE.has(mossa)
+    || MOSSE_POTENZA_PS_FLAIL.has(mossa)
+    || mossa in MOSSE_POTENZA_PS_BERSAGLIO
+}
+
+/**
+ * Eruption, Water Spout, Dragon Energy: 150 scalato sulla frazione di vita di
+ * chi tira, col pavimento a 1. `damage_MASTER.js:1354`
+ */
+export function potenzaDaPsAttaccante(ps, psMax) {
+  return Math.max(1, Math.floor(150 * ps / psMax))
+}
+
+/**
+ * Flail e Reversal: sei gradini su `48 * vita` troncato.
+ * `damage_MASTER.js:1360`
+ */
+export function potenzaFlail(ps, psMax) {
+  const p = Math.floor(48 * ps / psMax)
+  return p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100 : p <= 16 ? 80 : p <= 32 ? 40 : 20
+}
+
+/**
+ * Crush Grip, Wring Out (120) e Hard Press (100): la frazione di vita di CHI
+ * SUBISCE, in virgola fissa. `damage_MASTER.js:1367` e `:1371`
+ *
+ * @param {number} base 120 per le prime due, 100 per Hard Press
+ */
+export function potenzaDaPsBersaglio(ps, psMax, base) {
+  const frazione = Math.floor(ps * 0x1000 / psMax)
+  return Math.floor(pokeRound(base * 100 * frazione / 0x1000) / 100)
+}
+
+/**
  * ─── LE DUE MOSSE LA CUI POTENZA VIENE DALLA VELOCITA' ──────────────────────
  *
  * Punto a di `basePowerFunc` (`damage_MASTER.js:1305-1316`), cioe' il blocco
@@ -1231,7 +1321,8 @@ export function haDannoFisso(mossa) {
  *   Velocita'    Gyro Ball, Electro Ball
  *   stadi        Stored Power, Power Trip, Punishment
  *   assunta      Return, Frustration, Trump Card — un numero, non una formula
- *   punti salute Super Fang e famiglia, Endeavor, Final Gambit
+ *   punti salute Super Fang e famiglia, Endeavor, Final Gambit — il DANNO;
+ *                Eruption e famiglia, Flail, Crush Grip — la POTENZA
  *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
  *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
  *
@@ -1241,6 +1332,7 @@ export function haDannoFisso(mossa) {
 export function mossaEntraNelCalcolo(mossa, dati) {
   if (!dati) return false
   return Boolean(dati.power)
+    || haPotenzaDaiPuntiSalute(mossa)
     || haDannoDaiPuntiSalute(mossa)
     || haPotenzaAssunta(mossa)
     || haPotenzaDaPeso(mossa)

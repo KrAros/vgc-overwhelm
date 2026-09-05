@@ -58,7 +58,7 @@ diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro d
 stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
 che il riferimento non ha e ne perdeva una che ha.
 
-Ventitré sono fatte:
+Ventotto sono fatte:
 
 - le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash, punto b
   di `basePowerFunc`;
@@ -81,10 +81,14 @@ Ventitré sono fatte:
   Madness, Ruination, Endeavor e Final Gambit, i punti b e c di `setDamage`
   (`:1221-1254`).
 
-E ne restano **12**:
+- **le otto la cui POTENZA viene dai punti salute** — Eruption, Water Spout,
+  Dragon Energy, Flail, Reversal, Crush Grip, Wring Out e Hard Press, punto c
+  di `basePowerFunc` (`:1350-1373`). Le prime tre una potenza nei dati ce
+  l'avevano, e la usavano sempre piena.
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Flail, Fling, Hard Press,
-> Metal Burst, Mirror Coat, Natural Gift, Reversal, Wring Out
+E ne restano **7**:
+
+> Beat Up, Comeuppance, Counter, Fling, Metal Burst, Mirror Coat, Natural Gift
 
 Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,
@@ -110,17 +114,21 @@ Chi ne cerca altre non guardi `power: 0`: guardi lo `switch` di `basePowerFunc`
 e i punti a–g di `calcAttack`, cioè i posti dove il riferimento sostituisce la
 potenza o la fonte della statistica.
 
-C'è poi un caso diverso e più insidioso, perché oggi non si vede: **Eruption e
-Water Spout**. Nei nostri dati hanno `power: 150` e il motore la usa cosi'
-com'e', mentre il riferimento la scala sui punti salute
-(`damage_MASTER.js:1354`). A punti salute pieni i due numeri coincidono, quindi
-il confronto con l'oracolo e' verde e resta verde: non e' un errore visibile,
-e' un'assunzione — «il Pokemon e' integro» — che nessun caso puo' oggi
-contraddire, perche' i punti salute non stanno nel nostro modello.
+**Eruption e Water Spout erano l'esempio che questa sezione portava**, e adesso
+sono fatte. Avevano `power: 150` nei dati e il motore quel 150 lo usava sempre,
+mentre il riferimento lo scala sui punti salute: a vita piena i due numeri
+coincidevano, il confronto con l'oracolo era verde e restava verde. Non era un
+errore visibile, era un'assunzione — «il Pokémon è integro» — che nessun caso
+poteva contraddire, perché i punti salute non stavano nel modello.
 
-Chi apre questo lavoro cominci da li': il registro c'e' gia' — `gapNoti.json`
-con la terza lista e il segnalino sulla riga della mossa — quindi resta da
-decidere se i punti salute entrano nel modello, e poi le implementazioni.
+Adesso ci stanno, e quella riga può sbagliare: un Torkoal a metà vita tira un
+Eruption da 75.
+
+Chi apre questo lavoro trova il registro gia' fatto — `gapNoti.json` con la
+terza lista e il segnalino sulla riga della mossa — e i punti salute nel
+motore. Le sette che restano non aspettano piu' una decisione: quattro
+dipendono dal colpo appena subito, che non modelliamo; le altre tre da dati
+sugli strumenti o da un'aggiudicazione (Beat Up).
 
 Il registro delle mosse si genera con lo stesso `npm run gap:gen` degli altri
 due, ma con un metodo diverso, ed e' dichiarato nello script: per le abilita' la
