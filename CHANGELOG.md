@@ -16,6 +16,16 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Foul Play usava la statistica del Pokémon sbagliato
+- **Foul Play** colpisce con l'Attacco del BERSAGLIO, non col proprio: è tutto
+  il senso della mossa. L'app usava quello di chi attacca — un Blissey faceva
+  12 di danno invece di 56, e contro un bersaglio potenziato **12 invece di
+  220**
+- **Acrobatics** vale il doppio quando chi la usa non ha nessuno strumento,
+  cioè nel modo normale di usarla. L'app dava sempre metà danno
+- Nessuna delle due aveva un avviso: hanno una potenza nei dati, quindi
+  mostravano un numero e sembrava giusto
+
 ### Stored Power e Power Trip erano sbagliate di dodici volte
 - Le due mosse che crescono con i propri potenziamenti usavano sempre la
   potenza minima. Con chi attacca a +6 in due statistiche il danno usciva

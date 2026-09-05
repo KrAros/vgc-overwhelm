@@ -93,6 +93,17 @@ dentro `move_data.js`; il punto g di `setDamage` si chiama «Psywave» ed è un
 commento senza codice sotto. L'harness risponde «mossa non presente in NCP».
 Per loro non c'è un oracolo, quindi non sono lavoro di trascrizione.
 
+**E c'è una categoria peggiore delle venti col badge**: le mosse che una
+potenza nei dati ce l'hanno, quindi mostrano un numero senza avvisi, e il
+riferimento quel numero lo ricalcola. Non dicono «non lo so», dicono un numero
+sbagliato. Ne sono state trovate quattro finora — Stored Power, Power Trip,
+Foul Play, Acrobatics — e sono state fatte tutte. Il registro delle mosse non
+le può vedere: elenca chi esce `null`.
+
+Chi ne cerca altre non guardi `power: 0`: guardi lo `switch` di `basePowerFunc`
+e i punti a–g di `calcAttack`, cioè i posti dove il riferimento sostituisce la
+potenza o la fonte della statistica.
+
 C'è poi un caso diverso e più insidioso, perché oggi non si vede: **Eruption e
 Water Spout**. Nei nostri dati hanno `power: 150` e il motore la usa cosi'
 com'e', mentre il riferimento la scala sui punti salute
