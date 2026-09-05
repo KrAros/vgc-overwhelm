@@ -30,6 +30,10 @@ import {
   haPotenzaDaVelocita,
   potenzaGyroBall,
   potenzaElectroBall,
+  MOSSE_STADI_ATTACCANTE,
+  haPotenzaDaStadi,
+  potenzaDaStadiAttaccante,
+  potenzaDaStadiDifensore,
   potenzaDaPeso,
   potenzaDaRapportoPeso,
   dannoFisso,
@@ -994,6 +998,25 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
       : potenzaElectroBall(speAttaccante, speDifensore)
   }
 
+  // ─── LA POTENZA DAGLI STADI ──────────────────────────────────────────────
+  //
+  // Punto f di `basePowerFunc`. Gli stadi sono quelli DOPO la preparazione —
+  // nel riferimento `basePowerFunc` riceve i due Pokemon gia' passati per
+  // `checkIntimidate` e compagnia — quindi un Intimidate che abbassa l'Attacco
+  // del bersaglio non toglie niente a Punishment, che conta solo i positivi,
+  // ma un Download che alza il proprio conta per Stored Power.
+  //
+  // Le due liste sono due perche' guardano lati diversi: Stored Power e Power
+  // Trip contano gli stadi di chi attacca, Punishment quelli di chi subisce.
+  // Una lista sola con un `if` sul nome sarebbe stata la stessa cosa scritta
+  // peggio.
+  let potenzaDagliStadi = null
+  if (haPotenzaDaStadi(move)) {
+    potenzaDagliStadi = MOSSE_STADI_ATTACCANTE.has(move)
+      ? potenzaDaStadiAttaccante(preparazione.attaccante.boosts)
+      : potenzaDaStadiDifensore(preparazione.difensore.boosts)
+  }
+
   // ─── LE MOSSE CHE LO STATO RADDOPPIA ──────────────────────────────────────
   //
   // Nel riferimento sono rami del `switch` di `calcBasePower`
@@ -1024,6 +1047,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
     : potenzaDallaVelocita !== null ? potenzaDallaVelocita
+    : potenzaDagliStadi !== null ? potenzaDagliStadi
     : isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2

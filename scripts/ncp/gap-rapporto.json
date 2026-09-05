@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T12:11:39.585Z",
+    "generatedAt": "2026-09-05T12:33:24.240Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -12,10 +12,10 @@
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
     "mosseAPotenzaZero": 303,
-    "mosseOffensiveNelRiferimento": 539,
-    "mosseOffensiveAPotenzaZero": 34,
+    "mosseOffensiveNelRiferimento": 541,
+    "mosseOffensiveAPotenzaZero": 35,
     "mosseNelGap": 20,
-    "mosseSenzaOracolo": 10,
+    "mosseSenzaOracolo": 9,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
   },
@@ -491,9 +491,9 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "punishment",
-        "nome": "Punishment",
-        "categoriaNCP": "Physical"
+        "chiave": "natures madness",
+        "nome": "Nature's Madness",
+        "categoriaNCP": "Special"
       },
       {
         "chiave": "return",
@@ -531,7 +531,6 @@
       "confide",
       "floreal healing",
       "magnitude",
-      "natures madness",
       "play nice",
       "present",
       "psywave",

@@ -41,13 +41,14 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Quattordici sono fatte, ne restano **20**, e **portano il badge**:
+nome. Quindici sono fatte, ne restano **20**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
 > Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
 > Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
-> Punishment, Return, Reversal, Ruination, Super Fang, Trump Card, Wring Out
+> Nature's Madness, Return, Reversal, Ruination, Super Fang, Trump Card,
+> Wring Out
 
 Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
 Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press, Ruination, Final
@@ -60,6 +61,12 @@ turno che il nostro modello non ha. Restano quelle che si trascrivono e basta:
 l'affetto (Return, Frustration), il peso degli alleati (Beat Up), lo strumento
 (Fling, Natural Gift), gli stadi del bersaglio (Punishment), i PP (Trump Card).
 
+**Punishment è uscita da questo elenco e Nature's Madness ci è entrata**, e il
+totale resta venti per caso: Punishment è stata fatta, Nature's Madness invece
+c'era sempre stata e non si vedeva — il suo nome nei nostri dati era scritto
+«Natures's Madness», quindi l'harness non la trovava e nessun conteggio la
+includeva. Due caratteri.
+
 **Gyro Ball ed Electro Ball erano in questo elenco fino a ieri**, e sono uscite
 solo dopo la correzione sulla Velocità di Analytic: leggono la stessa
 `stats[SP]`, e scritte prima sarebbero nate sbagliate — con l'oracolo che le
@@ -71,6 +78,24 @@ Magnitude, Present, Spit Up e Psywave nel riferimento sono **commentate** dentro
 codice sotto. L'harness risponde «mossa non presente in NCP». Per loro non c'è
 un oracolo: scriverle sarebbe un'aggiudicazione, non una trascrizione, e vanno
 in sezione B il giorno che qualcuno le vuole.
+
+### Le mosse che un numero ce l'hanno, e sbagliato
+Le venti col badge almeno avvisano. Queste no: hanno una potenza nei dati, il
+motore la usa, e mostrano un numero con sicurezza. Il registro delle mosse non
+può vederle — elenca chi esce `null`, e queste escono un numero.
+
+**Foul Play** attacca con l'Attacco di CHI SUBISCE (`calcAttack` punto a:
+`attackSource = move.name === "Foul Play" ? defender : attacker`). Noi usiamo
+quello di chi attacca. Misurato: Blissey contro Garchomp, 12 contro 56 del
+riferimento; col bersaglio a +6, **12 contro 220**. Non c'è nemmeno un flag nei
+dati, mentre Body Press ce l'ha (`useDefAsStat`).
+
+**Acrobatics** vale 110 senza strumento e 55 con (`basePowerFunc` punto g.i).
+Noi usiamo sempre il 55 dei dati: senza strumento — cioè il modo normale di
+usarla — il danno esce **la metà**. Misurato: 123 contro 244.
+
+Tutt'e due hanno un oracolo che risponde, quindi è trascrizione. Sono qui e non
+già fatte solo per non allargare il commit degli stadi.
 
 ### Il Ventoincoda non arriva al motore del danno
 `calculateDamage` riceve un `field` che non distingue i due lati, quindi

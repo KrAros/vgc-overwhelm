@@ -643,6 +643,84 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
 ])
 
 /**
+ * ─── LE TRE MOSSE CHE CONTANO GLI STADI ─────────────────────────────────────
+ *
+ * Punto f di `basePowerFunc` (`damage_MASTER.js:1385-1395`). Due guardano gli
+ * stadi di CHI ATTACCA, la terza quelli di CHI SUBISCE — ed e' la ragione per
+ * cui sono due liste e non una.
+ *
+ *     case "Stored Power":
+ *     case "Power Trip":
+ *         basePower = 20 + 20 * countBoosts(attacker.boosts);
+ *     case "Punishment":
+ *         basePower = Math.min(200, 60 + 20 * countBoosts(defender.boosts));
+ *
+ * ─── DUE DI QUESTE NON ERANO NEL DIVARIO, ED E' IL PUNTO ────────────────────
+ *
+ * Punishment ha `power: 0` nei nostri dati, quindi usciva `null` e almeno
+ * portava il segnalino «non calcolata».
+ *
+ * Stored Power e Power Trip no: hanno `power: 20`, il motore lo usava com'era
+ * e mostrava un numero senza avvisi. Con chi attacca a +6 in due statistiche
+ * il riferimento dice 260 di potenza e noi dicevamo 20 — misurato, il danno
+ * usciva DODICI VOLTE piu' basso. Nessun badge, perche' il registro delle
+ * mosse elenca chi esce `null`, e queste uscivano un numero.
+ *
+ * E' la stessa forma di Eruption, con una differenza che conta: l'assunzione
+ * dietro Eruption («il Pokemon e' integro») nessun caso puo' contraddirla,
+ * perche' i punti salute non sono nel modello. Gli stadi ci sono, li sceglie
+ * l'utente da un menu, e il numero era semplicemente sbagliato.
+ *
+ * ─── `countBoosts` CONTA SOLO I POSITIVI ────────────────────────────────────
+ *
+ * `damage_MASTER.js:701`, e le due cose da non perdere sono che i negativi non
+ * si sottraggono — un Pokemon a +2 e -2 conta 2, non 0 — e che le statistiche
+ * sono cinque: `STATS_GSC = [AT, DF, SA, SD, SP]`, quindi la Velocita' entra
+ * e i PS no.
+ */
+export const MOSSE_STADI_ATTACCANTE = new Set(['stored power', 'power trip'])
+export const MOSSE_STADI_DIFENSORE  = new Set(['punishment'])
+
+/** Vero se la potenza di questa mossa si ricava dagli stadi. */
+export function haPotenzaDaStadi(mossa) {
+  return MOSSE_STADI_ATTACCANTE.has(mossa) || MOSSE_STADI_DIFENSORE.has(mossa)
+}
+
+/**
+ * La somma degli stadi POSITIVI delle cinque statistiche da combattimento.
+ * `damage_MASTER.js:701`
+ *
+ * @param {{at:number, df:number, sa:number, sd:number, sp:number}} boosts
+ */
+export function contaStadiPositivi(boosts) {
+  let somma = 0
+  for (const s of ['at', 'df', 'sa', 'sd', 'sp']) {
+    const v = boosts?.[s] ?? 0
+    if (v > 0) somma += v
+  }
+  return somma
+}
+
+/**
+ * Stored Power e Power Trip: 20 + 20 per ogni stadio positivo di chi attacca.
+ * Nessun tetto scritto — a +6 su cinque statistiche fa 620, e il riferimento
+ * lo lascia salire.
+ * `damage_MASTER.js:1388`
+ */
+export function potenzaDaStadiAttaccante(boosts) {
+  return 20 + 20 * contaStadiPositivi(boosts)
+}
+
+/**
+ * Punishment: 60 + 20 per ogni stadio positivo di chi SUBISCE, col tetto a 200.
+ * Il tetto c'e' qui e non nell'altra, ed e' scritto cosi' nel riferimento.
+ * `damage_MASTER.js:1393`
+ */
+export function potenzaDaStadiDifensore(boosts) {
+  return Math.min(200, 60 + 20 * contaStadiPositivi(boosts))
+}
+
+/**
  * ─── LE DUE MOSSE LA CUI POTENZA VIENE DALLA VELOCITA' ──────────────────────
  *
  * Punto a di `basePowerFunc` (`damage_MASTER.js:1305-1316`), cioe' il blocco
@@ -864,6 +942,7 @@ export function haDannoFisso(mossa) {
  *   `power`      la stragrande maggioranza: la potenza sta nei dati
  *   peso         Low Kick, Grass Knot, Heavy Slam, Heat Crash
  *   Velocita'    Gyro Ball, Electro Ball
+ *   stadi        Stored Power, Power Trip, Punishment
  *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
  *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
  *
@@ -875,6 +954,7 @@ export function mossaEntraNelCalcolo(mossa, dati) {
   return Boolean(dati.power)
     || haPotenzaDaPeso(mossa)
     || haPotenzaDaVelocita(mossa)
+    || haPotenzaDaStadi(mossa)
     || dati.koSecco === true
     || haDannoFisso(mossa)
 }

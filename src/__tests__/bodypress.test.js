@@ -21,8 +21,13 @@
  * offensivi (strumento, abilità, bruciatura).
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
+import fs from 'node:fs'
+import path from 'node:path'
 import { calculateDamage } from '../calcEngine.js'
+
+const RADICE = path.resolve(import.meta.dirname, '..', '..')
+const vendorPresente = fs.existsSync(path.join(RADICE, 'vendor', 'ncp', 'damage_SV.js'))
 
 // Registeel: Difesa base 150, Attacco base 75. La forbice fra le due è così
 // larga che qualunque scambio fra i due stage salta all'occhio.
@@ -41,6 +46,68 @@ const bodyPress = (attacker, defender = INCINEROAR) =>
   calculateDamage({ attacker, defender, move: 'body press', field: {}, debug: false })
 
 const neutro = () => bodyPress(registeel())
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONTRO L'ORACOLO, CHE FINO A OGGI NON SAPEVA PORRE LA DOMANDA
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Tutto il file qui sotto confronta Body Press CON SÉ STESSO: «col boost fa
+ * più male che senza». Sono asserzioni sulla direzione, e non hanno mai
+ * toccato il riferimento.
+ *
+ * Non per pigrizia: l'harness passava a NCP solo gli stadi delle due
+ * statistiche con cui si ATTACCA — `at` e `sa` — e Body Press attacca con la
+ * DIFESA. Il riferimento riceveva un Registeel senza quel boost e rispondeva
+ * col numero di un caso diverso, plausibile e non confrontabile.
+ *
+ * Adesso l'harness passa tutt'e cinque gli stadi da tutt'e due i lati, e
+ * questi sono i primi confronti veri su questa mossa.
+ */
+describe('Body Press contro il riferimento eseguito', () => {
+  let harness
+
+  beforeAll(async () => {
+    if (!vendorPresente) return
+    harness = (await import('../../scripts/ncp/harness.mjs')).creaHarness()
+  })
+
+  it.runIf(!vendorPresente)('vendor/ncp assente — non verificabile', () => {
+    expect(vendorPresente).toBe(false)
+  })
+
+  const CASI = [
+    ['nudo',                      registeel(),                        INCINEROAR],
+    ['Difesa a +2',               registeel({ atkDefBoost: 2 }),      INCINEROAR],
+    ['Difesa a -1',               registeel({ atkDefBoost: -1 }),     INCINEROAR],
+    ['Difesa a +6',               registeel({ atkDefBoost: 6 }),      INCINEROAR],
+    ['Attacco a +6 — non conta',  registeel({ atkBoost: 6 }),         INCINEROAR],
+    ['Difesa a +2 e Attacco a -6', registeel({ atkDefBoost: 2, atkBoost: -6 }), INCINEROAR],
+  ]
+
+  for (const [nome, attacker, defender] of CASI) {
+    it.runIf(vendorPresente)(`${nome} ≡ NCP`, () => {
+      const rif = harness.calcola({ attacker, defender, move: 'body press', field: {} })
+      expect(rif.motivo ?? null).toBeNull()
+      expect(rif.ok).toBe(true)
+      expect(bodyPress(attacker, defender).rolls).toEqual(rif.rolls)
+    })
+  }
+
+  it.runIf(vendorPresente)('e l\'oracolo distingue i casi fra loro', () => {
+    // Il controllo che rende vere le righe qui sopra: prima della correzione
+    // l'harness rispondeva lo stesso numero a tutti e quattro gli stadi di
+    // Difesa, quindi confrontarsi con lui non provava niente.
+    const roll = (a) => harness.calcola({ attacker: a, defender: INCINEROAR, move: 'body press', field: {} }).rolls.at(-1)
+    const numeri = new Set([
+      roll(registeel()),
+      roll(registeel({ atkDefBoost: 2 })),
+      roll(registeel({ atkDefBoost: -1 })),
+      roll(registeel({ atkDefBoost: 6 })),
+    ])
+    expect(numeri.size, 'l\'oracolo risponde uguale a stadi di Difesa diversi').toBe(4)
+  })
+})
 
 describe('Body Press — quale stage conta', () => {
   it('il boost di Difesa aumenta il danno', () => {
