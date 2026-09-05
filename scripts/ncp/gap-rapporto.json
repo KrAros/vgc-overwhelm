@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T12:33:24.240Z",
+    "generatedAt": "2026-09-05T12:58:49.995Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -14,7 +14,7 @@
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
-    "mosseNelGap": 20,
+    "mosseNelGap": 17,
     "mosseSenzaOracolo": 9,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -466,11 +466,6 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "frustration",
-        "nome": "Frustration",
-        "categoriaNCP": "Physical"
-      },
-      {
         "chiave": "hard press",
         "nome": "Hard Press",
         "categoriaNCP": "Physical"
@@ -496,11 +491,6 @@
         "categoriaNCP": "Special"
       },
       {
-        "chiave": "return",
-        "nome": "Return",
-        "categoriaNCP": "Physical"
-      },
-      {
         "chiave": "reversal",
         "nome": "Reversal",
         "categoriaNCP": "Physical"
@@ -514,11 +504,6 @@
         "chiave": "super fang",
         "nome": "Super Fang",
         "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "trump card",
-        "nome": "Trump Card",
-        "categoriaNCP": "Special"
       },
       {
         "chiave": "wring out",

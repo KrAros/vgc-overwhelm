@@ -41,14 +41,13 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Quindici sono fatte, ne restano **20**, e **portano il badge**:
+nome. Diciotto sono fatte, ne restano **17**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
 > Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
-> Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
-> Nature's Madness, Return, Reversal, Ruination, Super Fang, Trump Card,
-> Wring Out
+> Fling, Hard Press, Metal Burst, Mirror Coat, Natural Gift, Nature's Madness,
+> Reversal, Ruination, Super Fang, Wring Out
 
 Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
 Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press, Ruination, Final
@@ -57,9 +56,19 @@ che oggi non ci sono: è la voce di sezione B qui sotto. Le reattive — Counter
 Mirror Coat, Metal Burst, Comeuppance — nel riferimento ci sono, ma calcolano
 il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
-turno che il nostro modello non ha. Restano quelle che si trascrivono e basta:
-l'affetto (Return, Frustration), il peso degli alleati (Beat Up), lo strumento
-(Fling, Natural Gift), gli stadi del bersaglio (Punishment), i PP (Trump Card).
+turno che il nostro modello non ha. Restano quelle che si trascrivono e basta: lo
+strumento (Fling, Natural Gift) e il peso degli alleati (Beat Up).
+
+**Return, Frustration e Trump Card sono uscite senza essere calcolate.** Nel
+gioco la loro potenza è variabile — affetto le prime due, PP la terza — e il
+riferimento non la calcola: i punti d e i.vii sono commenti senza codice, e
+cade sul numero scritto nei suoi dati. Abbiamo preso quel numero e l'ipotesi
+che lo regge, scritti insieme in `MOSSE_POTENZA_ASSUNTA`. Sono due ipotesi
+opposte: 102 è il massimo di Return, 40 è il minimo di Trump Card.
+
+**Beat Up è nella stessa forma e non è uscita**: il riferimento la calcola con
+un colpo solo, i nostri dati ne prevedono da uno a sei, e scegliere quale sia
+il numero giusto è un'aggiudicazione, non una trascrizione.
 
 **Punishment è uscita da questo elenco e Nature's Madness ci è entrata**, e il
 totale resta venti per caso: Punishment è stata fatta, Nature's Madness invece

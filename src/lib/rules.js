@@ -643,6 +643,62 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
 ])
 
 /**
+ * ─── LE TRE MOSSE LA CUI POTENZA E' UN'ASSUNZIONE DICHIARATA ────────────────
+ *
+ * Return, Frustration e Trump Card nel gioco hanno una potenza variabile: le
+ * prime due con l'affetto, la terza coi PP rimasti. Il riferimento **non le
+ * calcola**, e lo dice: i punti d ed e.iii di `basePowerFunc` sono commenti
+ * senza codice sotto, come Psywave e Beat Up.
+ *
+ *     //d. Friendship based
+ *     //   (not done under the assumption that it will always deal max damage)
+ *     //d.i. Return
+ *     //d.ii. Frustration
+ *     ...
+ *     //i.vii. Trump Card
+ *
+ * Non calcolandole, il riferimento cade sul `move.bp` scritto nei suoi dati —
+ * 102, 102 e 40 — e da li' in poi le tratta come mosse normali. L'oracolo
+ * quindi risponde, e risponde un numero verificabile.
+ *
+ * ─── PERCHE' QUESTA NON E' UNA TRASCRIZIONE COME LE ALTRE ───────────────────
+ *
+ * Le mosse a peso, a Velocita' e a stadi hanno una formula da copiare. Queste
+ * no: hanno un numero che vale sotto un'IPOTESI, e l'ipotesi non e' la stessa
+ * per tutt'e tre.
+ *
+ *   Return, Frustration   102 e' il MASSIMO. Il riferimento lo dice a voce:
+ *                         «assumendo che faccia sempre il danno massimo».
+ *                         Nel gioco Return a zero affetto fa 1.
+ *   Trump Card            40 e' il MINIMO — il valore con quattro o piu' PP,
+ *                         cioe' il caso normale. A un PP solo la mossa vale
+ *                         200. Qui il riferimento non commenta niente: usa il
+ *                         numero dei suoi dati e basta.
+ *
+ * Due assunzioni opposte, e nessuna delle due e' scritta nei nostri dati:
+ * `power: 0` per tutt'e tre. Il numero sta QUI e non in `moves.json` proprio
+ * per questo — in `moves.json` sembrerebbe un fatto sulla mossa, e non lo e':
+ * e' una scelta, e va letta accanto alla ragione.
+ *
+ * ─── COSA CAMBIEREBBE SE L'AFFETTO O I PP ENTRASSERO NEL MODELLO ────────────
+ *
+ * Questa tabella sparirebbe e diventerebbero due formule. E' la stessa forma
+ * dell'assunzione «vita piena» dietro Eruption, con una differenza: quella e'
+ * verde per costruzione perche' i punti salute non esistono nel modello,
+ * questa e' verde perche' e' la stessa assunzione che fa l'oracolo.
+ */
+export const MOSSE_POTENZA_ASSUNTA = Object.freeze({
+  'return': 102,
+  'frustration': 102,
+  'trump card': 40,
+})
+
+/** Vero se la potenza di questa mossa e' un numero assunto, non calcolato. */
+export function haPotenzaAssunta(mossa) {
+  return mossa in MOSSE_POTENZA_ASSUNTA
+}
+
+/**
  * ─── FOUL PLAY ATTACCA CON L'ATTACCO DI CHI SUBISCE ─────────────────────────
  *
  * `calcAttack` punto a (`damage_MASTER.js:1849`), la riga sopra quella di
@@ -1006,6 +1062,7 @@ export function haDannoFisso(mossa) {
  *   peso         Low Kick, Grass Knot, Heavy Slam, Heat Crash
  *   Velocita'    Gyro Ball, Electro Ball
  *   stadi        Stored Power, Power Trip, Punishment
+ *   assunta      Return, Frustration, Trump Card — un numero, non una formula
  *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
  *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
  *
@@ -1015,6 +1072,7 @@ export function haDannoFisso(mossa) {
 export function mossaEntraNelCalcolo(mossa, dati) {
   if (!dati) return false
   return Boolean(dati.power)
+    || haPotenzaAssunta(mossa)
     || haPotenzaDaPeso(mossa)
     || haPotenzaDaVelocita(mossa)
     || haPotenzaDaStadi(mossa)

@@ -58,7 +58,7 @@ diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro d
 stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
 che il riferimento non ha e ne perdeva una che ha.
 
-Quindici sono fatte:
+Diciotto sono fatte:
 
 - le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash, punto b
   di `basePowerFunc`;
@@ -72,17 +72,20 @@ Quindici sono fatte:
 - le quattro a **danno fisso** — Sonic Boom, Dragon Rage, Seismic Toss,
   Night Shade, i punti d ed e (`damage_MASTER.js:1256-1275`).
 
-E ne restano **20**:
+- **Return, Frustration e Trump Card**, che il riferimento non calcola affatto
+  — i punti d e i.vii sono commenti senza codice — e per cui usa il numero
+  scritto nei suoi dati. Quel numero, con l'ipotesi che lo regge, sta in
+  `MOSSE_POTENZA_ASSUNTA`.
+
+E ne restano **17**:
 
 > Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
-> Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
-> Nature's Madness, Return, Reversal, Ruination, Super Fang, Trump Card,
-> Wring Out
+> Fling, Hard Press, Metal Burst, Mirror Coat, Natural Gift, Nature's Madness,
+> Reversal, Ruination, Super Fang, Wring Out
 
 Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,
-Ruination, Final Gambit), quelle legate all'affetto (Return, Frustration),
-quelle legate allo
+Ruination, Final Gambit), quelle legate allo
 strumento (Fling, Natural Gift) e le reattive (Counter, Mirror Coat, Metal
 Burst, Comeuppance) — che nel riferimento ci sono ma calcolano il colpo appena
 subito dal difensore, cioè un pezzo di turno che non modelliamo.
