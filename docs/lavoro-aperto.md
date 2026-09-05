@@ -79,24 +79,6 @@ codice sotto. L'harness risponde «mossa non presente in NCP». Per loro non c'�
 un oracolo: scriverle sarebbe un'aggiudicazione, non una trascrizione, e vanno
 in sezione B il giorno che qualcuno le vuole.
 
-### Le mosse che un numero ce l'hanno, e sbagliato
-Le venti col badge almeno avvisano. Queste no: hanno una potenza nei dati, il
-motore la usa, e mostrano un numero con sicurezza. Il registro delle mosse non
-può vederle — elenca chi esce `null`, e queste escono un numero.
-
-**Foul Play** attacca con l'Attacco di CHI SUBISCE (`calcAttack` punto a:
-`attackSource = move.name === "Foul Play" ? defender : attacker`). Noi usiamo
-quello di chi attacca. Misurato: Blissey contro Garchomp, 12 contro 56 del
-riferimento; col bersaglio a +6, **12 contro 220**. Non c'è nemmeno un flag nei
-dati, mentre Body Press ce l'ha (`useDefAsStat`).
-
-**Acrobatics** vale 110 senza strumento e 55 con (`basePowerFunc` punto g.i).
-Noi usiamo sempre il 55 dei dati: senza strumento — cioè il modo normale di
-usarla — il danno esce **la metà**. Misurato: 123 contro 244.
-
-Tutt'e due hanno un oracolo che risponde, quindi è trascrizione. Sono qui e non
-già fatte solo per non allargare il commit degli stadi.
-
 ### Il Ventoincoda non arriva al motore del danno
 `calculateDamage` riceve un `field` che non distingue i due lati, quindi
 l'ordine di turno di Analytic — e domani la potenza di Gyro Ball ed Electro

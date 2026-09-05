@@ -643,6 +643,69 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
 ])
 
 /**
+ * ─── FOUL PLAY ATTACCA CON L'ATTACCO DI CHI SUBISCE ─────────────────────────
+ *
+ * `calcAttack` punto a (`damage_MASTER.js:1849`), la riga sopra quella di
+ * Body Press:
+ *
+ *     var attackSource = move.name === "Foul Play" ? defender : attacker;
+ *     var usesDefenseStat = move.name === "Body Press";
+ *
+ * Le due mosse sono la stessa idea vista da due lati: Body Press cambia QUALE
+ * statistica si legge, Foul Play cambia DI CHI. Da qui in poi il riferimento
+ * legge sempre `attackSource` — la base, gli SP, la natura, gli stadi,
+ * Imprudenza, il clamp del critico — e una sola volta `attacker`, per Hustle
+ * (punto e), che resta di chi la mossa la tira.
+ *
+ * ─── PERCHE' UN NOME E NON UN CAMPO NEI DATI ────────────────────────────────
+ *
+ * Perche' nel riferimento e' un nome. Body Press da noi ha `useDefAsStat` in
+ * `moves.json`, ma quel campo e' scritto a mano — non e' trascritto da un flag
+ * del vendor, che di flag per queste due non ne ha. Aggiungerne un secondo
+ * avrebbe dato l'idea di una categoria che il riferimento non ha: li' sono due
+ * righe consecutive con due nomi dentro.
+ *
+ * ─── COS'ERA IL DIFETTO ─────────────────────────────────────────────────────
+ *
+ * Il motore usava l'Attacco di chi tira. Misurato: Blissey (Attacco 10) contro
+ * Garchomp (130), noi 12 e il riferimento 56; col bersaglio a +6, noi 12 e il
+ * riferimento 220. Nessun avviso, perche' la mossa una potenza ce l'ha.
+ */
+export const MOSSE_ATTACCO_AVVERSARIO = new Set(['foul play'])
+
+/** Vero se questa mossa attacca con la statistica di CHI SUBISCE. */
+export function usaAttaccoAvversario(mossa) {
+  return MOSSE_ATTACCO_AVVERSARIO.has(mossa)
+}
+
+/**
+ * ─── ACROBATICS: 110 A MANI VUOTE, 55 CON QUALCOSA IN MANO ──────────────────
+ *
+ * `basePowerFunc` punto g.i (`damage_MASTER.js:1398`):
+ *
+ *     basePower = attacker.item === 'Flying Gem' || attacker.item === "" ? 110 : 55;
+ *
+ * Nei nostri dati la potenza scritta e' 55, e il motore usava sempre quella:
+ * senza strumento — cioe' il modo normale di usarla — il danno usciva la
+ * META'. Misurato 123 contro 244.
+ *
+ * ─── LO STRUMENTO E' QUELLO VERO, NON QUELLO SPENTO DA KLUTZ ────────────────
+ *
+ * Il riferimento legge `attacker.item` dopo `checkKlutz`, che NON lo svuota:
+ * lo sostituisce con la stringa `"Klutz"` (`:459`). Quindi con Klutz e uno
+ * strumento addosso la potenza resta 55, non diventa 110. Da noi va letto lo
+ * strumento GREZZO, perche' la nostra chiave post-Klutz e' la stringa vuota —
+ * e la stringa vuota qui vuol dire l'opposto.
+ */
+export const STRUMENTI_CHE_NON_FERMANO_ACROBATICS = new Set(['flying gem'])
+
+/** La potenza di Acrobatics: 110 a mani vuote o con la Volagemma, 55 altrimenti. */
+export function potenzaAcrobatics(strumentoGrezzo) {
+  const s = String(strumentoGrezzo || '').toLowerCase()
+  return s === '' || STRUMENTI_CHE_NON_FERMANO_ACROBATICS.has(s) ? 110 : 55
+}
+
+/**
  * ─── LE TRE MOSSE CHE CONTANO GLI STADI ─────────────────────────────────────
  *
  * Punto f di `basePowerFunc` (`damage_MASTER.js:1385-1395`). Due guardano gli

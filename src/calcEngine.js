@@ -31,6 +31,8 @@ import {
   potenzaGyroBall,
   potenzaElectroBall,
   MOSSE_STADI_ATTACCANTE,
+  usaAttaccoAvversario,
+  potenzaAcrobatics,
   haPotenzaDaStadi,
   potenzaDaStadiAttaccante,
   potenzaDaStadiDifensore,
@@ -394,6 +396,19 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //      vedi il blocco Intimidate più sotto.
   const isBodyPress = moveData.useDefAsStat === true
   const atkStatIdx = isSpecial ? STAT_SPA : (isBodyPress ? STAT_DEF : STAT_ATT)
+
+  // ── FOUL PLAY: LA STATISTICA E' LA SUA, MA IL POKEMON E' L'ALTRO ─────────
+  //
+  // `calcAttack` punto a, la riga sopra quella di Body Press:
+  //
+  //     var attackSource = move.name === "Foul Play" ? defender : attacker;
+  //
+  // Le due mosse sono la stessa idea da due lati: Body Press cambia QUALE
+  // statistica si legge, Foul Play cambia DI CHI. Da qui in giu' il
+  // riferimento legge `attackSource` per la base, gli SP, la natura, gli
+  // stadi, Imprudenza e il clamp del critico — e `attacker` una volta sola,
+  // per Hustle (punto e), che resta di chi la mossa la tira.
+  const isFoulPlay = usaAttaccoAvversario(move)
   const defStatIdx = isSpecial ? STAT_SPD : STAT_DEF
 
   // ── QUANTE VOLTE COLPISCE ────────────────────────────────────────────────
@@ -635,9 +650,17 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     return { immune: true, reason: 'weather', weatherName: meteo, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
 
-  const atkBase = getBaseStat(atkPokemon, atkStatIdx)
+  // Foul Play: la fonte della statistica d'attacco e' il DIFENSORE. Cambiano
+  // insieme specie, SP, natura e tipi — se cambiasse solo la specie il numero
+  // sarebbe una statistica che nessuno dei due ha.
+  const fonteAtkSpecie  = isFoulPlay ? defPokemon : atkPokemon
+  const fonteAtkSPs     = isFoulPlay ? defSPs : atkSPs
+  const fonteAtkNatura  = isFoulPlay ? defNature : atkNature
+  const fonteAtkTipi    = isFoulPlay ? defTypes : atkTypes
+
+  const atkBase = getBaseStat(fonteAtkSpecie, atkStatIdx)
   const defBase = getBaseStat(defPokemon, defStatIdx)
-  const atkStat = calcStat(atkBase, atkSPs[atkStatIdx], level, atkNature, atkStatIdx, meteo, atkTypes)
+  const atkStat = calcStat(atkBase, fonteAtkSPs[atkStatIdx], level, fonteAtkNatura, atkStatIdx, meteo, fonteAtkTipi)
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
   const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
 
@@ -821,7 +844,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // regola scritta a parte: Intimidate abbassa lo stadio `at`, e Body Press
   // legge `df`.
   const chiaveAtk = atkStatIdx === STAT_SPA ? 'sa' : atkStatIdx === STAT_DEF ? 'df' : 'at'
-  const atkBoostVal0 = preparazione.attaccante.boosts[chiaveAtk]
+  const atkBoostVal0 = (isFoulPlay ? preparazione.difensore : preparazione.attaccante).boosts[chiaveAtk]
   const defBoostVal0 = preparazione.difensore.boosts[isSpecial ? 'sd' : 'df']
 
   // ── Imprudenza, da tutti e due i lati ────────────────────────────────────
@@ -1010,6 +1033,15 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Trip contano gli stadi di chi attacca, Punishment quelli di chi subisce.
   // Una lista sola con un `if` sul nome sarebbe stata la stessa cosa scritta
   // peggio.
+  // ─── ACROBATICS: 110 A MANI VUOTE ────────────────────────────────────────
+  //
+  // Punto g.i. Lo strumento e' quello GREZZO e non `atkItemKey`: il
+  // riferimento legge l'oggetto dopo `checkKlutz`, che non lo svuota ma lo
+  // sostituisce con la stringa `"Klutz"` — quindi con Klutz e uno strumento
+  // addosso la potenza resta 55. La nostra chiave post-Klutz e' la stringa
+  // vuota, che qui vorrebbe dire l'opposto.
+  const potenzaAcro = move === 'acrobatics' ? potenzaAcrobatics(atkItemGrezzo) : null
+
   let potenzaDagliStadi = null
   if (haPotenzaDaStadi(move)) {
     potenzaDagliStadi = MOSSE_STADI_ATTACCANTE.has(move)
@@ -1048,6 +1080,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
     : potenzaDallaVelocita !== null ? potenzaDallaVelocita
     : potenzaDagliStadi !== null ? potenzaDagliStadi
+    : potenzaAcro !== null ? potenzaAcro
     : isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2

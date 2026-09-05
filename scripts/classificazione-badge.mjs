@@ -105,6 +105,13 @@ export const CLASSIFICAZIONE = {
       verdetto: 'meccanica-diversa',
       nota: 'speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:449',
     },
+    'flying gem': {
+      verdetto: 'meccanica-diversa',
+      nota: 'rules.js la nomina per Acrobatics, che adesso facciamo (basePowerFunc:1400). '
+          + 'Il badge resta per l\'ALTRA cosa: il ×1,3 delle gemme sulle mosse del proprio '
+          + 'tipo (calcBPMods punto l, :1715), che non facciamo — e che vale per tutte le '
+          + 'diciotto gemme, non solo questa',
+    },
     // `kebia berry` stava qui con verdetto `citata-non-applicata`: era l'unica
     // delle diciotto resist berry senza una riga in ITEM_EFFECTS, mentre
     // `smogonString.js` la stampava già fra gli item difensivi. In F-3 le è
