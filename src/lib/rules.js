@@ -703,6 +703,112 @@ export function potenzaDaRapportoPeso(rapporto) {
 }
 
 /**
+ * ─── LE QUATTRO MOSSE A DANNO FISSO ─────────────────────────────────────────
+ *
+ * Il danno non passa dalla formula: è un numero deciso in partenza. Nei dati
+ * hanno `power: 0` come le mosse a peso e le mosse KO, e per la stessa ragione
+ * fino a questa sessione uscivano `null` — cioè `~` nella matrice, che è il
+ * disegno di una mossa di stato. Seismic Toss sembrava Protect.
+ *
+ * Trascritte dai punti d ed e di `setDamage` (`damage_MASTER.js:1256-1275`),
+ * che sono due blocchi separati e restano due:
+ *
+ *     //d. Set Damage (Sonic Boom, Dragon Rage)
+ *     if (move.name === "Sonic Boom")  return { damage: [20] }
+ *     if (move.name === "Dragon Rage") return { damage: [40] }
+ *
+ *     //e. Level Dependent Damage (Seismic Toss, Night Shade)
+ *     if (move.name === "Seismic Toss" || move.name === "Night Shade") {
+ *         var lv = attacker.level; …
+ *         return { damage: [lv] }
+ *     }
+ *
+ * Il punto f — le mosse KO — è il blocco subito dopo, ed è già nel motore.
+ *
+ * ─── PERCHÉ DUE STRUTTURE E NON UNA ────────────────────────────────────────
+ *
+ * Perché nel riferimento sono due cose diverse. Il punto d ha il numero
+ * scritto dentro la condizione; il punto e non ha un numero affatto, legge il
+ * livello di chi attacca. Unirle in una mappa sola vorrebbe dire scrivere
+ * `50` accanto a Seismic Toss, cioè trasformare una lettura in una costante —
+ * e a livello 100 quella costante sarebbe sbagliata.
+ *
+ * ─── PERCHÉ NOMI E NON UN FLAG ─────────────────────────────────────────────
+ *
+ * Perché nel vendor non c'è un campo da trascrivere: c'è un `if` sul nome
+ * della mossa. `koSecco` esiste perché il vendor ha `isOHKO`; qui non ha
+ * niente, e inventare un `dannoFisso` nei dati vorrebbe dire dedurre una
+ * categoria dove il riferimento fa un elenco. Stessa forma di
+ * `MOSSE_ANNULLATE_DA_DAMP` e delle quattro mosse a peso, per la stessa
+ * ragione.
+ *
+ * ─── COSA NON LE TOCCA, MISURATO ───────────────────────────────────────────
+ *
+ * Niente della catena del danno: efficacia, STAB, stadi, natura, strumenti,
+ * schermi, meteo, abilità del difensore, bersaglio doppio. Il numero resta
+ * quello. L'unica cosa che le ferma è l'immunità di tipo, che nel riferimento
+ * sta in `immunityChecks` — cioè PRIMA di `setDamage` — ed è il motivo per cui
+ * Night Shade su un Normale e Seismic Toss su uno Spettro escono zero senza
+ * passare di qui. Le quattordici sonde stanno in `mosseADannoFisso.test.js`.
+ */
+export const MOSSE_DANNO_FISSO = Object.freeze({
+  'sonic boom': 20,
+  'dragon rage': 40,
+})
+export const MOSSE_DANNO_DA_LIVELLO = new Set(['seismic toss', 'night shade'])
+
+/**
+ * Il danno fisso di questa mossa, o `null` se non è una delle quattro.
+ *
+ * `livello` è `attacker.level` del riferimento, non la costante `LEVEL`: il
+ * motore accetta un livello per chiamata, e il punto e legge quello.
+ */
+export function dannoFisso(mossa, livello) {
+  if (mossa in MOSSE_DANNO_FISSO) return MOSSE_DANNO_FISSO[mossa]
+  return MOSSE_DANNO_DA_LIVELLO.has(mossa) ? livello : null
+}
+
+/** Vero se il danno di questa mossa è un numero deciso, non la formula. */
+export function haDannoFisso(mossa) {
+  return mossa in MOSSE_DANNO_FISSO || MOSSE_DANNO_DA_LIVELLO.has(mossa)
+}
+
+/**
+ * ─── CHI ENTRA NEL CALCOLO, E CHI ESCE `null` ───────────────────────────────
+ *
+ * La riga d'ingresso del motore, scritta qui perché ha due lettori e non uno.
+ *
+ * Il primo è `calculateDamage`, che la usa per decidere se proseguire. Il
+ * secondo è `scripts/gen-gap-noti.mjs`, che genera l'elenco delle mosse col
+ * badge «non calcolata»: quell'elenco è ESATTAMENTE il complemento di questa
+ * condizione fra le mosse che il riferimento tratta come offensive.
+ *
+ * Scriverla due volte sarebbe il modo più comodo di far mentire il badge: il
+ * giorno che qualcuno aggiunge una famiglia al motore e non alla copia, l'app
+ * calcolerebbe la mossa e continuerebbe a dire di non calcolarla. È lo stesso
+ * difetto che `gap.test.js` racconta per le abilità — due liste nate in due
+ * posti, e niente che le tenga allineate — e qui si evita alla radice invece
+ * che con un controllo a valle.
+ *
+ * Le quattro condizioni, in ordine di quanto sono comuni:
+ *
+ *   `power`      la stragrande maggioranza: la potenza sta nei dati
+ *   peso         Low Kick, Grass Knot, Heavy Slam, Heat Crash
+ *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
+ *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
+ *
+ * @param {string} mossa la chiave in `moves.json`
+ * @param {object|undefined} dati la sua voce, o `undefined` se non c'è
+ */
+export function mossaEntraNelCalcolo(mossa, dati) {
+  if (!dati) return false
+  return Boolean(dati.power)
+    || haPotenzaDaPeso(mossa)
+    || dati.koSecco === true
+    || haDannoFisso(mossa)
+}
+
+/**
  * ─── LE DUE LISTE DEI COPIATORI ─────────────────────────────────────────────
  *
  * Trascritte da `checkTrace` (`damage_MASTER.js:387`) e da `checkNeutralGas`

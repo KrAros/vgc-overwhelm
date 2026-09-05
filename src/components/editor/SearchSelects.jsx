@@ -9,6 +9,8 @@ import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
 import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
+import { mossaNonCalcolata } from '../../lib/gap.js'
+import { SegnalinoNonCalcolata } from './BadgeNonCalcolata.jsx'
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n.js'
 
@@ -225,6 +227,19 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
       </div>
       {moveDetails && (
         <div className="flex items-center gap-2 shrink-0 pl-1">
+          {/* ─── «NON CALCOLATA», SULLE MOSSE ────────────────────────────
+              Sta PRIMA della potenza perché è la potenza che mente: le
+              ventidue mosse nel divario mostrano `—` al posto di un numero,
+              esattamente come una mossa di stato, e il segnalino è la cosa
+              che distingue «non ne ha» da «non la sappiamo calcolare».
+
+              Il segnalino e non il riquadro, per la stessa ragione delle
+              abilità: la riga è alta 9 (`h-9`) e un riquadro la farebbe
+              crescere, facendo saltare le altre tre mosse ogni volta che se ne
+              cambia una. Qui il costo di quel compromesso è lo stesso già
+              dichiarato in `BadgeNonCalcolata.jsx` — chi tocca vede l'avviso
+              ambra e non la ragione, che resta nel `title` e nell'`aria-label`. */}
+          {mossaNonCalcolata(value) && <SegnalinoNonCalcolata tipo="move" />}
           <span className="text-xs font-mono font-bold text-gray-300 text-right">
             {displayBP && displayBP > 0 ? displayBP : '—'}
           </span>

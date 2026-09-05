@@ -9,9 +9,10 @@ Cosa resta da fare, e **perché non è stato fatto**. Non è una lista di
 desideri: ogni voce dice se il riferimento ha una risposta o se serve una
 decisione umana, cosa la blocca, e dove andrebbe scritta.
 
-Le sessioni hanno chiuso il divario delle abilità da 46 a 1. Questo file
-esiste perché ciò che resta non si perda nella memoria di una conversazione —
-ed è **presidiato**: `src/__tests__/lavoroAperto.test.js` controlla che ogni
+Le sessioni hanno chiuso il divario delle abilità da 46 a 1, e le prime due
+voci di questo registro — le quattro mosse a danno fisso e il registro delle
+mosse nel divario — le ha chiuse chi l'ha letto. Questo file esiste perché ciò che resta non si perda nella memoria di
+una conversazione — ed è **presidiato**: `src/__tests__/lavoroAperto.test.js` controlla che ogni
 voce sia ancora vera. Il giorno che una viene fatta, quel test diventa rosso e
 la riga qui va tolta nello stesso commit. Un registro che nessuno verifica
 diventa una lapide.
@@ -32,30 +33,40 @@ fine turno e Heatproof.
 
 ## A — Dove l'oracolo risponde
 
-### Le quattro mosse a danno fisso
-`seismic toss`, `night shade`, `dragon rage`, `sonic boom` — e `psywave`, che
-è la stessa famiglia con una variazione.
+### Le ventidue mosse che restano
+`calcEngine.js` esce con `null` per una mossa a `power: 0` che non sia una
+delle quattro a peso, una delle quattro KO o una delle quattro a danno fisso.
+Un `null` nella matrice si disegna `~`, cioè come una mossa di stato.
 
-Stanno nello **stesso blocco** del riferimento
-(`damage_MASTER.js:1240-1283`) delle quattro mosse KO già fatte: Seismic Toss
-e Night Shade tornano il livello, Dragon Rage 40, Sonic Boom 20. Oggi hanno
-`power: 0` e il motore esce con `null`, cioè `~` nella matrice — **Seismic
-Toss sembra Protect**.
+Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
+come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
+nome. Dodici sono fatte, ne restano **22**, e da questa sessione **portano il
+badge**: `gapNoti.json` ha una terza lista e la riga della mossa mostra il
+segnalino ambra. Il `~` resta, ma non è più muto.
 
-È il punto da cui ripartire, per una ragione precisa: fino alla sessione del
-fine turno l'harness confondeva un danno fisso con un colpo nullo, e a
-chiedergli «Seismic Toss» rispondeva «zero». Adesso distingue `[0]` da `[50]`,
-quindi l'oracolo è interrogabile. Il pezzo difficile è già fatto.
+> Beat Up, Comeuppance, Counter, Crush Grip, Electro Ball, Endeavor,
+> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Metal Burst,
+> Mirror Coat, Natural Gift, Punishment, Return, Reversal, Ruination,
+> Super Fang, Trump Card, Wring Out
 
-### Le altre 26 mosse senza badge
-L'elenco sta in `CONTRIBUTING.md`. Non sono tutte lo stesso problema: quelle
-legate ai punti salute (Flail, Reversal, Endeavor, Super Fang…) chiedono prima
-di decidere **se i punti salute entrano nel modello**, che oggi non ci sono.
+Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
+Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press, Ruination, Final
+Gambit — chiedono prima di decidere **se i punti salute entrano nel modello**,
+che oggi non ci sono: è la voce di sezione B qui sotto. Le reattive — Counter,
+Mirror Coat, Metal Burst, Comeuppance — nel riferimento ci sono, ma calcolano
+il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
+`defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
+turno che il nostro modello non ha. Restano quelle che si trascrivono e basta:
+la Velocità (Gyro Ball, Electro Ball), l'affetto (Return, Frustration), il peso
+degli alleati (Beat Up), lo strumento (Fling, Natural Gift), gli stadi del
+bersaglio (Punishment), i PP (Trump Card).
 
-### Il registro delle mosse nel divario
-`gapNoti.json` ha due liste, `abilita` e `strumenti`. Non ha le mosse, e le
-mosse un divario ce l'hanno. Finché non c'è, nessun badge avvisa l'utente che
-di quel `~` non deve fidarsi.
+**E cinque mosse che sembrano di questa famiglia e non lo sono.** Bide,
+Magnitude, Present, Spit Up e Psywave nel riferimento sono **commentate** dentro
+`move_data.js`, e il punto g di `setDamage` — «Psywave» — è un commento senza
+codice sotto. L'harness risponde «mossa non presente in NCP». Per loro non c'è
+un oracolo: scriverle sarebbe un'aggiudicazione, non una trascrizione, e vanno
+in sezione B il giorno che qualcuno le vuole.
 
 ### I 39 strumenti col badge
 Il numero non è mai sceso mentre le abilità andavano da 46 a 1. Nessuno ci ha
@@ -84,6 +95,23 @@ Spirit, Sweet Veil, Flower Veil. Oggi il menù dello stato lascia scegliere
 l'app, la stessa ragione per cui si può scrivere «bruciato» su un Pokémon di
 tipo Fuoco — ma è una scelta, e se domani il menù deve restringersi è una
 decisione di Simone, non una correzione.
+
+### Parental Bond sulle mosse a danno fisso
+Il riferimento raddoppia il numero — Seismic Toss diventa `[100]`, Sonic Boom
+`[40]` — e lo fa senza nessuno dei controlli su colpi multipli e mosse ad area
+che applica altrove: in `setDamage` la condizione è il solo
+`attacker.ability === "Parental Bond"` (`damage_MASTER.js:1172`).
+
+La wiki dice che nel gioco su queste mosse l'abilità non fa niente, ed è la
+stessa fonte — già corretta da Simone su tre punti — da cui viene
+`MOSSE_SENZA_PARENTAL_BOND`. Quella nota dice che le mosse a danno fisso non
+compaiono nella lista «perché da noi hanno potenza 0: al calcolo del danno non
+arrivano». Adesso ci arrivano, quindi la frase non regge più e la scelta è
+davanti.
+
+Oggi si segue l'oracolo, che è la regola del progetto quando l'oracolo c'è. La
+levetta è già in piedi: quattro nomi in `MOSSE_SENZA_PARENTAL_BOND` e il motore
+smette di raddoppiare, senza toccare una riga di `calcEngine.js`.
 
 ### La seconda metà di Sturdy
 Nel gioco fa anche sopravvivere con un punto salute a un colpo che ucciderebbe

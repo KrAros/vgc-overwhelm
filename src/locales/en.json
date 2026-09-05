@@ -107,7 +107,8 @@
   "gap": {
     "badge": "Not calculated",
     "spiegazioneAbilita": "this ability isn't included in the damage shown",
-    "spiegazioneItem": "this item isn't included in the damage shown"
+    "spiegazioneItem": "this item isn't included in the damage shown",
+    "spiegazioneMossa": "this move isn't included in the damage shown: the table marks it «~»"
   },
   "report": {
     "selected_matchup": "Selected Matchup",

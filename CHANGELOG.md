@@ -16,6 +16,27 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Il badge «non calcolata» adesso c'è anche sulle mosse
+- Le **22 mosse** che il riferimento calcola e noi no mostrano il segnalino
+  ambra accanto alla potenza — Counter, Super Fang, Gyro Ball, Return e le
+  altre. Prima erano l'unico divario del progetto del tutto silenzioso: la
+  tabella scriveva `~`, cioè quello che scrive per Protect, e niente diceva
+  che di quel `~` non ci si deve fidare
+- Il badge non compare sulle mosse che il riferimento non calcola affatto
+  (Bide, Magnitude, Present, Spit Up, Psywave): lì non c'è un numero giusto da
+  nessuna delle due parti, e dichiararlo un divario sarebbe falso
+
+### Mosse che prima sembravano di stato
+- **Sonic Boom, Dragon Rage, Seismic Toss e Night Shade** mostrano il loro
+  danno. Prima uscivano `~` nella matrice, cioè il disegno di una mossa che
+  non fa danno: a livello 50 Seismic Toss ne fa 50, e l'app diceva «niente»
+- Il numero è fisso e non ha variazione: un valore solo invece di sedici tiri.
+  Non lo cambiano né l'efficacia, né lo STAB, né gli stadi, né gli strumenti —
+  solo l'immunità di tipo lo azzera
+- Restano 22 mosse a potenza zero che il riferimento calcola e noi no, e
+  continuano a disegnarsi `~` senza nessun avviso: l'elenco sta in
+  [`docs/lavoro-aperto.md`](docs/lavoro-aperto.md)
+
 ### Più leggera da aprire
 - Il JavaScript scaricato alla prima apertura passa da **212,56 a 205,21 kB**
   gzip: dal bundle escono i campi dei dati di gioco che l'applicazione non

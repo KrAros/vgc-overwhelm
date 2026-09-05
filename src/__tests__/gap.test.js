@@ -29,9 +29,13 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../data/abilityEffects.js'
 import { ITEM_EFFECTS } from '../data/itemEffects.js'
-import { abilitaNonCalcolata, strumentoNonCalcolato, metaGap, elencoGap } from '../lib/gap.js'
+import { abilitaNonCalcolata, strumentoNonCalcolato, mossaNonCalcolata, metaGap, elencoGap } from '../lib/gap.js'
 import abilities from '../data/abilities.json' with { type: 'json' }
 import items from '../data/items.json' with { type: 'json' }
+import movesData from '../data/moves.json' with { type: 'json' }
+import { calculateDamage } from '../calcEngine.js'
+import { caricaNCP } from '../../scripts/ncp/contesto.mjs'
+import path from 'node:path'
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 // `haEffetto` arriva da qui e non è più ridefinito nel file: prima ne esisteva
 // una copia identica a quella del generatore, quindi il test controllava il
@@ -40,6 +44,10 @@ import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import { haEffetto } from '../../scripts/campi-meta.mjs'
 
 const norm = (s) => String(s || '').toLowerCase().replace(/[.'’:]/g, '').replace(/[\s\-_]+/g, '')
+
+const vendorPresente = fs.existsSync(
+  path.resolve(fileURLToPath(new URL('../../vendor/ncp/damage_SV.js', import.meta.url))),
+)
 
 /**
  * Il rapporto con le prove. Il percorso è calcolato da `import.meta.url` e non
@@ -190,5 +198,108 @@ describe('gap noti — la lista che alimenta il badge', () => {
     expect(abilitaNonCalcolata('')).toBe(false)
     expect(strumentoNonCalcolato('strumento che non esiste')).toBe(false)
     expect(strumentoNonCalcolato(null)).toBe(false)
+  })
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LE MOSSE — la terza lista, e la prima in cui il silenzio era totale
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── PERCHE' QUESTA LISTA SI CONTROLLA DIVERSAMENTE DALLE ALTRE DUE ────────
+ *
+ * Per le abilità il difetto verificabile è «badge di troppo», e si trova
+ * incrociando `gapNoti.json` con `ABILITY_EFFECTS`: due liste scritte in due
+ * posti, tenute allineate da questo file.
+ *
+ * Per le mosse la seconda fonte non è una lista: è il motore. Una mossa merita
+ * il badge se `calculateDamage` esce `null`, e questo si può CHIEDERE invece
+ * che dedurre — quindi qui si chiede, mossa per mossa, in tutte e due le
+ * direzioni.
+ */
+describe('le mosse nel divario', () => {
+  const att = { atkPokemon: 'garchomp', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null, atkAbility: null, atkItem: null, level: 50 }
+  const dif = { defPokemon: 'blissey', defSPs: [0, 0, 0, 0, 0, 0], defNature: null, defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {} }
+  const calcola = (m) => calculateDamage({ attacker: att, defender: dif, move: m, field: {} })
+
+  it('la lista c\'è, è generata, e il meta la conta', () => {
+    expect(elencoGap.mosse.length).toBeGreaterThan(0)
+    expect(metaGap.mosseNelGap).toBe(elencoGap.mosse.length)
+  })
+
+  it('ogni mossa col badge esce davvero `null` dal motore', () => {
+    // Il «badge di troppo»: dire di non calcolare un numero che invece
+    // calcoliamo insegna a diffidare di un numero giusto.
+    const sbagliate = elencoGap.mosse.filter(m => calcola(m) !== null)
+    expect(sbagliate, 'rigenerare con `npm run gap:gen`').toEqual([])
+  })
+
+  it.runIf(vendorPresente)('e nessuna mossa che il riferimento calcola resta senza badge', () => {
+    // Il «badge mancante», che per le abilità questo file non può controllare
+    // e per le mosse sì — perché tutte e due le fonti si possono interrogare
+    // invece che leggere da una lista:
+    //
+    //   il riferimento   eseguito, `category` diversa da `Status`
+    //   il nostro motore chiamato, `null` oppure no
+    //
+    // È la stessa misura del generatore, rifatta da un altro file con un altro
+    // import. Se il generatore un giorno sbagliasse a scriverne una, la lista
+    // e questa misura divergerebbero — che è tutto il punto di rifarla.
+    const datiNCP = caricaNCP().leggi('moves')
+    const dovrebbero = Object.entries(movesData)
+      .filter(([, v]) => datiNCP[v.name]?.category && datiNCP[v.name].category !== 'Status')
+      .map(([k]) => k)
+      .filter(m => calcola(m) === null)
+
+    expect([...dovrebbero].sort()).toEqual([...elencoGap.mosse].sort())
+  })
+
+  it('ogni voce porta la categoria che il riferimento le dà', () => {
+    // La «prova» delle mosse. Per le abilità è file:riga nel vendor; qui è la
+    // categoria letta dai suoi dati eseguiti, che è la cosa che le fa entrare.
+    const rapporto = leggiRapporto()
+    expect(rapporto.prove.mosse.map(v => v.chiave)).toEqual([...elencoGap.mosse])
+    for (const v of rapporto.prove.mosse) {
+      expect(['Physical', 'Special'], `${v.chiave}: categoria inattesa`).toContain(v.categoriaNCP)
+    }
+  })
+
+  it('le mosse che il riferimento non ha NON portano il badge', () => {
+    // Bide, Magnitude, Present, Spit Up, Psywave. Il badge dice «il
+    // riferimento la calcola e noi no»: su di loro sarebbe falso, perché non
+    // la calcola nessuno dei due. La differenza fra «non calcolata» e «non
+    // calcolabile» è tutta la promessa del badge.
+    for (const m of ['bide', 'magnitude', 'present', 'spit up', 'psywave']) {
+      expect(calcola(m), `${m} adesso la calcoliamo`).toBeNull()
+      expect(mossaNonCalcolata(m), `${m} ha preso un badge che non le spetta`).toBe(false)
+    }
+  })
+
+  it('le mosse di stato non portano il badge', () => {
+    for (const m of ['protect', 'swords dance', 'thunder wave', 'toxic']) {
+      expect(mossaNonCalcolata(m)).toBe(false)
+    }
+  })
+
+  it('e le dodici che abbiamo fatto nemmeno', () => {
+    // Le quattro a peso, le quattro KO, le quattro a danno fisso. Hanno tutte
+    // potenza zero nei dati: se il badge guardasse `power` invece della riga
+    // d'ingresso del motore, sarebbero qui col segnalino.
+    for (const m of ['low kick', 'grass knot', 'heavy slam', 'heat crash',
+      'fissure', 'guillotine', 'horn drill', 'sheer cold',
+      'sonic boom', 'dragon rage', 'seismic toss', 'night shade']) {
+      expect(movesData[m].power, `${m} ha una potenza nei dati`).toBe(0)
+      expect(mossaNonCalcolata(m), `${m} ha il badge e invece la calcoliamo`).toBe(false)
+    }
+  })
+
+  it('controllo negativo: una mossa inventata non porta il badge', () => {
+    expect(mossaNonCalcolata('mossa che non esiste')).toBe(false)
+    expect(mossaNonCalcolata(null)).toBe(false)
+    expect(mossaNonCalcolata('')).toBe(false)
+    // E una che c'è lo porta: senza questa riga, una funzione che risponde
+    // sempre `false` passerebbe tutto il blocco.
+    expect(mossaNonCalcolata('counter')).toBe(true)
+    expect(mossaNonCalcolata('Counter')).toBe(true)
   })
 })
