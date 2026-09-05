@@ -706,3 +706,63 @@ export function koChanceSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, max
 export function findBestNHKOSitrus(rolls, defHP, { eotNet = 0, conSitrus = true, minHits = 1, maxHits = MAX_HITS, colpiPerTurno = 1, rollsFiglio = null } = {}) {
   return primoKO(koChanceSitrus(rolls, defHP, { eotNet, conSitrus, maxHits, colpiPerTurno, rollsFiglio }), { minHits, maxHits })
 }
+/**
+ * ═══ IL VERDETTO DI KO, IN TRE STATI ══════════════════════════════════════
+ *
+ * ─── IL DIFETTO CHE C'ERA GIÀ, A VITA PIENA ────────────────────────────────
+ *
+ * La matrice colorava una cella «KO» con `maxPct >= 100`, cioè «il tiro
+ * MIGLIORE uccide». Quindi una mossa che fa 40–105% e una che ne fa 100–120%
+ * avevano lo stesso colore: la prima uccide in un caso su sedici, la seconda
+ * sempre.
+ *
+ * Non è un difetto nato coi punti salute — c'era già, e a vita piena. I punti
+ * salute lo rendono solo più grosso: abbassando la soglia, quasi tutto
+ * attraversa il 100% e il colore diventa rumore.
+ *
+ * ─── E IL CONFRONTO NON È PIÙ CON UNA PERCENTUALE ──────────────────────────
+ *
+ * La percentuale resta sul MASSIMO — è la decisione presa, e la ragione è la
+ * matrice: il danno è una proprietà del colpo, e va confrontato fra celle
+ * diverse. Il KO invece è una proprietà della situazione, e guarda quanti
+ * punti salute restano.
+ *
+ * Quindi il confronto si fa sui punti, non sui per cento: `maxPct >= 100`
+ * risponde alla domanda sbagliata appena `defPS` è diverso da `defHP`.
+ *
+ * ─── I TRE STATI, E PERCHÉ LA PROBABILITÀ NON SI STIMA ─────────────────────
+ *
+ *   `certo`      anche il tiro peggiore basta
+ *   `possibile`  alcuni sì e altri no, con la probabilità esatta
+ *   `no`         nemmeno il migliore
+ *
+ * I due estremi si decidono con `minDmg` e `maxDmg`, che sono già la somma
+ * giusta per le mosse multi-colpo e per Parental Bond. Il numero in mezzo NO:
+ * la somma di dieci tiri non è dieci volte un tiro, e `koChanceCumulative` la
+ * convolve colpo per colpo. Si chiede a lei — e le si chiede un turno solo,
+ * perché è quello che la cella mostra.
+ *
+ * @param {object|null} risultato   l'uscita di `calculateDamage`
+ * @param {number} [psResidui]      i punti salute rimasti; se non dato, quelli
+ *                                  del risultato, che a vita piena sono i massimi
+ * @returns {{stato: 'certo'|'possibile'|'no', probabilita: number}}
+ */
+export function verdettoKO(risultato, psResidui = undefined) {
+  const niente = { stato: 'no', probabilita: 0 }
+  if (!risultato || risultato.immune) return niente
+
+  const ps = psResidui ?? risultato.defPS ?? risultato.defHP
+  if (!(ps > 0)) return niente
+
+  const rolls = Array.isArray(risultato.rolls) ? risultato.rolls : []
+  if (rolls.length === 0) return niente
+
+  if (risultato.maxDmg < ps) return niente
+  if (risultato.minDmg >= ps) return { stato: 'certo', probabilita: 1 }
+
+  // Il caso in mezzo, e l'unico che ha bisogno della convoluzione.
+  const [entroUnTurno] = koChanceCumulative(
+    rolls, ps, 0, 1, risultato.colpi ?? 1, risultato.rollsFiglio ?? null,
+  )
+  return { stato: 'possibile', probabilita: entroUnTurno }
+}

@@ -2332,6 +2332,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
 
   return {
     rolls, minDmg, maxDmg, minPct, maxPct, defHP, effectiveness, stab, log,
+    // I punti salute CORRENTI di chi subisce. `defHP` resta il MASSIMO, ed e'
+    // il denominatore delle percentuali: il danno e' una proprieta' del colpo
+    // e va confrontato fra celle diverse. `defPS` e' quanto ne resta, ed e'
+    // quello che decide se il colpo uccide. Due numeri perche' rispondono a
+    // due domande, e finche' nessuno manda i punti salute sono lo stesso.
+    defPS: psDif,
     atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType,
     // I sedici roll del SECONDO colpo di Parental Bond, o `null` se non
     // c'entra. Sono un array a parte e non un moltiplicatore perché i due

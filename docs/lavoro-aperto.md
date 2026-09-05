@@ -174,11 +174,10 @@ Le decisioni sono prese, e sono di Simone:
   accetta l'una o l'altra in ingresso. L'asimmetria «i miei in punti, i suoi in
   percentuale» non è esprimibile: la matrice è simmetrica, ogni cella calcola
   tutte e due le direzioni, e non esiste un lato «mio»;
-- il verdetto diventa **tre stati invece di due** — KO certo, KO possibile,
-  niente. Oggi `maxPct >= 100` li confonde già a vita piena: una mossa che fa
-  40–105% e una che ne fa 100–120% hanno lo stesso colore. E il terzo stato non
-  può essere solo un colore, perché la matrice è densa e c'è chi il rosso dal
-  verde non lo distingue;
+- il verdetto è **tre stati invece di due** — fatto: KO certo, KO possibile
+  con la probabilità esatta, niente. Prima `maxPct >= 100` li confondeva già a
+  vita piena, e i tre si distinguono con una forma («KO» e «KO?») e non col
+  solo colore;
 - **le due levette restano** per adesso, ma derivate: la precedenza è decisa e
   scritta, il numero vince. Ritirarle dall'interfaccia si valuta dopo.
 

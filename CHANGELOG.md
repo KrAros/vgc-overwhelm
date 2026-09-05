@@ -16,6 +16,17 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### La matrice distingue «lo uccide» da «forse lo uccide»
+- Prima una mossa che fa 40–105% e una che ne fa 100–120% avevano **lo stesso
+  colore**: la prima uccide in un caso su sedici, la seconda sempre
+- Adesso la cella dice **KO** quando anche il tiro peggiore basta e **KO?**
+  quando solo alcuni bastano, con la probabilità esatta passando col mouse
+- Il verdetto guarda i punti salute **rimasti**, non il massimo: un bersaglio
+  a metà vita va KO con una mossa che ne fa il 60%. La percentuale invece
+  resta sul massimo, così due celle si possono ancora confrontare fra loro
+- I due stati si leggono anche in bianco e nero, e il lettore di schermo li
+  annuncia
+
 ### Eruption dava sempre il danno massimo, anche a un punto di vita
 - **Eruption**, **Water Spout** e **Dragon Energy** valgono meno man mano che
   chi le usa si indebolisce: a metà vita fanno metà. L'app dava sempre il

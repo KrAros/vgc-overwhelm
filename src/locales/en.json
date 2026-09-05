@@ -102,7 +102,9 @@
     "ssShort": "SS",
     "fwShort": "Flw",
     "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's.",
-    "ptShort": "Pro"
+    "ptShort": "Pro",
+    "ko_certo": "Guaranteed KO",
+    "ko_possibile": "Possible KO: {{pct}}%"
   },
   "gap": {
     "badge": "Not calculated",

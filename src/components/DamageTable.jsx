@@ -8,6 +8,7 @@ import movesData from '../data/moves.json'
 import { formatPokeName, nomeCompleto } from '../utils/nomiPokemon'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { costruisciMatrice } from '../lib/matrice'
+import { verdettoKO } from '../lib/damage'
 import useFieldState from '../hooks/useFieldState'
 import useBordiScorrimento from '../hooks/useBordiScorrimento'
 
@@ -80,6 +81,16 @@ function immuneLabel(result) {
  * null altrimenti. Basta a decidere sia l'anello attorno alla cella sia quale
  * delle due metà evidenziare.
  */
+/**
+ * La frase del verdetto, composta in un posto solo perché la usano il `title`
+ * e il nome accessibile — e devono dire la stessa cosa, che è la regola delle
+ * due affordance già applicata al badge «non calcolata».
+ */
+function etichettaKO(t, ko) {
+  if (ko.stato === 'certo') return t('ui.ko_certo')
+  return t('ui.ko_possibile', { pct: Math.round(ko.probabilita * 1000) / 10 })
+}
+
 const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelect, ri, ci, dirPrima, dirSeconda, showKoOnly, isOnAxis, hasSelection, selDir }) {
   const { t } = useTranslation()
   const dimCell = hasSelection && !isOnAxis
@@ -100,9 +111,21 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
     primo,
   } = cella
 
+  // ─── IL VERDETTO, CALCOLATO UNA VOLTA PER MEZZA CELLA ──────────────────
+  //
+  // Era `maxPct >= 100`, cioè «il tiro MIGLIORE uccide»: una mossa che fa
+  // 40–105% e una che ne fa 100–120% avevano lo stesso colore. E adesso che i
+  // punti salute esistono, il confronto con una percentuale del MASSIMO
+  // risponde proprio alla domanda sbagliata.
+  const koT1 = d1 ? verdettoKO(d1.result) : { stato: 'no', probabilita: 0 }
+  const koT2 = d2 ? verdettoKO(d2.result) : { stato: 'no', probabilita: 0 }
+
   if (showKoOnly) {
-    const t1Ko = d1 && d1.result.maxPct >= 100
-    const t2Ko = d2 && d2.result.maxPct >= 100
+    // «Solo KO» continua a voler dire «può andare KO», certo o possibile: è il
+    // filtro per cercare le linee di gioco, e una che uccide un tiro su sedici
+    // è una linea di gioco.
+    const t1Ko = koT1.stato !== 'no'
+    const t2Ko = koT2.stato !== 'no'
     if (!t1Ko && !t2Ko) {
       return (
         <td className="border-l border-gray-700 opacity-0 pointer-events-none"><div className="p-1 h-8" /></td>
@@ -110,23 +133,27 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
     }
   }
 
-  const koFilterDimT1 = showKoOnly && !(d1 && d1.result.maxPct >= 100)
-  const koFilterDimT2 = showKoOnly && !(d2 && d2.result.maxPct >= 100)
+  const koFilterDimT1 = showKoOnly && koT1.stato === 'no'
+  const koFilterDimT2 = showKoOnly && koT2.stato === 'no'
 
   const goesFirstT1 = primo === 't1'
   const goesFirstT2 = primo === 't2'
 
-  const colorClass = (pct) => {
+  // Il colore del numero segue il KO quando c'è, e la percentuale quando non
+  // c'è: il rosso vuol dire «uccide», non «fa tanto».
+  const colorClass = (pct, ko) => {
+    if (ko === 'certo') return 'text-red-400'
+    if (ko === 'possibile') return 'text-amber-400'
     if (!pct) return 'text-teal-300'
-    if (pct >= 100) return 'text-red-400'
     if (pct >= 50)  return 'text-orange-400'
     if (pct <= 25)  return 'text-green-400'
     return 'text-teal-300'
   }
 
-  const bgClass = (pct) => {
+  const bgClass = (pct, ko) => {
+    if (ko === 'certo') return 'bg-red-900/30'
+    if (ko === 'possibile') return 'bg-amber-900/20'
     if (!pct) return ''
-    if (pct >= 100) return 'bg-red-900/30'
     if (pct <= 25)  return 'bg-green-900/20'
     return ''
   }
@@ -140,13 +167,13 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
     ? 'ring-2 ring-violet-400 ring-inset shadow-[0_0_16px_rgba(167,139,250,0.25)]'
     : ''
 
-  const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false, pokeName = '') => {
+  const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false, pokeName = '', ko = { stato: 'no', probabilita: 0 }) => {
     const label = immune ? immuneLabel(immune.result) : null
 
     const halfSelected =
       dirPrima   === dir ? 'bg-teal-900/40'   :
       dirSeconda === dir ? 'bg-violet-900/40' :
-      d ? bgClass(d.result.maxPct) : ''
+      d ? bgClass(d.result.maxPct, ko.stato) : ''
 
     // Fix 3: tooltip del fulmine con nome Pokémon + testo i18n
     const goesFirstTitle = pokeName
@@ -159,7 +186,10 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
         role="button"
         tabIndex={0}
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const [a,d,m] = dir === 't1' ? [attacker, defender, allMovesT1] : [defender, attacker, allMovesT2]; onSelect(ri, ci, dir, a, d, m) } }}
-        aria-label={d ? `${dir === 't1' ? attacker?.key : defender?.key} uses ${d.move}, ${d.result.minPct}–${d.result.maxPct}% damage` : `${dir === 't1' ? '▶' : '◀'} no move`}
+        aria-label={d
+          ? `${dir === 't1' ? attacker?.key : defender?.key} uses ${d.move}, ${d.result.minPct}–${d.result.maxPct}% damage`
+            + (ko.stato !== 'no' ? `, ${etichettaKO(t, ko)}` : '')
+          : `${dir === 't1' ? '▶' : '◀'} no move`}
         className={`p-1 text-center cursor-pointer hover:bg-gray-700/40 transition-colors ${
           dir === 't1' ? 'border-b border-gray-700/50' : ''
         } ${halfSelected} ${dim ? 'opacity-20 pointer-events-none' : ''}`}
@@ -193,8 +223,21 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
                 </span>
               )}
             </div>
-            <div className={`font-medium text-xs ${colorClass(d.result.maxPct)}`}>
+            <div className={`font-medium text-xs ${colorClass(d.result.maxPct, ko.stato)}`}>
               {d.result.minPct}–{d.result.maxPct}%
+              {/* ─── IL TERZO STATO NON PUO' ESSERE SOLO UN COLORE ──────
+                  La matrice è densa e c'è chi il rosso dall'ambra non lo
+                  distingue. «KO» e «KO?» sono due FORME diverse: si leggono
+                  in bianco e nero, e si leggono anche a 360 px.
+
+                  La probabilità esatta sta nel `title` e nel nome
+                  accessibile: nella cella non ci sta, e sarebbe un quarto
+                  numero accanto a tre che ci sono già. */}
+              {ko.stato !== 'no' && (
+                <span className="ml-1 font-bold" title={etichettaKO(t, ko)}>
+                  {ko.stato === 'certo' ? 'KO' : 'KO?'}
+                </span>
+              )}
             </div>
           </>
         ) : label ? (
@@ -215,8 +258,8 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
 
   return (
     <td className={`border-l border-t border-gray-700 ${cellRing} relative transition-all hover:brightness-125 w-25 min-w-25 max-w-25 ${dimCell && !isFirst && !isSecond ? 'opacity-30' : ''}`}>
-      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1, attacker?.key)}
-      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2, defender?.key)}
+      {renderHalf(d1, firstImmuneT1, '▶', 't1', koFilterDimT1 || (hasSelection && !dimCell && selDir === 't2'), goesFirstT1, attacker?.key, koT1)}
+      {renderHalf(d2, firstImmuneT2, '◀', 't2', koFilterDimT2 || (hasSelection && !dimCell && selDir === 't1'), goesFirstT2, defender?.key, koT2)}
     </td>
   )
 })
