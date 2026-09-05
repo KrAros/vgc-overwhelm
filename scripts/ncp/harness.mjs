@@ -354,7 +354,7 @@ export function creaHarness() {
       nature: a.atkNature,
       ability: tr.abilitaNCP(a.atkAbility),
       item: tr.strumentoNCP(a.atkItem),
-      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0 },
+      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0, sp: a.atkSpeBoost || 0 },
       mossaNCP,
       datiMossa,
       extra: {
@@ -384,7 +384,7 @@ export function creaHarness() {
       nature: d.defNature,
       ability: tr.abilitaNCP(d.defAbility),
       item: tr.strumentoNCP(d.defItem),
-      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0 },
+      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0, sp: d.defSpeBoost || 0 },
       mossaNCP,
       datiMossa,
       extra: {
@@ -408,6 +408,52 @@ export function creaHarness() {
     }
     if (d.defItem && !dif.pokemon.item) {
       return { ok: false, motivo: `strumento non presente in NCP: ${d.defItem}` }
+    }
+
+    // ── 4-bis. LA VELOCITA' FINALE ─────────────────────────────────────────
+    //
+    // ─── COSA MANCAVA, E PERCHE' NESSUN TEST POTEVA VEDERLO ────────────────
+    //
+    // Questo percorso entra da `GET_DAMAGE_SV`, un livello sotto l'ingresso
+    // vero. E l'ingresso vero, prima di ogni calcolo, fa due cose alla
+    // Velocita' che qui non succedevano (`damage_SV.js:43-53`):
+    //
+    //     p1.stats[SP] = getModifiedStat(p1.rawStats[SP], p1.boosts[SP]);
+    //     setHighestStat(p1, 0);
+    //     p1.stats[SP] = getFinalSpeed(p1, weather, tailwind, swamp, terrain);
+    //
+    // `getFinalSpeed` e' Ferrolimo, Ferroblocco, Quick Feet, Slow Start, le
+    // abilita' meteo, Surge Surfer, Unburden, Ventoincoda, il paradosso e la
+    // paralisi. Senza, `stats[SP]` restava la Velocita' coi soli stadi.
+    //
+    // Chi la legge sono due cose: l'ordine di turno di Analytic
+    // (`damage_SV.js:147`) e la potenza di Gyro Ball ed Electro Ball
+    // (`damage_MASTER.js:1307` e `:1312`). Su tutt'e due l'harness rispondeva
+    // con una Velocita' che nell'applicazione vera non esiste — e siccome il
+    // nostro motore faceva lo stesso errore, il confronto era verde.
+    //
+    // E' la stessa forma del difetto che confondeva un danno fisso con un
+    // colpo nullo: l'oracolo rispondeva, rispondeva sbagliato, e nessuno
+    // poteva accorgersene perche' sbagliava d'accordo con noi.
+    //
+    // ─── COSA RESTA FUORI, DICHIARATO ─────────────────────────────────────
+    //
+    //   Ventoincoda      il nostro `field` non arriva fin qui coi due lati
+    //                    separati, e `costruisciCampo` lo passa `false` anche
+    //                    nell'altro percorso. Resta `false` da tutt'e due le
+    //                    parti, quindi non e' una divergenza nascosta: e' una
+    //                    casella che nessuno dei due accende.
+    //   Grass/Water      le mosse Pledge non esistono nel nostro modello, come
+    //     Pledge         gia' dichiarato in `utils/speedOrder.js`.
+    //   il paradosso     `checkParadoxAbilities` gira nell'ingresso alto, non
+    //                    qui: `paradoxAbilityBoost` resta indefinito e il
+    //                    x1,5 non si accende. Chi vuole verificarlo usa
+    //                    `calcolaConPreparazione`, che quello strato lo esegue.
+    const meteoNCP = METEO_NCP[String(field.weather || '').toLowerCase()] || ''
+    const terrenoNCP = TERRENO_NCP[field.terrain] || ''
+    for (const [p, posizione] of [[att.pokemon, 0], [dif.pokemon, 1]]) {
+      ncp.setHighestStat(p, posizione)
+      p.stats.sp = ncp.getFinalSpeed(p, meteoNCP, false, false, terrenoNCP)
     }
 
     // ── 5. Esecuzione ──────────────────────────────────────────────────────
@@ -620,7 +666,7 @@ export function creaHarness() {
       nature: a.atkNature,
       ability: tr.abilitaNCP(a.atkAbility),
       item: tr.strumentoNCP(a.atkItem),
-      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0 },
+      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0, sp: a.atkSpeBoost || 0 },
       mossaNCP,
       datiMossa,
       extra: {
@@ -642,7 +688,7 @@ export function creaHarness() {
       nature: d.defNature,
       ability: tr.abilitaNCP(d.defAbility),
       item: tr.strumentoNCP(d.defItem),
-      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0 },
+      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0, sp: d.defSpeBoost || 0 },
       mossaNCP,
       datiMossa,
       // `abilityOn` sul difensore raccoglie i nostri due flag che vi

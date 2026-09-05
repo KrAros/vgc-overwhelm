@@ -68,6 +68,17 @@ codice sotto. L'harness risponde «mossa non presente in NCP». Per loro non c'�
 un oracolo: scriverle sarebbe un'aggiudicazione, non una trascrizione, e vanno
 in sezione B il giorno che qualcuno le vuole.
 
+### Il Ventoincoda non arriva al motore del danno
+`calculateDamage` riceve un `field` che non distingue i due lati, quindi
+l'ordine di turno di Analytic — e domani la potenza di Gyro Ball ed Electro
+Ball — lo calcola con `tailwind: false`. L'harness fa la stessa cosa da tutte
+e due le parti, quindi **non è una divergenza nascosta**: è una casella che
+nessuno dei due accende, e finché è così nessun caso può contraddirla.
+
+È la stessa forma dell'assunzione dietro Eruption: verde per costruzione. Il
+giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
+sa già fare.
+
 ### I 39 strumenti col badge
 Il numero non è mai sceso mentre le abilità andavano da 46 a 1. Nessuno ci ha
 ancora guardato.

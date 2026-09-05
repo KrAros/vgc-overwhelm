@@ -15,15 +15,29 @@
  *
  * ─── I DUE PUNTI DOVE SI SBAGLIA ───────────────────────────────────────────
  *
- * 1. ANALYTIC NON GUARDA LA VELOCITÀ EFFETTIVA. Il riferimento ricava l'ordine
- *    di turno da sé, in una riga (`damage_SV.js:147`), confrontando `stats[SP]`
- *    — la Velocità con gli STADI e nient'altro. Niente Choice Scarf, niente
- *    meteo, niente Tailwind, niente ×1.5 del paradosso.
+ * 1. ANALYTIC GUARDA LA VELOCITÀ EFFETTIVA — e questo file diceva il contrario.
  *
- *    Il motore ha già `calcEffectiveSpe`, che tutte quelle cose le sa. Usarla
- *    qui sarebbe stato «migliorare» il riferimento — cioè divergere da lui con
- *    le migliori intenzioni. Il caso con lo Choice Scarf, più sotto, è quello
- *    che rende la differenza rossa invece che invisibile.
+ *    Il riferimento ricava l'ordine di turno da sé, in una riga
+ *    (`damage_SV.js:147`), confrontando `stats[SP]`. Leggendo quella riga da
+ *    sola sembra la Velocità coi soli stadi, ed è la conclusione che stava
+ *    scritta qui: usare `calcEffectiveSpe` sarebbe stato «migliorare» il
+ *    riferimento.
+ *
+ *    Quattro righe più su nello STESSO file (`damage_SV.js:43-53`), dentro
+ *    `CALCULATE_ALL_MOVES_SV`, c'è invece questo, prima di ogni calcolo:
+ *
+ *        p1.stats[SP] = getModifiedStat(p1.rawStats[SP], p1.boosts[SP]);
+ *        setHighestStat(p1, 0);
+ *        p1.stats[SP] = getFinalSpeed(p1, weather, tailwind, swamp, terrain);
+ *
+ *    `getFinalSpeed` è Choice Scarf, Ferroblocco, la paralisi, le abilità
+ *    meteo, il ×1.5 del paradosso. Quindi la Velocità effettiva il riferimento
+ *    la guarda: la scrive dentro `stats[SP]` prima di leggerla.
+ *
+ *    Per due sessioni nessun test l'ha visto perché l'HARNESS sbagliava
+ *    d'accordo con noi: `calcola` entra da `GET_DAMAGE_SV`, un livello sotto,
+ *    e quelle tre righe non le eseguiva. Il caso «Analytic con lo Scarf ≡ NCP»
+ *    passava confrontando due numeri sbagliati nello stesso modo.
  *
  *    E il confronto è `>` STRETTO: a parità esatta di Velocità, Analytic si
  *    accende. Un `>=` scritto per simmetria lo spegnerebbe, e nessun numero
@@ -138,23 +152,48 @@ describe('Analytic: ×1.3 se non muovi per primo', () => {
       .toBeGreaterThan(rallentatoSenza.maxDmg)
   })
 
-  it('lo CHOICE SCARF non conta — ed è il caso che difende la trascrizione', () => {
-    // Watchog 77 contro Charizard 100: più lento, quindi Analytic accesa.
+  it('lo CHOICE SCARF conta — e prima si diceva il contrario', () => {
+    // ─── IL TEST CHE DIFENDEVA UNA PREMESSA FALSA ────────────────────────
     //
-    // Con lo Choice Scarf la Velocità EFFETTIVA diventa 115, cioè maggiore di
-    // 100. Un motore che guardasse `calcEffectiveSpe` — che il progetto ha, e
-    // che sa dello Scarf — direbbe «muove per primo» e spegnerebbe Analytic.
+    // Qui c'era scritto «lo Choice Scarf NON conta», con la spiegazione che il
+    // riferimento guarda `stats[SP]`, che lo Scarf non tocca. La premessa era
+    // falsa: `CALCULATE_ALL_MOVES_SV` scrive `stats[SP] = getFinalSpeed(...)`
+    // prima di ogni calcolo, e `getFinalSpeed` lo Scarf lo sa.
     //
-    // Il riferimento guarda `stats[SP]`, che lo Scarf non tocca: resta 77,
-    // resta LAST, resta ×1.3. Questo test è l'unica cosa che tiene ferma la
-    // scelta di NON usare la funzione più informata che abbiamo.
+    // Watchog 77 contro Charizard 100: più lento, Analytic accesa. Con lo
+    // Scarf diventa 115, passa davanti, e Analytic si spegne.
+    //
+    // Il caso non è stato tolto: è stato girato, e adesso è il contrario a
+    // essere presidiato. È verificato dall'oracolo — «Analytic con lo Scarf ≡
+    // NCP», più in basso — che prima passava confrontando due numeri sbagliati
+    // nello stesso modo.
     const conScarf = calcola(
       att('watchog', 'analytic', { atkItem: 'choice scarf' }), dif('charizard'), 'hyper voice')
     const senzaAbilita = calcola(
       att('watchog', null, { atkItem: 'choice scarf' }), dif('charizard'), 'hyper voice')
 
-    expect(conScarf.maxDmg, 'lo Choice Scarf ha spento Analytic: si sta usando la Velocità effettiva')
-      .toBeGreaterThan(senzaAbilita.maxDmg)
+    expect(conScarf.rolls, 'lo Choice Scarf non ha spento Analytic')
+      .toEqual(senzaAbilita.rolls)
+  })
+
+  it('e la PARALISI del bersaglio pure, dall\'altro verso', () => {
+    // Il controllo che si muove nell'altra direzione: lì lo Scarf accelera chi
+    // attacca, qui la paralisi rallenta chi subisce. Starmie 115 contro
+    // Dragapult 142 è più lento e ha Analytic accesa; con Dragapult paralizzato
+    // (142 → 71) passa davanti e si spegne.
+    //
+    // Senza questo caso, un motore che leggesse la Velocità effettiva del solo
+    // ATTACCANTE passerebbe il test qui sopra.
+    const sano = calcola(att('starmie', 'analytic'), dif('dragapult'), 'surf')
+    const paralizzato = calcola(
+      att('starmie', 'analytic'), dif('dragapult', null, { defStatus: 'paralyzed' }), 'surf')
+    const paralizzatoSenza = calcola(
+      att('starmie', null), dif('dragapult', null, { defStatus: 'paralyzed' }), 'surf')
+
+    expect(sano.maxDmg, 'senza paralisi Analytic dovrebbe essere accesa')
+      .toBeGreaterThan(calcola(att('starmie', null), dif('dragapult'), 'surf').maxDmg)
+    expect(paralizzato.rolls, 'la paralisi del difensore non ha spento Analytic')
+      .toEqual(paralizzatoSenza.rolls)
   })
 })
 
@@ -291,8 +330,37 @@ describe('roll per roll contro NCP', () => {
     ['Analytic, più veloce',   att('starmie', 'analytic'),  dif('torkoal'),   'surf', {}],
     ['Analytic, più lento',    att('watchog', 'analytic'),  dif('charizard'), 'hyper voice', {}],
     ['Analytic, pareggio',     att('starmie', 'analytic'),  dif('starmie'),   'surf', {}],
+    // ─── I SEI CASI CHE PRIMA L'HARNESS NON SAPEVA PORRE ─────────────────
+    // Ognuno accende una voce diversa di `getFinalSpeed`. Finché l'oracolo
+    // entrava da `GET_DAMAGE_SV` rispondevano tutti come il caso nudo, cioè
+    // confermavano qualunque cosa facessimo.
     ['Analytic con lo Scarf',  att('watchog', 'analytic', { atkItem: 'choice scarf' }),
                                dif('charizard'), 'hyper voice', {}],
+    ['Analytic col Ferroblocco su chi attacca',
+                               att('starmie', 'analytic', { atkItem: 'iron ball' }),
+                               dif('charizard'), 'surf', {}],
+    ['Analytic col Ferroblocco sul bersaglio',
+                               att('watchog', 'analytic'),
+                               dif('charizard', null, { defItem: 'iron ball' }), 'hyper voice', {}],
+    ['Analytic col bersaglio paralizzato',
+                               att('starmie', 'analytic'),
+                               dif('dragapult', null, { defStatus: 'paralyzed' }), 'surf', {}],
+    ['Analytic con chi attacca paralizzato',
+                               att('starmie', 'analytic', { atkStatus: 'paralyzed' }),
+                               dif('charizard'), 'surf', {}],
+    ['Analytic con lo stadio di Velocità',
+                               att('starmie', 'analytic', { atkSpeBoost: -1 }),
+                               dif('charizard'), 'surf', {}],
+    // Clorofilla sta sul BERSAGLIO, non su chi attacca: un Pokémon ha
+    // un'abilità sola, e qui serve che sia il difensore ad accelerare. Starmie
+    // 115 batte Venusaur 80 e Analytic è spenta; al sole Venusaur va a 160,
+    // passa davanti, e si accende.
+    ['Analytic contro Clorofilla al sole',
+                               att('starmie', 'analytic'),
+                               dif('venusaur', 'chlorophyll'), 'surf', { weather: 'sun' }],
+    ['Analytic contro Clorofilla senza sole — il controllo negativo',
+                               att('starmie', 'analytic'),
+                               dif('venusaur', 'chlorophyll'), 'surf', {}],
     ['Hustle sul fisico',      att('flapple', 'hustle'),    dif('incineroar'), 'dragon claw', {}],
     ['Hustle sullo speciale',  att('flapple', 'hustle'),    dif('incineroar'), 'energy ball', {}],
     ['Liquid Voice',           att('primarina', 'liquid-voice'), dif('torkoal'), 'hyper voice', {}],

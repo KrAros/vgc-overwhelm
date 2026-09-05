@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T10:44:01.658Z",
+    "generatedAt": "2026-09-05T10:59:33.553Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 979,
+        "riga": 980,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -174,7 +174,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 616,
+          "riga": 617,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -246,7 +246,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 979,
+          "riga": 980,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -326,7 +326,7 @@
         "chiave": "quick feet",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 235,
+          "riga": 241,
           "testo": "const quickFeet = normalizeAbilityKey(pokemon.ability) === 'quick-feet'"
         }
       },
@@ -414,7 +414,7 @@
         "chiave": "surge surfer",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 216,
+          "riga": 222,
           "testo": "if (normalizeAbilityKey(pokemon.ability) === 'surge-surfer'"
         }
       },
@@ -504,7 +504,7 @@
         "chiave": "choice scarf",
         "prova": {
           "file": "src/utils/speedOrder.js",
-          "riga": 207,
+          "riga": 213,
           "testo": "if (item === 'choice scarf') altriMod *= 1.5"
         }
       },
