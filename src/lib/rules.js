@@ -643,6 +643,75 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
 ])
 
 /**
+ * ─── LE DUE MOSSE LA CUI POTENZA VIENE DALLA VELOCITA' ──────────────────────
+ *
+ * Punto a di `basePowerFunc` (`damage_MASTER.js:1305-1316`), cioe' il blocco
+ * subito SOPRA quello delle mosse a peso. Stessa forma: `power: 0` nei dati e
+ * la potenza vera ricavata da una statistica dei due Pokemon.
+ *
+ *     case "Gyro Ball":
+ *         basePower = Math.min(150, Math.floor(25 * defender.stats[SP] / attacker.stats[SP]));
+ *     case "Electro Ball":
+ *         var r = (defender.stats[SP] == 0) ? 0 : Math.floor(attacker.stats[SP] / defender.stats[SP]);
+ *         basePower = r >= 4 ? 150 : r >= 3 ? 120 : r >= 2 ? 80 : r >= 1 ? 60 : 40;
+ *
+ * ─── LE DUE NON SONO SIMMETRICHE, E SEMBRANO ────────────────────────────────
+ *
+ * Gyro Ball e' una FORMULA continua col tetto a 150: piu' sei lento, piu' fai
+ * male, e ogni punto di Velocita' sposta il numero. Electro Ball e' una SCALA
+ * a cinque gradini sul rapporto INTERO: fra 1,0 e 1,9 volte la Velocita' del
+ * bersaglio la potenza e' 60 e non si muove.
+ *
+ * Scriverle con la stessa forma — due catene di soglie, o due divisioni —
+ * sarebbe sembrato piu' ordinato e avrebbe cambiato i numeri.
+ *
+ * ─── QUELLO CHE MANCA IN GYRO BALL, E CHE NON SI AGGIUNGE ───────────────────
+ *
+ * Nel gioco Gyro Ball ha una potenza minima di 1. Il riferimento quel minimo
+ * non ce l'ha: contro un bersaglio abbastanza lento `Math.floor` puo' dare 0.
+ * Non si aggiunge, perche' qui si trascrive — e se un giorno lo si vuole, e'
+ * un'aggiudicazione da registrare, non una svista da correggere.
+ *
+ * La divisione per zero non e' un caso reale (nessun Pokemon ha Velocita' 0
+ * calcolata) ma Electro Ball il controllo ce l'ha nel riferimento, quindi ce
+ * l'ha anche qui: si copia la riga, non il ragionamento sulla riga.
+ *
+ * ─── QUALE VELOCITA' ────────────────────────────────────────────────────────
+ *
+ * `stats[SP]`, che nell'ingresso alto e' la Velocita' EFFETTIVA — stadi,
+ * Ferrolimo, Ferroblocco, paralisi, abilita' meteo, paradosso
+ * (`damage_SV.js:43-53`). E' la stessa che legge l'ordine di turno di
+ * Analytic, ed e' la ragione per cui queste due mosse non si potevano fare
+ * prima che quella riga fosse corretta: sarebbero nate sbagliate.
+ */
+export const MOSSE_POTENZA_DA_VELOCITA = new Set(['gyro ball', 'electro ball'])
+
+/** Vero se la potenza di questa mossa si ricava dalla Velocita'. */
+export function haPotenzaDaVelocita(mossa) {
+  return MOSSE_POTENZA_DA_VELOCITA.has(mossa)
+}
+
+/**
+ * La potenza di Gyro Ball: 25 x (Velocita' del bersaglio / la propria),
+ * troncata, col tetto a 150.
+ * `damage_MASTER.js:1308`
+ */
+export function potenzaGyroBall(speAttaccante, speDifensore) {
+  if (speAttaccante <= 0) return 150
+  return Math.min(150, Math.floor(25 * speDifensore / speAttaccante))
+}
+
+/**
+ * La potenza di Electro Ball: cinque gradini sul rapporto INTERO fra la
+ * propria Velocita' e quella del bersaglio.
+ * `damage_MASTER.js:1313`
+ */
+export function potenzaElectroBall(speAttaccante, speDifensore) {
+  const r = speDifensore === 0 ? 0 : Math.floor(speAttaccante / speDifensore)
+  return r >= 4 ? 150 : r >= 3 ? 120 : r >= 2 ? 80 : r >= 1 ? 60 : 40
+}
+
+/**
  * ─── LE QUATTRO MOSSE LA CUI POTENZA VIENE DAL PESO ─────────────────────────
  *
  * Nei dati hanno `power: 0`, che il motore tratta come «non calcolabile»: la
@@ -794,6 +863,7 @@ export function haDannoFisso(mossa) {
  *
  *   `power`      la stragrande maggioranza: la potenza sta nei dati
  *   peso         Low Kick, Grass Knot, Heavy Slam, Heat Crash
+ *   Velocita'    Gyro Ball, Electro Ball
  *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
  *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
  *
@@ -804,6 +874,7 @@ export function mossaEntraNelCalcolo(mossa, dati) {
   if (!dati) return false
   return Boolean(dati.power)
     || haPotenzaDaPeso(mossa)
+    || haPotenzaDaVelocita(mossa)
     || dati.koSecco === true
     || haDannoFisso(mossa)
 }

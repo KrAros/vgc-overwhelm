@@ -58,25 +58,27 @@ diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro d
 stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
 che il riferimento non ha e ne perdeva una che ha.
 
-Dodici sono fatte:
+Quattordici sono fatte:
 
-- le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash;
+- le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash, punto b
+  di `basePowerFunc`;
+- le due a **Velocità** — Gyro Ball ed Electro Ball, punto a
+  (`damage_MASTER.js:1305-1316`);
 - le quattro **KO** — Fissure, Guillotine, Horn Drill, Sheer Cold, col flag
   `koSecco` e il punto f del riferimento;
 - le quattro a **danno fisso** — Sonic Boom, Dragon Rage, Seismic Toss,
   Night Shade, i punti d ed e (`damage_MASTER.js:1256-1275`).
 
-E ne restano **22**:
+E ne restano **20**:
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Electro Ball, Endeavor,
-> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Metal Burst,
-> Mirror Coat, Natural Gift, Punishment, Return, Reversal, Ruination,
-> Super Fang, Trump Card, Wring Out
+> Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
+> Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
+> Punishment, Return, Reversal, Ruination, Super Fang, Trump Card, Wring Out
 
 Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,
-Ruination, Final Gambit), quelle legate alla Velocità (Gyro Ball, Electro
-Ball), quelle legate all'affetto (Return, Frustration), quelle legate allo
+Ruination, Final Gambit), quelle legate all'affetto (Return, Frustration),
+quelle legate allo
 strumento (Fling, Natural Gift) e le reattive (Counter, Mirror Coat, Metal
 Burst, Comeuppance) — che nel riferimento ci sono ma calcolano il colpo appena
 subito dal difensore, cioè un pezzo di turno che non modelliamo.

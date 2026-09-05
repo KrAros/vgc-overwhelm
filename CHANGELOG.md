@@ -16,6 +16,17 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Gyro Ball ed Electro Ball mostrano il loro danno
+- Le due mosse la cui potenza dipende dalla Velocità dei due Pokémon ora sono
+  calcolate. Prima disegnavano `~` come le altre
+- **Gyro Ball** premia chi è lento e cresce con continuità: ogni punto di
+  Velocità sposta il numero, fino a un tetto. **Electro Ball** premia chi è
+  veloce ma a gradini: fra una volta e due volte la Velocità del bersaglio la
+  potenza non si muove
+- Contano anche Ferrolimo, Ferroblocco, paralisi e le abilità meteo: la
+  Velocità è quella vera, non quella sulla carta
+- Le mosse col badge «non calcolata» scendono da 22 a 20
+
 ### Analytic leggeva la Velocità sbagliata
 - **Analytic** (×1,3 quando attacchi per secondo) decideva l'ordine di turno
   guardando una Velocità senza Ferrolimo, senza Ferroblocco, senza paralisi e
