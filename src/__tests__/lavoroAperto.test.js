@@ -108,8 +108,26 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     expect(resteDaFare()).toHaveLength(22)
   })
 
-  it('`gapNoti.json` non ha ancora la lista delle mosse', () => {
-    expect(Object.keys(gapNoti)).toEqual(['meta', 'abilita', 'strumenti'])
+  it('`gapNoti.json` adesso ha anche le mosse, e il badge le avvisa', () => {
+    // La seconda voce che si chiude, e anche questa girata invece che tolta.
+    // Il registro aveva due liste; ne ha tre, e la terza è quella che mancava.
+    expect(Object.keys(gapNoti)).toEqual(['meta', 'abilita', 'strumenti', 'mosse'])
+    expect(gapNoti.mosse.length).toBe(22)
+    expect(gapNoti.meta.mosseNelGap).toBe(22)
+  })
+
+  it('e le due liste dicono la stessa cosa: nessuna mossa calcolata col badge', () => {
+    // Il difetto simmetrico di quello che `gap.test.js` blocca per le abilità:
+    // un badge su una mossa che invece calcoliamo direbbe all'utente di
+    // diffidare di un numero giusto. Le due fonti sono `gapNoti.json` — che è
+    // generato — e la riga d'ingresso del motore, che è quella vera.
+    const sbagliate = gapNoti.mosse.filter(
+      m => calculateDamage({ attacker: att, defender: dif(), move: m, field: {} }) !== null,
+    )
+    expect(
+      sbagliate,
+      'queste mosse le calcoliamo e mostrano comunque «non calcolata»: `npm run gap:gen`',
+    ).toEqual([])
   })
 
   it('gli strumenti col badge sono ancora trentanove', () => {

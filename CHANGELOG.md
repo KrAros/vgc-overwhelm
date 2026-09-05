@@ -16,6 +16,16 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Il badge «non calcolata» adesso c'è anche sulle mosse
+- Le **22 mosse** che il riferimento calcola e noi no mostrano il segnalino
+  ambra accanto alla potenza — Counter, Super Fang, Gyro Ball, Return e le
+  altre. Prima erano l'unico divario del progetto del tutto silenzioso: la
+  tabella scriveva `~`, cioè quello che scrive per Protect, e niente diceva
+  che di quel `~` non ci si deve fidare
+- Il badge non compare sulle mosse che il riferimento non calcola affatto
+  (Bide, Magnitude, Present, Spit Up, Psywave): lì non c'è un numero giusto da
+  nessuna delle due parti, e dichiararlo un divario sarebbe falso
+
 ### Mosse che prima sembravano di stato
 - **Sonic Boom, Dragon Rage, Seismic Toss e Night Shade** mostrano il loro
   danno. Prima uscivano `~` nella matrice, cioè il disegno di una mossa che

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-03T11:10:52.714Z",
+    "generatedAt": "2026-09-05T10:44:02.157Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -11,6 +11,11 @@
     "strumentiSelezionabili": 320,
     "strumentiSenzaEffetto": 174,
     "strumentiNelGap": 39,
+    "mosseAPotenzaZero": 303,
+    "mosseOffensiveNelRiferimento": 539,
+    "mosseOffensiveAPotenzaZero": 34,
+    "mosseNelGap": 22,
+    "mosseSenzaOracolo": 10,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
   },
@@ -418,6 +423,130 @@
           "riga": 753
         }
       }
+    ],
+    "mosse": [
+      {
+        "chiave": "beat up",
+        "nome": "Beat Up",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "comeuppance",
+        "nome": "Comeuppance",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "counter",
+        "nome": "Counter",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "crush grip",
+        "nome": "Crush Grip",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "electro ball",
+        "nome": "Electro Ball",
+        "categoriaNCP": "Special"
+      },
+      {
+        "chiave": "endeavor",
+        "nome": "Endeavor",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "final gambit",
+        "nome": "Final Gambit",
+        "categoriaNCP": "Special"
+      },
+      {
+        "chiave": "flail",
+        "nome": "Flail",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "fling",
+        "nome": "Fling",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "frustration",
+        "nome": "Frustration",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "gyro ball",
+        "nome": "Gyro Ball",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "hard press",
+        "nome": "Hard Press",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "metal burst",
+        "nome": "Metal Burst",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "mirror coat",
+        "nome": "Mirror Coat",
+        "categoriaNCP": "Special"
+      },
+      {
+        "chiave": "natural gift",
+        "nome": "Natural Gift",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "punishment",
+        "nome": "Punishment",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "return",
+        "nome": "Return",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "reversal",
+        "nome": "Reversal",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "ruination",
+        "nome": "Ruination",
+        "categoriaNCP": "Special"
+      },
+      {
+        "chiave": "super fang",
+        "nome": "Super Fang",
+        "categoriaNCP": "Physical"
+      },
+      {
+        "chiave": "trump card",
+        "nome": "Trump Card",
+        "categoriaNCP": "Special"
+      },
+      {
+        "chiave": "wring out",
+        "nome": "Wring Out",
+        "categoriaNCP": "Special"
+      }
+    ],
+    "mosseSenzaOracolo": [
+      "bide",
+      "confide",
+      "floreal healing",
+      "magnitude",
+      "natures madness",
+      "play nice",
+      "present",
+      "psywave",
+      "spit up",
+      "strenght sap"
     ]
   },
   "esclusioni": {

@@ -17,6 +17,13 @@
  *     badge presente  → questa voce non entra nel numero
  *     badge assente   → il numero è quello che sarebbe nel gioco
  *
+ * ─── E DAL 2026 ANCHE SULLE MOSSE ──────────────────────────────────────────
+ * Le mosse sono il caso peggiore dei tre, ed è il motivo per cui il badge ci è
+ * arrivato per ultimo dopo essere servito da subito: un'abilità nel divario
+ * lascia comunque un numero in tabella, una mossa nel divario lascia `~` —
+ * cioè il disegno di una mossa di stato. Ventidue mosse che il riferimento
+ * calcola oggi si presentano come Protect.
+ *
  * ─── DOVE NON COMPARE, E PERCHÉ ────────────────────────────────────────────
  * Solo sulle voci che il riferimento NCP calcola davvero nel danno: 130
  * abilità e 41 strumenti, elencati in `src/data/gapNoti.json` e rigenerabili
@@ -37,8 +44,14 @@ import { useTranslation } from 'react-i18next'
  * regola di P sulle due affordance. Qui la frase si compone in un posto solo e
  * la usano entrambe, come testo o come nome accessibile.
  */
+const CHIAVE_SPIEGAZIONE = {
+  ability: 'gap.spiegazioneAbilita',
+  item: 'gap.spiegazioneItem',
+  move: 'gap.spiegazioneMossa',
+}
+
 function frase(t, tipo) {
-  return `${t('gap.badge')} — ${t(tipo === 'item' ? 'gap.spiegazioneItem' : 'gap.spiegazioneAbilita')}`
+  return `${t('gap.badge')} — ${t(CHIAVE_SPIEGAZIONE[tipo] ?? CHIAVE_SPIEGAZIONE.ability)}`
 }
 
 /**
@@ -103,7 +116,7 @@ export default function BadgeNonCalcolata({ tipo = 'ability' }) {
       <span className="min-w-0 truncate">
         <span className="font-medium">{t('gap.badge')}</span>
         {' — '}
-        {t(tipo === 'item' ? 'gap.spiegazioneItem' : 'gap.spiegazioneAbilita')}
+        {t(CHIAVE_SPIEGAZIONE[tipo] ?? CHIAVE_SPIEGAZIONE.ability)}
       </span>
     </div>
   )

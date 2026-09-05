@@ -41,9 +41,9 @@ e noi no; l'elenco generato è in
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
 È il contributo più prezioso, ed è quello con le regole più severe qui sotto.
 
-**Le mosse SENZA il badge — un lavoro aperto, cominciato.**
-`gapNoti.json` ha due liste, `abilita` e `strumenti`. Non ha le mosse, e le
-mosse un divario ce l'hanno.
+**Le mosse col badge — un lavoro aperto, cominciato.**
+`gapNoti.json` ha tre liste: `abilita`, `strumenti` e — da questa sessione —
+`mosse`. Fino a ieri le mosse un divario ce l'avevano e nessuno lo dichiarava.
 
 `calcEngine.js` esce con `null` per qualunque mossa con `power: 0` che non sia
 una delle quattro a peso, una delle quattro KO o una delle quattro a danno
@@ -95,9 +95,19 @@ il confronto con l'oracolo e' verde e resta verde: non e' un errore visibile,
 e' un'assunzione — «il Pokemon e' integro» — che nessun caso puo' oggi
 contraddire, perche' i punti salute non stanno nel nostro modello.
 
-Chi apre questo lavoro cominci da li': prima decidere se i punti salute entrano
-nel modello, poi il registro delle mosse nel divario (`gapNoti.json` con una
-terza lista e un badge, come per abilita' e strumenti), poi le implementazioni.
+Chi apre questo lavoro cominci da li': il registro c'e' gia' — `gapNoti.json`
+con la terza lista e il segnalino sulla riga della mossa — quindi resta da
+decidere se i punti salute entrano nel modello, e poi le implementazioni.
+
+Il registro delle mosse si genera con lo stesso `npm run gap:gen` degli altri
+due, ma con un metodo diverso, ed e' dichiarato nello script: per le abilita' la
+domanda e' «NCP la nomina?», per le mosse quella domanda ha una risposta sola e
+inutile — tutte e 34 sono nominate per intero in `damage_MASTER.js`, comprese
+le dodici che calcoliamo. La domanda giusta e' «il riferimento la tratta come
+offensiva, e il nostro motore esce `null`?», e la seconda meta' la risponde
+`mossaEntraNelCalcolo` in `lib/rules.js` — che e' LA riga d'ingresso del
+motore, importata e non ricopiata. Una seconda copia sarebbe il modo piu'
+comodo di far mentire il badge.
 
 ---
 

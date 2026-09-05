@@ -9,9 +9,9 @@ Cosa resta da fare, e **perché non è stato fatto**. Non è una lista di
 desideri: ogni voce dice se il riferimento ha una risposta o se serve una
 decisione umana, cosa la blocca, e dove andrebbe scritta.
 
-Le sessioni hanno chiuso il divario delle abilità da 46 a 1, e la prima voce
-di questo registro — le quattro mosse a danno fisso — l'ha chiusa chi l'ha
-letto. Questo file esiste perché ciò che resta non si perda nella memoria di
+Le sessioni hanno chiuso il divario delle abilità da 46 a 1, e le prime due
+voci di questo registro — le quattro mosse a danno fisso e il registro delle
+mosse nel divario — le ha chiuse chi l'ha letto. Questo file esiste perché ciò che resta non si perda nella memoria di
 una conversazione — ed è **presidiato**: `src/__tests__/lavoroAperto.test.js` controlla che ogni
 voce sia ancora vera. Il giorno che una viene fatta, quel test diventa rosso e
 la riga qui va tolta nello stesso commit. Un registro che nessuno verifica
@@ -40,7 +40,9 @@ Un `null` nella matrice si disegna `~`, cioè come una mossa di stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Dodici sono fatte, ne restano **22**:
+nome. Dodici sono fatte, ne restano **22**, e da questa sessione **portano il
+badge**: `gapNoti.json` ha una terza lista e la riga della mossa mostra il
+segnalino ambra. Il `~` resta, ma non è più muto.
 
 > Beat Up, Comeuppance, Counter, Crush Grip, Electro Ball, Endeavor,
 > Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Metal Burst,
@@ -65,11 +67,6 @@ Magnitude, Present, Spit Up e Psywave nel riferimento sono **commentate** dentro
 codice sotto. L'harness risponde «mossa non presente in NCP». Per loro non c'è
 un oracolo: scriverle sarebbe un'aggiudicazione, non una trascrizione, e vanno
 in sezione B il giorno che qualcuno le vuole.
-
-### Il registro delle mosse nel divario
-`gapNoti.json` ha due liste, `abilita` e `strumenti`. Non ha le mosse, e le
-mosse un divario ce l'hanno. Finché non c'è, nessun badge avvisa l'utente che
-di quel `~` non deve fidarsi.
 
 ### I 39 strumenti col badge
 Il numero non è mai sceso mentre le abilità andavano da 46 a 1. Nessuno ci ha

@@ -84,6 +84,8 @@ import { ABILITY_EFFECTS, normalizeAbilityKey } from '../src/data/abilityEffects
 import { badgeDaTogliere } from './classificazione-badge.mjs'
 import { haEffetto } from './campi-meta.mjs'
 import { ITEM_EFFECTS } from '../src/data/itemEffects.js'
+import { mossaEntraNelCalcolo } from '../src/lib/rules.js'
+import { caricaNCP } from './ncp/contesto.mjs'
 
 const QUI = path.dirname(fileURLToPath(import.meta.url))
 const RADICE = path.resolve(QUI, '..')
@@ -358,7 +360,85 @@ function cerca(voci, indice) {
 // Generazione
 // ───────────────────────────────────────────────────────────────────────────
 
-export function generaGap() {
+export // ───────────────────────────────────────────────────────────────────────────
+// LE MOSSE — un'altra domanda, quindi un altro strumento
+// ───────────────────────────────────────────────────────────────────────────
+
+/**
+ * ═══ PERCHE' QUI IL METODO DI SOPRA NON FUNZIONA ══════════════════════════
+ *
+ * Per le abilità e gli strumenti la domanda è «NCP lo nomina dentro la
+ * superficie del danno?», e la risposta si legge cercando il nome. Per le
+ * mosse quella domanda ha una risposta sola e inutile: **tutte e 34** le mosse
+ * a potenza zero che il riferimento tratta come offensive sono nominate per
+ * intero dentro `damage_MASTER.js` — misurato, 34 su 34 — comprese le dodici
+ * che il nostro motore calcola benissimo.
+ *
+ * Il canale del nome direbbe quindi «nel divario» anche di Seismic Toss, che
+ * calcoliamo, e il badge mentirebbe nel modo peggiore: su un numero giusto.
+ *
+ * ═══ LA DOMANDA GIUSTA, E LE DUE FONTI CHE LA RISPONDONO ══════════════════
+ *
+ * «Il riferimento la tratta come offensiva, e il nostro motore esce `null`?»
+ *
+ *   il riferimento    `category` diversa da `Status` nel suo `move_data.js`,
+ *                     letto eseguendo il vendor e non cercandolo nel testo.
+ *                     Le mosse che lì sono commentate — Bide, Magnitude,
+ *                     Present, Spit Up, Psywave — semplicemente non ci sono, e
+ *                     giustamente non entrano: per loro non esiste un oracolo,
+ *                     quindi non sono un divario, sono una decisione.
+ *
+ *   il nostro motore  `mossaEntraNelCalcolo`, che è LA RIGA D'INGRESSO di
+ *                     `calculateDamage`, importata e non riscritta. È il punto
+ *                     su cui questo elenco può mentire, e per questo la
+ *                     condizione ha un solo posto in cui vive.
+ *
+ * ═══ PERCHE' NELLO STESSO FILE ════════════════════════════════════════════
+ *
+ * Perché il file che ne esce è uno solo, `gapNoti.json`, e un secondo
+ * generatore che scrivesse dentro lo stesso file sarebbe due scrittori su un
+ * documento — il modo classico di perdere una lista rigenerando l'altra. Il
+ * metodo diverso è dichiarato qui invece che nascosto in un secondo script.
+ */
+function cercaMosse() {
+  const mosse = JSON.parse(fs.readFileSync(path.join(RADICE, 'src/data/moves.json'), 'utf8'))
+  const datiNCP = caricaNCP().leggi('moves')
+
+  const offensiveNelRiferimento = Object.entries(mosse).filter(([, v]) => {
+    const suo = datiNCP[v.name]
+    return Boolean(suo?.category) && suo.category !== 'Status'
+  })
+
+  const nelDivario = offensiveNelRiferimento
+    .filter(([chiave, v]) => !mossaEntraNelCalcolo(chiave, v))
+    .map(([chiave, v]) => ({ chiave, nome: v.name, categoriaNCP: datiNCP[v.name].category }))
+
+  // Le mosse che il riferimento NON ha affatto. Non sono un divario — nessuno
+  // può dire chi ha ragione — ma vanno contate, perché la differenza fra «non
+  // calcolata» e «non calcolabile» è esattamente ciò che il badge promette.
+  const senzaOracolo = Object.entries(mosse)
+    .filter(([chiave, v]) => !mossaEntraNelCalcolo(chiave, v) && !datiNCP[v.name])
+    .map(([chiave]) => chiave)
+    .sort()
+
+  // Il conto che il documento cita. Tutte e 22 le mosse nel divario hanno
+  // potenza zero, e non è una coincidenza: `mossaEntraNelCalcolo` fa entrare
+  // qualunque mossa con una potenza scritta nei dati. Il numero è qui perché
+  // sia misurato invece che affermato — se un giorno divergessero, vorrebbe
+  // dire che una mossa CON potenza non entra nel calcolo, ed è una notizia.
+  const aPotenzaZero = Object.entries(mosse).filter(([, v]) => !v.power).length
+  const offensiveAPotenzaZero = offensiveNelRiferimento.filter(([, v]) => !v.power).length
+
+  return {
+    offensive: offensiveNelRiferimento.length,
+    aPotenzaZero,
+    offensiveAPotenzaZero,
+    nelDivario: nelDivario.sort((a, b) => a.chiave.localeCompare(b.chiave)),
+    senzaOracolo,
+  }
+}
+
+function generaGap() {
   const abilita = JSON.parse(fs.readFileSync(path.join(RADICE, 'src/data/abilities.json'), 'utf8'))
   const strumenti = JSON.parse(fs.readFileSync(path.join(RADICE, 'src/data/items.json'), 'utf8'))
 
@@ -393,6 +473,8 @@ export function generaGap() {
   //
   // Chi le scopre è `npm run inventario:gen`, che si rifiuta di scrivere se
   // una collisione non è classificata.
+  const mosse = cercaMosse()
+
   const togli = badgeDaTogliere()
   const abTrovate = cerca(abSenzaEffetto, indice)
     .filter(a => !FORME_SCELTE_A_MANO.has(a.chiave))
@@ -427,6 +509,11 @@ export function generaGap() {
       strumentiSelezionabili: Object.keys(strumenti).length,
       strumentiSenzaEffetto: itSenzaEffetto.length,
       strumentiNelGap: itTrovati.length,
+      mosseAPotenzaZero: mosse.aPotenzaZero,
+      mosseOffensiveNelRiferimento: mosse.offensive,
+      mosseOffensiveAPotenzaZero: mosse.offensiveAPotenzaZero,
+      mosseNelGap: mosse.nelDivario.length,
+      mosseSenzaOracolo: mosse.senzaOracolo.length,
       badgeToltiDallaSecondaFonte: togli.abilita.length + togli.strumenti.length,
       note: 'Voci che il riferimento NCP calcola nel danno e il nostro motore no. '
           + 'Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` '
@@ -435,10 +522,18 @@ export function generaGap() {
     // Solo le chiavi: è tutto ciò che serve per decidere se disegnare il badge.
     abilita: abTrovate.map(a => a.chiave).sort(),
     strumenti: itTrovati.map(a => a.chiave).sort(),
+    mosse: mosse.nelDivario.map(m => m.chiave),
     // Le prove vanno nel rapporto, non qui.
     prove: {
       abilita: abTrovate.map(a => ({ chiave: a.chiave, nome: a.nome, canale: a.canale, prova: a.prova })),
       strumenti: itTrovati.map(a => ({ chiave: a.chiave, nome: a.nome, canale: a.canale, prova: a.prova })),
+      // Per le mosse la «prova» è la categoria che il riferimento gli dà: è la
+      // cosa che le fa entrare, e si legge dai suoi dati eseguiti.
+      mosse: mosse.nelDivario,
+      // Le mosse a potenza zero che il riferimento non ha affatto. Non hanno
+      // il badge e non devono averlo: il badge dice «il riferimento la calcola
+      // e noi no», e qui il riferimento non calcola niente.
+      mosseSenzaOracolo: mosse.senzaOracolo,
     },
     esclusioni: {
       funzioni: FUORI_SUPERFICIE,
@@ -459,6 +554,7 @@ function serializzaDati(dati) {
       ingresso: dati.meta.ingresso,
       abilitaNelGap: dati.meta.abilitaNelGap,
       strumentiNelGap: dati.meta.strumentiNelGap,
+      mosseNelGap: dati.meta.mosseNelGap,
       note: 'Chiavi che il riferimento calcola nel danno e noi no. Le prove '
           + 'stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen',
     }, null, 2).replace(/\n/g, '\n  ') + ',',
@@ -467,6 +563,9 @@ function serializzaDati(dati) {
     '  ],',
     '  "strumenti": [',
     dati.strumenti.map(riga).join(',\n'),
+    '  ],',
+    '  "mosse": [',
+    dati.mosse.map(riga).join(',\n'),
     '  ]',
     '}',
     '',
@@ -498,6 +597,11 @@ if (eseguitoDirettamente) {
   console.log(`Strumenti selezionabili  ${m.strumentiSelezionabili}`)
   console.log(`  senza effetto da noi   ${m.strumentiSenzaEffetto}`)
   console.log(`  di cui NCP calcola     ${m.strumentiNelGap}   ← badge`)
+  console.log('')
+  console.log(`Mosse a potenza zero     ${m.mosseAPotenzaZero}`)
+  console.log(`  offensive per NCP      ${m.mosseOffensiveAPotenzaZero}   (su ${m.mosseOffensiveNelRiferimento} offensive in tutto)`)
+  console.log(`  che noi non calcoliamo ${m.mosseNelGap}   ← badge`)
+  console.log(`  senza oracolo affatto  ${m.mosseSenzaOracolo}   (NCP non le ha: niente badge)`)
 
   if (process.argv.includes('--prove')) {
     console.log('\n── Abilità, con la riga di prova ───────────────────────────')

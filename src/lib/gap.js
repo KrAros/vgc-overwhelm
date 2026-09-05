@@ -35,6 +35,18 @@ const ABILITA_NEL_GAP = new Set(gapNoti.abilita.map(normalizza))
 const STRUMENTI_NEL_GAP = new Set(gapNoti.strumenti.map(normalizza))
 
 /**
+ * ─── LE MOSSE, CHE NON HANNO IL PROBLEMA DELLE TRE CONVENZIONI ──────────────
+ *
+ * Le chiavi delle mosse sono le stesse dappertutto — `moves.json`, il motore e
+ * questa lista usano la minuscola con gli spazi — quindi la normalizzazione
+ * qui non serve a far combaciare due convenzioni. Si applica lo stesso, per
+ * una ragione più povera e più solida: è la stessa funzione delle altre due, e
+ * una terza porta che accetta un formato diverso sarebbe il punto in cui, fra
+ * sei mesi, `Seismic Toss` non trova il suo badge.
+ */
+const MOSSE_NEL_GAP = new Set(gapNoti.mosse.map(normalizza))
+
+/**
  * Vero se il riferimento calcola questa abilità nel danno e noi no.
  * @param {string|null} abilita chiave o nome, in qualunque convenzione
  */
@@ -49,11 +61,27 @@ export function strumentoNonCalcolato(strumento) {
   return STRUMENTI_NEL_GAP.has(normalizza(strumento))
 }
 
+/**
+ * Vero se il riferimento calcola questa mossa e il nostro motore esce `null`.
+ *
+ * ─── PERCHE' QUESTA E' PIU' URGENTE DELLE ALTRE DUE ────────────────────────
+ *
+ * Un'abilità nel divario lascia comunque un numero in tabella: sbagliato di un
+ * moltiplicatore, ma un numero. Una mossa nel divario non lascia niente — la
+ * matrice disegna `~`, che è il disegno di una mossa di stato. Senza questo
+ * badge, Seismic Toss e Protect si somigliano.
+ */
+export function mossaNonCalcolata(mossa) {
+  if (!mossa) return false
+  return MOSSE_NEL_GAP.has(normalizza(mossa))
+}
+
 /** I metadati della generazione: commit NCP, data, conteggi. */
 export const metaGap = gapNoti.meta
 
-/** Le due liste di chiavi, per chi deve enumerarle. */
+/** Le tre liste di chiavi, per chi deve enumerarle. */
 export const elencoGap = {
   abilita: gapNoti.abilita,
   strumenti: gapNoti.strumenti,
+  mosse: gapNoti.mosse,
 }

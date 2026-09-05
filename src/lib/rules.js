@@ -774,6 +774,41 @@ export function haDannoFisso(mossa) {
 }
 
 /**
+ * ─── CHI ENTRA NEL CALCOLO, E CHI ESCE `null` ───────────────────────────────
+ *
+ * La riga d'ingresso del motore, scritta qui perché ha due lettori e non uno.
+ *
+ * Il primo è `calculateDamage`, che la usa per decidere se proseguire. Il
+ * secondo è `scripts/gen-gap-noti.mjs`, che genera l'elenco delle mosse col
+ * badge «non calcolata»: quell'elenco è ESATTAMENTE il complemento di questa
+ * condizione fra le mosse che il riferimento tratta come offensive.
+ *
+ * Scriverla due volte sarebbe il modo più comodo di far mentire il badge: il
+ * giorno che qualcuno aggiunge una famiglia al motore e non alla copia, l'app
+ * calcolerebbe la mossa e continuerebbe a dire di non calcolarla. È lo stesso
+ * difetto che `gap.test.js` racconta per le abilità — due liste nate in due
+ * posti, e niente che le tenga allineate — e qui si evita alla radice invece
+ * che con un controllo a valle.
+ *
+ * Le quattro condizioni, in ordine di quanto sono comuni:
+ *
+ *   `power`      la stragrande maggioranza: la potenza sta nei dati
+ *   peso         Low Kick, Grass Knot, Heavy Slam, Heat Crash
+ *   `koSecco`    Fissure, Guillotine, Horn Drill, Sheer Cold
+ *   danno fisso  Sonic Boom, Dragon Rage, Seismic Toss, Night Shade
+ *
+ * @param {string} mossa la chiave in `moves.json`
+ * @param {object|undefined} dati la sua voce, o `undefined` se non c'è
+ */
+export function mossaEntraNelCalcolo(mossa, dati) {
+  if (!dati) return false
+  return Boolean(dati.power)
+    || haPotenzaDaPeso(mossa)
+    || dati.koSecco === true
+    || haDannoFisso(mossa)
+}
+
+/**
  * ─── LE DUE LISTE DEI COPIATORI ─────────────────────────────────────────────
  *
  * Trascritte da `checkTrace` (`damage_MASTER.js:387`) e da `checkNeutralGas`

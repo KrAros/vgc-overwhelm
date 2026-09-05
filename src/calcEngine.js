@@ -30,7 +30,7 @@ import {
   potenzaDaPeso,
   potenzaDaRapportoPeso,
   dannoFisso,
-  haDannoFisso,
+  mossaEntraNelCalcolo,
   MOSSE_PESO_BERSAGLIO,
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
@@ -215,7 +215,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // deciso ai punti d ed e (`damage_MASTER.js:1256-1275`), il blocco subito
   // sopra quello delle mosse KO. Finche' non superavano questa riga il motore
   // le disegnava come mosse di stato.
-  if (!moveData || (!moveData.power && !haPotenzaDaPeso(move) && !moveData.koSecco && !haDannoFisso(move))) return null
+  //
+  // La condizione sta in `rules.js` e non qui perché ha due lettori: questo, e
+  // il generatore del badge «non calcolata» sulle mosse, che deve elencare
+  // esattamente chi questa riga scarta. Due copie sarebbero due occasioni di
+  // far mentire il badge.
+  if (!mossaEntraNelCalcolo(move, moveData)) return null
 
   const atkPokeData = POKEMON_DATA[atkPokemon]
   const defPokeData = POKEMON_DATA[defPokemon]

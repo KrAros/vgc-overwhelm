@@ -107,7 +107,8 @@
   "gap": {
     "badge": "Non calcolata",
     "spiegazioneAbilita": "questa abilità non entra nel danno mostrato",
-    "spiegazioneItem": "questo strumento non entra nel danno mostrato"
+    "spiegazioneItem": "questo strumento non entra nel danno mostrato",
+    "spiegazioneMossa": "questa mossa non entra nel danno mostrato: la tabella segna «~»"
   },
   "report": {
     "selected_matchup": "Matchup Selezionato",
