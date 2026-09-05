@@ -33,21 +33,21 @@ fine turno e Heatproof.
 
 ## A — Dove l'oracolo risponde
 
-### Le ventidue mosse che restano
+### Le venti mosse che restano
 `calcEngine.js` esce con `null` per una mossa a `power: 0` che non sia una
-delle quattro a peso, una delle quattro KO o una delle quattro a danno fisso.
-Un `null` nella matrice si disegna `~`, cioè come una mossa di stato.
+delle quattro a peso, delle due a Velocità, delle quattro KO o delle quattro a
+danno fisso. Un `null` nella matrice si disegna `~`, cioè come una mossa di
+stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Dodici sono fatte, ne restano **22**, e da questa sessione **portano il
-badge**: `gapNoti.json` ha una terza lista e la riga della mossa mostra il
-segnalino ambra. Il `~` resta, ma non è più muto.
+nome. Quattordici sono fatte, ne restano **20**, e **portano il badge**:
+`gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
+ambra. Il `~` resta, ma non è più muto.
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Electro Ball, Endeavor,
-> Final Gambit, Flail, Fling, Frustration, Gyro Ball, Hard Press, Metal Burst,
-> Mirror Coat, Natural Gift, Punishment, Return, Reversal, Ruination,
-> Super Fang, Trump Card, Wring Out
+> Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
+> Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
+> Punishment, Return, Reversal, Ruination, Super Fang, Trump Card, Wring Out
 
 Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
 Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press, Ruination, Final
@@ -57,9 +57,13 @@ Mirror Coat, Metal Burst, Comeuppance — nel riferimento ci sono, ma calcolano
 il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
 turno che il nostro modello non ha. Restano quelle che si trascrivono e basta:
-la Velocità (Gyro Ball, Electro Ball), l'affetto (Return, Frustration), il peso
-degli alleati (Beat Up), lo strumento (Fling, Natural Gift), gli stadi del
-bersaglio (Punishment), i PP (Trump Card).
+l'affetto (Return, Frustration), il peso degli alleati (Beat Up), lo strumento
+(Fling, Natural Gift), gli stadi del bersaglio (Punishment), i PP (Trump Card).
+
+**Gyro Ball ed Electro Ball erano in questo elenco fino a ieri**, e sono uscite
+solo dopo la correzione sulla Velocità di Analytic: leggono la stessa
+`stats[SP]`, e scritte prima sarebbero nate sbagliate — con l'oracolo che le
+confermava, perché rispondeva 96 BP a sette configurazioni diverse.
 
 **E cinque mosse che sembrano di questa famiglia e non lo sono.** Bide,
 Magnitude, Present, Spit Up e Psywave nel riferimento sono **commentate** dentro

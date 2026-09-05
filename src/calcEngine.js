@@ -27,6 +27,9 @@ import {
   MOSSE_ANNULLATE_DA_DAMP,
   STRUMENTI_IMMUNI_A_KLUTZ,
   haPotenzaDaPeso,
+  haPotenzaDaVelocita,
+  potenzaGyroBall,
+  potenzaElectroBall,
   potenzaDaPeso,
   potenzaDaRapportoPeso,
   dannoFisso,
@@ -764,6 +767,43 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     terreno: field.terrain,
   })
 
+  // ── LA VELOCITA' EFFETTIVA DEI DUE ───────────────────────────────────────
+  //
+  // Sta QUI e non piu' in basso perche' adesso ha DUE lettori, e uno dei due
+  // e' la potenza base — che si calcola molto prima dei moltiplicatori:
+  //
+  //   Gyro Ball, Electro Ball   la loro potenza E' il rapporto fra le due
+  //   Analytic                  l'ordine di turno, punto e.iii della catena
+  //
+  // Nel riferimento e' la stessa cosa per la stessa ragione: `stats[SP]` viene
+  // scritta una volta sola nell'ingresso alto (`damage_SV.js:43-53`) e poi la
+  // leggono sia `basePowerFunc` (`:1307`, `:1312`) sia la riga dell'ordine di
+  // turno (`:147`). Una Velocita' calcolata due volte in due punti sarebbe
+  // due occasioni di calcolarla in due modi.
+  //
+  // Gli stadi che si passano sono quelli DOPO la preparazione, non quelli
+  // dell'argomento: nel riferimento `getFinalSpeed` gira dopo `checkIntimidate`
+  // e compagnia, e legge `pokemon.boosts[SP]` gia' modificato. Stessa cosa per
+  // l'abilita', che e' quella VERA — dopo Trace e Neutralizing Gas — perche'
+  // `checkTrace` e `checkNeutralGas` sono le prime tre righe dell'ingresso
+  // alto, prima di ogni assegnamento a `stats`.
+  //
+  // ─── COSA RESTA FUORI ────────────────────────────────────────────────────
+  //
+  // Il Ventoincoda: `calculateDamage` non riceve i due lati del campo, e
+  // l'harness lo passa `false` da tutt'e due le parti. Non e' una divergenza
+  // nascosta — e' una casella che nessuno dei due accende — ma e' un confine,
+  // e sta scritto invece che essere scoperto.
+  const velocitaDi = (specie, sps, natura, abilita, strumento, stato, boostSp) =>
+    calcEffectiveSpe(
+      { key: specie, sps, nature: natura, speBoost: boostSp, item: strumento, ability: abilita, status: stato },
+      meteo, false, field.terrain, level,
+    )
+  const speAttaccante = velocitaDi(
+    atkPokemon, atkSPs, atkNature, atkAbilVera, atkItem, atkStatus, preparazione.attaccante.boosts.sp)
+  const speDifensore = velocitaDi(
+    defPokemon, defSPs, defNature, defAbilVera, defItem, defStatus, preparazione.difensore.boosts.sp)
+
   // ── Boost di stat base ───────────────────────────────────────────────────
   // Il boost da usare segue la STATISTICA, non la categoria della mossa.
   // Per quasi tutte le mosse le due cose coincidono, ma Body Press è fisica e
@@ -936,6 +976,24 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     }
   }
 
+  // ─── LA POTENZA DALLA VELOCITA' ──────────────────────────────────────────
+  //
+  // Punto a di `basePowerFunc`, il blocco sopra quello del peso. Le formule
+  // stanno in `lib/rules.js`; qui c'e' solo la scelta di quale delle due, e
+  // le due Velocita' sono quelle gia' calcolate piu' su — le stesse che legge
+  // l'ordine di turno di Analytic, come nel riferimento.
+  //
+  // Gyro Ball guarda il rapporto in un verso, Electro Ball nell'altro: la
+  // prima premia chi e' lento, la seconda chi e' veloce. Passarle nello stesso
+  // ordine sarebbe un difetto che a Velocita' simili non si vedrebbe, e che
+  // qui e' presidiato da un caso con l'attaccante lentissimo.
+  let potenzaDallaVelocita = null
+  if (haPotenzaDaVelocita(move)) {
+    potenzaDallaVelocita = move === 'gyro ball'
+      ? potenzaGyroBall(speAttaccante, speDifensore)
+      : potenzaElectroBall(speAttaccante, speDifensore)
+  }
+
   // ─── LE MOSSE CHE LO STATO RADDOPPIA ──────────────────────────────────────
   //
   // Nel riferimento sono rami del `switch` di `calcBasePower`
@@ -965,6 +1023,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (move === 'facade' && STATI_CHE_ACCENDONO_FACADE.has(statoAtk))
 
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
+    : potenzaDallaVelocita !== null ? potenzaDallaVelocita
     : isLastRespects ? lastRespectsBP
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2
@@ -1470,15 +1529,6 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // l'abilita', che e' quella VERA — dopo Trace e Neutralizing Gas — perche'
   // `checkTrace` e `checkNeutralGas` sono le prime tre righe dell'ingresso
   // alto, prima di ogni assegnamento a `stats`.
-  const velocitaDi = (specie, sps, natura, abilita, strumento, stato, boostSp) =>
-    calcEffectiveSpe(
-      { key: specie, sps, nature: natura, speBoost: boostSp, item: strumento, ability: abilita, status: stato },
-      meteo, false, field.terrain, level,
-    )
-  const speAttaccante = velocitaDi(
-    atkPokemon, atkSPs, atkNature, atkAbilVera, atkItem, atkStatus, preparazione.attaccante.boosts.sp)
-  const speDifensore = velocitaDi(
-    defPokemon, defSPs, defNature, defAbilVera, defItem, defStatus, preparazione.difensore.boosts.sp)
   const muovePerPrimo = speAttaccante > speDifensore
 
   // e.i — Sheer Force: ×1.3 sulle mosse con un effetto secondario.

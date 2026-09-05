@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T10:44:02.157Z",
+    "generatedAt": "2026-09-05T12:11:39.585Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -14,7 +14,7 @@
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 539,
     "mosseOffensiveAPotenzaZero": 34,
-    "mosseNelGap": 22,
+    "mosseNelGap": 20,
     "mosseSenzaOracolo": 10,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -446,11 +446,6 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "electro ball",
-        "nome": "Electro Ball",
-        "categoriaNCP": "Special"
-      },
-      {
         "chiave": "endeavor",
         "nome": "Endeavor",
         "categoriaNCP": "Physical"
@@ -473,11 +468,6 @@
       {
         "chiave": "frustration",
         "nome": "Frustration",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "gyro ball",
-        "nome": "Gyro Ball",
         "categoriaNCP": "Physical"
       },
       {
