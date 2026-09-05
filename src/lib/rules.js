@@ -643,6 +643,94 @@ export const STRUMENTI_IMMUNI_A_KLUTZ = new Set([
 ])
 
 /**
+ * ═══ I PUNTI SALUTE, E LE TRE SOGLIE CHE IL RIFERIMENTO LEGGE ══════════════
+ *
+ * Otto abilita' guardano i punti salute, e lo fanno su tre soglie diverse:
+ *
+ *   esattamente pieni   Multiscale, Shadow Shield, Tera Shell
+ *                       (`damage_MASTER.js:2360`, `damage_SV.js:135`)
+ *   <= la meta'         Defeatist (`:1925`)
+ *   <= un terzo         Overgrow, Blaze, Torrent, Swarm (`:1942-1945`)
+ *
+ * ─── PERCHE' TRE FUNZIONI E NON UN NUMERO ──────────────────────────────────
+ *
+ * Perche' nel riferimento sono tre confronti scritti tre volte, con due
+ * differenze che si perderebbero unificandoli:
+ *
+ *   · «pieni» e' `===`, non `>=`. Non e' pignoleria: e' l'unica soglia che
+ *     un solo punto in meno fa cadere, ed e' il modo in cui l'harness la
+ *     esprime da sempre (`maxHP - 1`).
+ *   · le altre due sono `<=` su una FRAZIONE non arrotondata: `maxHP / 3`,
+ *     non `floor(maxHP / 3)`. Con 100 punti salute massimi la soglia e'
+ *     33,33 e un Pokemon a 33 ci sta dentro; scrivendo `floor` cambierebbe
+ *     solo dove `maxHP` non e' divisibile, cioe' proprio dove nessuno
+ *     guarderebbe.
+ *
+ * ─── E LA TRADUZIONE DALLE VECCHIE LEVETTE ─────────────────────────────────
+ *
+ * Fino a oggi il modello non aveva i punti salute: aveva due levette, e
+ * l'harness le traduceva in punti salute per interrogare il riferimento.
+ * Quella traduzione era gia' scritta, verificata contro l'oracolo, ed e'
+ * diventata `psDaLevetta` qui sotto — cosi' il motore e l'oracolo leggono la
+ * stessa conversione invece di averne due che si somigliano.
+ */
+
+/** Vero se questi punti salute sono il massimo. `damage_MASTER.js:2360` */
+export function aVitaPiena(ps, psMax) {
+  return ps === psMax
+}
+
+/** Vero se i punti salute sono a meta' o meno. `damage_MASTER.js:1925` */
+export function psSottoLaMeta(ps, psMax) {
+  return ps <= psMax / 2
+}
+
+/** Vero se i punti salute sono a un terzo o meno. `damage_MASTER.js:1942` */
+export function psSottoUnTerzo(ps, psMax) {
+  return ps <= psMax / 3
+}
+
+/**
+ * I punti salute che una vecchia levetta descrive, o `null` se non ne descrive
+ * nessuna.
+ *
+ * E' la traduzione che l'harness fa da sempre per interrogare il riferimento:
+ *
+ *   `multiscaleActive: false`  → un punto in meno del massimo, che e' il modo
+ *                                piu' piccolo di non essere a vita piena
+ *   l'interruttore acceso su   → un terzo del massimo, che soddisfa insieme
+ *   una delle cinque              la soglia di Blaze e compagnia (<= 1/3) e
+ *                                 quella di Defeatist (<= 1/2)
+ *
+ * Serve finche' l'interfaccia manda le levette invece dei punti salute. Il
+ * giorno che manda i numeri, questa funzione resta solo per le squadre salvate
+ * prima — e allora la sua casa e' l'importatore, non il motore.
+ *
+ * @param {number} psMax
+ * @param {boolean} pieniSpenti   la levetta della vita piena e' su «no»
+ * @param {boolean} vitaBassa     l'interruttore di un'abilita' a vita bassa
+ */
+export function psDaLevetta(psMax, { pieniSpenti = false, vitaBassa = false } = {}) {
+  if (vitaBassa) return Math.floor(psMax / 3)
+  if (pieniSpenti) return psMax - 1
+  return null
+}
+
+/**
+ * Le cinque abilita' la cui levetta significa «a vita bassa».
+ *
+ * L'interruttore che le accende NON e' loro: e' lo stesso di Flash Fire, Plus,
+ * Minus, Electromorphosis, Protean e Libero — un unico `abilityOn` che nel
+ * riferimento vuol dire cose diverse a seconda dell'abilita' che lo porta.
+ * Questa lista dice per QUALI vuol dire punti salute, ed e' la ragione per cui
+ * l'interruttore non si potra' togliere nemmeno quando i punti salute ci
+ * saranno: per le altre sei continua a voler dire altro.
+ */
+export const ABILITA_A_VITA_BASSA = new Set([
+  'overgrow', 'blaze', 'torrent', 'swarm', 'defeatist',
+])
+
+/**
  * ─── LE TRE MOSSE LA CUI POTENZA E' UN'ASSUNZIONE DICHIARATA ────────────────
  *
  * Return, Frustration e Trump Card nel gioco hanno una potenza variabile: le

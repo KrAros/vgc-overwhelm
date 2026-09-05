@@ -35,6 +35,11 @@ import {
   potenzaAcrobatics,
   MOSSE_POTENZA_ASSUNTA,
   haPotenzaAssunta,
+  aVitaPiena,
+  psSottoLaMeta,
+  psSottoUnTerzo,
+  psDaLevetta,
+  ABILITA_A_VITA_BASSA,
   haPotenzaDaStadi,
   potenzaDaStadiAttaccante,
   potenzaDaStadiDifensore,
@@ -176,6 +181,12 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     atkAbilityFlags = {},
     // Lo stato di chi attacca. Sei valori (`rules.js` → `STATI`); `null` e
     // 'healthy' valgono lo stesso.
+    // I punti salute CORRENTI di chi attacca. `null` significa «pieni», ed e'
+    // il valore che manda tutto quello che oggi chiama il motore.
+    //
+    // Li legge il riferimento in otto abilita' e undici mosse; da noi, per
+    // adesso, solo le cinque abilita' a vita bassa. Le mosse arrivano dopo.
+    atkPS = null,
     atkStatus = null,
     lastRespectsKOs = 0,
     // Quante volte colpisce una mossa multi-colpo. Come `lastRespectsKOs`:
@@ -203,6 +214,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // Lo stato di chi subisce. Lo leggono Hex, Venoshock, Smelling Salts,
     // Wake-Up Slap, Dream Eater e Marvel Scale.
     defStatus = null,
+    // I punti salute CORRENTI di chi subisce. `null` significa «pieni».
+    defPS = null,
   } = defender
 
   validateSPs(atkSPs, debug)
@@ -263,6 +276,54 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defAbilKey = defAbilVera || ''
   const atkAbilEffect = ABILITY_EFFECTS[atkAbilKey] || null
   const defAbilEffettiva = ABILITY_EFFECTS[defAbilKey] || null
+
+  // ══ I PUNTI SALUTE ═══════════════════════════════════════════════════════
+  //
+  // Stanno subito dopo le abilita' e prima di ogni riga di formula, e i due
+  // confini sono tutt'e due obbligati:
+  //
+  //   DOPO le abilita'   perche' la traduzione della vecchia levetta guarda
+  //                      QUALE abilita' ha chi attacca, e vale solo per le
+  //                      cinque a vita bassa. E dev'essere l'abilita' VERA,
+  //                      dopo Trace e Neutralizing Gas, come nel riferimento
+  //                      (`checkTrace` e `checkNeutralGas` sono le prime
+  //                      righe dell'ingresso alto).
+  //   PRIMA della formula perche' li legge Tera Shell, che entra
+  //                      nell'efficacia di tipo.
+  //
+  // ─── UNA FONTE SOLA, E LE VECCHIE LEVETTE CI ENTRANO DENTRO ──────────────
+  //
+  // Fino a oggi il modello non aveva i punti salute: aveva due levette che li
+  // descrivevano a pezzi — «Multiscale attivo» per la vita piena, e
+  // l'interruttore dell'abilita' per la vita bassa. Erano due affermazioni
+  // separate sullo stesso Pokemon, e potevano contraddirsi: si poteva dire
+  // insieme «e' a vita piena» e «e' sotto un terzo».
+  //
+  // Adesso c'e' un numero, e le levette ci si traducono dentro invece di
+  // vivere accanto. La traduzione non e' inventata qui: e' quella che
+  // l'harness fa da sempre per interrogare il riferimento, verificata contro
+  // l'oracolo da quando esiste. Sta in `psDaLevetta`, e la usano tutt'e due.
+  //
+  // Finche' l'interfaccia manda le levette, `atkPS` e `defPS` arrivano `null`
+  // e il numero lo ricava la traduzione: nessun comportamento cambia, e lo
+  // snapshot lo dimostra su 601 casi. Il giorno che l'interfaccia manda i
+  // numeri, la traduzione serve solo alle squadre salvate prima.
+  const psMaxAtk = calcStat(getBaseStat(atkPokemon, STAT_HP), atkSPs[STAT_HP], level, null, STAT_HP, null, [])
+  const psMaxDif = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
+
+  const psAtk = atkPS ?? psDaLevetta(psMaxAtk, {
+    vitaBassa: atkAbilityFlags.interruttore === true
+      && ABILITA_A_VITA_BASSA.has(atkAbilKey),
+  }) ?? psMaxAtk
+
+  const psDif = defPS ?? psDaLevetta(psMaxDif, {
+    pieniSpenti: defAbilityFlags.multiscaleActive === false,
+  }) ?? psMaxDif
+
+  // Le tre soglie del riferimento, calcolate una volta e lette dove servono.
+  const difAVitaPiena = aVitaPiena(psDif, psMaxDif)
+  const atkSottoUnTerzo = psSottoUnTerzo(psAtk, psMaxAtk)
+  const atkSottoLaMeta = psSottoLaMeta(psAtk, psMaxAtk)
 
   // ── Mold Breaker, Teravolt, Turboblaze ───────────────────────────────────
   //
@@ -533,7 +594,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // cambiarlo romperebbe le squadre gia' salvate, per guadagnare una
     // parola. Il giorno che i punti salute entrano nel modello, questa levetta
     // diventa derivata e la domanda torna a essere una sola.
-    teraShell: defAbilEffect?.teraShell === true && defAbilityFlags.multiscaleActive !== false,
+    teraShell: defAbilEffect?.teraShell === true && difAVitaPiena,
   })
 
   // ── Meteo: sole e pioggia, normali ed estremi ────────────────────────────
@@ -689,7 +750,9 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const defBase = getBaseStat(defPokemon, defStatIdx)
   const atkStat = calcStat(atkBase, fonteAtkSPs[atkStatIdx], level, fonteAtkNatura, atkStatIdx, meteo, fonteAtkTipi)
   const defStat = calcStat(defBase, defSPs[defStatIdx], level, defNature, defStatIdx, meteo, defTypes)
-  const defHP   = calcStat(getBaseStat(defPokemon, STAT_HP), defSPs[STAT_HP], level, null, STAT_HP, null, [])
+  // Calcolato una volta sola in cima, insieme ai punti salute correnti: era
+  // qui, e da qui lo leggevano il punto f e il risultato.
+  const defHP = psMaxDif
 
   // ── PUNTI d ed e — IL DANNO FISSO (`damage_MASTER.js:1256-1275`) ─────────
   //
@@ -1280,7 +1343,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // quando i punti salute sono sotto la meta'. Non ha il controllo di
   // categoria che ha Slow Start — vale anche sulle mosse speciali.
   if ((atkAbilEffect?.slowStart && atkAbilityFlags.interruttore === true && !isSpecial)
-      || (atkAbilEffect?.defeatist && atkAbilityFlags.interruttore === true)) {
+      || (atkAbilEffect?.defeatist && atkSottoLaMeta)) {
     atMods.push(MOD.X0_5)
   }
 
@@ -1296,7 +1359,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // quando i punti salute sono a un terzo o meno (`:1942-1945`). Stanno
     // nello stesso `if` del resto del punto d, in `or`.
     (atkAbilEffect?.psBassiTipo !== undefined && moveType === atkAbilEffect.psBassiTipo
-      && atkAbilityFlags.interruttore === true) ||
+      && atkSottoUnTerzo) ||
     // Guts: x1,5 sull'attacco fisico con qualunque stato (`:1941`). E' la
     // PRIMA condizione dello stesso `if`, in `or` con tutte le altre.
     (atkAbilEffect?.guts && statoAtk !== 'healthy' && !isSpecial)
@@ -1962,7 +2025,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (atkAbilEffect?.sniper && critico)               finalMods.push(MOD.X1_5)
   if (atkAbilEffect?.tintedLens && effectiveness < 1) finalMods.push(MOD.X2)
 
-  if (defAbilEffect?.multiscale && defAbilityFlags.multiscaleActive !== false) {
+  if (defAbilEffect?.multiscale && difAVitaPiena) {
     finalMods.push(MOD.X0_5)
   }
   if (defAbilEffect?.fluffy && isContact)          finalMods.push(MOD.X0_5)
