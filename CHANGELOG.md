@@ -16,6 +16,18 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Stored Power e Power Trip erano sbagliate di dodici volte
+- Le due mosse che crescono con i propri potenziamenti usavano sempre la
+  potenza minima. Con chi attacca a +6 in due statistiche il danno usciva
+  **dodici volte più basso** del dovuto — e senza nessun avviso, perché il
+  badge «non calcolata» segnala le mosse che non mostrano un numero, e queste
+  un numero lo mostravano
+- **Punishment** ora è calcolata: cresce coi potenziamenti del bersaglio
+- **Power Trip** si chiamava «Power rip» nei nostri dati. Il nome sbagliato la
+  rendeva invisibile al confronto col riferimento, e l'esportazione verso
+  Showdown scriveva una mossa che non esiste. Stessa cosa per **Nature's
+  Madness**, scritta «Natures's Madness»
+
 ### Gyro Ball ed Electro Ball mostrano il loro danno
 - Le due mosse la cui potenza dipende dalla Velocità dei due Pokémon ora sono
   calcolate. Prima disegnavano `~` come le altre

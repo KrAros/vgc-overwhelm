@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T12:12:07.013Z",
+    "generatedAt": "2026-09-05T12:32:32.827Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 1039,
+        "riga": 1063,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -126,7 +126,7 @@
         "chiave": "battle bond",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 910,
+          "riga": 990,
           "testo": "'battle-bond',"
         }
       },
@@ -142,7 +142,7 @@
         "chiave": "comatose",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 911,
+          "riga": 991,
           "testo": "'comatose',"
         }
       },
@@ -150,7 +150,7 @@
         "chiave": "commander",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 912,
+          "riga": 992,
           "testo": "'commander',"
         }
       },
@@ -158,7 +158,7 @@
         "chiave": "disguise",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 913,
+          "riga": 993,
           "testo": "'disguise',"
         }
       },
@@ -174,7 +174,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 620,
+          "riga": 624,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -182,7 +182,7 @@
         "chiave": "flower gift",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 914,
+          "riga": 994,
           "testo": "'flower-gift',"
         }
       },
@@ -190,7 +190,7 @@
         "chiave": "forecast",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 915,
+          "riga": 995,
           "testo": "'forecast',"
         }
       },
@@ -214,7 +214,7 @@
         "chiave": "gulp missile",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 916,
+          "riga": 996,
           "testo": "'gulp-missile',"
         }
       },
@@ -222,7 +222,7 @@
         "chiave": "ice face",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 917,
+          "riga": 997,
           "testo": "'ice-face',"
         }
       },
@@ -230,7 +230,7 @@
         "chiave": "illusion",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 918,
+          "riga": 998,
           "testo": "'illusion',"
         }
       },
@@ -238,7 +238,7 @@
         "chiave": "imposter",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 919,
+          "riga": 999,
           "testo": "'imposter',"
         }
       },
@@ -246,7 +246,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 1039,
+          "riga": 1063,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -262,7 +262,7 @@
         "chiave": "multitype",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 920,
+          "riga": 1000,
           "testo": "'multitype',"
         }
       },
@@ -286,7 +286,7 @@
         "chiave": "power construct",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 943,
+          "riga": 1023,
           "testo": "'power-construct',"
         }
       },
@@ -294,7 +294,7 @@
         "chiave": "power of alchemy",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 921,
+          "riga": 1001,
           "testo": "'power-of-alchemy',"
         }
       },
@@ -334,7 +334,7 @@
         "chiave": "receiver",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 924,
+          "riga": 1004,
           "testo": "'receiver',"
         }
       },
@@ -350,7 +350,7 @@
         "chiave": "rks system",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 925,
+          "riga": 1005,
           "testo": "'rks-system',"
         }
       },
@@ -382,7 +382,7 @@
         "chiave": "schooling",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 926,
+          "riga": 1006,
           "testo": "'schooling',"
         }
       },
@@ -398,7 +398,7 @@
         "chiave": "shields down",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 927,
+          "riga": 1007,
           "testo": "'shields-down',"
         }
       },
@@ -406,7 +406,7 @@
         "chiave": "stance change",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 928,
+          "riga": 1008,
           "testo": "'stance-change',"
         }
       },
@@ -438,7 +438,7 @@
         "chiave": "tera shift",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 948,
+          "riga": 1028,
           "testo": "'tera-shift',"
         }
       },
@@ -446,7 +446,7 @@
         "chiave": "trace",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 929,
+          "riga": 1009,
           "testo": "'trace',"
         }
       },
@@ -462,7 +462,7 @@
         "chiave": "wonder guard",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 930,
+          "riga": 1010,
           "testo": "'wonder-guard',"
         }
       },
@@ -470,7 +470,7 @@
         "chiave": "zen mode",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 931,
+          "riga": 1011,
           "testo": "'zen-mode',"
         }
       },
@@ -478,7 +478,7 @@
         "chiave": "zero to hero",
         "prova": {
           "file": "src/lib/rules.js",
-          "riga": 932,
+          "riga": 1012,
           "testo": "'zero-to-hero',"
         }
       }

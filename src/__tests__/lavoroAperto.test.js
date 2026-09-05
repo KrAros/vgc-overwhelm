@@ -108,6 +108,32 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     expect(resteDaFare()).toHaveLength(20)
   })
 
+  it('Foul Play e Acrobatics mostrano ancora un numero sbagliato', () => {
+    // Le due voci peggiori del registro: non dicono «non lo so», dicono un
+    // numero. Qui si presidia che siano ANCORA aperte — il giorno che vengono
+    // fatte, questo diventa rosso e le righe nel documento vanno tolte.
+    //
+    // Foul Play deve attaccare con l'Attacco di chi SUBISCE: finché non lo fa,
+    // alzare l'Attacco di chi attacca cambia il danno, e alzare quello del
+    // bersaglio no.
+    const a = { atkPokemon: 'blissey', atkSPs: [0, 0, 0, 0, 0, 0], atkNature: null,
+      atkAbility: null, atkItem: null, level: 50, atkBoost: 0, atkAbilityFlags: {} }
+    const d = (extra = {}) => ({ defPokemon: 'garchomp', defSPs: [0, 0, 0, 0, 0, 0],
+      defNature: null, defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0,
+      defAtkBoost: 0, defAbilityFlags: {}, ...extra })
+    const foul = (att, def) => calculateDamage({ attacker: att, defender: def, move: 'foul play', field: {} })
+    expect(
+      foul(a, d({ defAtkBoost: 6 })).rolls,
+      'Foul Play guarda l\'Attacco del bersaglio: aggiornare docs/lavoro-aperto.md',
+    ).toEqual(foul(a, d()).rolls)
+
+    // Acrobatics deve valere 110 senza strumento. Finché non lo fa, resta 55.
+    expect(
+      calculateDamage({ attacker: a, defender: d(), move: 'acrobatics', field: {} }).effectiveBP,
+      'Acrobatics raddoppia senza strumento: aggiornare docs/lavoro-aperto.md',
+    ).toBe(55)
+  })
+
   it('`gapNoti.json` adesso ha anche le mosse, e il badge le avvisa', () => {
     // La seconda voce che si chiude, e anche questa girata invece che tolta.
     // Il registro aveva due liste; ne ha tre, e la terza è quella che mancava.

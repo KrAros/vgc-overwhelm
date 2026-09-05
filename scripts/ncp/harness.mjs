@@ -354,7 +354,22 @@ export function creaHarness() {
       nature: a.atkNature,
       ability: tr.abilitaNCP(a.atkAbility),
       item: tr.strumentoNCP(a.atkItem),
-      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0, sp: a.atkSpeBoost || 0 },
+      // ─── TUTTI E CINQUE GLI STADI, NON I TRE CHE SERVIVANO ────────────
+      //
+      // Erano `at` e `sa`: le due statistiche con cui si attacca, cioe' le
+      // uniche che la formula legge da questo lato. `sp` e' arrivato con la
+      // Velocita' effettiva, e mancavano ancora `df` e `sd`.
+      //
+      // Non e' un dettaglio di completezza. Body Press attacca con la DIFESA
+      // di chi la usa (`calcAttack` punto a), e Stored Power conta gli stadi
+      // POSITIVI di tutt'e cinque (`:1388`): con gli stadi mancanti il
+      // riferimento rispondeva con un Pokemon che quegli stadi non li ha, e
+      // il numero usciva plausibile.
+      boosts: {
+        at: a.atkBoost || 0, df: a.atkDefBoost || 0,
+        sa: a.spAtkBoost || 0, sd: a.atkSpDefBoost || 0,
+        sp: a.atkSpeBoost || 0,
+      },
       mossaNCP,
       datiMossa,
       extra: {
@@ -391,7 +406,15 @@ export function creaHarness() {
       nature: d.defNature,
       ability: tr.abilitaNCP(d.defAbility),
       item: tr.strumentoNCP(d.defItem),
-      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0, sp: d.defSpeBoost || 0 },
+      // Stessa storia dall'altro lato: erano `df` e `sd`, le due con cui si
+      // subisce. Foul Play attacca con l'Attacco di CHI SUBISCE
+      // (`calcAttack` punto a) e Punishment conta gli stadi positivi del
+      // difensore su tutt'e cinque (`:1393`).
+      boosts: {
+        at: d.defAtkBoost || 0, df: d.defBoost || 0,
+        sa: d.defSpAtkBoost || 0, sd: d.spDefBoost || 0,
+        sp: d.defSpeBoost || 0,
+      },
       mossaNCP,
       datiMossa,
       extra: {
@@ -673,7 +696,11 @@ export function creaHarness() {
       nature: a.atkNature,
       ability: tr.abilitaNCP(a.atkAbility),
       item: tr.strumentoNCP(a.atkItem),
-      boosts: { at: a.atkBoost || 0, sa: a.spAtkBoost || 0, sp: a.atkSpeBoost || 0 },
+      boosts: {
+        at: a.atkBoost || 0, df: a.atkDefBoost || 0,
+        sa: a.spAtkBoost || 0, sd: a.atkSpDefBoost || 0,
+        sp: a.atkSpeBoost || 0,
+      },
       mossaNCP,
       datiMossa,
       extra: {
@@ -709,7 +736,11 @@ export function creaHarness() {
       nature: d.defNature,
       ability: tr.abilitaNCP(d.defAbility),
       item: tr.strumentoNCP(d.defItem),
-      boosts: { df: d.defBoost || 0, sd: d.spDefBoost || 0, sp: d.defSpeBoost || 0 },
+      boosts: {
+        at: d.defAtkBoost || 0, df: d.defBoost || 0,
+        sa: d.defSpAtkBoost || 0, sd: d.spDefBoost || 0,
+        sp: d.defSpeBoost || 0,
+      },
       mossaNCP,
       datiMossa,
       // `abilityOn` sul difensore raccoglie i nostri due flag che vi

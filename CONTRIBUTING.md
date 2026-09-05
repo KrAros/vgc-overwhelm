@@ -58,12 +58,15 @@ diversa da `Status` in `vendor/ncp/move_data.js` — ed è rifatta a ogni giro d
 stava qui prima era sbagliato in due direzioni insieme, ci teneva cinque mosse
 che il riferimento non ha e ne perdeva una che ha.
 
-Quattordici sono fatte:
+Quindici sono fatte:
 
 - le quattro a **peso** — Low Kick, Grass Knot, Heavy Slam, Heat Crash, punto b
   di `basePowerFunc`;
 - le due a **Velocità** — Gyro Ball ed Electro Ball, punto a
   (`damage_MASTER.js:1305-1316`);
+- **Punishment**, che conta gli stadi positivi del bersaglio, punto f
+  (`:1385-1395`) — insieme a Stored Power e Power Trip, che una potenza nei
+  dati ce l'avevano e la mostravano sbagliata;
 - le quattro **KO** — Fissure, Guillotine, Horn Drill, Sheer Cold, col flag
   `koSecco` e il punto f del riferimento;
 - le quattro a **danno fisso** — Sonic Boom, Dragon Rage, Seismic Toss,
@@ -73,7 +76,8 @@ E ne restano **20**:
 
 > Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
 > Fling, Frustration, Hard Press, Metal Burst, Mirror Coat, Natural Gift,
-> Punishment, Return, Reversal, Ruination, Super Fang, Trump Card, Wring Out
+> Nature's Madness, Return, Reversal, Ruination, Super Fang, Trump Card,
+> Wring Out
 
 Non sono tutte lo stesso problema: ci sono quelle legate ai punti salute
 (Flail, Reversal, Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press,
