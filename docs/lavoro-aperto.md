@@ -41,17 +41,14 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Ventitré sono fatte, ne restano **12**, e **portano il badge**:
+nome. Ventotto sono fatte, ne restano **7**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Flail, Fling, Hard Press,
-> Metal Burst, Mirror Coat, Natural Gift, Reversal, Wring Out
+> Beat Up, Comeuppance, Counter, Fling, Metal Burst, Mirror Coat, Natural Gift
 
-Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
-Crush Grip, Wring Out, Hard Press — adesso il motore i punti salute ce li ha, e
-sono **la prossima cosa da fare**: leggono la POTENZA dai punti salute (punto c
-di `basePowerFunc`), mentre le cinque appena fatte ne leggevano il danno.
+Non sono lo stesso problema, e quelle legate ai punti salute non ci sono più:
+sono state fatte tutte.
 
 Le reattive — Counter, Mirror Coat, Metal Burst, Comeuppance — nel riferimento
 ci sono, ma calcolano

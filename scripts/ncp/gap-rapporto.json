@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T16:57:11.227Z",
+    "generatedAt": "2026-09-05T17:06:33.971Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -14,7 +14,7 @@
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
-    "mosseNelGap": 12,
+    "mosseNelGap": 7,
     "mosseSenzaOracolo": 9,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -441,23 +441,8 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "crush grip",
-        "nome": "Crush Grip",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "flail",
-        "nome": "Flail",
-        "categoriaNCP": "Physical"
-      },
-      {
         "chiave": "fling",
         "nome": "Fling",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "hard press",
-        "nome": "Hard Press",
         "categoriaNCP": "Physical"
       },
       {
@@ -474,16 +459,6 @@
         "chiave": "natural gift",
         "nome": "Natural Gift",
         "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "reversal",
-        "nome": "Reversal",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "wring out",
-        "nome": "Wring Out",
-        "categoriaNCP": "Special"
       }
     ],
     "mosseSenzaOracolo": [

@@ -37,6 +37,13 @@ import {
   haPotenzaAssunta,
   haDannoDaiPuntiSalute,
   dannoDaiPuntiSalute,
+  MOSSE_POTENZA_PS_ATTACCANTE,
+  MOSSE_POTENZA_PS_FLAIL,
+  MOSSE_POTENZA_PS_BERSAGLIO,
+  haPotenzaDaiPuntiSalute,
+  potenzaDaPsAttaccante,
+  potenzaFlail,
+  potenzaDaPsBersaglio,
   aVitaPiena,
   psSottoLaMeta,
   psSottoUnTerzo,
@@ -1186,6 +1193,26 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // `rules.js`, che lo tiene accanto all'ipotesi sotto cui vale.
   const potenzaAssunta = haPotenzaAssunta(move) ? MOSSE_POTENZA_ASSUNTA[move] : null
 
+  // ─── LA POTENZA DAI PUNTI SALUTE ─────────────────────────────────────────
+  //
+  // Punto c di `basePowerFunc`, fra il peso e l'affetto. Tre famiglie, tre
+  // formule, e due leggono chi tira mentre la terza legge chi subisce — che e'
+  // la ragione per cui sono tre strutture e non una.
+  //
+  // Eruption, Water Spout e Dragon Energy NON erano nel divario: hanno
+  // `power: 150` nei dati e il motore quel 150 lo usava sempre, mostrando un
+  // numero senza avvisi. E' l'assunzione «il Pokemon e' integro» che
+  // CONTRIBUTING dichiara da sessioni, e che fino a ieri era vera per
+  // costruzione. Adesso i punti salute ci sono e quella riga puo' sbagliare.
+  let potenzaDaiPS = null
+  if (haPotenzaDaiPuntiSalute(move)) {
+    potenzaDaiPS = MOSSE_POTENZA_PS_ATTACCANTE.has(move)
+      ? potenzaDaPsAttaccante(psAtk, psMaxAtk)
+      : MOSSE_POTENZA_PS_FLAIL.has(move)
+        ? potenzaFlail(psAtk, psMaxAtk)
+        : potenzaDaPsBersaglio(psDif, psMaxDif, MOSSE_POTENZA_PS_BERSAGLIO[move])
+  }
+
   let potenzaDagliStadi = null
   if (haPotenzaDaStadi(move)) {
     potenzaDagliStadi = MOSSE_STADI_ATTACCANTE.has(move)
@@ -1222,6 +1249,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (move === 'facade' && STATI_CHE_ACCENDONO_FACADE.has(statoAtk))
 
   const effectiveBP = potenzaDalPeso !== null ? potenzaDalPeso
+    : potenzaDaiPS !== null ? potenzaDaiPS
     : potenzaDallaVelocita !== null ? potenzaDallaVelocita
     : potenzaDagliStadi !== null ? potenzaDagliStadi
     : potenzaAcro !== null ? potenzaAcro
