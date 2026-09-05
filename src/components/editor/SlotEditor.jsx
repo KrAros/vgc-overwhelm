@@ -385,10 +385,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                   regge da se' — la barra e' il controllo che si guarda per
                   primo quando si legge «quanto e' messo male», e lo stato e'
                   una precisazione. */}
-              <div className="w-full sm:w-1/2">
+              {/* `h-full` sulle due metà: senza, ognuna prende l'altezza del
+                  proprio contenuto e i due controlli finiscono di misura
+                  diversa. Con questo la riga la decide il più alto e l'altro
+                  ci si allunga. */}
+              <div className="w-full sm:w-1/2 h-full">
                 <BarraPS ps={ps} psMax={psMax} onChange={v => setPS(team, index, v)} />
               </div>
-              <div className="w-full sm:w-1/2">
+              <div className="w-full sm:w-1/2 h-full">
                 <StatusSelect value={status} onChange={v => setStatus(team, index, v)} />
               </div>
             </div>
@@ -480,6 +484,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 placeholder={`${t('editor.move_slot')} ${mi+1}`}
                 onChange={m => handleMoveChange(mi, m)}
                 ability={ability}
+                /* Eruzione e sorelle: la potenza scritta accanto alla mossa e'
+                   quella vera, che dipende da quanti punti salute ha CHI
+                   TIRA. Vedi la nota in `SearchSelects.jsx`. */
+                ps={ps}
+                psMax={psMax}
               />
             ))}
           </div>

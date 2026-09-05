@@ -104,7 +104,8 @@
     "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon.",
     "ptShort": "Prot",
     "ko_certo": "KO garantito",
-    "ko_possibile": "KO possibile: {{pct}}%"
+    "ko_possibile": "KO possibile: {{pct}}%",
+    "siglaPuntiSalute": "PS"
   },
   "gap": {
     "badge": "Non calcolata",

@@ -104,7 +104,8 @@
     "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's.",
     "ptShort": "Pro",
     "ko_certo": "Guaranteed KO",
-    "ko_possibile": "Possible KO: {{pct}}%"
+    "ko_possibile": "Possible KO: {{pct}}%",
+    "siglaPuntiSalute": "HP"
   },
   "gap": {
     "badge": "Not calculated",

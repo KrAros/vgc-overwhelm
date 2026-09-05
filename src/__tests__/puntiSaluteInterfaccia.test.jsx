@@ -35,6 +35,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { caricaLingua } from '../i18n.js'
 import BarraPS from '../components/editor/BarraPS.jsx'
 import { SegnoPS } from '../components/DamageTable.jsx'
+import { MoveSearch } from '../components/editor/SearchSelects.jsx'
+import { statMostrata } from '../lib/statMostrata.js'
 import {
   psMassimi, psCorrenti, colorePS, VERDE, GIALLO, ROSSO,
 } from '../lib/psSlot.js'
@@ -44,6 +46,8 @@ import useCalcStore, { emptyPokemon } from '../store/useCalcStore.js'
 import { calcStat } from '../lib/stats.js'
 import { STAT_HP } from '../lib/rules.js'
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
+import it_ from '../locales/it.json' with { type: 'json' }
+import en from '../locales/en.json' with { type: 'json' }
 
 beforeAll(() => caricaLingua('it'))
 
@@ -354,5 +358,132 @@ describe('setPS', () => {
     conSlot({ key: 'garchomp' })
     useCalcStore.getState().setPS('team1', 0, 0)
     expect(primo().ps).toBe(1)
+  })
+})
+
+// ─── 8. L'etichetta e l'altezza ──────────────────────────────────────────────
+
+describe('la barra dice cosa è', () => {
+  it('porta la sigla, e non è quella di Fonte di Energia', () => {
+    // `ui.psShort` esiste già e in inglese vale «PS»: è la sigla di Power Spot
+    // nella barra dei modificatori. In italiano quella dice «FE», quindi sullo
+    // schermo le due non si incontrano — ma la chiave qui è un'altra apposta,
+    // e questo test lo tiene fermo.
+    expect(it_.ui.siglaPuntiSalute).toBe('PS')
+    expect(en.ui.siglaPuntiSalute).toBe('HP')
+    expect(it_.ui.psShort).toBe('FE')
+  })
+
+  it('e la sigla compare davvero nel markup', () => {
+    // Senza questa riga il test qui sopra sorveglierebbe due stringhe in un
+    // file JSON che nessuno legge.
+    const html = renderToStaticMarkup(<BarraPS ps={131} psMax={175} onChange={() => {}} />)
+    expect(html).toContain('>PS<')
+  })
+
+  it('i tre controlli riempiono la riga invece di stare alti e corti', () => {
+    // Misurato nell'app build: il menù dello stato era 25 px, questa riga 20,
+    // con i bordi superiori sfalsati di 1,5. La correzione è `h-full`, non un
+    // numero — così i due restano uguali anche se il menù cambia padding.
+    // Si guardano gli elementi, non il numero di occorrenze della classe:
+    // contarle vuol dire riscrivere il test ogni volta che si annida un div.
+    const html = renderToStaticMarkup(<BarraPS ps={131} psMax={175} onChange={() => {}} />)
+    expect(html.slice(0, html.indexOf('>')), 'la riga non riempie la metà')
+      .toContain('h-full')
+    for (const tag of html.match(/<input[^>]*>/g)) {
+      expect(tag, tag).toContain('h-full')
+    }
+  })
+})
+
+// ─── 9. Le mosse la cui potenza è i propri punti salute ──────────────────────
+
+describe('la potenza scritta accanto alla mossa', () => {
+  const rendi = (props) => renderToStaticMarkup(
+    <MoveSearch value={props.move} onChange={() => {}} placeholder="" ps={props.ps} psMax={props.psMax} />)
+  // Il numero della potenza è l'unico `font-mono` della riga.
+  const potenza = (html) => html.match(/font-mono[^>]*>([^<]+)</)?.[1]
+
+  it('Eruzione a metà vita dice 75, non 150', () => {
+    // Era la riga diventata falsa il giorno in cui la barra è arrivata:
+    // `moves.json` dice `power: 150`, e il motore con il Pokémon a metà ne usa
+    // 75. Due numeri per la stessa cosa, sulla stessa schermata.
+    expect(potenza(rendi({ move: 'eruption', ps: 175, psMax: 175 }))).toBe('150')
+    expect(potenza(rendi({ move: 'eruption', ps: 87,  psMax: 175 }))).toBe('74')
+    expect(potenza(rendi({ move: 'eruption', ps: 1,   psMax: 175 }))).toBe('1')
+  })
+
+  it('Rovesciamento passa da «—» al numero', () => {
+    // Ha `power: 0`, quindi la riga mostrava un trattino. Non era falso — ma
+    // il numero si sa, e dipende da un valore scritto due centimetri più su.
+    expect(potenza(rendi({ move: 'reversal', ps: 175, psMax: 175 }))).toBe('20')
+    expect(potenza(rendi({ move: 'reversal', ps: 3,   psMax: 175 }))).toBe('200')
+  })
+
+  it('ma quelle che dipendono dal BERSAGLIO restano «—»', () => {
+    // È il confine: qui c'è un Pokémon solo. Presa Ferrea dipende dai punti
+    // salute di chi subisce, Erbafrusta dal suo peso, Vortexpalla da tutt'e
+    // due le Velocità. Inventare un numero sarebbe peggio del trattino.
+    for (const m of ['crush grip', 'hard press', 'grass knot', 'gyro ball']) {
+      expect(potenza(rendi({ move: m, ps: 87, psMax: 175 })), m).toBe('—')
+    }
+  })
+
+  it('e senza punti salute non si inventa niente', () => {
+    // Il default dei prop: un chiamante che non li manda deve vedere il dato
+    // grezzo, non un numero costruito su `psMax = 0`.
+    const html = renderToStaticMarkup(
+      <MoveSearch value="eruption" onChange={() => {}} placeholder="" />)
+    expect(potenza(html)).toBe('150')
+  })
+})
+
+// ─── 10. Le due abilità che dimezzano, nella colonna «Mod» ───────────────────
+
+describe('statMostrata — Sconfittite e Partenza Lenta', () => {
+  const STAT_ATT = 1, STAT_SPA = 3, STAT_DEF = 2
+
+  it('Sconfittite dimezza Attacco e Att. Speciale sotto la metà', () => {
+    // Il motore lo fa da tre sessioni (`calcAttack` punto b) e la colonna no:
+    // mostrava l'Attacco intero mentre il danno usava la metà. Adesso è
+    // raggiungibile, perché il numero che lo decide è nella barra.
+    const s = (ps) => ({ key: 'archen', ability: 'Defeatist', sps: [0,0,0,0,0,0], ps })
+    const psMax = psMassimi(s(null))
+
+    const pieno = statMostrata(s(psMax), STAT_ATT)
+    expect(pieno.modificata, 'a vita piena non deve dimezzare niente').toBe(false)
+
+    const ferito = statMostrata(s(Math.floor(psMax / 2)), STAT_ATT)
+    expect(ferito.modificata).toBe(true)
+    expect(ferito.effettiva).toBeLessThan(ferito.grezza)
+
+    // Sconfittite non ha il controllo di categoria che ha Partenza Lenta:
+    // vale anche sulle mosse speciali, quindi anche sull'Att. Speciale.
+    expect(statMostrata(s(Math.floor(psMax / 2)), STAT_SPA).modificata).toBe(true)
+    // Ma non sulla Difesa: dimezza l'attacco, non tutto.
+    expect(statMostrata(s(Math.floor(psMax / 2)), STAT_DEF).modificata).toBe(false)
+  })
+
+  it('Partenza Lenta dimezza il solo Attacco, e con la levetta', () => {
+    // La sua levetta NON è sparita: Partenza Lenta non parla di punti salute.
+    const s = (acceso) => ({
+      key: 'regigigas', ability: 'Slow Start', sps: [0,0,0,0,0,0],
+      abilityFlags: { interruttore: acceso },
+    })
+    expect(statMostrata(s(false), STAT_ATT).modificata).toBe(false)
+    const acceso = statMostrata(s(true), STAT_ATT)
+    expect(acceso.modificata).toBe(true)
+    expect(acceso.effettiva).toBeLessThan(acceso.grezza)
+    // `!isSpecial` nel motore: l'Att. Speciale non lo tocca.
+    expect(statMostrata(s(true), STAT_SPA).modificata).toBe(false)
+  })
+
+  it('e il numero è lo stesso che usa il motore', () => {
+    // Non «circa la metà»: la colonna passa da `chainMods` con un `pokeRound`
+    // solo, come il motore. Un troncamento diverso darebbe una colonna che
+    // contraddice il danno scritto sotto.
+    const s = { key: 'archen', ability: 'Defeatist', sps: [0,0,0,0,0,0], ps: 20 }
+    const r = statMostrata(s, STAT_ATT)
+    expect(r.effettiva).toBe(Math.floor(r.grezza / 2))
   })
 })

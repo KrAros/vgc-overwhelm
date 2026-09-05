@@ -35,6 +35,16 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 - I link condivisi portano il numero; quelli vecchi si aprono mostrando nella
   barra lo stato che le levette descrivevano
 
+### E quello che la barra ha reso sbagliato altrove
+- **La potenza scritta accanto alla mossa.** Eruzione diceva 150 anche col
+  Pokémon a metà, quando il calcolo ne usava 75. Adesso dice il numero vero.
+  Rovesciamento e Ritorsione passano da «—» al numero. Presa Ferrea,
+  Erbafrusta e Vortexpalla restano «—»: dipendono dall'avversario, e qui
+  l'editor vede un Pokémon solo
+- **La colonna «Mod».** Sconfittite dimezza Attacco e Att. Speciale sotto
+  metà vita, e la colonna mostrava il numero intero. Adesso mostra la metà —
+  e con lei **Partenza Lenta**, che aveva la stessa lacuna
+
 ### La matrice distingue «lo uccide» da «forse lo uccide»
 - Prima una mossa che fa 40–105% e una che ne fa 100–120% avevano **lo stesso
   colore**: la prima uccide in un caso su sedici, la seconda sempre

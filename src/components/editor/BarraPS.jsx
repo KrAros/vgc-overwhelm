@@ -33,6 +33,39 @@
  * Trascinare va bene per «più o meno a metà», e non va bene per «gli restano
  * 42». La casella accanto serve al secondo caso, ed è la stessa coppia
  * cursore + casella che le righe delle statistiche hanno già.
+ *
+ * ─── PERCHÉ C'È SCRITTO «PS», DOPO CHE AVEVO DECISO DI NO ──────────────────
+ *
+ * Avevo tolto l'etichetta ragionando che il «/ 175» dicesse già di che numero
+ * si tratta. Guardato nell'app, non lo dice: dice che è una frazione di
+ * qualcosa. Chi apre l'editor per la prima volta vede una barra colorata con
+ * due numeri e deve indovinare. Simone: «l'utente deve sapere cosa è quella
+ * barra».
+ *
+ * L'etichetta costa ~28 px alla larghezza del cursore, ed è il prezzo giusto.
+ *
+ * Attenzione al nome della chiave: `ui.psShort` esiste già e in inglese vale
+ * «PS» — ma è la sigla di **Power Spot** nella barra dei modificatori. In
+ * italiano quella dice «FE», quindi le due non si incontrano mai sullo
+ * schermo; il rischio è nel codice, e per questo la chiave qui si chiama
+ * `siglaPuntiSalute` e non `ps` qualcosa.
+ *
+ * ─── L'ALTEZZA ─────────────────────────────────────────────────────────────
+ *
+ * Misurata nell'app build, non dedotta: il menù dello stato era 25 px, questa
+ * riga 20, e i due bordi superiori differivano di 1,5 px — la barra stava
+ * alta e corta accanto a una tendina più grossa.
+ *
+ * La correzione non è un numero scritto qui: è `h-full` sui tre controlli. Il
+ * contenitore è una metà di una riga `flex`, che di suo si stira all'altezza
+ * della riga, e la riga la decide il menù. Così i due restano uguali anche se
+ * un domani il menù cambia padding — un `h-[25px]` scritto qui sarebbe una
+ * copia da tenere allineata a mano, che è il difetto che questo progetto
+ * paga già altrove.
+ *
+ * Su telefono la riga è `flex-col` e i due si impilano: lì `h-full` non ha
+ * un'altezza definita da cui prendere e vale `auto`, cioè il comportamento di
+ * prima. Il `min-h-[1.5rem]` è il pavimento per quel caso.
  */
 
 import { useTranslation } from 'react-i18next'
@@ -47,28 +80,22 @@ export default function BarraPS({ ps, psMax, onChange }) {
   const colore = colorePS(valore, psMax)
 
   return (
-    <div className="flex items-center gap-2 w-full">
-      {/* La casella e il massimo. Niente etichetta «PS»: il «/ 175» dice già
-          di che numero si tratta, e l'etichetta ruberebbe la larghezza che
-          serve alla barra. */}
+    <div className="flex items-center gap-2 w-full h-full min-h-[1.5rem]">
+      <span className="text-xs text-gray-400 shrink-0 font-medium">{t('ui.siglaPuntiSalute')}</span>
       <input
         type="number" min="1" max={psMax} value={valore}
         aria-label={t('aria.ps_value')}
         onChange={e => onChange(Math.min(psMax, Math.max(1, parseInt(e.target.value) || 1)))}
-        className="w-11 shrink-0 bg-gray-700 text-white text-xs rounded px-1 py-0.5 outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="w-11 h-full shrink-0 bg-gray-700 text-white text-xs rounded px-1 py-0.5 outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
       <span className="text-xs text-gray-400 shrink-0">/ {psMax}</span>
 
-      {/* `h-5` e non `h-4`: «cicciotta», ha chiesto Simone, ed e' anche
-          l'altezza della casella accanto — due controlli della stessa riga che
-          finiscono a filo invece che uno dentro l'altro.
-
-          Il fondo e' `bg-gray-700`, lo stesso della casella e della tendina.
+      {/* Il fondo e' `bg-gray-700`, lo stesso della casella e della tendina.
           Al primo giro era `bg-gray-900`: guardato nell'app, la parte VUOTA
           della barra spariva nel fondo del pannello, e la barra sembrava
           finire dove finiva il verde — cioe' non si vedeva piu' quanto
           mancasse al massimo, che e' meta' dell'informazione. */}
-      <div className="relative flex-1 min-w-0 h-5">
+      <div className="relative flex-1 min-w-0 h-full">
         <div className="absolute inset-0 rounded-full bg-gray-700 overflow-hidden">
           <div
             className="h-full transition-[width] duration-100"

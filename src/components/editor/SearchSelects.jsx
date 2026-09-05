@@ -8,7 +8,11 @@ import { cercaSpecie, ordinaPerRoster } from '../../utils/nomiPokemon'
 import movesData   from '../../data/moves.json'
 import itemsData   from '../../data/items.json'
 import { TYPE_NAMES, TYPE_COLORS } from '../../data/typeChart.js'
-import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
+import {
+  ABILITA_ATE, tipoPallaClima,
+  MOSSE_POTENZA_PS_ATTACCANTE, MOSSE_POTENZA_PS_FLAIL,
+  potenzaDaPsAttaccante, potenzaFlail,
+} from '../../lib/rules.js'
 import { mossaNonCalcolata } from '../../lib/gap.js'
 import { SegnalinoNonCalcolata } from './BadgeNonCalcolata.jsx'
 import { useTranslation } from 'react-i18next'
@@ -140,7 +144,7 @@ export function PokemonSearch({ value, onChange }) {
 
 // ─── MoveSearch ───────────────────────────────────────────────────────────────
 
-export function MoveSearch({ value, onChange, placeholder, ability }) {
+export function MoveSearch({ value, onChange, placeholder, ability, ps = 0, psMax = 0 }) {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
@@ -170,7 +174,31 @@ export function MoveSearch({ value, onChange, placeholder, ability }) {
   const isNormalMove = baseType === 0 // 0 = Normal
   const ateType = isNormalMove && ABILITA_ATE[abilityKey] !== undefined ? ABILITA_ATE[abilityKey] : null
   const displayType = ateType !== null ? ateType : baseType
-  const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100 : moveDetails?.power
+
+  // ─── LE CINQUE LA CUI POTENZA È I PROPRI PUNTI SALUTE ────────────────────
+  //
+  // Eruzione, Idrondata, Dragoenergia leggono `power: 150` nei nostri dati, e
+  // fino a ieri quel 150 era vero: l'app assumeva la vita piena ovunque, e
+  // 150 è quello che il motore usava. Da quando c'è la barra non lo è più —
+  // con il Pokémon a metà il motore ne usa 75, e questa riga continuava a
+  // dire 150. Non è una svista nuova: è una riga diventata falsa il giorno
+  // in cui i punti salute sono arrivati nell'interfaccia.
+  //
+  // Rovesciamento e Ritorsione hanno `power: 0` e la riga mostrava `—`. Non
+  // era falso, ma il numero adesso si sa, e `—` vuol dire «dipende» quando
+  // invece dipende da una cosa che è scritta due centimetri più in su.
+  //
+  // Il confine è quello che l'editor può sapere: qui c'è UN Pokémon, quindi
+  // si calcolano solo le mosse la cui potenza dipende dai punti salute di chi
+  // TIRA. Presa Ferrea, Strizzata e Pressoduro dipendono da quelli del
+  // bersaglio, Erbafrusta e Calciobasso dal suo peso, Vortexpalla da tutt'e
+  // due le Velocità: quelle restano `—`, ed è la risposta giusta.
+  const potenzaDaiPS = !psMax ? null
+    : MOSSE_POTENZA_PS_ATTACCANTE.has(value) ? potenzaDaPsAttaccante(ps, psMax)
+    : MOSSE_POTENZA_PS_FLAIL.has(value)      ? potenzaFlail(ps, psMax)
+    : null
+  const displayBP   = isWeatherBall && wbTypeIdx !== null ? 100
+    : (potenzaDaiPS ?? moveDetails?.power)
 
   const categoryTitles = { 0: 'Fisico', 1: 'Speciale', 2: 'Stato' }
 

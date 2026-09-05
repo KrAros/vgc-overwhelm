@@ -31,7 +31,10 @@
  * «Gravemente avvelenato».
  *
  * L'altra metà è tenuta dalla barra dei punti salute (`BarraPS.jsx`), che sta
- * PRIMA — scelta di Simone. Fino a ieri qui c'era scritto che quello spazio
+ * PRIMA — scelta di Simone. Il menù porta `h-full` per stare alla stessa
+ * altezza di quella: misurato, era 25 px contro 20, con i bordi superiori
+ * sfalsati di 1,5. Adesso i due riempiono la riga, e la riga la decide il più
+ * alto dei due — nessun numero scritto a mano da tenere allineato. Fino a ieri qui c'era scritto che quello spazio
  * aspettava il tipo Tera: era una lapide nel layout, perché in Champions il
  * tipo Tera non esiste. Mezza riga tenuta libera per una cosa che non arriva
  * è mezza riga persa, e su telefono era la metà buona.
@@ -45,7 +48,7 @@ export default function StatusSelect({ value, onChange }) {
 
   return (
     <select
-      className="w-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none"
+      className="w-full h-full bg-gray-700 text-xs text-white rounded px-2 py-1 outline-none"
       aria-label={t('aria.status')}
       value={value || 'healthy'}
       onChange={e => onChange(e.target.value === 'healthy' ? null : e.target.value)}
