@@ -130,9 +130,20 @@ export function creaHarness() {
         // il divario delle mosse registrato in CONTRIBUTING — quindi un caso
         // che accenda `psBassi` su una di loro divergerebbe per una ragione
         // che non c'entra con l'abilita' in prova.
-        curHP: extra.psBassi === true
+        // ─── E ADESSO I PUNTI SALUTE ARRIVANO ANCHE DIRETTI ──────────────
+        //
+        // `ps` e' il numero che il nostro modello manda da quando ce l'ha. Le
+        // due levette restano perche' i casi vecchi le usano ancora, ma
+        // vengono DOPO: se il caso porta un numero, e' quello.
+        //
+        // Le due traduzioni qui sotto non sono piu' solo nostre. Il motore fa
+        // la stessa conversione, e la fa con la stessa funzione
+        // (`psDaLevetta` in `lib/rules.js`): una levetta vecchia diventa lo
+        // stesso numero da tutt'e due le parti, invece che due numeri che si
+        // somigliano.
+        curHP: extra.ps ?? (extra.psBassi === true
           ? Math.floor(maxHP / 3)
-          : (extra.hpPieni === false ? maxHP - 1 : maxHP),
+          : (extra.hpPieni === false ? maxHP - 1 : maxHP)),
         HPSPs: sps[NOSTRO_INDICE.hp] || 0,
         HPEVs: 0,
         HPIVs: 31,
@@ -395,6 +406,7 @@ export function creaHarness() {
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
         stato: a.atkStatus,
+        ps: a.atkPS ?? undefined,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -420,6 +432,7 @@ export function creaHarness() {
       extra: {
         hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
         stato: d.defStatus,
+        ps: d.defPS ?? undefined,
       },
     })
     if (!dif) return { ok: false, motivo: `specie non presente in NCP: ${d.defPokemon}` }
@@ -725,6 +738,7 @@ export function creaHarness() {
         psBassi: ABILITA_A_PS_BASSI.has(tr.abilitaNCP(a.atkAbility))
           && a.atkAbilityFlags?.interruttore === true,
         stato: a.atkStatus,
+        ps: a.atkPS ?? undefined,
         supremeOverlordKOs: a.atkAbilityFlags?.supremeOverlordKOs,
       },
     })
@@ -755,6 +769,7 @@ export function creaHarness() {
       extra: {
         hpPieni: d.defAbilityFlags?.multiscaleActive !== false,
         stato: d.defStatus,
+        ps: d.defPS ?? undefined,
         abilitaAttiva: d.defAbilityFlags?.intimidateActive
           || d.defAbilityFlags?.interruttore,
       },
