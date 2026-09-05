@@ -113,6 +113,11 @@ const A = {
   // (STAB) e Whimsicott è Erba/Folletto: il Veleno ci va ×4, quindi la resist
   // berry si attiva davvero — le berry richiedono il super efficace.
   amoonSludge:[atk('amoonguss', 'modest', SP.speciale), 'sludge bomb'],    // STAB Poison
+  // Aggiunto per Swarm: era l'unico dei quattro tipi «a vita bassa» senza una
+  // mossa nel catalogo. L'attaccante NON è di tipo Coleottero, ed è voluto —
+  // l'abilità guarda il tipo della MOSSA, non quello di chi la tira, e un
+  // attaccante col STAB confonderebbe le due cose.
+  chompScissor:[atk('garchomp', 'adamant', SP.fisico), 'x-scissor'],       // Bug senza STAB
 }
 
 // ─── Difensori ricorrenti ──────────────────────────────────────────────────
@@ -134,6 +139,10 @@ const D = {
   whimsi:   def('whimsicott', 'timid', SP.vuoto),
   registeel:def('registeel', 'impish', SP.difensore),
   corvi:    def('corviknight', 'impish', SP.bulkyFis),
+  // Aggiunto per Tera Shell, che è la sua abilità. È di tipo Normale, quindi
+  // Terremoto gli arriva neutro: sopra il mezzo, cioè dentro la soglia che
+  // Tera Shell dimezza.
+  terapagos:def('terapagos', 'calm', SP.difensore),
 }
 
 // ─── Utilità di costruzione ────────────────────────────────────────────────
@@ -335,6 +344,44 @@ function aggiungi(blocco, etichetta, input) {
     { nome: 'defiant',          coppia: A.chompEq,    difensore: D.incin, flags: {} },
     { nome: 'contrary',         coppia: A.chompEq,    difensore: D.incin, flags: {} },
     { nome: 'competitive',      coppia: A.fluttMoon,  difensore: D.hands, flags: {} },
+
+    // ─── LE CINQUE A VITA BASSA, FOTOGRAFATE PRIMA DI SPOSTARLE ───────────
+    //
+    // Blaze, Torrent, Overgrow, Swarm e Defeatist leggono i punti salute di
+    // chi attacca. Noi non abbiamo i punti salute: abbiamo una levetta, e
+    // l'harness la traduce in `floor(maxHP / 3)` per interrogare il
+    // riferimento.
+    //
+    // Se i punti salute entrano nel modello, quella levetta diventa un numero.
+    // E qui c'era un buco: `psBassi.test.js` le verifica — anche contro
+    // l'oracolo — ma lo SNAPSHOT non le conteneva. Zero occorrenze, misurato.
+    //
+    // Lo snapshot non è un oracolo, è un rilevatore di cambiamenti: serve a
+    // rispondere «cosa si è mosso?». Senza queste righe, una conversione che
+    // ne cambiasse i numeri avrebbe avuto `snapshot:diff` che dice «zero
+    // divergenze» — la conferma sbagliata, data proprio dove atterra la
+    // modifica.
+    //
+    // Ognuna nei due stati, più un controllo col TIPO SBAGLIATO: le prime
+    // quattro potenziano solo le mosse del loro tipo, e un caso col tipo
+    // giusto soltanto non distinguerebbe «legge la levetta» da «potenzia
+    // sempre».
+    { nome: 'blaze',      coppia: A.incinFlare,  difensore: D.amoon, flags: { interruttore: true } },
+    { nome: 'blaze',      coppia: A.incinFlare,  difensore: D.amoon, flags: { interruttore: false } },
+    { nome: 'blaze',      coppia: A.chompEq,     difensore: D.incin, flags: { interruttore: true } },  // tipo sbagliato
+    { nome: 'torrent',    coppia: A.bundleHydro, difensore: D.incin, flags: { interruttore: true } },
+    { nome: 'torrent',    coppia: A.bundleHydro, difensore: D.incin, flags: { interruttore: false } },
+    { nome: 'torrent',    coppia: A.chompEq,     difensore: D.incin, flags: { interruttore: true } },  // tipo sbagliato
+    { nome: 'overgrow',   coppia: A.rillaWood,   difensore: D.incin, flags: { interruttore: true } },
+    { nome: 'overgrow',   coppia: A.rillaWood,   difensore: D.incin, flags: { interruttore: false } },
+    { nome: 'swarm',      coppia: A.chompScissor, difensore: D.amoon, flags: { interruttore: true } },
+    { nome: 'swarm',      coppia: A.chompScissor, difensore: D.amoon, flags: { interruttore: false } },
+    // Defeatist non guarda il tipo: dimezza Attacco e Att. Speciale su tutto.
+    // Il suo controllo è quindi solo lo spento, e una mossa speciale accanto a
+    // una fisica per vedere che dimezza tutt'e due.
+    { nome: 'defeatist',  coppia: A.chompEq,     difensore: D.incin, flags: { interruttore: true } },
+    { nome: 'defeatist',  coppia: A.chompEq,     difensore: D.incin, flags: { interruttore: false } },
+    { nome: 'defeatist',  coppia: A.fluttMoon,   difensore: D.hands, flags: { interruttore: true } },
   ]
 
   for (const { nome, coppia, difensore, flags } of abilitaAtk) {
@@ -364,6 +411,23 @@ function aggiungi(blocco, etichetta, input) {
     { nome: 'fur coat',      coppia: A.chompEq,    difensore: D.incin,     flags: {} },
     { nome: 'ice scales',    coppia: A.fluttMoon,  difensore: D.hands,     flags: {} },
     { nome: 'heatproof',     coppia: A.incinFlare, difensore: D.amoon,     flags: {} },
+
+    // ─── TERA SHELL, E IL CANCELLO CHE NON C'E' ──────────────────────────
+    //
+    // Nel riferimento Tera Shell dimezza solo se il bersaglio è a vita PIENA
+    // (`damage_SV.js:135`, `defAbility === 'Tera Shell' && defender.curHP ===
+    // defender.maxHP`). Il nostro motore la applica sempre: non guarda niente.
+    //
+    // Oggi non si vede, perché l'app assume la vita piena ovunque — è verde
+    // per costruzione, come Eruption. Ma le altre due abilità «a vita piena»
+    // una levetta ce l'hanno e questa no, quindi è l'unica che si romperebbe
+    // in silenzio il giorno che i punti salute entrano.
+    //
+    // Queste due righe sono la fotografia PRIMA: oggi danno lo stesso numero,
+    // perché la levetta non la legge nessuno. Quando il cancello arriva, la
+    // seconda deve muoversi e la prima no — ed è il commit dopo questo.
+    { nome: 'tera shell',    coppia: A.chompEq,    difensore: D.terapagos, flags: { multiscaleActive: true } },
+    { nome: 'tera shell',    coppia: A.chompEq,    difensore: D.terapagos, flags: { multiscaleActive: false } },
   ]
 
   for (const { nome, coppia, difensore, flags } of abilitaDef) {
