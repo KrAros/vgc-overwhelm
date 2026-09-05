@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-05T12:58:49.995Z",
+    "generatedAt": "2026-09-05T16:57:11.227Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -14,7 +14,7 @@
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
-    "mosseNelGap": 17,
+    "mosseNelGap": 12,
     "mosseSenzaOracolo": 9,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -446,16 +446,6 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "endeavor",
-        "nome": "Endeavor",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "final gambit",
-        "nome": "Final Gambit",
-        "categoriaNCP": "Special"
-      },
-      {
         "chiave": "flail",
         "nome": "Flail",
         "categoriaNCP": "Physical"
@@ -486,23 +476,8 @@
         "categoriaNCP": "Physical"
       },
       {
-        "chiave": "natures madness",
-        "nome": "Nature's Madness",
-        "categoriaNCP": "Special"
-      },
-      {
         "chiave": "reversal",
         "nome": "Reversal",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "ruination",
-        "nome": "Ruination",
-        "categoriaNCP": "Special"
-      },
-      {
-        "chiave": "super fang",
-        "nome": "Super Fang",
         "categoriaNCP": "Physical"
       },
       {

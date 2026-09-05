@@ -35,6 +35,8 @@ import {
   potenzaAcrobatics,
   MOSSE_POTENZA_ASSUNTA,
   haPotenzaAssunta,
+  haDannoDaiPuntiSalute,
+  dannoDaiPuntiSalute,
   aVitaPiena,
   psSottoLaMeta,
   psSottoUnTerzo,
@@ -753,6 +755,50 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // Calcolato una volta sola in cima, insieme ai punti salute correnti: era
   // qui, e da qui lo leggevano il punto f e il risultato.
   const defHP = psMaxDif
+
+  // ── PUNTI b e c — IL DANNO DAI PUNTI SALUTE (`:1221-1254`) ───────────────
+  //
+  // I due blocchi SOPRA quello del danno fisso, e la stessa forma: il danno
+  // non passa dalla formula, e' un numero solo.
+  //
+  //   Super Fang, Nature's Madness, Ruination   meta' dei PS di CHI SUBISCE
+  //   Endeavor                                  la differenza fra i due
+  //   Final Gambit                              tutti i PS di CHI TIRA
+  //
+  // Stanno qui perche' li' stanno: dopo le immunita', prima del danno fisso.
+  // Le formule sono in `lib/rules.js`; qui c'e' solo la chiamata e cosa farne.
+  //
+  // ─── ENDEAVOR PUO' TORNARE ZERO SENZA ESSERE IMMUNE ─────────────────────
+  //
+  // E' l'unica mossa del motore che lo fa: se chi tira ha PIU' punti salute
+  // del bersaglio, il colpo arriva e non toglie niente. Non e' `immune: true`
+  // — quello vuol dire «il tipo non passa», ed e' una cosa diversa che la
+  // tabella disegna diversamente. Qui il danno e' zero e basta.
+  //
+  // E il confronto e' sui punti salute CORRENTI, non sui massimi: a vita
+  // piena da tutt'e due le parti Endeavor fa danno lo stesso, se il bersaglio
+  // e' piu' grosso. Garchomp intero contro Blissey intera toglie 147 —
+  // 330 meno 183 — ed e' un caso che l'app puo' mostrare gia' adesso, senza
+  // aspettare che l'interfaccia mandi i punti salute.
+  //
+  // ─── E QUANDO IL DANNO E' ZERO, L'ORACOLO LO CHIAMA «NULLO» ─────────────
+  //
+  // Il riferimento torna `damage: [0]`, e l'harness lo classifica come colpo
+  // nullo — e' la sua regola, scritta: «`[0]` non e' un danno fisso». Noi
+  // torniamo `rolls: [0]`, che dice la stessa cosa con un campo in piu': il
+  // tipo e' passato, la mossa e' arrivata, il danno e' zero. Chi confronta i
+  // due deve guardare il DANNO, non la forma.
+  if (haDannoDaiPuntiSalute(move)) {
+    const danno = dannoDaiPuntiSalute(move, psAtk, psDif, parentalBond)
+    return {
+      rolls: [danno], minDmg: danno, maxDmg: danno,
+      minPct: Math.floor(danno / defHP * 1000) / 10,
+      maxPct: Math.floor(danno / defHP * 1000) / 10,
+      defHP, effectiveness, stab: 1, log: null,
+      atkBoostEffective: 0, weatherBallType: null, effectiveBP: 0,
+      effectiveMoveType: moveType, rollsFiglio: null, colpi: 1,
+    }
+  }
 
   // ── PUNTI d ed e — IL DANNO FISSO (`damage_MASTER.js:1256-1275`) ─────────
   //

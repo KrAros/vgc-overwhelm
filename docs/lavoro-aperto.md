@@ -41,19 +41,20 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Diciotto sono fatte, ne restano **17**, e **portano il badge**:
+nome. Ventitré sono fatte, ne restano **12**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
-> Beat Up, Comeuppance, Counter, Crush Grip, Endeavor, Final Gambit, Flail,
-> Fling, Hard Press, Metal Burst, Mirror Coat, Natural Gift, Nature's Madness,
-> Reversal, Ruination, Super Fang, Wring Out
+> Beat Up, Comeuppance, Counter, Crush Grip, Flail, Fling, Hard Press,
+> Metal Burst, Mirror Coat, Natural Gift, Reversal, Wring Out
 
 Non sono lo stesso problema. Quelle legate ai punti salute — Flail, Reversal,
-Endeavor, Super Fang, Crush Grip, Wring Out, Hard Press, Ruination, Final
-Gambit — chiedono prima di decidere **se i punti salute entrano nel modello**,
-che oggi non ci sono: è la voce di sezione B qui sotto. Le reattive — Counter,
-Mirror Coat, Metal Burst, Comeuppance — nel riferimento ci sono, ma calcolano
+Crush Grip, Wring Out, Hard Press — adesso il motore i punti salute ce li ha, e
+sono **la prossima cosa da fare**: leggono la POTENZA dai punti salute (punto c
+di `basePowerFunc`), mentre le cinque appena fatte ne leggevano il danno.
+
+Le reattive — Counter, Mirror Coat, Metal Burst, Comeuppance — nel riferimento
+ci sono, ma calcolano
 il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
 turno che il nostro modello non ha. Restano quelle che si trascrivono e basta: lo
