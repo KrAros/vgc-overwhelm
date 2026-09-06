@@ -2000,7 +2000,7 @@
     "rattled": "Nessun $t(abilities.intimidate) avversario attivo — nessun bonus"
   },
   "statuses": {
-    "healthy": "Sano",
+    "healthy": "In Salute",
     "burned": "Bruciato",
     "paralyzed": "Paralizzato",
     "poisoned": "Avvelenato",

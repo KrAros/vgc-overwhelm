@@ -113,13 +113,31 @@ export default function BarraPS({ ps, psMax, onChange }) {
         />
       </div>
 
-      {/* La percentuale solo quando serve: a vita piena non aggiunge niente
-          al «175 / 175» che sta due centimetri più in là. */}
-      {pct < 100 && (
-        <span className="text-xs font-medium w-9 text-right shrink-0" style={{ color: colore }}>
-          {pct}%
-        </span>
-      )}
+      {/* ─── LA PERCENTUALE C'È SEMPRE, ANCHE A VITA PIENA ──────────────────
+
+          Prima compariva solo sotto il 100%, ragionando che a vita piena non
+          aggiungesse niente al «175 / 175» lì accanto. Il ragionamento era
+          giusto sul contenuto e sbagliato sul comportamento: comparendo e
+          sparendo, questo elemento porta via 44 px (36 di larghezza più 8 di
+          spazio) alla barra ogni volta che si passa il 100%.
+
+          Cosa succede trascinando: si parte dal massimo, il cursore scende, la
+          percentuale compare, la barra si accorcia di 44 px — e il punto sotto
+          il dito non è più il valore che si stava scegliendo. Il cursore
+          scatta. Poi si risale al massimo, la percentuale sparisce, la barra
+          si allunga, e scatta di nuovo.
+
+          Il posto va tenuto sempre: la larghezza è fissa (`w-9`) e il
+          contenuto cambia, invece del contrario.
+
+          `text-center` e non `text-right`: il numero sta in mezzo ai suoi 36
+          px, quindi la distanza dalla barra e quella dalla tendina dello stato
+          restano uguali sia con «7%» sia con «100%». Allineato a destra, un
+          numero corto lasciava un buco dopo la barra e nessuno prima della
+          tendina. */}
+      <span className="text-xs font-medium w-9 text-center shrink-0" style={{ color: colore }}>
+        {pct}%
+      </span>
     </div>
   )
 }

@@ -16,6 +16,17 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### La barra degli HP: quattro ritocchi
+- **La percentuale c'è sempre**, anche a vita piena. Prima spariva al 100% e
+  la barra si allungava di 44 px: trascinando il cursore proprio attorno al
+  massimo, il punto sotto il dito non era più il valore che si stava
+  scegliendo, e il cursore scattava
+- Il numero è **centrato** nel suo posto, così la distanza dalla barra e
+  quella dalla tendina dello stato restano uguali con «7%» come con «100%»
+- I tre colori sono più saturi: verde `#00CC55`, giallo `#FFCC00`, rosso
+  `#FF0000`
+- In italiano lo stato «sano» si legge **«In Salute»**
+
 ### Cinque mosse davano un numero sbagliato, da sempre
 - **Colpo Sleale** attacca con l'Attacco di chi subisce — e gli stadi di
   quell'Attacco non arrivavano al calcolo. Contro un avversario a +6 faceva

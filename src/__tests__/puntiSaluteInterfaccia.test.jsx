@@ -150,9 +150,16 @@ describe('colorePS — le tre soglie di Simone', () => {
   })
 
   it('i tre colori sono quelli che ha scelto Simone', () => {
-    // Scritti qui perché siano falsificabili: se qualcuno cambia la costante,
-    // questa riga lo dice invece di lasciar passare un verde diverso.
-    expect([VERDE, GIALLO, ROSSO]).toEqual(['#70C8A0', '#FFFF00', '#FF0000'])
+    // ─── L'UNICO POSTO CHE FISSA I VALORI ────────────────────────────────
+    //
+    // Gli altri casi di questo file confrontano col NOME della costante, non
+    // con l'esadecimale: così un cambio di tavolozza tocca una riga sola —
+    // questa — invece di quattro sparse, e resta comunque una decisione che
+    // qualcuno deve prendere di proposito.
+    //
+    // Sono già cambiati una volta: il primo giro aveva `#70C8A0` (verde
+    // smorto) e `#FFFF00` (giallo puro). Simone li ha voluti più saturi.
+    expect([VERDE, GIALLO, ROSSO]).toEqual(['#00CC55', '#FFCC00', '#FF0000'])
   })
 })
 
@@ -171,17 +178,50 @@ describe('BarraPS', () => {
     expect(html).toContain('/ 175')
   })
 
-  it('la percentuale compare solo sotto il massimo', () => {
-    expect(rendi({ ps: 175, psMax: 175 })).not.toContain('%<')
-    expect(rendi({ ps: 131, psMax: 175 })).toContain('75%')
+  it('la percentuale c\'è SEMPRE, anche a vita piena', () => {
+    // ─── PERCHÉ NON «SOLO QUANDO SERVE» ──────────────────────────────────
+    //
+    // Prima compariva sotto il 100% e basta: a vita piena, si diceva, non
+    // aggiunge niente al «175 / 175» lì accanto. Vero sul contenuto, falso
+    // sul comportamento — comparendo e sparendo porta via 44 px alla barra
+    // proprio mentre la si trascina, e il cursore scatta sotto il dito.
+    // ─── E PERCHÉ NON `toContain('100%')` ────────────────────────────────
+    //
+    // Perché passava per il motivo sbagliato: a vita piena il markup contiene
+    // `style="width:100%"`, cioè il riempimento della barra. Rimettendo la
+    // condizione `pct < 100` questo caso restava VERDE con la percentuale
+    // sparita — l'ho visto provando la mutazione, non ragionandoci.
+    //
+    // Adesso si guarda il TESTO degli elementi, non la stringa intera.
+    const testi = (html) => [...html.matchAll(/>([^<>]+)</g)].map(m => m[1].trim())
+    expect(testi(rendi({ ps: 175, psMax: 175 }))).toContain('100%')
+    expect(testi(rendi({ ps: 131, psMax: 175 }))).toContain('75%')
+  })
+
+  it('e il posto che occupa non cambia mai: è la larghezza a essere fissa', () => {
+    // Il presidio vero, che il caso qui sopra da solo non dà: si può mostrare
+    // sempre la percentuale e lasciare che l'elemento si allarghi col numero
+    // — «7%» contro «100%» — e il cursore scatterebbe lo stesso, solo di meno.
+    //
+    // Si confronta la STRUTTURA a tre valori diversi: stessi tag, stesse
+    // classi, cambia solo il testo.
+    const struttura = (ps) => rendi({ ps, psMax: 175 })
+      .replace(/>[^<]*</g, '><')
+      .replace(/style="[^"]*"/g, '')
+      .replace(/value="\d+"/g, '')
+    expect(struttura(175)).toBe(struttura(87))
+    expect(struttura(175)).toBe(struttura(7))
+    // E il posto è dichiarato, non dedotto dal contenuto.
+    expect(rendi({ ps: 175, psMax: 175 })).toContain('w-9')
   })
 
   it('il riempimento è la frazione, e il colore il semaforo', () => {
     expect(rendi({ ps: 175, psMax: 175 })).toContain('width:100%')
     const meta = rendi({ ps: 87, psMax: 175 })
     expect(meta).toContain('width:50%')
-    // 87/175 è il 49,7%: sotto la metà, quindi giallo.
-    expect(meta.toLowerCase()).toContain('#ffff00')
+    // 87/175 è il 49,7%: sotto la metà, quindi giallo. Si confronta con la
+    // COSTANTE, non con l'esadecimale: i valori li fissa un caso solo.
+    expect(meta.toLowerCase()).toContain(GIALLO.toLowerCase())
   })
 
   it('i due controlli hanno un nome accessibile, e sono due diversi', () => {
@@ -289,14 +329,14 @@ describe('SegnoPS — il promemoria nella griglia', () => {
     // cioè giallo. Il test l'ha detto, e il numero corretto è questo.)
     const html = rendi(slot({ key: 'garchomp', ps: 150 }))
     expect(html).toContain('82%')
-    expect(html.toLowerCase()).toContain('#70c8a0')
+    expect(html.toLowerCase()).toContain(VERDE.toLowerCase())
     // Il numero esatto nel `title`: la percentuale arrotondata non basta a
     // rileggere quanto si era messo.
     expect(html).toMatch(/title="150 \/ 183"/)
 
     // E il semaforo cambia davvero, sullo stesso Pokémon.
-    expect(rendi(slot({ key: 'garchomp', ps: 90 })).toLowerCase()).toContain('#ffff00')
-    expect(rendi(slot({ key: 'garchomp', ps: 30 })).toLowerCase()).toContain('#ff0000')
+    expect(rendi(slot({ key: 'garchomp', ps: 90 })).toLowerCase()).toContain(GIALLO.toLowerCase())
+    expect(rendi(slot({ key: 'garchomp', ps: 30 })).toLowerCase()).toContain(ROSSO.toLowerCase())
   })
 
   it('senza Pokémon non c\'è, e non esplode', () => {
@@ -373,6 +413,18 @@ describe('la barra dice cosa è', () => {
     expect(it_.ui.siglaPuntiSalute).toBe('PS')
     expect(en.ui.siglaPuntiSalute).toBe('HP')
     expect(it_.ui.psShort).toBe('FE')
+  })
+
+  it('e lo stato «sano» in italiano si legge «In Salute»', () => {
+    // Scelta di Simone. Sta qui e non in un file di traduzioni perché la
+    // tendina dello stato è l'altra metà di questa riga, e le due etichette
+    // si leggono insieme: «PS 175 / 175 — In Salute».
+    //
+    // `healthy` è anche il valore che il motore tratta come assenza di stato,
+    // quindi la chiave NON cambia: cambia solo come si legge.
+    expect(it_.statuses.healthy).toBe('In Salute')
+    expect(en.statuses.healthy).toBe('Healthy')
+    expect(Object.keys(it_.statuses)).toEqual(Object.keys(en.statuses))
   })
 
   it('e la sigla compare davvero nel markup', () => {
