@@ -1406,16 +1406,26 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   }
 
   // punto b — Slow Start: ×0,5 sull'attacco fisico, quando l'interruttore e'
-  // acceso (`damage_MASTER.js:1924`).
-  //
-  // Il riferimento la mette in `or` con Defeatist, che chiede i punti salute e
-  // non li modelliamo ancora. La sua condizione comprende anche le mosse Z
-  // speciali: da noi le mosse Z non esistono, quindi resta il solo fisico.
+  // acceso (`damage_MASTER.js:1924`). La sua condizione comprende anche le
+  // mosse Z speciali: da noi le mosse Z non esistono, quindi resta il solo
+  // fisico.
   //
   // E' un `if` a se', prima del punto c e del punto d.
+  //
   // Defeatist sta nello STESSO `if` (`:1925`), in `or`: ×0,5 sull'attacco
   // quando i punti salute sono sotto la meta'. Non ha il controllo di
   // categoria che ha Slow Start — vale anche sulle mosse speciali.
+  //
+  // Qui c'era scritto che Defeatist «chiede i punti salute e non li
+  // modelliamo ancora». Era falso da tre sessioni, e lo smentiva la riga due
+  // sotto: `atkSottoLaMeta` e' proprio quel numero. Un commento che contraddice
+  // il codice che sta commentando e' peggio di nessun commento, perche' chi
+  // legge crede al commento.
+  //
+  // Tutt'e due si vedono anche nella colonna «Mod» dell'editor
+  // (`statMostrata.js`): spingono un moltiplicatore in `atMods`, quindi sono
+  // modificatori della statistica, e la regola di Simone vale anche per quelli
+  // che dimezzano.
   if ((atkAbilEffect?.slowStart && atkAbilityFlags.interruttore === true && !isSpecial)
       || (atkAbilEffect?.defeatist && atkSottoLaMeta)) {
     atMods.push(MOD.X0_5)

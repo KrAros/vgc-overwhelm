@@ -49,8 +49,9 @@
 import pokemonData from '../data/pokemon.json'
 import { ABILITY_EFFECTS, normalizeAbilityKey } from '../data/abilityEffects.js'
 import { calcStat } from './stats.js'
+import { psMassimi, psCorrenti } from './psSlot.js'
 import {
-  applyBoost, LEVEL,
+  applyBoost, LEVEL, psSottoLaMeta,
   STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
 } from './rules.js'
 import { preparaSingolo, CHIAVI_BOOST } from './preparazione.js'
@@ -154,6 +155,36 @@ function moltiplicatori(slot, statIdx, { paradosso, statPiuAlta }) {
 
   // Fur Coat: ×2 sulla Difesa. Nel riferimento è `calcDefense` punto e.
   if (statIdx === STAT_DEF && eff.furCoat) mods.push(MOD.X2)
+
+  // ─── LE DUE CHE DIMEZZANO, E CHE QUI NON C'ERANO ────────────────────────
+  //
+  // Sconfittite e Partenza Lenta stanno nello STESSO `if` del motore
+  // (`calcEngine.js`, punto b di `calcAttack`, `damage_MASTER.js:1924-1925`) e
+  // spingono `MOD.X0_5` in `atMods` — cioè sono modificatori della
+  // statistica, esattamente come Gorilla Tactics che sta qui sopra.
+  //
+  // Non c'erano perché questa funzione era nata per rispondere a «di
+  // un'abilità che POTENZIA una statistica si deve poter leggere il nuovo
+  // valore», e nessuno aveva notato che la stessa ragione vale al contrario:
+  // un Attacco dimezzato che la colonna mostra intero è sbagliato quanto un
+  // Attacco raddoppiato che non mostra.
+  //
+  // Sconfittite arriva qui adesso perché adesso è raggiungibile: fino a ieri
+  // la accendeva una levetta, oggi la accende la barra dei punti salute, e il
+  // numero che serve a deciderlo è nello slot.
+  //
+  // Le condizioni sono quelle del motore, non due riscritte a mano:
+  //   - Partenza Lenta ha `!isSpecial`, quindi è il solo Attacco;
+  //   - Sconfittite NON ha il controllo di categoria, quindi sono tutt'e due.
+  // Rientrano nel confine dichiarato in cima: valgono per OGNI mossa della
+  // categoria, non per una.
+  if (statIdx === STAT_ATT && eff.slowStart && slot?.abilityFlags?.interruttore === true) {
+    mods.push(MOD.X0_5)
+  }
+  if ((statIdx === STAT_ATT || statIdx === STAT_SPA) && eff.defeatist) {
+    const psMax = psMassimi(slot)
+    if (psMax && psSottoLaMeta(psCorrenti(slot, psMax), psMax)) mods.push(MOD.X0_5)
+  }
 
   // Protosynthesis / Quark Drive: ×1.3 sulla statistica più alta. La Velocità
   // è esclusa perché lì il potenziamento è ×1.5 e vive in `calcEffectiveSpe`,

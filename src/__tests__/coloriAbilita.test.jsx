@@ -106,8 +106,26 @@ const CASI = [
   // ── stato da una levetta: prima il fondo NON cambiava ────────────────────
   ['flash fire',       {},                                     'gray',  'levetta spenta'],
   ['flash fire',       { flags: { flashFireActive: true } },   'green', 'levetta accesa'],
-  ['multiscale',       {},                                     'gray',  'levetta spenta'],
-  ['multiscale',       { flags: { multiscaleActive: true } },  'green', 'levetta accesa'],
+  // Multiscale non ha piu' una levetta: legge i punti salute. Le due righe
+  // dicevano «levetta spenta / accesa», adesso dicono «non e' a vita piena /
+  // lo e'» — stesso colore, altra causa. La terza riga e' nuova e presidia il
+  // default: senza punti salute il riquadro non deve dichiarare NIENTE, e in
+  // particolare non deve dire «attivo» perche' 0 === 0.
+  ['multiscale',       { ps: 90, psMax: 175 },                 'gray',  'non e\' a vita piena'],
+  ['multiscale',       { ps: 175, psMax: 175 },                'green', 'a vita piena'],
+  ['multiscale',       {},                                     'gray',  'punti salute non passati'],
+  // Le cinque a vita bassa: stessa storia, soglia diversa. Blaze sotto un
+  // terzo, Sconfittite sotto la meta' — e sono le soglie del riferimento.
+  ['blaze',            { ps: 90, psMax: 175 },                 'gray',  'sopra un terzo'],
+  ['blaze',            { ps: 58, psMax: 175 },                 'green', 'sotto un terzo'],
+  ['defeatist',        { ps: 90, psMax: 175 },                 'gray',  'sopra la meta\''],
+  ['defeatist',        { ps: 87, psMax: 175 },                 'green', 'sotto la meta\''],
+  // ── I due casi che stanno FRA le due soglie ────────────────────────────
+  // 80/175 è il 45,7%: sotto la metà, sopra un terzo. Senza queste due righe
+  // si può scambiare una soglia con l'altra e restare verdi — provato, e
+  // restava verde. È il punto in cui le due condizioni si separano.
+  ['blaze',            { ps: 80, psMax: 175 },                 'gray',  'fra un terzo e la meta\''],
+  ['defeatist',        { ps: 80, psMax: 175 },                 'green', 'fra un terzo e la meta\''],
   ['supreme overlord', { flags: { supremeOverlordKOs: 0 } },   'gray',  'nessun KO alleato'],
   ['supreme overlord', { flags: { supremeOverlordKOs: 3 } },   'green', 'tre KO alleati'],
   ['intimidate',       {},                                     'gray',  'levetta spenta'],

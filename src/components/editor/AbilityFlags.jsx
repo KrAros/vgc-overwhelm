@@ -4,7 +4,10 @@
 // Solo `normalizeAbilityKey`: da T il componente NON legge più testo dal file
 // di meccaniche. Le descrizioni vivono nei file di traduzione, e basta.
 import { normalizeAbilityKey, ABILITY_EFFECTS } from '../../data/abilityEffects.js'
-import { ABILITA_ATE, tipoPallaClima } from '../../lib/rules.js'
+import {
+  ABILITA_ATE, tipoPallaClima,
+  ABILITA_A_VITA_BASSA, aVitaPiena, psSottoLaMeta, psSottoUnTerzo,
+} from '../../lib/rules.js'
 import { TYPES } from '../../data/typeChart.js'
 import movesData from '../../data/moves.json'
 import { SPEED_WEATHER_ABILITIES, speedWeatherAttiva } from '../../utils/speedOrder.js'
@@ -120,7 +123,7 @@ const PERNO_SPENTO = 'bg-gray-600'
 
 // ─── AbilityFlags ─────────────────────────────────────────────────────────────
 
-export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather, moves }) {
+export default function AbilityFlags({ ability, flags, opponentHasIntimidateActive, onFlagChange, weather, moves, ps = 0, psMax = 0 }) {
   const { t, i18n } = useTranslation()
   const key = normalizeAbilityKey(ability)
 
@@ -166,29 +169,54 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
     )
   }
 
-  // `tera-shell` e' entrata qui insieme al cancello nel motore: e' la terza
-  // abilita' che chiede «sei a vita piena?», e senza questa riga la levetta
-  // c'era nel calcolo e non nell'interfaccia — cioe' una condizione vera che
-  // nessuno poteva mettere a false.
+  // ── Le tre che chiedono «sei a vita piena?» ─────────────────────────────
+  //
+  // Multiscale, Scudo d'Ombra e Guscio Cristallo. Avevano una levetta,
+  // `multiscaleActive`, e adesso non ce l'hanno piu': la risposta e' nella
+  // barra dei punti salute, che e' l'unico posto dove quel fatto si dichiara.
+  //
+  // La levetta non e' stata tolta per pulizia. Era una SECONDA affermazione
+  // sullo stesso Pokemon, accanto a quella dell'interruttore delle cinque a
+  // vita bassa, e le due potevano contraddirsi: si poteva dire insieme «e' a
+  // vita piena» e «e' sotto un terzo». Un numero solo non puo'.
+  //
+  // Il riquadro resta, e resta il posto dove si legge se l'abilita' e'
+  // attiva: e' la regola di Simone — di un'abilita' si deve sempre poter
+  // leggere cosa sta facendo. Cambia solo che lo dice invece di chiederlo.
   if (key === 'multiscale' || key === 'shadow-shield' || key === 'tera-shell') {
+    // `psMax > 0` non e' una difesa contro l'impossibile: senza, `psMax = 0`
+    // farebbe rispondere «a vita piena» (0 === 0) a chi non ha mandato i punti
+    // salute. Nell'app non capita — il riquadro compare solo con un Pokemon
+    // scelto — ma il default di un componente non deve affermare un fatto che
+    // nessuno gli ha detto.
+    const attiva = psMax > 0 && aVitaPiena(ps, psMax)
     return (
-      <div className={`${RIQUADRO} gap-2 ${flags.multiscaleActive ? ACCESO : SPENTO}`}>
-        <button
-          type="button"
-          onClick={() => onFlagChange('multiscaleActive', !flags.multiscaleActive)}
-          className={`w-8 h-4 rounded-full transition-colors relative shrink-0 ${
-            flags.multiscaleActive ? PERNO_ACCESO : PERNO_SPENTO
-          }`}
-        >
-          <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${
-            flags.multiscaleActive ? 'left-4' : 'left-0.5'
-          }`} />
-        </button>
-        <span className={flags.multiscaleActive ? TESTO_ACCESO : TESTO_SPENTO}>
-          {flags.multiscaleActive
-            ? t(`abilities_desc_on.${key}`)
-            : t(`abilities_desc_off.${key}`)}
-        </span>
+      <div className={`${RIQUADRO} ${attiva ? ACCESO : SPENTO}`}>
+        {attiva
+          ? `❤️ ${t(`abilities_desc_on.${key}`)}`
+          : `💡 ${t(`abilities_desc_off.${key}`)}`}
+      </div>
+    )
+  }
+
+  // ── Le cinque che chiedono «sei a vita bassa?» ──────────────────────────
+  //
+  // Erbaiuto, Aiutofuoco, Torrente, Insettoshock e Sconfittite. Stessa storia
+  // delle tre qui sopra, con la soglia che cambia: un terzo per le prime
+  // quattro, la meta' per Sconfittite — e sono le soglie del riferimento,
+  // trascritte in `rules.js`, non due numeri riscritti qui.
+  //
+  // Questo ramo deve stare PRIMA di quello dell'interruttore: `defeatist` e
+  // `psBassiTipo` cadrebbero li' dentro, ed e' proprio da li' che sono uscite.
+  if (ABILITA_A_VITA_BASSA.has(key)) {
+    const attiva = psMax > 0 && (key === 'defeatist'
+      ? psSottoLaMeta(ps, psMax)
+      : psSottoUnTerzo(ps, psMax))
+    return (
+      <div className={`${RIQUADRO} ${attiva ? ACCESO : SPENTO}`}>
+        {attiva
+          ? `❤️ ${t(`abilities_desc_on.${key}`)}`
+          : `💡 ${t(`abilities_desc_off.${key}`)}`}
       </div>
     )
   }
@@ -279,10 +307,15 @@ export default function AbilityFlags({ ability, flags, opponentHasIntimidateActi
   // le applicava e l'utente non poteva accenderle. Non le ha viste nessun
   // presidio perche' nessun presidio guardava questo. Adesso c'e'
   // (`levette.test.js`), e confronta questa condizione con ABILITY_EFFECTS.
+  //
+  // ─── E PERCHE' SI E' ACCORCIATA ────────────────────────────────────────
+  //
+  // `defeatist` e `psBassiTipo` stavano in questo elenco. Non ci stanno piu':
+  // il motore non le accende con l'interruttore ma con i punti salute, e la
+  // barra e' il loro controllo. Il ramo che le serve sta qui sopra.
   if (ABILITY_EFFECTS[key]?.plusMinus || ABILITY_EFFECTS[key]?.caricata
       || ABILITY_EFFECTS[key]?.protean || ABILITY_EFFECTS[key]?.stakeout
-      || ABILITY_EFFECTS[key]?.slowStart || ABILITY_EFFECTS[key]?.defeatist
-      || ABILITY_EFFECTS[key]?.psBassiTipo !== undefined
+      || ABILITY_EFFECTS[key]?.slowStart
       || ABILITY_EFFECTS[key]?.trace
       || ABILITY_EFFECTS[key]?.supersweetSyrup
       || ABILITY_EFFECTS[key]?.battleBond) {

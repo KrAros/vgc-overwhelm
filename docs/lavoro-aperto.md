@@ -147,46 +147,6 @@ Nel gioco fa anche sopravvivere con un punto salute a un colpo che ucciderebbe
 da vita piena. Nel riferimento non c'è, perché non è la catena del danno di un
 colpo: è cosa succede **dopo** che il danno è stato calcolato. Da noi nemmeno.
 
-### I punti salute nel modello — il motore ce li ha, l'interfaccia no
-Il motore adesso accetta `atkPS` e `defPS`, e le otto abilità che leggono i
-punti salute passano da lì: le due vecchie levette ci si traducono dentro con
-la stessa funzione che usa l'harness. Lo stato contraddittorio — «a vita piena»
-e «sotto un terzo» insieme — non è più scrivibile.
-
-**Quello che manca è tutto il resto**, ed è nell'ordine deciso con Simone:
-le undici mosse che li leggono, il verdetto di KO dal residuo, e il controllo
-nell'interfaccia. Finché l'interfaccia non li manda, arrivano `null` e nessun
-numero cambia — lo snapshot lo dimostra su 601 casi.
-
-### I punti salute nell'interfaccia
-Il motore li ha, l'app non li manda: assume la vita piena ovunque. È
-l'assunzione dietro Eruption e Water Spout, dietro il `defender.curHP` delle
-mosse KO, e dietro tutte le mosse della famiglia Flail/Reversal/Endeavor.
-
-Le decisioni sono prese, e sono di Simone:
-
-- la **percentuale del danno resta sul massimo**, e il verdetto di KO guarda il
-  residuo. È la convenzione di Showdown, e la ragione è la matrice: il danno è
-  una proprietà del colpo, il KO della situazione — fonderli in un numero solo
-  toglierebbe la possibilità di confrontare le celle fra loro, che è la cosa
-  per cui l'app esiste;
-- il controllo **mostra tutt'e due le letture** — punti e percentuale — e
-  accetta l'una o l'altra in ingresso. L'asimmetria «i miei in punti, i suoi in
-  percentuale» non è esprimibile: la matrice è simmetrica, ogni cella calcola
-  tutte e due le direzioni, e non esiste un lato «mio»;
-- il verdetto è **tre stati invece di due** — fatto: KO certo, KO possibile
-  con la probabilità esatta, niente. Prima `maxPct >= 100` li confondeva già a
-  vita piena, e i tre si distinguono con una forma («KO» e «KO?») e non col
-  solo colore;
-- **le due levette restano** per adesso, ma derivate: la precedenza è decisa e
-  scritta, il numero vince. Ritirarle dall'interfaccia si valuta dopo.
-
-E una cosa che nessuna di queste decisioni copre: **un Pokémon messo al 50% e
-poi dimenticato cambia il significato di tutta la sua riga e la sua colonna**,
-in silenzio. Il controllo per impostarli non basta: serve un segno sempre
-visibile in matrice per chi non è al massimo, o si costruisce una fabbrica di
-numeri sbagliati con l'aria di essere giusti.
-
 ---
 
 ## C — Dove manca un dato

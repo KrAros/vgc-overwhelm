@@ -16,6 +16,35 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### I punti salute si possono mettere a mano
+- Una **barra** accanto allo stato, nell'editor: `131 / 175`, si trascina o si
+  scrive. Verde sopra la metà, gialla sotto, rossa sotto un quinto
+- Serviva a rispondere a una domanda che l'app non sapeva ancora fare:
+  **quanto fa Eruption con questo Pokémon a metà?** Prima la risposta era
+  sempre quella della vita piena
+- Cambia anche cosa subisce: **Multiscale** si spegne, **Crush Grip** e
+  **Hard Press** fanno meno, e il verdetto di KO guarda quanti punti restano
+- Le due levette che dicevano lo stesso a pezzi — «Multiscale attivo» e
+  l'interruttore di Erbaiuto, Aiutofuoco, Torrente, Insettoshock e
+  Sconfittite — **non ci sono più**. Il loro riquadro adesso *legge* la barra
+  invece di chiedere la stessa cosa una seconda volta: si poteva dire insieme
+  «è a vita piena» e «è sotto un terzo»
+- In matrice, chi non è al massimo porta la **percentuale sull'icona**: un
+  Pokémon messo al 50% e poi dimenticato cambiava il senso di tutta la sua
+  riga e la sua colonna, in silenzio
+- I link condivisi portano il numero; quelli vecchi si aprono mostrando nella
+  barra lo stato che le levette descrivevano
+
+### E quello che la barra ha reso sbagliato altrove
+- **La potenza scritta accanto alla mossa.** Eruzione diceva 150 anche col
+  Pokémon a metà, quando il calcolo ne usava 75. Adesso dice il numero vero.
+  Rovesciamento e Ritorsione passano da «—» al numero. Presa Ferrea,
+  Erbafrusta e Vortexpalla restano «—»: dipendono dall'avversario, e qui
+  l'editor vede un Pokémon solo
+- **La colonna «Mod».** Sconfittite dimezza Attacco e Att. Speciale sotto
+  metà vita, e la colonna mostrava il numero intero. Adesso mostra la metà —
+  e con lei **Partenza Lenta**, che aveva la stessa lacuna
+
 ### La matrice distingue «lo uccide» da «forse lo uccide»
 - Prima una mossa che fa 40–105% e una che ne fa 100–120% avevano **lo stesso
   colore**: la prima uccide in un caso su sedici, la seconda sempre

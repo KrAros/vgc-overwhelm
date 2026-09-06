@@ -16,9 +16,9 @@
 
 import { create } from 'zustand'
 import { slotConAbilitaValida, abilitaPerSpecie } from '../lib/abilitaSpecie.js'
-import { DEFAULT_ABILITY_FLAGS } from '../data/abilityEffects.js'
+import { DEFAULT_ABILITY_FLAGS, normalizeAbilityKey } from '../data/abilityEffects.js'
 import { NATURE_MODIFIERS } from '../data/natures.js'
-import { MAX_SP_PER_STAT, STATI } from '../lib/rules.js'
+import { MAX_SP_PER_STAT, STATI, ABILITA_A_VITA_BASSA } from '../lib/rules.js'
 import pokemonData from '../data/pokemon.json'
 import movesData from '../data/moves.json'
 
@@ -45,6 +45,17 @@ export const emptyPokemon = () => ({
   // «non l'ho scelto» e «l'ho scelto sano» si scrivono uguale nel link, e
   // scriverne uno solo tiene il link corto.
   status: null,
+  // I punti salute CORRENTI. `null` = «pieni», ed e' il default per la stessa
+  // ragione di `status`: «non li ho toccati» e «sono pieni» si scrivono
+  // uguale nel link, e scriverne uno solo lo tiene corto.
+  //
+  // Fino a ieri questo fatto non aveva un campo: lo dicevano due levette —
+  // «Multiscale attivo» per la vita piena, l'interruttore dell'abilita' per
+  // la vita bassa — che potevano contraddirsi, perche' erano due
+  // affermazioni separate sullo stesso Pokemon. Adesso e' un numero, e le
+  // levette ci si traducono dentro (`psDaLevetta`) quando arriva un link
+  // vecchio.
+  ps: null,
   atkBoost: 0,
   defBoost: 0,
   spAtkBoost: 0,
@@ -289,6 +300,9 @@ export function encodeTeamsToURL(team1, team2, campo = null) {
     // Lo stato: si scrive solo se c'e' e non e' «sano», per non allungare il
     // link con l'unico valore che il motore tratta come assenza.
     if (slot.status && slot.status !== 'healthy') s.st = slot.status
+    // I punti salute: si scrivono solo se qualcuno li ha mossi. Stesso
+    // `!= null` di `colpiScelti`, e per lo stesso motivo.
+    if (slot.ps != null) s.ps = slot.ps
 
     // I flag abilità: si scrive solo ciò che differisce dal default. Nota che
     // `multiscaleActive` è `true` di default, quindi qui si registra quando è
@@ -365,6 +379,11 @@ export function decodeTeamsFromURL(encoded) {
               // Un valore fuori elenco diventa `null`: un link storpiato non
               // deve produrre uno stato che il motore non sa leggere.
               status:     STATI.includes(grezzo.st) ? grezzo.st : null,
+              // Il limite superiore non e' il massimo di QUESTO Pokemon —
+              // qui non lo sappiamo ancora — ma un tetto che nessun massimo
+              // a livello 50 supera (Chansey, base 250, arriva a 351).
+              // L'interfaccia poi taglia sul massimo vero.
+              ps:         typeof grezzo.ps === 'number' ? intero(grezzo.ps, 1, 999) : null,
               atkBoost:   intero(grezzo.ab,  -6, 6),
               defBoost:   intero(grezzo.db,  -6, 6),
               spAtkBoost: intero(grezzo.sab, -6, 6),
@@ -571,6 +590,25 @@ const useCalcStore = create((set) => ({
 
   setStatus: (team, index, status) =>
     set((s) => updateSlot(s, team, index, { status: status || null })),
+
+  // I punti salute correnti. `null` rimette il Pokemon a vita piena.
+  //
+  // Insieme al numero si azzerano le due levette che dicevano lo stesso
+  // fatto: `multiscaleActive` sempre (non significa altro che «a vita
+  // piena»), l'interruttore SOLO se l'abilita' e' una delle cinque a vita
+  // bassa — per Protean o Stakeout lo stesso interruttore vuol dire un'altra
+  // cosa, e spegnerlo qui sarebbe un danno.
+  setPS: (team, index, ps) =>
+    set((s) => {
+      const slot = s[team][index]
+      const abilita = normalizeAbilityKey(slot?.ability)
+      const flags = { ...slot?.abilityFlags, multiscaleActive: true }
+      if (ABILITA_A_VITA_BASSA.has(abilita)) flags.interruttore = false
+      return updateSlot(s, team, index, {
+        ps: ps == null ? null : Math.max(1, Math.trunc(ps)),
+        abilityFlags: flags,
+      })
+    }),
 
   setNature: (team, index, nature) =>
     set((s) => updateSlot(s, team, index, { nature })),

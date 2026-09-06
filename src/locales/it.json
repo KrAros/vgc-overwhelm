@@ -104,7 +104,8 @@
     "campoAltrove": "Si accende dalla barra dei modificatori: è un'abilità dell'alleato, non di questo Pokémon.",
     "ptShort": "Prot",
     "ko_certo": "KO garantito",
-    "ko_possibile": "KO possibile: {{pct}}%"
+    "ko_possibile": "KO possibile: {{pct}}%",
+    "siglaPuntiSalute": "PS"
   },
   "gap": {
     "badge": "Non calcolata",
@@ -220,7 +221,9 @@
     "clear_pokemon": "Svuota il Pokémon",
     "clear_item": "Svuota lo strumento",
     "clear_move": "Svuota la mossa",
-    "status": "Stato del Pokémon"
+    "status": "Stato del Pokémon",
+    "ps_value": "Punti salute — valore esatto",
+    "ps_slider": "Punti salute — cursore"
   },
   "natures": {
     "adamant": "Decisa",

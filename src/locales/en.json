@@ -104,7 +104,8 @@
     "campoAltrove": "Switch it on from the modifier bar: it is an ally's ability, not this Pokémon's.",
     "ptShort": "Pro",
     "ko_certo": "Guaranteed KO",
-    "ko_possibile": "Possible KO: {{pct}}%"
+    "ko_possibile": "Possible KO: {{pct}}%",
+    "siglaPuntiSalute": "HP"
   },
   "gap": {
     "badge": "Not calculated",
@@ -220,7 +221,9 @@
     "clear_pokemon": "Clear Pokémon",
     "clear_item": "Clear item",
     "clear_move": "Clear move",
-    "status": "Pokémon status"
+    "status": "Pokémon status",
+    "ps_value": "HP — exact value",
+    "ps_slider": "HP — slider"
   },
   "natures": {
     "adamant": "Adamant",
