@@ -11,6 +11,7 @@ import useCalcStore from '../store/useCalcStore'
 import { buildSmogonString } from '../utils/smogonString'
 import { calcEOT, findBestNHKO, findBestNHKOSitrus, contraccolpoDaMostrare } from '../lib/damage'
 import { MAX_HITS } from '../lib/rules'
+import { colorePS } from '../lib/psSlot'
 import { spriteUrl, fallbackSpriteUrl, itemIconUrl } from '../utils/sprite'
 import { calcFinalStat } from '../utils/statCalc'
 import pokemonData from '../data/pokemon.json'
@@ -100,6 +101,49 @@ function TypeBadge({ typeIdx }) {
 }
 
 // ── HpStep — step HP intermedio nel Damage Breakdown ─────────────────────────
+
+/**
+ * Da quanti punti salute parte il turno.
+ *
+ * ─── PERCHÉ NON BASTAVA IL NUMERO ──────────────────────────────────────────
+ *
+ * Questo nodo diceva «221 HP» anche quando il Pokémon era stato messo a metà
+ * nell'editor, perché leggeva il massimo. Corretto il numero, resta il
+ * problema di chi legge: «111 HP» da solo non dice se è tanto o poco, e
+ * soprattutto non dice che manca qualcosa — il conto dei colpi al KO cambia
+ * senza che si veda perché.
+ *
+ * Scelta di Simone fra tre: la barra mostra il VUOTO. La striscia resta lunga
+ * quanto il massimo, la parte già persa si disegna spenta, e la soglia di KO
+ * più in basso si sposta da sola. Si vede, invece di leggerlo in una frase.
+ *
+ * A vita piena la barra non compare affatto: non c'è niente da dire, e il
+ * nodo torna esattamente com'era.
+ *
+ * Il colore è quello della barra dell'editor (`colorePS`), e viene da lì e non
+ * da una seconda tavolozza: sono lo stesso fatto guardato in due schermate, e
+ * due verdi diversi per lo stesso 50% sarebbero una domanda per chi legge.
+ */
+function PsDiPartenza({ psIniziali, defHP, nome }) {
+  const { t } = useTranslation()
+  const ferito = psIniziali < defHP
+  return (
+    <>
+      <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight">{t("report.start")}</div>
+      <div className="text-[10px] text-gray-400 capitalize leading-tight truncate w-full text-center">{nome}</div>
+      <div className="text-xs font-bold text-white mt-1 whitespace-nowrap">
+        {ferito ? `${psIniziali} / ${defHP}` : defHP} HP
+      </div>
+      {ferito && (
+        <div className="w-full mt-1 h-1.5 rounded-full bg-gray-700 overflow-hidden"
+             title={`${psIniziali} / ${defHP} — ${Math.round(psIniziali / defHP * 100)}%`}>
+          <div className="h-full rounded-full"
+               style={{ width: `${(psIniziali / defHP) * 100}%`, backgroundColor: colorePS(psIniziali, defHP) }} />
+        </div>
+      )}
+    </>
+  )
+}
 
 function HpStep({ range, defKey }) {
   const { t } = useTranslation()
@@ -318,9 +362,34 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
   const colpi  = result.colpi ?? 1
   // Parental Bond: i due colpi hanno numeri diversi, quindi non basta contarli.
   const rollsFiglio = result.rollsFiglio ?? null
-  const hasSitrus = def.item === 'sitrus berry' && result.minPct < 100
-
+  // ══ DUE NUMERI, DUE SIGNIFICATI ═══════════════════════════════════════════
+  //
+  // `defHP`      il MASSIMO. E' il denominatore delle percentuali, e il tetto
+  //              di ogni cura: la Baccarancia ne ridà un quarto, e nessuno
+  //              guarisce sopra il proprio massimo.
+  // `psIniziali` quelli CORRENTI, cioè da dove parte questo turno. Sono la
+  //              soglia del KO, e quanti colpi servono.
+  //
+  // ─── PERCHE' ERANO UNO SOLO, E COSA SBAGLIAVA ────────────────────────────
+  //
+  // Questo pannello usava `defHP` in tutti e trentacinque i punti in cui tocca
+  // i punti salute, compresi quelli che chiedono «quanti ne restano». La cella
+  // della matrice invece leggeva `defPS` da quando esiste il verdetto a tre
+  // stati. Sullo stesso identico attacco dicevano due cose diverse:
+  //
+  //   Amoonguss a 111/221 PS, Terremoto di Garchomp
+  //     la cella:      KO?  13%
+  //     il pannello:   2HKO  2,3%,  con la barra che parte da 221
+  //
+  // La regola per dividerli è quella già presa per il verdetto: la percentuale
+  // del danno resta sul MASSIMO — così le celle si confrontano fra loro — e il
+  // KO guarda il RESIDUO. Qui non era mai stata applicata.
   const defHP = result.defHP
+  const psIniziali = result.defPS ?? defHP
+  // La Baccarancia conta solo se il Pokémon al colpo peggiore sopravvive, e
+  // «sopravvive» si misura sui punti salute che ha, non sul massimo. Sta qui
+  // e non venti righe più su perché ha bisogno di `psIniziali`.
+  const hasSitrus = def.item === 'sitrus berry' && result.minDmg < psIniziali
   const defTypes = pokemonData[def.key]?.type || []
   // Due valori e non uno, e la differenza e' l'iride:
   //
@@ -331,7 +400,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
   //
   // Per tutto il resto le due cose coincidono, ed e' il caso normale.
   const { voci, eotNet: eot, eotAlTurno } = calcEOT(def, defHP, field.weather, defTypes)
-  const sitrus = hasSitrus ? riassuntoSitrus(rolls, defHP, eotAlTurno, voci, true, colpi, rollsFiglio) : null
+  const sitrus = hasSitrus ? riassuntoSitrus(rolls, psIniziali, eotAlTurno, voci, true, colpi, rollsFiglio) : null
 
   const formatSummary = (s) => {
     if (!s) return ''
@@ -348,7 +417,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
   const endOfTurnInfo = (() => {
     if (result.minPct >= 100) return null
 
-    const best = findBestNHKO(rolls, defHP, eotAlTurno, { colpiPerTurno: colpi, rollsFiglio })
+    const best = findBestNHKO(rolls, psIniziali, eotAlTurno, { colpiPerTurno: colpi, rollsFiglio })
     if (!best || best.hits === 1) return null
 
     const label = `${best.hits}HKO`
@@ -384,8 +453,11 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
     const atkHP = calcFinalStat(atkHPBase, atk.sps?.[0] ?? 0, 50, null, 0)
     const [rNum, rDen] = moveRecoil.fraction
     if (moveRecoil.type === 'damage') {
-      const minRoll = Math.min(rolls[0], defHP)
-      const maxRoll = Math.min(rolls[rolls.length - 1], defHP)
+      // Il contraccolpo è una frazione del danno INFLITTO, e non si può
+      // infliggere più dei punti salute che il bersaglio ha addosso: il taglio
+      // è sui residui, non sul massimo.
+      const minRoll = Math.min(rolls[0], psIniziali)
+      const maxRoll = Math.min(rolls[rolls.length - 1], psIniziali)
       const minRecoilHP = Math.floor(minRoll * rNum / rDen)
       const maxRecoilHP = Math.floor(maxRoll * rNum / rDen)
       const minPct = Math.round(minRecoilHP * 1000 / atkHP) / 10
@@ -404,12 +476,19 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
     }
   }
 
-  const isOHKO = result.minPct >= 100
-  const hasOHKOChance = !isOHKO && result.maxPct >= 100
+  // ─── «UCCIDE?» SI CHIEDE AI PUNTI SALUTE, NON ALLA PERCENTUALE ───────────
+  //
+  // Erano `minPct >= 100` e `maxPct >= 100`, cioè il 100% del MASSIMO. Su un
+  // bersaglio a metà vita rispondevano tutt'e due «no», e il pannello non
+  // mostrava né «2HKO» né «1HKO chance»: il riquadro del verdetto restava
+  // vuoto. L'ho visto provando una mutazione, non rileggendo il codice — la
+  // prima stesura di questa correzione lasciava proprio questo buco.
+  const isOHKO = result.minDmg >= psIniziali
+  const hasOHKOChance = !isOHKO && result.maxDmg >= psIniziali
   const moveData = movesData[move]
   const isSpread = moveData?.spread === true
   // % chance OHKO reale
-  const ohkoChanceRolls = rolls.filter(r => r >= defHP).length
+  const ohkoChanceRolls = rolls.filter(r => r >= psIniziali).length
   const ohkoPct = Math.round(ohkoChanceRolls / rolls.length * 1000) / 10
 
   const atkPokeData = pokemonData[atk.key]
@@ -418,7 +497,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
   const defTypes2 = defPokeData?.type || []
 
   // Roll KO count per la barra segmentata
-  const segColors = rolls.map(r => r >= defHP)
+  const segColors = rolls.map(r => r >= psIniziali)
 
   return (
     <div>
@@ -625,9 +704,13 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
 
         {/* CARD 2: Breakdown Turno — logica differenziata per KO/EOT/no-EOT */}
         {(() => {
+          // La Baccarancia ridà un quarto del MASSIMO, non del residuo, e il
+          // tetto di ogni cura resta il massimo: sono le due cose per cui
+          // `defHP` continua a comparire qui sotto.
           const sitrusHeal = Math.floor(defHP * 0.25)
-          let hpMin = Math.max(0, defHP - result.maxDmg)
-          let hpMax = Math.max(0, defHP - result.minDmg)
+          // La catena invece parte da dove il Pokémon è messo adesso.
+          let hpMin = Math.max(0, psIniziali - result.maxDmg)
+          let hpMax = Math.max(0, psIniziali - result.minDmg)
           const hpAfterMove = [hpMin, hpMax]
           if (sitrus) { hpMin = Math.min(hpMin + sitrusHeal, defHP); hpMax = Math.min(hpMax + sitrusHeal, defHP) }
           const hpAfterSitrus = [hpMin, hpMax]
@@ -661,9 +744,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
                 <div className="flex-1 flex items-center justify-center gap-3">
                   <div className="flex flex-col items-center shrink-0 w-20">
                     <span className="text-3xl mb-2">❤️</span>
-                    <div className="text-[9px] text-gray-400 uppercase tracking-wide">{t("report.start")}</div>
-                    <div className="text-[10px] text-gray-400 capitalize truncate w-full text-center">{def.key.split('-')[0]}</div>
-                    <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
+                    <PsDiPartenza psIniziali={psIniziali} defHP={defHP} nome={def.key.split('-')[0]} />
                   </div>
                   <span className="text-gray-400 mb-4">→</span>
                   <div className="flex flex-col items-center shrink-0 w-23">
@@ -713,9 +794,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
                   <div className="h-10 flex items-center justify-center mb-2">
                     <span className="text-3xl">❤️</span>
                   </div>
-                  <div className="text-[9px] text-gray-400 uppercase tracking-wide leading-tight">{t("report.start")}</div>
-                  <div className="text-[10px] text-gray-400 capitalize leading-tight truncate w-full text-center">{def.key.split('-')[0]}</div>
-                  <div className="text-xs font-bold text-white mt-1">{defHP} HP</div>
+                  <PsDiPartenza psIniziali={psIniziali} defHP={defHP} nome={def.key.split('-')[0]} />
                 </div>
 
                 {/* 1. Mossa */}
@@ -776,8 +855,11 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
                     // Mostra % danno finale (dopo tutto l'EOT)
                     const finalRange = passi.length > 0 ? passi[passi.length - 1].range
                       : sitrus ? hpAfterSitrus : hpAfterMove
-                    const minFinalPct = Math.round(Math.max(0, defHP - finalRange[1]) / defHP * 1000) / 10
-                    const maxFinalPct = Math.round(Math.max(0, defHP - finalRange[0]) / defHP * 1000) / 10
+                    // Quanto ha perso IN QUESTO TURNO — quindi da dove
+                    // partiva, non dal massimo — ma espresso in percentuale
+                    // del massimo, che è la convenzione di tutta l'app.
+                    const minFinalPct = Math.round(Math.max(0, psIniziali - finalRange[1]) / defHP * 1000) / 10
+                    const maxFinalPct = Math.round(Math.max(0, psIniziali - finalRange[0]) / defHP * 1000) / 10
                     return (
                       <div className="text-sm font-black mt-1 whitespace-nowrap text-gray-200">
                         {minFinalPct}–{maxFinalPct}%
@@ -801,7 +883,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
               <span
                 key={i}
                 className={`text-xs px-2.5 py-1 rounded font-mono font-semibold ${
-                  r >= defHP
+                  r >= psIniziali
                     ? 'bg-red-950/60 text-red-300 border border-red-700/40'
                     : 'bg-gray-800 text-gray-300 border border-gray-700/40'
                 }`}
@@ -831,7 +913,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
             </div>
           </div>
           <div className="text-center mt-2">
-            <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">{t('report.ko_threshold')}: ≥ {defHP} HP</span>
+            <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">{t('report.ko_threshold')}: ≥ {psIniziali} HP</span>
           </div>
         </div>
       </div>
@@ -914,21 +996,29 @@ function CumulativePanel({ entries }) {
   const cumulative = useMemo(() => {
     if (!active1 || !active2) return null
     const r1 = active1.result, r2 = active2.result
+    // La stessa divisione del pannello singolo: il massimo è il denominatore,
+    // i residui sono la soglia. Qui la domanda è «i due insieme lo ammazzano?»,
+    // e la risposta dipende da quanti punti salute ha ADESSO — che è il caso
+    // per cui questo pannello esiste, due attacchi sullo stesso bersaglio.
     const defHP = r1.defHP
+    const psIniziali = r1.defPS ?? defHP
     const rolls1 = r1.rolls, rolls2 = r2.rolls
     let koCount = 0
-    for (const a of rolls1) for (const b of rolls2) if (a + b >= defHP) koCount++
+    for (const a of rolls1) for (const b of rolls2) if (a + b >= psIniziali) koCount++
     const totalCombos = rolls1.length * rolls2.length
     const minSum = rolls1[0] + rolls2[0]
     const maxSum = rolls1[rolls1.length - 1] + rolls2[rolls2.length - 1]
     const minPct = Math.floor(minSum / defHP * 1000) / 10
     const maxPct = Math.floor(maxSum / defHP * 1000) / 10
     const koOf16 = Math.round(koCount / (totalCombos / 16))
-    return { minPct, maxPct, defHP, minSum, maxSum, koCount, totalCombos, koOf16, rolls1, rolls2 }
+    return { minPct, maxPct, defHP, psIniziali, minSum, maxSum, koCount, totalCombos, koOf16, rolls1, rolls2 }
   }, [active1, active2])
 
+  // Il KO garantito è «anche il tiro peggiore basta», e basta CONTRO I PUNTI
+  // SALUTE CHE HA. Guardava `minPct >= 100`, cioè il 100% del massimo: su un
+  // bersaglio a metà diceva «no» a due colpi che lo uccidono di sicuro.
   const badge = !cumulative ? null :
-    cumulative.minPct >= 100 ? { text: t('eot.guaranteed') + ' KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
+    cumulative.minSum >= cumulative.psIniziali ? { text: t('eot.guaranteed') + ' KO', cls: 'bg-green-900/40 border-green-500/50 text-green-300' } :
     cumulative.koOf16 > 0    ? { text: `Likely KO (${cumulative.koOf16}/16)`, cls: 'bg-yellow-900/40 border-yellow-500/50 text-yellow-300' } :
                                { text: t('report.no_ko'), cls: 'bg-gray-800 border-gray-600 text-gray-400' }
 
@@ -1038,10 +1128,21 @@ function CumulativePanel({ entries }) {
             <div className="shrink-0 w-full text-center lg:w-auto lg:text-right lg:ml-auto">
               <div className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
-              <div className="text-xs text-gray-400 mt-0.5">{cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP</div>
+              {/* Il denominatore è il massimo — la percentuale sopra è su
+                  quello — ma se il bersaglio parte ferito si dice anche da
+                  dove parte, altrimenti «180 – 210 HP / 221 HP» sembra dire
+                  che non muore, mentre il badge accanto dice di sì. */}
+              <div className="text-xs text-gray-400 mt-0.5">
+                {cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP
+              </div>
+              {cumulative.psIniziali < cumulative.defHP && (
+                <div className="text-xs mt-0.5" style={{ color: colorePS(cumulative.psIniziali, cumulative.defHP) }}>
+                  {t('report.start')}: {cumulative.psIniziali} / {cumulative.defHP} HP
+                </div>
+              )}
               <div className="mt-2">
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
-                  {cumulative.minPct >= 100 ? '✓ ' + t('eot.guaranteed') + ' KO' : cumulative.koOf16 > 0 ? `⚡ ${t('report.likely_ko')} (${cumulative.koOf16}/16)` : '✗ ' + t('report.no_ko')}
+                  {cumulative.minSum >= cumulative.psIniziali ? '✓ ' + t('eot.guaranteed') + ' KO' : cumulative.koOf16 > 0 ? `⚡ ${t('report.likely_ko')} (${cumulative.koOf16}/16)` : '✗ ' + t('report.no_ko')}
                 </span>
               </div>
             </div>
@@ -1113,10 +1214,10 @@ function CumulativePanel({ entries }) {
         {/* Barra segmentata combinata — stile uguale al singolo */}
         {cumulative && (() => {
           // 16 step uniformi da minSum a maxSum
-          const { minSum, maxSum, defHP, koOf16 } = cumulative
+          const { minSum, maxSum, psIniziali, koOf16 } = cumulative
           const step = (maxSum - minSum) / 15
           const sums = Array.from({ length: 16 }, (_, i) => Math.round(minSum + i * step))
-          // segmenti KO sono quelli in fondo (valori più alti >= defHP)
+          // segmenti KO sono quelli in fondo (valori più alti >= psIniziali)
           const segColors = Array.from({ length: 16 }, (_, i) => i >= 16 - koOf16)
           return (
             <div className="px-5 py-4 border-b border-gray-700/20">
@@ -1126,7 +1227,7 @@ function CumulativePanel({ entries }) {
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {sums.map((s, i) => (
                   <span key={i} className={`text-xs px-2.5 py-1 rounded font-mono font-semibold ${
-                    s >= defHP
+                    s >= psIniziali
                       ? 'bg-red-950/60 text-red-300 border border-red-700/40'
                       : 'bg-gray-800 text-gray-300 border border-gray-700/40'
                   }`}>
@@ -1153,7 +1254,7 @@ function CumulativePanel({ entries }) {
               </div>
               <div className="text-center mt-2">
                 <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-[0.08em]">
-                  {t('report.ko_threshold')}: ≥ {defHP} HP
+                  {t('report.ko_threshold')}: ≥ {psIniziali} HP
                 </span>
               </div>
             </div>
