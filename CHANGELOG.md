@@ -16,6 +16,19 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Il pannello di dettaglio sapeva che il Pokémon è ferito, e non lo usava
+- Mettendo un Pokémon a metà vita, la cella diceva **KO?** e il pannello di
+  dettaglio, sullo stesso identico attacco, diceva **2HKO** con la barra che
+  partiva da vita piena. Adesso dicono la stessa cosa
+- Cambiano con lui: la soglia di KO, quali tiri sono segnati come letali, i
+  punti salute dopo il colpo, la catena di fine turno, la Baccarancia e il
+  verdetto dei due attacchi sommati
+- Il nodo **Inizio** mostra `110 / 221 HP` con una barra che disegna la parte
+  già persa, nei colori dell'editor. A vita piena non compare: torna a dire
+  `221 HP` e basta
+- Le percentuali del danno restano sul massimo, come prima — sono quelle che
+  permettono di confrontare le celle fra loro
+
 ### La barra degli HP: quattro ritocchi
 - **La percentuale c'è sempre**, anche a vita piena. Prima spariva al 100% e
   la barra si allungava di 44 px: trascinando il cursore proprio attorno al
