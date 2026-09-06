@@ -77,6 +77,35 @@ const CAMPO_STADIO = Object.freeze({
   [STAT_SPE]: 'speBoost',
 })
 
+/** Le cinque statistiche che hanno uno stadio: tutte tranne gli HP. */
+export const STAT_CON_STADIO = Object.freeze([STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE])
+
+/**
+ * I cinque stadi effettivi, nella forma che vuole `contaStadiPositivi`.
+ *
+ * Esportata per Forza Ancestrale e Sfoggio: la loro potenza è 20 più 20 per
+ * ogni stadio positivo, e il motore la calcola sui boost PREPARATI — non su
+ * quelli messi a mano. Farne un secondo conto in `potenzaMostrata.js`
+ * vorrebbe dire che la riga della mossa e la colonna «Boost» possono dire due
+ * cose diverse sullo stesso Pokémon, che è il difetto che questo file esiste
+ * per togliere.
+ *
+ * Resta la differenza di portata già dichiarata in cima: l'editor guarda
+ * «qualcuno nella squadra avversaria ha Intimidate», la matrice guarda
+ * «questo avversario preciso». Sono due domande diverse, e in quei due posti
+ * sono tutt'e due giuste.
+ */
+export function stadiEffettivi(slot, contesto = {}) {
+  const { meteo = null, terreno = null, avversarioConIntimidate = false } = contesto
+  const { statPiuAlta } = preparaSingolo(slot, meteo, terreno)
+  const stadi = {}
+  for (const statIdx of STAT_CON_STADIO) {
+    stadi[CHIAVE_DA_INDICE[statIdx]] =
+      stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate)
+  }
+  return stadi
+}
+
 /**
  * Lo stadio EFFETTIVO di una statistica: quello messo a mano più i gradi che
  * arrivano dalle abilità.
@@ -257,4 +286,3 @@ export function statMostrata(slot, statIdx, contesto = {}) {
 export { CHIAVI_BOOST }
 
 /** Gli indici delle cinque statistiche che hanno uno stadio. */
-export const STAT_CON_STADIO = Object.freeze([STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE])

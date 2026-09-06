@@ -16,6 +16,30 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Cinque mosse davano un numero sbagliato, da sempre
+- **Colpo Sleale** attacca con l'Attacco di chi subisce — e gli stadi di
+  quell'Attacco non arrivavano al calcolo. Contro un avversario a +6 faceva
+  **26 di danno invece di 99**
+- **Punizione** conta gli stadi positivi del bersaglio: potenza 100 invece di
+  200, danno 38 invece di 75
+- **Forza Ancestrale** e **Sfoggio** contano i propri: la Velocità e la Difesa
+  Speciale non venivano contate. A +6 Velocità e +2 Difesa Sp. facevano **20 di
+  danno invece di 162**
+- **Elettropalla** (18 invece di 34) e **Vortexpalla** (9 invece di 3) leggono
+  la propria Velocità, e leggevano sempre quella senza stadi
+- Non era il motore a sbagliare: erano cinque campi che l'app non gli mandava.
+  Chi non usa stadi di Velocità o Difesa Speciale non vede nessuna differenza
+
+### La potenza accanto alla mossa è quella vera, per otto mosse
+- **Forza Ancestrale** e **Sfoggio** salgono con gli stadi (20 → 80 a +3),
+  **Acrobazia** raddoppia senza strumento (55 → 110), **Facciatosta** con
+  bruciatura o paralisi (70 → 140), **Ultimo Sigillo** con gli alleati caduti
+  (50 → 150 con due)
+- **Ritorno**, **Frustrazione** e **Ultimatum** passano da «—» a 102, 102 e 40
+- Le mosse che dipendono dall'avversario — Presa Ferrea, Punizione, Erbafrusta,
+  Vortexpalla — continuano a mostrare «—»: nell'editor c'è un Pokémon solo, e
+  un numero inventato sarebbe peggio del trattino
+
 ### I punti salute si possono mettere a mano
 - Una **barra** accanto allo stato, nell'editor: `131 / 175`, si trascina o si
   scrive. Verde sopra la metà, gialla sotto, rossa sotto un quinto

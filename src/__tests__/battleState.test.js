@@ -20,11 +20,15 @@
  */
 
 import { describe, it, expect } from 'vitest'
+import fs from 'node:fs'
+import path from 'node:path'
 import { calculateDamage } from '../calcEngine.js'
 import {
   buildAttackerInput, buildDefenderInput, buildField, buildMatchup,
 } from '../lib/battleState.js'
 import { LEVEL } from '../lib/rules.js'
+
+const RADICE = path.resolve(import.meta.dirname, '..', '..')
 
 // ─── ORACOLI — le costruzioni a mano prima della sessione C ────────────────
 
@@ -108,14 +112,22 @@ describe('battleState — costruzione di attaccante e difensore', () => {
     // a Body Press — quindi lo dichiariamo qui, esplicitamente, invece di
     // riscrivere la copia storica.
     //
-    // Stessa cosa per `colpiScelti`, aggiunto con le mosse multi-colpo, e per
-    // `atkPS`, aggiunto con la barra dei punti salute: si dichiarano qui, e
-    // l'elenco che cresce sotto gli occhi è il punto — dice quanto la
-    // costruzione si è allontanata dalla fotografia del 2024.
+    // Stessa cosa per `colpiScelti`, aggiunto con le mosse multi-colpo, per
+    // `atkPS`, aggiunto con la barra dei punti salute, e per i due stadi che
+    // il condotto non ha mai mandato: si dichiarano qui, e l'elenco che cresce
+    // sotto gli occhi è il punto — dice quanto la costruzione si è allontanata
+    // dalla fotografia del 2024.
+    //
+    // `atkSpDefBoost` e `atkSpeBoost` non sono una novità come gli altri: il
+    // motore li accettava già nel 2024 e nessuno glieli mandava. Stanno in
+    // questo elenco perché la fotografia storica riproduce il difetto, non
+    // perché il difetto fosse voluto.
     expect(buildAttackerInput(houndstone, LEVEL))
       .toEqual({
         ...attaccanteTabellaStorico(houndstone, 50),
         atkDefBoost: 0, colpiScelti: null, atkPS: null,
+        atkSpDefBoost: houndstone.spDefBoost || 0,
+        atkSpeBoost: houndstone.speBoost || 0,
       })
   })
 
@@ -292,5 +304,163 @@ describe('battleState — buildMatchup', () => {
       })
       expect(nuovo.rolls).toEqual(vecchio.rolls)
     }
+  })
+})
+// ─── Il presidio che mancava ────────────────────────────────────────────────
+
+describe('ogni campo che il motore accetta, il condotto lo manda', () => {
+  /**
+   * ─── IL DIFETTO CHE NESSUNO GUARDAVA ──────────────────────────────────────
+   *
+   * `calculateDamage` accettava `atkSpDefBoost`, `atkSpeBoost`, `defAtkBoost`,
+   * `defSpAtkBoost` e `defSpeBoost`, e `battleState` non gliene mandava
+   * nessuno: arrivavano zero, sempre, da sempre. Cinque numeri sbagliati nella
+   * matrice, in silenzio:
+   *
+   *   Colpo Sleale        danno 26 invece di 99   (attacca con l'Attacco altrui)
+   *   Punizione           danno 38 invece di 75   (conta gli stadi altrui)
+   *   Forza Ancestrale    danno 20 invece di 162  (conta i propri)
+   *   Elettropalla        danno 18 invece di 34   (la propria Velocità)
+   *   Vortexpalla         danno  9 invece di  3   (idem, al contrario)
+   *
+   * Perché nessun presidio l'ha visto:
+   *
+   *   - lo SNAPSHOT chiama `calculateDamage` con input scritti a mano, quindi
+   *     salta questa funzione — e infatti è rimasto a zero divergenze mentre
+   *     il difetto c'era e mentre veniva corretto;
+   *   - la fotografia della MATRICE è stata scattata da questo stesso condotto,
+   *     quindi concordava con sé stessa;
+   *   - `battleState.test.js` confrontava con la costruzione del 2024, che
+   *     aveva lo stesso buco.
+   *
+   * Tutt'e tre erano verdi. È lo schema dei quattro difetti dell'harness di
+   * questa sessione: le due parti sbagliavano d'accordo.
+   *
+   * ─── PERCHÉ GUARDA IL SORGENTE ────────────────────────────────────────────
+   *
+   * Perché la domanda è una proprietà del sorgente: «il motore dichiara un
+   * parametro che nessuno riempie?». Un test che provasse le mosse una per una
+   * coprirebbe quelle a cui ho pensato — e queste cinque nessuno ci aveva
+   * pensato per due anni. È lo stesso schema di `levette.test.js`.
+   */
+  const motore = fs.readFileSync(path.join(RADICE, 'src/calcEngine.js'), 'utf8')
+
+  /** I nomi destrutturati da `attacker` e da `defender` in `calculateDamage`. */
+  function parametriDi(oggetto) {
+    const i = motore.indexOf(`} = ${oggetto}`)
+    expect(i, `non trovo la destrutturazione di ${oggetto}`).toBeGreaterThan(-1)
+    // Indietro fino alla graffa che apre.
+    const apertura = motore.lastIndexOf('const {', i)
+    expect(apertura).toBeGreaterThan(-1)
+    return motore.slice(apertura, i)
+      .split('\n')
+      .map(r => r.trim().match(/^([A-Za-z_$][\w$]*)\s*(?:=|,|$)/)?.[1])
+      .filter(n => n && n !== 'const')
+  }
+
+  const slotPieno = {
+    key: 'garchomp', sps: [4, 4, 4, 4, 4, 4], nature: 'adamant', ability: 'Rough Skin',
+    item: 'life orb', status: 'burned', ps: 100,
+    atkBoost: 1, defBoost: 2, spAtkBoost: 3, spDefBoost: 4, speBoost: 5,
+    abilityFlags: {}, lastRespectsKOs: 1, colpiScelti: 2,
+  }
+
+  it('l\'attaccante: nessun parametro resta senza chi lo riempie', () => {
+    const attesi = parametriDi('attacker')
+    // Il presupposto: se l'estrazione non trovasse niente il test sarebbe
+    // verde e vuoto.
+    expect(attesi.length, 'l\'estrazione dal sorgente non trova più i parametri')
+      .toBeGreaterThanOrEqual(10)
+
+    const mandati = Object.keys(buildAttackerInput(slotPieno))
+    expect(
+      attesi.filter(k => !mandati.includes(k)),
+      'il motore li accetta e `buildAttackerInput` non glieli manda: '
+      + 'arrivano al valore di riposo e nessun test se ne accorge',
+    ).toEqual([])
+  })
+
+  it('il difensore: idem', () => {
+    const attesi = parametriDi('defender')
+    expect(attesi.length).toBeGreaterThanOrEqual(8)
+    const mandati = Object.keys(buildDefenderInput(slotPieno))
+    expect(
+      attesi.filter(k => !mandati.includes(k)),
+      'il motore li accetta e `buildDefenderInput` non glieli manda',
+    ).toEqual([])
+  })
+
+  it('e i cinque stadi arrivano col valore giusto, non solo col nome', () => {
+    // Il test qui sopra sarebbe verde anche con `atkSpeBoost: 0` scritto
+    // fisso. Questo guarda il valore.
+    const a = buildAttackerInput(slotPieno)
+    expect([a.atkBoost, a.atkDefBoost, a.spAtkBoost, a.atkSpDefBoost, a.atkSpeBoost])
+      .toEqual([1, 2, 3, 4, 5])
+    const d = buildDefenderInput(slotPieno)
+    expect([d.defAtkBoost, d.defBoost, d.defSpAtkBoost, d.spDefBoost, d.defSpeBoost])
+      .toEqual([1, 2, 3, 4, 5])
+  })
+})
+
+// ─── E le cinque mosse, dal capo opposto ────────────────────────────────────
+
+describe('i cinque numeri che erano sbagliati nella matrice', () => {
+  /**
+   * Il presidio qui sopra guarda il SORGENTE: «esiste un parametro che nessuno
+   * riempie?». Questo guarda il DANNO, ed è la stessa domanda dall'altro capo.
+   *
+   * Servono tutt'e due. Quello strutturale trova anche il parametro a cui
+   * nessuno ha pensato — ed è il caso di questi cinque, rimasti fuori per due
+   * anni. Questo qui dice che il numero è cambiato davvero, e in che verso:
+   * senza, il primo sarebbe verde anche mandando la chiave giusta con dentro
+   * il valore sbagliato.
+   *
+   * I numeri NON sono riscritti a mano: si confronta lo slot con lo stadio
+   * contro lo stesso slot senza. Un valore atteso scritto qui sarebbe una
+   * terza copia della formula.
+   */
+  const slot = (extra) => ({
+    key: 'garchomp', sps: [0, 0, 0, 0, 0, 0], nature: null, ability: null,
+    item: null, status: null, abilityFlags: {},
+    atkBoost: 0, defBoost: 0, spAtkBoost: 0, spDefBoost: 0, speBoost: 0,
+    ...extra,
+  })
+
+  const danno = (atk, def, move) => calculateDamage({
+    attacker: buildAttackerInput(atk),
+    defender: buildDefenderInput(def),
+    move, field: {},
+  })
+
+  const NEUTRO = slot({ key: 'amoonguss' })
+
+  it.each([
+    // [mossa, chi ha lo stadio, quale stadio, verso atteso]
+    ['stored power', 'attaccante', { speBoost: 6 },  'su'],
+    ['stored power', 'attaccante', { spDefBoost: 4 }, 'su'],
+    ['electro ball', 'attaccante', { speBoost: 6 },  'su'],
+    // Vortexpalla è più forte quando sei LENTO: alzare la Velocità la
+    // indebolisce. Il verso opposto è il caso che distingue «arriva il numero»
+    // da «arriva un numero qualunque».
+    ['gyro ball',    'attaccante', { speBoost: 6 },  'giu'],
+    ['foul play',    'difensore',  { atkBoost: 6 },  'su'],
+    ['punishment',   'difensore',  { spAtkBoost: 6 }, 'su'],
+  ])('%s reagisce allo stadio di %s (%o)', (move, lato, stadio, verso) => {
+    const atkFermo = slot({ moves: [move] })
+    const conStadio = lato === 'attaccante'
+      ? [slot({ ...stadio }), NEUTRO]
+      : [atkFermo, slot({ key: 'amoonguss', ...stadio })]
+    const senza = lato === 'attaccante'
+      ? [slot({}), NEUTRO]
+      : [atkFermo, NEUTRO]
+
+    const a = danno(senza[0], senza[1], move)
+    const b = danno(conStadio[0], conStadio[1], move)
+    expect(a, `il motore non calcola ${move}`).not.toBeNull()
+    expect(a.maxDmg, 'il caso neutro non fa danno: non distingue niente')
+      .toBeGreaterThan(0)
+
+    if (verso === 'su') expect(b.maxDmg).toBeGreaterThan(a.maxDmg)
+    else expect(b.maxDmg).toBeLessThan(a.maxDmg)
   })
 })

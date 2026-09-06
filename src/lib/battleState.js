@@ -73,6 +73,29 @@ export function buildAttackerInput(slot, level = LEVEL) {
     // l'unica cosa che gli arrivasse, e con Difesa −1 il danno andava su
     // invece che giù. Vedi il caso golden `B8-bodypress-def-1-004`.
     atkDefBoost:     s.defBoost || 0,
+    // ─── E GLI ALTRI DUE, CHE MANCAVANO DA SEMPRE ──────────────────────────
+    //
+    // Il motore li accetta (`atkSpDefBoost`, `atkSpeBoost`) e questa funzione
+    // non glieli ha mai mandati: arrivavano zero, sempre. Non era un difetto
+    // del motore — passandoglieli a mano risponde giusto — era il condotto che
+    // rispondeva a una domanda diversa da quella fatta.
+    //
+    // Cosa sbagliava, misurato su Dragoscudo con +6 Velocità e +2 Difesa Sp.:
+    //
+    //   Forza Ancestrale   potenza 20, danno 20   →  potenza 180, danno 162
+    //   Elettropalla       potenza 80, danno 18   →  potenza 150, danno 34
+    //   Vortexpalla        potenza 10, danno  9   →  potenza  2,  danno  3
+    //
+    // Vortexpalla scende, ed è giusto: è più forte quando sei LENTO.
+    //
+    // Perché nessun presidio l'ha visto: lo snapshot chiama `calculateDamage`
+    // direttamente, con input scritti a mano, quindi salta questa funzione. E
+    // la fotografia della matrice è stata scattata da questo stesso condotto,
+    // quindi concordava con sé stessa. È lo stesso schema dei quattro difetti
+    // dell'harness trovati in questa sessione: il confronto veniva verde
+    // perché le due parti sbagliavano d'accordo.
+    atkSpDefBoost:   s.spDefBoost || 0,
+    atkSpeBoost:     s.speBoost || 0,
     atkItem:         s.item || null,
     atkAbility:      s.ability || null,
     atkAbilityFlags: s.abilityFlags || {},
@@ -112,6 +135,18 @@ export function buildDefenderInput(slot) {
     defNature:       s.nature ?? null,
     defBoost:        s.defBoost || 0,
     spDefBoost:      s.spDefBoost || 0,
+    // Gli altri tre, per la stessa ragione e con lo stesso difetto. Non sono
+    // simmetrici ai due di sopra per capriccio: chi subisce ha bisogno del
+    // proprio Attacco perché Colpo Sleale attacca CON QUELLO, e degli stadi
+    // interi perché Punizione li conta.
+    //
+    // Misurato su Amoonguss con +6 Attacco e +6 Att. Speciale:
+    //
+    //   Colpo Sleale   danno 26  →  danno 99
+    //   Punizione      potenza 100, danno 38  →  potenza 200, danno 75
+    defAtkBoost:     s.atkBoost || 0,
+    defSpAtkBoost:   s.spAtkBoost || 0,
+    defSpeBoost:     s.speBoost || 0,
     defItem:         s.item || null,
     defAbility:      s.ability || null,
     defAbilityFlags: s.abilityFlags || {},

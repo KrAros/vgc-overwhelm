@@ -37,6 +37,7 @@ import BarraPS from '../components/editor/BarraPS.jsx'
 import { SegnoPS } from '../components/DamageTable.jsx'
 import { MoveSearch } from '../components/editor/SearchSelects.jsx'
 import { statMostrata } from '../lib/statMostrata.js'
+import { potenzaMostrata } from '../lib/potenzaMostrata.js'
 import {
   psMassimi, psCorrenti, colorePS, VERDE, GIALLO, ROSSO,
 } from '../lib/psSlot.js'
@@ -396,42 +397,44 @@ describe('la barra dice cosa è', () => {
   })
 })
 
-// ─── 9. Le mosse la cui potenza è i propri punti salute ──────────────────────
+// ─── 9. La riga della mossa scrive quello che la funzione risponde ──────────
 
 describe('la potenza scritta accanto alla mossa', () => {
-  const rendi = (props) => renderToStaticMarkup(
-    <MoveSearch value={props.move} onChange={() => {}} placeholder="" ps={props.ps} psMax={props.psMax} />)
-  // Il numero della potenza è l'unico `font-mono` della riga.
+  // ─── COS'È RIMASTO QUI, E COSA SE N'È ANDATO ─────────────────────────────
+  //
+  // I casi che verificavano i NUMERI (Eruzione a metà fa 74, Rovesciamento
+  // quasi morto fa 200) stanno in `potenzaMostrata.test.js`, dove il criterio
+  // è l'uguaglianza con `effectiveBP` del motore invece di un valore che ho
+  // scritto io. Ripeterli qui vorrebbe dire due fonti per lo stesso fatto, e
+  // la seconda più debole.
+  //
+  // Qui resta la domanda che solo il componente può rispondere: quel numero
+  // arriva sullo schermo, e lo zero diventa un trattino.
+  const rendi = (move, slot) => renderToStaticMarkup(
+    <MoveSearch value={move} onChange={() => {}} placeholder="" slot={slot} />)
   const potenza = (html) => html.match(/font-mono[^>]*>([^<]+)</)?.[1]
 
-  it('Eruzione a metà vita dice 75, non 150', () => {
-    // Era la riga diventata falsa il giorno in cui la barra è arrivata:
-    // `moves.json` dice `power: 150`, e il motore con il Pokémon a metà ne usa
-    // 75. Due numeri per la stessa cosa, sulla stessa schermata.
-    expect(potenza(rendi({ move: 'eruption', ps: 175, psMax: 175 }))).toBe('150')
-    expect(potenza(rendi({ move: 'eruption', ps: 87,  psMax: 175 }))).toBe('74')
-    expect(potenza(rendi({ move: 'eruption', ps: 1,   psMax: 175 }))).toBe('1')
+  it.each([
+    ['eruption',  slot({ key: 'torkoal', ps: 87 })],
+    ['reversal',  slot({ key: 'garchomp', ps: 3 })],
+    ['stored power', slot({ key: 'garchomp', atkBoost: 2, speBoost: 2 })],
+    ['acrobatics', slot({ key: 'garchomp' })],
+    ['return',    slot({ key: 'garchomp' })],
+    ['facade',    slot({ key: 'garchomp', status: 'burned' })],
+  ])('%s: la riga scrive il numero della funzione', (move, s) => {
+    expect(potenza(rendi(move, s))).toBe(String(potenzaMostrata(move, s, {})))
   })
 
-  it('Rovesciamento passa da «—» al numero', () => {
-    // Ha `power: 0`, quindi la riga mostrava un trattino. Non era falso — ma
-    // il numero si sa, e dipende da un valore scritto due centimetri più su.
-    expect(potenza(rendi({ move: 'reversal', ps: 175, psMax: 175 }))).toBe('20')
-    expect(potenza(rendi({ move: 'reversal', ps: 3,   psMax: 175 }))).toBe('200')
+  it('e zero diventa un trattino, non «0»', () => {
+    // È il confine reso visibile: Presa Ferrea dipende dai punti salute di chi
+    // subisce, e nell'editor c'è un Pokémon solo. Scrivere «0» direbbe «non fa
+    // danno», che è un'altra cosa.
+    const s = slot({ key: 'garchomp', ps: 87 })
+    expect(potenzaMostrata('crush grip', s, {})).toBe(0)
+    expect(potenza(rendi('crush grip', s))).toBe('—')
   })
 
-  it('ma quelle che dipendono dal BERSAGLIO restano «—»', () => {
-    // È il confine: qui c'è un Pokémon solo. Presa Ferrea dipende dai punti
-    // salute di chi subisce, Erbafrusta dal suo peso, Vortexpalla da tutt'e
-    // due le Velocità. Inventare un numero sarebbe peggio del trattino.
-    for (const m of ['crush grip', 'hard press', 'grass knot', 'gyro ball']) {
-      expect(potenza(rendi({ move: m, ps: 87, psMax: 175 })), m).toBe('—')
-    }
-  })
-
-  it('e senza punti salute non si inventa niente', () => {
-    // Il default dei prop: un chiamante che non li manda deve vedere il dato
-    // grezzo, non un numero costruito su `psMax = 0`.
+  it('senza slot il componente non esplode e mostra il dato grezzo', () => {
     const html = renderToStaticMarkup(
       <MoveSearch value="eruption" onChange={() => {}} placeholder="" />)
     expect(potenza(html)).toBe('150')
