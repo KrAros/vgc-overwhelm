@@ -30,6 +30,16 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 - Non era il motore a sbagliare: erano cinque campi che l'app non gli mandava.
   Chi non usa stadi di Velocità o Difesa Speciale non vede nessuna differenza
 
+### La potenza accanto alla mossa è quella vera, per otto mosse
+- **Forza Ancestrale** e **Sfoggio** salgono con gli stadi (20 → 80 a +3),
+  **Acrobazia** raddoppia senza strumento (55 → 110), **Facciatosta** con
+  bruciatura o paralisi (70 → 140), **Ultimo Sigillo** con gli alleati caduti
+  (50 → 150 con due)
+- **Ritorno**, **Frustrazione** e **Ultimatum** passano da «—» a 102, 102 e 40
+- Le mosse che dipendono dall'avversario — Presa Ferrea, Punizione, Erbafrusta,
+  Vortexpalla — continuano a mostrare «—»: nell'editor c'è un Pokémon solo, e
+  un numero inventato sarebbe peggio del trattino
+
 ### I punti salute si possono mettere a mano
 - Una **barra** accanto allo stato, nell'editor: `131 / 175`, si trascina o si
   scrive. Verde sopra la metà, gialla sotto, rossa sotto un quinto

@@ -484,11 +484,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 placeholder={`${t('editor.move_slot')} ${mi+1}`}
                 onChange={m => handleMoveChange(mi, m)}
                 ability={ability}
-                /* Eruzione e sorelle: la potenza scritta accanto alla mossa e'
-                   quella vera, che dipende da quanti punti salute ha CHI
-                   TIRA. Vedi la nota in `SearchSelects.jsx`. */
-                ps={ps}
-                psMax={psMax}
+                /* Lo slot intero, e non i pezzi: la potenza vera di otto mosse
+                   dipende da punti salute, stadi, strumento, stato o contatore
+                   degli alleati caduti. Passarne i pezzi vorrebbe dire
+                   aggiungere un parametro a ogni mossa nuova — ed e' cosi' che
+                   la colonna «Mod» era rimasta indietro. */
+                slot={pokemon}
+                terreno={terrain}
+                avversarioConIntimidate={opponentHasIntimidateActive}
               />
             ))}
           </div>

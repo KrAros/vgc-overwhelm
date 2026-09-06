@@ -124,6 +124,23 @@ poteva contraddire, perché i punti salute non stavano nel modello.
 Adesso ci stanno, e quella riga può sbagliare: un Torkoal a metà vita tira un
 Eruption da 75.
 
+**E c'è una TERZA superficie, che non è il motore.** Il motore può calcolare
+giusto e l'editor scrivere lo stesso un numero sbagliato accanto alla mossa:
+`moves.json` dice `power: 20` per Forza Ancestrale, e a +2 il motore ne usa 60.
+Otto mosse erano così. La risposta sta in `lib/potenzaMostrata.js`, che ricalca
+l'ordine di `effectiveBP`, e il presidio confronta i due numeri mossa per mossa
+invece di riscriverli a mano. Il confine è che l'editor mostra UN Pokémon: le
+mosse che dipendono dall'avversario mostrano «—», ed è la risposta giusta.
+
+**Attenzione a cosa lo snapshot NON copre.** Chiama `calculateDamage` con input
+scritti a mano, quindi salta `lib/battleState.js`. Per due anni quel condotto ha
+omesso cinque campi che il motore accettava — gli stadi di Velocità e Difesa
+Speciale di chi attacca, e i tre di chi subisce — e cinque numeri della matrice
+erano sbagliati (Colpo Sleale faceva 26 invece di 99) con lo snapshot a zero
+divergenze. Chi aggiunge un parametro a `calculateDamage` deve aggiungerlo
+anche lì: `battleState.test.js` adesso lo confronta col sorgente del motore e
+diventa rosso da solo.
+
 Chi apre questo lavoro trova il registro gia' fatto — `gapNoti.json` con la
 terza lista e il segnalino sulla riga della mossa — e i punti salute nel
 motore. Le sette che restano non aspettano piu' una decisione: quattro
