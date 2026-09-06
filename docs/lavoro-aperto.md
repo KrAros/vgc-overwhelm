@@ -54,8 +54,39 @@ Le reattive — Counter, Mirror Coat, Metal Burst, Comeuppance — nel riferimen
 ci sono, ma calcolano
 il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
-turno che il nostro modello non ha. Restano quelle che si trascrivono e basta: lo
-strumento (Fling, Natural Gift) e il peso degli alleati (Beat Up).
+turno che il nostro modello non ha.
+
+**Le altre tre si trascrivono, e sono di difficoltà molto diversa.**
+
+**Beat Up è la più facile delle tre, non la più difficile.** Questo documento
+diceva «il peso degli alleati»: è falso, e l'ho scritto senza aprire il
+riferimento. `move_data.js:2796` dice
+
+    'Beat Up': { bp: 14 }, //average fully evolved atk. stat is ~90. 90/10 + 5 = 14.
+
+cioè un numero ASSUNTO, con l'ipotesi scritta accanto — esattamente la famiglia
+di Return, Frustration e Trump Card, che sono già fatte. Non conta nessun
+alleato. È una riga in `MOSSE_POTENZA_ASSUNTA` e un caso contro l'oracolo.
+(Da noi ha anche `colpi: [1,6]`, quindi si incrocia col selettore dei
+multi-colpo: quello è l'unico punto da guardare due volte.)
+
+**Natural Gift è una tabella, e la copertura è quasi piena.** 66 bacche in
+`item_data.js:655`, ognuna con tipo e potenza. Delle 49 bacche selezionabili da
+noi, **48 sono nella tabella**; l'unica fuori è `berry juice`, che nel
+riferimento non è una bacca da Natural Gift. Da trascrivere: la tabella, e le
+due condizioni al contorno — senza bacca la mossa non fa niente
+(`damage_MASTER.js:1152`), e il TIPO della mossa cambia con la bacca (`:749`),
+che è la parte che tocca l'efficacia e non solo la potenza.
+
+**Fling è una tabella con tre regole per famiglia dentro.** `item_data.js:631`:
+53 strumenti nominati (29 selezionabili da noi), più tre regole che valgono per
+famiglia — qualunque `Plate` fa 90, qualunque `Memory` fa 50, e `Eviolite`
+compare due volte con due valori diversi (80 e 40: la prima condizione vince, e
+va trascritta com'è, non «corretta»). Tutto il resto cade sul default 10.
+C'è anche una guardia: certi strumenti non si possono lanciare
+(`cantFlingItem`, `:1148`).
+
+L'ordine consigliato è quello: Beat Up, poi Natural Gift, poi Fling.
 
 **Return, Frustration e Trump Card sono uscite senza essere calcolate.** Nel
 gioco la loro potenza è variabile — affetto le prime due, PP la terza — e il
@@ -97,9 +128,67 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 39 strumenti col badge
-Il numero non è mai sceso mentre le abilità andavano da 46 a 1. Nessuno ci ha
-ancora guardato.
+### I 39 strumenti col badge — la superficie più grande rimasta
+Il numero non è mai sceso mentre le abilità andavano da 46 a 1. **Nessuno ci ha
+ancora guardato**, e questa è la sola voce del documento di cui non si sappia
+già la forma del lavoro.
+
+**Non si comincia correggendo: si comincia misurando.** L'esperienza delle
+abilità dice che quei 39 non sono una lista omogenea, e che si divideranno in
+almeno quattro gruppi, ognuno con un lavoro diverso:
+
+1. **badge sbagliato** — lo strumento lo calcoliamo già, e il registro non se ne
+   accorge perché lo cerca dove non è. È successo con `flying gem`, `iron ball`
+   e `macho brace`, che oggi sono classificati `meccanica-diversa` in
+   `classificazione-badge.mjs` con scritto il perché;
+2. **moltiplicatore semplice** — una riga in `ITEM_EFFECTS` e un caso contro
+   l'oracolo. È il grosso, se le abilità sono un'indicazione;
+3. **chiede un dato che non abbiamo** — come Rivalry col sesso. Va in famiglia C
+   e non si fa;
+4. **chiede una meccanica che non modelliamo** — chi agisce dopo il danno, o fra
+   un turno e l'altro. Va in famiglia B, e la decisione è di Simone.
+
+**Come misurare**, e in quest'ordine:
+
+    npm run gap:gen          rigenera il registro; l'elenco sta in
+                             `scripts/ncp/gap-rapporto.json`, campo `prove.strumenti`
+    npm run inventario:gen   dice quali dei 39 il MOTORE già nomina — quelli
+                             sono candidati al gruppo 1
+
+Per ognuno, la domanda è una sola e si legge nel riferimento, non si deduce dal
+nome: **dove tocca il danno `item_data.js`, e in quale punto della catena?**
+`calcBPMods`, `calcAttack`, `calcDefense` e i modificatori finali sono posti
+diversi, e sbagliare punto dà numeri che divergono di un arrotondamento.
+
+Il risultato della misura è un elenco diviso in quattro, con accanto a ciascuno
+il punto del riferimento. **Da lì si decide cosa fare, e la decisione è di
+Simone.** Prima di quella misura non si scrive codice: il rischio è correggerne
+tre a caso e lasciare il numero a 36 senza sapere cos'è il resto.
+
+### Diciassette chiavi di traduzione che non rende nessuno
+Su 216 chiavi d'interfaccia in `it.json` — esclusi i cataloghi di dati, che sono
+un'altra cosa — **17 non compaiono in nessun sorgente**:
+
+    ui       cumulative_hint, custom_set_saved, custom_set_delete,
+             custom_set_badge, custom_set_load
+    report   damage_breakdown, scroll_rolls, quick_info_desc,
+             scroll_to_rolls, attacks_short, attacked_by_short
+    editor   save_custom_set
+    eot      ko_arrow, sitrus_activates, eot_delta, sitrus_recovery_cap,
+             pkmn_takes
+
+Trovate rinominando «Set personalizzati» in «Set personali»: tre delle cinque
+stringhe di quella famiglia non le legge nessuno, e cercando le altre sono
+saltate fuori tutte.
+
+`traduzioni.test.js` presidia già la PARITÀ fra le due lingue e che l'italiano
+non resti in inglese. Che una chiave sia ancora USATA non lo guarda nessuno, ed
+è la ragione per cui queste sono rimaste.
+
+**La domanda non è come tradurle meglio, è se servono.** Alcune sembrano avanzi
+di funzioni tolte (`scroll_to_rolls`, `quick_info_desc`); altre potrebbero
+essere pezzi mai finiti. Sono da leggere una per una — e il lavoro vero è il
+presidio che impedisce alle prossime di accumularsi.
 
 ---
 
