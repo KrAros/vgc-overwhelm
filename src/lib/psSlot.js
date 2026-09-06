@@ -74,8 +74,11 @@ export function psCorrenti(slot, psMax) {
 // un terzo per Blaze e sorelle): il 20% non è la soglia di nessuna abilità. È
 // voluto — il colore dice «sta per morire», la levetta dell'abilità la dice il
 // suo riquadro.
-export const VERDE  = '#70C8A0'
-export const GIALLO = '#FFFF00'
+// I valori sono di Simone, e sono cambiati una volta: il primo giro aveva un
+// verde smorto (#70C8A0) e un giallo puro (#FFFF00). Questi sono più saturi e
+// più vicini a quelli del gioco.
+export const VERDE  = '#00CC55'
+export const GIALLO = '#FFCC00'
 export const ROSSO  = '#FF0000'
 
 /**
