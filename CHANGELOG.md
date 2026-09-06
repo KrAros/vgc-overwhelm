@@ -16,6 +16,18 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Il verdetto di KO dice sempre la stessa frase
+- Prima il riquadro in alto a destra diceva **«1HKO Chance»** in un caso e il
+  solo **«2HKO»** nell'altro, con accanto una percentuale che non si capiva a
+  cosa si riferisse. Adesso è sempre `1HKO Possibile` / `2HKO Possibile` /
+  `Garantito 2HKO`
+- «Chance» era scritto in inglese anche per chi legge in italiano, e l'ordine
+  delle parole cambiava fra un caso e l'altro. Corretti tutti e tre
+- Nel **danno combinato**, i punti salute del difensore sono passati dalla
+  colonna del danno alla **scheda del difensore**, con la stessa barretta del
+  pannello singolo. Stavano fra due numeri dell'attacco e sembravano un terzo
+  numero dell'attacco
+
 ### Il pannello di dettaglio sapeva che il Pokémon è ferito, e non lo usava
 - Mettendo un Pokémon a metà vita, la cella diceva **KO?** e il pannello di
   dettaglio, sullo stesso identico attacco, diceva **2HKO** con la barra che

@@ -205,7 +205,9 @@
     "damage_from": "danno {{nome}}",
     "burn_damage": "danno da bruciatura",
     "poison_damage": "danno da veleno",
-    "toxic_damage": "danno da veleno grave"
+    "toxic_damage": "danno da veleno grave",
+    "hko_garantito": "Garantito {{n}}HKO",
+    "hko_possibile": "{{n}}HKO Possibile"
   },
   "aria": {
     "team_modifiers": "Modificatori e azioni del team",

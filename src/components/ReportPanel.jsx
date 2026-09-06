@@ -420,13 +420,25 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
     const best = findBestNHKO(rolls, psIniziali, eotAlTurno, { colpiPerTurno: colpi, rollsFiglio })
     if (!best || best.hits === 1) return null
 
+    // ─── L'ETICHETTA LA COMPONE IL BADGE, NON QUESTA FUNZIONE ─────────────
+    //
+    // Qui c'era `const label = \`${best.hits}HKO\`` e il badge poi ci
+    // attaccava davanti «Garantito» oppure niente. Da quel «niente» nasceva
+    // il difetto che Simone ha visto: «54,3% · 2HKO» accanto a
+    // «93,8% · 1HKO Chance», cioè la stessa cosa detta in due modi, e uno dei
+    // due senza la parola che dice che è una probabilità.
+    //
+    // Adesso viaggia il NUMERO, e la frase la sceglie chi la scrive, da una
+    // stringa tradotta per lingua. Serve: l'italiano vuole «2HKO Possibile»
+    // e «Garantito 2HKO» — aggettivo dopo, avverbio prima — e nessun ordine
+    // fisso è naturale in tutt'e due le lingue.
     const label = `${best.hits}HKO`
 
     if (voci.length === 0) {
       // Nessun EOT — solo badge, nessun breadcrumb
       return best.guaranteed
-        ? { hkoSuffix: label, guaranteed: true }
-        : { hkoSuffix: label, pct: best.pct }
+        ? { hits: best.hits, hkoSuffix: label, guaranteed: true }
+        : { hits: best.hits, hkoSuffix: label, pct: best.pct }
     }
 
     const condStr = voci.map(v => etichettaVoce(v, t)).join(` ${t('eot.and')} `)
@@ -434,9 +446,9 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
     if (eot === 0) return { text: `${condStr} ${t('eot.neutralize')}`, hkoSuffix: null }
 
     if (best.guaranteed) {
-      return { text: `${t('eot.guaranteed')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: label, guaranteed: true }
+      return { text: `${t('eot.guaranteed')} ${label} ${t('eot.after')} ${condStr}`, hits: best.hits, hkoSuffix: label, guaranteed: true, coda: condStr }
     }
-    return { text: `${best.pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hkoSuffix: label, pct: best.pct }
+    return { text: `${best.pct}% ${t('eot.chance_to')} ${label} ${t('eot.after')} ${condStr}`, hits: best.hits, hkoSuffix: label, pct: best.pct, coda: condStr }
   })()
 
   // Rock Head lo azzera sulle dieci di tipo `damage`. La decisione sta in
@@ -604,24 +616,38 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
             {isOHKO ? (
               <div className="border-2 border-red-500/70 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-red-950/30 w-28 lg:w-36">
                 <div className="text-3xl font-black text-red-400 leading-tight">100%</div>
-                <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">1HKO {t('eot.guaranteed')}</div>
+                <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest mt-1">{t('eot.hko_garantito', { n: 1 })}</div>
               </div>
             ) : hasOHKOChance ? (
               <div className="border-2 border-orange-500/60 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-orange-950/20 w-28 lg:w-36">
                 <div className="text-3xl font-black text-orange-400 leading-tight">{ohkoPct}%</div>
-                <div className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mt-1">1HKO Chance</div>
+                {/* Era «1HKO Chance» scritto a mano nel JSX: in inglese anche
+                    per chi legge in italiano. Adesso è una stringa tradotta,
+                    la stessa che usa il caso a più colpi qui sotto. */}
+                <div className="text-[10px] font-bold text-orange-400 uppercase tracking-widest mt-1">{t('eot.hko_possibile', { n: 1 })}</div>
               </div>
             ) : endOfTurnInfo ? (
               <div className="border-2 border-yellow-600/40 rounded-xl px-3 lg:px-5 py-3 lg:py-4 text-center bg-yellow-950/10 w-28 lg:w-36">
                 <div className="text-2xl font-black text-yellow-300 leading-tight">
                   {endOfTurnInfo.pct ? `${endOfTurnInfo.pct}%` : '100%'}
                 </div>
+                {/* ─── LA STESSA FRASE DEGLI ALTRI DUE CASI ────────────────
+                    Qui il ramo senza `guaranteed` mostrava il solo «2HKO», e
+                    accanto un 54,3% che non si capiva a cosa si riferisse.
+                    Adesso dice «2HKO Possibile», come «1HKO Possibile» due
+                    riquadri più su.
+
+                    La coda «dopo la sabbia» resta separata: è il contesto, non
+                    il verdetto, e prima veniva ritagliata dal testo con due
+                    espressioni regolari — una delle quali cercava la parola
+                    inglese «Guaranteed» e quindi non funzionava in italiano. */}
                 <div className="text-[10px] font-semibold text-yellow-400 leading-tight mt-1 px-1">
-                  {endOfTurnInfo.guaranteed && !endOfTurnInfo.text
-                    ? `${t('eot.guaranteed')} ${endOfTurnInfo.hkoSuffix}`
-                    : endOfTurnInfo.text
-                    ? endOfTurnInfo.text.replace(/^[\d.]+%\s+\S+\s+/, '').replace(/^Guaranteed\s+/, '')
-                    : endOfTurnInfo.hkoSuffix}
+                  {endOfTurnInfo.hits
+                    ? t(endOfTurnInfo.guaranteed ? 'eot.hko_garantito' : 'eot.hko_possibile', { n: endOfTurnInfo.hits })
+                    : endOfTurnInfo.text}
+                  {endOfTurnInfo.hits && endOfTurnInfo.coda
+                    ? ` ${t('eot.after')} ${endOfTurnInfo.coda}`
+                    : ''}
                 </div>
               </div>
             ) : (
@@ -966,7 +992,7 @@ function SinglePanel({ entry, onClose }) {
 
 // ── CumulativePanel ───────────────────────────────────────────────────────────
 
-function CumulativePanel({ entries }) {
+export function CumulativePanel({ entries }) {
   const { t } = useTranslation()
   const [entry1, entry2] = entries
   const def = entry1.def
@@ -1098,6 +1124,12 @@ function CumulativePanel({ entries }) {
           {/* Difensore */}
           {(() => {
             const defTypes = pokemonData[def.key]?.type || []
+            // Gli stessi due numeri del pannello singolo, presi dallo stesso
+            // posto: il risultato del motore, non una seconda lettura dello
+            // slot. `cumulative` può non esserci se una delle due mosse non
+            // produce un risultato.
+            const psMax = cumulative?.defHP ?? 0
+            const psOra = cumulative?.psIniziali ?? psMax
             const borderColor = TYPE_HEX[TYPE_NAMES[defTypes[0]]] || '#4b5563'
             return (
               <div className="flex items-center justify-center lg:justify-start gap-3 shrink-0">
@@ -1115,6 +1147,25 @@ function CumulativePanel({ entries }) {
                   <div className="flex gap-1 flex-wrap">
                     {defTypes.map(t => <TypeBadge key={t} typeIdx={t} />)}
                   </div>
+                  {/* I punti salute, e solo se non sono pieni. Qui non serve
+                      nominare il Pokémon: è la sua scheda, con la sua faccia a
+                      due centimetri. È il motivo per cui questa riga sta qui e
+                      non nella colonna del danno, dove stava prima.
+
+                      Stessa barra del pannello singolo e stessi colori: sono
+                      lo stesso fatto in due schermate. */}
+                  {psMax > 0 && psOra < psMax && (
+                    <div className="mt-1.5 w-28">
+                      <div className="text-xs font-bold text-white whitespace-nowrap">
+                        {psOra} / {psMax} HP
+                      </div>
+                      <div className="mt-1 h-1.5 rounded-full bg-gray-700 overflow-hidden"
+                           title={`${Math.round(psOra / psMax * 100)}%`}>
+                        <div className="h-full rounded-full"
+                             style={{ width: `${(psOra / psMax) * 100}%`, backgroundColor: colorePS(psOra, psMax) }} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )
@@ -1128,18 +1179,15 @@ function CumulativePanel({ entries }) {
             <div className="shrink-0 w-full text-center lg:w-auto lg:text-right lg:ml-auto">
               <div className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-semibold mb-1">{t("report.combined_damage")}</div>
               <div className="text-3xl font-bold text-white tracking-tight">{cumulative.minPct} – {cumulative.maxPct}%</div>
-              {/* Il denominatore è il massimo — la percentuale sopra è su
-                  quello — ma se il bersaglio parte ferito si dice anche da
-                  dove parte, altrimenti «180 – 210 HP / 221 HP» sembra dire
-                  che non muore, mentre il badge accanto dice di sì. */}
+              {/* Il denominatore è il massimo: la percentuale sopra è su
+                  quello. Che il bersaglio parta ferito lo dice la SUA scheda,
+                  qui accanto — c'era una riga «Inizio: 87 / 185» proprio qui,
+                  e in una colonna che parla del danno si leggeva come se fosse
+                  un terzo numero dell'attacco. Scelta di Simone: il fatto
+                  appartiene al difensore, e sta sul difensore. */}
               <div className="text-xs text-gray-400 mt-0.5">
                 {cumulative.minSum} – {cumulative.maxSum} HP / {cumulative.defHP} HP
               </div>
-              {cumulative.psIniziali < cumulative.defHP && (
-                <div className="text-xs mt-0.5" style={{ color: colorePS(cumulative.psIniziali, cumulative.defHP) }}>
-                  {t('report.start')}: {cumulative.psIniziali} / {cumulative.defHP} HP
-                </div>
-              )}
               <div className="mt-2">
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded border ${badge.cls}`}>
                   {cumulative.minSum >= cumulative.psIniziali ? '✓ ' + t('eot.guaranteed') + ' KO' : cumulative.koOf16 > 0 ? `⚡ ${t('report.likely_ko')} (${cumulative.koOf16}/16)` : '✗ ' + t('report.no_ko')}

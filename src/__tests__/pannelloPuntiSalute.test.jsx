@@ -34,12 +34,13 @@
 import { describe, it, expect, beforeAll } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { caricaLingua } from '../i18n.js'
-import { MoveCard } from '../components/ReportPanel.jsx'
+import { MoveCard, CumulativePanel } from '../components/ReportPanel.jsx'
 import { calculateDamage } from '../calcEngine.js'
 import { buildAttackerInput, buildDefenderInput } from '../lib/battleState.js'
 import { emptyPokemon } from '../store/useCalcStore.js'
 import { verdettoKO, findBestNHKO } from '../lib/damage.js'
 import { psMassimi } from '../lib/psSlot.js'
+import it_ from '../locales/it.json' with { type: 'json' }
 
 beforeAll(() => caricaLingua('it'))
 
@@ -252,5 +253,130 @@ describe('e il pannello lo scrive davvero', () => {
     const html = rendi(meta)
     expect(html).toContain(`width:${(meta / DIF_MAX) * 100}%`)
     expect(rendi(DIF_MAX)).not.toContain('width:100%')
+  })
+})
+
+// ─── Il badge del verdetto: una forma sola per quattro casi ──────────────────
+
+describe('il badge dice sempre la stessa frase', () => {
+  /**
+   * ─── COSA C'ERA PRIMA ─────────────────────────────────────────────────────
+   *
+   * Simone: «appare 93.8% / 1HKO Chance, e va bene… ma con 54.3% / 2HKO.
+   * Potrebbe apparire 2HKO Chance?». Guardando, i casi erano quattro e le
+   * incoerenze tre:
+   *
+   *   KO certo in 1 colpo      100%  ·  1HKO Garantito
+   *   KO possibile in 1       12.5%  ·  1HKO Chance     ← inglese, in italiano
+   *   KO possibile in 2        2.3%  ·  2HKO            ← manca la parola
+   *   KO certo in 4           100%   ·  Garantito 4HKO  ← ordine invertito
+   *
+   * Cioè: una parola mancante, una non tradotta, e un ordine che cambia.
+   *
+   * ─── PERCHÉ DUE STRINGHE E NON UN ORDINE FISSO ────────────────────────────
+   *
+   * Perché l'italiano vuole «2HKO Possibile» e «Garantito 2HKO» — l'aggettivo
+   * dopo, l'avverbio prima — e nessun ordine unico è naturale in tutt'e due le
+   * lingue. Il numero viaggia, la frase la sceglie la traduzione.
+   */
+  const badge = (mossa, ps) => {
+    const atk = slot({ key: 'garchomp', moves: [mossa] })
+    const r = calculateDamage({
+      attacker: buildAttackerInput(atk), defender: buildDefenderInput(dif(ps)),
+      move: mossa, field: {},
+    })
+    const html = renderToStaticMarkup(
+      <MoveCard atk={atk} def={dif(ps)} move={mossa} result={r} field={{}}
+        computedMoves={[]} activeMoveKey={mossa}
+        onMoveSelect={() => {}} onClose={() => {}} />)
+    const i = html.indexOf('shrink-0 flex flex-col items-end')
+    return [...html.slice(i, i + 900).matchAll(/>([^<>]{1,40})</g)]
+      .map(m => m[1].trim()).filter(Boolean)
+  }
+
+  it.each([
+    ['KO certo in un colpo',      'earthquake', 30,      'Garantito 1HKO'],
+    ['KO possibile in un colpo',  'earthquake', 110,     '1HKO Possibile'],
+    ['KO possibile in due colpi', 'earthquake', DIF_MAX, '2HKO Possibile'],
+    ['KO certo in quattro',       'bulldoze',   DIF_MAX, 'Garantito 4HKO'],
+  ])('%s → «%s»', (_, mossa, ps, atteso) => {
+    expect(badge(mossa, ps)).toContain(atteso)
+  })
+
+  it('e nessuno dei quattro dice un numero di colpi senza dire cosa significa', () => {
+    // Il difetto di Simone, scritto come proprietà invece che come esempio:
+    // un «2HKO» nudo, senza «Garantito» né «Possibile», è la forma che non
+    // deve più esistere. Senza questo caso, togliere la parola SOLO al ramo
+    // dei due colpi resterebbe verde negli altri tre.
+    for (const [mossa, ps] of [['earthquake', 30], ['earthquake', 110],
+                               ['earthquake', DIF_MAX], ['bulldoze', DIF_MAX]]) {
+      const nudi = badge(mossa, ps).filter(x => /^\d+HKO$/.test(x))
+      expect(nudi, `${mossa} a ${ps} PS mostra un «${nudi[0]}» senza verdetto`).toEqual([])
+    }
+  })
+})
+
+// ─── Il danno cumulativo: i punti salute stanno sul difensore ───────────────
+
+describe('nel danno cumulativo il fatto sta sulla scheda di chi lo riguarda', () => {
+  /**
+   * Simone leggeva questo, nella colonna del danno:
+   *
+   *     Danno Combinato
+   *     107.5 – 128.1%
+   *     199 – 237 HP / 185 HP
+   *     Inizio: 87 / 185 HP        ← e non si capiva di chi parlasse
+   *
+   * Due frazioni con lo stesso denominatore e significati diversi, in una
+   * colonna che parla dell'ATTACCO. Scelta di Simone fra tre: la riga si
+   * sposta sulla scheda del DIFENSORE, che sta lì accanto con la sua faccia —
+   * così non serve nemmeno nominarlo.
+   */
+  const rendiCumulativo = (ps) => {
+    const a1 = slot({ key: 'garchomp', moves: ['earthquake'] })
+    const a2 = slot({ key: 'garchomp', moves: ['bulldoze'] })
+    const d = dif(ps)
+    return renderToStaticMarkup(
+      <CumulativePanel entries={[{ atk: a1, def: d }, { atk: a2, def: d }]} />)
+  }
+
+  /**
+   * Le due sezioni, tagliate sul markup vero.
+   *
+   * Il confine è la classe che apre la colonna del danno; la scheda del
+   * difensore è quello che sta fra la sua etichetta e quel confine. Anchorare
+   * sull'etichetta TRADOTTA e non su una stringa maiuscola scritta a mano: la
+   * prima stesura cercava «DIFENSORE» e non trovava niente, perché il markup
+   * dice «Difensore» e il maiuscolo lo fa il CSS.
+   */
+  const CONFINE = 'lg:text-right lg:ml-auto'
+  const sezioni = (html) => {
+    const iDanno = html.indexOf(CONFINE)
+    const iDif = html.indexOf(`>${it_.report.defender}<`)
+    expect(iDanno, 'non trovo la colonna del danno').toBeGreaterThan(-1)
+    expect(iDif, 'non trovo l\'etichetta del difensore').toBeGreaterThan(-1)
+    expect(iDif, 'la scheda del difensore non precede più la colonna del danno')
+      .toBeLessThan(iDanno)
+    return { danno: html.slice(iDanno), difensore: html.slice(iDif, iDanno) }
+  }
+
+  it('la scheda del difensore mostra i punti salute quando non è intero', () => {
+    const meta = Math.floor(DIF_MAX / 2)
+    const { difensore } = sezioni(rendiCumulativo(meta))
+    expect(difensore).toContain(`${meta} / ${DIF_MAX} HP`)
+  })
+
+  it('e la colonna del danno NON li mostra più: lì parlava dell\'attacco', () => {
+    const meta = Math.floor(DIF_MAX / 2)
+    const { danno } = sezioni(rendiCumulativo(meta))
+    expect(danno, 'la colonna del danno è tornata a dire da dove si parte')
+      .not.toContain(`${meta} / ${DIF_MAX} HP`)
+    // Ma il denominatore delle percentuali resta il massimo, e resta lì.
+    expect(danno).toContain(`/ ${DIF_MAX} HP`)
+  })
+
+  it('a vita piena la scheda non dice niente in più', () => {
+    const { difensore } = sezioni(rendiCumulativo(DIF_MAX))
+    expect(difensore).not.toContain(`/ ${DIF_MAX} HP`)
   })
 })
