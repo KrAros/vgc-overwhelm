@@ -36,6 +36,7 @@ import { MOSSE_SENZA_PARENTAL_BOND } from '../lib/rules.js'
 import movesData from '../data/moves.json' with { type: 'json' }
 import pokemonData from '../data/pokemon.json' with { type: 'json' }
 import gapNoti from '../data/gapNoti.json' with { type: 'json' }
+import itLocale from '../locales/it.json' with { type: 'json' }
 import { caricaNCP } from '../../scripts/ncp/contesto.mjs'
 
 const RADICE = path.resolve(import.meta.dirname, '..', '..')
@@ -211,6 +212,56 @@ describe('B — le decisioni non sono ancora state prese', () => {
   // Chi presidia adesso quel fatto: `puntiSaluteInterfaccia.test.jsx` tira la
   // catena dal numero nello slot fino al danno, e `levette.test.js` sorveglia
   // che le cinque a vita bassa NON tornino a leggere l'interruttore.
+})
+
+describe('le chiavi di traduzione che non rende nessuno', () => {
+  // Gli strumenti col badge li presidia già `gli strumenti col badge sono
+  // ancora trentanove`, qui sopra: ne avevo scritto un secondo uguale, ed è
+  // stata la mutazione a mostrarmelo — fallivano tutt'e due insieme.
+
+  it('sono ancora di traduzione mai usate sono ancora tante', () => {
+    // ─── PERCHÉ UNA SOGLIA E NON IL NUMERO ESATTO ─────────────────────────
+    //
+    // 17 al momento della misura. Il numero esatto si muoverebbe anche solo
+    // aggiungendo una stringa nuova e usandola subito — un falso rosso, e un
+    // presidio che si lamenta di cose giuste lo si spegne. La soglia larga
+    // diventa rossa solo quando qualcuno fa davvero la pulizia, che è quando
+    // la riga del documento va tolta.
+    //
+    // La ricerca è grossolana di proposito: cerca la chiave in QUALUNQUE
+    // forma nel sorgente, quindi sbaglia per DIFETTO — se dice che una chiave
+    // è morta, è morta. `eot.ko_arrow` per esempio compare solo dentro un
+    // altro test, e quello non la rende.
+    const CATALOGHI = new Set(['natures', 'types', 'items', 'abilities', 'moves',
+      'statuses', 'abilities_desc', 'abilities_desc_on', 'abilities_desc_off'])
+
+    const chiavi = []
+    for (const [sez, v] of Object.entries(itLocale)) {
+      if (CATALOGHI.has(sez) || typeof v !== 'object') continue
+      for (const k of Object.keys(v)) chiavi.push([sez, k])
+    }
+    expect(chiavi.length, 'l\'estrazione non trova più le chiavi').toBeGreaterThan(150)
+
+    const sorgenti = []
+    const cammina = (d) => {
+      for (const f of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, f.name)
+        if (f.isDirectory()) { if (f.name !== '__tests__' && f.name !== 'locales') cammina(p) }
+        else if (/\.(js|jsx)$/.test(f.name)) sorgenti.push(fs.readFileSync(p, 'utf8'))
+      }
+    }
+    cammina(path.join(RADICE, 'src'))
+    const testo = sorgenti.join('\n')
+
+    const morte = chiavi.filter(([sez, k]) =>
+      !testo.includes(`${sez}.${k}`) && !testo.includes(`'${k}'`)
+      && !testo.includes(`"${k}"`) && !testo.includes(`\`${k}\``) && !testo.includes(`.${k}`))
+
+    expect(
+      morte.length,
+      'le chiavi morte sono state ripulite: togliere la voce da docs/lavoro-aperto.md',
+    ).toBeGreaterThanOrEqual(10)
+  })
 })
 
 describe('C — il dato che manca, manca ancora', () => {
