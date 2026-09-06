@@ -205,7 +205,9 @@
     "damage_from": "{{nome}} damage",
     "burn_damage": "burn damage",
     "poison_damage": "poison damage",
-    "toxic_damage": "toxic damage"
+    "toxic_damage": "toxic damage",
+    "hko_garantito": "Guaranteed {{n}}HKO",
+    "hko_possibile": "{{n}}HKO Chance"
   },
   "aria": {
     "team_modifiers": "Team modifiers and actions",

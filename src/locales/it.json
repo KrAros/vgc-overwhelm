@@ -79,7 +79,7 @@
     "import_names_result_stat": "solo stat (nessun preset)",
     "import_names_result_notfound": "non trovato",
     "team_library_save": "Salva",
-    "custom_set_manage": "Set personalizzati",
+    "custom_set_manage": "Set personali",
     "custom_set_save_current": "Salva set corrente",
     "custom_set_load": "Carica",
     "team_cleared": "Team {{n}} resettato.",
@@ -182,7 +182,7 @@
     "duplicate": "Duplica",
     "error_details": "Dettagli errore",
     "save_custom_set": "Salva set personalizzato",
-    "manage_custom_sets": "Set personalizzati",
+    "manage_custom_sets": "Set personali",
     "move_slot": "Mossa"
   },
   "eot": {
@@ -205,7 +205,9 @@
     "damage_from": "danno {{nome}}",
     "burn_damage": "danno da bruciatura",
     "poison_damage": "danno da veleno",
-    "toxic_damage": "danno da veleno grave"
+    "toxic_damage": "danno da veleno grave",
+    "hko_garantito": "Garantito {{n}}HKO",
+    "hko_possibile": "{{n}}HKO Possibile"
   },
   "aria": {
     "team_modifiers": "Modificatori e azioni del team",
