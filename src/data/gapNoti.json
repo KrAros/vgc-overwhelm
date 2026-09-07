@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:31:58.270Z",
+    "generatedAt": "2026-09-07T06:48:58.712Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
-    "strumentiNelGap": 34,
+    "strumentiNelGap": 33,
     "mosseNelGap": 7,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -34,7 +34,6 @@
     "ground memory",
     "ice memory",
     "iron ball",
-    "light ball",
     "lustrous orb",
     "macho brace",
     "metal powder",

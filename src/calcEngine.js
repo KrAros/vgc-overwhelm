@@ -1550,12 +1550,39 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (defAbilEffect?.purifyingSalt && moveType === TYPES.GHOST)
   if (dimezzaAttacco) atMods.push(MOD.X0_5)
 
+  // La categoria richiesta dallo strumento, se ne richiede una. Vale per i
+  // punti i e j, che sono due rami dello stesso `if`.
+  const categoriaStrumentoOk = (e) => !e.statType
+    || (e.statType === 'physical' && !isSpecial)
+    || (e.statType === 'special'  &&  isSpecial)
+
+  // punto i — ×2 dagli strumenti legati a una specie sola
+  // (`damage_MASTER.js:1993`). Oggi c'è solo la Sferascintilla su Pikachu:
+  // Clava Ossea, Squamastrana e Perlamarina stanno nello stesso `if` del
+  // riferimento, ma sono di Marowak e Clamperl, che in Champions non ci sono.
+  //
+  // ─── PERCHE' E' UN `if / else if` CON IL PUNTO j ─────────────────────────
+  // Perché nel riferimento lo è (`:1997-2002`): il ×2 degli strumenti ESCLUDE
+  // il ×1.5 degli strumenti. Con un campo strumento solo l'esclusione non può
+  // mai servire — nessuno tiene la Sferascintilla e la Fasciapotenza insieme —
+  // ma è com'è scritta, e dedurre che «tanto non capita» è il tipo di
+  // ragionamento che invecchia male. Stessa scelta già fatta per Expert Belt e
+  // Life Orb.
+  //
+  // ─── E PERCHE' LA SPECIE SI GUARDA QUI E NON NELLA TABELLA ───────────────
+  // `soloSpecie` è un cancello, come `soloSeEvolvibile` nella catena di difesa
+  // qui sopra: la tabella dichiara l'effetto e la condizione, il motore la
+  // consulta. Lo slug è quello del nostro dex, non il nome di NCP.
+  const specieAttaccanteOk = !atkItemEffect?.soloSpecie
+    || atkItemEffect.soloSpecie.includes(atkPokemon)
+
+  if (atkItemEffect?.atkMult === 2 && specieAttaccanteOk
+      && categoriaStrumentoOk(atkItemEffect)) {
+    atMods.push(MOD.X2)
+  }
   // punto j — ×1.5 dagli strumenti: Choice Band e Choice Specs.
-  if (atkItemEffect?.atkMult === 1.5) {
-    const isCorrectType = !atkItemEffect.statType
-      || (atkItemEffect.statType === 'physical' && !isSpecial)
-      || (atkItemEffect.statType === 'special'  &&  isSpecial)
-    if (isCorrectType) atMods.push(MOD.X1_5)
+  else if (atkItemEffect?.atkMult === 1.5 && categoriaStrumentoOk(atkItemEffect)) {
+    atMods.push(MOD.X1_5)
   }
 
   if (atMods.length > 0) {

@@ -14,6 +14,7 @@ import { MOD } from '../lib/modifiers.js'
 // finalModSuperEff: come finalMod, ma solo quando l'efficacia è maggiore di 1
 // typBoost:   tipo richiesto perché bpMod si applichi (TYPES.X)
 // statType:   restringe atkMult/bpMod a 'physical' o 'special'
+// soloSpecie: elenco di slug — l'effetto vale solo su quelle specie
 //
 // ─── PERCHÉ bpMod E NON UN DECIMALE ────────────────────────────────────────
 // Fino a D-2 gli item type-boost e i ×1.1 erano scritti come moltiplicatori
@@ -33,6 +34,42 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical', showInSmogon: true },
   'choice specs':   { atkMult: 1.5, statType: 'special',  showInSmogon: true },
+
+  /**
+   * ─── SFERASCINTILLA ───────────────────────────────────────────────────────
+   *
+   * ×2 sulla statistica d'attacco, ma solo addosso a Pikachu.
+   *
+   * Trascritto da `damage_MASTER.js:1993-1997`, `calcAtMods` punto
+   * `//i. 2.0x Items`, che spinge `0x2000`:
+   *
+   *     (attacker.item === "Light Ball" && (attacker.name === "Pikachu"
+   *                                      || attacker.name === "Pikachu-Gmax"))
+   *
+   * ─── QUELLO CHE NON C'E', ED E' LA PARTE CHE CONTA ────────────────────────
+   *
+   * Nessun controllo di categoria. Le altre due voci dello STESSO `if` ce
+   * l'hanno — Clava Ossea vuole `move.category === "Physical"`, Squamastrana
+   * vuole `"Special"` — e Sferascintilla no: raddoppia l'Attacco sulle fisiche
+   * E l'Attacco Speciale sulle speciali. Percio' qui NON c'e' `statType`, ed e'
+   * un'assenza deliberata: aggiungerlo per simmetria con le sorelle dimezzerebbe
+   * meta' dei casi. Misurato contro il riferimento su tutt'e due le categorie.
+   *
+   * ─── PERCHE' SOLO `pikachu` E NON ANCHE LA FORMA GIGAMAX ──────────────────
+   *
+   * Il riferimento nomina anche `Pikachu-Gmax`. Nel nostro dex le forme Gigamax
+   * non esistono affatto — zero voci, misurato — quindi scrivere qui uno slug
+   * `pikachu-gmax` non sarebbe una trascrizione ma uno slug inventato, che
+   * nessun dato conferma e nessun test puo' falsificare. Il giorno che le forme
+   * Gigamax entrano nel dex, questa lista si allunga di una riga.
+   *
+   * ─── PERCHE' NON E' `atkMult: 2` E BASTA ──────────────────────────────────
+   *
+   * Perche' senza `soloSpecie` il raddoppio andrebbe a chiunque tenga la
+   * Sferascintilla, e il riferimento dice di no: su Raichu e su Pichu risponde
+   * gli stessi identici sedici roll con e senza lo strumento.
+   */
+  'light ball':     { atkMult: 2, soloSpecie: ['pikachu'], showInSmogon: true },
   // Expert Belt: ×1.2 sul danno finale, ma SOLO contro un bersaglio che prende
   // super efficace (`calcFinalMods` punto o). Serve un campo suo perché
   // `finalMod` è incondizionato: scriverlo lì darebbe il ×1.2 anche su un

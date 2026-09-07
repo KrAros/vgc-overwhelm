@@ -154,25 +154,34 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     ).toEqual([])
   })
 
-  it('gli strumenti col badge sono trentaquattro, e la misura è stata fatta', () => {
+  it('gli strumenti col badge sono trentatré, e la misura è stata fatta', () => {
     // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso sì: la
-    // misura sta nel documento, divisa in quattro gruppi, e i cinque incensi —
-    // il gruppo 2, moltiplicatore semplice — sono stati fatti.
+    // misura sta nel documento, divisa in quattro gruppi. I cinque incensi —
+    // il gruppo 2, moltiplicatore semplice — sono stati fatti, e da 34 si è
+    // scesi a 33 con la Sferascintilla, la prima delle due vive del gruppo 4.
     //
     // Resta un numero da NON difendere: se scende ancora, la voce va
     // aggiornata insieme al codice, nello stesso commit.
-    expect(gapNoti.strumenti.length).toBe(34)
+    expect(gapNoti.strumenti.length).toBe(33)
   })
 
-  it('gli incensi non portano più il badge, e i ventotto dormienti sì', () => {
-    // La forma della misura, presidiata: i cinque incensi sono usciti, e i
-    // ventotto legati a specie che Champions non ha sono rimasti — di
-    // proposito, perché il gioco potrebbe aggiungerle.
-    for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense', 'rock incense']) {
+  it('gli incensi e la Sferascintilla non portano più il badge, e i ventotto dormienti sì', () => {
+    // La forma della misura, presidiata: i cinque incensi e la Sferascintilla
+    // sono usciti, e i ventotto legati a specie che Champions non ha sono
+    // rimasti — di proposito, perché il gioco potrebbe aggiungerle.
+    for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense',
+      'rock incense', 'light ball']) {
       expect(gapNoti.strumenti, `${i} porta ancora il badge`).not.toContain(i)
     }
     const memorie = gapNoti.strumenti.filter(k => k.endsWith(' memory'))
     expect(memorie.length, 'le memorie di Silvally sono uscite senza che nessuno lo decidesse').toBe(17)
+  })
+
+  it('la Polvere Metallica invece il badge ce l\'ha ancora', () => {
+    // L'ALTRA viva del gruppo 4, e la voce che resta aperta nel documento.
+    // Il giorno che si fa, questo diventa rosso e la riga va aggiornata.
+    expect(gapNoti.strumenti, 'metal powder è stata fatta: aggiornare docs/lavoro-aperto.md')
+      .toContain('metal powder')
   })
 })
 

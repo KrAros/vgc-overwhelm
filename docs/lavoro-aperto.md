@@ -128,7 +128,7 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 34 strumenti col badge — la misura è stata fatta
+### I 33 strumenti col badge — la misura è stata fatta
 
 Erano trentanove e nessuno ci aveva guardato. Adesso la misura c'è, e il numero
 non era quello che sembrava.
@@ -160,11 +160,26 @@ incontra.
 4. **raddoppio di statistica su una specie sola** — 4: `light ball` (Pikachu),
    `thick club` (Marowak), `deepseatooth`/`deepseascale` (Clamperl),
    `soul dew` (Latios/Latias), `metal powder` (Ditto). Meccanica semplice,
-   `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` sono gli unici
-   due vivi**, perché Pikachu e Ditto sono in M-B.
+   `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` erano gli unici
+   due vivi**, perché Pikachu e Ditto sono in M-B. **`light ball` è fatta**:
+   `calcAtMods` punto i, `0x2000`, col cancello `soloSpecie` in `ITEM_EFFECTS`
+   e i casi in `sferascintilla.test.js`. Resta `metal powder`, che è la stessa
+   meccanica dall'altro lato — `calcDefMods` punto g, sempre `0x2000`, solo
+   Ditto e solo sulle fisiche (`damage_MASTER.js:2126`).
 
-**Quindi cosa resta di davvero giocabile oggi:** `light ball`, `metal powder`,
-`air balloon`, più i tre già classificati. Sei voci, non trentaquattro.
+**Quindi cosa resta di davvero giocabile oggi:** `metal powder`, `air balloon`,
+più i tre già classificati. Cinque voci, non trentatré.
+
+**Una cosa misurata mentre si faceva la Sferascintilla, e che vale per tutta la
+famiglia.** La regola qui sotto — «sbagliare punto dà numeri che divergono di un
+arrotondamento» — non vale per un moltiplicatore ESATTO. Un ×2 è `0x2000`, e
+`chainMods` lo accumula senza resto: metterlo nella catena della statistica o in
+quella della potenza dà gli stessi identici sedici roll, misurato su quattro
+terne. L'unica posizione osservabile è la catena FINALE, che risponde 74 contro
+72 perché lì il `+2` della formula è già stato aggiunto. Quindi per gli strumenti
+di questo gruppo un caso contro l'oracolo esclude l'errore grosso ma NON
+distingue le due catene d'ingresso: quella la decide solo la riga del
+riferimento, che va letta.
 
 **Come rifare la misura**, se il roster cambia:
 
