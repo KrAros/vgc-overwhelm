@@ -286,6 +286,36 @@ presidio che impedisce alle prossime di accumularsi.
 
 ---
 
+### Due asserzioni sull'orologio da parete, che cedono sotto carico
+
+Trovate **chiudendo** la sessione degli strumenti, non lavorandoci: la suite è
+uscita rossa una volta su dodici, e il giro rosso era quello in cui giravano
+anche `build` e `lint`.
+
+`src/__tests__/damage.test.js` misura due volte il tempo reale:
+
+    riga 358   koChanceCumulative           soglia  5 ms
+    riga 368   lo scenario del ReportPanel  soglia 20 ms
+
+Misurate quindici volte a macchina scarica: la prima sta su una mediana di
+**0,12 ms**, la seconda su **0,77 ms** con un picco a **6,17 ms**. Il margine
+nominale è enorme — ventisei volte — ma la varianza no, e sotto quattro worker
+più una build concorrente il picco ci arriva.
+
+**Non è di questa sessione**: `lib/damage.js` non è stato toccato, misurato col
+diff. È preesistente, ed è la stessa famiglia di guaio che `vite.config.js`
+racconta già a proposito di `hookTimeout` — dove la cura giusta fu ridurre i
+worker invece di alzare la soglia.
+
+**Cosa NON fare**: alzare la soglia. Sposterebbe il dado, non lo toglierebbe, e
+un test che dice «va abbastanza veloce» smette di dirlo. Quello che quei due
+casi vogliono davvero difendere è una regressione di ORDINE DI GRANDEZZA — il
+commento accanto lo dice: la vecchia ricorsione costava 4.400 ms. Un contatore
+di operazioni direbbe la stessa cosa senza guardare l'orologio, e sarebbe
+deterministico. È una decisione su cosa misurare, non una correzione.
+
+---
+
 ## B — Dove serve una decisione
 
 ### Merciless

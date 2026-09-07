@@ -64,7 +64,7 @@ schermi e le priorità già applicati.
 - Interfaccia in italiano e inglese
 
 Quello che il motore **non** modella porta un badge visibile nell'interfaccia:
-109 abilità e 40 strumenti sono dichiarati non calcolati anziché essere
+1 abilità e 27 strumenti sono dichiarati non calcolati anziché essere
 calcolati male in silenzio.
 
 ---

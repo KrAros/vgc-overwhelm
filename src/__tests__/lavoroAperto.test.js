@@ -80,6 +80,45 @@ describe('il documento esiste ed è raggiungibile', () => {
   })
 })
 
+describe('i numeri scritti nei documenti sono quelli veri', () => {
+  /**
+   * ─── PERCHE' QUESTO PRESIDIO NASCE ADESSO ────────────────────────────────
+   *
+   * L'intestazione di questo file porta come esempio «i numeri di
+   * CONTRIBUTING.md fermi a due sessioni prima». Chiudendo la sessione degli
+   * strumenti si è guardato, e erano fermi ancora: CONTRIBUTING diceva 39
+   * strumenti col segnalino e README ne diceva 40 — quando `gapNoti.json` ne
+   * contava 34, cioè sbagliati GIA' PRIMA che la sessione cominciasse.
+   *
+   * Il difetto non è che qualcuno si sia distratto: è che quei due numeri non
+   * li verificava nessuno. Un registro presidiato accanto a due documenti che
+   * raccontano lo stesso fatto a mano è mezzo presidio — e il numero che la
+   * gente legge per prima è quello del README.
+   *
+   * La ricerca è deliberatamente RIGIDA: cerca la frase esatta con dentro il
+   * numero. Riformulare la frase rende rosso questo test, ed è voluto — chi la
+   * riformula deve decidere come tenerla verificabile, non aggirare il
+   * controllo.
+   */
+  const leggi = (nome) => fs.readFileSync(path.join(RADICE, nome), 'utf8')
+
+  it('CONTRIBUTING.md conta gli strumenti col segnalino come `gapNoti.json`', () => {
+    expect(
+      leggi('CONTRIBUTING.md'),
+      `CONTRIBUTING.md non dice «${gapNoti.strumenti.length} strumenti»: rigenerare il numero a mano`,
+    ).toContain(`e ${gapNoti.strumenti.length} strumenti che il riferimento calcola`)
+  })
+
+  it('e il README conta tutt\'e due le liste', () => {
+    expect(
+      leggi('README.md'),
+      `README.md non dice «${gapNoti.abilita.length} abilità e ${gapNoti.strumenti.length} strumenti»`,
+    ).toContain(
+      `${gapNoti.abilita.length} abilità e ${gapNoti.strumenti.length} strumenti sono dichiarati non calcolati`,
+    )
+  })
+})
+
 describe('A — le voci che aspettano una trascrizione sono ancora aperte', () => {
   it('le quattro mosse a danno fisso non sono più una voce aperta', () => {
     // La prima voce del registro che si chiude. Il test non è stato tolto: è
