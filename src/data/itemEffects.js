@@ -179,6 +179,35 @@ export const ITEM_EFFECTS = {
   'eviolite':       { defMult: 1.5, spdMult: 1.5, soloSeEvolvibile: true },
   'assault vest':   { spdMult: 1.5 },
 
+  /**
+   * ─── POLVERE METALLICA ────────────────────────────────────────────────────
+   *
+   * ×2 sulla Difesa, ma solo addosso a Ditto e solo contro le mosse fisiche.
+   *
+   * Trascritto da `damage_MASTER.js:2125-2127`, `calcDefMods` ramo
+   * `//g. 2.0x Items`, che spinge `0x2000`:
+   *
+   *     (defender.item === "Metal Powder" && defender.name === "Ditto"
+   *                                       && hitsPhysical)
+   *
+   * ─── PERCHE' `defMult` E NON ANCHE `spdMult` ──────────────────────────────
+   *
+   * Perché il riferimento scrive `hitsPhysical`, e la Sferascintilla — l'altra
+   * viva dello stesso gruppo — invece NON ha nessun controllo di categoria.
+   * Sono due voci della stessa famiglia con due condizioni diverse, e la
+   * simmetria fra loro è quella sbagliata da cui farsi guidare: qui la
+   * categoria c'è, lì no. Misurato contro il riferimento su tutt'e due —
+   * su una mossa speciale NCP risponde gli stessi identici sedici roll con e
+   * senza la Polvere.
+   *
+   * ─── E PERCHE' SOLO `ditto` ───────────────────────────────────────────────
+   *
+   * Nello stesso `if` c'è anche la Perlamarina, che è di Clamperl: Champions
+   * non ce l'ha, quindi resta col segnalino «non calcolata» — di proposito,
+   * pronta per il giorno che la specie arriva.
+   */
+  'metal powder':   { defMult: 2, soloSpecie: ['ditto'] },
+
   // Pietrapiuma: dimezza il PESO. Non tocca nessuna catena — il peso serve
   // solo alle quattro mosse che ne ricavano la potenza (Low Kick, Grass Knot,
   // Heavy Slam, Heat Crash).

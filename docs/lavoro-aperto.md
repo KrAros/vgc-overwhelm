@@ -128,7 +128,7 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 33 strumenti col badge — la misura è stata fatta
+### I 32 strumenti col badge — la misura è stata fatta
 
 Erano trentanove e nessuno ci aveva guardato. Adesso la misura c'è, e il numero
 non era quello che sembrava.
@@ -161,14 +161,34 @@ incontra.
    `thick club` (Marowak), `deepseatooth`/`deepseascale` (Clamperl),
    `soul dew` (Latios/Latias), `metal powder` (Ditto). Meccanica semplice,
    `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` erano gli unici
-   due vivi**, perché Pikachu e Ditto sono in M-B. **`light ball` è fatta**:
-   `calcAtMods` punto i, `0x2000`, col cancello `soloSpecie` in `ITEM_EFFECTS`
-   e i casi in `sferascintilla.test.js`. Resta `metal powder`, che è la stessa
-   meccanica dall'altro lato — `calcDefMods` punto g, sempre `0x2000`, solo
-   Ditto e solo sulle fisiche (`damage_MASTER.js:2126`).
+   due vivi**, perché Pikachu e Ditto sono in M-B, e **sono state fatte
+   tutt'e due**: `calcAtMods` punto i e `calcDefMods` punto g, `0x2000` in
+   tutt'e due i casi, col cancello `soloSpecie` in `ITEM_EFFECTS` e i casi in
+   `sferascintilla.test.js` e `polvereMetallica.test.js`. Le altre tre restano
+   col segnalino: sono di Marowak, Clamperl e Latios/Latias.
 
-**Quindi cosa resta di davvero giocabile oggi:** `metal powder`, `air balloon`,
-più i tre già classificati. Cinque voci, non trentatré.
+**Le due si somigliano e le condizioni sono OPPOSTE**, ed è la cosa da non
+dedurre dalla parentela: la Sferascintilla non ha nessun controllo di categoria
+— raddoppia l'Attacco E l'Attacco Speciale — mentre la Polvere ha `hitsPhysical`
+e vale solo contro le fisiche. Nel riferimento stanno in due `if` che elencano
+tre voci ciascuno, e dentro ogni `if` le voci NON hanno la stessa condizione:
+Clava Ossea vuole `"Physical"`, Squamastrana vuole `"Special"`, Sferascintilla
+niente. Si leggono una per una.
+
+**Quindi cosa resta di davvero giocabile oggi:** `air balloon`, più i tre già
+classificati. Quattro voci, non trentadue — e `air balloon` è l'unica del
+gruppo 3 che non chieda né una specie assente né un cambio di tipo: tocca il
+contatto col terreno, cioè `pIsGrounded`, e va verificata nel riferimento prima
+di assumere di che famiglia sia.
+
+**Una divergenza vecchia che la Polvere fa affiorare, misurata.** `hitsPhysical`
+nel riferimento comprende anche Psyshock, Psystrike e Secret Sword — speciali
+che colpiscono la Difesa (`damage_MASTER.js:2025`) — e il nostro motore non ha
+quella distinzione: `defStatIdx` sceglie dalla sola categoria. Non è nato qui —
+su quelle tre mosse divergevamo già sulla SCELTA della statistica, cioè prima e
+peggio — ma adesso ha un secondo modo di manifestarsi, e sta scritto e
+presidiato in `polvereMetallica.test.js` invece che aspettare di essere
+scoperto.
 
 **Una cosa misurata mentre si faceva la Sferascintilla, e che vale per tutta la
 famiglia.** La regola qui sotto — «sbagliare punto dà numeri che divergono di un

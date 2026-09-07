@@ -1373,7 +1373,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // punto e — Fur Coat: ×2 sulla Difesa fisica.
   else if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
 
-  const itemDifesaOk = !defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true
+  // ─── I DUE CANCELLI DEGLI STRUMENTI DIFENSIVI ───────────────────────────
+  //
+  // `soloSeEvolvibile` è l'Evolcondensa, che vale solo su chi può ancora
+  // evolversi. `soloSpecie` è la Polvere Metallica, che vale solo su Ditto
+  // (`damage_MASTER.js:2126`), e domani la Perlamarina su Clamperl. Sono la
+  // stessa forma: la tabella dichiara la condizione, il motore la consulta —
+  // e lo slug è quello del nostro dex, non il nome di NCP.
+  const specieDifensoreOk = !defItemEffect?.soloSpecie
+    || defItemEffect.soloSpecie.includes(defPokemon)
+  const itemDifesaOk = (!defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true)
+    && specieDifensoreOk
+
+  // punti f e g — i moltiplicatori di difesa degli strumenti: ×1,5 al punto f
+  // (`:2119` — Giubbotto Imbottito, Evolcondensa, Gemmadanima), ×2 al punto g
+  // (`:2125` — Perlamarina e Polvere Metallica), e fra i due un `else if`.
+  //
+  // Qui è un `push` solo e non due rami, perché la costante che distingue f da
+  // g la dice la TABELLA: `daDecimale` la ricava da `defMult`. Due `if`
+  // separati per 1,5 e 2 direbbero la stessa cosa e in più farebbero sparire
+  // in silenzio un moltiplicatore diverso da quei due, il giorno che ne
+  // arrivasse uno. L'`else if` del riferimento non è osservabile in nessun
+  // caso: il campo strumento è uno, e nessuno strumento sta in tutt'e due gli
+  // elenchi.
   if (itemDifesaOk) {
     if (defItemEffect?.defMult && !isSpecial) dfMods.push(daDecimale(defItemEffect.defMult))
     if (defItemEffect?.spdMult &&  isSpecial) dfMods.push(daDecimale(defItemEffect.spdMult))
