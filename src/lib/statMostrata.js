@@ -30,20 +30,43 @@
  *
  * ─── IL CONFINE, DICHIARATO ────────────────────────────────────────────────
  *
- * Questa funzione mostra solo i potenziamenti che appartengono al POKÉMON, non
- * alla mossa. Sharpness, Transistor, Dragon's Maw e le altre stanno anch'esse
- * nella catena della statistica d'attacco, ma dipendono dal tipo o da un flag
- * della mossa: un numero solo, in una colonna che non sa quale mossa userai,
- * sarebbe vero per una mossa e falso per le altre tre.
+ * La regola è «TUTTE le modifiche», e le due cose che restano fuori non sono
+ * un residuo: sono le due che un numero solo non può dire.
  *
- * Gorilla Tactics invece c'è, e non è un'incoerenza: la sua condizione è
+ * **Quello che dipende dalla MOSSA.** Affilato, Transistor, Fire Mane, Bolla
+ * d'Acqua, Erbaiuto e sorelle stanno anch'esse nella catena della statistica
+ * d'attacco, ma guardano il tipo o un flag della mossa. Una colonna che non sa
+ * quale mossa userai scriverebbe un numero vero per una mossa e falso per le
+ * altre tre — che è peggio di non scrivere niente, perché chi costruisce un
+ * set decide su quel numero.
+ *
+ * Tattiche Scimmiesche invece c'è, e non è un'incoerenza: la sua condizione è
  * `move.category === "Physical"`, cioè vale per OGNI mossa fisica. Su un
- * Pokémon che attacca fisicamente è una proprietà dell'Attacco, non della
- * mossa.
+ * Pokémon che attacca fisicamente è una proprietà dell'Attacco. La categoria
+ * è il confine, non il tipo: la colonna dell'Attacco È quella delle fisiche.
  *
- * Intimidate non c'è, e per un'altra ragione ancora: dipende dall'AVVERSARIO,
- * e questa funzione riceve un Pokémon solo. Chi vuole vederlo mette lo stadio
- * a mano, che è il posto dove l'app lo ha sempre chiesto.
+ * **Quello che dipende dall'AVVERSARIO o da un ALLEATO.** Intimidate, le
+ * quattro Rovina, le abilità difensive che dimezzano l'attacco altrui, il
+ * Flower Gift di un alleato. Questa funzione riceve un Pokémon solo. Chi vuole
+ * vederli mette lo stadio a mano, che è il posto dove l'app lo ha sempre
+ * chiesto.
+ *
+ * I due elenchi non sono qui e basta: `colonnaModCompleta.test.js` li asserisce
+ * come casi, perché un confine scritto solo in un commento si allarga da sé.
+ *
+ * ─── E COSA C'E' DENTRO ────────────────────────────────────────────────────
+ *
+ * Tutto il resto delle due catene, strumenti compresi. Gli strumenti erano
+ * fuori senza che nessuno l'avesse deciso — la Fascianodo dà ×1.5 sull'Attacco
+ * su OGNI mossa fisica, esattamente come Tattiche Scimmiesche che c'era già —
+ * e la colonna mostrava l'Attacco nudo.
+ *
+ * ─── COME SI SA CHE I NUMERI SONO GLI STESSI DEL DANNO ─────────────────────
+ *
+ * `calculateDamage` restituisce `atkStatFinal` e `defStatFinal`, cioè i due
+ * numeri che entrano davvero nella formula, e il test li confronta con questi.
+ * Non è una seconda scrittura della stessa logica che verifica la prima: è il
+ * motore, che è già verificato contro NCP, messo accanto alla colonna.
  */
 
 import pokemonData from '../data/pokemon.json'
@@ -55,7 +78,7 @@ import {
   STAT_ATT, STAT_DEF, STAT_SPA, STAT_SPD, STAT_SPE,
 } from './rules.js'
 import { preparaSingolo, CHIAVI_BOOST } from './preparazione.js'
-import { MOD, chainMods, pokeRound, FIXED_POINT } from './modifiers.js'
+import { MOD, chainMods, pokeRound, daDecimale, FIXED_POINT } from './modifiers.js'
 import { calcEffectiveSpe } from '../utils/speedOrder.js'
 import { ITEM_EFFECTS } from '../data/itemEffects.js'
 
@@ -160,66 +183,166 @@ function stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate) {
 /**
  * I moltiplicatori che il POKÉMON porta su una statistica, in virgola fissa.
  *
- * Sono gli stessi che `calcEngine` spinge in `atMods` e nella catena di
- * difesa, e si applicano qui come là: una `chainMods` sola con un `pokeRound`
- * solo, non una moltiplicazione per volta. Applicarli uno alla volta darebbe
- * numeri che divergono dal motore di qualche punto, cioè una colonna che
- * contraddice il danno scritto sotto.
+ * Sono gli stessi che `calcEngine` spinge in `atMods` e in `dfMods`, e si
+ * applicano qui come là: una `chainMods` sola con un `pokeRound` solo, non una
+ * moltiplicazione per volta. Applicarli uno alla volta darebbe numeri che
+ * divergono dal motore di qualche punto, cioè una colonna che contraddice il
+ * danno scritto sotto.
+ *
+ * ─── L'ORDINE E' QUELLO DEL MOTORE, E NON E' DECORATIVO ────────────────────
+ *
+ * `chainMods` arrotonda a ogni passo, quindi due modificatori scambiati di
+ * posto possono dare due numeri diversi. Qui i `push` seguono l'ordine delle
+ * due catene di `calcEngine.js`, che a sua volta segue quello del riferimento:
+ * prima le abilità, gli strumenti per ultimi.
+ *
+ * Anche i tre `else if` sono quelli del motore. Con un campo abilità solo non
+ * possono servire — le condizioni si escludono da sé — ma copiarli costa una
+ * riga, e dedurre che «tanto non capita» è il ragionamento che invecchia male.
+ *
+ * ─── LE DUE COLONNE SONO DUE LATI ──────────────────────────────────────────
+ *
+ * Attacco e Attacco Speciale portano i modificatori di `atMods`; Difesa e
+ * Difesa Speciale quelli di `dfMods`. E la corrispondenza con la CATEGORIA è
+ * incrociata sui due lati, il che è la cosa che si sbaglia leggendo in fretta:
+ *
+ *   Attacco   ← ciò che il motore applica quando la mossa è FISICA
+ *   Difesa    ← ciò che applica quando la mossa che SUBISCE è fisica
+ *
+ * cioè `!isSpecial` in tutt'e due i casi, ma una volta è la mossa che tiri e
+ * una volta quella che prendi.
  */
-function moltiplicatori(slot, statIdx, { paradosso, statPiuAlta }) {
+function moltiplicatori(slot, statIdx, contesto) {
+  const { paradosso, statPiuAlta, meteo, terreno } = contesto
   const eff = ABILITY_EFFECTS[normalizeAbilityKey(slot?.ability)] || null
-  if (!eff) return []
+  const chiaveItem = String(slot?.item || '').toLowerCase()
+  const item = ITEM_EFFECTS[chiaveItem] || null
+  if (!eff && !item) return []
+
   const chiave = CHIAVE_DA_INDICE[statIdx]
   const mods = []
 
-  // Huge Power e Pure Power: ×2 sull'Attacco. `statType: 'physical'` nella
-  // tabella vuol dire «sulle mosse fisiche», e la statistica delle mosse
-  // fisiche è l'Attacco.
-  if (statIdx === STAT_ATT && eff.atkMult === 2.0 && eff.statType === 'physical') {
-    mods.push(MOD.X2)
-  }
+  // Le quattro caselle, dette una volta sola. `perLeFisiche` e `controLeFisiche`
+  // sono lo stesso `!isSpecial` del motore letto dai due lati.
+  const perLeFisiche    = statIdx === STAT_ATT
+  const perLeSpeciali   = statIdx === STAT_SPA
+  const attacco         = perLeFisiche || perLeSpeciali
+  const controLeFisiche  = statIdx === STAT_DEF
+  const controLeSpeciali = statIdx === STAT_SPD
 
-  // Gorilla Tactics: ×1.5 su ogni mossa fisica, quindi sull'Attacco.
-  if (statIdx === STAT_ATT && eff.gorillaTactics) mods.push(MOD.X1_5)
+  const interruttore = slot?.abilityFlags?.interruttore === true
+  const stato = slot?.status || 'healthy'
+  const ombrello = chiaveItem === 'utility umbrella'
+  // Il motore distingue il sole normale da quello estremo, e le due abilità
+  // che seguono NON lo leggono allo stesso modo: Solar Power accetta tutt'e due
+  // (`indexOf("Sun")`), Orichalcum Pulse solo quello normale (`=== "Sun"`).
+  // È una distinzione trascritta, non una svista da uniformare.
+  const sole = meteo === 'sun' || meteo === 'harsh sunshine'
 
-  // Fur Coat: ×2 sulla Difesa. Nel riferimento è `calcDefense` punto e.
-  if (statIdx === STAT_DEF && eff.furCoat) mods.push(MOD.X2)
-
-  // ─── LE DUE CHE DIMEZZANO, E CHE QUI NON C'ERANO ────────────────────────
-  //
-  // Sconfittite e Partenza Lenta stanno nello STESSO `if` del motore
-  // (`calcEngine.js`, punto b di `calcAttack`, `damage_MASTER.js:1924-1925`) e
-  // spingono `MOD.X0_5` in `atMods` — cioè sono modificatori della
-  // statistica, esattamente come Gorilla Tactics che sta qui sopra.
-  //
-  // Non c'erano perché questa funzione era nata per rispondere a «di
-  // un'abilità che POTENZIA una statistica si deve poter leggere il nuovo
-  // valore», e nessuno aveva notato che la stessa ragione vale al contrario:
-  // un Attacco dimezzato che la colonna mostra intero è sbagliato quanto un
-  // Attacco raddoppiato che non mostra.
-  //
-  // Sconfittite arriva qui adesso perché adesso è raggiungibile: fino a ieri
-  // la accendeva una levetta, oggi la accende la barra dei punti salute, e il
-  // numero che serve a deciderlo è nello slot.
-  //
-  // Le condizioni sono quelle del motore, non due riscritte a mano:
-  //   - Partenza Lenta ha `!isSpecial`, quindi è il solo Attacco;
-  //   - Sconfittite NON ha il controllo di categoria, quindi sono tutt'e due.
-  // Rientrano nel confine dichiarato in cima: valgono per OGNI mossa della
-  // categoria, non per una.
-  if (statIdx === STAT_ATT && eff.slowStart && slot?.abilityFlags?.interruttore === true) {
-    mods.push(MOD.X0_5)
-  }
-  if ((statIdx === STAT_ATT || statIdx === STAT_SPA) && eff.defeatist) {
+  const psSottoMeta = () => {
     const psMax = psMassimi(slot)
-    if (psMax && psSottoLaMeta(psCorrenti(slot, psMax), psMax)) mods.push(MOD.X0_5)
+    return !!psMax && psSottoLaMeta(psCorrenti(slot, psMax), psMax)
   }
 
-  // Protosynthesis / Quark Drive: ×1.3 sulla statistica più alta. La Velocità
-  // è esclusa perché lì il potenziamento è ×1.5 e vive in `calcEffectiveSpe`,
-  // che questa funzione chiama invece di rifarne il conto.
-  if (paradosso && chiave === statPiuAlta && statIdx !== STAT_SPE) {
-    mods.push(MOD.X1_3)
+  if (attacco) {
+    // ── CATENA ATTACCO (`calcAtMods`) ────────────────────────────────────
+    //
+    // Punto a — le Rovina — non c'è, e non è una dimenticanza: dipendono da
+    // CHI STA DI FRONTE, e questa funzione riceve un Pokémon solo. È la stessa
+    // ragione per cui Intimidate non c'è, scritta in cima.
+
+    // punto b — Partenza Lenta (solo fisiche) e Sconfittite (tutt'e due).
+    if (perLeFisiche && eff?.slowStart && interruttore) mods.push(MOD.X0_5)
+    if (eff?.defeatist && psSottoMeta()) mods.push(MOD.X0_5)
+
+    // punto c — Flower Gift dell'ALLEATO non c'è, per la ragione delle Rovina:
+    // è una casella di campo che descrive un terzo Pokémon.
+
+    // punti d / e / f — un `if / else if` solo nel motore, quindi uno solo qui.
+    //
+    // Del punto d entrano le tre condizioni che NON guardano la mossa: Forza
+    // Bruta con qualunque stato, Più e Meno con l'interruttore, e Tattiche
+    // Scimmiesche. Restano fuori Fire Mane, Affilato, Fuocardore acceso e le
+    // quattro a vita bassa (Erbaiuto e sorelle), che guardano il TIPO o un
+    // flag della mossa: un numero solo sarebbe vero per una mossa e falso per
+    // le altre tre. È il confine dichiarato in cima a questo file.
+    const puntoD =
+      (perLeFisiche && eff?.guts && stato !== 'healthy') ||
+      (eff?.plusMinus && interruttore) ||
+      (perLeFisiche && eff?.gorillaTactics)
+    // Solar Power è l'`else if` successivo: ×1.5 sulle speciali, col sole.
+    const solarPower = perLeSpeciali && eff?.solarPower && sole && !ombrello
+    // punto e — il paradosso. Transistor sta nello stesso ramo del motore ma
+    // guarda il tipo della mossa, quindi resta fuori.
+    const puntoE = paradosso && chiave === statPiuAlta
+    // punto f — Pulsorichalco vuole il sole NORMALE (`=== "Sun"` nel
+    // riferimento), Motore Adroneutronico il terreno elettrico.
+    const puntoF =
+      (perLeFisiche && eff?.orichalcum && meteo === 'sun' && !ombrello) ||
+      (perLeSpeciali && eff?.hadron && terreno === 'electric')
+
+    if (puntoD) mods.push(MOD.X1_5)
+    else if (solarPower) mods.push(MOD.X1_5)
+    else if (puntoE) mods.push(MOD.X1_3)
+    else if (puntoF) mods.push(MOD.X1_3333)
+
+    // punto g — le ×2. Bolla d'Acqua guarda il tipo della mossa e resta fuori;
+    // Agguato e Grancasa/Forzapura no.
+    if (eff?.stakeout && interruttore) mods.push(MOD.X2)
+    if (eff?.atkMult) {
+      // `statType: 'physical'` nella tabella vuol dire «sulle mosse fisiche», e
+      // la statistica delle mosse fisiche è l'Attacco.
+      const categoriaOk = !eff.statType || (eff.statType === 'physical' && perLeFisiche)
+      if (categoriaOk) mods.push(daDecimale(eff.atkMult))
+    }
+
+    // punto h — le abilità difensive che dimezzano l'attacco altrui non ci
+    // sono: sono dell'AVVERSARIO, e per giunta guardano il tipo della mossa.
+
+    // punti i / j — gli strumenti, per ultimi come nel motore.
+    if (item) {
+      const specieOk = !item.soloSpecie || item.soloSpecie.includes(slot?.key)
+      const categoriaOk = !item.statType
+        || (item.statType === 'physical' && perLeFisiche)
+        || (item.statType === 'special'  && perLeSpeciali)
+      if (item.atkMult === 2 && specieOk && categoriaOk) mods.push(MOD.X2)
+      else if (item.atkMult === 1.5 && categoriaOk) mods.push(MOD.X1_5)
+    }
+  }
+
+  if (controLeFisiche || controLeSpeciali) {
+    // ── CATENA DIFESA (`calcDefMods`) ────────────────────────────────────
+    //
+    // Punto a (Spada e Perle della Rovina) e punto b (Flower Gift dell'alleato)
+    // non ci sono, per la ragione di sempre: descrivono altri Pokémon.
+
+    // punto c — Squame Miracolo con qualunque stato, Mantoerboso sul terreno
+    // erboso. Tutt'e due solo contro le fisiche, cioè sulla Difesa.
+    const puntoC = controLeFisiche && (
+      (eff?.marvelScale && stato !== 'healthy') ||
+      (eff?.grassPelt && terreno === 'grassy')
+    )
+    // punto d — il paradosso, e punto e — Pelo Folto.
+    const puntoD = paradosso && chiave === statPiuAlta
+    const puntoE = controLeFisiche && eff?.furCoat
+
+    if (puntoC) mods.push(MOD.X1_5)
+    else if (puntoD) mods.push(MOD.X1_3)
+    else if (puntoE) mods.push(MOD.X2)
+
+    // punti f / g — gli strumenti, per ultimi come nel motore.
+    //
+    // `soloSeEvolvibile` è l'Evolcondensa: `canEvolve` è generato in
+    // pokemon.json, e dove il campo manca preferiamo NON applicare il bonus
+    // piuttosto che applicarlo a caso — la stessa scelta del motore.
+    if (item) {
+      const evolvibileOk = !item.soloSeEvolvibile || pokemonData[slot?.key]?.canEvolve === true
+      const specieOk = !item.soloSpecie || item.soloSpecie.includes(slot?.key)
+      if (evolvibileOk && specieOk) {
+        if (item.defMult && controLeFisiche)  mods.push(daDecimale(item.defMult))
+        if (item.spdMult && controLeSpeciali) mods.push(daDecimale(item.spdMult))
+      }
+    }
   }
 
   return mods
@@ -274,7 +397,7 @@ export function statMostrata(slot, statIdx, contesto = {}) {
   const stadio = stadioEffettivo(slot, statIdx, statPiuAlta, avversarioConIntimidate)
   const conStadio = applyBoost(grezza, stadio)
 
-  const mods = moltiplicatori(slot, statIdx, { paradosso, statPiuAlta })
+  const mods = moltiplicatori(slot, statIdx, { paradosso, statPiuAlta, meteo, terreno })
   const effettiva = mods.length > 0
     ? Math.max(1, pokeRound(conStadio * chainMods(mods) / FIXED_POINT))
     : conStadio

@@ -2504,6 +2504,22 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // due domande, e finche' nessuno manda i punti salute sono lo stesso.
     defPS: psDif,
     atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType,
+    // ─── LE DUE STATISTICHE CON CUI IL COLPO E' STATO CALCOLATO ───────────
+    //
+    // Sono `atkStatFinal` e `defStatFinal`: il valore DOPO gli stadi e dopo la
+    // catena dei moltiplicatori, cioè esattamente i due numeri che entrano
+    // nella formula.
+    //
+    // Non servono a disegnare niente. Servono a essere CONFRONTATI: la colonna
+    // «Mod» dell'editor risponde alla stessa domanda per conto suo
+    // (`lib/statMostrata.js`), e finché quel numero non usciva di qui le due
+    // risposte non si potevano mettere una accanto all'altra — si poteva solo
+    // riscrivere la stessa logica nel test e sperare che le due copie
+    // sbagliassero insieme.
+    //
+    // È la regola dei due oracoli indipendenti applicata a una colonna:
+    // `statMostrata.test.js` confronta questi due numeri con i suoi.
+    atkStatFinal, defStatFinal,
     // I sedici roll del SECONDO colpo di Parental Bond, o `null` se non
     // c'entra. Sono un array a parte e non un moltiplicatore perché i due
     // colpi hanno numeri diversi: chi calcola la probabilità di KO ha bisogno
