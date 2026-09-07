@@ -87,6 +87,28 @@ export const ITEM_EFFECTS = {
   'dragon fang':    { typBoost: TYPES.DRAGON,   bpMod: MOD.X1_2, showInSmogon: true },
   'black glasses':  { typBoost: TYPES.DARK,     bpMod: MOD.X1_2, showInSmogon: true },
   'silver powder':  { typBoost: TYPES.BUG,      bpMod: MOD.X1_2, showInSmogon: true },
+
+  /**
+   * ─── I CINQUE INCENSI ─────────────────────────────────────────────────────
+   *
+   * Stessa meccanica esatta delle diciotto righe qui sopra, e il riferimento
+   * non li distingue affatto: `getItemBoostType` (`item_data.js:496`) li mette
+   * nello stesso `switch` di Carbonella e Acquamistica, e il ramo che li usa e'
+   * lo stesso — `//k. 1.2x Items`, `damage_MASTER.js:1699`, `0x1333`, cioe'
+   * esattamente `MOD.X1_2`.
+   *
+   * Mancavano e basta. Sono cinque dei trentanove strumenti col segnalino «non
+   * calcolata», ed erano l'unico gruppo dove il lavoro era gia' fatto per altri
+   * e non per loro.
+   *
+   * Tipi trascritti dal riferimento, non dedotti dal nome — Sea e Wave sono
+   * entrambi Acqua, e Odd e' Psico, che dal nome non si indovina.
+   */
+  'rose incense':   { typBoost: TYPES.GRASS,    bpMod: MOD.X1_2, showInSmogon: true },
+  'odd incense':    { typBoost: TYPES.PSYCHIC,  bpMod: MOD.X1_2, showInSmogon: true },
+  'sea incense':    { typBoost: TYPES.WATER,    bpMod: MOD.X1_2, showInSmogon: true },
+  'wave incense':   { typBoost: TYPES.WATER,    bpMod: MOD.X1_2, showInSmogon: true },
+  'rock incense':   { typBoost: TYPES.ROCK,     bpMod: MOD.X1_2, showInSmogon: true },
   // Fairy Feather: ×1.2 su mosse Fairy (introdotto in Scarlet/Violet)
   'fairy feather':  { typBoost: TYPES.FAIRY,    bpMod: MOD.X1_2, showInSmogon: true },
 

@@ -154,10 +154,25 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     ).toEqual([])
   })
 
-  it('gli strumenti col badge sono ancora trentanove', () => {
-    // Non è un numero da difendere: è il numero che nessuno ha ancora
-    // guardato. Se scende, la voce nel documento va aggiornata.
-    expect(gapNoti.strumenti.length).toBe(39)
+  it('gli strumenti col badge sono trentaquattro, e la misura è stata fatta', () => {
+    // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso sì: la
+    // misura sta nel documento, divisa in quattro gruppi, e i cinque incensi —
+    // il gruppo 2, moltiplicatore semplice — sono stati fatti.
+    //
+    // Resta un numero da NON difendere: se scende ancora, la voce va
+    // aggiornata insieme al codice, nello stesso commit.
+    expect(gapNoti.strumenti.length).toBe(34)
+  })
+
+  it('gli incensi non portano più il badge, e i ventotto dormienti sì', () => {
+    // La forma della misura, presidiata: i cinque incensi sono usciti, e i
+    // ventotto legati a specie che Champions non ha sono rimasti — di
+    // proposito, perché il gioco potrebbe aggiungerle.
+    for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense', 'rock incense']) {
+      expect(gapNoti.strumenti, `${i} porta ancora il badge`).not.toContain(i)
+    }
+    const memorie = gapNoti.strumenti.filter(k => k.endsWith(' memory'))
+    expect(memorie.length, 'le memorie di Silvally sono uscite senza che nessuno lo decidesse').toBe(17)
   })
 })
 

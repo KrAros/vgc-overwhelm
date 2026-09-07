@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-06T09:25:50.050Z",
+    "generatedAt": "2026-09-07T06:31:58.270Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -9,8 +9,8 @@
     "abilitaSenzaEffetto": 159,
     "abilitaNelGap": 1,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 174,
-    "strumentiNelGap": 39,
+    "strumentiSenzaEffetto": 169,
+    "strumentiNelGap": 34,
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
@@ -144,16 +144,6 @@
         }
       },
       {
-        "chiave": "rose incense",
-        "nome": "Rose Incense",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemBoostType",
-          "file": "item_data.js",
-          "riga": 526
-        }
-      },
-      {
         "chiave": "lustrous orb",
         "nome": "Lustrous Orb",
         "canale": "STR",
@@ -161,46 +151,6 @@
           "funzione": "getItemDualTypeBoost",
           "file": "item_data.js",
           "riga": 571
-        }
-      },
-      {
-        "chiave": "odd incense",
-        "nome": "Odd Incense",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemBoostType",
-          "file": "item_data.js",
-          "riga": 530
-        }
-      },
-      {
-        "chiave": "rock incense",
-        "nome": "Rock Incense",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemBoostType",
-          "file": "item_data.js",
-          "riga": 549
-        }
-      },
-      {
-        "chiave": "sea incense",
-        "nome": "Sea Incense",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemBoostType",
-          "file": "item_data.js",
-          "riga": 541
-        }
-      },
-      {
-        "chiave": "wave incense",
-        "nome": "Wave Incense",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemBoostType",
-          "file": "item_data.js",
-          "riga": 542
         }
       },
       {
