@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:31:58.270Z",
+    "generatedAt": "2026-09-07T07:11:52.507Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
-    "strumentiNelGap": 34,
+    "strumentiNelGap": 27,
     "mosseNelGap": 7,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -12,8 +12,6 @@
     "rivalry"
   ],
   "strumenti": [
-    "adamant orb",
-    "air balloon",
     "bug memory",
     "burn drive",
     "chill drive",
@@ -30,19 +28,14 @@
     "flying memory",
     "ghost memory",
     "grass memory",
-    "griseous orb",
     "ground memory",
     "ice memory",
     "iron ball",
-    "light ball",
-    "lustrous orb",
     "macho brace",
-    "metal powder",
     "poison memory",
     "psychic memory",
     "rock memory",
     "shock drive",
-    "soul dew",
     "steel memory",
     "thick club",
     "water memory"

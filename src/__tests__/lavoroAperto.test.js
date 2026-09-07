@@ -80,6 +80,45 @@ describe('il documento esiste ed è raggiungibile', () => {
   })
 })
 
+describe('i numeri scritti nei documenti sono quelli veri', () => {
+  /**
+   * ─── PERCHE' QUESTO PRESIDIO NASCE ADESSO ────────────────────────────────
+   *
+   * L'intestazione di questo file porta come esempio «i numeri di
+   * CONTRIBUTING.md fermi a due sessioni prima». Chiudendo la sessione degli
+   * strumenti si è guardato, e erano fermi ancora: CONTRIBUTING diceva 39
+   * strumenti col segnalino e README ne diceva 40 — quando `gapNoti.json` ne
+   * contava 34, cioè sbagliati GIA' PRIMA che la sessione cominciasse.
+   *
+   * Il difetto non è che qualcuno si sia distratto: è che quei due numeri non
+   * li verificava nessuno. Un registro presidiato accanto a due documenti che
+   * raccontano lo stesso fatto a mano è mezzo presidio — e il numero che la
+   * gente legge per prima è quello del README.
+   *
+   * La ricerca è deliberatamente RIGIDA: cerca la frase esatta con dentro il
+   * numero. Riformulare la frase rende rosso questo test, ed è voluto — chi la
+   * riformula deve decidere come tenerla verificabile, non aggirare il
+   * controllo.
+   */
+  const leggi = (nome) => fs.readFileSync(path.join(RADICE, nome), 'utf8')
+
+  it('CONTRIBUTING.md conta gli strumenti col segnalino come `gapNoti.json`', () => {
+    expect(
+      leggi('CONTRIBUTING.md'),
+      `CONTRIBUTING.md non dice «${gapNoti.strumenti.length} strumenti»: rigenerare il numero a mano`,
+    ).toContain(`e ${gapNoti.strumenti.length} strumenti che il riferimento calcola`)
+  })
+
+  it('e il README conta tutt\'e due le liste', () => {
+    expect(
+      leggi('README.md'),
+      `README.md non dice «${gapNoti.abilita.length} abilità e ${gapNoti.strumenti.length} strumenti»`,
+    ).toContain(
+      `${gapNoti.abilita.length} abilità e ${gapNoti.strumenti.length} strumenti sono dichiarati non calcolati`,
+    )
+  })
+})
+
 describe('A — le voci che aspettano una trascrizione sono ancora aperte', () => {
   it('le quattro mosse a danno fisso non sono più una voce aperta', () => {
     // La prima voce del registro che si chiude. Il test non è stato tolto: è
@@ -154,25 +193,61 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     ).toEqual([])
   })
 
-  it('gli strumenti col badge sono trentaquattro, e la misura è stata fatta', () => {
-    // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso sì: la
-    // misura sta nel documento, divisa in quattro gruppi, e i cinque incensi —
-    // il gruppo 2, moltiplicatore semplice — sono stati fatti.
-    //
-    // Resta un numero da NON difendere: se scende ancora, la voce va
-    // aggiornata insieme al codice, nello stesso commit.
-    expect(gapNoti.strumenti.length).toBe(34)
+  it('gli strumenti col badge sono ventisette', () => {
+    // Erano trentanove e «nessuno ci aveva ancora guardato». La misura c'è, e
+    // il conto è sceso così: 39 → 34 (i cinque incensi) → 33 → 32 (le due vive
+    // del gruppo 4) → 31 (il Palloncino) → 27 (i tre orbi e la Gemmadanima).
+    expect(gapNoti.strumenti.length).toBe(27)
   })
 
-  it('gli incensi non portano più il badge, e i ventotto dormienti sì', () => {
-    // La forma della misura, presidiata: i cinque incensi sono usciti, e i
-    // ventotto legati a specie che Champions non ha sono rimasti — di
-    // proposito, perché il gioco potrebbe aggiungerle.
-    for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense', 'rock incense']) {
+  it('e i ventisette sono tutti dormienti o classificati, non dimenticati', () => {
+    // La forma della misura, presidiata dove conta: non il numero, ma il fatto
+    // che ogni voce rimasta abbia una RAGIONE per restarci. Le tre classificate
+    // stanno in `classificazione-badge.mjs`; le altre ventiquattro chiedono un
+    // cambio di tipo che non modelliamo — le memorie e i drive.
+    const classificate = ['iron ball', 'macho brace', 'flying gem']
+    const dormienti = gapNoti.strumenti.filter(k => !classificate.includes(k))
+    expect(dormienti.length, 'una voce nuova senza ragione scritta').toBe(24)
+    for (const c of classificate) {
+      expect(gapNoti.strumenti, `${c} è uscita: aggiornare classificazione-badge.mjs`).toContain(c)
+    }
+    // Le ventiquattro sono le diciassette memorie, i quattro drive e i tre
+    // raddoppi di statistica su specie che Champions non ha.
+    const memorie = dormienti.filter(k => k.endsWith(' memory'))
+    const drive = dormienti.filter(k => k.endsWith(' drive'))
+    expect(memorie.length).toBe(17)
+    expect(drive.length).toBe(4)
+    expect(dormienti.filter(k => !memorie.includes(k) && !drive.includes(k)).sort())
+      .toEqual(['deepseascale', 'deepseatooth', 'thick club'])
+  })
+
+  it('le dodici fatte non portano più il badge, e le memorie sì', () => {
+    // La forma della misura, presidiata: i cinque incensi, la Sferascintilla,
+    // la Polvere Metallica, il Palloncino, i tre orbi e la Gemmadanima sono
+    // usciti; le voci che chiedono un cambio di tipo sono rimaste — di
+    // proposito, perché il gioco potrebbe aggiungere quelle specie.
+    for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense',
+      'rock incense', 'light ball', 'metal powder', 'air balloon',
+      'adamant orb', 'lustrous orb', 'griseous orb', 'soul dew']) {
       expect(gapNoti.strumenti, `${i} porta ancora il badge`).not.toContain(i)
     }
     const memorie = gapNoti.strumenti.filter(k => k.endsWith(' memory'))
     expect(memorie.length, 'le memorie di Silvally sono uscite senza che nessuno lo decidesse').toBe(17)
+  })
+
+  it('e le tre dormienti del gruppo 4 il badge ce l\'hanno ancora', () => {
+    // Le altre voci dello STESSO `if` del riferimento, tenute apposta: sono di
+    // Marowak e Clamperl, che in M-B non ci sono. Il giorno che Champions
+    // aggiunge una di quelle specie il segnalino è già al posto giusto — ed è
+    // la scelta scritta nel documento, non una dimenticanza.
+    //
+    // La Gemmadanima stava in questo elenco ed è uscita: non perché qualcuno
+    // l'abbia scelta, ma perché è il QUARTO caso del `switch` degli orbi e i
+    // tre orbi ci cadono dentro. Farla era obbligatorio per fare loro.
+    for (const i of ['thick club', 'deepseatooth', 'deepseascale']) {
+      expect(gapNoti.strumenti, `${i} è uscita dal divario: aggiornare docs/lavoro-aperto.md`)
+        .toContain(i)
+    }
   })
 })
 

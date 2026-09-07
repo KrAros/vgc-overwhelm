@@ -128,7 +128,7 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 34 strumenti col badge — la misura è stata fatta
+### I 27 strumenti col badge — la misura è stata fatta, e le voci vive sono finite
 
 Erano trentanove e nessuno ci aveva guardato. Adesso la misura c'è, e il numero
 non era quello che sembrava.
@@ -154,17 +154,99 @@ incontra.
    identica meccanica delle diciotto righe `typBoost` già in `ITEM_EFFECTS`:
    `getItemBoostType` li mette nello stesso `switch` di Carbonella, e il ramo
    che li usa è `//k. 1.2x Items`, `0x1333`, cioè `MOD.X1_2`. Mancavano e basta.
-3. **meccanica che non modelliamo** — 22: le memorie e i drive cambiano il tipo
-   del Pokémon o della mossa; gli orbi sono un doppio `typBoost`; `air balloon`
-   tocca il contatto col terreno. Famiglia B o C a seconda del caso.
+3. **meccanica che non modelliamo** — erano 22, **restano 21 le memorie e i
+   drive**, che cambiano il tipo del Pokémon o della mossa. Le altre sono
+   state fatte:
+
+   **`air balloon`, e la misura di partenza su di lei era sbagliata.** Era data
+   per famiglia B — «probabilmente il riferimento non la calcola» — e invece la
+   calcola in DUE posti, `damage_MASTER.js:1119` (immunità a Terra) e `:1298`
+   (`pIsGrounded`). Famiglia A, e per giunta l'unica voce GENERICA dell'elenco:
+   la potevano tenere tutti.
+
+   **I tre orbi, e non erano dormienti.** Stavano fra le voci «legate a specie
+   che Champions non ha», e la specie in effetti non è nel roster — ma **il
+   roster da noi non filtra**: `nomiPokemon.js` lo usa per ORDINARE l'elenco, e
+   il commento accanto dice perché («stringere è una riga», il giorno che la
+   fonte è confermata). Dialga, Palkia e Giratina si possono scegliere oggi.
+
+   Meccanicamente erano davvero il lavoro più vicino agli incensi — stesso
+   `0x1333`, stessa catena, punto k — ma la coppia di tipi non è una proprietà
+   dello STRUMENTO: è una proprietà della coppia strumento-specie, e viene da
+   un `switch` **senza `break`**. Un orbo che non trova la sua specie cade nel
+   caso successivo, quindi vale per la sua specie e per tutte quelle dei casi
+   più in basso — la matrice misurata è TRIANGOLARE. L'Orbo Bramoso addosso a
+   Palkia dà il bonus di Palkia; il Grigiosfera su Palkia non dà niente, perché
+   quel caso sta sopra.
+
+   Ci è entrata anche la **Gemmadanima**, che non era una voce di questa
+   sessione: è il quarto caso dello stesso `switch`, e i tre orbi ci cadono
+   dentro. Senza di lei l'Orbo Bramoso su Latios avrebbe dato zero. L'altra
+   metà che ha nel riferimento — ×1.5 su Attacco e Difesa Speciale — è chiusa
+   da `gen <= 6` e Champions gira a `gen = 10`: è codice morto alla nostra
+   generazione, non un pezzo mancante.
 4. **raddoppio di statistica su una specie sola** — 4: `light ball` (Pikachu),
    `thick club` (Marowak), `deepseatooth`/`deepseascale` (Clamperl),
    `soul dew` (Latios/Latias), `metal powder` (Ditto). Meccanica semplice,
-   `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` sono gli unici
-   due vivi**, perché Pikachu e Ditto sono in M-B.
+   `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` erano gli unici
+   due vivi**, perché Pikachu e Ditto sono in M-B, e **sono state fatte
+   tutt'e due**: `calcAtMods` punto i e `calcDefMods` punto g, `0x2000` in
+   tutt'e due i casi, col cancello `soloSpecie` in `ITEM_EFFECTS` e i casi in
+   `sferascintilla.test.js` e `polvereMetallica.test.js`. Le altre tre restano
+   col segnalino: sono di Marowak, Clamperl e Latios/Latias.
 
-**Quindi cosa resta di davvero giocabile oggi:** `light ball`, `metal powder`,
-`air balloon`, più i tre già classificati. Sei voci, non trentaquattro.
+**Le due si somigliano e le condizioni sono OPPOSTE**, ed è la cosa da non
+dedurre dalla parentela: la Sferascintilla non ha nessun controllo di categoria
+— raddoppia l'Attacco E l'Attacco Speciale — mentre la Polvere ha `hitsPhysical`
+e vale solo contro le fisiche. Nel riferimento stanno in due `if` che elencano
+tre voci ciascuno, e dentro ogni `if` le voci NON hanno la stessa condizione:
+Clava Ossea vuole `"Physical"`, Squamastrana vuole `"Special"`, Sferascintilla
+niente. Si leggono una per una.
+
+**Quindi cosa resta.** I ventisette che portano ancora il segnalino sono le
+diciassette memorie, i quattro drive, i tre raddoppi di statistica su specie
+che Champions non ha (Clava Ossea, Squamastrana, Perlamarina) e tre col badge
+classificato `meccanica-diversa`. Le prime ventuno chiedono un CAMBIO DI TIPO,
+che è una meccanica che non modelliamo: sono la voce che resta, e non è più
+un elenco di strumenti — è una cosa sola.
+
+Il presidio adesso sorveglia la composizione — 17 + 4 + 3 + 3 — e non il solo
+totale: un numero da solo non dice se una voce nuova ha una ragione per starci.
+
+**E le due misure sbagliate vanno tenute scritte, perché sono la stessa.**
+
+`air balloon` era «probabilmente famiglia B», cioè da decidere: bastava aprire
+il riferimento per vedere che la calcola in due posti, ed era l'unica voce
+generica dell'elenco — mostravamo un danno pieno dove il gioco non ne fa
+nessuno.
+
+Gli orbi erano «dormienti», cioè su specie irraggiungibili: bastava aprire
+`nomiPokemon.js` per vedere che il roster ordina e non filtra.
+
+In tutt'e due i casi la voce era stata classificata su una PLAUSIBILITA' — il
+nome dello strumento, il nome della specie — invece che sulla riga che decide.
+**Quello che una voce fa si legge nel riferimento; se qualcuno la può
+incontrare si legge nel nostro codice.** Nessuna delle due si stima.
+
+**Una divergenza vecchia che la Polvere fa affiorare, misurata.** `hitsPhysical`
+nel riferimento comprende anche Psyshock, Psystrike e Secret Sword — speciali
+che colpiscono la Difesa (`damage_MASTER.js:2025`) — e il nostro motore non ha
+quella distinzione: `defStatIdx` sceglie dalla sola categoria. Non è nato qui —
+su quelle tre mosse divergevamo già sulla SCELTA della statistica, cioè prima e
+peggio — ma adesso ha un secondo modo di manifestarsi, e sta scritto e
+presidiato in `polvereMetallica.test.js` invece che aspettare di essere
+scoperto.
+
+**Una cosa misurata mentre si faceva la Sferascintilla, e che vale per tutta la
+famiglia.** La regola qui sotto — «sbagliare punto dà numeri che divergono di un
+arrotondamento» — non vale per un moltiplicatore ESATTO. Un ×2 è `0x2000`, e
+`chainMods` lo accumula senza resto: metterlo nella catena della statistica o in
+quella della potenza dà gli stessi identici sedici roll, misurato su quattro
+terne. L'unica posizione osservabile è la catena FINALE, che risponde 74 contro
+72 perché lì il `+2` della formula è già stato aggiunto. Quindi per gli strumenti
+di questo gruppo un caso contro l'oracolo esclude l'errore grosso ma NON
+distingue le due catene d'ingresso: quella la decide solo la riga del
+riferimento, che va letta.
 
 **Come rifare la misura**, se il roster cambia:
 
@@ -201,6 +283,36 @@ non resti in inglese. Che una chiave sia ancora USATA non lo guarda nessuno, ed
 di funzioni tolte (`scroll_to_rolls`, `quick_info_desc`); altre potrebbero
 essere pezzi mai finiti. Sono da leggere una per una — e il lavoro vero è il
 presidio che impedisce alle prossime di accumularsi.
+
+---
+
+### Due asserzioni sull'orologio da parete, che cedono sotto carico
+
+Trovate **chiudendo** la sessione degli strumenti, non lavorandoci: la suite è
+uscita rossa una volta su dodici, e il giro rosso era quello in cui giravano
+anche `build` e `lint`.
+
+`src/__tests__/damage.test.js` misura due volte il tempo reale:
+
+    riga 358   koChanceCumulative           soglia  5 ms
+    riga 368   lo scenario del ReportPanel  soglia 20 ms
+
+Misurate quindici volte a macchina scarica: la prima sta su una mediana di
+**0,12 ms**, la seconda su **0,77 ms** con un picco a **6,17 ms**. Il margine
+nominale è enorme — ventisei volte — ma la varianza no, e sotto quattro worker
+più una build concorrente il picco ci arriva.
+
+**Non è di questa sessione**: `lib/damage.js` non è stato toccato, misurato col
+diff. È preesistente, ed è la stessa famiglia di guaio che `vite.config.js`
+racconta già a proposito di `hookTimeout` — dove la cura giusta fu ridurre i
+worker invece di alzare la soglia.
+
+**Cosa NON fare**: alzare la soglia. Sposterebbe il dado, non lo toglierebbe, e
+un test che dice «va abbastanza veloce» smette di dirlo. Quello che quei due
+casi vogliono davvero difendere è una regressione di ORDINE DI GRANDEZZA — il
+commento accanto lo dice: la vecchia ricorsione costava 4.400 ms. Un contatore
+di operazioni direbbe la stessa cosa senza guardare l'orologio, e sarebbe
+deterministico. È una decisione su cosa misurare, non una correzione.
 
 ---
 

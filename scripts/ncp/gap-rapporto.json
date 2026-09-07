@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:31:58.270Z",
+    "generatedAt": "2026-09-07T07:11:52.507Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -9,8 +9,8 @@
     "abilitaSenzaEffetto": 159,
     "abilitaNelGap": 1,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 169,
-    "strumentiNelGap": 34,
+    "strumentiSenzaEffetto": 162,
+    "strumentiNelGap": 27,
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
@@ -101,76 +101,6 @@
           "funzione": "calcAtMods",
           "file": "damage_MASTER.js",
           "riga": 1993
-        }
-      },
-      {
-        "chiave": "light ball",
-        "nome": "Light Ball",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 1995
-        }
-      },
-      {
-        "chiave": "adamant orb",
-        "nome": "Adamant Orb",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemDualTypeBoost",
-          "file": "item_data.js",
-          "riga": 569
-        }
-      },
-      {
-        "chiave": "air balloon",
-        "nome": "Air Balloon",
-        "canale": "STR",
-        "prova": {
-          "funzione": "pIsGrounded",
-          "file": "damage_MASTER.js",
-          "riga": 1298
-        }
-      },
-      {
-        "chiave": "metal powder",
-        "nome": "Metal Powder",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcDefMods",
-          "file": "damage_MASTER.js",
-          "riga": 2126
-        }
-      },
-      {
-        "chiave": "lustrous orb",
-        "nome": "Lustrous Orb",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemDualTypeBoost",
-          "file": "item_data.js",
-          "riga": 571
-        }
-      },
-      {
-        "chiave": "soul dew",
-        "nome": "Soul Dew",
-        "canale": "STR",
-        "prova": {
-          "funzione": "calcAtMods",
-          "file": "damage_MASTER.js",
-          "riga": 2001
-        }
-      },
-      {
-        "chiave": "griseous orb",
-        "nome": "Griseous Orb",
-        "canale": "STR",
-        "prova": {
-          "funzione": "getItemDualTypeBoost",
-          "file": "item_data.js",
-          "riga": 573
         }
       },
       {

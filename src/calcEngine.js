@@ -60,6 +60,7 @@ import {
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
   tipoPallaClima,
+  tipiDoppioStrumento,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
@@ -165,10 +166,45 @@ const nomeAbilita = (chiave) =>
  * sarebbe stata immune — e il numero mostrato sarebbe stato un danno pieno
  * invece di zero, cioè l'errore nella direzione peggiore.
  */
-function isGrounded(pokeData, abilEffect) {
+function isGrounded(pokeData, abilEffect, itemEffect) {
   if (pokeData.type.includes(TYPES.FLYING)) return false
   if (abilEffect?.levitate) return false
+  // Il Palloncino (`nonAncorato`). Nel riferimento è un termine della stessa
+  // congiunzione — `mon.item != "Air Balloon" && !Levitate && !Flying` — quindi
+  // l'ordine fra i tre non conta: basta che uno sia vero perché non tocchi
+  // terra. Lo strumento arriva già passato al vaglio di Klutz, che lo annulla.
+  //
+  // I DUE TERMINI CHE MANCANO, dichiarati: `field.isGravity` e `field.isIngrain`
+  // non esistono nel nostro campo, e l'Ferroball — che nel riferimento ANCORA
+  // chi lo tiene, vincendo su Volante e Levitate — non ha un campo suo. È il
+  // motivo per cui porta ancora il segnalino «non calcolata».
+  if (itemEffect?.nonAncorato) return false
   return true
+}
+
+/**
+ * La chiave dello strumento DOPO Klutz, che lo annulla.
+ *
+ * ─── PERCHE' UNA FUNZIONE E NON DUE VOLTE LE STESSE TRE RIGHE ─────────────
+ *
+ * Perché adesso ha due chiamanti, e a due altezze diverse del motore:
+ *
+ *   - il blocco delle IMMUNITA', che gira prima della preparazione e ha
+ *     bisogno di sapere se il difensore ha il Palloncino;
+ *   - la catena dei moltiplicatori, che gira dopo e ha bisogno di tutto il
+ *     resto.
+ *
+ * Due copie di questa regola sarebbero due occasioni di scriverla storta, ed è
+ * lo stesso motivo per cui `campi-meta.mjs` esiste.
+ *
+ * Trascritta da `checkKlutz` (`damage_MASTER.js:448`), che scrive
+ * `pokemon.item = "Klutz"` — un nome che nessuna tabella conosce, cioè il modo
+ * in cui il riferimento dice «non ha più niente in mano».
+ */
+function chiaveStrumentoDopoKlutz(strumento, abilKey) {
+  const grezzo = (strumento || '').toLowerCase()
+  const klutz = ABILITY_EFFECTS[abilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(grezzo)
+  return klutz ? '' : grezzo
 }
 
 export function calculateDamage({ attacker, defender, move, field = {}, debug = IS_DEBUG }) {
@@ -738,6 +774,52 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (effectiveness === 0) {
     return { immune: true, reason: 'type', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
+
+  // ─── L'IMMUNITA' DEL PALLONCINO ─────────────────────────────────────────
+  //
+  //     if (move.type === "Ground" && !field.isGravity
+  //         && defender.item === "Air Balloon"
+  //         && move.name !== "Thousand Arrows")     `damage_MASTER.js:1119`
+  //
+  // ─── PERCHE' PROPRIO QUI E NON PIU' SU ───────────────────────────────────
+  //
+  // Perché nel riferimento sta DOPO il controllo di efficacia zero (`:1104`) e
+  // dopo le undici abilità (`:1105-1117`), e il posto decide l'ETICHETTA: un
+  // Volante col Palloncino colpito da una mossa Terra legge «Immune (tipo)»,
+  // non «Immune (Palloncino)», perché il tipo esce per primo. Il numero è
+  // zero in tutt'e due i casi; il motivo scritto no.
+  //
+  // ─── LE DUE CONDIZIONI CHE NON SI POSSONO SCRIVERE ──────────────────────
+  //
+  // `!field.isGravity` — la Gravità non è nel nostro campo, quindi è sempre
+  // vera e nessun caso può contraddirla. È la stessa forma dichiarata per il
+  // Ventoincoda in `docs/lavoro-aperto.md`: verde per costruzione.
+  //
+  // `move.name !== "Thousand Arrows"` — quella mossa NON è in `moves.json`,
+  // misurato, quindi l'eccezione non è nemmeno esprimibile. È scritta lo
+  // stesso, perché il giorno che la mossa arriva dev'essere già al suo posto;
+  // il test asserisce l'assenza, così quel giorno qualcuno la vede.
+  //
+  // ─── E PERCHE' LO STRUMENTO SI RILEGGE QUI ──────────────────────────────
+  //
+  // Perché `defItemEffect` nasce molto più in basso, dopo la preparazione, e
+  // fra qui e là ci sono altri quattro `return`: le mosse a danno fisso, quelle
+  // a peso e le quattro KO. Fra le KO c'è FRACASSATERRA, che è di tipo Terra:
+  // con il controllo spostato in basso, il Palloncino non la fermerebbe e il
+  // riquadro scriverebbe «KO» dove il gioco non fa niente. Il posto non è un
+  // dettaglio di stile.
+  //
+  // La differenza fra questa chiave e quella di laggiù è lo strumento che la
+  // preparazione può CONSUMARE. Sono due soli — l'Energia Booster
+  // (`accendeParadosso`, `preparazione.js:194`) e l'Orbo Adrenalina
+  // (`orboAdrenalina`, `:283`) — e il Palloncino non è nessuno dei due: un
+  // test lo asserisce, così il giorno che l'elenco si allunga qualcuno lo vede.
+  const strumentoDifensore = chiaveStrumentoDopoKlutz(defItem, defAbilKey)
+  if (moveType === TYPES.GROUND
+      && ITEM_EFFECTS[strumentoDifensore]?.immuneTipo === TYPES.GROUND
+      && move !== 'thousand arrows') {
+    return { immune: true, reason: 'item', itemName: strumentoDifensore, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
   // Meteo estremo: sotto Sole Estremo le mosse Acqua falliscono, sotto Pioggia
   // Intensa falliscono le mosse Fuoco. Non è una riduzione del danno: in NCP
   // (`immunityChecks`) la funzione esce subito con `damage: [0]`, esattamente
@@ -1097,11 +1179,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // ci sono tutti: la lista è l'eccezione a una regola che ANNULLA, e tenerne
   // una parte vorrebbe dire che il giorno in cui uno degli altri entrasse,
   // Klutz comincerebbe a spegnerlo in silenzio.
-  const klutzAtk = ABILITY_EFFECTS[atkAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(atkItemGrezzo)
-  const klutzDef = ABILITY_EFFECTS[defAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(defItemGrezzo)
-
-  const atkItemKey = klutzAtk ? '' : atkItemGrezzo
-  const defItemKey = klutzDef ? '' : defItemGrezzo
+  const atkItemKey = chiaveStrumentoDopoKlutz(atkItemGrezzo, atkAbilKey)
+  const defItemKey = chiaveStrumentoDopoKlutz(defItemGrezzo, defAbilKey)
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
@@ -1373,7 +1452,29 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // punto e — Fur Coat: ×2 sulla Difesa fisica.
   else if (defAbilEffect?.furCoat && !isSpecial) dfMods.push(MOD.X2)
 
-  const itemDifesaOk = !defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true
+  // ─── I DUE CANCELLI DEGLI STRUMENTI DIFENSIVI ───────────────────────────
+  //
+  // `soloSeEvolvibile` è l'Evolcondensa, che vale solo su chi può ancora
+  // evolversi. `soloSpecie` è la Polvere Metallica, che vale solo su Ditto
+  // (`damage_MASTER.js:2126`), e domani la Perlamarina su Clamperl. Sono la
+  // stessa forma: la tabella dichiara la condizione, il motore la consulta —
+  // e lo slug è quello del nostro dex, non il nome di NCP.
+  const specieDifensoreOk = !defItemEffect?.soloSpecie
+    || defItemEffect.soloSpecie.includes(defPokemon)
+  const itemDifesaOk = (!defItemEffect?.soloSeEvolvibile || defPokeData.canEvolve === true)
+    && specieDifensoreOk
+
+  // punti f e g — i moltiplicatori di difesa degli strumenti: ×1,5 al punto f
+  // (`:2119` — Giubbotto Imbottito, Evolcondensa, Gemmadanima), ×2 al punto g
+  // (`:2125` — Perlamarina e Polvere Metallica), e fra i due un `else if`.
+  //
+  // Qui è un `push` solo e non due rami, perché la costante che distingue f da
+  // g la dice la TABELLA: `daDecimale` la ricava da `defMult`. Due `if`
+  // separati per 1,5 e 2 direbbero la stessa cosa e in più farebbero sparire
+  // in silenzio un moltiplicatore diverso da quei due, il giorno che ne
+  // arrivasse uno. L'`else if` del riferimento non è osservabile in nessun
+  // caso: il campo strumento è uno, e nessuno strumento sta in tutt'e due gli
+  // elenchi.
   if (itemDifesaOk) {
     if (defItemEffect?.defMult && !isSpecial) dfMods.push(daDecimale(defItemEffect.defMult))
     if (defItemEffect?.spdMult &&  isSpecial) dfMods.push(daDecimale(defItemEffect.spdMult))
@@ -1550,12 +1651,39 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     (defAbilEffect?.purifyingSalt && moveType === TYPES.GHOST)
   if (dimezzaAttacco) atMods.push(MOD.X0_5)
 
+  // La categoria richiesta dallo strumento, se ne richiede una. Vale per i
+  // punti i e j, che sono due rami dello stesso `if`.
+  const categoriaStrumentoOk = (e) => !e.statType
+    || (e.statType === 'physical' && !isSpecial)
+    || (e.statType === 'special'  &&  isSpecial)
+
+  // punto i — ×2 dagli strumenti legati a una specie sola
+  // (`damage_MASTER.js:1993`). Oggi c'è solo la Sferascintilla su Pikachu:
+  // Clava Ossea, Squamastrana e Perlamarina stanno nello stesso `if` del
+  // riferimento, ma sono di Marowak e Clamperl, che in Champions non ci sono.
+  //
+  // ─── PERCHE' E' UN `if / else if` CON IL PUNTO j ─────────────────────────
+  // Perché nel riferimento lo è (`:1997-2002`): il ×2 degli strumenti ESCLUDE
+  // il ×1.5 degli strumenti. Con un campo strumento solo l'esclusione non può
+  // mai servire — nessuno tiene la Sferascintilla e la Fasciapotenza insieme —
+  // ma è com'è scritta, e dedurre che «tanto non capita» è il tipo di
+  // ragionamento che invecchia male. Stessa scelta già fatta per Expert Belt e
+  // Life Orb.
+  //
+  // ─── E PERCHE' LA SPECIE SI GUARDA QUI E NON NELLA TABELLA ───────────────
+  // `soloSpecie` è un cancello, come `soloSeEvolvibile` nella catena di difesa
+  // qui sopra: la tabella dichiara l'effetto e la condizione, il motore la
+  // consulta. Lo slug è quello del nostro dex, non il nome di NCP.
+  const specieAttaccanteOk = !atkItemEffect?.soloSpecie
+    || atkItemEffect.soloSpecie.includes(atkPokemon)
+
+  if (atkItemEffect?.atkMult === 2 && specieAttaccanteOk
+      && categoriaStrumentoOk(atkItemEffect)) {
+    atMods.push(MOD.X2)
+  }
   // punto j — ×1.5 dagli strumenti: Choice Band e Choice Specs.
-  if (atkItemEffect?.atkMult === 1.5) {
-    const isCorrectType = !atkItemEffect.statType
-      || (atkItemEffect.statType === 'physical' && !isSpecial)
-      || (atkItemEffect.statType === 'special'  &&  isSpecial)
-    if (isCorrectType) atMods.push(MOD.X1_5)
+  else if (atkItemEffect?.atkMult === 1.5 && categoriaStrumentoOk(atkItemEffect)) {
+    atMods.push(MOD.X1_5)
   }
 
   if (atMods.length > 0) {
@@ -1630,8 +1758,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // NOTA su j e k: in NCP sono un `else if`, ma la mutua esclusione è già
   // garantita dal fatto che un Pokémon tiene un solo strumento.
-  const defGrounded = isGrounded(defPokeData, defAbilEffect)
-  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect)
+  const defGrounded = isGrounded(defPokeData, defAbilEffect, defItemEffect)
+  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect, atkItemEffect)
   const bpMods = []
 
   // ─── PUNTO a — FRANGIAURA ────────────────────────────────────────────────
@@ -1937,6 +2065,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // mosse fisiche. Il flag `punch` in moves.json viene da gen-flag-dati.mjs.
     const pugnoOk = !atkItemEffect.soloMossePugno || isPunch
     if (tipoOk && categoriaOk && pugnoOk) bpMods.push(atkItemEffect.bpMod)
+  }
+  // ─── GLI ORBI: UN DOPPIO POTENZIAMENTO DI TIPO ──────────────────────────
+  //
+  //     else if (getItemDualTypeBoost(attacker.item, attacker.name)
+  //                .indexOf(move.type) !== -1)  { bpMods.push(0x1333) }
+  //                                              `damage_MASTER.js:1704`
+  //
+  // Stesso `0x1333` del punto k — cioè `MOD.X1_2`, lo stesso di Carbonella e
+  // degli incensi — e nella stessa catena. L'unica differenza è che i tipi
+  // potenziati sono DUE invece di uno, e che dipendono dalla specie.
+  //
+  // ─── E' UN `else if`, E LO E' ANCHE QUI ─────────────────────────────────
+  //
+  // Nel riferimento questo ramo è l'alternativa del potenziamento a tipo
+  // singolo: uno strumento non può prenderli tutti e due. Con le nostre
+  // tabelle l'esclusione non serve mai — nessun orbo ha `bpMod` — ma è com'è
+  // scritta, e la scriviamo perché il giorno che qualcuno desse un `bpMod` a
+  // un orbo il ×1.2 non si applicherebbe due volte.
+  //
+  // ─── LA CADUTA DEL `switch` STA IN `rules.js`, NON QUI ──────────────────
+  //
+  // Perché è una TABELLA ordinata e non una condizione: `tipiDoppioStrumento`
+  // entra al caso dello strumento e scende. Il perché, e la matrice misurata
+  // che lo conferma, stanno accanto alla tabella.
+  else if (atkItemEffect?.doppioTipo) {
+    const tipiOrbo = tipiDoppioStrumento(atkItemKey, atkPokemon)
+    if (tipiOrbo?.includes(moveType)) bpMods.push(MOD.X1_2)
   }
 
   // o — Knock Off: ×1.5 se il difensore tiene uno strumento RIMOVIBILE.
@@ -2349,6 +2504,22 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // due domande, e finche' nessuno manda i punti salute sono lo stesso.
     defPS: psDif,
     atkBoostEffective, weatherBallType, effectiveBP, effectiveMoveType: moveType,
+    // ─── LE DUE STATISTICHE CON CUI IL COLPO E' STATO CALCOLATO ───────────
+    //
+    // Sono `atkStatFinal` e `defStatFinal`: il valore DOPO gli stadi e dopo la
+    // catena dei moltiplicatori, cioè esattamente i due numeri che entrano
+    // nella formula.
+    //
+    // Non servono a disegnare niente. Servono a essere CONFRONTATI: la colonna
+    // «Mod» dell'editor risponde alla stessa domanda per conto suo
+    // (`lib/statMostrata.js`), e finché quel numero non usciva di qui le due
+    // risposte non si potevano mettere una accanto all'altra — si poteva solo
+    // riscrivere la stessa logica nel test e sperare che le due copie
+    // sbagliassero insieme.
+    //
+    // È la regola dei due oracoli indipendenti applicata a una colonna:
+    // `statMostrata.test.js` confronta questi due numeri con i suoi.
+    atkStatFinal, defStatFinal,
     // I sedici roll del SECONDO colpo di Parental Bond, o `null` se non
     // c'entra. Sono un array a parte e non un moltiplicatore perché i due
     // colpi hanno numeri diversi: chi calcola la probabilità di KO ha bisogno

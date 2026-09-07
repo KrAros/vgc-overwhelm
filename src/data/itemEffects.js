@@ -14,6 +14,9 @@ import { MOD } from '../lib/modifiers.js'
 // finalModSuperEff: come finalMod, ma solo quando l'efficacia è maggiore di 1
 // typBoost:   tipo richiesto perché bpMod si applichi (TYPES.X)
 // statType:   restringe atkMult/bpMod a 'physical' o 'special'
+// soloSpecie: elenco di slug — l'effetto vale solo su quelle specie
+// immuneTipo: tipo a cui lo strumento rende immuni (danno zero, non ridotto)
+// nonAncorato: chi lo tiene non tocca il terreno — `pIsGrounded` del riferimento
 //
 // ─── PERCHÉ bpMod E NON UN DECIMALE ────────────────────────────────────────
 // Fino a D-2 gli item type-boost e i ×1.1 erano scritti come moltiplicatori
@@ -33,6 +36,42 @@ export const ITEM_EFFECTS = {
   // ── Boost attacco ─────────────────────────────────────────────────────────
   'choice band':    { atkMult: 1.5, statType: 'physical', showInSmogon: true },
   'choice specs':   { atkMult: 1.5, statType: 'special',  showInSmogon: true },
+
+  /**
+   * ─── SFERASCINTILLA ───────────────────────────────────────────────────────
+   *
+   * ×2 sulla statistica d'attacco, ma solo addosso a Pikachu.
+   *
+   * Trascritto da `damage_MASTER.js:1993-1997`, `calcAtMods` punto
+   * `//i. 2.0x Items`, che spinge `0x2000`:
+   *
+   *     (attacker.item === "Light Ball" && (attacker.name === "Pikachu"
+   *                                      || attacker.name === "Pikachu-Gmax"))
+   *
+   * ─── QUELLO CHE NON C'E', ED E' LA PARTE CHE CONTA ────────────────────────
+   *
+   * Nessun controllo di categoria. Le altre due voci dello STESSO `if` ce
+   * l'hanno — Clava Ossea vuole `move.category === "Physical"`, Squamastrana
+   * vuole `"Special"` — e Sferascintilla no: raddoppia l'Attacco sulle fisiche
+   * E l'Attacco Speciale sulle speciali. Percio' qui NON c'e' `statType`, ed e'
+   * un'assenza deliberata: aggiungerlo per simmetria con le sorelle dimezzerebbe
+   * meta' dei casi. Misurato contro il riferimento su tutt'e due le categorie.
+   *
+   * ─── PERCHE' SOLO `pikachu` E NON ANCHE LA FORMA GIGAMAX ──────────────────
+   *
+   * Il riferimento nomina anche `Pikachu-Gmax`. Nel nostro dex le forme Gigamax
+   * non esistono affatto — zero voci, misurato — quindi scrivere qui uno slug
+   * `pikachu-gmax` non sarebbe una trascrizione ma uno slug inventato, che
+   * nessun dato conferma e nessun test puo' falsificare. Il giorno che le forme
+   * Gigamax entrano nel dex, questa lista si allunga di una riga.
+   *
+   * ─── PERCHE' NON E' `atkMult: 2` E BASTA ──────────────────────────────────
+   *
+   * Perche' senza `soloSpecie` il raddoppio andrebbe a chiunque tenga la
+   * Sferascintilla, e il riferimento dice di no: su Raichu e su Pichu risponde
+   * gli stessi identici sedici roll con e senza lo strumento.
+   */
+  'light ball':     { atkMult: 2, soloSpecie: ['pikachu'], showInSmogon: true },
   // Expert Belt: ×1.2 sul danno finale, ma SOLO contro un bersaglio che prende
   // super efficace (`calcFinalMods` punto o). Serve un campo suo perché
   // `finalMod` è incondizionato: scriverlo lì darebbe il ×1.2 anche su un
@@ -56,11 +95,48 @@ export const ITEM_EFFECTS = {
   // generazione di `canEvolve`. In NCP toglie anche il contatto alla mossa
   // (`damage_MASTER.js` riga 826): quello lo modelliamo qui sotto nel motore.
   'punching glove': { bpMod: MOD.X1_1_ALT, soloMossePugno: true,  showInSmogon: true },
-  // Orb leggendari: ×1.2 su Dragon/Steel per Dialga, Water/Dragon per Palkia,
-  // Ghost/Dragon per Giratina. Qui senza logica di filtro tipo — mostrati sempre.
-  'adamant orb':    { showInSmogon: true },
-  'lustrous orb':   { showInSmogon: true },
-  'griseous orb':   { showInSmogon: true },
+  /**
+   * ─── GLI ORBI LEGGENDARI ──────────────────────────────────────────────────
+   *
+   * ×1.2 su DUE tipi, e quali dipende dalla specie che li tiene:
+   * Acciaio/Drago su Dialga, Acqua/Drago su Palkia, Spettro/Drago su Giratina,
+   * Drago/Psico su Latias e Latios.
+   *
+   * Stesso `0x1333` degli incensi e di Carbonella, stessa catena — è il punto
+   * k di `calcBPMods` (`damage_MASTER.js:1704`) — quindi meccanicamente sono
+   * la cosa più vicina al lavoro già fatto. La differenza è che la coppia di
+   * tipi non è una proprietà dello strumento: è una proprietà della COPPIA
+   * strumento-specie, e viene da un `switch` che CADE.
+   *
+   * ─── PERCHE' QUI C'E' SOLO UN FLAG ────────────────────────────────────────
+   *
+   * Perché la tabella vera è ORDINATA, e l'ordine è la meccanica: sta in
+   * `STRUMENTI_DOPPIO_TIPO` dentro `lib/rules.js`, con la matrice misurata che
+   * la giustifica. Scriverla qui come `tipi: [...]` per orbo perderebbe la
+   * caduta — e con lei il fatto che l'Orbo Bramoso addosso a Palkia dà il
+   * bonus di PALKIA, che è quello che il riferimento calcola.
+   *
+   * `doppioTipo` è solo il segnale che l'effetto esiste: lo legge il motore
+   * per entrare nel ramo, e `haEffetto` per togliere il segnalino.
+   *
+   * ─── E PERCHE' LA GEMMADANIMA E' QUI ADESSO ───────────────────────────────
+   *
+   * Perché è il QUARTO caso dello stesso `switch`, e i tre orbi ci cadono
+   * dentro. Non era una voce di questa sessione — è entrata perché senza di
+   * lei l'Orbo Bramoso su Latios avrebbe dato zero invece del ×1.2 che il
+   * riferimento gli dà.
+   *
+   * L'altra metà della Gemmadanima — ×1.5 sull'Attacco Speciale (`:2001`) e
+   * sulla Difesa Speciale (`:2121`) — NON resta da fare: tutt'e due i rami
+   * sono chiusi da `gen <= 6`, e Champions gira a `gen = 10`
+   * (`scripts/ncp/contesto.mjs:83`). Sono codice morto alla nostra
+   * generazione, non un pezzo mancante — e questo è il motivo per cui la
+   * Gemmadanima esce dal segnalino intera e non a metà.
+   */
+  'adamant orb':    { doppioTipo: true, showInSmogon: true },
+  'lustrous orb':   { doppioTipo: true, showInSmogon: true },
+  'griseous orb':   { doppioTipo: true, showInSmogon: true },
+  'soul dew':       { doppioTipo: true, showInSmogon: true },
   // Throat Spray: ×1.5 SpAtk dopo una mossa sonora. Trattato come attivo.
   'throat spray':   { showInSmogon: true },
   // (Booster Energy stava qui con il solo `showInSmogon`, cioè fra le voci
@@ -141,6 +217,85 @@ export const ITEM_EFFECTS = {
   // 50% di Difesa che nel gioco non esiste.
   'eviolite':       { defMult: 1.5, spdMult: 1.5, soloSeEvolvibile: true },
   'assault vest':   { spdMult: 1.5 },
+
+  /**
+   * ─── PALLONCINO ───────────────────────────────────────────────────────────
+   *
+   * L'unico strumento GENERICO dei trentanove: chiunque può tenerlo, quindi è
+   * anche l'unico dove il numero sbagliato lo incontra chiunque.
+   *
+   * ─── E' FAMIGLIA A, NON B: MISURATO ───────────────────────────────────────
+   *
+   * L'ipotesi di partenza era che il riferimento non lo calcolasse e servisse
+   * un'aggiudicazione. È falsa: lo calcola in DUE posti, e le due cose sono
+   * indipendenti.
+   *
+   *   1. IMMUNITA' A TERRA — `damage_MASTER.js:1119`, dentro `immunityChecks`,
+   *      `return damage: [0]`:
+   *
+   *          move.type === "Ground" && !field.isGravity
+   *            && defender.item === "Air Balloon"
+   *            && move.name !== "Thousand Arrows"
+   *
+   *   2. NON TOCCA IL TERRENO — `pIsGrounded` (`:1298`), che decide se i
+   *      terreni si applicano:
+   *
+   *          field.isGravity || mon.item == "Iron Ball"
+   *            || (mon.item != "Air Balloon" && !Levitate && !Flying)
+   *            || field.isIngrain
+   *
+   * Non è la stessa condizione letta due volte: un Volante è NON ancorato ma è
+   * immune a Terra per il tipo, e Levitate è non ancorata ma immunizza come
+   * abilità. Il Palloncino fa tutt'e due le cose per conto suo, e nel
+   * riferimento sono due righe in due funzioni diverse. Perciò due campi.
+   *
+   * ─── QUANTO SI SBAGLIAVA, MISURATO CONTRO L'ORACOLO ───────────────────────
+   *
+   *   Terremoto su chi ha il Palloncino     NCP 0        noi 43-51
+   *   Fulmine, terreno elettrico            NCP 45-54    noi 58-70
+   *   Pulsardragon, terreno nebbioso        NCP 22-27    noi 11-14
+   *
+   * La prima riga è la direzione peggiore: mostravamo un danno pieno dove il
+   * gioco non ne fa nessuno.
+   *
+   * ─── LE TRE CASELLE CHE NON ABBIAMO ───────────────────────────────────────
+   *
+   * `isGravity` e `isIngrain` non esistono nel nostro campo, e l'Ferroball —
+   * che nel riferimento ANCORA chi lo tiene, vincendo su Volante e Levitate —
+   * qui non ha un campo suo: resta col segnalino «non calcolata», che è dove
+   * sta già oggi. Sono tre assenze dichiarate, non tre dimenticanze: nessuna
+   * delle tre è esprimibile nell'app, quindi nessun caso può contraddirle.
+   */
+  'air balloon':    { immuneTipo: TYPES.GROUND, nonAncorato: true, showInSmogon: true },
+
+  /**
+   * ─── POLVERE METALLICA ────────────────────────────────────────────────────
+   *
+   * ×2 sulla Difesa, ma solo addosso a Ditto e solo contro le mosse fisiche.
+   *
+   * Trascritto da `damage_MASTER.js:2125-2127`, `calcDefMods` ramo
+   * `//g. 2.0x Items`, che spinge `0x2000`:
+   *
+   *     (defender.item === "Metal Powder" && defender.name === "Ditto"
+   *                                       && hitsPhysical)
+   *
+   * ─── PERCHE' `defMult` E NON ANCHE `spdMult` ──────────────────────────────
+   *
+   * Perché il riferimento scrive `hitsPhysical`, e la Sferascintilla — l'altra
+   * viva dello stesso gruppo — invece NON ha nessun controllo di categoria.
+   * Sono due voci della stessa famiglia con due condizioni diverse, e la
+   * simmetria fra loro è quella sbagliata da cui farsi guidare: qui la
+   * categoria c'è, lì no. Misurato contro il riferimento su tutt'e due —
+   * su una mossa speciale NCP risponde gli stessi identici sedici roll con e
+   * senza la Polvere.
+   *
+   * ─── E PERCHE' SOLO `ditto` ───────────────────────────────────────────────
+   *
+   * Nello stesso `if` c'è anche la Perlamarina, che è di Clamperl: Champions
+   * non ce l'ha, quindi resta col segnalino «non calcolata» — di proposito,
+   * pronta per il giorno che la specie arriva.
+   */
+  'metal powder':   { defMult: 2, soloSpecie: ['ditto'] },
 
   // Pietrapiuma: dimezza il PESO. Non tocca nessuna catena — il peso serve
   // solo alle quattro mosse che ne ricavano la potenza (Low Kick, Grass Knot,

@@ -55,6 +55,14 @@ function immuneLabel(result) {
     const nome = toTitleCase(result.moveName || '')
     return { text: `Fails (${nome})`, cls: 'text-gray-400' }
   }
+  // L'immunita' che viene dallo STRUMENTO e non dall'abilita': oggi solo il
+  // Palloncino contro le mosse Terra (`calcEngine.js`, `reason: 'item'`). Il
+  // colore e' quello degli strumenti, non quello delle abilita': chi legge deve
+  // capire da dove viene lo zero senza aprire il pannello.
+  if (result.reason === 'item') {
+    const nome = toTitleCase(result.itemName || '')
+    return { text: `Immune (${nome})`, cls: 'text-amber-400' }
+  }
   if (result.reason === 'weather') {
     const nome = result.weatherName === 'heavy rain' ? 'Heavy Rain' : 'Harsh Sunshine'
     return { text: `Fails (${nome})`, cls: 'text-sky-400' }

@@ -35,7 +35,7 @@ il registro non diventa una lapide. Le due sezioni qui sotto sono i due punti
 di ingresso più battuti.
 
 **Le abilità col badge.** 1 abilità — `rivalry`, che aspetta un dato sul sesso
-che oggi manca a 986 specie su 1225 — e 39 strumenti che il riferimento calcola
+che oggi manca a 986 specie su 1225 — e 27 strumenti che il riferimento calcola
 e noi no; l'elenco generato è in
 [`src/data/gapNoti.json`](src/data/gapNoti.json). Ognuna è una PR piccola e
 isolata: implementi l'effetto, e il caso golden corrispondente diventa verde.
