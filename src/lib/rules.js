@@ -1551,3 +1551,85 @@ export const DANNO_FINE_TURNO_PER_STATO = Object.freeze({
  * salisse sopra i quindici turni, sarebbe gia' a posto.
  */
 export const TETTO_IRIDE = 15
+
+/**
+ * ─── GLI ORBI, E IL `switch` SENZA `break` DA CUI VENGONO ──────────────────
+ *
+ * `getItemDualTypeBoost` (`item_data.js:567`) è un `switch` di sette casi che
+ * NON HA NESSUN `break`. Ogni caso è
+ *
+ *     case 'Adamant Orb':
+ *         if (species === 'Dialga') return 'Steel Dragon';
+ *
+ * cioè: se la specie non corrisponde, l'esecuzione CADE nel caso successivo e
+ * ne prova la condizione. Non è una svista da correggere — è quello che il
+ * riferimento calcola, e il confronto roll per roll lo conferma su tutte e
+ * trentadue le combinazioni misurate.
+ *
+ * Cosa vuol dire in pratica: **un orbo vale per la sua specie e per tutte
+ * quelle dei casi PIU' IN BASSO.** L'Orbo Bramoso addosso a Palkia dà il bonus
+ * di Palkia (Acqua/Drago), non niente; addosso a Latios dà quello di Latios
+ * (Drago/Psico). Al contrario non risale: il Grigiosfera su Palkia non fa
+ * niente, perché il caso di Palkia sta sopra.
+ *
+ * La matrice misurata contro l'oracolo, con Dragopulsar (Drago, che compare in
+ * tutte e quattro le coppie) — `<<` dove il bonus si accende:
+ *
+ *                     adamant  lustrous  griseous  soul dew
+ *     dialga             <<
+ *     palkia             <<       <<
+ *     giratina           <<       <<        <<
+ *     latias/latios      <<       <<        <<        <<
+ *     dialga-origin      <<       <<        <<        <<
+ *     palkia-origin      <<       <<        <<        <<
+ *     giratina-origin    <<       <<        <<        <<
+ *
+ * È triangolare, ed è la firma esatta di un `switch` che cade.
+ *
+ * ─── PERCHE' UNA LISTA ORDINATA E NON UNA MAPPA ───────────────────────────
+ *
+ * Perché l'ORDINE è la meccanica. Una mappa `strumento → specie` direbbe la
+ * cosa sbagliata e sembrerebbe più pulita: perderebbe esattamente la
+ * triangolarità qui sopra.
+ *
+ * ─── I TRE CHE NON ABBIAMO, E CHE CI SERVONO LO STESSO ────────────────────
+ *
+ * `adamant crystal`, `lustrous globe` e `griseous core` non sono in
+ * `items.json`, quindi nessuno può sceglierli. Stanno qui perché sono i casi
+ * IN FONDO al `switch`, e ci si CADE DENTRO dai quattro che invece si possono
+ * scegliere: senza le loro tre righe, il Grigiosfera su Giratina-Origin non
+ * darebbe niente, mentre il riferimento gli dà Spettro/Drago. Non sono
+ * completismo: sono la coda di una caduta che parte da uno strumento vero.
+ */
+export const STRUMENTI_DOPPIO_TIPO = Object.freeze([
+  { strumento: 'adamant orb',     specie: ['dialga'],            tipi: [TYPES.STEEL, TYPES.DRAGON] },
+  { strumento: 'lustrous orb',    specie: ['palkia'],            tipi: [TYPES.WATER, TYPES.DRAGON] },
+  // Nona generazione: il riferimento chiede `Giratina` a gen ≥ 9 e
+  // `Giratina-Origin` solo a gen ≤ 8 (`item_data.js:574`). Champions è gen 9,
+  // quindi qui va la forma base — e la forma Origine la ripesca comunque
+  // l'ultimo caso, cadendoci dentro.
+  { strumento: 'griseous orb',    specie: ['giratina'],          tipi: [TYPES.GHOST, TYPES.DRAGON] },
+  { strumento: 'soul dew',        specie: ['latias', 'latios'],  tipi: [TYPES.DRAGON, TYPES.PSYCHIC] },
+  { strumento: 'adamant crystal', specie: ['dialga-origin'],     tipi: [TYPES.STEEL, TYPES.DRAGON] },
+  { strumento: 'lustrous globe',  specie: ['palkia-origin'],     tipi: [TYPES.WATER, TYPES.DRAGON] },
+  { strumento: 'griseous core',   specie: ['giratina-origin'],   tipi: [TYPES.GHOST, TYPES.DRAGON] },
+])
+
+/**
+ * I due tipi potenziati da uno strumento addosso a una specie, o `null`.
+ *
+ * È il `switch` senza `break` scritto come si comporta: si entra al caso dello
+ * strumento e si scende finché una specie corrisponde.
+ *
+ * @param {string} strumento chiave minuscola, già passata al vaglio di Klutz
+ * @param {string} specie    slug del nostro dex
+ * @returns {number[]|null}
+ */
+export function tipiDoppioStrumento(strumento, specie) {
+  const partenza = STRUMENTI_DOPPIO_TIPO.findIndex(r => r.strumento === strumento)
+  if (partenza === -1) return null
+  for (let i = partenza; i < STRUMENTI_DOPPIO_TIPO.length; i++) {
+    if (STRUMENTI_DOPPIO_TIPO[i].specie.includes(specie)) return STRUMENTI_DOPPIO_TIPO[i].tipi
+  }
+  return null
+}

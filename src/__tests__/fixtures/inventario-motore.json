@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T07:03:58.087Z",
+    "generatedAt": "2026-09-07T07:11:52.970Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -8,7 +8,7 @@
     ],
     "fileEsaminati": 23,
     "abilitaNelMotore": 52,
-    "strumentiNelMotore": 28,
+    "strumentiNelMotore": 32,
     "classificate": 9,
     "badgeDaTogliere": 6,
     "collisioniResidue": 3,
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 1347,
+        "riga": 1348,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -201,7 +201,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 771,
+          "riga": 772,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -273,7 +273,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 1347,
+          "riga": 1348,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },
@@ -552,11 +552,43 @@
         }
       },
       {
+        "chiave": "adamant orb",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 1605,
+          "testo": "{ strumento: 'adamant orb',     specie: ['dialga'],            tipi: [TYPES.STEEL, TYPES.DRAGON] },"
+        }
+      },
+      {
         "chiave": "choice scarf",
         "prova": {
           "file": "src/utils/speedOrder.js",
           "riga": 213,
           "testo": "if (item === 'choice scarf') altriMod *= 1.5"
+        }
+      },
+      {
+        "chiave": "lustrous orb",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 1606,
+          "testo": "{ strumento: 'lustrous orb',    specie: ['palkia'],            tipi: [TYPES.WATER, TYPES.DRAGON] },"
+        }
+      },
+      {
+        "chiave": "soul dew",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 1612,
+          "testo": "{ strumento: 'soul dew',        specie: ['latias', 'latios'],  tipi: [TYPES.DRAGON, TYPES.PSYCHIC] },"
+        }
+      },
+      {
+        "chiave": "griseous orb",
+        "prova": {
+          "file": "src/lib/rules.js",
+          "riga": 1611,
+          "testo": "{ strumento: 'griseous orb',    specie: ['giratina'],          tipi: [TYPES.GHOST, TYPES.DRAGON] },"
         }
       },
       {

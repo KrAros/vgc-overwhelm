@@ -154,38 +154,42 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     ).toEqual([])
   })
 
-  it('gli strumenti col badge sono trentuno, e non ne resta nessuno di vivo', () => {
-    // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso la misura
-    // c'è, e le voci GIOCABILI OGGI sono finite: 39 → 34 (i cinque incensi)
-    // → 33 → 32 (le due vive del gruppo 4) → 31 (il Palloncino).
-    //
-    // I trentuno che restano sono ventotto legati a specie che Champions non
-    // ha e tre col badge classificato `meccanica-diversa`. Nessuno di loro è
-    // tenibile da qualcuno in M-B: il numero non scende più senza che cambi il
-    // roster o che si apra una delle tre collisioni.
-    expect(gapNoti.strumenti.length).toBe(31)
+  it('gli strumenti col badge sono ventisette', () => {
+    // Erano trentanove e «nessuno ci aveva ancora guardato». La misura c'è, e
+    // il conto è sceso così: 39 → 34 (i cinque incensi) → 33 → 32 (le due vive
+    // del gruppo 4) → 31 (il Palloncino) → 27 (i tre orbi e la Gemmadanima).
+    expect(gapNoti.strumenti.length).toBe(27)
   })
 
-  it('e i trentuno sono tutti dormienti o classificati, non dimenticati', () => {
+  it('e i ventisette sono tutti dormienti o classificati, non dimenticati', () => {
     // La forma della misura, presidiata dove conta: non il numero, ma il fatto
     // che ogni voce rimasta abbia una RAGIONE per restarci. Le tre classificate
-    // stanno in `classificazione-badge.mjs`; le altre ventotto vogliono una
-    // specie che il roster non ha.
+    // stanno in `classificazione-badge.mjs`; le altre ventiquattro chiedono un
+    // cambio di tipo che non modelliamo — le memorie e i drive.
     const classificate = ['iron ball', 'macho brace', 'flying gem']
     const dormienti = gapNoti.strumenti.filter(k => !classificate.includes(k))
-    expect(dormienti.length, 'una voce nuova senza ragione scritta').toBe(28)
+    expect(dormienti.length, 'una voce nuova senza ragione scritta').toBe(24)
     for (const c of classificate) {
       expect(gapNoti.strumenti, `${c} è uscita: aggiornare classificazione-badge.mjs`).toContain(c)
     }
+    // Le ventiquattro sono le diciassette memorie, i quattro drive e i tre
+    // raddoppi di statistica su specie che Champions non ha.
+    const memorie = dormienti.filter(k => k.endsWith(' memory'))
+    const drive = dormienti.filter(k => k.endsWith(' drive'))
+    expect(memorie.length).toBe(17)
+    expect(drive.length).toBe(4)
+    expect(dormienti.filter(k => !memorie.includes(k) && !drive.includes(k)).sort())
+      .toEqual(['deepseascale', 'deepseatooth', 'thick club'])
   })
 
-  it('le otto fatte non portano più il badge, e i ventotto dormienti sì', () => {
+  it('le dodici fatte non portano più il badge, e le memorie sì', () => {
     // La forma della misura, presidiata: i cinque incensi, la Sferascintilla,
-    // la Polvere Metallica e il Palloncino sono usciti, e i ventotto legati a
-    // specie che Champions non ha sono rimasti — di proposito, perché il gioco
-    // potrebbe aggiungerle.
+    // la Polvere Metallica, il Palloncino, i tre orbi e la Gemmadanima sono
+    // usciti; le voci che chiedono un cambio di tipo sono rimaste — di
+    // proposito, perché il gioco potrebbe aggiungere quelle specie.
     for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense',
-      'rock incense', 'light ball', 'metal powder', 'air balloon']) {
+      'rock incense', 'light ball', 'metal powder', 'air balloon',
+      'adamant orb', 'lustrous orb', 'griseous orb', 'soul dew']) {
       expect(gapNoti.strumenti, `${i} porta ancora il badge`).not.toContain(i)
     }
     const memorie = gapNoti.strumenti.filter(k => k.endsWith(' memory'))
@@ -194,10 +198,14 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
 
   it('e le tre dormienti del gruppo 4 il badge ce l\'hanno ancora', () => {
     // Le altre voci dello STESSO `if` del riferimento, tenute apposta: sono di
-    // Marowak, Clamperl e Latios/Latias, che in M-B non ci sono. Il giorno che
-    // Champions aggiunge una di quelle specie il segnalino è già al posto
-    // giusto — ed è la scelta scritta nel documento, non una dimenticanza.
-    for (const i of ['thick club', 'deepseatooth', 'deepseascale', 'soul dew']) {
+    // Marowak e Clamperl, che in M-B non ci sono. Il giorno che Champions
+    // aggiunge una di quelle specie il segnalino è già al posto giusto — ed è
+    // la scelta scritta nel documento, non una dimenticanza.
+    //
+    // La Gemmadanima stava in questo elenco ed è uscita: non perché qualcuno
+    // l'abbia scelta, ma perché è il QUARTO caso del `switch` degli orbi e i
+    // tre orbi ci cadono dentro. Farla era obbligatorio per fare loro.
+    for (const i of ['thick club', 'deepseatooth', 'deepseascale']) {
       expect(gapNoti.strumenti, `${i} è uscita dal divario: aggiornare docs/lavoro-aperto.md`)
         .toContain(i)
     }

@@ -60,6 +60,7 @@ import {
   MOSSE_CHE_IGNORANO_ABILITA,
   ABILITA_NON_IGNORABILI,
   tipoPallaClima,
+  tipiDoppioStrumento,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
@@ -2064,6 +2065,33 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     // mosse fisiche. Il flag `punch` in moves.json viene da gen-flag-dati.mjs.
     const pugnoOk = !atkItemEffect.soloMossePugno || isPunch
     if (tipoOk && categoriaOk && pugnoOk) bpMods.push(atkItemEffect.bpMod)
+  }
+  // ─── GLI ORBI: UN DOPPIO POTENZIAMENTO DI TIPO ──────────────────────────
+  //
+  //     else if (getItemDualTypeBoost(attacker.item, attacker.name)
+  //                .indexOf(move.type) !== -1)  { bpMods.push(0x1333) }
+  //                                              `damage_MASTER.js:1704`
+  //
+  // Stesso `0x1333` del punto k — cioè `MOD.X1_2`, lo stesso di Carbonella e
+  // degli incensi — e nella stessa catena. L'unica differenza è che i tipi
+  // potenziati sono DUE invece di uno, e che dipendono dalla specie.
+  //
+  // ─── E' UN `else if`, E LO E' ANCHE QUI ─────────────────────────────────
+  //
+  // Nel riferimento questo ramo è l'alternativa del potenziamento a tipo
+  // singolo: uno strumento non può prenderli tutti e due. Con le nostre
+  // tabelle l'esclusione non serve mai — nessun orbo ha `bpMod` — ma è com'è
+  // scritta, e la scriviamo perché il giorno che qualcuno desse un `bpMod` a
+  // un orbo il ×1.2 non si applicherebbe due volte.
+  //
+  // ─── LA CADUTA DEL `switch` STA IN `rules.js`, NON QUI ──────────────────
+  //
+  // Perché è una TABELLA ordinata e non una condizione: `tipiDoppioStrumento`
+  // entra al caso dello strumento e scende. Il perché, e la matrice misurata
+  // che lo conferma, stanno accanto alla tabella.
+  else if (atkItemEffect?.doppioTipo) {
+    const tipiOrbo = tipiDoppioStrumento(atkItemKey, atkPokemon)
+    if (tipiOrbo?.includes(moveType)) bpMods.push(MOD.X1_2)
   }
 
   // o — Knock Off: ×1.5 se il difensore tiene uno strumento RIMOVIBILE.

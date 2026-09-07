@@ -95,11 +95,48 @@ export const ITEM_EFFECTS = {
   // generazione di `canEvolve`. In NCP toglie anche il contatto alla mossa
   // (`damage_MASTER.js` riga 826): quello lo modelliamo qui sotto nel motore.
   'punching glove': { bpMod: MOD.X1_1_ALT, soloMossePugno: true,  showInSmogon: true },
-  // Orb leggendari: ×1.2 su Dragon/Steel per Dialga, Water/Dragon per Palkia,
-  // Ghost/Dragon per Giratina. Qui senza logica di filtro tipo — mostrati sempre.
-  'adamant orb':    { showInSmogon: true },
-  'lustrous orb':   { showInSmogon: true },
-  'griseous orb':   { showInSmogon: true },
+  /**
+   * ─── GLI ORBI LEGGENDARI ──────────────────────────────────────────────────
+   *
+   * ×1.2 su DUE tipi, e quali dipende dalla specie che li tiene:
+   * Acciaio/Drago su Dialga, Acqua/Drago su Palkia, Spettro/Drago su Giratina,
+   * Drago/Psico su Latias e Latios.
+   *
+   * Stesso `0x1333` degli incensi e di Carbonella, stessa catena — è il punto
+   * k di `calcBPMods` (`damage_MASTER.js:1704`) — quindi meccanicamente sono
+   * la cosa più vicina al lavoro già fatto. La differenza è che la coppia di
+   * tipi non è una proprietà dello strumento: è una proprietà della COPPIA
+   * strumento-specie, e viene da un `switch` che CADE.
+   *
+   * ─── PERCHE' QUI C'E' SOLO UN FLAG ────────────────────────────────────────
+   *
+   * Perché la tabella vera è ORDINATA, e l'ordine è la meccanica: sta in
+   * `STRUMENTI_DOPPIO_TIPO` dentro `lib/rules.js`, con la matrice misurata che
+   * la giustifica. Scriverla qui come `tipi: [...]` per orbo perderebbe la
+   * caduta — e con lei il fatto che l'Orbo Bramoso addosso a Palkia dà il
+   * bonus di PALKIA, che è quello che il riferimento calcola.
+   *
+   * `doppioTipo` è solo il segnale che l'effetto esiste: lo legge il motore
+   * per entrare nel ramo, e `haEffetto` per togliere il segnalino.
+   *
+   * ─── E PERCHE' LA GEMMADANIMA E' QUI ADESSO ───────────────────────────────
+   *
+   * Perché è il QUARTO caso dello stesso `switch`, e i tre orbi ci cadono
+   * dentro. Non era una voce di questa sessione — è entrata perché senza di
+   * lei l'Orbo Bramoso su Latios avrebbe dato zero invece del ×1.2 che il
+   * riferimento gli dà.
+   *
+   * L'altra metà della Gemmadanima — ×1.5 sull'Attacco Speciale (`:2001`) e
+   * sulla Difesa Speciale (`:2121`) — NON resta da fare: tutt'e due i rami
+   * sono chiusi da `gen <= 6`, e Champions gira a `gen = 10`
+   * (`scripts/ncp/contesto.mjs:83`). Sono codice morto alla nostra
+   * generazione, non un pezzo mancante — e questo è il motivo per cui la
+   * Gemmadanima esce dal segnalino intera e non a metà.
+   */
+  'adamant orb':    { doppioTipo: true, showInSmogon: true },
+  'lustrous orb':   { doppioTipo: true, showInSmogon: true },
+  'griseous orb':   { doppioTipo: true, showInSmogon: true },
+  'soul dew':       { doppioTipo: true, showInSmogon: true },
   // Throat Spray: ×1.5 SpAtk dopo una mossa sonora. Trattato come attivo.
   'throat spray':   { showInSmogon: true },
   // (Booster Energy stava qui con il solo `showInSmogon`, cioè fra le voci
