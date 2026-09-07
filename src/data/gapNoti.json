@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:54:24.811Z",
+    "generatedAt": "2026-09-07T07:03:57.654Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
-    "strumentiNelGap": 32,
+    "strumentiNelGap": 31,
     "mosseNelGap": 7,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -13,7 +13,6 @@
   ],
   "strumenti": [
     "adamant orb",
-    "air balloon",
     "bug memory",
     "burn drive",
     "chill drive",

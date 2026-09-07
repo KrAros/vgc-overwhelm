@@ -15,6 +15,8 @@ import { MOD } from '../lib/modifiers.js'
 // typBoost:   tipo richiesto perché bpMod si applichi (TYPES.X)
 // statType:   restringe atkMult/bpMod a 'physical' o 'special'
 // soloSpecie: elenco di slug — l'effetto vale solo su quelle specie
+// immuneTipo: tipo a cui lo strumento rende immuni (danno zero, non ridotto)
+// nonAncorato: chi lo tiene non tocca il terreno — `pIsGrounded` del riferimento
 //
 // ─── PERCHÉ bpMod E NON UN DECIMALE ────────────────────────────────────────
 // Fino a D-2 gli item type-boost e i ×1.1 erano scritti come moltiplicatori
@@ -178,6 +180,56 @@ export const ITEM_EFFECTS = {
   // 50% di Difesa che nel gioco non esiste.
   'eviolite':       { defMult: 1.5, spdMult: 1.5, soloSeEvolvibile: true },
   'assault vest':   { spdMult: 1.5 },
+
+  /**
+   * ─── PALLONCINO ───────────────────────────────────────────────────────────
+   *
+   * L'unico strumento GENERICO dei trentanove: chiunque può tenerlo, quindi è
+   * anche l'unico dove il numero sbagliato lo incontra chiunque.
+   *
+   * ─── E' FAMIGLIA A, NON B: MISURATO ───────────────────────────────────────
+   *
+   * L'ipotesi di partenza era che il riferimento non lo calcolasse e servisse
+   * un'aggiudicazione. È falsa: lo calcola in DUE posti, e le due cose sono
+   * indipendenti.
+   *
+   *   1. IMMUNITA' A TERRA — `damage_MASTER.js:1119`, dentro `immunityChecks`,
+   *      `return damage: [0]`:
+   *
+   *          move.type === "Ground" && !field.isGravity
+   *            && defender.item === "Air Balloon"
+   *            && move.name !== "Thousand Arrows"
+   *
+   *   2. NON TOCCA IL TERRENO — `pIsGrounded` (`:1298`), che decide se i
+   *      terreni si applicano:
+   *
+   *          field.isGravity || mon.item == "Iron Ball"
+   *            || (mon.item != "Air Balloon" && !Levitate && !Flying)
+   *            || field.isIngrain
+   *
+   * Non è la stessa condizione letta due volte: un Volante è NON ancorato ma è
+   * immune a Terra per il tipo, e Levitate è non ancorata ma immunizza come
+   * abilità. Il Palloncino fa tutt'e due le cose per conto suo, e nel
+   * riferimento sono due righe in due funzioni diverse. Perciò due campi.
+   *
+   * ─── QUANTO SI SBAGLIAVA, MISURATO CONTRO L'ORACOLO ───────────────────────
+   *
+   *   Terremoto su chi ha il Palloncino     NCP 0        noi 43-51
+   *   Fulmine, terreno elettrico            NCP 45-54    noi 58-70
+   *   Pulsardragon, terreno nebbioso        NCP 22-27    noi 11-14
+   *
+   * La prima riga è la direzione peggiore: mostravamo un danno pieno dove il
+   * gioco non ne fa nessuno.
+   *
+   * ─── LE TRE CASELLE CHE NON ABBIAMO ───────────────────────────────────────
+   *
+   * `isGravity` e `isIngrain` non esistono nel nostro campo, e l'Ferroball —
+   * che nel riferimento ANCORA chi lo tiene, vincendo su Volante e Levitate —
+   * qui non ha un campo suo: resta col segnalino «non calcolata», che è dove
+   * sta già oggi. Sono tre assenze dichiarate, non tre dimenticanze: nessuna
+   * delle tre è esprimibile nell'app, quindi nessun caso può contraddirle.
+   */
+  'air balloon':    { immuneTipo: TYPES.GROUND, nonAncorato: true, showInSmogon: true },
 
   /**
    * ─── POLVERE METALLICA ────────────────────────────────────────────────────

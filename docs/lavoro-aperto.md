@@ -128,7 +128,7 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 32 strumenti col badge — la misura è stata fatta
+### I 31 strumenti col badge — la misura è stata fatta, e le voci vive sono finite
 
 Erano trentanove e nessuno ci aveva guardato. Adesso la misura c'è, e il numero
 non era quello che sembrava.
@@ -156,7 +156,13 @@ incontra.
    che li usa è `//k. 1.2x Items`, `0x1333`, cioè `MOD.X1_2`. Mancavano e basta.
 3. **meccanica che non modelliamo** — 22: le memorie e i drive cambiano il tipo
    del Pokémon o della mossa; gli orbi sono un doppio `typBoost`; `air balloon`
-   tocca il contatto col terreno. Famiglia B o C a seconda del caso.
+   tocca il contatto col terreno. **`air balloon` è fatta**, e la misura di
+   partenza su di lei era sbagliata: era data per famiglia B — «probabilmente
+   il riferimento non la calcola» — e invece la calcola in DUE posti,
+   `damage_MASTER.js:1119` (immunità a Terra) e `:1298` (`pIsGrounded`). Era
+   famiglia A, e per giunta l'unica voce GENERICA dell'elenco: la potevano
+   tenere tutti. Le altre 21 restano, e chiedono un cambio di tipo o una specie
+   assente.
 4. **raddoppio di statistica su una specie sola** — 4: `light ball` (Pikachu),
    `thick club` (Marowak), `deepseatooth`/`deepseascale` (Clamperl),
    `soul dew` (Latios/Latias), `metal powder` (Ditto). Meccanica semplice,
@@ -175,11 +181,19 @@ tre voci ciascuno, e dentro ogni `if` le voci NON hanno la stessa condizione:
 Clava Ossea vuole `"Physical"`, Squamastrana vuole `"Special"`, Sferascintilla
 niente. Si leggono una per una.
 
-**Quindi cosa resta di davvero giocabile oggi:** `air balloon`, più i tre già
-classificati. Quattro voci, non trentadue — e `air balloon` è l'unica del
-gruppo 3 che non chieda né una specie assente né un cambio di tipo: tocca il
-contatto col terreno, cioè `pIsGrounded`, e va verificata nel riferimento prima
-di assumere di che famiglia sia.
+**Quindi cosa resta di davvero giocabile oggi: niente.** I trentuno che
+portano ancora il segnalino sono ventotto legati a specie che Champions non ha
+e tre col badge classificato `meccanica-diversa`. Nessuno è tenibile da
+qualcuno in M-B, e il numero non scende più senza che cambi il roster o che si
+apra una delle tre collisioni. Il presidio adesso sorveglia proprio questo —
+28 + 3 — invece del solo totale.
+
+**E la lezione della misura sbagliata va tenuta.** `air balloon` era scritta
+qui come «probabilmente famiglia B», cioè come una cosa da decidere. Bastava
+aprire il riferimento per vedere che la calcola in due posti. Era l'unica voce
+GENERICA di tutto l'elenco — la potevano tenere tutti — e mostravamo un danno
+pieno dove il gioco non ne fa nessuno. **La famiglia di una voce si legge, non
+si stima dal nome**: è la stessa regola che vale per il punto della catena.
 
 **Una divergenza vecchia che la Polvere fa affiorare, misurata.** `hitsPhysical`
 nel riferimento comprende anche Psyshock, Psystrike e Secret Sword — speciali

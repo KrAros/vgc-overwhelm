@@ -154,24 +154,38 @@ describe('A — le voci che aspettano una trascrizione sono ancora aperte', () =
     ).toEqual([])
   })
 
-  it('gli strumenti col badge sono trentadue, e la misura è stata fatta', () => {
-    // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso sì: la
-    // misura sta nel documento, divisa in quattro gruppi. Sono stati fatti i
-    // cinque incensi — il gruppo 2, moltiplicatore semplice — e poi tutt'e due
-    // le voci VIVE del gruppo 4: 39 → 34 → 33 → 32.
+  it('gli strumenti col badge sono trentuno, e non ne resta nessuno di vivo', () => {
+    // Erano trentanove e «nessuno ci aveva ancora guardato». Adesso la misura
+    // c'è, e le voci GIOCABILI OGGI sono finite: 39 → 34 (i cinque incensi)
+    // → 33 → 32 (le due vive del gruppo 4) → 31 (il Palloncino).
     //
-    // Resta un numero da NON difendere: se scende ancora, la voce va
-    // aggiornata insieme al codice, nello stesso commit.
-    expect(gapNoti.strumenti.length).toBe(32)
+    // I trentuno che restano sono ventotto legati a specie che Champions non
+    // ha e tre col badge classificato `meccanica-diversa`. Nessuno di loro è
+    // tenibile da qualcuno in M-B: il numero non scende più senza che cambi il
+    // roster o che si apra una delle tre collisioni.
+    expect(gapNoti.strumenti.length).toBe(31)
   })
 
-  it('gli incensi e le due del gruppo 4 non portano più il badge, e i ventotto dormienti sì', () => {
-    // La forma della misura, presidiata: i cinque incensi, la Sferascintilla e
-    // la Polvere Metallica sono usciti, e i ventotto legati a specie che
-    // Champions non ha sono rimasti — di proposito, perché il gioco potrebbe
-    // aggiungerle.
+  it('e i trentuno sono tutti dormienti o classificati, non dimenticati', () => {
+    // La forma della misura, presidiata dove conta: non il numero, ma il fatto
+    // che ogni voce rimasta abbia una RAGIONE per restarci. Le tre classificate
+    // stanno in `classificazione-badge.mjs`; le altre ventotto vogliono una
+    // specie che il roster non ha.
+    const classificate = ['iron ball', 'macho brace', 'flying gem']
+    const dormienti = gapNoti.strumenti.filter(k => !classificate.includes(k))
+    expect(dormienti.length, 'una voce nuova senza ragione scritta').toBe(28)
+    for (const c of classificate) {
+      expect(gapNoti.strumenti, `${c} è uscita: aggiornare classificazione-badge.mjs`).toContain(c)
+    }
+  })
+
+  it('le otto fatte non portano più il badge, e i ventotto dormienti sì', () => {
+    // La forma della misura, presidiata: i cinque incensi, la Sferascintilla,
+    // la Polvere Metallica e il Palloncino sono usciti, e i ventotto legati a
+    // specie che Champions non ha sono rimasti — di proposito, perché il gioco
+    // potrebbe aggiungerle.
     for (const i of ['rose incense', 'odd incense', 'sea incense', 'wave incense',
-      'rock incense', 'light ball', 'metal powder']) {
+      'rock incense', 'light ball', 'metal powder', 'air balloon']) {
       expect(gapNoti.strumenti, `${i} porta ancora il badge`).not.toContain(i)
     }
     const memorie = gapNoti.strumenti.filter(k => k.endsWith(' memory'))

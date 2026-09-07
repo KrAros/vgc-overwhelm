@@ -165,10 +165,45 @@ const nomeAbilita = (chiave) =>
  * sarebbe stata immune — e il numero mostrato sarebbe stato un danno pieno
  * invece di zero, cioè l'errore nella direzione peggiore.
  */
-function isGrounded(pokeData, abilEffect) {
+function isGrounded(pokeData, abilEffect, itemEffect) {
   if (pokeData.type.includes(TYPES.FLYING)) return false
   if (abilEffect?.levitate) return false
+  // Il Palloncino (`nonAncorato`). Nel riferimento è un termine della stessa
+  // congiunzione — `mon.item != "Air Balloon" && !Levitate && !Flying` — quindi
+  // l'ordine fra i tre non conta: basta che uno sia vero perché non tocchi
+  // terra. Lo strumento arriva già passato al vaglio di Klutz, che lo annulla.
+  //
+  // I DUE TERMINI CHE MANCANO, dichiarati: `field.isGravity` e `field.isIngrain`
+  // non esistono nel nostro campo, e l'Ferroball — che nel riferimento ANCORA
+  // chi lo tiene, vincendo su Volante e Levitate — non ha un campo suo. È il
+  // motivo per cui porta ancora il segnalino «non calcolata».
+  if (itemEffect?.nonAncorato) return false
   return true
+}
+
+/**
+ * La chiave dello strumento DOPO Klutz, che lo annulla.
+ *
+ * ─── PERCHE' UNA FUNZIONE E NON DUE VOLTE LE STESSE TRE RIGHE ─────────────
+ *
+ * Perché adesso ha due chiamanti, e a due altezze diverse del motore:
+ *
+ *   - il blocco delle IMMUNITA', che gira prima della preparazione e ha
+ *     bisogno di sapere se il difensore ha il Palloncino;
+ *   - la catena dei moltiplicatori, che gira dopo e ha bisogno di tutto il
+ *     resto.
+ *
+ * Due copie di questa regola sarebbero due occasioni di scriverla storta, ed è
+ * lo stesso motivo per cui `campi-meta.mjs` esiste.
+ *
+ * Trascritta da `checkKlutz` (`damage_MASTER.js:448`), che scrive
+ * `pokemon.item = "Klutz"` — un nome che nessuna tabella conosce, cioè il modo
+ * in cui il riferimento dice «non ha più niente in mano».
+ */
+function chiaveStrumentoDopoKlutz(strumento, abilKey) {
+  const grezzo = (strumento || '').toLowerCase()
+  const klutz = ABILITY_EFFECTS[abilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(grezzo)
+  return klutz ? '' : grezzo
 }
 
 export function calculateDamage({ attacker, defender, move, field = {}, debug = IS_DEBUG }) {
@@ -738,6 +773,52 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   if (effectiveness === 0) {
     return { immune: true, reason: 'type', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
   }
+
+  // ─── L'IMMUNITA' DEL PALLONCINO ─────────────────────────────────────────
+  //
+  //     if (move.type === "Ground" && !field.isGravity
+  //         && defender.item === "Air Balloon"
+  //         && move.name !== "Thousand Arrows")     `damage_MASTER.js:1119`
+  //
+  // ─── PERCHE' PROPRIO QUI E NON PIU' SU ───────────────────────────────────
+  //
+  // Perché nel riferimento sta DOPO il controllo di efficacia zero (`:1104`) e
+  // dopo le undici abilità (`:1105-1117`), e il posto decide l'ETICHETTA: un
+  // Volante col Palloncino colpito da una mossa Terra legge «Immune (tipo)»,
+  // non «Immune (Palloncino)», perché il tipo esce per primo. Il numero è
+  // zero in tutt'e due i casi; il motivo scritto no.
+  //
+  // ─── LE DUE CONDIZIONI CHE NON SI POSSONO SCRIVERE ──────────────────────
+  //
+  // `!field.isGravity` — la Gravità non è nel nostro campo, quindi è sempre
+  // vera e nessun caso può contraddirla. È la stessa forma dichiarata per il
+  // Ventoincoda in `docs/lavoro-aperto.md`: verde per costruzione.
+  //
+  // `move.name !== "Thousand Arrows"` — quella mossa NON è in `moves.json`,
+  // misurato, quindi l'eccezione non è nemmeno esprimibile. È scritta lo
+  // stesso, perché il giorno che la mossa arriva dev'essere già al suo posto;
+  // il test asserisce l'assenza, così quel giorno qualcuno la vede.
+  //
+  // ─── E PERCHE' LO STRUMENTO SI RILEGGE QUI ──────────────────────────────
+  //
+  // Perché `defItemEffect` nasce molto più in basso, dopo la preparazione, e
+  // fra qui e là ci sono altri quattro `return`: le mosse a danno fisso, quelle
+  // a peso e le quattro KO. Fra le KO c'è FRACASSATERRA, che è di tipo Terra:
+  // con il controllo spostato in basso, il Palloncino non la fermerebbe e il
+  // riquadro scriverebbe «KO» dove il gioco non fa niente. Il posto non è un
+  // dettaglio di stile.
+  //
+  // La differenza fra questa chiave e quella di laggiù è lo strumento che la
+  // preparazione può CONSUMARE. Sono due soli — l'Energia Booster
+  // (`accendeParadosso`, `preparazione.js:194`) e l'Orbo Adrenalina
+  // (`orboAdrenalina`, `:283`) — e il Palloncino non è nessuno dei due: un
+  // test lo asserisce, così il giorno che l'elenco si allunga qualcuno lo vede.
+  const strumentoDifensore = chiaveStrumentoDopoKlutz(defItem, defAbilKey)
+  if (moveType === TYPES.GROUND
+      && ITEM_EFFECTS[strumentoDifensore]?.immuneTipo === TYPES.GROUND
+      && move !== 'thousand arrows') {
+    return { immune: true, reason: 'item', itemName: strumentoDifensore, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
   // Meteo estremo: sotto Sole Estremo le mosse Acqua falliscono, sotto Pioggia
   // Intensa falliscono le mosse Fuoco. Non è una riduzione del danno: in NCP
   // (`immunityChecks`) la funzione esce subito con `damage: [0]`, esattamente
@@ -1097,11 +1178,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // ci sono tutti: la lista è l'eccezione a una regola che ANNULLA, e tenerne
   // una parte vorrebbe dire che il giorno in cui uno degli altri entrasse,
   // Klutz comincerebbe a spegnerlo in silenzio.
-  const klutzAtk = ABILITY_EFFECTS[atkAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(atkItemGrezzo)
-  const klutzDef = ABILITY_EFFECTS[defAbilKey]?.klutz && !STRUMENTI_IMMUNI_A_KLUTZ.has(defItemGrezzo)
-
-  const atkItemKey = klutzAtk ? '' : atkItemGrezzo
-  const defItemKey = klutzDef ? '' : defItemGrezzo
+  const atkItemKey = chiaveStrumentoDopoKlutz(atkItemGrezzo, atkAbilKey)
+  const defItemKey = chiaveStrumentoDopoKlutz(defItemGrezzo, defAbilKey)
   const atkItemEffect = ITEM_EFFECTS[atkItemKey] || null
   const defItemEffect = ITEM_EFFECTS[defItemKey] || null
 
@@ -1679,8 +1757,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   //
   // NOTA su j e k: in NCP sono un `else if`, ma la mutua esclusione è già
   // garantita dal fatto che un Pokémon tiene un solo strumento.
-  const defGrounded = isGrounded(defPokeData, defAbilEffect)
-  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect)
+  const defGrounded = isGrounded(defPokeData, defAbilEffect, defItemEffect)
+  const atkGrounded = isGrounded(atkPokeData, atkAbilEffect, atkItemEffect)
   const bpMods = []
 
   // ─── PUNTO a — FRANGIAURA ────────────────────────────────────────────────

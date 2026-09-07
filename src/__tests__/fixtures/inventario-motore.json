@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:54:25.258Z",
+    "generatedAt": "2026-09-07T07:03:58.087Z",
     "superficie": [
       "src/calcEngine.js",
       "src/lib",
@@ -77,7 +77,7 @@
       "nota": "calcEngine:332 — toglie il contatto come checkContactOverride, e da lì passano Tough Claws e Fluffy: cambia il numero",
       "prova": {
         "file": "src/calcEngine.js",
-        "riga": 1269,
+        "riga": 1347,
         "testo": "atkAbilKey === 'long-reach' ||"
       }
     },
@@ -201,7 +201,7 @@
         "chiave": "flash fire",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 736,
+          "riga": 771,
           "testo": "return { immune: true, reason: 'ability', abilityName: 'Flash Fire', rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct:"
         }
       },
@@ -273,7 +273,7 @@
         "chiave": "long reach",
         "prova": {
           "file": "src/calcEngine.js",
-          "riga": 1269,
+          "riga": 1347,
           "testo": "atkAbilKey === 'long-reach' ||"
         }
       },

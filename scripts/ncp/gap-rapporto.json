@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T06:54:24.811Z",
+    "generatedAt": "2026-09-07T07:03:57.654Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -9,8 +9,8 @@
     "abilitaSenzaEffetto": 159,
     "abilitaNelGap": 1,
     "strumentiSelezionabili": 320,
-    "strumentiSenzaEffetto": 167,
-    "strumentiNelGap": 32,
+    "strumentiSenzaEffetto": 166,
+    "strumentiNelGap": 31,
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
@@ -111,16 +111,6 @@
           "funzione": "getItemDualTypeBoost",
           "file": "item_data.js",
           "riga": 569
-        }
-      },
-      {
-        "chiave": "air balloon",
-        "nome": "Air Balloon",
-        "canale": "STR",
-        "prova": {
-          "funzione": "pIsGrounded",
-          "file": "damage_MASTER.js",
-          "riga": 1298
         }
       },
       {
