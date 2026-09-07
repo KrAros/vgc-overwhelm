@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-09-06T09:25:50.050Z",
+    "generatedAt": "2026-09-07T06:31:58.270Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
-    "strumentiNelGap": 39,
+    "strumentiNelGap": 34,
     "mosseNelGap": 7,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
@@ -38,19 +38,14 @@
     "lustrous orb",
     "macho brace",
     "metal powder",
-    "odd incense",
     "poison memory",
     "psychic memory",
-    "rock incense",
     "rock memory",
-    "rose incense",
-    "sea incense",
     "shock drive",
     "soul dew",
     "steel memory",
     "thick club",
-    "water memory",
-    "wave incense"
+    "water memory"
   ],
   "mosse": [
     "beat up",

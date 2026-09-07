@@ -128,42 +128,54 @@ nessuno dei due accende, e finché è così nessun caso può contraddirla.
 giorno che il Ventoincoda entra nel campo del danno, `calcEffectiveSpe` lo
 sa già fare.
 
-### I 39 strumenti col badge — la superficie più grande rimasta
-Il numero non è mai sceso mentre le abilità andavano da 46 a 1. **Nessuno ci ha
-ancora guardato**, e questa è la sola voce del documento di cui non si sappia
-già la forma del lavoro.
+### I 34 strumenti col badge — la misura è stata fatta
 
-**Non si comincia correggendo: si comincia misurando.** L'esperienza delle
-abilità dice che quei 39 non sono una lista omogenea, e che si divideranno in
-almeno quattro gruppi, ognuno con un lavoro diverso:
+Erano trentanove e nessuno ci aveva guardato. Adesso la misura c'è, e il numero
+non era quello che sembrava.
 
-1. **badge sbagliato** — lo strumento lo calcoliamo già, e il registro non se ne
-   accorge perché lo cerca dove non è. È successo con `flying gem`, `iron ball`
-   e `macho brace`, che oggi sono classificati `meccanica-diversa` in
-   `classificazione-badge.mjs` con scritto il perché;
-2. **moltiplicatore semplice** — una riga in `ITEM_EFFECTS` e un caso contro
-   l'oracolo. È il grosso, se le abilità sono un'indicazione;
-3. **chiede un dato che non abbiamo** — come Rivalry col sesso. Va in famiglia C
-   e non si fa;
-4. **chiede una meccanica che non modelliamo** — chi agisce dopo il danno, o fra
-   un turno e l'altro. Va in famiglia B, e la decisione è di Simone.
+**Ventotto dei trentanove sono legati a specie che Champions non ha.** Le
+diciassette memorie vogliono Silvally, i quattro drive vogliono Genesect, e gli
+altri sette sono di Marowak, Latios/Latias, Clamperl, Dialga, Palkia e Giratina.
+Nessuna di quelle specie è in M-B: **ventotto segnalini su strumenti che
+nessuno può tenere.**
 
-**Come misurare**, e in quest'ordine:
+Non sono rumore da togliere. **Scelta di Simone: restano.** Champions potrebbe
+aggiungere quelle specie, e il giorno che succede il segnalino è già al posto
+giusto — meglio un avviso che nessuno incontra di un silenzio che qualcuno
+incontra.
 
-    npm run gap:gen          rigenera il registro; l'elenco sta in
-                             `scripts/ncp/gap-rapporto.json`, campo `prove.strumenti`
-    npm run inventario:gen   dice quali dei 39 il MOTORE già nomina — quelli
-                             sono candidati al gruppo 1
+**I quattro gruppi, misurati:**
 
-Per ognuno, la domanda è una sola e si legge nel riferimento, non si deduce dal
+1. **badge sbagliato** — 3: `flying gem`, `iron ball`, `macho brace`. Il motore
+   li nomina già, per un'altra cosa. Sono classificati `meccanica-diversa` in
+   `classificazione-badge.mjs` con scritto il perché. `inventario:gen` conferma
+   che sono gli unici tre: non ce ne sono altri nascosti.
+2. **moltiplicatore semplice** — 5: i cinque incensi. **Fatti.** Erano la stessa
+   identica meccanica delle diciotto righe `typBoost` già in `ITEM_EFFECTS`:
+   `getItemBoostType` li mette nello stesso `switch` di Carbonella, e il ramo
+   che li usa è `//k. 1.2x Items`, `0x1333`, cioè `MOD.X1_2`. Mancavano e basta.
+3. **meccanica che non modelliamo** — 22: le memorie e i drive cambiano il tipo
+   del Pokémon o della mossa; gli orbi sono un doppio `typBoost`; `air balloon`
+   tocca il contatto col terreno. Famiglia B o C a seconda del caso.
+4. **raddoppio di statistica su una specie sola** — 4: `light ball` (Pikachu),
+   `thick club` (Marowak), `deepseatooth`/`deepseascale` (Clamperl),
+   `soul dew` (Latios/Latias), `metal powder` (Ditto). Meccanica semplice,
+   `calcAtMods` e `calcDefMods`; **`light ball` e `metal powder` sono gli unici
+   due vivi**, perché Pikachu e Ditto sono in M-B.
+
+**Quindi cosa resta di davvero giocabile oggi:** `light ball`, `metal powder`,
+`air balloon`, più i tre già classificati. Sei voci, non trentaquattro.
+
+**Come rifare la misura**, se il roster cambia:
+
+    npm run gap:gen          rigenera il registro
+    npm run gap:funzioni     lo raggruppa per la funzione di NCP che lo gestisce
+    npm run inventario:gen   dice quali il MOTORE già nomina — gruppo 1
+
+Per ognuno la domanda è una sola e si legge nel riferimento, non si deduce dal
 nome: **dove tocca il danno `item_data.js`, e in quale punto della catena?**
 `calcBPMods`, `calcAttack`, `calcDefense` e i modificatori finali sono posti
 diversi, e sbagliare punto dà numeri che divergono di un arrotondamento.
-
-Il risultato della misura è un elenco diviso in quattro, con accanto a ciascuno
-il punto del riferimento. **Da lì si decide cosa fare, e la decisione è di
-Simone.** Prima di quella misura non si scrive codice: il rischio è correggerne
-tre a caso e lasciare il numero a 36 senza sapere cos'è il resto.
 
 ### Diciassette chiavi di traduzione che non rende nessuno
 Su 216 chiavi d'interfaccia in `it.json` — esclusi i cataloghi di dati, che sono
