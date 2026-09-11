@@ -763,9 +763,16 @@ export const ABILITA_A_VITA_BASSA = new Set([
  *                         cioe' il caso normale. A un PP solo la mossa vale
  *                         200. Qui il riferimento non commenta niente: usa il
  *                         numero dei suoi dati e basta.
+ *   Beat Up               14 e' una MEDIA, ed e' l'unica delle quattro in cui
+ *                         il riferimento mostra il conto che ha fatto:
+ *                         `move_data.js:2796` scrive
+ *                         «average fully evolved atk. stat is ~90. 90/10 + 5
+ *                         = 14». Nel gioco la potenza di ogni colpo dipende
+ *                         dall'Attacco BASE dell'alleato che lo tira; qui c'e'
+ *                         un alleato medio, ipotizzato una volta per tutte.
  *
- * Due assunzioni opposte, e nessuna delle due e' scritta nei nostri dati:
- * `power: 0` per tutt'e tre. Il numero sta QUI e non in `moves.json` proprio
+ * Tre assunzioni diverse — un massimo, un minimo e una media — e nessuna
+ * delle tre e' scritta nei nostri dati: `power: 0` per tutt'e quattro. Il numero sta QUI e non in `moves.json` proprio
  * per questo — in `moves.json` sembrerebbe un fatto sulla mossa, e non lo e':
  * e' una scelta, e va letta accanto alla ragione.
  *
@@ -776,10 +783,39 @@ export const ABILITA_A_VITA_BASSA = new Set([
  * verde per costruzione perche' i punti salute non esistono nel modello,
  * questa e' verde perche' e' la stessa assunzione che fa l'oracolo.
  */
+/**
+ * ─── PERCHE' BEAT UP E' QUI, DOPO ESSERE STATA TENUTA FUORI ────────────────
+ *
+ * Stava fuori con una motivazione scritta, e la motivazione era sbagliata:
+ *
+ *     «l'oracolo la calcola con UN colpo solo mentre i nostri dati ne
+ *      prevedono da uno a sei: il numero non sarebbe confrontabile»
+ *
+ * Misurato, e' falso su tutt'e due le meta'.
+ *
+ * IL RIFERIMENTO HA IL NOSTRO STESSO INTERVALLO. Le sue tabelle sono fusioni
+ * profonde (`$.extend(true, ...)`): `MOVES_GSC` definisce Beat Up con
+ * `hitRange: [1, 6]` e `MOVES_BW` ne cambia SOLO la potenza a 14. Letto alla
+ * generazione di Champions, il dato esce
+ *
+ *     { bp: 14, type: 'Dark', category: 'Physical', hitRange: [1, 6] }
+ *
+ * cioe' lo stesso `colpi: [1, 6]` che abbiamo noi.
+ *
+ * E IL CONTO DEI COLPI NON E' NEL CONFRONTO. Per le multi-colpo il
+ * riferimento torna i roll di UN colpo, e quante volte colpisca lo decide
+ * altrove. Misurato su tre gia' fatte, roll identici ai nostri con `colpi`
+ * tenuto a parte: Bullet Seed e Rock Blast 5, Dual Wingbeat 2. Beat Up ha la
+ * stessa forma, e l'oracolo risponde 22-26 per colpo.
+ *
+ * Non era un'aggiudicazione: era una trascrizione, classificata su una
+ * plausibilita' invece che sulla riga che decide.
+ */
 export const MOSSE_POTENZA_ASSUNTA = Object.freeze({
   'return': 102,
   'frustration': 102,
   'trump card': 40,
+  'beat up': 14,
 })
 
 /** Vero se la potenza di questa mossa e' un numero assunto, non calcolato. */

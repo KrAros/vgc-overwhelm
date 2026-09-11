@@ -58,20 +58,38 @@ describe('le tre entrano nel calcolo, e il badge se n\'è andato', () => {
     }
   })
 
-  it('e Beat Up no, che sembra della stessa famiglia', () => {
-    // Anche Beat Up è un commento senza codice nel riferimento (punto i.i) e
-    // cade su `move.bp: 14`. Non è qui perché l'oracolo la calcola con UN
-    // colpo solo mentre i nostri dati ne prevedono da uno a sei: il numero
-    // non sarebbe confrontabile, e sceglierne uno sarebbe un'aggiudicazione.
+  it('e Beat Up adesso è con loro — la ragione per tenerla fuori era falsa', () => {
+    // ─── IL TEST NON E' STATO TOLTO, E' STATO GIRATO ──────────────────────
+    //
+    // Diceva: «l'oracolo la calcola con UN colpo solo mentre i nostri dati ne
+    // prevedono da uno a sei: il numero non sarebbe confrontabile, e
+    // sceglierne uno sarebbe un'aggiudicazione».
+    //
+    // Misurato, era falso su tutt'e due le metà.
+    //
+    // Il riferimento ha il NOSTRO STESSO intervallo: le sue tabelle sono
+    // fusioni profonde, `MOVES_GSC` definisce `hitRange: [1, 6]` e `MOVES_BW`
+    // cambia solo la potenza a 14. Alla generazione di Champions il dato esce
+    // `{ bp: 14, hitRange: [1, 6] }`.
+    //
+    // E il conto dei colpi non è nel confronto: per le multi-colpo il
+    // riferimento torna i roll di UN colpo. Su Bullet Seed e Rock Blast i
+    // nostri roll sono identici ai suoi con `colpi: 5` tenuto a parte, e su
+    // Dual Wingbeat con `colpi: 2`. Beat Up ha la stessa forma.
+    //
+    // Il caso contro l'oracolo sta in `beatUp.test.js`.
     expect(movesData['beat up'].colpi).toEqual([1, 6])
-    expect(haPotenzaAssunta('beat up')).toBe(false)
-    expect(mossaNonCalcolata('beat up')).toBe(true)
+    expect(haPotenzaAssunta('beat up')).toBe(true)
+    expect(mossaNonCalcolata('beat up')).toBe(false)
+    expect(nostro(att(), dif(), 'beat up'), 'Beat Up è tornata nulla').not.toBeNull()
   })
 })
 
 describe('i tre numeri, e le due ipotesi opposte', () => {
-  it('102, 102 e 40', () => {
-    expect(MOSSE_POTENZA_ASSUNTA).toEqual({ 'return': 102, 'frustration': 102, 'trump card': 40 })
+  it('102, 102, 40 e 14', () => {
+    expect(MOSSE_POTENZA_ASSUNTA).toEqual({
+      'return': 102, 'frustration': 102, 'trump card': 40, 'beat up': 14,
+    })
   })
 
   it('Return e Frustration danno lo stesso danno', () => {

@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generatedAt": "2026-09-07T07:11:52.507Z",
+    "generatedAt": "2026-09-11T06:27:28.540Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "abilitaNelGap": 1,
     "strumentiNelGap": 27,
-    "mosseNelGap": 7,
+    "mosseNelGap": 6,
     "note": "Chiavi che il riferimento calcola nel danno e noi no. Le prove stanno in scripts/ncp/gap-rapporto.json. Rigenerare: npm run gap:gen"
   },
   "abilita": [
@@ -41,7 +41,6 @@
     "water memory"
   ],
   "mosse": [
-    "beat up",
     "comeuppance",
     "counter",
     "fling",
