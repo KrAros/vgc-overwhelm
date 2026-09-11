@@ -165,6 +165,42 @@ export const ITEM_EFFECTS = {
   'silver powder':  { typBoost: TYPES.BUG,      bpMod: MOD.X1_2, showInSmogon: true },
 
   /**
+   * ─── LE QUATTRO CHIAVI CHE IL MOTORE NON TROVAVA ──────────────────────────
+   *
+   * `items.json` scrive questi quattro SENZA spazi — `silverpowder`,
+   * `blackglasses`, `nevermeltice`, `twistedspoon` — mentre qui sopra hanno il
+   * nome del listino, con gli spazi. Il motore cerca `ITEM_EFFECTS[chiave]`
+   * con la chiave di `items.json`, non la trova, e va avanti: quattro
+   * potenziatori di tipo che NON SI SONO MAI ACCESI.
+   *
+   * Misurato prima di correggere: Knock Off con gli Occhialineri dava 98-99
+   * contro i 118-119 del riferimento. Un numero piu' basso del vero, senza
+   * nessun avviso — la direzione peggiore.
+   *
+   * ─── PERCHE' NESSUN PRESIDIO LO VEDEVA ────────────────────────────────────
+   *
+   * `anomalieListino.test.js` e `gen-gap-noti.mjs` cercano le voci con una
+   * `norm()` che TOGLIE spazi e trattini, quindi per loro `black glasses` e
+   * `blackglasses` sono la stessa cosa e non c'e' nessuna anomalia. Il motore
+   * invece fa una ricerca esatta.
+   *
+   * Il presidio normalizzava dove il motore non normalizza: guardava la parola
+   * e non la cosa. Adesso `anomalieListino.test.js` ha un caso che fa la
+   * ricerca ESATTA, la stessa del motore.
+   *
+   * ─── PERCHE' ALIAS E NON RINOMINARE `items.json` ──────────────────────────
+   *
+   * Perche' quelle chiavi finiscono nei link condivisibili e nelle squadre
+   * salvate in locale: rinominarle romperebbe i set che la gente ha gia'.
+   * L'alias costa quattro righe e non rompe niente. Normalizzare il listino e'
+   * un'altra sessione, e allora queste righe se ne andranno insieme.
+   */
+  'silverpowder':   { typBoost: TYPES.BUG,      bpMod: MOD.X1_2, showInSmogon: true },
+  'blackglasses':   { typBoost: TYPES.DARK,     bpMod: MOD.X1_2, showInSmogon: true },
+  'nevermeltice':   { typBoost: TYPES.ICE,      bpMod: MOD.X1_2, showInSmogon: true },
+  'twistedspoon':   { typBoost: TYPES.PSYCHIC,  bpMod: MOD.X1_2, showInSmogon: true },
+
+  /**
    * ─── I CINQUE INCENSI ─────────────────────────────────────────────────────
    *
    * Stessa meccanica esatta delle diciotto righe qui sopra, e il riferimento

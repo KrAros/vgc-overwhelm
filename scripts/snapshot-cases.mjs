@@ -555,6 +555,17 @@ function aggiungi(blocco, etichetta, input) {
     attacker: { ...atk('dragonite', 'adamant', SP.fisico), atkAbility: 'aerilate' },
     defender: D.hands, move: 'extreme speed', field: field(),
   })
+  // ─── I QUATTRO POTENZIATORI CHE IL MOTORE NON TROVAVA ───────────────────
+  //
+  // `items.json` scrive `blackglasses` senza spazi, `ITEM_EFFECTS` lo nominava
+  // `black glasses`: il ×1,2 sulle mosse Buio non si e' mai acceso. Nessun caso
+  // della fotografia usava quei quattro strumenti, quindi nemmeno lei poteva
+  // vederlo — `snapshot:diff` restava a zero mentre il numero era sbagliato.
+  aggiungi('B8', 'chiave-senza-spazi-blackglasses', {
+    attacker: { ...atk('garchomp', 'adamant', SP.fisico), atkItem: 'blackglasses' },
+    defender: D.chomp, move: 'knock off', field: field(),
+  })
+
   // ─── DONONATURALE, E LE MOSSE CHE IL TIPO SE LO SCELGONO DA SOLE ────────
   //
   // Tre casi che prima non c'erano, e la loro assenza si e' vista: quando
