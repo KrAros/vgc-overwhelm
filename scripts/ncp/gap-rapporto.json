@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-11T11:49:40.899Z",
+    "generatedAt": "2026-09-11T18:26:20.233Z",
     "ncpCommit": "7919130",
     "ingresso": "CALCULATE_ALL_MOVES_SV",
     "funzioniRaggiunte": 78,
@@ -14,7 +14,7 @@
     "mosseAPotenzaZero": 303,
     "mosseOffensiveNelRiferimento": 541,
     "mosseOffensiveAPotenzaZero": 35,
-    "mosseNelGap": 5,
+    "mosseNelGap": 4,
     "mosseSenzaOracolo": 9,
     "badgeToltiDallaSecondaFonte": 6,
     "note": "Voci che il riferimento NCP calcola nel danno e il nostro motore no. Alimenta il badge «non calcolata». Rigenerare con `npm run gap:gen` dopo ogni sessione che aggiunge effetti."
@@ -313,11 +313,6 @@
       {
         "chiave": "counter",
         "nome": "Counter",
-        "categoriaNCP": "Physical"
-      },
-      {
-        "chiave": "fling",
-        "nome": "Fling",
         "categoriaNCP": "Physical"
       },
       {

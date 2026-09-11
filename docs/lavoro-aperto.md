@@ -41,11 +41,11 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **35** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Trenta sono fatte, ne restano **5**, e **portano il badge**:
+nome. Trentuno sono fatte, ne restano **4**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
-> Comeuppance, Counter, Fling, Metal Burst, Mirror Coat
+> Comeuppance, Counter, Metal Burst, Mirror Coat
 
 Non sono lo stesso problema, e quelle legate ai punti salute non ci sono più:
 sono state fatte tutte.
@@ -56,7 +56,10 @@ il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
 turno che il nostro modello non ha.
 
-**Ne resta una sola da trascrivere: Fling.**
+**Non ne resta nessuna da trascrivere.** Le quattro che portano ancora il
+badge sono tutte reattive — calcolano il colpo che il difensore ha appena
+tirato — e non sono una trascrizione: sono un pezzo di turno che il nostro
+modello non ha.
 
 **Beat Up è fatta**, ed era la più facile — una riga in `MOSSE_POTENZA_ASSUNTA`
 e un caso contro l'oracolo, come Return e Trump Card. I casi stanno in
@@ -102,15 +105,29 @@ stesso elenco: Palla Clima senza meteo è Normale, e con Pixilate la
 convertivamo — 12-13 dove il riferimento dà 11-13. Corretto qui perché è la
 stessa riga del riferimento: trascriverne metà l'avrebbe lasciato in piedi.
 
-**Fling è una tabella con tre regole per famiglia dentro.** `item_data.js:631`:
-53 strumenti nominati (29 selezionabili da noi), più tre regole che valgono per
-famiglia — qualunque `Plate` fa 90, qualunque `Memory` fa 50, e `Eviolite`
-compare due volte con due valori diversi (80 e 40: la prima condizione vince, e
-va trascritta com'è, non «corretta»). Tutto il resto cade sul default 10.
-C'è anche una guardia: certi strumenti non si possono lanciare
-(`cantFlingItem`, `:1148`).
+**Fling è fatta**, e il conto che questo documento dava era sbagliato in tre
+punti su tre. I casi stanno in `lancio.test.js`.
 
-Resta Fling.
+| il documento diceva | misurato |
+|---|---|
+| 53 nominati, 29 nostri | **86** dei nostri 320 prendono un valore non di ripiego |
+| «tre regole per famiglia» | **due** — qualunque `Plate` fa 90, qualunque `Memory` fa 50 |
+| «una guardia» | **undici condizioni**, e una riguarda il DIFENSORE |
+
+La differenza fra 29 e 86 è tutta nelle due regole per famiglia: diciassette
+Tavole e diciassette Memorie entrano senza essere nominate.
+
+La cosa giusta il documento la diceva: l'`Eviolite` compare due volte, 80 e 40,
+e vince la prima. Per questo la trascrizione è una CATENA e non una tabella —
+una tabella piatta avrebbe dovuto scegliere, e scegliere è correggere.
+
+**Due cose in più che nessuno aveva visto.** Il `Griseous Orb` non è nella lista
+dei 60 dove stanno gli altri due orbi, e cade sul ripiego di 10. E la condizione
+che dovrebbe bloccare i cristalli Z — `indexOf(" ium Z")` — cerca uno SPAZIO che
+nessun nome ha, quindi non scatta mai: nel gioco non si lanciano, nel riferimento
+sì. Si segue l'oracolo.
+
+Non resta niente da trascrivere.
 
 **Return, Frustration, Trump Card e Beat Up sono uscite senza essere
 calcolate.** Nel

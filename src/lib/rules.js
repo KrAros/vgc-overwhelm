@@ -1372,6 +1372,8 @@ export function mossaEntraNelCalcolo(mossa, dati) {
     // delle bacche. Senza questa riga uscirebbe di qui, e il `return` a zero
     // di chi non ha bacca non sarebbe nemmeno raggiungibile.
     || mossa === 'natural gift'
+    // Il Lancio ha `power: 0` nei dati e la potenza vera nello strumento.
+    || mossa === 'fling'
     || haPotenzaDaiPuntiSalute(mossa)
     || haDannoDaiPuntiSalute(mossa)
     || haPotenzaAssunta(mossa)
@@ -1708,3 +1710,129 @@ export const MOSSE_CON_TIPO_PROPRIO = new Set([
   'multi-attack',
   'terrain pulse',
 ])
+
+/**
+ * ─── LANCIO: LA POTENZA DIPENDE DALLO STRUMENTO ────────────────────────────
+ *
+ * Trascritta da `getFlingPower` (`vendor/ncp/item_data.js:631`), che NON e' una
+ * tabella: e' una catena di undici ternari annidati, e **l'ordine e' la
+ * meccanica**. Due cose lo dimostrano, e nessuna delle due si dedurrebbe da un
+ * elenco piatto:
+ *
+ *   L'EVOLCONDENSA COMPARE DUE VOLTE, con due valori diversi — 80 al quarto
+ *   livello e 40 al nono. Vince il primo, quindi vale 80 e la riga dei 40 e'
+ *   morta. Misurato contro l'oracolo: 120-122, cioe' 80. Va trascritta com'e',
+ *   non «corretta».
+ *
+ *   DUE REGOLE VALGONO PER FAMIGLIA, non per nome: qualunque cosa contenga
+ *   «Plate» fa 90, qualunque «Memory» fa 50. Sono la ragione per cui gli
+ *   strumenti che prendono un valore non di ripiego sono 86 dei nostri 320 e
+ *   non i 53 nominati: diciassette Tavole e diciassette Memorie entrano dalla
+ *   famiglia, non dall'elenco.
+ *
+ * ─── E UNA ASIMMETRIA CHE SEMBRA UN REFUSO E NON LO E' ─────────────────────
+ *
+ * Orbo Adamante e Orbo Bramoso stanno nei 60; il Grigiosfera NO, e cade sul
+ * ripiego di 10. Misurato: 16 danni contro i 90 degli altri due. Si trascrive.
+ *
+ * ─── IL PRIMO RAMO DEL RIFERIMENTO NON E' QUI ──────────────────────────────
+ *
+ *     isInt = parseInt(item); return isNaN(isInt) ? (...) : isInt;
+ *
+ * E' il trucco di Goffaggine in quarta generazione, dove `checkKlutz` scrive la
+ * potenza dentro il nome dello strumento. A gen 10 `checkKlutz` scrive `"Klutz"`
+ * e basta, quindi quel ramo non si accende mai.
+ *
+ * ─── PERCHE' CERTI NOMI COMPAIONO IN DUE GRAFIE ───────────────────────────
+ *
+ * Perche' le NOSTRE chiavi non sono coerenti fra loro: `items.json` scrive
+ * `black belt` e `poison barb` con lo spazio, ma `blackglasses`,
+ * `deepseatooth`, `deepseascale`, `nevermeltice` e `twistedspoon` senza.
+ *
+ * Scritti nella sola forma del riferimento, quei cinque non si sarebbero mai
+ * trovati e avrebbero preso il ripiego di 10 in silenzio. Non e' un'ipotesi:
+ * e' successo, e l'ha visto il caso che prova TUTTI e 320 gli strumenti contro
+ * l'oracolo — cinque divergenze, tutte di questa forma. Un caso su una manciata
+ * di strumenti scelti a mano non li avrebbe presi.
+ *
+ * Ci sono tutt'e due le grafie invece di una sola perche' normalizzare
+ * `items.json` e' un'altra sessione, e finche' non succede la chiave vera e'
+ * quella senza spazi.
+ *
+ * @param {string} chiaveStrumento chiave minuscola, gia' passata per Klutz
+ * @returns {number} la potenza base del Lancio
+ */
+export function potenzaLancio(chiaveStrumento) {
+  const s = String(chiaveStrumento || '')
+  if (s === 'iron ball' || s === 'big nugget') return 130
+  if (s === 'hard stone' || s === 'room service') return 100
+  if (s.includes('plate') || ['deep sea tooth', 'deepseatooth', 'thick club', 'grip claw'].includes(s)) return 90
+  // L'Evolcondensa, e vince QUI. La riga dei 40 piu' sotto non la raggiunge mai.
+  if (s === 'eviolite' || ['assault vest', 'weakness policy', 'blunder policy',
+    'heavy-duty boots', 'quick claw', 'razor claw', 'safety goggles'].includes(s)) return 80
+  if (['poison barb', 'dragon fang', 'power anklet', 'power band', 'power belt',
+    'power bracer', 'power lens', 'power weight', 'burn drive', 'chill drive',
+    'douse drive', 'shock drive'].includes(s)) return 70
+  if (['adamant orb', 'lustrous orb', 'macho brace', 'leek', 'rocky helmet',
+    'utility umbrella', 'terrain extender', 'damp rock', 'heat rock'].includes(s)) return 60
+  if (s.includes('memory') || ['sharp beak', 'eject pack'].includes(s)) return 50
+  // `eviolite` e' scritta qui nel riferimento e non ci si arriva mai. Resta,
+  // perche' toglierla nasconderebbe che il riferimento la nomina due volte.
+  if (['eviolite', 'icy rock', 'lucky punch'].includes(s)) return 40
+  if (['black belt', 'black sludge', 'black glasses', 'blackglasses', 'charcoal',
+    'deep sea scale', 'deepseascale',
+    'flame orb', "king's rock", 'life orb', 'light ball', 'magnet', 'metal coat',
+    'miracle seed', 'mystic water', 'never-melt ice', 'nevermeltice', 'razor fang', 'soul dew',
+    'spell tag', 'toxic orb', 'twisted spoon', 'twistedspoon', 'absorb bulb', 'adrenaline orb',
+    'berry juice', 'binding band', 'eject button', 'float stone', 'light clay',
+    'luminous moss', 'metronome', 'protective pads', 'shell bell', 'throat spray',
+    'covert cloak', 'loaded dice', 'ability shield', 'booster energy',
+    'clear amulet', 'punching glove', 'big nugget'].includes(s)) return 30
+  return 10
+}
+
+/**
+ * ─── E CERTI STRUMENTI NON SI LANCIANO AFFATTO ─────────────────────────────
+ *
+ * Trascritta da `cantFlingItem` (`item_data.js:1021`), che il registro
+ * riassumeva come «una guardia». Sono undici condizioni, e una riguarda
+ * il DIFENSORE.
+ *
+ * Qui ce ne sono nove; le due che mancano sono nel motore perche' hanno
+ * bisogno di cose che questa funzione non ha: l'annullamento di Goffaggine
+ * (che arriva gia' fatto nella chiave) e le Megapietre, che il motore sa gia'
+ * riconoscere con `isStrumentoInamovibile` — lo stesso predicato di `canMega`,
+ * eccezione della Floette Eterna compresa.
+ *
+ * ─── UNA CONDIZIONE CHE NON PUO' MAI SCATTARE, MISURATA ────────────────────
+ *
+ *     atItem.indexOf(" ium Z") !== -1
+ *
+ * Cerca uno SPAZIO prima di «ium Z», e nessun cristallo Z ce l'ha:
+ * `'Normalium Z'.indexOf(' ium Z')` fa -1, mentre senza spazio farebbe 6. Nel
+ * gioco i cristalli Z non si possono lanciare; nel riferimento si puo'.
+ * L'oracolo lo conferma: Normalium Z fa 16 danni, Normal Gem zero.
+ *
+ * E' scritta con lo spazio, com'e' la', ed e' la stessa scelta dell'Evolcondensa
+ * doppia: si segue l'oracolo, non la wiki. Il giorno che il riferimento
+ * corregge il refuso, il caso in `lancio.test.js` diventa rosso e ce ne
+ * accorgiamo.
+ *
+ * @param {string} chiaveStrumento chiave minuscola, gia' passata per Klutz
+ * @param {string} specie          slug di chi lancia
+ * @param {boolean} difensoreBloccaBacche  As One o Unnerve dall'altra parte
+ */
+export function nonSiPuoLanciare(chiaveStrumento, specie, difensoreBloccaBacche) {
+  const s = String(chiaveStrumento || '')
+  if (s === '') return true
+  if (s.includes(' gem')) return true
+  // Trascritta con lo spazio. Non scatta mai: vedi sopra.
+  if (s.includes(' ium z')) return true
+  if (['red orb', 'blue orb', 'rusted sword', 'rusted shield'].includes(s)) return true
+  if (specie === 'giratina-origin' && s === 'griseous orb') return true
+  if (specie === 'arceus' && s.includes(' plate')) return true
+  if (specie === 'genesect' && s.includes(' drive')) return true
+  if (specie === 'silvally' && s.includes(' memory')) return true
+  if (difensoreBloccaBacche && s.includes(' berry')) return true
+  return false
+}

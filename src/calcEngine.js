@@ -62,6 +62,8 @@ import {
   tipoPallaClima,
   tipiDoppioStrumento,
   MOSSE_CON_TIPO_PROPRIO,
+  potenzaLancio,
+  nonSiPuoLanciare,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
 import { DONO_NATURALE, haBaccaDaDono } from './data/naturalGift.js'
@@ -801,6 +803,36 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // nominare Mold Breaker.
   const isKoSeccoFermatoDaSturdy = moveData.koSecco === true && defAbilEffect?.sturdy === true
 
+  // ─── IL LANCIO, QUANDO LO STRUMENTO NON SI PUO' LANCIARE ────────────────
+  //
+  //     if (move.name === "Fling"
+  //         && cantFlingItem(attacker.item, attacker.name, defAbility))
+  //                                                  `damage_MASTER.js:1148`
+  //
+  // Sta una riga SOPRA quella di Dononaturale, e l'ordine e' lo stesso qui.
+  // Non e' osservabile — una mossa e' una sola — ma si copia com'e' scritto.
+  //
+  // Due delle undici condizioni non stanno in `nonSiPuoLanciare` perche'
+  // hanno bisogno di cose che quella funzione non ha:
+  //
+  //   Goffaggine   arriva gia' fatta: `chiaveStrumentoDopoKlutz` azzera la
+  //                chiave, e la funzione tratta la stringa vuota come «niente
+  //                da lanciare». Nel riferimento e' la stessa cosa detta al
+  //                contrario — `atItem === 'Klutz'`, il nome che `checkKlutz`
+  //                scrive al posto dello strumento.
+  //   canMega      e' `isStrumentoInamovibile`, che il motore ha gia' per
+  //                Knock Off: stessa domanda, stessa eccezione della Floette.
+  //
+  // L'abilita' del difensore e' quella EFFETTIVA, cioe' dopo Mold Breaker e
+  // Neutralizing Gas — il riferimento passa `defAbility`, che e' gia' filtrata.
+  const isLancio = move === 'fling'
+  if (isLancio && (
+    nonSiPuoLanciare(strumentoAttaccante, atkPokemon, defAbilEffect?.impedisceBacca === true)
+    || isStrumentoInamovibile(strumentoAttaccante, atkPokemon)
+  )) {
+    return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
+
   // ─── DONONATURALE SENZA BACCA NON FA NIENTE ─────────────────────────────
   //
   //     if (move.name === "Natural Gift"
@@ -1412,6 +1444,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     : potenzaAcro !== null ? potenzaAcro
     : potenzaAssunta !== null ? potenzaAssunta
     : isLastRespects ? lastRespectsBP
+    : isLancio ? potenzaLancio(strumentoAttaccante)
     : baccaDono !== null ? baccaDono[1]
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2
