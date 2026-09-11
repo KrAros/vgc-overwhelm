@@ -41,11 +41,11 @@ stato.
 
 Delle 303 mosse a potenza zero nei nostri dati, **35** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Ventinove sono fatte, ne restano **6**, e **portano il badge**:
+nome. Trenta sono fatte, ne restano **5**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
-> Comeuppance, Counter, Fling, Metal Burst, Mirror Coat, Natural Gift
+> Comeuppance, Counter, Fling, Metal Burst, Mirror Coat
 
 Non sono lo stesso problema, e quelle legate ai punti salute non ci sono più:
 sono state fatte tutte.
@@ -56,7 +56,7 @@ il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
 turno che il nostro modello non ha.
 
-**Le altre due si trascrivono, e sono di difficoltà molto diversa.**
+**Ne resta una sola da trascrivere: Fling.**
 
 **Beat Up è fatta**, ed era la più facile — una riga in `MOSSE_POTENZA_ASSUNTA`
 e un caso contro l'oracolo, come Return e Trump Card. I casi stanno in
@@ -83,13 +83,24 @@ stessa forma delle due misure sbagliate sugli strumenti, e la terza volta che
 succede: quello che una voce fa si legge nella riga che decide, non si stima
 da ciò che le somiglia.
 
-**Natural Gift è una tabella, e la copertura è quasi piena.** 66 bacche in
-`item_data.js:655`, ognuna con tipo e potenza. Delle 49 bacche selezionabili da
-noi, **48 sono nella tabella**; l'unica fuori è `berry juice`, che nel
-riferimento non è una bacca da Natural Gift. Da trascrivere: la tabella, e le
-due condizioni al contorno — senza bacca la mossa non fa niente
-(`damage_MASTER.js:1152`), e il TIPO della mossa cambia con la bacca (`:749`),
-che è la parte che tocca l'efficacia e non solo la potenza.
+**Natural Gift è fatta**, e la misura del registro su di lei era giusta — 66
+bacche, 48 delle nostre 49 dentro, il solo `berry juice` fuori. I casi stanno in
+`dononaturale.test.js`.
+
+Ma «la tabella e le due condizioni al contorno» erano tre cose su cinque.
+Misurando sono uscite le altre due, e tutt'e due cambiano il numero:
+
+- **Le abilità «-ate» non la toccano.** `damage_SV.js:131` esclude otto mosse
+  da `checkAbilityTypeChange`, e Dononaturale è una di quelle. Con la Bacca
+  Cilan la mossa è Normale, quindi senza l'esclusione Pixilate la convertirebbe
+  in Folletto e ci aggiungerebbe il ×1,2.
+- **Goffaggine la spegne del tutto.** `checkKlutz` scrive `item = "Klutz"`, che
+  non contiene `" Berry"`: niente tipo e danno zero.
+
+E l'esclusione ha scoperto **un difetto che c'era già**, su un'altra mossa dello
+stesso elenco: Palla Clima senza meteo è Normale, e con Pixilate la
+convertivamo — 12-13 dove il riferimento dà 11-13. Corretto qui perché è la
+stessa riga del riferimento: trascriverne metà l'avrebbe lasciato in piedi.
 
 **Fling è una tabella con tre regole per famiglia dentro.** `item_data.js:631`:
 53 strumenti nominati (29 selezionabili da noi), più tre regole che valgono per
@@ -99,7 +110,7 @@ va trascritta com'è, non «corretta»). Tutto il resto cade sul default 10.
 C'è anche una guardia: certi strumenti non si possono lanciare
 (`cantFlingItem`, `:1148`).
 
-L'ordine consigliato per le due che restano: prima Natural Gift, poi Fling.
+Resta Fling.
 
 **Return, Frustration, Trump Card e Beat Up sono uscite senza essere
 calcolate.** Nel

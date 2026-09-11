@@ -61,8 +61,10 @@ import {
   ABILITA_NON_IGNORABILI,
   tipoPallaClima,
   tipiDoppioStrumento,
+  MOSSE_CON_TIPO_PROPRIO,
 } from './lib/rules.js'
 import { pokeRound, chainMods, daDecimale, MOD, FIXED_POINT } from './lib/modifiers.js'
+import { DONO_NATURALE, haBaccaDaDono } from './data/naturalGift.js'
 import { calcStat, getBaseStat } from './lib/stats.js'
 import { preparaCoppia, abilitaEffettive } from './lib/preparazione.js'
 import { calcEffectiveSpe } from './utils/speedOrder.js'
@@ -457,7 +459,34 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   const weatherBallType = isWeatherBall && atkAbilEffect?.megaSol === true
     ? TYPES.FIRE
     : tipoPallaClima(move, meteo)
-  let moveType = weatherBallType !== null ? weatherBallType : moveData.type
+  // ── Dononaturale: la bacca decide tipo e potenza ─────────────────────────
+  //
+  // `checkMoveTypeChange` (`damage_MASTER.js:749`) e' la stessa catena di
+  // ternari da cui esce il tipo di Palla Clima, tre rami piu' sotto:
+  //
+  //     else if (move.name == "Natural Gift" && attacker.item.includes(" Berry"))
+  //         move.type = getNaturalGift(attacker.item).t;
+  //
+  // Il tipo si decide QUI e non fra i modificatori perche' da qui passano
+  // l'efficacia, lo STAB e le immunita': con la Bacca Chople la mossa e' Lotta,
+  // e su Blissey vale doppio. Deciderlo piu' in basso darebbe la potenza giusta
+  // con l'efficacia sbagliata.
+  //
+  // ─── E LA BACCA SI LEGGE DOPO GOFFAGGINE ────────────────────────────────
+  //
+  // Nel riferimento `checkKlutz` scrive `pokemon.item = "Klutz"`, che non
+  // contiene `" Berry"`: con Goffaggine addosso la mossa non cambia tipo E
+  // non fa danno, perche' cade nel `return damage: [0]` di `:1152`. Non e' una
+  // riga in piu' da scrivere, e' la stessa chiave passata al vaglio giusto —
+  // `chiaveStrumentoDopoKlutz`, la funzione che il Palloncino usa gia'.
+  const isDonoNaturale = move === 'natural gift'
+  const strumentoAttaccante = chiaveStrumentoDopoKlutz(atkItem, atkAbilKey)
+  const baccaDono = isDonoNaturale && haBaccaDaDono(strumentoAttaccante)
+    ? DONO_NATURALE[strumentoAttaccante] ?? null
+    : null
+  let moveType = baccaDono !== null ? baccaDono[0]
+    : weatherBallType !== null ? weatherBallType
+    : moveData.type
   const isLastRespects = move === 'last respects'
   const lastRespectsBP = isLastRespects ? 50 + (Math.min(3, Math.max(0, lastRespectsKOs)) * 50) : null
   // ─── IL TIPO EFFETTIVO, NON QUELLO SCRITTO NEI DATI ──────────────────────
@@ -585,11 +614,38 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // La tabella sta in `data/typeChart.js` dalla sessione Q. Qui c'erano quattro
   // `if`, e in `SearchSelects.jsx` la stessa corrispondenza scritta con gli
   // indici numerici: due copie che concordavano senza che niente lo garantisse.
+  // ─── OTTO MOSSE CHE LE «-ate» NON TOCCANO ───────────────────────────────
+  //
+  // `damage_SV.js:131` chiama `checkAbilityTypeChange` solo se la mossa NON e'
+  // in questo elenco:
+  //
+  //     'Hidden Power', 'Weather Ball', 'Natural Gift', 'Judgement',
+  //     'Techno Blast', 'Revelation Dance', 'Multi-Attack', 'Terrain Pulse'
+  //
+  // Sono le mosse che il TIPO se lo scelgono gia' da sole — dal meteo, dalla
+  // bacca, dalla lastra, dal terreno. Pixilate non le converte, e non prendono
+  // nemmeno il ×1,2.
+  //
+  // ─── ERA UN DIFETTO NOSTRO, MISURATO ────────────────────────────────────
+  //
+  // Il ramo qui sotto chiede solo che la mossa sia Normale, e Palla Clima senza
+  // meteo lo e'. Con Pixilate il motore la convertiva in Folletto: misurato,
+  // 12-13 contro i 11-13 del riferimento. Il difetto c'era prima di
+  // Dononaturale — e Dononaturale ci sarebbe caduta dentro allo stesso modo
+  // con la Bacca Cilan, che da' tipo Normale.
+  //
+  // L'elenco si trascrive intero e non solo per le due che ci riguardano:
+  // e' una riga sola del riferimento, e tenerne meta' vorrebbe dire che il
+  // giorno che arriva Giudizio il difetto rinasce in silenzio.
+  const tipoSceltoDallaMossa = MOSSE_CON_TIPO_PROPRIO.has(move)
+
   let ateBoost = false
-  if (atkAbilEffect?.liquidVoice && isSound) {
+  // Liquid Voice sta nella STESSA condizione del riferimento (`:130`, in `or`
+  // con le «-ate»), quindi l'esclusione vale anche per lei.
+  if (atkAbilEffect?.liquidVoice && isSound && !tipoSceltoDallaMossa) {
     moveType = TYPES.WATER
   }
-  else if (atkAbilEffect?.normalize) {
+  else if (atkAbilEffect?.normalize && !tipoSceltoDallaMossa) {
     // Normalize e' l'`else if` DOPO le «-ate» (`damage_MASTER.js:1091`), e la
     // sua condizione e' l'opposto: le altre chiedono che la mossa sia gia'
     // Normale, lei la rende Normale qualunque fosse.
@@ -599,7 +655,8 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     moveType = TYPES.NORMAL
     ateBoost = true
   }
-  else if (moveType === TYPES.NORMAL && ABILITA_ATE[atkAbilKey] !== undefined) {
+  else if (moveType === TYPES.NORMAL && !tipoSceltoDallaMossa
+      && ABILITA_ATE[atkAbilKey] !== undefined) {
     moveType = ABILITA_ATE[atkAbilKey]
     ateBoost = true
   }
@@ -743,6 +800,27 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
   // quando l'abilita' e' ignorata: la condizione lo eredita senza dover
   // nominare Mold Breaker.
   const isKoSeccoFermatoDaSturdy = moveData.koSecco === true && defAbilEffect?.sturdy === true
+
+  // ─── DONONATURALE SENZA BACCA NON FA NIENTE ─────────────────────────────
+  //
+  //     if (move.name === "Natural Gift"
+  //         && attacker.item.indexOf(" Berry") === -1)  `damage_MASTER.js:1152`
+  //
+  // Sta dentro `immunityChecks`, DOPO Sturdy sulle mosse KO e PRIMA del blocco
+  // delle mosse con priorita'. Il posto qui e' lo stesso.
+  //
+  // Il motivo e' `move` e non `item`: non e' lo strumento del difensore a
+  // immunizzare, e' la mossa dell'attaccante che fallisce — la stessa forma di
+  // Dream Eater contro chi non dorme. Il riquadro scrive «Fallisce».
+  //
+  // Ci cadono dentro tre casi, e il terzo e' quello che si sbaglierebbe:
+  //   - nessuno strumento
+  //   - uno strumento che non e' una bacca
+  //   - il SUCCO DI BACCHE, che di nome ce l'ha ma non passa il controllo
+  //     dello spazio (vedi `haBaccaDaDono`). Misurato contro l'oracolo: zero.
+  if (isDonoNaturale && !haBaccaDaDono(strumentoAttaccante)) {
+    return { immune: true, reason: 'move', moveName: move, rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
+  }
 
   if (isKoSeccoFermatoDaSturdy) {
     return { immune: true, reason: 'ability', abilityName: nomeAbilita(defAbilKey), rolls: [], minDmg: 0, maxDmg: 0, minPct: 0, maxPct: 0, defHP: 0, effectiveness: 0 }
@@ -1334,6 +1412,7 @@ export function calculateDamage({ attacker, defender, move, field = {}, debug = 
     : potenzaAcro !== null ? potenzaAcro
     : potenzaAssunta !== null ? potenzaAssunta
     : isLastRespects ? lastRespectsBP
+    : baccaDono !== null ? baccaDono[1]
     : isWeatherBall && weatherBallType !== null ? 100
     : raddoppiaPerStato ? moveData.power * 2
     : moveData.power

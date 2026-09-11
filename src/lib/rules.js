@@ -1368,6 +1368,10 @@ export function haDannoFisso(mossa) {
 export function mossaEntraNelCalcolo(mossa, dati) {
   if (!dati) return false
   return Boolean(dati.power)
+    // Dononaturale ha `power: 0` nei dati e la potenza vera nella tabella
+    // delle bacche. Senza questa riga uscirebbe di qui, e il `return` a zero
+    // di chi non ha bacca non sarebbe nemmeno raggiungibile.
+    || mossa === 'natural gift'
     || haPotenzaDaiPuntiSalute(mossa)
     || haDannoDaiPuntiSalute(mossa)
     || haPotenzaAssunta(mossa)
@@ -1669,3 +1673,38 @@ export function tipiDoppioStrumento(strumento, specie) {
   }
   return null
 }
+
+/**
+ * ─── LE MOSSE CHE IL TIPO SE LO SCELGONO DA SOLE ───────────────────────────
+ *
+ * Trascritto da `damage_SV.js:131`, che chiama `checkAbilityTypeChange` — cioe'
+ * le «-ate», Normalize e Liquid Voice — solo se la mossa NON e' in questo
+ * elenco:
+ *
+ *     'Hidden Power', 'Weather Ball', 'Natural Gift', 'Judgement',
+ *     'Techno Blast', 'Revelation Dance', 'Multi-Attack', 'Terrain Pulse'
+ *
+ * Hanno tutte la stessa forma: il tipo lo prendono da qualcos'altro — il
+ * meteo, la bacca, la lastra, il terreno, la memoria. Pixilate su una di
+ * queste non fa niente, e non da' nemmeno il ×1,2.
+ *
+ * ─── PERCHE' L'ELENCO INTERO E NON SOLO LE DUE CHE ABBIAMO ─────────────────
+ *
+ * Perche' nel riferimento e' una riga sola. Tre delle otto — Giudizio,
+ * Tecnobotto, Danzarivelo — non sono in `moves.json`, e una quarta, Poterotipo,
+ * non ha ancora una meccanica da noi: tenerne meta' vorrebbe dire che il giorno
+ * che una di quelle entra, il difetto rinasce senza che nessuno se ne accorga.
+ *
+ * `multi-attack` e `terrain pulse` invece ci sono gia', e da oggi sono protette
+ * anche loro.
+ */
+export const MOSSE_CON_TIPO_PROPRIO = new Set([
+  'hidden power',
+  'weather ball',
+  'natural gift',
+  'judgement',
+  'techno blast',
+  'revelation dance',
+  'multi-attack',
+  'terrain pulse',
+])
