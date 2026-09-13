@@ -105,6 +105,47 @@ export const CLASSIFICAZIONE = {
       verdetto: 'meccanica-diversa',
       nota: 'speedOrder:93 dimezza la Velocità. NCP la calcola via checkKlutz:449',
     },
+    // ─── LE SETTE CHE IL LANCIO HA FATTO NOMINARE ─────────────────────────
+    //
+    // `potenzaLancio` (`src/lib/rules.js`) elenca gli strumenti per la potenza
+    // del Lancio. Sette di quelli portano il badge, e continuano a portarlo
+    // giustamente: il riferimento li calcola per un'ALTRA cosa, che noi non
+    // facciamo. Nominarli per il Lancio non ci avvicina di un passo a quella.
+    //
+    // È la stessa forma di `flying gem` qui sotto, che il motore nomina per
+    // Acrobatics mentre NCP la calcola per il ×1,3 delle gemme.
+    'burn drive': {
+      verdetto: 'meccanica-diversa',
+      nota: 'nominata in potenzaLancio per i 70 del Lancio. NCP la calcola per il TIPO di Techno Blast '
+          + '(checkMoveTypeChange, damage_MASTER.js:745), che non modelliamo — e vuole Genesect, che in M-B non c\'è',
+    },
+    'chill drive': {
+      verdetto: 'meccanica-diversa',
+      nota: 'come burn drive: 70 al Lancio da noi, il tipo di Techno Blast in NCP',
+    },
+    'douse drive': {
+      verdetto: 'meccanica-diversa',
+      nota: 'come burn drive: 70 al Lancio da noi, il tipo di Techno Blast in NCP',
+    },
+    'shock drive': {
+      verdetto: 'meccanica-diversa',
+      nota: 'come burn drive: 70 al Lancio da noi, il tipo di Techno Blast in NCP',
+    },
+    'thick club': {
+      verdetto: 'meccanica-diversa',
+      nota: 'nominata in potenzaLancio per i 90 del Lancio. NCP la calcola per il ×2 sull\'Attacco '
+          + 'di Marowak (calcAtMods punto i, damage_MASTER.js:1993), e Marowak in M-B non c\'è',
+    },
+    'deepseatooth': {
+      verdetto: 'meccanica-diversa',
+      nota: 'nominata in potenzaLancio per i 90 del Lancio. NCP la calcola per il ×2 sull\'Attacco '
+          + 'Speciale di Clamperl (stesso `if` della Clava Ossea), e Clamperl in M-B non c\'è',
+    },
+    'deepseascale': {
+      verdetto: 'meccanica-diversa',
+      nota: 'nominata in potenzaLancio per i 30 del Lancio. NCP la calcola per il ×2 sulla Difesa '
+          + 'Speciale di Clamperl (calcDefMods punto g, :2125)',
+    },
     'flying gem': {
       verdetto: 'meccanica-diversa',
       nota: 'rules.js la nomina per Acrobatics, che adesso facciamo (basePowerFunc:1400). '

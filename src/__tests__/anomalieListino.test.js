@@ -236,6 +236,58 @@ describe('anomalie di listino', () => {
     expect(scadute, 'questa voce non è più un\'anomalia: togli la riga').toEqual([])
   })
 
+  it('il motore TROVA l\'effetto di ogni strumento selezionabile che ne ha uno', () => {
+    /**
+     * ─── PERCHE' QUESTO CASO NASCE DOPO GLI ALTRI ──────────────────────────
+     *
+     * Tutti i casi qui sopra cercano con `norm()`, che toglie spazi e trattini.
+     * Il MOTORE no: fa `ITEM_EFFECTS[chiave]` con la chiave esatta di
+     * `items.json`.
+     *
+     * Quattro strumenti stavano nel mezzo: `items.json` li scrive
+     * `silverpowder`, `blackglasses`, `nevermeltice`, `twistedspoon`, mentre
+     * `ITEM_EFFECTS` li nominava col nome del listino, con gli spazi. Per
+     * `norm()` erano la stessa voce e non c'era nessuna anomalia; per il motore
+     * non esistevano, e il loro ×1,2 non si e' mai acceso.
+     *
+     * Misurato: Knock Off con gli Occhialineri dava 98-99 invece di 118-119.
+     *
+     * Il presidio normalizzava dove il motore non normalizza — guardava la
+     * parola e non la cosa, che e' il difetto contro cui l'intestazione di
+     * questo file mette in guardia. Questo caso fa la ricerca ESATTA.
+     */
+    const norm2 = new Map()
+    for (const k of Object.keys(ITEM_EFFECTS)) {
+      const n = norm(k)
+      if (!norm2.has(n)) norm2.set(n, [])
+      norm2.get(n).push(k)
+    }
+    const invisibili = Object.keys(items)
+      .filter(k => !ITEM_EFFECTS[k] && norm2.has(norm(k)))
+      .map(k => `${k} (in ITEM_EFFECTS come ${norm2.get(norm(k)).join(', ')})`)
+    expect(
+      invisibili,
+      'il motore non trova l\'effetto di questi strumenti: aggiungere la chiave esatta in ITEM_EFFECTS',
+    ).toEqual([])
+  })
+
+  it('e i quattro che erano invisibili adesso muovono il numero', () => {
+    // La prova dall'altro verso: non che la chiave esista, ma che il ×1,2
+    // arrivi al danno. Se qualcuno togliesse gli alias, questo diventa rosso
+    // anche senza l'oracolo.
+    const att = (item) => ({ atkPokemon: 'garchomp', atkSPs: [0, 32, 0, 0, 0, 0],
+      atkNature: 'adamant', atkAbility: null, atkItem: item, level: 50, atkAbilityFlags: {} })
+    const dif = { defPokemon: 'blissey', defSPs: [32, 0, 16, 0, 16, 0], defNature: 'bold',
+      defAbility: null, defItem: null, defBoost: 0, spDefBoost: 0, defAbilityFlags: {} }
+    const CASI = [['blackglasses', 'knock off'], ['silverpowder', 'x-scissor'],
+      ['nevermeltice', 'ice fang'], ['twistedspoon', 'zen headbutt']]
+    for (const [item, move] of CASI) {
+      const con = calculateDamage({ attacker: att(item), defender: dif, move, field: {} })
+      const senza = calculateDamage({ attacker: att(null), defender: dif, move, field: {} })
+      expect(con.maxDmg, `${item} non potenzia ${move}`).toBeGreaterThan(senza.maxDmg)
+    }
+  })
+
   it('controllo negativo: la ricerca vede le voci selezionabili', () => {
     // Senza, i test sopra passerebbero anche con gli insiemi vuoti — per un
     // import rotto o un normalizzatore che risponde sempre di sì.

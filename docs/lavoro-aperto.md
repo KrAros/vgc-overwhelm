@@ -39,13 +39,13 @@ delle quattro a peso, delle due a Velocità, delle quattro KO o delle quattro a
 danno fisso. Un `null` nella matrice si disegna `~`, cioè come una mossa di
 stato.
 
-Delle 303 mosse a potenza zero nei nostri dati, **34** il riferimento le tratta
+Delle 303 mosse a potenza zero nei nostri dati, **35** il riferimento le tratta
 come offensive — `category` diversa da `Status` nel suo `move_data.js`, non il
-nome. Ventotto sono fatte, ne restano **7**, e **portano il badge**:
+nome. Trentuno sono fatte, ne restano **4**, e **portano il badge**:
 `gapNoti.json` ha una terza lista e la riga della mossa mostra il segnalino
 ambra. Il `~` resta, ma non è più muto.
 
-> Beat Up, Comeuppance, Counter, Fling, Metal Burst, Mirror Coat, Natural Gift
+> Comeuppance, Counter, Metal Burst, Mirror Coat
 
 Non sono lo stesso problema, e quelle legate ai punti salute non ci sono più:
 sono state fatte tutte.
@@ -56,48 +56,88 @@ il colpo che il difensore ha appena tirato (`damage_MASTER.js:1175`,
 `defender.moves[move.usedOppMoveIndex]`): non è una trascrizione, è un pezzo di
 turno che il nostro modello non ha.
 
-**Le altre tre si trascrivono, e sono di difficoltà molto diversa.**
+**Non ne resta nessuna da trascrivere.** Le quattro che portano ancora il
+badge sono tutte reattive — calcolano il colpo che il difensore ha appena
+tirato — e non sono una trascrizione: sono un pezzo di turno che il nostro
+modello non ha.
 
-**Beat Up è la più facile delle tre, non la più difficile.** Questo documento
-diceva «il peso degli alleati»: è falso, e l'ho scritto senza aprire il
-riferimento. `move_data.js:2796` dice
+**Beat Up è fatta**, ed era la più facile — una riga in `MOSSE_POTENZA_ASSUNTA`
+e un caso contro l'oracolo, come Return e Trump Card. I casi stanno in
+`beatUp.test.js`.
 
-    'Beat Up': { bp: 14 }, //average fully evolved atk. stat is ~90. 90/10 + 5 = 14.
+Questo documento ha sbagliato su di lei DUE volte, e vale la pena che restino
+scritte tutt'e due perché sono lo stesso errore. Prima diceva «il peso degli
+alleati», che era inventato. Poi, corretto quello, diceva:
 
-cioè un numero ASSUNTO, con l'ipotesi scritta accanto — esattamente la famiglia
-di Return, Frustration e Trump Card, che sono già fatte. Non conta nessun
-alleato. È una riga in `MOSSE_POTENZA_ASSUNTA` e un caso contro l'oracolo.
-(Da noi ha anche `colpi: [1,6]`, quindi si incrocia col selettore dei
-multi-colpo: quello è l'unico punto da guardare due volte.)
+> il riferimento la calcola con un colpo solo, i nostri dati ne prevedono da
+> uno a sei, e scegliere quale sia il numero giusto è un'aggiudicazione
 
-**Natural Gift è una tabella, e la copertura è quasi piena.** 66 bacche in
-`item_data.js:655`, ognuna con tipo e potenza. Delle 49 bacche selezionabili da
-noi, **48 sono nella tabella**; l'unica fuori è `berry juice`, che nel
-riferimento non è una bacca da Natural Gift. Da trascrivere: la tabella, e le
-due condizioni al contorno — senza bacca la mossa non fa niente
-(`damage_MASTER.js:1152`), e il TIPO della mossa cambia con la bacca (`:749`),
-che è la parte che tocca l'efficacia e non solo la potenza.
+**Falso su tutt'e due le metà, misurato.** Le tabelle di mosse del riferimento
+sono fusioni profonde: `MOVES_GSC` definisce `hitRange: [1, 6]` e `MOVES_BW`
+cambia SOLO la potenza a 14, quindi alla generazione di Champions il dato è
+`{ bp: 14, hitRange: [1, 6] }` — il nostro stesso intervallo. E il conto dei
+colpi non entra nel confronto: per le multi-colpo il riferimento torna i roll
+di UN colpo, ed è già così per Bullet Seed, Rock Blast e Dual Wingbeat, dove i
+nostri roll coincidono coi suoi mentre `colpi` vale 5, 5 e 2.
 
-**Fling è una tabella con tre regole per famiglia dentro.** `item_data.js:631`:
-53 strumenti nominati (29 selezionabili da noi), più tre regole che valgono per
-famiglia — qualunque `Plate` fa 90, qualunque `Memory` fa 50, e `Eviolite`
-compare due volte con due valori diversi (80 e 40: la prima condizione vince, e
-va trascritta com'è, non «corretta»). Tutto il resto cade sul default 10.
-C'è anche una guardia: certi strumenti non si possono lanciare
-(`cantFlingItem`, `:1148`).
+La seconda volta l'errore non è stato inventare un fatto, ma **dedurne uno
+plausibile da `colpi: [1,6]` senza aprire la tabella del riferimento**. È la
+stessa forma delle due misure sbagliate sugli strumenti, e la terza volta che
+succede: quello che una voce fa si legge nella riga che decide, non si stima
+da ciò che le somiglia.
 
-L'ordine consigliato è quello: Beat Up, poi Natural Gift, poi Fling.
+**Natural Gift è fatta**, e la misura del registro su di lei era giusta — 66
+bacche, 48 delle nostre 49 dentro, il solo `berry juice` fuori. I casi stanno in
+`dononaturale.test.js`.
 
-**Return, Frustration e Trump Card sono uscite senza essere calcolate.** Nel
+Ma «la tabella e le due condizioni al contorno» erano tre cose su cinque.
+Misurando sono uscite le altre due, e tutt'e due cambiano il numero:
+
+- **Le abilità «-ate» non la toccano.** `damage_SV.js:131` esclude otto mosse
+  da `checkAbilityTypeChange`, e Dononaturale è una di quelle. Con la Bacca
+  Cilan la mossa è Normale, quindi senza l'esclusione Pixilate la convertirebbe
+  in Folletto e ci aggiungerebbe il ×1,2.
+- **Goffaggine la spegne del tutto.** `checkKlutz` scrive `item = "Klutz"`, che
+  non contiene `" Berry"`: niente tipo e danno zero.
+
+E l'esclusione ha scoperto **un difetto che c'era già**, su un'altra mossa dello
+stesso elenco: Palla Clima senza meteo è Normale, e con Pixilate la
+convertivamo — 12-13 dove il riferimento dà 11-13. Corretto qui perché è la
+stessa riga del riferimento: trascriverne metà l'avrebbe lasciato in piedi.
+
+**Fling è fatta**, e il conto che questo documento dava era sbagliato in tre
+punti su tre. I casi stanno in `lancio.test.js`.
+
+| il documento diceva | misurato |
+|---|---|
+| 53 nominati, 29 nostri | **86** dei nostri 320 prendono un valore non di ripiego |
+| «tre regole per famiglia» | **due** — qualunque `Plate` fa 90, qualunque `Memory` fa 50 |
+| «una guardia» | **undici condizioni**, e una riguarda il DIFENSORE |
+
+La differenza fra 29 e 86 è tutta nelle due regole per famiglia: diciassette
+Tavole e diciassette Memorie entrano senza essere nominate.
+
+La cosa giusta il documento la diceva: l'`Eviolite` compare due volte, 80 e 40,
+e vince la prima. Per questo la trascrizione è una CATENA e non una tabella —
+una tabella piatta avrebbe dovuto scegliere, e scegliere è correggere.
+
+**Due cose in più che nessuno aveva visto.** Il `Griseous Orb` non è nella lista
+dei 60 dove stanno gli altri due orbi, e cade sul ripiego di 10. E la condizione
+che dovrebbe bloccare i cristalli Z — `indexOf(" ium Z")` — cerca uno SPAZIO che
+nessun nome ha, quindi non scatta mai: nel gioco non si lanciano, nel riferimento
+sì. Si segue l'oracolo.
+
+Non resta niente da trascrivere.
+
+**Return, Frustration, Trump Card e Beat Up sono uscite senza essere
+calcolate.** Nel
 gioco la loro potenza è variabile — affetto le prime due, PP la terza — e il
 riferimento non la calcola: i punti d e i.vii sono commenti senza codice, e
 cade sul numero scritto nei suoi dati. Abbiamo preso quel numero e l'ipotesi
-che lo regge, scritti insieme in `MOSSE_POTENZA_ASSUNTA`. Sono due ipotesi
-opposte: 102 è il massimo di Return, 40 è il minimo di Trump Card.
-
-**Beat Up è nella stessa forma e non è uscita**: il riferimento la calcola con
-un colpo solo, i nostri dati ne prevedono da uno a sei, e scegliere quale sia
-il numero giusto è un'aggiudicazione, non una trascrizione.
+che lo regge, scritti insieme in `MOSSE_POTENZA_ASSUNTA`. Sono tre ipotesi di
+forma diversa: 102 è il MASSIMO di Return, 40 è il MINIMO di Trump Card, e 14
+è una MEDIA — l'unica in cui il riferimento mostra il conto che ha fatto
+(«average fully evolved atk. stat is ~90. 90/10 + 5 = 14»).
 
 **Punishment è uscita da questo elenco e Nature's Madness ci è entrata**, e il
 totale resta venti per caso: Punishment è stata fatta, Nature's Madness invece

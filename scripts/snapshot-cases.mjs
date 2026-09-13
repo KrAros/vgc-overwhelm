@@ -555,6 +555,43 @@ function aggiungi(blocco, etichetta, input) {
     attacker: { ...atk('dragonite', 'adamant', SP.fisico), atkAbility: 'aerilate' },
     defender: D.hands, move: 'extreme speed', field: field(),
   })
+  // ─── I QUATTRO POTENZIATORI CHE IL MOTORE NON TROVAVA ───────────────────
+  //
+  // `items.json` scrive `blackglasses` senza spazi, `ITEM_EFFECTS` lo nominava
+  // `black glasses`: il ×1,2 sulle mosse Buio non si e' mai acceso. Nessun caso
+  // della fotografia usava quei quattro strumenti, quindi nemmeno lei poteva
+  // vederlo — `snapshot:diff` restava a zero mentre il numero era sbagliato.
+  aggiungi('B8', 'chiave-senza-spazi-blackglasses', {
+    attacker: { ...atk('garchomp', 'adamant', SP.fisico), atkItem: 'blackglasses' },
+    defender: D.chomp, move: 'knock off', field: field(),
+  })
+
+  // ─── DONONATURALE, E LE MOSSE CHE IL TIPO SE LO SCELGONO DA SOLE ────────
+  //
+  // Tre casi che prima non c'erano, e la loro assenza si e' vista: quando
+  // Dononaturale e' entrata nel motore, `snapshot:diff` e' rimasto a zero
+  // anche sul difetto che quella sessione stava correggendo.
+  //
+  //   la bacca decide la POTENZA       apicot, 100 invece di 80
+  //   la bacca decide il TIPO          chople e' Lotta, e su Blissey vale x2
+  //   le «-ate» NON la convertono      Palla Clima con Pixilate resta Normale
+  //
+  // L'ultimo e' il caso che mancava del tutto: nessun caso combinava Palla
+  // Clima con un'abilita' «-ate», quindi la fotografia non poteva vedere la
+  // conversione di troppo che il motore faceva.
+  aggiungi('B8', 'dononaturale-potenza', {
+    attacker: { ...atk('garchomp', 'adamant', SP.fisico), atkItem: 'apicot berry' },
+    defender: D.chansey ?? D.incin, move: 'natural gift', field: field(),
+  })
+  aggiungi('B8', 'dononaturale-tipo', {
+    attacker: { ...atk('garchomp', 'adamant', SP.fisico), atkItem: 'chople berry' },
+    defender: D.chansey ?? D.incin, move: 'natural gift', field: field(),
+  })
+  aggiungi('B8', 'weatherball-ate-non-converte', {
+    attacker: { ...atk('whimsicott', 'adamant', SP.fisico), atkAbility: 'pixilate' },
+    defender: D.chomp, move: 'weather ball', field: field(),
+  })
+
   // Livello diverso da 50 — non usato dall'app, ma il parametro esiste
   aggiungi('B8', 'livello-100', {
     attacker: { ...A.chompEq[0], level: 100 },
