@@ -29088,5 +29088,119 @@
 			"defiant"
 		],
 		"canEvolve": false
+	},
+	"absol-mega-z": {
+		"num": "",
+		"name": "Absol-Mega-Z",
+		"type": [
+			15,
+			13
+		],
+		"mega": 1,
+		"weight": 49,
+		"gender": null,
+		"stats": [
+			65,
+			154,
+			60,
+			75,
+			60,
+			151
+		],
+		"abilities": [
+			"sharpness"
+		],
+		"canEvolve": false
+	},
+	"garchomp-mega-z": {
+		"num": "",
+		"name": "Garchomp-Mega-Z",
+		"type": [
+			14
+		],
+		"mega": 1,
+		"weight": 99,
+		"gender": null,
+		"stats": [
+			108,
+			130,
+			85,
+			141,
+			85,
+			151
+		],
+		"abilities": [
+			"levitate"
+		],
+		"canEvolve": false
+	},
+	"lucario-mega-z": {
+		"num": "",
+		"name": "Lucario-Mega-Z",
+		"type": [
+			6,
+			16
+		],
+		"mega": 1,
+		"weight": 49.4,
+		"gender": null,
+		"stats": [
+			70,
+			100,
+			70,
+			164,
+			70,
+			151
+		],
+		"abilities": [
+			"aura-guard"
+		],
+		"canEvolve": false
+	},
+	"golisopod-mega": {
+		"num": "",
+		"name": "Golisopod-Mega",
+		"type": [
+			11,
+			16
+		],
+		"mega": 1,
+		"weight": 148,
+		"gender": null,
+		"stats": [
+			75,
+			150,
+			175,
+			70,
+			120,
+			40
+		],
+		"abilities": [
+			"tough-claws"
+		],
+		"canEvolve": false
+	},
+	"baxcalibur-mega": {
+		"num": "",
+		"name": "Baxcalibur-Mega",
+		"type": [
+			14,
+			5
+		],
+		"mega": 1,
+		"weight": 315,
+		"gender": null,
+		"stats": [
+			115,
+			175,
+			117,
+			105,
+			101,
+			87
+		],
+		"abilities": [
+			"thermal-exchange"
+		],
+		"canEvolve": false
 	}
 }

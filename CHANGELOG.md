@@ -16,6 +16,20 @@ contro il riferimento, ma l'interfaccia può ancora cambiare forma.
 
 ## Non ancora rilasciato
 
+### Il registro sa che siamo in M-8, e cinque Mega nuove
+- Prima l'app credeva che l'ultima stagione fosse M-5, finita il 9 settembre,
+  e proponeva i set di quel periodo. Adesso conosce M-6, M-7 e M-8, tutte del
+  regolamento **M-C**, e sa che oggi siamo in M-8 (fino al 2 dicembre)
+- Entrano in anagrafica **Mega Absol Z, Mega Garchomp Z, Mega Lucario Z, Mega
+  Golisopod e Mega Baxcalibur**, con statistiche, tipi e icona. Le tre Z sono
+  forme diverse dalle Mega già presenti, non lo stesso Pokémon con un altro nome
+- Le statistiche delle cinque vengono da **una fonte sola** e sono da
+  ricontrollare contro il gioco
+- **Non cambia**: nessuna Megapietra le attiva ancora, quindi non si possono
+  usare in un set; Aura Guard (l'abilità di Lucario Z) si può scegliere ma il
+  calcolo non la conosce e non mostra l'avviso «non calcolata»; strumenti e
+  mosse di M-C non sono stati toccati
+
 ### Il verdetto di KO dice sempre la stessa frase
 - Prima il riquadro in alto a destra diceva **«1HKO Chance»** in un caso e il
   solo **«2HKO»** nell'altro, con accanto una percentuale che non si capiva a
