@@ -125,7 +125,16 @@ describe('registro delle reg — la stagione in corso', () => {
     expect(stagioneCorrente(new Date('2026-08-04T12:00:00')).id, 'ultimo giorno di M-4').toBe('M-4')
     expect(stagioneCorrente(new Date('2026-04-08T12:00:00')).id, 'primo giorno assoluto').toBe('M-1')
     expect(stagioneCorrente(new Date('2026-04-07T12:00:00')), 'prima di tutto').toBeNull()
-    expect(stagioneCorrente(new Date('2026-09-09T12:00:00')), 'M-5 finisce il 9, escluso').toBeNull()
+    // Il 9 settembre chiude M-5 e apre M-6: il giorno e' di UNA stagione sola,
+    // quella che comincia (finestra [dal, al)).
+    expect(stagioneCorrente(new Date('2026-09-09T12:00:00')).id, 'il 9 settembre e\' di M-6, non di M-5').toBe('M-6')
+    expect(stagioneCorrente(new Date('2026-09-08T12:00:00')).id, 'ultimo giorno di M-5').toBe('M-5')
+    // Il confine esclusivo sta ora alla fine del registro: M-8 finisce il 2
+    // dicembre e finche' nessuno aggiunge M-9 quel giorno non e' di nessuno.
+    // E' lo stesso controllo che prima stava sul 9 settembre, spostato dove
+    // il registro finisce davvero.
+    expect(stagioneCorrente(new Date('2026-12-01T12:00:00')).id, 'ultimo giorno di M-8').toBe('M-8')
+    expect(stagioneCorrente(new Date('2026-12-02T12:00:00')), 'M-8 finisce il 2 dicembre, escluso').toBeNull()
     expect(stagioneCorrente(new Date('2020-01-01T12:00:00'))).toBeNull()
 
     // E nessuna riga del registro dichiara di essere corrente.

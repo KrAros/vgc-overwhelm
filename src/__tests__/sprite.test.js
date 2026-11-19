@@ -164,8 +164,21 @@ describe('sprite — le forme non condividono più l\'icona della base', () => {
     //              pokemon-zone, uno per uno: quattro coincidono con la regola
     //              posizionale, `slowbro-galar` no — sta a f02 e non a f01, ed
     //              e' per questo fissata in ORDINE_CORRETTO.
+    //   44 in KK   le cinque Mega nuove della reg M-C (Absol Z, Garchomp Z,
+    //              Lucario Z, Golisopod, Baxcalibur): tutte e cinque solo su
+    //              pokemon-zone, +5 contato sulla tabella. Le icone sono state
+    //              guardate a occhio sul foglio di contatto: la Z sta a f02,
+    //              la Mega normale gia' presente a f01.
     const daZone = Object.entries(formeSprite.fonte).filter(([, f]) => f === 'zone')
-    expect(daZone.length, 'forme recuperate dal ripiego').toBe(39)
+    expect(daZone.length, 'forme recuperate dal ripiego').toBe(44)
+    for (const k of ['absol-mega-z', 'garchomp-mega-z', 'lucario-mega-z']) {
+      expect(formeSprite.forme[k], `${k} e' la seconda forma Mega`).toBe('f02')
+      expect(formeSprite.fonte[k]).toBe('zone')
+    }
+    for (const k of ['golisopod-mega', 'baxcalibur-mega']) {
+      expect(formeSprite.forme[k], k).toBe('f01')
+      expect(formeSprite.fonte[k]).toBe('zone')
+    }
     expect(formeSprite.forme['staraptor-mega']).toBe('f01')
     expect(formeSprite.fonte['staraptor-mega']).toBe('zone')
     expect(spriteUrl('staraptor-mega')).toContain('_0398_01_0.webp')
