@@ -84,20 +84,16 @@ export default function TopBar() {
           className="pointer-events-none absolute inset-y-0 right-0 w-8 z-30
                      bg-gradient-to-l from-gray-900 to-transparent" />
       )}
-      {/* ─── VA A CAPO INVECE DI SCORRERE ──────────────────────────────────
-          Le sfumature qui sopra dichiarano lo scorrimento, ma dichiararlo non
-          basta per dei CONTROLLI: la matrice è una griglia di dati e scorrerla
-          è normale, mentre un bottone che non si vede è un bottone che non
-          esiste. Misurato prima: «Sole» stava 323 px fuori a 640 e 129 a 834.
-
-          `flex-wrap` sotto `xl` è la stessa scelta che la sessione S ha fatto
-          per le due file di levette, ed è il motivo per cui esiste già quel
-          precedente qui accanto. Le sfumature restano come rete: se un giorno
-          il contenuto crescesse ancora, tornerebbero ad accendersi da sole. */}
-      <div ref={striscia} className="flex flex-wrap xl:flex-nowrap gap-x-3 gap-y-2 items-center xl:justify-between overflow-x-auto">
+      {/* ─── UNA SOLA RIGA ─────────────────────────────────────────────────
+          Tre gruppi con etichetta (Opzioni, Campo, Meteo) su una riga che non
+          va a capo: la barra occupa un'altezza sola. Fino a 1024 px il
+          contenuto può non starci, e allora la striscia scorre: le sfumature
+          qui sopra si accendono da sole solo da quel lato, così nessun
+          bottone sparisce senza dirlo. Sotto 640 px subentrano le tendine. */}
+      <div ref={striscia} className="flex flex-nowrap gap-x-3 items-center justify-between overflow-x-auto">
 
         {/* Options */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.options")}</span>
           <button
             onClick={toggleTrickRoom}
@@ -148,13 +144,10 @@ export default function TopBar() {
           </div>
         </div>
 
-        {/* Il divisore separa due gruppi sulla STESSA riga. Quando la striscia
-            va a capo sotto `xl` non separa più niente: resta una stanghetta
-            orfana a inizio riga. Visto guardando lo scatto, non misurando. */}
-        <div className="hidden xl:block w-px h-6 bg-gray-700" />
+        <div className="w-px h-6 bg-gray-700 shrink-0" />
 
         {/* Field */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.field")}</span>
           <div className="flex gap-1">
             <button
@@ -172,13 +165,10 @@ export default function TopBar() {
           </div>
         </div>
 
-        {/* Il divisore separa due gruppi sulla STESSA riga. Quando la striscia
-            va a capo sotto `xl` non separa più niente: resta una stanghetta
-            orfana a inizio riga. Visto guardando lo scatto, non misurando. */}
-        <div className="hidden xl:block w-px h-6 bg-gray-700" />
+        <div className="w-px h-6 bg-gray-700 shrink-0" />
 
         {/* Weather */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-[10px] text-gray-400 uppercase tracking-[0.15em] font-semibold">{t("ui.weather")}</span>
           <div className="flex gap-1">
             <button
