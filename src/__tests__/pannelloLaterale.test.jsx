@@ -14,11 +14,12 @@ import { SOGLIA_DESKTOP, ruoloPannello, eTastoChiusura, prossimoIndiceFocus } fr
 import { GuscioPannello } from '../components/PannelloLaterale.jsx'
 
 describe('ruoloPannello', () => {
-  it('sotto 1024 px è un dialog modale, da 1024 in su un complementary', () => {
-    expect(SOGLIA_DESKTOP).toBe(1024)
+  it('sotto 1100 px è un dialog modale, da 1100 in su un complementary', () => {
+    expect(SOGLIA_DESKTOP).toBe(1100)
     expect(ruoloPannello(375)).toEqual({ role: 'dialog', modale: true })
-    expect(ruoloPannello(1023)).toEqual({ role: 'dialog', modale: true })
-    expect(ruoloPannello(1024)).toEqual({ role: 'complementary', modale: false })
+    expect(ruoloPannello(1024)).toEqual({ role: 'dialog', modale: true })
+    expect(ruoloPannello(1099)).toEqual({ role: 'dialog', modale: true })
+    expect(ruoloPannello(1100)).toEqual({ role: 'complementary', modale: false })
     expect(ruoloPannello(1280)).toEqual({ role: 'complementary', modale: false })
   })
 })
@@ -57,6 +58,21 @@ describe('GuscioPannello in SSR', () => {
     expect(html).toContain('>Chiudi<')
     expect(html).toContain('contenuto')
   })
+  it('desktop: in flusso e sticky, non fixed; niente ombra marcata né blur', () => {
+    const html = render(false)
+    expect(html).toMatch(/class="[^"]*\bsticky\b/)
+    expect(html).not.toMatch(/class="[^"]*\bfixed\b/)
+    expect(html).toMatch(/\bself-start\b/)
+    expect(html).toMatch(/\btop-3\b/)
+    expect(html).toMatch(/\brounded-lg\b/)
+    expect(html).not.toMatch(/shadow|blur/)
+  })
+  it('mobile: sheet fixed a tutto schermo', () => {
+    const html = render(true)
+    expect(html).toMatch(/class="[^"]*\bfixed\b/)
+    expect(html).toContain('inset-0')
+    expect(html).not.toMatch(/\bsticky\b/)
+  })
   it('mobile: dialog modale con aria-label', () => {
     const html = render(true)
     expect(html).toContain('role="dialog"')
@@ -71,6 +87,20 @@ describe('App.jsx e traduzioni', () => {
   it('non fa più scorrere la pagina verso report o tabella', () => {
     expect(app).not.toContain('scrollIntoView')
     expect(app).toContain('PannelloLaterale')
+  })
+  it('nessun padding-right riservato: la colonna del pannello è nel flusso', () => {
+    expect(app).not.toMatch(/pr-\[/)
+    expect(app).not.toMatch(/\bpr-\d/)
+  })
+  it('griglia matrice + pannello: 1fr chiuso, 1fr + 360px aperto; TopBar fuori dalla griglia', () => {
+    expect(app).toContain('grid-cols-[minmax(0,1fr)_360px]')
+    expect(app).toContain('grid-cols-[minmax(0,1fr)]')
+    const iTop = app.indexOf('<TopBar />')
+    const iGrid = app.indexOf('grid-cols-[minmax(0,1fr)]')
+    const iPan = app.indexOf('<PannelloLaterale')
+    expect(iTop).toBeGreaterThan(0)
+    expect(iTop).toBeLessThan(iGrid)
+    expect(iGrid).toBeLessThan(iPan)
   })
   it('la chiave del titolo esiste in it e en', () => {
     for (const l of ['it', 'en']) {

@@ -10,8 +10,8 @@ const FOCALIZZABILI =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
 /**
- * Guscio visivo e di accessibilità. Desktop: colonna fissa a destra, non
- * modale. Mobile: sheet a tutto schermo, modale, con trappola del Tab e
+ * Guscio visivo e di accessibilità. Desktop: scheda sticky nella seconda
+ * colonna accanto alla matrice, in flusso, non modale. Mobile: sheet a tutto schermo, modale, con trappola del Tab e
  * scroll del body bloccato. Animazione solo transform/opacity; il blocco
  * `prefers-reduced-motion` globale di index.css la azzera.
  */
@@ -66,10 +66,10 @@ export function GuscioPannello({ modale, etichetta, chiudiAria, chiudiTesto, onC
       role={role}
       aria-modal={modale ? 'true' : undefined}
       aria-label={etichetta}
-      className={`pannello-entra fixed z-40 flex flex-col bg-gray-950 border-gray-700 ${
+      className={`pannello-entra flex flex-col bg-gray-950 border-gray-700 ${
         modale
-          ? 'inset-0 border-0'
-          : 'top-0 right-0 bottom-0 w-[min(480px,40vw)] border-l'
+          ? 'fixed z-40 inset-0 border-0'
+          : 'sticky top-3 self-start max-h-[calc(100vh-1.5rem)] rounded-lg border'
       }`}
     >
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gray-700 px-4 py-2">

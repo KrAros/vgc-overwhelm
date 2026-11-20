@@ -4,8 +4,12 @@
 // Logica pura del pannello laterale, separata dal componente per poterla
 // testare senza DOM.
 
-// Stessa soglia del breakpoint `lg:` di Tailwind usato dal resto della home.
-export const SOGLIA_DESKTOP = 1024
+// Soglia misurata con Playwright, non il `lg:` (1024) di Tailwind. Con il
+// pannello aperto (colonna 360 px + gap 12) la matrice a 6 colonne ha bisogno
+// di 680 px (80 + 6×100, larghezze minime fisse): a 1024 ne ha 620 e l'ultima
+// colonna resta tagliata, a 1100 ne ha 696. 1100 lascia 16 px di margine anche
+// con la barra di scorrimento classica (15 px).
+export const SOGLIA_DESKTOP = 1100
 
 // Desktop: il pannello affianca la matrice (non modale, quindi `complementary`
 // e nessuna trappola di tastiera). Sotto soglia occupa tutto lo schermo: lì

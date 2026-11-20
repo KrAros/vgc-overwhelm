@@ -63,11 +63,7 @@ function App() {
   }, [setTeam1Focus, setTeam2Focus])
 
   return (
-    // Con il pannello aperto su desktop si riserva la sua larghezza a destra:
-    // nessuna cella resta coperta. Sotto 1024 px il pannello è uno sheet.
-    <div className={`min-h-screen text-white flex flex-col ${
-      reportSelection && desktop ? 'pr-[min(480px,40vw)]' : ''
-    }`}>
+    <div className="min-h-screen text-white flex flex-col">
       {/* Skip link. Tre difetti corretti in P, tutti nello stesso punto:
 
           1. puntava a #main-content, e NESSUN elemento aveva quell'id — il
@@ -135,17 +131,26 @@ function App() {
                   nello store anche quando la barra non è montata. */}
               <TopBar />
 
-              <ErrorBoundary>
-                <DamageTable onCellSelect={handleCellSelect} />
-              </ErrorBoundary>
+              {/* Matrice + pannello: due colonne in flusso su desktop (il pannello
+                  è sticky, la matrice si restringe). Sotto soglia il pannello è
+                  uno sheet fixed e la griglia resta a una colonna. */}
+              <div className={`grid gap-3 ${
+                reportSelection && desktop
+                  ? 'grid-cols-[minmax(0,1fr)_360px]'
+                  : 'grid-cols-[minmax(0,1fr)]'
+              }`}>
+                <ErrorBoundary>
+                  <DamageTable onCellSelect={handleCellSelect} />
+                </ErrorBoundary>
 
-              {reportSelection && (
-                <PannelloLaterale onClose={() => setReportSelection(null)}>
-                  <ErrorBoundary>
-                    <ReportPanel selection={reportSelection} />
-                  </ErrorBoundary>
-                </PannelloLaterale>
-              )}
+                {reportSelection && (
+                  <PannelloLaterale onClose={() => setReportSelection(null)}>
+                    <ErrorBoundary>
+                      <ReportPanel selection={reportSelection} />
+                    </ErrorBoundary>
+                  </PannelloLaterale>
+                )}
+              </div>
             </>
           ) : (
             <GuidaMatrice team1={team1} team2={team2} />
