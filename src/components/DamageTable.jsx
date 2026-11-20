@@ -422,7 +422,6 @@ export default function DamageTable({ onCellSelect }) {
         </div>
       )}
 
-      <div className="xl:flex xl:gap-3 xl:items-start">
       {/* ─── LA MATRICE DICHIARA DI SCORRERE ─────────────────────────────
           Difetto 3 delle foto: a 360 px si vedono tre colonne su sei e niente
           segnala che ce ne siano altre. La barra di scorrimento su telefono
@@ -438,7 +437,7 @@ export default function DamageTable({ onCellSelect }) {
           `pointer-events-none` perché non devono intercettare il dito, e
           `aria-hidden` perché non aggiungono informazione a chi non vede: per
           quello c'è già `role="grid"`. */}
-      <div className="relative xl:flex-1 xl:min-w-0">
+      <div className="relative">
       {bordi.inizio && (
         <div aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 left-0 w-8 z-30 rounded-l-xl
@@ -581,33 +580,8 @@ export default function DamageTable({ onCellSelect }) {
       </div>
       </div>
 
-      {/* ── Legend sidebar (desktop largo) ── */}
-      <aside className="hidden xl:block w-47.5 shrink-0 bg-gray-900 rounded-xl border border-gray-700/40 px-4 py-4 self-stretch">
-        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mb-3">{t("report.legend")}</div>
-        <div className="space-y-2 text-xs text-gray-300">
-          <div className="flex items-center gap-2"><span className="text-teal-400">▶</span> {t("report.attacks")}</div>
-          <div className="flex items-center gap-2"><span className="text-red-400">◀</span> {t("report.attacked_by")}</div>
-          <div className="flex items-center gap-2"><span className="text-yellow-400">⚡</span> {t("ui.moves_first")}</div>
-          <div className="flex items-center gap-2"><span className="text-yellow-400 inline-flex"><SpreadIcon /></span> {t("report.spread_move")}</div>
-        </div>
-        <div className="text-[11px] text-gray-400 mt-4 mb-2">{t("report.damage")}</div>
-        <div className="space-y-1.5 text-xs">
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> <span className="text-green-400">0 – 25%</span></div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-teal-300 inline-block" /> <span className="text-teal-300">25 – 50%</span></div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-orange-400 inline-block" /> <span className="text-orange-400">50 – 100%</span></div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> <span className="text-red-400">100%+</span></div>
-        </div>
-        <div className="text-[11px] tracking-[0.15em] text-gray-400 uppercase font-semibold mt-5 mb-2">{t("report.quick_info")}</div>
-        <div className="space-y-1.5 text-[11px] text-gray-400 leading-relaxed">
-          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_1")}</div>
-          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_2")}</div>
-          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_3")}</div>
-        </div>
-      </aside>
-      </div>
-
-      {/* ── Legend riga compatta (schermi sotto xl) ── */}
-      <div className="xl:hidden flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-400">
+      {/* ── Legenda: una riga sotto la tabella, a tutte le larghezze ── */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 py-2 mt-2 text-[11px] text-gray-400">
         <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-400">{t("report.legend")}</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">▶</span> {t("report.attacks")}</span>
         <span className="flex items-center gap-1"><span className="text-gray-400">◀</span> {t("report.attacked_by")}</span>
@@ -621,6 +595,14 @@ export default function DamageTable({ onCellSelect }) {
         <span className="text-gray-400">|</span>
         <span className="text-teal-300">{t("ui.cumulative_short")}</span>
       </div>
+
+      {/* ── «Come si usa»: una riga discreta, va a capo da sola ── */}
+      <p className="px-2 pb-2 text-[11px] leading-relaxed text-gray-400">
+        <span className="uppercase tracking-[0.15em] text-[10px] font-semibold">{t("report.quick_info")}</span>
+        {[1, 2, 3].map(n => (
+          <span key={n}> · {t(`report.how_to_${n}`)}</span>
+        ))}
+      </p>
     </div>
   )
 }
