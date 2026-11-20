@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 KrAros
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useCalcStore from './store/useCalcStore'
 import TopBar from './components/TopBar'
 import DamageTable from './components/DamageTable'
 import TeamEditor from './components/TeamEditor'
 import ReportPanel from './components/ReportPanel'
+import PannelloLaterale from './components/PannelloLaterale'
+import { useDesktop } from './hooks/useDesktop'
 import ErrorBoundary from './components/ErrorBoundary'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -24,7 +26,7 @@ import { matriceVisibile } from './lib/squadre'
 function App() {
   const { t } = useTranslation()
   const [reportSelection, setReportSelection] = useState(null)
-  const reportRef = useRef(null)
+  const desktop = useDesktop()
   // Un ?share= illeggibile prima falliva in silenzio: due team vuoti e nessuna
   // spiegazione. Ora lo store lo segnala e qui lo diciamo.
   const shareError      = useCalcStore(s => s.shareError)
@@ -57,19 +59,15 @@ function App() {
         setTeam1Focus(t1idx)
         setTeam2Focus(t2idx)
       }
-      setTimeout(() => {
-        reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 50)
-    } else {
-      // Deselezione: il report si smonta e il contenuto sale — riporta la tabella in vista
-      setTimeout(() => {
-        document.getElementById('damage-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 50)
     }
   }, [setTeam1Focus, setTeam2Focus])
 
   return (
-    <div className="min-h-screen text-white flex flex-col">
+    // Con il pannello aperto su desktop si riserva la sua larghezza a destra:
+    // nessuna cella resta coperta. Sotto 1024 px il pannello è uno sheet.
+    <div className={`min-h-screen text-white flex flex-col ${
+      reportSelection && desktop ? 'pr-[min(480px,40vw)]' : ''
+    }`}>
       {/* Skip link. Tre difetti corretti in P, tutti nello stesso punto:
 
           1. puntava a #main-content, e NESSUN elemento aveva quell'id — il
@@ -129,7 +127,7 @@ function App() {
           <ControlBar />
 
           {/* Matrice e report solo con almeno un Pokémon per squadra;
-              prima, una guida di una riga. Il report sta sotto la matrice che lo apre. */}
+              prima, una guida di una riga. Il report si apre in un pannello laterale. */}
           {mostraMatrice ? (
             <>
               {/* Barra opzioni subito sopra la matrice: Trick Room, campo, meteo
@@ -141,16 +139,13 @@ function App() {
                 <DamageTable onCellSelect={handleCellSelect} />
               </ErrorBoundary>
 
-              <div ref={reportRef}>
-                <ErrorBoundary>
-                  {reportSelection && (
-                    <ReportPanel
-                      selection={reportSelection}
-                      onClose={() => setReportSelection(null)}
-                    />
-                  )}
-                </ErrorBoundary>
-              </div>
+              {reportSelection && (
+                <PannelloLaterale onClose={() => setReportSelection(null)}>
+                  <ErrorBoundary>
+                    <ReportPanel selection={reportSelection} />
+                  </ErrorBoundary>
+                </PannelloLaterale>
+              )}
             </>
           ) : (
             <GuidaMatrice team1={team1} team2={team2} />

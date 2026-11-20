@@ -148,6 +148,7 @@
     "no_ko": "No KO",
     "no_ko_in_n": "No KO in {{turni}} turns",
     "copy_calc_aria": "Copy calc string",
+    "pannello_titolo": "Damage analysis",
     "close_aria": "Close report panel",
     "scroll_rolls": "Scroll to damage rolls",
     "damage_report_aria": "Damage report",

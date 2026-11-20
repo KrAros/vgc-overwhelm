@@ -84,3 +84,11 @@ a,
     scroll-behavior: auto !important;
   }
 }
+
+/* Pannello laterale del report: entra con transform/opacity, 180 ms. Il blocco
+   prefers-reduced-motion qui sopra porta già la durata a 0.01ms: non si ripete. */
+@keyframes pannello-entra {
+  from { transform: translateX(24px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.pannello-entra { animation: pannello-entra 180ms ease-out; }

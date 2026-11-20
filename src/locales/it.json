@@ -148,6 +148,7 @@
     "no_ko": "Nessun KO",
     "no_ko_in_n": "Nessun KO in {{turni}} turni",
     "copy_calc_aria": "Copia stringa calcolo",
+    "pannello_titolo": "Analisi danni",
     "close_aria": "Chiudi pannello",
     "scroll_rolls": "Vai ai roll danno",
     "damage_report_aria": "Report danno",

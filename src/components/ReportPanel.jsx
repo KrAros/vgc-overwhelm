@@ -326,7 +326,7 @@ function CopyCalcButton({ smogon }) {
 // meteo lo legge dallo store, e in SSR Zustand serve lo stato INIZIALE, non
 // quello impostato dal test. Qui il campo arriva come proprieta', e la catena
 // del fine turno si vede davvero disegnata.
-export function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect, onClose }) {
+export function MoveCard({ atk, def, move, result, field = {}, computedMoves, activeMoveKey, onMoveSelect }) {
   const { t } = useTranslation()
 
   // ── Pannello di debug: la cella cliccata, non l'ultima calcolata ──────────
@@ -515,15 +515,11 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
     <div>
       {/* ═══ CARD 1: MATCHUP ═══ */}
       <div className="bg-gray-900 rounded-xl border border-gray-700/40 overflow-hidden mb-3">
-        {/* Label + Copy + Close — prima riga della card, ha accesso a smogon e onClose */}
+        {/* Label + Copy — prima riga della card (la chiusura è nel pannello laterale) */}
         <div className="flex items-center justify-between px-4 pt-2.5 pb-2 border-b border-gray-700/20">
           <span className="text-[9px] tracking-[0.2em] text-gray-400 uppercase font-bold">{t("report.selected_matchup")}</span>
           <div className="flex items-center gap-1.5">
             <CopyCalcButton smogon={smogon} />
-            <button onClick={onClose} aria-label={t("report.close_aria")}
-              className="text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded border border-gray-700/50 hover:border-gray-500 transition-colors">
-              {t("ui.close")}
-            </button>
           </div>
         </div>
 
@@ -950,7 +946,7 @@ export function MoveCard({ atk, def, move, result, field = {}, computedMoves, ac
 
 // ── SinglePanel ───────────────────────────────────────────────────────────────
 
-function SinglePanel({ entry, onClose }) {
+function SinglePanel({ entry }) {
   const { t } = useTranslation()
   const { atk, def, dir } = entry
   const campo = useFieldState()
@@ -985,7 +981,6 @@ function SinglePanel({ entry, onClose }) {
       computedMoves={computedMoves}
       activeMoveKey={activeMoveKey}
       onMoveSelect={setSelectedMove}
-      onClose={onClose}
     />
   ) : null
 }
@@ -1330,7 +1325,7 @@ export function CumulativePanel({ entries }) {
 
 // ── ReportPanel root ──────────────────────────────────────────────────────────
 
-export default function ReportPanel({ selection, onClose }) {
+export default function ReportPanel({ selection }) {
   const { t } = useTranslation()
   const isDouble = Array.isArray(selection) && selection.length === 2
   const team1 = useCalcStore(s => s.team1)
@@ -1348,7 +1343,7 @@ export default function ReportPanel({ selection, onClose }) {
 
       {isDouble
         ? <CumulativePanel entries={liveSelection} />
-        : <SinglePanel entry={entry1} onClose={onClose} />
+        : <SinglePanel entry={entry1} />
       }
     </section>
   )
