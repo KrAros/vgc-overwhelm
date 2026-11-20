@@ -76,13 +76,13 @@ export default function TopBar() {
       <div className="relative hidden sm:block">
       {bordi.inizio && (
         <div aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 w-8 z-30
-                     bg-gradient-to-r from-gray-900 to-transparent" />
+          className="pointer-events-none absolute inset-y-0 left-0 w-16 z-30
+                     bg-gradient-to-r from-gray-900 from-30% to-transparent" />
       )}
       {bordi.fine && (
         <div aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 w-8 z-30
-                     bg-gradient-to-l from-gray-900 to-transparent" />
+          className="pointer-events-none absolute inset-y-0 right-0 w-16 z-30
+                     bg-gradient-to-l from-gray-900 from-30% to-transparent" />
       )}
       {/* ─── UNA SOLA RIGA ─────────────────────────────────────────────────
           Tre gruppi con etichetta (Opzioni, Campo, Meteo) su una riga che non
@@ -133,7 +133,7 @@ export default function TopBar() {
                      erano gli ultimi due nodi fra 96 e 100 sul desktop. */
                   className={`text-xs px-2 py-1 min-w-6 transition-colors ${
                     doubleTarget === due
-                      ? 'bg-yellow-500 text-gray-900'
+                      ? 'bg-teal-800 text-teal-200'
                       : 'text-gray-400 hover:bg-gray-700'
                   }`}
                 >
@@ -210,7 +210,7 @@ export default function TopBar() {
                 onClick={() => { if (doubleTarget !== due) toggleDoubleTarget() }}
                 aria-pressed={doubleTarget === due}
                 className={`text-xs px-3 py-2.5 transition-colors ${
-                  doubleTarget === due ? 'bg-yellow-500 text-gray-900' : 'text-gray-400'
+                  doubleTarget === due ? 'bg-teal-800 text-teal-200' : 'text-gray-400'
                 }`}
               >
                 {t("ui.enemies_short")} {due ? '2' : '1'}

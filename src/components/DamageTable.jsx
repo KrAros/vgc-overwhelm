@@ -200,7 +200,7 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
   const cellRing = isFirst
     ? 'ring-2 ring-teal-400 ring-inset shadow-[0_0_16px_rgba(45,212,191,0.25)]'
     : isSecond
-    ? 'ring-2 ring-violet-400 ring-inset shadow-[0_0_16px_rgba(167,139,250,0.25)]'
+    ? 'ring-2 ring-teal-200 ring-inset shadow-[0_0_16px_rgba(153,246,228,0.25)]'
     : ''
 
   const renderHalf = (d, immune, prefix, dir, dim = false, goesFirst = false, pokeName = '', ko = { stato: 'no', probabilita: 0 }) => {
@@ -208,7 +208,7 @@ const DamageCell = memo(function DamageCell({ cella, attacker, defender, onSelec
 
     const halfSelected =
       dirPrima   === dir ? 'bg-teal-900/40'   :
-      dirSeconda === dir ? 'bg-violet-900/40' :
+      dirSeconda === dir ? 'bg-teal-800/30' :
       d ? bgClass(d.result.maxPct, ko.stato) : ''
 
     // Fix 3: tooltip del fulmine con nome Pokémon + testo i18n
@@ -416,7 +416,7 @@ export default function DamageTable({ onCellSelect }) {
       {/* Indicatore modalità cumulativa */}
       {selectionState.second && (
         <div className="mb-2 px-1">
-          <span className="text-xs text-violet-400">
+          <span className="text-xs text-teal-300">
             {t('ui.cumulative_active')}
           </span>
         </div>
@@ -601,7 +601,7 @@ export default function DamageTable({ onCellSelect }) {
         <div className="space-y-1.5 text-[11px] text-gray-400 leading-relaxed">
           <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_1")}</div>
           <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_2")}</div>
-          <div className="flex items-start gap-1.5"><span className="text-violet-500 mt-0.5">›</span>{t("report.how_to_3")}</div>
+          <div className="flex items-start gap-1.5"><span className="text-gray-400 mt-0.5">›</span>{t("report.how_to_3")}</div>
         </div>
       </aside>
       </div>
@@ -619,7 +619,7 @@ export default function DamageTable({ onCellSelect }) {
         <span className="text-orange-400">50–100%</span>
         <span className="text-red-400">100%+ KO</span>
         <span className="text-gray-400">|</span>
-        <span className="text-violet-400">{t("ui.cumulative_short")}</span>
+        <span className="text-teal-300">{t("ui.cumulative_short")}</span>
       </div>
     </div>
   )

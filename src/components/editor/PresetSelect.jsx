@@ -149,7 +149,7 @@ export function CustomSetModal({ slug, currentSlot, onClose, onChanged }) {
           <span className="text-sm font-semibold text-gray-200">
             ⚙ {t('ui.custom_set_manage')}
             {slug && (
-              <span className="ml-2 text-xs font-normal text-amber-400">
+              <span className="ml-2 text-xs font-normal text-teal-300">
                 {pokemonData[slug]?.name || slug}
               </span>
             )}
@@ -214,7 +214,7 @@ export function CustomSetModal({ slug, currentSlot, onClose, onChanged }) {
                     className="flex items-center gap-2 bg-gray-800/50 rounded-lg px-3 py-1.5 border border-gray-700/40"
                     onClick={() => { if (deleteConfirm === preset.id) setDeleteConfirm(null) }}
                   >
-                    <span className="flex-1 text-xs text-amber-300 truncate" title={preset.label}>
+                    <span className="flex-1 text-xs text-teal-300 truncate" title={preset.label}>
                       ★ {preset.label}
                     </span>
                     <button

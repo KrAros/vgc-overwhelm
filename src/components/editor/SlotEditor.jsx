@@ -185,14 +185,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
           un difetto misurabile: passano WCAG 2.5.8, perché la norma chiede
           se si riesce a colpirli e non se sembrano stretti. Le due domande
           sono diverse, e per la seconda l'unico strumento è l'occhio. */}
-      <div className="flex justify-end gap-2.5 mb-2.5 text-xs">
+      <div className="flex flex-wrap justify-end gap-2.5 mb-2.5 text-xs">
 
             {/* Salva Custom Set — visibile solo se c'è un Pokémon nello slot */}
             {data && (
               <button
                 type="button"
                 onClick={() => setShowCustomModal(true)}
-                className="flex items-center justify-center gap-1 px-2.5 py-1 rounded border transition bg-amber-900/30 hover:bg-amber-900/60 text-amber-300 border-amber-700/40"
+                className="flex items-center justify-center gap-1 px-2.5 py-1 rounded border transition bg-gray-700/60 hover:bg-gray-700 text-teal-300 border-teal-700/40"
                 title={t('editor.manage_custom_sets')}
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -435,7 +435,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 <span>SP</span>
                 <span className={`text-[10px] font-bold px-1 rounded ${
                   remaining === 0
-                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                    ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
                     : 'bg-gray-700 text-gray-400'
                 }`}>
                   {/* Mostrava `remaining`: «(0/66)» voleva dire set COMPLETO,
@@ -509,7 +509,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
 
           {/* Last Respects: contatore alleati KO */}
           {hasLastRespects && (
-            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
+            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-teal-950/30 border border-teal-800/30 rounded text-xs">
               <span className="text-gray-400 shrink-0">{t("editor.last_respects_allies")}</span>
               <div className="flex gap-1">
                 {[0,1,2,3].map(n => (
@@ -518,14 +518,14 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                     type="button"
                     onClick={() => setLastRespectsKOs(team, index, n)}
                     className={`w-5 h-5 rounded text-[10px] font-bold transition-colors ${
-                      lastRespectsKOs === n ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      lastRespectsKOs === n ? 'bg-teal-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
                     }`}
                   >
                     {n}
                   </button>
                 ))}
               </div>
-              <span className={lastRespectsKOs > 0 ? 'text-purple-300' : 'text-gray-400'}>
+              <span className={lastRespectsKOs > 0 ? 'text-teal-300' : 'text-gray-400'}>
                 {50 + lastRespectsKOs * 50} BP
               </span>
             </div>
@@ -535,7 +535,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               perché è la stessa cosa — uno stato del turno che dichiara chi
               usa l'app, legato alla MOSSA e non all'abilità. */}
           {haColpiMultipli && (
-            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-purple-950/30 border border-purple-800/30 rounded text-xs">
+            <div className="flex items-center gap-2 mt-1.5 px-1 py-1 bg-teal-950/30 border border-teal-800/30 rounded text-xs">
               <span className="text-gray-400 shrink-0">{t('editor.colpi')}</span>
               <div className="flex gap-1 flex-wrap">
                 {Array.from({ length: colpiMax - colpiMin + 1 }, (_, i) => colpiMin + i).map(n => (
@@ -545,7 +545,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                     disabled={abilitaMultipla}
                     onClick={() => setColpiScelti(team, index, n)}
                     className={`w-5 h-5 rounded text-[10px] font-bold transition-colors ${
-                      colpiScelti === n ? 'bg-purple-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      colpiScelti === n ? 'bg-teal-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
                     } ${abilitaMultipla ? 'opacity-60 cursor-not-allowed' : ''}`}
                   >
                     {n}
@@ -553,7 +553,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 ))}
               </div>
               {abilitaMultipla && (
-                <span className="text-purple-300">{t('editor.colpi_skill_link')}</span>
+                <span className="text-teal-300">{t('editor.colpi_skill_link')}</span>
               )}
             </div>
           )}
