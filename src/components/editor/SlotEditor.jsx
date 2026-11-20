@@ -170,6 +170,15 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
 
   return (
     <div className="p-3">
+      {/* Slot vuoto: la ricerca viene PRIMA dei pulsanti. È l'unica azione che
+          ha senso su uno slot vuoto (Duplica/Esporta/Elimina sono spenti), e
+          sulla home deve essere la prima cosa che si vede. Con lo slot pieno
+          l'ordine resta quello di sempre. */}
+      {!pokemon?.key && (
+        <div className="mb-2.5">
+          <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} inEvidenza />
+        </div>
+      )}
       {/* Barra bottoni — sempre visibile. Duplica/Esporta/Elimina disabilitati se slot vuoto */}
       {/* `gap-2.5` invece di `gap-1.5`: da 6 a 10 px fra i bottoni.
           Segnalato guardando l'app — «Duplica ed Esporta si toccano». Non è
@@ -303,9 +312,11 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
                 78 px e «flutter-mane» ne chiede 98 — è il «Charizard·» delle
                 foto. Lo spazio c'è perché in P-2/5 la tendina del set è andata
                 a capo, lasciando la prima riga alla ricerca e ai badge. */}
-            <div className={pokemon?.key ? "w-1/2 sm:w-1/3 shrink-0" : "flex-1"}>
-              <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
-            </div>
+            {pokemon?.key && (
+              <div className="w-1/2 sm:w-1/3 shrink-0">
+                <PokemonSearch value={pokemon?.key} onChange={handlePokemonChange} />
+              </div>
+            )}
             {pokemon?.key && (
               <>
                 <div className="w-full order-last sm:order-0 sm:w-auto sm:flex-1 min-w-0">

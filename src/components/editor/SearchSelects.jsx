@@ -56,7 +56,7 @@ function corrisponde(chiave, query, sezione) {
 
 // ─── PokemonSearch ────────────────────────────────────────────────────────────
 
-export function PokemonSearch({ value, onChange }) {
+export function PokemonSearch({ value, onChange, inEvidenza = false }) {
   const { t } = useTranslation()
   const [query, setQuery]   = useState('')
   const [focused, setFocused] = useState(false)
@@ -97,7 +97,10 @@ export function PokemonSearch({ value, onChange }) {
   return (
     <div className="relative flex items-center">
       <input
-        className="w-full bg-gray-700 text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border border-gray-600"
+        className={`w-full text-xs text-white rounded pl-2 pr-7 py-1 outline-none capitalize border ${
+          // Campo attivo, non grigio opaco: sullo slot vuoto è l'azione principale.
+          inEvidenza ? 'bg-gray-900 border-teal-500 py-1.5' : 'bg-gray-700 border-gray-600'
+        }`}
         aria-label={t("ui.search_pokemon")}
         placeholder={t("ui.search_pokemon")}
         value={focused ? query : (value || '')}
