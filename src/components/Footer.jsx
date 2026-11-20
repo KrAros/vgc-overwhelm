@@ -62,8 +62,8 @@ export default function Footer() {
                   diventati due numeri diversi. «beta» è una parola per chi
                   legge — per la semantica delle versioni qualunque 0.x è già
                   pre-1.0. Diventerà 1.0.0 il giorno del lancio. */}
-              <span className="ml-1.5 text-gray-500">v{__APP_VERSION__}</span>
-              <span className="ml-1 text-amber-300/80 uppercase tracking-wider text-[9px]">beta</span>
+              <span className="ml-1.5 text-gray-400">v{__APP_VERSION__}</span>
+              <span className="ml-1 text-gray-300 uppercase tracking-wider text-[9px]">beta</span>
             </div>
           </div>
         </div>

@@ -541,7 +541,7 @@ export default function ControlBar() {
   const btnNormal = `${btnBase} bg-gray-700/60 hover:bg-gray-700 text-gray-300 border-gray-600/40`
   const btnActive = `${btnBase} bg-teal-800 border-teal-600 text-teal-200`
   const btnReset  = `${btnBase} bg-red-950/30 hover:bg-red-900/50 text-red-400 border-red-900/30`
-  const btnLib    = `${btnBase} bg-gray-700/60 hover:bg-gray-700 text-amber-300 border-amber-700/40`
+  const btnLib    = `${btnBase} bg-gray-700/60 hover:bg-gray-700 text-teal-300 border-teal-700/40`
 
   // ── Pannello import espandibile ──────────────────────────────────────────
   const targetTeam = mode === 'import1' ? 'team1' : 'team2'
@@ -714,7 +714,7 @@ export default function ControlBar() {
             <div className="flex items-center gap-2">
               {feedback && <span className="text-xs text-green-400">{feedback}</span>}
               <button type="button" aria-label={t('ui.team_library')} onClick={() => setShowLibrary(true)}
-                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-amber-300 border-amber-700/40">
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border bg-gray-700/60 text-teal-300 border-teal-700/40">
                 <IconLibrary />
               </button>
               <button type="button" onClick={handleShare}

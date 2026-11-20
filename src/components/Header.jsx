@@ -99,10 +99,10 @@ export default function Header() {
 
       {/* ── SINISTRA: fiamma + nome inline ── */}
       <div className="flex items-center gap-2 min-w-0">
-        <FiammaLogo />
-        <span className="text-sm whitespace-nowrap">
-          <span className="text-gray-400 font-normal">The Sixth </span>
-          <span className="text-white font-medium">Ember</span>
+        <FiammaLogo size={24} />
+        <span className="text-base font-semibold whitespace-nowrap">
+          <span className="text-gray-300">The Sixth </span>
+          <span className="text-white">Ember</span>
         </span>
         <span className="text-gray-400 hidden lg:inline">|</span>
         <span className="text-gray-400 text-xs hidden lg:inline whitespace-nowrap">
