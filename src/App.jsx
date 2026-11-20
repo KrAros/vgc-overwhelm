@@ -13,7 +13,9 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import ControlBar from './components/ControlBar'
 import DebugPanel from './components/DebugPanel'
+import GuidaMatrice from './components/GuidaMatrice'
 import { IS_DEBUG } from './lib/debugBus'
+import { matriceVisibile } from './lib/squadre'
 
 
 
@@ -29,6 +31,15 @@ function App() {
   const clearShareError = useCalcStore(s => s.clearShareError)
   const setTeam1Focus = useCalcStore(s => s.setTeam1Focus)
   const setTeam2Focus = useCalcStore(s => s.setTeam2Focus)
+  const team1 = useCalcStore(s => s.team1)
+  const team2 = useCalcStore(s => s.team2)
+  const mostraMatrice = matriceVisibile(team1, team2)
+
+  // Se l'utente svuota una squadra con il report aperto, la matrice sparisce:
+  // la selezione non deve restare orfana. Si azzera durante il render (schema
+  // «adjusting state» di React) invece che in un effetto: niente render in più
+  // con un report che punta a una cella che non c'è.
+  if (!mostraMatrice && reportSelection) setReportSelection(null)
 
   // In useCallback perché `DamageTable` la usa dentro il proprio useCallback:
   // se cambiasse identità a ogni render di App — e App rirende a ogni
@@ -90,27 +101,9 @@ function App() {
       <main id="main-content" className="flex-1 px-3 py-3 sm:p-4">
         <div className="max-w-7xl mx-auto">
 
-          {/* ReportPanel */}
-          <div ref={reportRef}>
-            <ErrorBoundary>
-              {reportSelection && (
-                <ReportPanel
-                  selection={reportSelection}
-                  onClose={() => setReportSelection(null)}
-                />
-              )}
-            </ErrorBoundary>
-          </div>
-
           {/* TopBar */}
           <TopBar />
 
-          {/* DamageTable */}
-          <ErrorBoundary>
-            <DamageTable onCellSelect={handleCellSelect} />
-          </ErrorBoundary>
-
-          {/* ControlBar */}
           {shareError && (
             <div
               role="alert"
@@ -127,15 +120,39 @@ function App() {
             </div>
           )}
 
-          <ControlBar />
-
-          {/* TeamEditor — 1 colonna su mobile, 2 su desktop */}
+          {/* TeamEditor — 1 colonna su mobile, 2 su desktop. Vengono prima
+              della matrice: chi apre il sito deve vedere dove inserire i Pokémon. */}
           <ErrorBoundary>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
               <TeamEditor team="team1" />
               <TeamEditor team="team2" />
             </div>
           </ErrorBoundary>
+
+          <ControlBar />
+
+          {/* Matrice e report solo con almeno un Pokémon per squadra;
+              prima, una guida di una riga. Il report sta sotto la matrice che lo apre. */}
+          {mostraMatrice ? (
+            <>
+              <ErrorBoundary>
+                <DamageTable onCellSelect={handleCellSelect} />
+              </ErrorBoundary>
+
+              <div ref={reportRef}>
+                <ErrorBoundary>
+                  {reportSelection && (
+                    <ReportPanel
+                      selection={reportSelection}
+                      onClose={() => setReportSelection(null)}
+                    />
+                  )}
+                </ErrorBoundary>
+              </div>
+            </>
+          ) : (
+            <GuidaMatrice team1={team1} team2={team2} />
+          )}
 
         </div>
       </main>
