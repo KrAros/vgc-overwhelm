@@ -101,9 +101,6 @@ function App() {
       <main id="main-content" className="flex-1 px-3 py-3 sm:p-4">
         <div className="max-w-7xl mx-auto">
 
-          {/* TopBar */}
-          <TopBar />
-
           {shareError && (
             <div
               role="alert"
@@ -135,6 +132,11 @@ function App() {
               prima, una guida di una riga. Il report sta sotto la matrice che lo apre. */}
           {mostraMatrice ? (
             <>
+              {/* Barra opzioni subito sopra la matrice: Trick Room, campo, meteo
+                  e numero di avversari ne cambiano i numeri. I valori restano
+                  nello store anche quando la barra non è montata. */}
+              <TopBar />
+
               <ErrorBoundary>
                 <DamageTable onCellSelect={handleCellSelect} />
               </ErrorBoundary>

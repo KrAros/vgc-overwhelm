@@ -88,4 +88,19 @@ describe('ordine e soglia della home', () => {
     expect(matrice).toBeGreaterThan(secondoEditor)
     expect(html).not.toContain('Add at least one Pokémon')
   })
+
+  it('entrambe piene: la barra opzioni sta DOPO il secondo editor e PRIMA della matrice', async () => {
+    const html = await render({ team1: [slot('garchomp')], team2: [slot('gholdengo')] })
+    const barra = html.indexOf('aria-label="Battle conditions"')
+    const secondoEditor = html.indexOf('aria-label="Team 2"')
+    const matrice = html.indexOf('id="damage-table"')
+    expect(barra).toBeGreaterThan(-1)
+    expect(barra).toBeGreaterThan(secondoEditor)
+    expect(barra).toBeLessThan(matrice)
+  })
+
+  it('squadre vuote: la barra opzioni non compare', async () => {
+    const html = await render(null)
+    expect(html).not.toContain('aria-label="Battle conditions"')
+  })
 })
