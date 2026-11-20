@@ -178,6 +178,21 @@ export default defineConfig({
     include: ['src/**/*.test.{js,jsx}'],
 
     /**
+     * Copertura (`npm run test:coverage`). Le soglie stanno appena sotto i valori
+     * misurati il 2026-11-20 (righe 84,8 · istruzioni 81,8 · rami 75,0 ·
+     * funzioni 59,5): servono a impedire che la copertura scenda, non a
+     * dichiarare che basta. Quando i componenti dell'interfaccia saranno testati
+     * vanno alzate.
+     */
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{js,jsx}'],
+      exclude: ['src/__tests__/**'],
+      reporter: ['text-summary', 'text'],
+      thresholds: { lines: 82, statements: 80, branches: 73, functions: 57 },
+    },
+
+    /**
      * ─── QUATTRO WORKER, MISURATI ─────────────────────────────────────────
      *
      * Vitest ne apre uno per CPU meno una: qui dodici CPU, quindi undici. Ma

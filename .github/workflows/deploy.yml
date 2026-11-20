@@ -48,8 +48,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Suite completa
-        run: npm run test:run
+      # Stessa suite, con la copertura: fallisce se scende sotto le soglie di
+      # `vite.config.js`. Sostituisce l'esecuzione semplice, non si somma.
+      - name: Suite completa, con soglie di copertura
+        run: npm run test:coverage
 
       # La caratterizzazione del motore: deve essere a ZERO. È la stessa
       # verifica che si fa a mano prima di ogni merge.
