@@ -124,7 +124,9 @@ export default function StatRow({
             ))}
           </select>
           <span className={`text-xs w-8 text-center ${boostedStat ? (alzata ? 'text-green-400' : 'text-red-400') : 'text-gray-400'}`}>
-            {boostedStat ?? '—'}
+            {/* Vuota quando non c'è nulla da dire: il «—» ripetuto cinque volte era
+              rumore, e il valore resta sempre leggibile quando esiste. */}
+            {boostedStat ?? ''}
           </span>
         </div>
       ) : (
