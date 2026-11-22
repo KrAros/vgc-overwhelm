@@ -117,7 +117,7 @@ export default function StatRow({
             value={boostVal}
             aria-label={nome('stage')}
             onChange={e => onBoostChange(parseInt(e.target.value))}
-            className={`w-12 bg-gray-700 text-xs rounded px-0.5 py-0.5 outline-none text-center ${boostColor}`}
+            className={`w-12 text-xs rounded px-0.5 py-0.5 outline-none text-center border focus-visible:border-teal-400 ${boostVal === 0 ? 'bg-transparent border-transparent hover:bg-gray-700 hover:border-gray-600' : 'bg-gray-700 border-gray-600'} ${boostColor}`}
           >
             {[-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6].map(v => (
               <option key={v} value={v}>{v > 0 ? `+${v}` : v}</option>

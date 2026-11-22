@@ -372,7 +372,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
 
       {data && (
         <>
-          <div className="mb-2">
+          <div className="mb-2 pt-2 border-t border-gray-700/60">
             <div className="flex items-center text-xs text-gray-400 mb-1 gap-2">
               <span className="w-8 text-center">{t("report.stat")}</span>
               <span className="w-7 text-center">{t("report.base")}</span>
@@ -432,7 +432,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
               Costa altezza: quattro righe invece di due. È lo stesso scambio
               accettato per StatRow e per le celle della matrice — non
               nascondere l'informazione si paga in verticale. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-2 pt-2 border-t border-gray-700/60">
             {[0,1,2,3].map(mi => (
               <MoveSearch
                 key={mi}
