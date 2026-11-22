@@ -13,8 +13,8 @@
  * focus: il tooltip di un'azione disabilitata («Duplica» su slot vuoto) deve
  * comunque spiegare cos'è.
  *
- * Area di tocco: 44 px su telefono, 36 px da `sm` in su, dove il puntatore è
- * preciso e la barra deve restare bassa.
+ * Area di tocco: 44 px ovunque, il minimo WCAG AA — niente taglia ridotta
+ * da desktop.
  */
 export default function IconButton({ label, onClick, disabled = false, active = false, tone = 'neutral', children }) {
   const colori = disabled
@@ -35,7 +35,7 @@ export default function IconButton({ label, onClick, disabled = false, active = 
         aria-pressed={active || undefined}
         disabled={disabled}
         onClick={disabled ? undefined : onClick}
-        className={`inline-flex items-center justify-center w-11 h-11 sm:w-9 sm:h-9 rounded border transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-400 ${colori}`}
+        className={`inline-flex items-center justify-center w-11 h-11 rounded border transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-400 ${colori}`}
       >
         {children}
       </button>

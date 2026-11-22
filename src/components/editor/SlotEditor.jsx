@@ -206,7 +206,7 @@ export default function PokemonPanel({ team, index, tailwindActive = false }) {
           onClick={data ? () => { setPokemon(team, index, ''); setAbility(team, index, '') } : undefined}
           disabled={!data}
           aria-label={t('editor.delete_pokemon')}
-          className={`inline-flex items-center justify-center gap-1 px-2.5 h-11 sm:h-9 rounded border transition ${
+          className={`inline-flex items-center justify-center gap-1 px-2.5 h-11 rounded border transition ${
             !data ? 'bg-gray-800/40 border-gray-700/20 text-gray-400 cursor-not-allowed'
             : 'bg-red-950/30 hover:bg-red-900/50 text-red-400 hover:text-red-300 border-red-900/30'
           }`}
